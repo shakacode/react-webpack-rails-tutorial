@@ -1,0 +1,53 @@
+{
+  "name": "react-tutorial",
+  "version": "0.0.0",
+  "description": "Code from the React tutorial.",
+  "main": "server.js",
+  "engines": {
+    "node": "0.10.31"
+  },
+  "dependencies": {
+    "sleep": "1.1.8",
+    "body-parser": "^1.6.6",
+    "express": "^4.8.6",
+    "jquery": "^1.11.1",
+    "react": "^0.11.1",
+    "react-bootstrap": "^0.11.0",
+    "marked": "^0.3.2"
+  },
+  "devDependencies": {
+    "expose-loader": "^0.5.3",
+    "path": "^0.4.9",
+    "loader-utils": "^0.2.3",
+    "sass-loader": "^0.2.0",
+    "css-loader": "^0.7.1",
+    "es6-loader": "^0.2.0",
+    "extract-text-webpack-plugin": "^0.2.5",
+    "jsx-loader": "^0.11.0",
+    "react-tools": "^0.11.1",
+    "react-hot-loader": "^0.4.2",
+    "style-loader": "^0.7.1",
+    "webpack": "^1.4.0-beta1",
+    "webpack-dev-server": "^1.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-tutorial.git"
+  },
+  "keywords": [
+    "react",
+    "tutorial",
+    "comment",
+    "example"
+  ],
+  "author": "petehunt, gaearon, justin808",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaearon/react-tutorial-hot/issues"
+  },
+  "homepage": "https://github.com/gaearon/react-tutorial-hot"
+}
