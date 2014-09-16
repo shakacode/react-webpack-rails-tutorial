@@ -1,0 +1,2 @@
+web: rails s -p 4000
+webpack: cd webpack && webpack -w --config webpack.rails.config.js
