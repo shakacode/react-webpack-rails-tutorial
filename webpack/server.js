@@ -24,8 +24,8 @@ server.app.get('/comments.json', function(req, res) {
 
 server.app.post('/comments.json', function(req, res) {
   console.log("Processing comment: %j", req.body.comment);
-  console.log("(shhhh...napping 2 seconds)");
-  sleep.sleep(2);
+  console.log("(shhhh...napping 1 seconds)");
+  sleep.sleep(1);
   console.log("Just got done with nap!");
   comments.push(req.body.comment);
   res.setHeader('Content-Type', 'application/json');
