@@ -1,4 +1,3 @@
-console.log("__dirname is " + __dirname);
 var webpack = require("webpack");
 var path = require("path");
 module.exports = {
@@ -28,10 +27,6 @@ module.exports = {
     root: [ path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts"),
             path.join(__dirname, "assets/stylesheets") ],
     extensions: ["", ".webpack.js", ".web.js", ".js", ".jsx", ".scss", ".css", "config.js"]
-  },
-  resolveLoader: {
-    root: [ __dirname + "./assets/javascripts"],
-    extensions: ["", ".webpack.js", ".web.js", ".js", ".jsx"]
   },
   module: {
     loaders: [

@@ -26,11 +26,6 @@ module.exports = {
     root: [ path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts")],
     extensions: ["", ".js", ".jsx"]
   },
-  resolveLoader: {
-    // todo -- see if this is necessary
-    root: [path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts")],
-    extensions: ["", ".webpack.js", ".web.js", ".js", ".jsx"]
-  },
   module: {
     loaders: [
       { test: /\.jsx$/,
