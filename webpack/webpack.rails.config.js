@@ -37,21 +37,10 @@ module.exports = {
 var devBuild = (typeof process.env["BUILDPACK_URL"]) === "undefined";
 if (devBuild) {
   console.log("Webpack dev build for rails");
-  module.exports.devtool = "source-map";
+  module.exports.devtool = "eval-source-map";
   module.exports.module.loaders.push(
     { test: require.resolve("react"), loader: "expose?React" }
   );
-  module.exports.plugins = [
-    function () {
-      this.plugin("emit", function (compilation, callback) {
-        // CRITICAL: This must be a relative path from the railsJsAssetsDir (where gen file goes)
-        var asset = compilation.assets[railsBundleMapFile];
-        compilation.assets[railsBundleMapRelativePath] = asset;
-        delete compilation.assets[railsBundleMapFile];
-        callback();
-      });
-    }
-  ];
 } else {
   console.log("Webpack production build for rails");
 }
