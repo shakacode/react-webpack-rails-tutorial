@@ -6,3 +6,6 @@ require("test-stylesheet.css");
 // Test out sass
 require("test-sass-stylesheet.scss");
 
+require("expose?$!jquery");
+require("expose?jQuery!jquery");
+require("bootstrap-webpack");

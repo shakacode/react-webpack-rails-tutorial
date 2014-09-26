@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "body-parser": "^1.8.2",
+    "bootstrap-webpack": "*",
     "express": "^4.9.0",
     "jquery": "^2.1.1",
     "marked": "^0.3.2",
@@ -20,6 +21,8 @@
     "es6-loader": "^0.2.0",
     "expose-loader": "^0.5.3",
     "extract-text-webpack-plugin": "^0.3.1",
+    "file-loader": "^0.7.2",
+    "url-loader": "^0.5.5",
     "jsx-loader": "^0.11.0",
     "loader-utils": "^0.2.3",
     "react-hot-loader": "^0.4.3",
