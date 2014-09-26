@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-module $ from 'jquery';
+var $ = require('jquery');
 module React from 'react/addons';
 
 // Next line is necessary for exposing React to browser for
