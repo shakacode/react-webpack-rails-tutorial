@@ -10,8 +10,8 @@ var railsBundleMapRelativePath = "../../../public/assets/" + railsBundleMapFile;
 module.exports = {
   context: __dirname,
   entry: [
-    // In case we don't require jQuery from CDN or asset pipeline
-    "./scripts/rails_only",
+    // to expose something Rails specific, uncomment the next line
+    //"./scripts/rails_only",
     "./assets/javascripts/example"
   ],
   output: {
@@ -28,10 +28,13 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx$/,
-        loaders: ['es6', 'jsx?harmony'] }
+      { test: /\.jsx$/, loaders: ['es6', 'jsx?harmony'] },
+      // Next 2 lines expose jQuery and $ to any JavaScript files loaded after rails-bundle.js
+      //   in the Rails Asset Pipeline. Thus, load this one prior.
+      { test: require.resolve("jquery"), loader: "expose?jQuery" },
+      { test: require.resolve("jquery"), loader: "expose?$" }
     ]
-  },
+  }
 };
 
 var devBuild = (typeof process.env["BUILDPACK_URL"]) === "undefined";
