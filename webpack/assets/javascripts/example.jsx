@@ -5,7 +5,7 @@ import { CommentBox } from './CommentBox';
 
 var $ = require('jquery');
 
-var render = function() {
+var render = () => {
   if ($("#content").length > 0) {
     React.renderComponent(
       <div>
@@ -20,7 +20,7 @@ var render = function() {
 $(function() {
   render();
   // Next part is to make this work with turbo-links
-  $(document).on("page:change", function () {
+  $(document).on("page:change", () => {
     render();
   });
 });
