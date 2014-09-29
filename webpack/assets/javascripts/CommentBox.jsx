@@ -127,7 +127,7 @@ var CommentForm = React.createClass({
     return;
   },
   handleSelect: function(selectedKey) {
-   this.setState({ formMode: selectedKey });
+    this.setState({ formMode: selectedKey });
   },
   handleChange: function() {
     // This could also be done using ReactLink:
@@ -154,7 +154,7 @@ var CommentForm = React.createClass({
           <Input type="textarea" label="Text" placeholder="Say something..." labelClassName="col-sm-2" wrapperClassName="col-sm-10" ref="text"  value={this.props.formData.text} onChange={this.handleChange} disabled={this.props.ajaxSending} />
           <div className="form-group"><div className="col-sm-offset-2 col-sm-10"><input type="submit" className="btn btn-primary" value="Post" disabled={this.props.ajaxSending} /></div></div>
         </form></div>
-      );
+    );
   },
   formStacked: function() {
     return (
@@ -164,7 +164,7 @@ var CommentForm = React.createClass({
           <Input type="textarea" label="Text" placeholder="Say something..." ref="text" value={this.props.formData.text} onChange={this.handleChange} disabled={this.props.ajaxSending} />
           <input type="submit" className="btn btn-primary" value="Post" disabled={this.props.ajaxSending} />
         </form></div>
-      );
+    );
   },
   formInline: function() {
     return (
@@ -182,21 +182,21 @@ var CommentForm = React.createClass({
                 <input type="submit" className="btn btn-primary" value="Post" disabled={this.props.ajaxSending} />
               </Col>
             </Row>
-        </Input>
+          </Input>
         </form></div>
-      );
+    );
   },
   render: function() {
     var inputForm;
     switch (this.state.formMode) {
-       case 0:
-         inputForm = this.formHorizontal();
-         break;
-       case 1:
-         inputForm = this.formStacked();
-         break;
-       case 2:
-         inputForm = this.formInline();
+      case 0:
+        inputForm = this.formHorizontal();
+        break;
+      case 1:
+        inputForm = this.formStacked();
+        break;
+      case 2:
+        inputForm = this.formInline();
     }
     return (
       <div>
