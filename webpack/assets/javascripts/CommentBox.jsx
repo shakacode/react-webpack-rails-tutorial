@@ -32,17 +32,15 @@ var Comment = React.createClass({
 });
 
 var CommentBox = React.createClass({
+  logError: function(xhr, status, err) {
+    console.error(`Error loading comments from server!\nURL is ${this.props.url}\nstatus is ${status}\nerr is ${err.toString()}`);
+  },
   loadCommentsFromServer: function() {
     $.ajax({
       url: this.props.url,
-      dataType: 'json',
-      success: data => {
+      dataType: 'json'}).then(data => {
         this.setState({data: data});
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
-      }
-    });
+      }, this.logError);
   },
   emptyFormData:  { author: "", text: "" },
   handleCommentSubmit: function() {
@@ -55,17 +53,14 @@ var CommentBox = React.createClass({
       url: this.props.url,
       dataType: 'json',
       type: 'POST',
-      data: { comment: comment},
-      success: data => {
+      data: { comment: comment}}).then(data => {
         var comments = this.state.data;
         var newComments = React.addons.update(comments, { $push: [comment] } );
         this.setState({ajaxSending: false, data: newComments, formData: this.emptyFormData });
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
+      }, (xhr, status, err) => {
+        this.logError(xhr, status, err);
         this.setState({ajaxSending: false});
-      }
-    });
+      });
   },
   getInitialState: function() {
     return {
