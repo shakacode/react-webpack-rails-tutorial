@@ -1,5 +1,11 @@
 # React, React-Bootstrap, and ES-6 on Rails via WebPack
 
+By Justin Gordon, http://www.railsonmaui.com
+
+Full tutorial can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/02/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
+
+[Discussion forum regarding the tutorial](http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/10)
+
 # Motivation
 
 1. Enable development of a JS client separate from Rails.
