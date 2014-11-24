@@ -38,6 +38,17 @@ That's totally different than "Live Reload" which refreshes the browser.
 
 # Rails
 
+## Automatically building the rails-bundle.js
+Run this command to automatically build the rails-bundle.js file in the
+javascript directory whenever your jsx files change.
+
+```
+cd webpack
+webpack -w --config webpack.rails.config.js
+```
+
+## Run Rails
+
 ```
 bundle install
 rake db:setup
@@ -46,15 +57,6 @@ rails s -p 4000
 Point browser to [http://0.0.0.0:4000]().
 
 It's important to run the rails server on different port than the node server.
-
-## Automatically Building the rails-bundle.js
-Run this command to automatically build the rails-bundle.js file in the
-javascript directory whenever your jsx files change.
-
-```
-cd webpack
-webpack -w --config webpack.rails.config.js
-```
 
 # Webpack Configuration
 `webpack.hot.config.js`: Used by server.js to run the demo server.

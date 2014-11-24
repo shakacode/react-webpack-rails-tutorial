@@ -17,4 +17,3 @@
 
 //= require rails-bundle
 //= require turbolinks
-//= require bootstrap-sprockets
