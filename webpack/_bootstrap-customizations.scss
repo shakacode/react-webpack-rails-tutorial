@@ -1,0 +1,10 @@
+// ## Customize Variables
+
+// This gets loaded after bootstrap/variables is loaded, so you can refer to bootstrap variables
+// Remove borders around `<pre>` block so the code
+// flows with our right column layout.
+$pre-border-color: $pre-bg; // hide the border.
+
+// This makes the font on the buttons and the text BIG
+$font-size-base: 18px;
+

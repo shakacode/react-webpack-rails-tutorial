@@ -39,8 +39,6 @@ GEM
       execjs
     binding_of_caller (0.7.3.pre1)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.2.0.1)
-      sass (~> 3.2)
     builder (3.2.2)
     byebug (3.2.0)
       columnize (~> 0.8)
@@ -161,7 +159,6 @@ PLATFORMS
 
 DEPENDENCIES
   autoprefixer-rails
-  bootstrap-sass (~> 3.2.0)
   byebug
   coffee-rails (~> 4.0.0)
   jbuilder (~> 2.0)

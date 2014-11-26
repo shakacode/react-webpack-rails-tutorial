@@ -10,7 +10,6 @@
     "bootstrap-sass": "~3.3.1",
     "bootstrap-sass-loader": "~0.0.4",
     "imports-loader": "^0.6.3",
-    "extract-text-webpack-plugin": "~0.3.5",
     "body-parser": "^1.9.0",
     "bootstrap-webpack": "*",
     "es6-loader": "^0.2.0",

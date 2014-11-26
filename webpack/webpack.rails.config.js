@@ -2,26 +2,21 @@
 // cd webpack && webpack -w --config webpack.rails.config.js
 
 var path = require("path");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var railsBundleFile = "rails-bundle.js";
 var railsJsAssetsDir = "../app/assets/javascripts";
-var railsBundleMapFile = railsBundleFile + ".map";
-var railsBundleMapRelativePath = "../../../public/assets/" + railsBundleMapFile;
+//var railsBundleMapFile = railsBundleFile + ".map";
+//var railsBundleMapRelativePath = "../../../public/assets/" + railsBundleMapFile;
 
 module.exports = {
   context: __dirname,
   entry: [
-    // to expose something Rails specific, uncomment the next line
-    //"./scripts/rails_only",
+    //"./scripts/rails_only", // uncomment to expose Rails specific
     "./assets/javascripts/example",
 
-    // Alternative for including everything with no customization
-    'bootstrap-sass-loader'
-    //
-    // Example of using customization file
-    //'bootstrap-sass!./bootstrap-sass.config.js'
-    //
-    // Example of using customization file with ExtractTextPlugin
-    //"bootstrap-sass!./bootstrap-sass.extract-text-plugin.config.js"
+    //'bootstrap-sass-loader' // include all bootstrap
+    //'bootstrap-sass!./bootstrap-sass.config.js' // use custom bootstrap file
+    'bootstrap-sass!./bootstrap-sass.extract-text-plugin.config.js' // use custom bootstrap file w/ ExtractTextPlugin
   ],
   output: {
     filename: railsBundleFile,
@@ -41,10 +36,16 @@ module.exports = {
       // bootstrap-sass-loader has access to the jQuery object
       { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
       { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"},
-      { test: /\.woff$/,   loader: "url-loader?limit=10000&minetype=application/font-woff" },
-      { test: /\.ttf$/,    loader: "file-loader" },
-      { test: /\.eot$/,    loader: "file-loader" },
-      { test: /\.svg$/,    loader: "file-loader" },
+      // Load Bootstrap's CSS
+      // Needed for the css-loader when [bootstrap-sass-loader]
+      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&minetype=application/font-woff" },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=application/octet-stream" },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=image/svg+xml" },
+      //{ test: /\.woff$/,   loader: "url-loader?limit=10000&minetype=application/font-woff" },
+      //{ test: /\.ttf$/,    loader: "file-loader" },
+      //{ test: /\.eot$/,    loader: "file-loader" },
+      //{ test: /\.svg$/,    loader: "file-loader" },
 
       { test: /\.jsx$/, loaders: ['es6', 'jsx?harmony'] },
       // Next 2 lines expose jQuery and $ to any JavaScript files loaded after rails-bundle.js
@@ -52,7 +53,10 @@ module.exports = {
       { test: require.resolve("jquery"), loader: "expose?jQuery" },
       { test: require.resolve("jquery"), loader: "expose?$" }
     ]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin("../stylesheets/bootstrap-and-customizations.css")
+  ]
 };
 
 var devBuild = (typeof process.env["BUILDPACK_URL"]) === "undefined";
