@@ -89,7 +89,9 @@ by the Rails asset pipeline.
    images. The image directory for the webpack server is configured by this
    line:
 
+```
     { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"}
+```
 
 # Source Maps
 They work for both Rails and the Webpack Server!
