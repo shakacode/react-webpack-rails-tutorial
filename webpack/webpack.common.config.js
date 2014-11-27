@@ -5,9 +5,7 @@ var path = require("path");
 module.exports = {
   devtool: "eval-source-map",
   context: __dirname, // the project dir
-  entry: [
-    "./assets/javascripts/example"
-  ],
+  entry: [ "./assets/javascripts/example" ],
   // In case you wanted to load jQuery from the CDN, this is how you would do it:
   // externals: {
   //   jquery: "var jQuery"
