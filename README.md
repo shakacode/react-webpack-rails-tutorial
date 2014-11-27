@@ -13,43 +13,55 @@ Full tutorial can be found at: [Fast Rich Client Rails Development With Webpack 
 3. Enable the use of the JavaScript es6 transpiler.
 4. Enable easily using npm modules with a Rails application.
 
-# Example of the following technologies:
+# Example of the following technologies
 
-1. react
-2. react-bootstrap
-3. webpack with hot-reload
+1. React
+2. React-bootstrap
+3. Webpack with hot-reload
+4. Webpack ExtractTextPlugin
 4. es6-loader (es6 transpiler)
 5. Simultaneously working with Rails 4.2
 6. Deployable to Heroku
 
-# Running without Rails using Hot Reload
+# Running without Rails using Module Hot Replacement
 
 Setup node and run the node server.
+
 ```
 npm install
-cd webpack && node server.js
+cd webpack && webpack --config webpack.hot.config.js
+node server.js
 ```
 
 Point browser to [http://0.0.0.0:3000]().
+
+Note: Make sure to invoke your local copy of the webpack executable as opposed
+to any globally installed webpack.
+See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
 That's totally different than "Live Reload" which refreshes the browser.
 
-# Rails
+# Running with Rails
 
-## Automatically building the rails-bundle.js
-Run this command to automatically build the rails-bundle.js file in the
-javascript directory whenever your jsx files change.
+## Build Rails bundles
+Run this command to have webpack build the Rails bundles in the Rails
+asset pipeline.
+Note that the Webpack ExtractTextPlugin is used so that two bundles are generated:
+- rails-bundle.js which gets copied to app/assets/javascripts
+- bootstrap-and-customizations.css which gets copied in app/assets/stylesheet
+Observe how the bundles are automatically re-generated whever your JSX changes.
 
 ```
 cd webpack
 webpack -w --config webpack.rails.config.js
 ```
 
-## Run Rails
+## Run Rails server
 
 ```
+cd <rails_project_name>
 bundle install
 rake db:setup
 rails s -p 4000
@@ -58,17 +70,18 @@ Point browser to [http://0.0.0.0:4000]().
 
 It's important to run the rails server on different port than the node server.
 
-# Webpack Configuration
-`webpack.hot.config.js`: Used by server.js to run the demo server.
-`webpack.rails.config.js`: Used to generate the rails-bundle.js file
+# Webpack configuration files
+- `webpack.hot.config.js`: Used by server.js to run the demo express server.
+- `webpack.rails.config.js`: Used to generate the Rails bundles.
+- `webpack.common.config.js`: Common configuration file to minimize code duplication.
 
-# Notes on Rails Assets
+# Notes on Rails assets
 ## Javascript
-The `webpack.rails.config.js` file generates rails-bundle.js which is included
+The `webpack.rails.config.js` file generates rails-bundle.js which is then included
 by the Rails asset pipeline.
 
 ## Sass and images
-1. The Webpack server loads the images from the **symlink** of of the
+1. The Webpack server loads the images from the **symlink** of the
    app/assets/images directory.
 2. Since the images are not moved, Rails loads images via the normal asset
    pipeline features.
@@ -91,7 +104,3 @@ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-mult
 ```
 
 This runs the two buildpacks in the `.buildpacks` directory.
-
-# TO DO
-1. (Optionally) integrate twitter bootstrap assets into webpack build with way
-   to configure same options for Rails and Webpack.
