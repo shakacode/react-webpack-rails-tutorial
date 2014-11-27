@@ -1,24 +1,17 @@
-var webpack = require("webpack");
+// Common webpack configuration used by webpack.hot.config and webpack.rails.config.
+
 var path = require("path");
 
 module.exports = {
   devtool: "eval-source-map",
-
-  context: __dirname, //  + "/../app/assets/javascripts",
+  context: __dirname, // the project dir
   entry: [
-    "webpack-dev-server/client?http://localhost:3000",
-    "webpack/hot/dev-server",
-    "./scripts/webpack_only",
     "./assets/javascripts/example"
   ],
-  // Note, this file is not actually saved, but used by the express server
-  output: {
-    filename: "express-bundle.js",
-    path: __dirname
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
+  // In case you wanted to load jQuery from the CDN, this is how you would do it:
+  // externals: {
+  //   jquery: "var jQuery"
+  // },
   resolve: {
     root: [ path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts"),
             path.join(__dirname, "assets/stylesheets") ],

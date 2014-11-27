@@ -22,7 +22,7 @@ module.exports = {
     filename: railsBundleFile,
     path: railsJsAssetsDir
   },
-  // Let's load jQuery from the CDN or rails asset pipeline
+  // Load jQuery from the CDN or rails asset pipeline
   externals: {
     jquery: "var jQuery"
   },
@@ -34,20 +34,28 @@ module.exports = {
     loaders: [
       // **IMPORTANT** This is needed so that each bootstrap js file required by
       // bootstrap-sass-loader has access to the jQuery object
-      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
-      { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"},
+      { test: /bootstrap-sass\/assets\/javascripts\//,
+        loader: 'imports?jQuery=jquery' },
+      { test: /\.scss$/,
+        loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"},
+
       // Load Bootstrap's CSS
       // Needed for the css-loader when [bootstrap-sass-loader]
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&minetype=application/font-woff" },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=application/octet-stream" },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=image/svg+xml" },
+      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&minetype=application/font-woff" },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&minetype=application/octet-stream" },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file" },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&minetype=image/svg+xml" },
       //{ test: /\.woff$/,   loader: "url-loader?limit=10000&minetype=application/font-woff" },
       //{ test: /\.ttf$/,    loader: "file-loader" },
       //{ test: /\.eot$/,    loader: "file-loader" },
       //{ test: /\.svg$/,    loader: "file-loader" },
 
       { test: /\.jsx$/, loaders: ['es6', 'jsx?harmony'] },
+
       // Next 2 lines expose jQuery and $ to any JavaScript files loaded after rails-bundle.js
       // in the Rails Asset Pipeline. Thus, load this one prior.
       { test: require.resolve("jquery"), loader: "expose?jQuery" },
