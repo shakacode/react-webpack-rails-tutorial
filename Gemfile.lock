@@ -53,8 +53,12 @@ GEM
     columnize (0.8.9)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
+    dotenv (1.0.2)
     erubis (2.7.0)
     execjs (2.2.1)
+    foreman (0.76.0)
+      dotenv (~> 1.0.2)
+      thor (~> 0.19.1)
     globalid (0.2.3)
       activesupport (>= 4.1.0)
     hike (1.2.3)
@@ -161,6 +165,7 @@ DEPENDENCIES
   autoprefixer-rails
   byebug
   coffee-rails (~> 4.0.0)
+  foreman
   jbuilder (~> 2.0)
   jquery-rails
   pg

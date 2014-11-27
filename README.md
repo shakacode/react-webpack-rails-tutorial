@@ -38,6 +38,10 @@ Point browser to [http://0.0.0.0:3000]().
 Make sure to invoke your local copy of the webpack executable as opposed
 to any globally installed webpack.
 See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
+In doubt you can run the following command:
+```
+$(npm bin)/webpack --config webpack.hot.config.js
+```
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -91,6 +95,12 @@ by the Rails asset pipeline.
 
 ```
     { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"}
+```
+
+# Process management
+Run the following command in your development environment to invoke both Webpack and Rails.
+```
+bundle exec foreman start -f Procfile.dev
 ```
 
 # Source Maps
