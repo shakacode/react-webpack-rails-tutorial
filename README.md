@@ -35,7 +35,7 @@ node server.js
 
 Point browser to [http://0.0.0.0:3000]().
 
-Note: Make sure to invoke your local copy of the webpack executable as opposed
+Make sure to invoke your local copy of the webpack executable as opposed
 to any globally installed webpack.
 See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
 
