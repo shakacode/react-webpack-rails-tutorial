@@ -11,8 +11,8 @@ module.exports = {
   //   jquery: "var jQuery"
   // },
   resolve: {
-    root: [ path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts"),
-            path.join(__dirname, "assets/stylesheets") ],
+    root: [path.join(__dirname, "scripts"), path.join(__dirname, "assets/javascripts"),
+           path.join(__dirname, "assets/stylesheets")],
     extensions: ["", ".webpack.js", ".web.js", ".js", ".jsx", ".scss", ".css", "config.js"]
   },
   module: {

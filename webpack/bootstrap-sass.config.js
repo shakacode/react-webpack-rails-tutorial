@@ -5,16 +5,9 @@ module.exports = {
   // Default for the style loading is to put in your js files
   // styleLoader: "style-loader!css-loader!sass-loader";
 
-  // If you want to use the ExtractTextPlugin
-  //   and you want compressed
-  //     styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader"),
-  //   or if you want expanded CSS
-  //     styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader!sass?outputStyle=expanded"),
-
   // ### Scripts
-  // Any scripts here set to false will never
-  // make it to the client, it's not packaged
-  // by webpack.
+  // Any scripts here set to false will never make it to the client,
+  // i.e. it's not packaged by webpack.
   scripts: {
     'transition': true,
     'alert': true,
