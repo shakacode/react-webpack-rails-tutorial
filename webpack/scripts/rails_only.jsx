@@ -4,5 +4,3 @@
 // Showing this for example purposes
 // require("expose?$!jquery");
 // require("expose?jQuery!jquery");
-
-

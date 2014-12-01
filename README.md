@@ -29,8 +29,7 @@ Setup node and run the node server.
 
 ```
 npm install
-cd webpack && webpack --config webpack.hot.config.js
-node server.js
+cd webpack && node server.js
 ```
 
 Point browser to [http://0.0.0.0:3000]().

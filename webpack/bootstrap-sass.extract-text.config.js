@@ -1,9 +1,12 @@
+//var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = {
   bootstrapCustomizations: "./_bootstrap-customizations.scss",
   mainSass: "./_main.scss",
 
   // Default for the style loading is to put in your js files
   // styleLoader: "style-loader!css-loader!sass-loader";
+  // styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader"),
 
   // ### Scripts
   // Any scripts here set to false will never make it to the client,
@@ -12,7 +15,7 @@ module.exports = {
     'transition': true,
     'alert': true,
     'button': true,
-    'carousel': false,
+    'carousel': true,
     'collapse': true,
     'dropdown': true,
     'modal': false,

@@ -1,11 +1,7 @@
-// These are only loaded by only by the webpack server
+// These are only loaded by the webpack dev server
 
-// Option to load stylesheets via webpack
 require("test-stylesheet.css");
-
-// Test out sass
-require("test-sass-stylesheet.scss");
+require("test-sass-stylesheet.scss"); // test out sass
 
 require("expose?$!jquery");
 require("expose?jQuery!jquery");
-require("bootstrap-webpack");

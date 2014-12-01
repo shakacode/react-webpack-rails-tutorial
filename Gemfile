@@ -12,6 +12,7 @@ gem 'rails_12factor'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.0.beta1'
+gem 'bootstrap-sass', '~> 3.3.1'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -37,6 +38,8 @@ gem 'rails-html-sanitizer', '~> 1.0'
 # Use Unicorn as the app server
 gem 'unicorn'
 
+gem 'autoprefixer-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -53,5 +56,3 @@ group :development, :test do
   # Manage application processes
   gem 'foreman'
 end
-
-gem 'autoprefixer-rails'
