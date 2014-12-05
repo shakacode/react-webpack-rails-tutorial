@@ -1,5 +1,5 @@
 module.exports = {
-  bootstrapCustomizations: "./_bootstrap-customizations.scss",
+  bootstrapCustomizations: "./assets/stylesheets/_bootstrap-variables-customization.scss",
   mainSass: "./_main.scss",
 
   // Default for the style loading is to put in your js files
@@ -51,10 +51,10 @@ module.exports = {
     "pager": true,
     "labels": true,
     "badges": true,
-    "jumbotron": true,
+    "jumbotron": false,
     "thumbnails": true,
     "alerts": true,
-    "progress-bars": true,
+    "progress-bars": false,
     "media": true,
     "list-group": true,
     "panels": true,
