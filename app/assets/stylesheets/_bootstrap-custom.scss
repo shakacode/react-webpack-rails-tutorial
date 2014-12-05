@@ -1,3 +1,6 @@
+// Customizations
+@import "bootstrap-variables-customization";
+
 // Core variables and mixins
 @import "bootstrap/variables";
 @import "bootstrap/mixins";
@@ -28,10 +31,10 @@
 @import "bootstrap/pager";
 @import "bootstrap/labels";
 @import "bootstrap/badges";
-@import "bootstrap/jumbotron";
+//@import "bootstrap/jumbotron";
 @import "bootstrap/thumbnails";
 @import "bootstrap/alerts";
-@import "bootstrap/progress-bars";
+//@import "bootstrap/progress-bars";
 @import "bootstrap/media";
 @import "bootstrap/list-group";
 @import "bootstrap/panels";
@@ -48,3 +51,5 @@
 // Utility classes
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
+
+//@import "bootstrap-style-customizations";
