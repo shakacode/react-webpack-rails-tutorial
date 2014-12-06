@@ -12,10 +12,10 @@ module.exports = {
     'transition': true,
     'alert': true,
     'button': true,
-    'carousel': false,
+    'carousel': false, // excluding as an example
     'collapse': true,
     'dropdown': true,
-    'modal': false,
+    'modal': false, // excluding as an example
     'tooltip': true,
     'popover': true,
     'scrollspy': true,
@@ -51,10 +51,10 @@ module.exports = {
     "pager": true,
     "labels": true,
     "badges": true,
-    "jumbotron": false,
+    "jumbotron": false, // excluding as an example
     "thumbnails": true,
     "alerts": true,
-    "progress-bars": false,
+    "progress-bars": false, // excluding as an example
     "media": true,
     "list-group": true,
     "panels": true,

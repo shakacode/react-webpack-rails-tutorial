@@ -1,4 +1,4 @@
-// Customizations
+// Customizations - needs to be imported first!
 @import "bootstrap-variables-customization";
 
 // Core variables and mixins
@@ -31,10 +31,10 @@
 @import "bootstrap/pager";
 @import "bootstrap/labels";
 @import "bootstrap/badges";
-//@import "bootstrap/jumbotron";
+//@import "bootstrap/jumbotron"; // excluding as an example
 @import "bootstrap/thumbnails";
 @import "bootstrap/alerts";
-//@import "bootstrap/progress-bars";
+//@import "bootstrap/progress-bars"; // excluding as an example
 @import "bootstrap/media";
 @import "bootstrap/list-group";
 @import "bootstrap/panels";
@@ -43,13 +43,11 @@
 @import "bootstrap/close";
 
 // Components w/ JavaScript
-@import "bootstrap/modals";
+@import "bootstrap/modals"; // excluding as an example
 @import "bootstrap/tooltip";
 @import "bootstrap/popovers";
-@import "bootstrap/carousel";
+@import "bootstrap/carousel"; // excluding as an example
 
 // Utility classes
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
-
-//@import "bootstrap-style-customizations";

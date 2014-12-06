@@ -8,22 +8,23 @@ Full tutorial can be found at: [Fast Rich Client Rails Development With Webpack 
 
 # Motivation
 
-1. Enable development of a JS client separate from Rails.
-2. Enable easily retrofitting such a JS framework into an existing Rails app.
-3. Enable the use of the JavaScript es6 transpiler.
-4. Enable easily using npm modules with a Rails application.
+In no particular order:
+1. Enable development of a JS client independently from Rails.
+2. Easily enable use of npm modules with a Rails application.
+3. Easily enable retrofitting such a JS framework into an existing Rails app.
+4. Enable the use of the JavaScript ES6 transpiler.
 
-# Example of the following technologies
+# Technologies involved
 
-1. React
-2. React-bootstrap
-3. Webpack with hot-reload
-4. Webpack ExtractTextPlugin
-4. es6-loader (es6 transpiler)
-5. Simultaneously working with Rails 4.2
-6. Deployable to Heroku
+1. React 0.11 (for front-end app)
+2. React-bootstrap 0.12
+3. Webpack with hot-reload 1.4 (for local dev)
+4. Webpack ExtractTextPlugin (to extract CSS out of JS bundle)
+4. ES6 transpiler (es6-loader) 0.2
+5. Rails 4.2 (for backend app)
+6. Heroku (for deployment)
 
-# Running without Rails using Module Hot Replacement
+# Javascript development without Rails using Hot Module Replacement (HMR)
 
 Setup node and run the node server.
 
@@ -37,24 +38,26 @@ Point browser to [http://0.0.0.0:3000]().
 Make sure to invoke your local copy of the webpack executable as opposed
 to any globally installed webpack.
 See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
-In doubt you can run the following command:
+If in doubt, run the following command:
 ```
 $(npm bin)/webpack --config webpack.hot.config.js
 ```
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
-That's totally different than "Live Reload" which refreshes the browser.
+That's totally different than [Live Reload](http://livereload.com/) which refreshes
+the browser.
 
-# Running with Rails
+# Rails integration
 
-## Build Rails bundles
-Run this command to have webpack build the Rails bundles in the Rails
-asset pipeline.
-Note that the Webpack ExtractTextPlugin is used so that two bundles are generated:
-- rails-bundle.js which gets copied to app/assets/javascripts
-- bootstrap-and-customizations.css which gets copied in app/assets/stylesheet
-Observe how the bundles are automatically re-generated whever your JSX changes.
+## Build JS/CSS bundles
+Run this command to have webpack build the JS/CSS bundles and have them saved in the Rails
+asset pipeline (app/assets).
+The Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
+the JS bundle. The following bundles would then be generated:
+- rails-bundle.js which gets saved to app/assets/javascripts
+- bootstrap-and-customizations.css which gets saved in app/assets/stylesheets
+Observe how the bundles are automatically re-generated whenever your JSX changes.
 
 ```
 cd webpack
@@ -62,6 +65,9 @@ webpack -w --config webpack.rails.config.js
 ```
 
 ## Run Rails server
+
+Once the JS/CSS bundled have been generated into the Rails asset pipeline, you can start
+the Rails server.
 
 ```
 cd <rails_project_name>
@@ -71,9 +77,9 @@ rails s -p 4000
 ```
 Point browser to [http://0.0.0.0:4000]().
 
-It's important to run the rails server on different port than the node server.
+It's important to run the Rails server on different port than the node server.
 
-# Webpack configuration files
+# Webpack configuration
 - `webpack.hot.config.js`: Used by server.js to run the demo express server.
 - `webpack.rails.config.js`: Used to generate the Rails bundles.
 - `webpack.common.config.js`: Common configuration file to minimize code duplication.
@@ -107,7 +113,7 @@ They work for both Rails and the Webpack Server!
 
 # Deploying to Heroku
 
-In order to deploy to heroku, you'll need run this command once to set a custom
+In order to deploy to heroku, you'll need to run this command once to set a custom
 buildpack:
 
 ```
