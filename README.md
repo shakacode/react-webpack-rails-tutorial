@@ -75,14 +75,31 @@ bundle install
 rake db:setup
 rails s -p 4000
 ```
-Point browser to [http://0.0.0.0:4000]().
+Point your browser to [http://0.0.0.0:4000]().
 
-It's important to run the Rails server on different port than the node server.
+It's important to run the Rails server on a different port than the node server.
 
 # Webpack configuration
 - `webpack.hot.config.js`: Used by server.js to run the demo express server.
 - `webpack.rails.config.js`: Used to generate the Rails bundles.
 - `webpack.common.config.js`: Common configuration file to minimize code duplication.
+
+# Bootstrap integration
+Notice that Bootstrap Sass is installed as both a gem and an npm package.
+When running the Rails app, the bootstrap-sass gem assets are loaded directly
+through the asset pipeline without passing through Webpack.
+See app/assets/application.css.scss.
+On the other hand when running the Webpack dev server, the bootrap-sass npm
+assets are loaded through Webpack (with help of the bootstrap-sass-loader).
+See webpack/webpack.hot.config.js.
+
+
+To avoid duplicating any Bootstrap customization between Rails and Webpack,
+all Bootstrap customizations have been consolidated under Webpack in
+webpack/assets/stylesheets/_bootstrap-variables-customization.scss and the
+webpack/assets/stylesheets directory added to the Rails asset pipeline
+search path. See config config/application.rb. Keep that in mind as you
+need to customize Bootstrap.
 
 # Notes on Rails assets
 ## Javascript
