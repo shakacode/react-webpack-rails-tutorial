@@ -1,3 +1,6 @@
+// IMPORTANT: Make sure to keep the customizations defined in this file
+//            in-sync with the ones defined in app/assets/stylesheets/_bootstrap-custom.scss.
+
 module.exports = {
   bootstrapCustomizations: "./assets/stylesheets/_bootstrap-variables-customization.scss",
   mainSass: "./_main.scss",

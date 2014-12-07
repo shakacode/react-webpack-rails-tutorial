@@ -19,7 +19,6 @@ In no particular order:
 1. React 0.11 (for front-end app)
 2. React-bootstrap 0.12
 3. Webpack with hot-reload 1.4 (for local dev)
-4. Webpack ExtractTextPlugin (to extract CSS out of JS bundle)
 4. ES6 transpiler (es6-loader) 0.2
 5. Rails 4.2 (for backend app)
 6. Heroku (for deployment)
@@ -35,13 +34,6 @@ cd webpack && node server.js
 
 Point browser to [http://0.0.0.0:3000]().
 
-Make sure to invoke your local copy of the webpack executable as opposed
-to any globally installed webpack.
-See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
-If in doubt, run the following command:
-```
-$(npm bin)/webpack --config webpack.hot.config.js
-```
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -61,7 +53,15 @@ Observe how the bundles are automatically re-generated whenever your JSX changes
 
 ```
 cd webpack
-webpack -w --config webpack.rails.config.js
+webpack -w --config webpack.bundle.config.js
+```
+
+Make sure to invoke your local copy of the webpack executable as opposed
+to any globally installed webpack.
+See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
+If in doubt, run the following command:
+```
+$(npm bin)/webpack -w --config webpack.bundle.config.js
 ```
 
 ## Run Rails server
@@ -81,7 +81,7 @@ It's important to run the Rails server on a different port than the node server.
 
 # Webpack configuration
 - `webpack.hot.config.js`: Used by server.js to run the demo express server.
-- `webpack.rails.config.js`: Used to generate the Rails bundles.
+- `webpack.bundle.config.js`: Used to generate the Rails bundles.
 - `webpack.common.config.js`: Common configuration file to minimize code duplication.
 
 # Bootstrap integration
@@ -94,16 +94,36 @@ assets are loaded through Webpack (with help of the bootstrap-sass-loader).
 See webpack/webpack.hot.config.js.
 
 
-To avoid duplicating any Bootstrap customization between Rails and Webpack,
-all Bootstrap customizations have been consolidated under Webpack in
+Bootstrap can be customized by hand-picking which modules to load and/or overwriting
+some of the Sass variables defined by the frameworks.
+
+## Bootstrap modules customization
+
+If you are not using all the Bootstrap modules then you'll likely want to customize
+it to avoid loading unused assets. This customization is done in separate files
+for the Rails app versus the Webpack dev server so it's important to keep these
+in-sync as you develop your app in parallel using the Rails and the Webpack HMR
+environments.
+
+- Rails Bootstrap customization file: app/assets/stylesheets/_bootstrap-custom.scss
+- Webpack HMR Bootstrap customization file: webpack/bootstrap-sass.config.js
+
+## Bootstrap variables customization
+
+If you need to customize some of the Sass variables defined in Bootstrap you
+can do so by overwriting these variables in a separate file and have it loaded
+before other Bootstrap modules.
+
+To avoid duplicating this customization between Rails and Webpack HMR,
+this custom code has been consolidated under Webpack in
 webpack/assets/stylesheets/_bootstrap-variables-customization.scss and the
 webpack/assets/stylesheets directory added to the Rails asset pipeline
 search path. See config config/application.rb. Keep that in mind as you
-need to customize Bootstrap.
+customize the Bootstrap Sass variables.
 
 # Notes on Rails assets
 ## Javascript
-The `webpack.rails.config.js` file generates rails-bundle.js which is then included
+The `webpack.bundle.config.js` file generates rails-bundle.js which is then included
 by the Rails asset pipeline.
 
 ## Sass and images

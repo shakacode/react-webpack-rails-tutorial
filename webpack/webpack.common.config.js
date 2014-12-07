@@ -1,9 +1,8 @@
-// Common webpack configuration used by webpack.hot.config and webpack.rails.config.
+// Common webpack configuration used by webpack.hot.config and webpack.bundle.config.
 
 var path = require("path");
 
 module.exports = {
-  devtool: "eval-source-map",
   context: __dirname, // the project dir
   entry: [ "./assets/javascripts/example" ],
   // In case you wanted to load jQuery from the CDN, this is how you would do it:
