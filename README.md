@@ -53,7 +53,7 @@ Observe how the bundles are automatically re-generated whenever your JSX changes
 
 ```
 cd webpack
-webpack -w --config webpack.bundle.config.js
+webpack -w --config webpack.rails.config.js
 ```
 
 Make sure to invoke your local copy of the webpack executable as opposed
@@ -61,7 +61,7 @@ to any globally installed webpack.
 See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
 If in doubt, run the following command:
 ```
-$(npm bin)/webpack -w --config webpack.bundle.config.js
+$(npm bin)/webpack -w --config webpack.rails.config.js
 ```
 
 ## Run Rails server
@@ -81,7 +81,7 @@ It's important to run the Rails server on a different port than the node server.
 
 # Webpack configuration
 - `webpack.hot.config.js`: Used by server.js to run the demo express server.
-- `webpack.bundle.config.js`: Used to generate the Rails bundles.
+- `webpack.rails.config.js`: Used to generate the Rails bundles.
 - `webpack.common.config.js`: Common configuration file to minimize code duplication.
 
 # Bootstrap integration
@@ -123,7 +123,7 @@ customize the Bootstrap Sass variables.
 
 # Notes on Rails assets
 ## Javascript
-The `webpack.bundle.config.js` file generates rails-bundle.js which is then included
+The `webpack.rails.config.js` file generates rails-bundle.js which is then included
 by the Rails asset pipeline.
 
 ## Sass and images

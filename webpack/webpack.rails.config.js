@@ -1,11 +1,11 @@
 // Run like this:
-// cd webpack && $(npm bin)/webpack -w --config webpack.bundle.config.js
+// cd webpack && $(npm bin)/webpack -w --config webpack.rails.config.js
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 var config = require("./webpack.common.config");
 
 config.entry.push("./scripts/rails_only"); // rails specific assets
-config.output = { filename: "rails-bundle.js",
+config.output = { filename: "webpack-bundle.js",
                   path: "../app/assets/javascripts" };
 config.externals = { jquery: "var jQuery" }; // load jQuery from cdn or rails asset pipeline
 config.module.loaders.push(
