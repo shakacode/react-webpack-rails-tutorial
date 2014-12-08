@@ -9,10 +9,10 @@ Full tutorial can be found at: [Fast Rich Client Rails Development With Webpack 
 # Motivation
 
 In no particular order:
-1. Enable development of a JS client independently from Rails.
-2. Easily enable use of npm modules with a Rails application.
-3. Easily enable retrofitting such a JS framework into an existing Rails app.
-4. Enable the use of the JavaScript ES6 transpiler.
+- Enable development of a JS client independently from Rails.
+- Easily enable use of npm modules with a Rails application.
+- Easily enable retrofitting such a JS framework into an existing Rails app.
+- Enable the use of the JavaScript ES6 transpiler.
 
 # Technologies involved
 
@@ -32,7 +32,7 @@ npm install
 cd webpack && node server.js
 ```
 
-Point browser to [http://0.0.0.0:3000]().
+Point your browser to [http://0.0.0.0:3000]().
 
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
