@@ -1,4 +1,5 @@
-@import "bootstrap-sprockets";
-@import "bootstrap";
 @import "../../../webpack/assets/stylesheets/test-stylesheet";
 @import "../../../webpack/assets/stylesheets/test-sass-stylesheet";
+
+@import "bootstrap-sprockets";
+@import "bootstrap-custom";

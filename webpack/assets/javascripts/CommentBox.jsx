@@ -7,7 +7,6 @@ module React from 'react/addons';
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
 // require("expose?React!react");
 
-
 var Input = require('react-bootstrap/Input');
 var Button = require('react-bootstrap/Button');
 var Row = require('react-bootstrap/Row');

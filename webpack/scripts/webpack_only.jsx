@@ -1,11 +1,10 @@
-// These are only loaded by only by the webpack server
+// These are only loaded by the webpack dev server
 
-// Option to load stylesheets via webpack
 require("test-stylesheet.css");
-
-// Test out sass
+// Test out Sass.
+// Note that any sass in here cannot use the variables and mixins
+// defined in the boostrap customizations file.
 require("test-sass-stylesheet.scss");
 
 require("expose?$!jquery");
 require("expose?jQuery!jquery");
-require("bootstrap-webpack");
