@@ -71,7 +71,7 @@ the Rails server.
 
 ```
 cd <rails_project_name>
-bundle install
+bundle install --without production
 rake db:setup
 rails s -p 4000
 ```
