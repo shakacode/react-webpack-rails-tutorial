@@ -11,6 +11,7 @@ var render = () => {
       <div>
         <CommentBox url="comments.json" pollInterval={2000} />
         <div className="twitter-image container"/>
+        <div className="webpack-image container"/>
       </div>,
       document.getElementById('content')
     );

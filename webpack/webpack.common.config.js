@@ -1,4 +1,4 @@
-// Common webpack configuration used by webpack.hot.config and webpack.bundle.config.
+// Common webpack configuration used by webpack.hot.config and webpack.rails.config.
 
 var path = require("path");
 

@@ -1,3 +1,4 @@
+// These variables get loaded BEFORE Bootstrap thus overriding them in Bootstrap.
 $body-bg: #EFF8FB; // background w/ character
 $navbar-default-bg: #FFFFE0; // fancy yellow navbar
 $font-size-base: 15px; // make it bigger!

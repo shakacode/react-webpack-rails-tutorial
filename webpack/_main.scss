@@ -1,8 +1,7 @@
 // This file is used as part of the bootstrap-sass-loader customization
-// Compare this to main.scss (no underscore) which is loaded by itself
 // ## Baseline
 
-// Included from bootstrap.config.less.
+// Included from bootstrap-sass.config.js
 body {
   padding-top: 20px;
 }
@@ -13,6 +12,13 @@ body {
 
 .doc-content {
   padding-top: 10px;
+}
+
+.webpack-image {
+  background-image: image-url("webpack.png");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  height: 120px;
 }
 
 // ## Nav
@@ -63,4 +69,3 @@ table.file-table {
     margin: 0 0 !important;
   }
 }
-

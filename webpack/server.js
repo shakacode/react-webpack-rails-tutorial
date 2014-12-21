@@ -11,6 +11,7 @@ var server = new WebpackDevServer(webpack(config), {
   //contentBase: "/public",
   publicPath: config.output.publicPath,
   hot: true,
+  noInfo: false,
   stats: {colors: true}
 });
 

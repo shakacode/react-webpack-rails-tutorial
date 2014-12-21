@@ -6,7 +6,11 @@ module.exports = {
   mainSass: "./_main.scss",
 
   // Default for the style loading is to put in your js files
-  // styleLoader: "style-loader!css-loader!sass-loader";
+  // styleLoader: "style-loader!css-loader!sass-loader",
+
+  // See: https://github.com/sass/node-sass#outputstyle
+  //      https://github.com/sass/node-sass#imagepath
+  styleLoader: "style-loader!css-loader!sass-loader?imagePath=/assets/images",
 
   // ### Scripts
   // Any scripts here set to false will never make it to the client,
