@@ -45,10 +45,13 @@ the browser.
 ## Build JS/CSS bundles
 Run this command to have webpack build the JS/CSS bundles and have them saved in the Rails
 asset pipeline (app/assets).
-The Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
-the JS bundle. The following bundles would then be generated:
-- rails-bundle.js which gets saved to app/assets/javascripts
+Although not shown in this tutorial, the Webpack ExtractTextPlugin can optionally be used
+to extract the CSS out of the JS bundle.
+
+The following bundles are generated:
+- webpack-bundle.js which gets saved to app/assets/javascripts
 - bootstrap-and-customizations.css which gets saved in app/assets/stylesheets
+
 Observe how the bundles are automatically re-generated whenever your JSX changes.
 
 ```
@@ -59,14 +62,16 @@ webpack -w --config webpack.rails.config.js
 Make sure to invoke your local copy of the webpack executable as opposed
 to any globally installed webpack.
 See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
-If in doubt, run the following command:
+
+If in doubt, run the following command, which ensures that your local webpack copy
+gets picked:
 ```
 $(npm bin)/webpack -w --config webpack.rails.config.js
 ```
 
 ## Run Rails server
 
-Once the JS/CSS bundled have been generated into the Rails asset pipeline, you can start
+Once the JS/CSS bundles have been generated into the Rails asset pipeline, you can start
 the Rails server.
 
 ```
@@ -75,14 +80,16 @@ bundle install
 rake db:setup
 rails s -p 4000
 ```
-Point your browser to [http://0.0.0.0:4000]().
 
-It's important to run the Rails server on a different port than the node server.
+Now point your browser to [http://0.0.0.0:4000]().
+
+Note that it's important to run the Rails server on a different port than the node server.
 
 # Webpack configuration
-- `webpack.hot.config.js`: Used by server.js to run the demo express server.
+- `webpack.hot.config.js`: Used by server.js to run the demo HMR server.
 - `webpack.rails.config.js`: Used to generate the Rails bundles.
-- `webpack.common.config.js`: Common configuration file to minimize code duplication.
+- `webpack.common.config.js`: Common configuration file to minimize code duplication
+between the HMR and Rails configurations.
 
 # Bootstrap integration
 Notice that Bootstrap Sass is installed as both a gem and an npm package.

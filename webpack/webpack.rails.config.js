@@ -10,7 +10,7 @@ config.output = { filename: "webpack-bundle.js",
 config.externals = { jquery: "var jQuery" }; // load jQuery from cdn or rails asset pipeline
 config.module.loaders.push(
   { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"},
-  // Next 2 lines expose jQuery and $ to any JavaScript files loaded after rails-bundle.js
+  // Next 2 lines expose jQuery and $ to any JavaScript files loaded after webpack-bundle.js
   // in the Rails Asset Pipeline. Thus, load this one prior.
   { test: require.resolve("jquery"), loader: "expose?jQuery" },
   { test: require.resolve("jquery"), loader: "expose?$" }
