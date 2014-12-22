@@ -20,3 +20,4 @@ rails-bundle.js.map
 .env
 /node_modules
 npm-debug.log
+.ruby-version
