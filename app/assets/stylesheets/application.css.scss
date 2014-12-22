@@ -1,5 +1,12 @@
-@import "../../../webpack/assets/stylesheets/test-stylesheet";
-@import "../../../webpack/assets/stylesheets/test-sass-stylesheet";
+$rails: true;
+
+// Those scss files are located under webpack/assets/stylesheets,
+// which has been added to the Rails asset pipeline search path.
+// See config/application.rb.
+@import "test-stylesheet";
+@import "test-sass-stylesheet";
 
 @import "bootstrap-sprockets";
 @import "bootstrap-custom";
+
+@import "pages"; // a custom font is defined there

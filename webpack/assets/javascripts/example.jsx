@@ -10,7 +10,7 @@ var render = () => {
     React.renderComponent(
       <div>
         <CommentBox url="comments.json" pollInterval={2000} />
-        <div className="logo container"/>
+        <div className="logo container">Brought to you by</div>
       </div>,
       document.getElementById('content')
     );

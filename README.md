@@ -94,15 +94,15 @@ between the HMR and Rails configurations.
 # Bootstrap integration
 Notice that Bootstrap Sass is installed as both a gem and an npm package.
 When running the Rails app, the bootstrap-sass gem assets are loaded directly
-through the asset pipeline without passing through Webpack.
-See app/assets/application.css.scss.
+through the asset pipeline without goign through Webpack.
+See `app/assets/application.css.scss`.
 On the other hand when running the Webpack dev server, the bootrap-sass npm
 assets are loaded through Webpack (with help of the bootstrap-sass-loader).
-See webpack/webpack.hot.config.js.
+See `webpack/webpack.hot.config.js`.
 
 
 Bootstrap can be customized by hand-picking which modules to load and/or overwriting
-some of the Sass variables defined by the frameworks.
+some of the Sass variables defined by the framework.
 
 ## Bootstrap modules customization
 
@@ -112,8 +112,8 @@ for the Rails app versus the Webpack dev server so it's important to keep these
 in-sync as you develop your app in parallel using the Rails and the Webpack HMR
 environments.
 
-- Rails Bootstrap customization file: app/assets/stylesheets/_bootstrap-custom.scss
-- Webpack HMR Bootstrap customization file: webpack/bootstrap-sass.config.js
+- Rails Bootstrap customization file: `app/assets/stylesheets/_bootstrap-custom.scss`
+- Webpack HMR Bootstrap customization file: `webpack/bootstrap-sass.config.js`
 
 ## Bootstrap variables customization
 
@@ -123,19 +123,19 @@ before other Bootstrap modules.
 
 To avoid duplicating this customization between Rails and Webpack HMR,
 this custom code has been consolidated under Webpack in
-webpack/assets/stylesheets/_bootstrap-variables-customization.scss and the
-webpack/assets/stylesheets directory added to the Rails asset pipeline
-search path. See config config/application.rb. Keep that in mind as you
+`webpack/assets/stylesheets/_bootstrap-variables-customization.scss` and the
+`webpack/assets/stylesheets` directory has been added to the Rails asset pipeline
+search path. See config `config/application.rb`. Keep that in mind as you
 customize the Bootstrap Sass variables.
 
 # Notes on Rails assets
 ## Javascript
-The `webpack.rails.config.js` file generates rails-bundle.js which is then included
+The `webpack.rails.config.js` file generates webpack-bundle.js which is then included
 by the Rails asset pipeline.
 
 ## Sass and images
 1. The Webpack server loads the images from the **symlink** of the
-   app/assets/images directory.
+   `app/assets/images` directory.
 2. Since the images are not moved, Rails loads images via the normal asset
    pipeline features.
 3. The `image-url` sass helper takes care of mapping the correct directories for
@@ -143,8 +143,18 @@ by the Rails asset pipeline.
    line:
 
 ```
-    { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"}
+{ test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"}
 ```
+
+## Sass and fonts
+The tutorial makes use of a custom font OpenSans-Light. The font files are located
+under `app/assets/font` and are loaded by both the Rails asset pipeline and
+the Webpack HMR server. See the **symlink** under `webpack/assets/fonts` which
+points to `app/assets/fonts`.
+
+Note that the libsass C library, which is used by the Webpack sass-loader, does not
+support the font-url() helper so we use url() instead. See the hack in
+`webpack/assets/stylesheets/_bootstrap-variables-customization.scss`.
 
 # Process management
 Run the following command in your development environment to invoke both Webpack and Rails.
