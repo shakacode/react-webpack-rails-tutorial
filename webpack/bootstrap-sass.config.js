@@ -3,7 +3,7 @@
 
 module.exports = {
   bootstrapCustomizations: "./assets/stylesheets/_bootstrap-variables-customization.scss",
-  mainSass: "./_main.scss",
+  mainSass: "./assets/stylesheets/_app-styling-post-bootstrap-loading.scss",
 
   // Default for the style loading is to put in your js files
   // styleLoader: "style-loader!css-loader!sass-loader",

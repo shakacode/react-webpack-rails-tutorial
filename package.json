@@ -7,13 +7,13 @@
     "node": "0.10.32"
   },
   "dependencies": {
-    "bootstrap-sass": "~3.3.1",
-    "bootstrap-sass-loader": "~0.0.4",
-    "imports-loader": "^0.6.3",
     "body-parser": "^1.9.0",
+    "bootstrap-sass": "^3.3.1",
+    "bootstrap-sass-loader": "0.0.5",
     "bootstrap-webpack": "*",
     "es6-loader": "^0.2.0",
     "express": "^4.9.8",
+    "imports-loader": "^0.6.3",
     "jquery": "^2.1.1",
     "jsx-loader": "^0.11.2",
     "loader-utils": "^0.2.2",

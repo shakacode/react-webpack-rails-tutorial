@@ -54,3 +54,6 @@
 // Utility classes
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
+
+// This must come after all the boostrap styles are loaded so that these styles can override those.
+@import "app-styling-post-bootstrap-loading";

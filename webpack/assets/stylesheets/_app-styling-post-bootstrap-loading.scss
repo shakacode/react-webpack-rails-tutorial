@@ -18,8 +18,12 @@ body {
   background-image: image-url("railsonmaui.png");
   background-repeat: no-repeat;
   background-position: left bottom;
-  height: 60px;
-  padding: 0;
+  height: 40px;
+  width: 146px;
+  margin-right: 10px;
+  display: inline-block;
+}
+.open-sans-light {
   font-family: 'OpenSans-Light';  // making use of custom fonts
 }
 
