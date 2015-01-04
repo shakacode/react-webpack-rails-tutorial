@@ -43,21 +43,22 @@ the browser.
 # Rails integration
 
 ## Build JS/CSS bundles
-Run this command to have webpack build the JS/CSS bundles and have them saved in the Rails
-asset pipeline (app/assets).
-Although not shown in this tutorial, the Webpack ExtractTextPlugin can optionally be used
-to extract the CSS out of the JS bundle.
+If not already done, run `npm install` to install all node dependencies.
+
+Then instruct webpack to build the JS/CSS bundles and have them saved in the
+Rails asset pipeline (app/assets). Although not shown in this tutorial, the
+Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
+the JS bundle.
+
+```
+cd webpack && webpack -w --config webpack.rails.config.js
+```
 
 The following bundles are generated:
 - webpack-bundle.js which gets saved to app/assets/javascripts
 - bootstrap-and-customizations.css which gets saved in app/assets/stylesheets
 
 Observe how the bundles are automatically re-generated whenever your JSX changes.
-
-```
-cd webpack
-webpack -w --config webpack.rails.config.js
-```
 
 Make sure to invoke your local copy of the webpack executable as opposed
 to any globally installed webpack.

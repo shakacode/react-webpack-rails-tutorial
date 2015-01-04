@@ -20,3 +20,6 @@ webpack-bundle.js.map
 .env
 /node_modules
 npm-debug.log
+
+# Ignore bundle dependencies
+vendor/ruby
