@@ -175,7 +175,7 @@ buildpack:
 heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
 ```
 
-This runs the two buildpacks in the `.buildpacks` file.
+This runs the two buildpacks in the `.buildpacks` directory.
 
 Also make sure you are running the latest heroku stack, cedar-14, to avoid running
 into the [following issue](https://github.com/sass/node-sass/issues/467#issuecomment-61729195).
@@ -188,3 +188,14 @@ To deploy the app on Heroku:
 ```
 git push heroku master
 ```
+
+# Update Node Modules
+```
+npm-check-updates -u
+npm-install
+```
+Then confirm that the hot reload server and the rails server both work fine. You
+may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
+shrinkwrap`.
+
+

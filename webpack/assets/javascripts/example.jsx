@@ -1,13 +1,12 @@
-/** @jsx React.DOM */
+var React = require('react/addons');
 
-module React from 'react';
 import { CommentBox } from './CommentBox';
 
 var $ = require('jquery');
 
 var render = () => {
   if ($("#content").length > 0) {
-    React.renderComponent(
+    React.render(
       <div>
         <CommentBox url="comments.json" pollInterval={2000} />
         <div className="container">
@@ -22,7 +21,7 @@ var render = () => {
       document.getElementById('content')
     );
   }
-}
+};
 
 $(function() {
   render();
