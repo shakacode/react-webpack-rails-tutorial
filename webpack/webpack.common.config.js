@@ -18,7 +18,6 @@ module.exports = {
   module: {
     loaders: [
       { test: require.resolve("react"), loader: "expose?React" },
-      { test: /\.jsx$/, loaders: ["react-hot", "es6", "jsx?harmony"] },
       { test: /\.css$/, loader: "style-loader!css-loader" },
       { test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"},
 
