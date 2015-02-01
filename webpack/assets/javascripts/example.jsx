@@ -16,6 +16,10 @@ var render = () => {
               Example of styling using image-url and Open Sans Light custom font
             </h3>
           </a>
+          <a href="https://twitter.com/railsonmaui">
+            <div className="twitter-image"/>
+            Rails On Maui on Twitter
+          </a>
         </div>
       </div>,
       document.getElementById('content')
