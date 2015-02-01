@@ -13,7 +13,8 @@ config.entry.push("webpack-dev-server/client?http://localhost:3000",
 config.output = { filename: "express-bundle.js", // this file is served directly by webpack
                   path: __dirname };
 config.module.loaders.push(
-  { test: /\.jsx$/, loaders: ["react-hot", "es6", "jsx?harmony"] },
+  { test: require.resolve("react"), loader: "expose?React" },
+  { test: /\.jsx$/, loaders: ["react-hot", "es6", "jsx?harmony"] }
 );
 config.plugins = [ new webpack.HotModuleReplacementPlugin() ];
 config.devtool = "eval-source-map";
