@@ -183,3 +183,8 @@ into the [following issue](https://github.com/sass/node-sass/issues/467#issuecom
 ```
 heroku stack:set cedar-14 -a react-webpack-rails-tutorial
 ```
+
+To deploy the app on Heroku:
+```
+git push heroku master
+```
