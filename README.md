@@ -1,39 +1,70 @@
 # React, React-Bootstrap, and ES-6 on Rails via WebPack
 
-By Justin Gordon, http://www.railsonmaui.com
+By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 
-Full tutorial can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/02/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
+- Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
+  Rails project.
+- Please file issues for problems and feature requests.
+- Pull requests are welcome!
+- If this work interests you and you are looking for full or part-time remote work, please
+  [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
+
+A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/02/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
+Note, this source code repository is going to be ahead of the tutorial. We plan to update the tutorial soon.
 
 [Discussion forum regarding the tutorial](http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/10)
+
+# Example Application
+This is a simple example of using ReactJs for Comments that demonstrates the front end code in both
+Rails and using ReactJs, and has a Rails backend. It shows off a little bit of the interactivity
+of a ReactJs application, allowing the commment to choose the form layout. `react-bootstrap` is used
+for the React components.
+
+You can see this tutorial live here: [http://react-webpack-rails-tutorial.herokuapp.com/]()
 
 # Motivation
 
 In no particular order:
-- Enable development of a JS client independently from Rails.
+
+- Example of Rails 4.2 with ReactJs with Webpack and ES6.
+- Enable development of a JS client independently from Rails using Webpack Hot Module Reload.
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
 - Enable the use of the JavaScript ES6 transpiler.
 
 # Technologies involved
 
-1. React 0.11 (for front-end app)
-2. React-bootstrap 0.12
-3. Webpack with hot-reload 1.4 (for local dev)
-4. ES6 transpiler (es6-loader) 0.2
+See package.json and Gemfile for versions
+
+1. React (for front-end app)
+2. React-bootstrap
+3. Webpack with hot-reload (for local dev)
+4. ES6 transpiler (es6-loader)
 5. Rails 4.2 (for backend app)
 6. Heroku (for deployment)
 
+# Basic Setup
+1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node version `v0.10.33`.
+1. `git clone git@github.com:justin808/react-webpack-rails-tutorial.git`
+1. `cd react-webpack-rails-tutorial`
+1. Check that you have Ruby 2.1.5 and the gemset Rails 4.2 (this might change in the future)
+1. `bundle install`
+1. `npm install`
+1. `rake db:setup`
+1. `foreman start -f Procfile.dev`
+1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
+1. Open a browser tab to [http://0.0.0.0:3000]() for the Hot Module Replacement Example.
+
 # Javascript development without Rails using Hot Module Replacement (HMR)
 
-Setup node and run the node server.
+Setup node and run the node server with file `server.js`.
 
 ```
-npm install
-cd webpack && node server.js
+cd webpack
+node server.js
 ```
 
 Point your browser to [http://0.0.0.0:3000]().
-
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -43,41 +74,29 @@ the browser.
 # Rails integration
 
 ## Build JS/CSS bundles
-If not already done, run `npm install` to install all node dependencies.
 
-Then instruct webpack to build the JS/CSS bundles and have them saved in the
+Run `webpack` to build the JS/CSS bundles and have them saved in the
 Rails asset pipeline (app/assets). Although not shown in this tutorial, the
 Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
-the JS bundle.
+the JS bundle. We've chosen to let Rails handle CSS, SCSS, images, fonts.
 
 ```
-cd webpack && webpack -w --config webpack.rails.config.js
-```
-
-The following bundles are generated:
-- webpack-bundle.js which gets saved to app/assets/javascripts
-- bootstrap-and-customizations.css which gets saved in app/assets/stylesheets
-
-Observe how the bundles are automatically re-generated whenever your JSX changes.
-
-Make sure to invoke your local copy of the webpack executable as opposed
-to any globally installed webpack.
-See https://github.com/webpack/extract-text-webpack-plugin/blob/master/example/webpack.config.js
-
-If in doubt, run the following command, which ensures that your local webpack copy
-gets picked:
-```
+cd webpack
 $(npm bin)/webpack -w --config webpack.rails.config.js
 ```
 
+`webpack-bundle.js` is generated and saved to `app/assets/javascripts`. This is included in the
+Rails asset pipeline.
+
+Observe how the bundles are automatically re-generated whenever your JSX changes.
+
 ## Run Rails server
 
-Once the JS/CSS bundles have been generated into the Rails asset pipeline, you can start
+Once the JS bundle has been generated into the Rails asset pipeline, you can start
 the Rails server.
 
 ```
 cd <rails_project_name>
-bundle install
 rake db:setup
 rails s -p 4000
 ```
@@ -95,12 +114,13 @@ between the HMR and Rails configurations.
 # Bootstrap integration
 Notice that Bootstrap Sass is installed as both a gem and an npm package.
 When running the Rails app, the bootstrap-sass gem assets are loaded directly
-through the asset pipeline without goign through Webpack.
+through the asset pipeline without going through Webpack.
+
 See `app/assets/application.css.scss`.
+
 On the other hand when running the Webpack dev server, the bootrap-sass npm
 assets are loaded through Webpack (with help of the bootstrap-sass-loader).
 See `webpack/webpack.hot.config.js`.
-
 
 Bootstrap can be customized by hand-picking which modules to load and/or overwriting
 some of the Sass variables defined by the framework.
@@ -191,11 +211,16 @@ git push heroku master
 
 # Update Node Modules
 ```
+rm npm-shrinkwrap.json
 npm-check-updates -u
-npm-install
+npm install
+npm shrinkwrap
 ```
+
 Then confirm that the hot reload server and the rails server both work fine. You
 may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
 shrinkwrap`.
 
+# Contributors
+* [Martin Breining](https://github.com/mbreining)
 
