@@ -1,2 +1,3 @@
 web: rails s -p 4000
 webpack: cd webpack && $(npm bin)/webpack -w --config webpack.rails.config.js
+hot: cd webpack && node server.js
