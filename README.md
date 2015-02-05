@@ -15,10 +15,12 @@ Note, this source code repository is going to be ahead of the tutorial. We plan 
 [Discussion forum regarding the tutorial](http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/10)
 
 # Example Application
-This is a simple example of using ReactJs for Comments that demonstrates the front end code in both
-Rails and using ReactJs, and has a Rails backend. It shows off a little bit of the interactivity
-of a ReactJs application, allowing the commment to choose the form layout. `react-bootstrap` is used
-for the React components.
+This is a simple example application that illustrates the use of ReactJs to implement a commenting
+system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails.
+It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to
+choose the form layout. `react-bootstrap` is used for the React components.
+
+A pure Rails UI generated from scaffolding is shown for comparison.
 
 You can see this tutorial live here: [http://react-webpack-rails-tutorial.herokuapp.com/]()
 
