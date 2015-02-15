@@ -20,13 +20,24 @@
     "webpack": "^1.5.3"
   },
   "devDependencies": {
+    "babel": "^4.0.1",
+    "babel-core": "^4.0.1",
+    "babel-loader": "^4.0.0",
     "bootstrap-sass": "^3.3.3",
     "bootstrap-sass-loader": "0.0.6",
     "css-loader": "^0.9.1",
+    "expect": "^1.6.0",
     "expose-loader": "^0.6.0",
     "express": "^4.11.2",
     "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
+    "karma": "^0.12.31",
+    "karma-cli": "0.0.4",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-mocha": "^0.1.10",
+    "karma-sourcemap-loader": "^0.3.3",
+    "karma-webpack": "^1.5.0",
+    "mocha": "^2.1.0",
     "react-hot-loader": "^1.1.4",
     "sass-loader": "^0.4.0-beta.1",
     "style-loader": "^0.8.3",
@@ -34,7 +45,7 @@
     "webpack-dev-server": "^1.7.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cd webpack && karma start",
     "start": "node server.js"
   },
   "repository": {
