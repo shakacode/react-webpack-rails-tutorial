@@ -24,7 +24,7 @@ choose the form layout. `react-bootstrap` is used for the React components.
 
 A pure Rails UI generated from scaffolding is shown for comparison.
 
-You can see this tutorial live here: [http://react-webpack-rails-tutorial.herokuapp.com/]()
+You can see this tutorial live here: [http://react-webpack-rails-tutorial.herokuapp.com/](http://react-webpack-rails-tutorial.herokuapp.com/)
 
 # Motivation
 
