@@ -2,7 +2,7 @@
 // with Rails vs. the Webpack Dev Server
 $rails: true;
 
-// Those scss files are located under webpack/assets/stylesheets,
+// Those scss files are located under client/assets/stylesheets,
 // which has been added to the Rails asset pipeline search path.
 // See config/application.rb.
 @import "bootstrap-custom";
