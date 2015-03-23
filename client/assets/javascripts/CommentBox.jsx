@@ -5,12 +5,12 @@ var React = require('react/addons');
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
 // require("expose?React!react");
 
-var Input = require('react-bootstrap/Input');
-var Button = require('react-bootstrap/Button');
-var Row = require('react-bootstrap/Row');
-var Col = require('react-bootstrap/Col');
-var Nav = require('react-bootstrap/Nav')
-var NavItem = require('react-bootstrap/NavItem')
+var Input = require('react-bootstrap/lib/Input');
+var Button = require('react-bootstrap/lib/Button');
+var Row = require('react-bootstrap/lib/Row');
+var Col = require('react-bootstrap/lib/Col');
+var Nav = require('react-bootstrap/lib/Nav')
+var NavItem = require('react-bootstrap/lib/NavItem')
 
 var marked = require("marked");
 
