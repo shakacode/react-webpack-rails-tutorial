@@ -2,6 +2,11 @@
 
 var path = require("path");
 
+console.log("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+console.log("__dirname is %s", __dirname);
+console.log("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+
+
 module.exports = {
   context: __dirname, // the project dir
   entry: [ "./assets/javascripts/example" ],
