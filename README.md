@@ -2,6 +2,8 @@
 
 By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 
+- If you came to here from the blog article, this example project has evolved. See CHANGELOG.md for 
+  what's changed.
 - Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
   Rails project.
 - Please file issues for problems and feature requests.
@@ -64,7 +66,7 @@ See package.json and Gemfile for versions
 Setup node and run the node server with file `server.js`.
 
 ```
-cd webpack
+cd client
 node server.js
 ```
 
@@ -85,11 +87,11 @@ Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
 the JS bundle. We've chosen to let Rails handle CSS, SCSS, images, fonts.
 
 ```
-cd webpack
+cd client
 $(npm bin)/webpack -w --config webpack.rails.config.js
 ```
 
-`webpack-bundle.js` is generated and saved to `app/assets/javascripts`. This is included in the
+`client-bundle.js` is generated and saved to `app/assets/javascripts`. This is included in the
 Rails asset pipeline.
 
 Observe how the bundles are automatically re-generated whenever your JSX changes.
@@ -155,7 +157,7 @@ customize the Bootstrap Sass variables.
 
 # Notes on Rails assets
 ## Javascript
-The `webpack.rails.config.js` file generates webpack-bundle.js which is then included
+The `webpack.rails.config.js` file generates client-bundle.js which is then included
 by the Rails asset pipeline.
 
 ## Sass and images
@@ -232,5 +234,5 @@ shrinkwrap`.
 Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools
 [RubyMine](https://www.jetbrains.com/ruby/) and [WebStorm](https://www.jetbrains.com/webstorm/).
 The developers of this project use RubyMine at the top level, mostly for Ruby work, and we use
-WebStorm opened up to the `webpack` directory to focus on JSX and Sass files.
+WebStorm opened up to the `client` directory to focus on JSX and Sass files.
 

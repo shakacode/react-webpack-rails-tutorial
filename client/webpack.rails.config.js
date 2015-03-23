@@ -1,5 +1,5 @@
 // Run like this:
-// cd webpack && $(npm bin)/webpack -w --config webpack.rails.config.js
+// cd client && $(npm bin)/webpack -w --config webpack.rails.config.js
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 // NOTE: All style sheets handled by the asset pipeline in rails
@@ -7,12 +7,12 @@
 var config = require("./webpack.common.config");
 
 config.entry.push("./scripts/rails_only"); // rails specific assets
-config.output = { filename: "webpack-bundle.js",
+config.output = { filename: "client-bundle.js",
                   path: "../app/assets/javascripts" };
 config.externals = { jquery: "var jQuery" }; // load jQuery from cdn or rails asset pipeline
 config.module.loaders.push(
   { test: /\.jsx$/, loaders: ["es6", "jsx?harmony"] },
-  // Next 2 lines expose jQuery and $ to any JavaScript files loaded after webpack-bundle.js
+  // Next 2 lines expose jQuery and $ to any JavaScript files loaded after client-bundle.js
   // in the Rails Asset Pipeline. Thus, load this one prior.
   { test: require.resolve("jquery"), loader: "expose?jQuery" },
   { test: require.resolve("jquery"), loader: "expose?$" }

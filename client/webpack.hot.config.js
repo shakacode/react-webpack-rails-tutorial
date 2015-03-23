@@ -1,5 +1,5 @@
 // Run like this:
-// cd webpack && node server.js
+// cd client && node server.js
 
 var path = require("path");
 var config = require("./webpack.common.config");

@@ -15,8 +15,8 @@
 /log/*.log
 /tmp
 /public/assets
-webpack-bundle.js
-webpack-bundle.js.map
+client-bundle.js
+client-bundle.js.map
 .env
 /node_modules
 npm-debug.log
