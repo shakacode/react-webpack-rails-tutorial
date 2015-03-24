@@ -18,6 +18,7 @@
 client-bundle.js
 client-bundle.js.map
 .env
+.idea/
 node_modules
 npm-debug.log
 
