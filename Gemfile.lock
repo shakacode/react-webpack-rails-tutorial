@@ -60,9 +60,8 @@ GEM
     capybara-screenshot (1.0.7)
       capybara (>= 1.0, < 3)
       launchy
-    capybara-webkit (1.4.1)
-      capybara (>= 2.3.0, < 2.5.0)
-      json
+    childprocess (0.5.5)
+      ffi (~> 1.0, >= 1.0.11)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -71,6 +70,7 @@ GEM
       execjs
     coffee-script-source (1.9.0)
     columnize (0.9.0)
+    database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
@@ -82,6 +82,7 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
+    ffi (1.9.8)
     foreman (0.77.0)
       dotenv (~> 1.0.2)
       thor (~> 0.19.1)
@@ -147,17 +148,11 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
-    rspec (3.2.0)
-      rspec-core (~> 3.2.0)
-      rspec-expectations (~> 3.2.0)
-      rspec-mocks (~> 3.2.0)
     rspec-core (3.2.2)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
-    rspec-instafail (0.2.6)
-      rspec
     rspec-mocks (3.2.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
@@ -170,6 +165,7 @@ GEM
       rspec-mocks (~> 3.2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
+    rubyzip (1.1.7)
     sass (3.4.11)
     sass-rails (5.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -180,6 +176,11 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    selenium-webdriver (2.45.0)
+      childprocess (~> 0.5)
+      multi_json (~> 1.0)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
     slop (3.6.0)
     spring (1.2.0)
     sprockets (2.12.3)
@@ -211,6 +212,7 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (~> 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    websocket (1.2.1)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -223,20 +225,21 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  capybara-webkit
   coffee-rails
+  database_cleaner
   factory_girl_rails
   foreman
   jbuilder
   jquery-rails
+  launchy
   pg
   rails (~> 4.2)
   rails-html-sanitizer
   rails_12factor
-  rspec-instafail
   rspec-rails
   sass-rails
   sdoc
+  selenium-webdriver
   spring
   sqlite3
   turbolinks

@@ -55,13 +55,16 @@ group :development, :test do
 
   # Manage application processes
   gem 'foreman'
-end
 
-group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+end
+
+group :test  do
   gem 'capybara'
-  gem 'capybara-webkit'
+  #gem 'capybara-webkit'
   gem 'capybara-screenshot'
-  gem 'rspec-instafail', require: false
+  gem 'database_cleaner'
+  gem 'launchy'
+  gem 'selenium-webdriver'
 end
