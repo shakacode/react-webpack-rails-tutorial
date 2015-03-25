@@ -4,6 +4,7 @@ Capybara.register_driver :selenium_chrome do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
 
+
 # Saves page to place specfied at
 # NOTE: you must pass js: true for the feature definition (or else you'll see that render doesn't exist!)
 # call force = true, or set ENV[RENDER_SCREENSHOTS] == 'YES'
