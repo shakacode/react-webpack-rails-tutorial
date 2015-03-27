@@ -238,8 +238,9 @@ check if you have qt-4.x installed. You need at least qt-5 installed.
 ```
 brew info qt
 ```
-Check the output. Install qt5
+Check the output. Does the version say less than 5? If so, install qt5.
 ```
+brew uninstall qt
 brew install qt5
 ```
 
