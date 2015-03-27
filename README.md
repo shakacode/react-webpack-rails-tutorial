@@ -227,8 +227,35 @@ Then confirm that the hot reload server and the rails server both work fine. You
 may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
 shrinkwrap`.
 
+# Running Tests
+We have feature tests in /spec/features
+
+Run the tests with `rspec`.
+
+If you get errors when running rspec in that it can't find expected DOM elements, then you'll want to
+check if you have qt-4.x installed. You need at least qt-5 installed.
+
+```
+brew info qt
+```
+Check the output. Install qt5
+```
+brew install qt5
+```
+
+Then you need to run  
+```
+gem uninstall capybara-webkit
+QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
+```
+
+**IMPORTANT** Be sure that the path indicated for the QMAKE corresponds to a correct path.
+
+Then run `rspec` and you should see the tests have passed.
+
 # Contributors
 * [Martin Breining](https://github.com/mbreining)
+* [Dylan Grafmyre](https://github.com/Dgrafmyre)
 
 # RubyMine and WebStorm
 Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools
