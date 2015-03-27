@@ -48,6 +48,8 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  Capybara.javascript_driver = :webkit
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

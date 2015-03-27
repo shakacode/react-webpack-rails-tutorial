@@ -6,7 +6,6 @@
 
 var config = require("./webpack.common.config");
 
-config.entry.push("./scripts/rails_only"); // rails specific assets
 config.output = { filename: "client-bundle.js",
                   path: "../app/assets/javascripts" };
 config.externals = { jquery: "var jQuery" }; // load jQuery from cdn or rails asset pipeline
@@ -23,6 +22,7 @@ module.exports = config;
 var devBuild = (typeof process.env["BUILDPACK_URL"]) === "undefined";
 if (devBuild) {
   console.log("Webpack dev build for Rails");
+  config.entry.push('es5-shim'); // rails specific assets
   module.exports.devtool = "eval-source-map";
 } else {
   console.log("Webpack production build for Rails");
