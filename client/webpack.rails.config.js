@@ -9,6 +9,12 @@ var config = require("./webpack.common.config");
 config.output = { filename: "client-bundle.js",
                   path: "../app/assets/javascripts" };
 config.externals = { jquery: "var jQuery" }; // load jQuery from cdn or rails asset pipeline
+
+// You can add entry points specific to rails here
+config.entry.push('./scripts/rails_only');
+
+// See webpack.common.config for adding modules common to both the webpack dev server and rails
+
 config.module.loaders.push(
   { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
   // Next 2 lines expose jQuery and $ to any JavaScript files loaded after client-bundle.js
@@ -22,7 +28,6 @@ module.exports = config;
 var devBuild = (typeof process.env["BUILDPACK_URL"]) === "undefined";
 if (devBuild) {
   console.log("Webpack dev build for Rails");
-  config.entry.push('es5-shim'); // rails specific assets
   module.exports.devtool = "eval-source-map";
 } else {
   console.log("Webpack production build for Rails");
