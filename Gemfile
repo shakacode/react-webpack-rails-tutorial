@@ -55,4 +55,15 @@ group :development, :test do
 
   # Manage application processes
   gem 'foreman'
+
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test  do
+  gem 'capybara'
+  gem 'capybara-screenshot'
+  gem 'capybara-webkit'
+  gem 'database_cleaner'
+  gem 'launchy'
 end

@@ -13,7 +13,7 @@ namespace :assets do
 
   desc 'Compile assets with webpack'
   task :webpack do
-    sh 'cd webpack && $(npm bin)/webpack --config webpack.rails.config.js'
+    sh 'cd client && $(npm bin)/webpack --config webpack.rails.config.js'
   end
 
   task :clobber do
