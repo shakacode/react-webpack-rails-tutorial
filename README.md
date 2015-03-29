@@ -126,7 +126,7 @@ See `app/assets/application.css.scss`.
 
 On the other hand when running the Webpack dev server, the bootrap-sass npm
 assets are loaded through Webpack (with help of the bootstrap-sass-loader).
-See `webpack/webpack.hot.config.js`.
+See `client/webpack.hot.config.js`.
 
 Bootstrap can be customized by hand-picking which modules to load and/or overwriting
 some of the Sass variables defined by the framework.
@@ -140,7 +140,7 @@ in-sync as you develop your app in parallel using the Rails and the Webpack HMR
 environments.
 
 - Rails Bootstrap customization file: `app/assets/stylesheets/_bootstrap-custom.scss`
-- Webpack HMR Bootstrap customization file: `webpack/bootstrap-sass.config.js`
+- Webpack HMR Bootstrap customization file: `client/bootstrap-sass.config.js`
 
 ## Bootstrap variables customization
 
@@ -150,8 +150,8 @@ before other Bootstrap modules.
 
 To avoid duplicating this customization between Rails and Webpack HMR,
 this custom code has been consolidated under Webpack in
-`webpack/assets/stylesheets/_bootstrap-variables-customization.scss` and the
-`webpack/assets/stylesheets` directory has been added to the Rails asset pipeline
+`client/assets/stylesheets/_bootstrap-variables-customization.scss` and the
+`client/assets/stylesheets` directory has been added to the Rails asset pipeline
 search path. See config `config/application.rb`. Keep that in mind as you
 customize the Bootstrap Sass variables.
 
@@ -176,12 +176,12 @@ by the Rails asset pipeline.
 ## Sass and fonts
 The tutorial makes use of a custom font OpenSans-Light. The font files are located
 under `app/assets/font` and are loaded by both the Rails asset pipeline and
-the Webpack HMR server. See the **symlink** under `webpack/assets/fonts` which
+the Webpack HMR server. See the **symlink** under `client/assets/fonts` which
 points to `app/assets/fonts`.
 
 Note that the libsass C library, which is used by the Webpack sass-loader, does not
 support the font-url() helper so we use url() instead. See the hack in
-`webpack/assets/stylesheets/_bootstrap-variables-customization.scss`.
+`client/assets/stylesheets/_bootstrap-variables-customization.scss`.
 
 # Process management
 Run the following command in your development environment to invoke both Webpack and Rails.
