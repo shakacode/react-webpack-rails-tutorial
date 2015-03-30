@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var React = require('react/addons');
+var CommentStore = require('../stores/CommentStore');
 
 // Next line is necessary for exposing React to browser for
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
@@ -12,7 +13,7 @@ var Col = require('react-bootstrap/lib/Col');
 var Nav = require('react-bootstrap/lib/Nav')
 var NavItem = require('react-bootstrap/lib/NavItem')
 
-var marked = require("marked");
+var marked = require("marked"); // markdown parser
 
 var Comment = React.createClass({
   render: function() {
@@ -40,7 +41,8 @@ var CommentBox = React.createClass({
         this.setState({data: data});
       }, this.logError);
   },
-  emptyFormData:  { author: "", text: "" },
+
+  emptyFormData: { author: "", text: "" },
 
   handleCommentSubmit: function() {
     // `setState` accepts a callback. To avoid (improbable) race condition,
@@ -85,7 +87,10 @@ var CommentBox = React.createClass({
     return (
       <div className="commentBox container">
         <h1>Comments { this.state.ajaxSending ? "AJAX SENDING!" : "" }</h1>
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} formData={this.state.formData} onChange={this.onFormChange} ajaxSending={this.state.ajaxSending} />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit}
+                     formData={this.state.formData}
+                     onChange={this.onFormChange}
+                     ajaxSending={this.state.ajaxSending} />
         <CommentList data={this.state.data} />
       </div>
     );
@@ -170,6 +175,7 @@ var CommentForm = React.createClass({
         </form></div>
     );
   },
+
   formInline: function() {
     return (
       <div><hr/>
@@ -190,6 +196,7 @@ var CommentForm = React.createClass({
         </form></div>
     );
   },
+
   render: function() {
     var inputForm;
     switch (this.state.formMode) {

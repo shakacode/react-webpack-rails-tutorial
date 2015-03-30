@@ -1,8 +1,9 @@
+// The entry point to our client-side app (used by both Rails and Webpack HMR).
+// Essentially renders the top-level view-controller CommentBox component.
+
 var React = require('react/addons');
-
-import { CommentBox } from './CommentBox';
-
 var $ = require('jquery');
+import { CommentBox } from './components/CommentBox';
 
 var render = () => {
   if ($("#content").length > 0) {
