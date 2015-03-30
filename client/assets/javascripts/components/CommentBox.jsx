@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var React = require('react/addons');
 var CommentStore = require('../stores/CommentStore');
+var CommentActions = require('../actions/CommentActions');
 
 // Next line is necessary for exposing React to browser for
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
@@ -73,8 +74,23 @@ var CommentBox = React.createClass({
   },
 
   componentDidMount: function() {
-    this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    CommentStore.listen(this.onCommentsChange);
+
+    CommentActions.fetchComments(this.props.url);
+    //setInterval(CommentActions.fetchComments,
+    //            this.props.pollInterval,
+    //            this.props.url);
+
+    //this.loadCommentsFromServer();
+    //setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+
+  componentWillUnmount() {
+    CommentStore.unlisten(this.onCommentsChange);
+  },
+
+  onCommentsChange: function() {
+    this.setState(CommentStore.getState());
   },
 
   onFormChange: function(obj) {
