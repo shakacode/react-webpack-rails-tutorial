@@ -1,6 +1,5 @@
-
 /* Proof of concept of loading css from webpack */
 
-.commentAuthor {
+.comment-author {
   color: blue;
 }
