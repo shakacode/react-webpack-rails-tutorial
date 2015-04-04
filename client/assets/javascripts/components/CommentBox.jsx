@@ -1,7 +1,7 @@
-var $ = require('jquery');
-var React = require('react/addons');
-var CommentStore = require('../stores/CommentStore');
-var CommentActions = require('../actions/CommentActions');
+import $ from 'jquery';
+import React from 'react/addons';
+import CommentStore from '../stores/CommentStore';
+import CommentActions from '../actions/CommentActions';
 
 // Next line is necessary for exposing React to browser for
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
@@ -154,14 +154,15 @@ var CommentForm = React.createClass({
   handleChange: function() {
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
-    var obj;
+    let obj;
     if (this.state.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
         text: this.refs.text.getValue()
       }
     } else {
-      // This is different because the input is a native HTML element rather than a React element
+      // This is different because the input is a native HTML element
+      // rather than a React element.
       obj = {
         author: this.refs.inlineAuthor.getDOMNode().value,
         text: this.refs.inlineText.getDOMNode().value
@@ -214,7 +215,7 @@ var CommentForm = React.createClass({
   },
 
   render: function() {
-    var inputForm;
+    let inputForm;
     switch (this.state.formMode) {
       case 0:
         inputForm = this.formHorizontal();

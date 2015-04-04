@@ -1,5 +1,5 @@
-var alt = require('../FluxAlt');
-var CommentActions = require('../actions/CommentActions');
+import alt from '../FluxAlt';
+import CommentActions from '../actions/CommentActions';
 
 class CommentStore {
   constructor() {
@@ -28,4 +28,4 @@ class CommentStore {
   }
 }
 
-module.exports = alt.createStore(CommentStore, 'CommentStore');
+export default alt.createStore(CommentStore, 'CommentStore');

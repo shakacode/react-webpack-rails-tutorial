@@ -1,29 +1,42 @@
-var alt = require('../FluxAlt');
-var CommentsFetcher = require('../utils/CommentsFetcher');
+//var alt = require('../FluxAlt');
+//var CommentsFetcher = require('../utils/CommentsFetcher');
+import alt from '../FluxAlt';
+import CommentsFetcher from '../utils/CommentsFetcher';
 
 class CommentActions {
-  // Triggered by CommentBox component after being mounted.
+  /**
+   * Action triggered by CommentBox component after being mounted.
+   *
+   * @param {String} url
+   * @return undefined
+   */
   fetchComments(url) {
     this.dispatch(); // we dispatch an event here so we can have a "loading" state
 
     CommentsFetcher.fetch(url)
-      .then((comments) => {
-        this.actions.updateComments(comments); // trigger updateComments action
-      });
-      .catch((errorMessage) => {
-        this.actions.commentsFailed(errorMessage); // trigger commentsFailed action
-      });
+      .then((comments) => this.actions.updateComments(comments))
+      .catch((errorMessage) => this.actions.commentsFailed(errorMessage));
   }
 
-  // Triggered on a successful fetchComments.
+  /**
+   * Action triggered on a successful fetchComments.
+   *
+   * @param {Array} comments
+   * @return undefined
+   */
   updateComments(comments) {
     this.dispatch(comments);
   }
 
-  // Triggered on a failed fetchComments.
+  /**
+   * Action triggered on a failed fetchComments.
+   *
+   * @param {String} errorMessage
+   * @return undefined
+   */
   commentsFailed(errorMessage) {
     this.dispatch(errorMessage);
   }
 }
 
-module.exports = alt.createActions(CommentActions);
+export default alt.createActions(CommentActions);

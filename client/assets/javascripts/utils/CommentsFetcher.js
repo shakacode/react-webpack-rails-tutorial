@@ -1,9 +1,18 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-var CommentsFetcher = {
-  fetch: function(url) {
-    return $.ajax({url: url, dataType: 'json'})
+const CommentsFetcher = {
+  /**
+   * Retrieves comments from backend server using AJAX call.
+   *
+   * @param {String} url
+   * @return {Array}
+   */
+  fetch(url) {
+    return $.ajax({
+      url: url,
+      dataType: 'json'
+    })
   }
 };
 
-module.exports = CommentsFetcher;
+export default CommentsFetcher;
