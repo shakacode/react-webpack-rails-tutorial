@@ -13,8 +13,8 @@ class CommentStore {
   }
 
   handleFetchComments(comment) {
-    // Reset the array while we're fetching new locations
-    // so React can render a spinner since the data is empty.
+    // Reset the array while we're fetching new comments
+    // so React can render a spinner.
     this.comments = [];
   }
 

@@ -17,8 +17,8 @@ var NavItem = require('react-bootstrap/lib/NavItem')
 var marked = require("marked"); // markdown parser
 
 var Comment = React.createClass({
-  render: function() {
-    var rawMarkup = marked(this.props.children.toString());
+  render() {
+    const rawMarkup = marked(this.props.children.toString());
     return (
       <div className="comment">
         <h2 className="commentAuthor foobar">
@@ -31,10 +31,11 @@ var Comment = React.createClass({
 });
 
 var CommentBox = React.createClass({
-  logError: function(xhr, status, err) {
+  logError(xhr, status, err) {
     console.error(`Error loading comments from server!\nURL is ${this.props.url}\nstatus is ${status}\nerr is ${err.toString()}`);
   },
 
+  /**
   loadCommentsFromServer: function() {
     $.ajax({
       url: this.props.url,
@@ -42,13 +43,14 @@ var CommentBox = React.createClass({
         this.setState({data: data});
       }, this.logError);
   },
+  */
 
   emptyFormData: { author: "", text: "" },
 
   handleCommentSubmit: function() {
     // `setState` accepts a callback. To avoid (improbable) race condition,
-    // `we'll send the ajax request right after we optimistically set the new
-    // `state.
+    // we'll send the ajax request right after we optimistically set the new
+    // state.
     this.setState({ajaxSending: true});
     var comment = this.state.formData;
     $.ajax({
@@ -65,17 +67,16 @@ var CommentBox = React.createClass({
       });
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
-      data: [],
+      data: CommentStore.getState().comments,
       formData: this.emptyFormData,
       ajaxSending: false
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     CommentStore.listen(this.onCommentsChange);
-
     CommentActions.fetchComments(this.props.url);
     //setInterval(CommentActions.fetchComments,
     //            this.props.pollInterval,
@@ -89,17 +90,17 @@ var CommentBox = React.createClass({
     CommentStore.unlisten(this.onCommentsChange);
   },
 
-  onCommentsChange: function() {
-    this.setState(CommentStore.getState());
+  onCommentsChange() {
+    this.setState({ data: CommentStore.getState().comments });
   },
 
-  onFormChange: function(obj) {
+  onFormChange(obj) {
     this.setState({
       formData: obj
     })
   },
 
-  render: function() {
+  render() {
     return (
       <div className="commentBox container">
         <h1>Comments { this.state.ajaxSending ? "AJAX SENDING!" : "" }</h1>
@@ -114,7 +115,7 @@ var CommentBox = React.createClass({
 });
 
 var CommentList = React.createClass({
-  render: function() {
+  render() {
     var reversedData = this.props.data.slice(0).reverse();
     var commentNodes = reversedData.map((comment, index) => {
       return (

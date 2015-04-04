@@ -1,5 +1,3 @@
-//var alt = require('../FluxAlt');
-//var CommentsFetcher = require('../utils/CommentsFetcher');
 import alt from '../FluxAlt';
 import CommentsFetcher from '../utils/CommentsFetcher';
 
@@ -14,8 +12,9 @@ class CommentActions {
     this.dispatch(); // we dispatch an event here so we can have a "loading" state
 
     CommentsFetcher.fetch(url)
-      .then((comments) => this.actions.updateComments(comments))
-      .catch((errorMessage) => this.actions.commentsFailed(errorMessage));
+      .then((comments) => this.actions.updateComments(comments),
+            (errorMessage) => this.actions.commentsFailed(errorMessage));
+      //.catch((errorMessage) => this.actions.commentsFailed(errorMessage));
   }
 
   /**
