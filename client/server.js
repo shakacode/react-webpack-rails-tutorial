@@ -15,7 +15,7 @@ var server = new WebpackDevServer(webpack(config), {
   stats: {colors: true}
 });
 
-server.app.use(bodyParser.json());
+server.app.use(bodyParser.json(null));
 server.app.use(bodyParser.urlencoded({extended: true}));
 
 server.app.get('/comments.json', function(req, res) {
@@ -37,5 +37,6 @@ server.listen(3000, 'localhost', function(err) {
   if (err) {
     console.log(err);
   }
+
   console.log('Listening at localhost:3000...');
 });
