@@ -32,8 +32,10 @@ class FormStore {
     this.comment = emptyComment;
   }
 
-  handleFetchComments() {
-    this.ajaxSending = true;
+  handleFetchComments(displaySpinner) {
+    if (displaySpinner) {
+      this.ajaxSending = true;
+    }
   }
 
   handleUpdateComments(comments) {

@@ -33,6 +33,10 @@ const CommentsManager = {
   }
 
   /**
+  logError(xhr, status, err) {
+    console.error(`Error loading comments from server!\nURL is ${this.props.url}\nstatus is ${status}\nerr is ${err.toString()}`);
+  },
+
   loadCommentsFromServer: function() {
     $.ajax({
       url: this.props.url,

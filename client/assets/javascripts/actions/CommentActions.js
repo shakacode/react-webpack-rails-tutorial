@@ -8,9 +8,8 @@ class CommentActions {
    * @param {String} url
    * @return undefined
    */
-  fetchComments(url) {
-    this.dispatch(); // we dispatch an event here so we can have a "loading" state
-
+  fetchComments(url, displaySpinner) {
+    this.dispatch(displaySpinner);
     CommentsManager.fetchComments(url)
       .then((comments) => this.actions.updateComments(comments),
             (errorMessage) => this.actions.updateCommentsError(errorMessage));

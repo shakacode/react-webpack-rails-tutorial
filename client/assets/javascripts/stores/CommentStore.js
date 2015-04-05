@@ -13,10 +13,8 @@ class CommentStore {
     });
   }
 
-  handleFetchComments() {
-    // Reset the array while we're fetching new comments
-    // so React can render a spinner.
-    this.comments = [];
+  handleFetchComments(displaySpinner) {
+    return false;
   }
 
   handleUpdateComments(comments) {
