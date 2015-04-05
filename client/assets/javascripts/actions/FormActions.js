@@ -6,16 +6,6 @@ import CommentsManager from '../utils/CommentsManager';
 
 class FormActions {
   /**
-   * Change the form layout/mode.
-   *
-   * @param {Number} formMode
-   * @return undefined
-   */
-  changeFormMode(formMode) {
-    this.dispatch(formMode);
-  }
-
-  /**
    * Text is being entered in the comment form, update the state.
    *
    * @param {String} comment

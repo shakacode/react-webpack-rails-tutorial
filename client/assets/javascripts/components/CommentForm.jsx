@@ -14,20 +14,25 @@ var CommentForm = React.createClass({
 
   propTypes: {
     url: React.PropTypes.string.isRequired,
-    formMode: React.PropTypes.number.isRequired,
     formData: React.PropTypes.object.isRequired,
     ajaxSending: React.PropTypes.bool.isRequired
   },
 
+  getInitialState() {
+    return {
+      formMode: 0
+    };
+  },
+
   handleSelect(selectedKey) {
-    FormActions.changeFormMode(selectedKey);
+    this.setState({formMode: selectedKey});
   },
 
   handleChange() {
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
     let obj;
-    if (this.props.formMode < 2) {
+    if (this.state.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
         text: this.refs.text.getValue()
@@ -93,7 +98,7 @@ var CommentForm = React.createClass({
 
   render() {
     let inputForm;
-    switch (this.props.formMode) {
+    switch (this.state.formMode) {
       case 0:
         inputForm = this.formHorizontal();
         break;
@@ -102,10 +107,13 @@ var CommentForm = React.createClass({
         break;
       case 2:
         inputForm = this.formInline();
+        break;
+      default:
+        throw `Unknown form mode: ${this.state.formMode}.`;
     }
     return (
       <div>
-        <Nav bsStyle="pills" activeKey={this.props.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>

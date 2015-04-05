@@ -12,17 +12,12 @@ class FormStore {
     this.comment = emptyComment;
     this.ajaxSending = false;
     this.bindListeners({
-      handleChangeFormMode: FormActions.CHANGE_FORM_MODE,
       handleUpdateComment: FormActions.UPDATE_COMMENT,
       handleSubmitComment: FormActions.SUBMIT_COMMENT,
       handleFetchComments: CommentActions.FETCH_COMMENTS,
       handleUpdateComments: CommentActions.UPDATE_COMMENTS,
       handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR
     });
-  }
-
-  handleChangeFormMode(mode) {
-    this.mode = mode;
   }
 
   handleUpdateComment(comment) {
