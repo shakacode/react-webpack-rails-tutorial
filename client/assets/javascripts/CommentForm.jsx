@@ -47,6 +47,7 @@ var CommentForm = React.createClass({
         text: this.refs.inlineText.getDOMNode().value
       };
     }
+
     this.props.onChange(obj);
   },
 
@@ -94,6 +95,7 @@ var CommentForm = React.createClass({
       </div>
     );
   },
+
   formInline: function() {
     return (
       <div>
@@ -123,6 +125,7 @@ var CommentForm = React.createClass({
       </div>
     );
   },
+
   render: function() {
     var inputForm;
     switch (this.state.formMode) {

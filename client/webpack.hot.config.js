@@ -1,6 +1,7 @@
-'use strict';
 // Run like this:
 // cd client && node server.js
+
+'use strict';
 
 var path = require('path');
 var config = require('./webpack.common.config');
@@ -11,9 +12,13 @@ var webpack = require('webpack');
 config.entry.push('webpack-dev-server/client?http://localhost:3000',
   'webpack/hot/dev-server',
   './scripts/webpack_only',
-  'bootstrap-sass!./bootstrap-sass.config.js'); // custom bootstrap
+
+  // custom bootstrap
+  'bootstrap-sass!./bootstrap-sass.config.js');
 config.output = {
-  filename: 'express-bundle.js', // this file is served directly by webpack
+
+  // this file is served directly by webpack
+  filename: 'express-bundle.js',
   path: __dirname
 };
 config.plugins = [new webpack.HotModuleReplacementPlugin()];

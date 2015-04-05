@@ -24,6 +24,7 @@ var CommentBox = React.createClass({
       this.setState({data: data});
     }, this.logError);
   },
+
   emptyFormData: {author: '', text: ''},
 
   handleCommentSubmit: function() {
@@ -78,6 +79,5 @@ var CommentBox = React.createClass({
     );
   }
 });
-
 
 export default CommentBox
