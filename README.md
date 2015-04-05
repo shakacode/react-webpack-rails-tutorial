@@ -254,6 +254,15 @@ QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
 
 Then run `rspec` and you should see the tests have passed.
 
+# Linting and Code Inspection
+* See file [README.md](client/README.md) for how to run ESLint
+* Create a custom scope like this for RubyMine, named "Inspection Scope" 
+
+    file[react-rails-tutorial]:*/&&!file[react-rails-tutorial]:tmp//*&&!file[react-rails-tutorial]:log//*&&!file[react-rails-tutorial]:client/node_modules//*&&!file[react-rails-tutorial]:client/assets/fonts//*&&!file[react-rails-tutorial]:app/assets/fonts//*&&!file[react-rails-tutorial]:bin//*&&!file[react-rails-tutorial]:app/assets/javascripts//*
+
+* Install the code style and inspection files in [client/jetbrains](client/jetbrains)
+* Use the installed inspection settings and new Inspection Scope for code inspection.
+
 # Contributors
 * [Martin Breining](https://github.com/mbreining)
 * [Dylan Grafmyre](https://github.com/Dgrafmyre)

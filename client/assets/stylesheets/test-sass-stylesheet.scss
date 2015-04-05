@@ -1,5 +1,4 @@
 /* Proof of concept of loading css from webpack */
-
 // partial defines the $comment-text-color
 @import "test-sass-stylesheet-partial";
 
@@ -7,11 +6,4 @@
   p {
     color: $comment-text-color;
   }
-}
-
-.twitter-image {
-  background-image: image-url('twitter_64.png');
-  background-repeat: no-repeat;
-  height: 64px;
-  width: 64px;
 }

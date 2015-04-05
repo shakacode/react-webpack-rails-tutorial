@@ -1,9 +1,13 @@
-$rails: false !default;  // defaults to false (e.g. webpack environment)
+$rails: false !default;
+// defaults to false (e.g. webpack environment)
 
 // These variables get loaded BEFORE Bootstrap thus overriding them in Bootstrap.
-$body-bg: #EFF8FB; // background w/ character
-$navbar-default-bg: #FFFFE0; // fancy yellow navbar
-$font-size-base: 15px; // make it bigger!
+$body-bg: #EFF8FB;
+// background w/ character
+$navbar-default-bg: #FFFFE0;
+// fancy yellow navbar
+$font-size-base: 15px;
+// make it bigger!
 
 // Define a custom font.
 // Libsass, which is used by the webpack sass loader, does not support font-url()
@@ -16,3 +20,19 @@ $font-size-base: 15px; // make it bigger!
     src: url('assets/fonts/OpenSans-Light.ttf') format('truetype');
   }
 }
+
+// Sass 3 removes image-url helper
+// https://github.com/sass/libsass/issues/489
+$image-url-path: "/assets/images/" !default;
+@function img-url($image) {
+  @if $rails {
+    @return image-url($image);
+  } @else {
+    @return url("#{$image-url-path}#{$image}");
+  }
+}
+
+//$image-url-path: "../images/" !default;
+//@function image-url($url) {
+//  @return url("#{$image-url-path}#{$url}");
+//}
