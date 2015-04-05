@@ -43,11 +43,13 @@
     "css-loader": "^0.9.1",
     "eslint": "^0.18.0",
     "eslint-plugin-react": "^2.0.2",
+    "esprima-fb": "^14001.1.0-dev-harmony-fb",
     "expose-loader": "^0.6.0",
     "express": "^4.12.3",
     "file-loader": "^0.8.1",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.8.0",
+    "jscs": "^1.12.0",
     "node-sass": "^2.1.1",
     "react-hot-loader": "^1.2.4",
     "sass-loader": "^0.6.0",
@@ -58,6 +60,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "jscs": "jscs",
+    "eslint": "eslint"
   }
 }

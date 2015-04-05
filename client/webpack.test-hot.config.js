@@ -1,16 +1,20 @@
-'use strict';
 // File helpful for debugging issues with dependencies only used by the hot reload server
 // node-debug webpack --config webpack.test-hot.config.js
 
+'use strict';
 var path = require('path');
 var config = require('./webpack.common.config');
 
 // We're using the bootstrap-sass loader.
 // See: https://github.com/justin808/bootstrap-sass-loader
 config.entry.push('./scripts/webpack_only',
-  'bootstrap-sass!./bootstrap-sass.config.js'); // custom bootstrap
+
+  // custom bootstrap
+  'bootstrap-sass!./bootstrap-sass.config.js');
 config.output = {
-  filename: 'express-bundle.js', // this file is served directly by webpack
+
+  // this file is served directly by webpack
+  filename: 'express-bundle.js',
   path: __dirname
 };
 config.devtool = 'eval-source-map';

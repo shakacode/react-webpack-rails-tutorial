@@ -1,11 +1,15 @@
-'use strict';
 // Common webpack configuration used by webpack.hot.config and webpack.rails.config.
+
+'use strict';
 
 var path = require('path');
 
 module.exports = {
-  context: __dirname, // the project dir
+
+  // the project dir
+  context: __dirname,
   entry: ['./assets/javascripts/example'],
+
   // In case you wanted to load jQuery from the CDN, this is how you would do it:
   // externals: {
   //   jquery: 'var jQuery'

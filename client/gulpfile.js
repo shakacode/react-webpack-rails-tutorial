@@ -1,7 +1,7 @@
 'use strict';
 
-var gulp = require('gulp'),
-  eslint = require('gulp-eslint');
+var gulp = require('gulp');
+var eslint = require('gulp-eslint');
 
 gulp.task('lint', function() {
   // Note: To have the process exit with an error code (1) on
