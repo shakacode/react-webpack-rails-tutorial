@@ -30,7 +30,7 @@ server.app.post('/comments.json', function(req, res) {
   console.log('Just got done with nap!');
   comments.push(req.body.comment);
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(req.body.comment));
+  res.send(JSON.stringify(comments));
 });
 
 server.listen(3000, 'localhost', function(err) {
