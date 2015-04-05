@@ -11,7 +11,6 @@ class FormStore {
     this.mode = 0;
     this.comment = emptyComment;
     this.ajaxSending = false;
-    this.errorMessage = null;
     this.bindListeners({
       handleChangeFormMode: FormActions.CHANGE_FORM_MODE,
       handleUpdateComment: FormActions.UPDATE_COMMENT,
