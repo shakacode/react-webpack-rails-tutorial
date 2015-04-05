@@ -1,4 +1,6 @@
-var Alt = require('alt');
-var alt = new Alt();
+'use strict';
 
-module.exports = alt;
+import Alt from 'alt';
+const alt = new Alt();
+
+export default alt;
