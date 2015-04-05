@@ -6,7 +6,13 @@ Please see parent directory README.md.
 Running linter:
 ===========================
 
-Soon to be in gulpfile....but gulp-eslint depends on eslint 0.17.0
+Soon to be in gulpfile....but gulp-eslint depends on eslint depends on 
+
+```
+    "eslint-plugin-react": "^2.0.2",
+```
+
+So don't use `npm run gulp lint` yet. 
 
 For now: 
 
