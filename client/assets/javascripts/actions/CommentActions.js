@@ -1,5 +1,5 @@
 import alt from '../FluxAlt';
-import CommentsFetcher from '../utils/CommentsFetcher';
+import CommentsManager from '../utils/CommentsManager';
 
 class CommentActions {
   /**
@@ -11,10 +11,9 @@ class CommentActions {
   fetchComments(url) {
     this.dispatch(); // we dispatch an event here so we can have a "loading" state
 
-    CommentsFetcher.fetch(url)
+    CommentsManager.fetchComments(url)
       .then((comments) => this.actions.updateComments(comments),
-            (errorMessage) => this.actions.commentsFailed(errorMessage));
-      //.catch((errorMessage) => this.actions.commentsFailed(errorMessage));
+            (errorMessage) => this.actions.updateCommentsError(errorMessage));
   }
 
   /**
@@ -33,8 +32,18 @@ class CommentActions {
    * @param {String} errorMessage
    * @return undefined
    */
-  commentsFailed(errorMessage) {
+  updateCommentsError(errorMessage) {
     this.dispatch(errorMessage);
+  }
+
+  /**
+   * Action triggered after submitting a new comment.
+   *
+   * @param {String} comment
+   * @return undefined
+   */
+  addComment(comment) {
+    this.dispatch(comment);
   }
 }
 

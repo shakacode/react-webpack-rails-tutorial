@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import React from 'react/addons';
 import CommentStore from '../stores/CommentStore';
+import FormStore from '../stores/FormStore';
 import CommentActions from '../actions/CommentActions';
+import FormActions from '../actions/FormActions';
 
 // Next line is necessary for exposing React to browser for
 // the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
@@ -31,52 +33,24 @@ var Comment = React.createClass({
 });
 
 var CommentBox = React.createClass({
+  getStoreState() {
+    return {
+      comments: CommentStore.getState(),
+      form: FormStore.getState()
+    };
+  },
+
+  getInitialState() {
+    return this.getStoreState();
+  },
+
   logError(xhr, status, err) {
     console.error(`Error loading comments from server!\nURL is ${this.props.url}\nstatus is ${status}\nerr is ${err.toString()}`);
   },
 
-  /**
-  loadCommentsFromServer: function() {
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json'}).then(data => {
-        this.setState({data: data});
-      }, this.logError);
-  },
-  */
-
-  emptyFormData: { author: "", text: "" },
-
-  handleCommentSubmit: function() {
-    // `setState` accepts a callback. To avoid (improbable) race condition,
-    // we'll send the ajax request right after we optimistically set the new
-    // state.
-    this.setState({ajaxSending: true});
-    var comment = this.state.formData;
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: { comment: comment}}).then(data => {
-        var comments = this.state.data;
-        var newComments = React.addons.update(comments, { $push: [comment] } );
-        this.setState({ajaxSending: false, data: newComments, formData: this.emptyFormData });
-      }, (xhr, status, err) => {
-        this.logError(xhr, status, err);
-        this.setState({ajaxSending: false});
-      });
-  },
-
-  getInitialState() {
-    return {
-      data: CommentStore.getState().comments,
-      formData: this.emptyFormData,
-      ajaxSending: false
-    };
-  },
-
   componentDidMount() {
-    CommentStore.listen(this.onCommentsChange);
+    CommentStore.listen(this.onChange);
+    FormStore.listen(this.onChange);
     CommentActions.fetchComments(this.props.url);
     //setInterval(CommentActions.fetchComments,
     //            this.props.pollInterval,
@@ -87,28 +61,25 @@ var CommentBox = React.createClass({
   },
 
   componentWillUnmount() {
-    CommentStore.unlisten(this.onCommentsChange);
+    CommentStore.unlisten(this.onChange);
+    FormStore.unlisten(this.onChange);
   },
 
-  onCommentsChange() {
-    this.setState({ data: CommentStore.getState().comments });
-  },
-
-  onFormChange(obj) {
-    this.setState({
-      formData: obj
-    })
+  onChange() {
+    this.setState(this.getStoreState());
   },
 
   render() {
+        //<CommentForm onCommentSubmit={this.handleCommentSubmit}
+                     //onChange={this.onFormChange}
     return (
       <div className="commentBox container">
-        <h1>Comments { this.state.ajaxSending ? "AJAX SENDING!" : "" }</h1>
-        <CommentForm onCommentSubmit={this.handleCommentSubmit}
-                     formData={this.state.formData}
-                     onChange={this.onFormChange}
-                     ajaxSending={this.state.ajaxSending} />
-        <CommentList data={this.state.data} />
+        <h1>Comments { this.state.ajaxSending ? "SENDING AJAX REQUEST!" : "" }</h1>
+        <CommentForm formMode={this.state.form.mode}
+                     formData={this.state.form.comment}
+                     url={this.props.url}
+                     ajaxSending={this.state.form.ajaxSending} />
+        <CommentList comments={this.state.comments.comments} />
       </div>
     );
   }
@@ -116,7 +87,7 @@ var CommentBox = React.createClass({
 
 var CommentList = React.createClass({
   render() {
-    var reversedData = this.props.data.slice(0).reverse();
+    var reversedData = this.props.comments.slice(0).reverse();
     var commentNodes = reversedData.map((comment, index) => {
       return (
         // `key` is a React-specific concept and is not mandatory for the
@@ -136,43 +107,36 @@ var CommentList = React.createClass({
 });
 
 var CommentForm = React.createClass({
-  getInitialState: function() {
-    return {
-      formMode: 0
-    };
+  handleSelect(selectedKey) {
+    FormActions.changeFormMode(selectedKey);
   },
 
-  handleSubmit: function(e) {
-    e.preventDefault();
-    this.props.onCommentSubmit();
-    return;
-  },
-
-  handleSelect: function(selectedKey) {
-    this.setState({ formMode: selectedKey });
-  },
-
-  handleChange: function() {
+  handleChange() {
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
     let obj;
-    if (this.state.formMode < 2) {
+    if (this.props.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
         text: this.refs.text.getValue()
-      }
+      };
     } else {
       // This is different because the input is a native HTML element
       // rather than a React element.
       obj = {
         author: this.refs.inlineAuthor.getDOMNode().value,
         text: this.refs.inlineText.getDOMNode().value
-      }
+      };
     }
-    this.props.onChange(obj);
+    FormActions.updateComment(obj);
   },
 
-  formHorizontal: function() {
+  handleSubmit(e) {
+    e.preventDefault();
+    FormActions.submitComment(this.props.url, FormStore.getState().comment);
+  },
+
+  formHorizontal() {
     return (
       <div><hr/>
         <form className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
@@ -183,7 +147,7 @@ var CommentForm = React.createClass({
     );
   },
 
-  formStacked: function() {
+  formStacked() {
     return (
       <div><hr/>
         <form className="commentForm form" onSubmit={this.handleSubmit}>
@@ -194,7 +158,7 @@ var CommentForm = React.createClass({
     );
   },
 
-  formInline: function() {
+  formInline() {
     return (
       <div><hr/>
         <form className="commentForm form" onSubmit={this.handleSubmit}>
@@ -215,9 +179,9 @@ var CommentForm = React.createClass({
     );
   },
 
-  render: function() {
+  render() {
     let inputForm;
-    switch (this.state.formMode) {
+    switch (this.props.formMode) {
       case 0:
         inputForm = this.formHorizontal();
         break;
@@ -229,7 +193,7 @@ var CommentForm = React.createClass({
     }
     return (
       <div>
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.props.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>

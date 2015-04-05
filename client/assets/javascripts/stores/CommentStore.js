@@ -1,4 +1,5 @@
 import alt from '../FluxAlt';
+import React from 'react/addons';
 import CommentActions from '../actions/CommentActions';
 
 class CommentStore {
@@ -8,7 +9,8 @@ class CommentStore {
     this.bindListeners({
       handleFetchComments: CommentActions.FETCH_COMMENTS,
       handleUpdateComments: CommentActions.UPDATE_COMMENTS,
-      handleCommentsFailed: CommentActions.COMMENTS_FAILED
+      handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR,
+      handleAddComment: CommentActions.ADD_COMMENT
     });
   }
 
@@ -23,7 +25,7 @@ class CommentStore {
     this.errorMessage = null;
   }
 
-  handleCommentsFailed(errorMessage) {
+  handleUpdateCommentsError(errorMessage) {
     this.errorMessage = errorMessage;
   }
 }
