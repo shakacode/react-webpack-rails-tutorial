@@ -31,9 +31,6 @@ class FormActions {
    */
   submitComment(url, comment) {
     this.dispatch();
-    //CommentsManager.fetchComments(url)
-    //  .then((comments) => this.actions.updateComments(comments),
-    //        (errorMessage) => this.actions.updateCommentsError(errorMessage));
     CommentsManager.submitComment(url, comment)
       .then((data) => {
         CommentActions.updateComments(data);

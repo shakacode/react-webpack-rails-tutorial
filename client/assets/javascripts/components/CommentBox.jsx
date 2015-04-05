@@ -70,11 +70,9 @@ var CommentBox = React.createClass({
   },
 
   render() {
-        //<CommentForm onCommentSubmit={this.handleCommentSubmit}
-                     //onChange={this.onFormChange}
     return (
       <div className="commentBox container">
-        <h1>Comments { this.state.ajaxSending ? "SENDING AJAX REQUEST!" : "" }</h1>
+        <h1>Comments { this.state.form.ajaxSending ? "SENDING AJAX REQUEST!" : "" }</h1>
         <CommentForm formMode={this.state.form.mode}
                      formData={this.state.form.comment}
                      url={this.props.url}

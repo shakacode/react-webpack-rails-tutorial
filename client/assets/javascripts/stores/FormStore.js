@@ -1,5 +1,6 @@
 import alt from '../FluxAlt';
 import FormActions from '../actions/FormActions';
+import CommentActions from '../actions/CommentActions';
 
 const emptyComment = { author: "", text: "" };
 
@@ -13,6 +14,8 @@ class FormStore {
       handleChangeFormMode: FormActions.CHANGE_FORM_MODE,
       handleUpdateComment: FormActions.UPDATE_COMMENT,
       handleSubmitComment: FormActions.SUBMIT_COMMENT,
+      handleFetchComments: CommentActions.FETCH_COMMENTS,
+      handleUpdateComments: CommentActions.UPDATE_COMMENTS
     });
   }
 
@@ -25,7 +28,16 @@ class FormStore {
   }
 
   handleSubmitComment(comment) {
+    this.ajaxSending = true;
     this.comment = emptyComment;
+  }
+
+  handleFetchComments() {
+    this.ajaxSending = true;
+  }
+
+  handleUpdateComments(comments) {
+    this.ajaxSending = false;
   }
 }
 
