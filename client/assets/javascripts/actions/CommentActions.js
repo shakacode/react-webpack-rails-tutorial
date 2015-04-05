@@ -1,11 +1,14 @@
+'use strict';
+
 import alt from '../FluxAlt';
 import CommentsManager from '../utils/CommentsManager';
 
 class CommentActions {
   /**
-   * Action triggered by CommentBox component after being mounted.
+   * Fetch comments from server.
    *
    * @param {String} url
+   * @param {Boolean} displaySpinner
    * @return undefined
    */
   fetchComments(url, displaySpinner) {
@@ -16,7 +19,7 @@ class CommentActions {
   }
 
   /**
-   * Action triggered on a successful fetchComments.
+   * A new list of comments is available, refresh the store.
    *
    * @param {Array} comments
    * @return undefined
@@ -26,23 +29,13 @@ class CommentActions {
   }
 
   /**
-   * Action triggered on a failed fetchComments.
+   * An error occurred while fetching comments, dispatch error message.
    *
    * @param {String} errorMessage
    * @return undefined
    */
   updateCommentsError(errorMessage) {
     this.dispatch(errorMessage);
-  }
-
-  /**
-   * Action triggered after submitting a new comment.
-   *
-   * @param {String} comment
-   * @return undefined
-   */
-  addComment(comment) {
-    this.dispatch(comment);
   }
 }
 

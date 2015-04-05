@@ -1,22 +1,24 @@
+'use strict';
+
 import alt from '../FluxAlt';
 import CommentActions from '../actions/CommentActions';
 import CommentsManager from '../utils/CommentsManager';
 
 class FormActions {
   /**
-   * Action triggered on a failed fetchComments.
+   * Change the form layout/mode.
    *
-   * @param {String} errorMessage
+   * @param {Number} formMode
    * @return undefined
    */
-  changeFormMode(comment) {
-    this.dispatch(comment);
+  changeFormMode(formMode) {
+    this.dispatch(formMode);
   }
 
   /**
-   * Action triggered on a failed fetchComments.
+   * Text is being entered in the comment form, update the state.
    *
-   * @param {String} errorMessage
+   * @param {String} comment
    * @return undefined
    */
   updateComment(comment) {
@@ -24,9 +26,9 @@ class FormActions {
   }
 
   /**
-   * Action triggered 
+   * Submit a new comment to the server.
    *
-   * @param {Array} comments
+   * @param {String} comment
    * @return undefined
    */
   submitComment(url, comment) {
@@ -34,13 +36,8 @@ class FormActions {
     CommentsManager.submitComment(url, comment)
       .then((data) => {
         CommentActions.updateComments(data);
-        //var comments = this.state.data;
-        //var newComments = React.addons.update(comments, { $push: [comment] } );
-        //this.setState({ajaxSending: false, data: newComments, formData: this.emptyFormData });
-      }, (xhr, status, err) => {
-        console.log("error");
-        //this.logError(xhr, status, err);
-        //this.setState({ajaxSending: false});
+      }, (errMessage) => {
+        CommentActions.updateCommentsError(errorMessage);
       });
   }
 }

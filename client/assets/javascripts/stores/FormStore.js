@@ -1,3 +1,5 @@
+'use strict';
+
 import alt from '../FluxAlt';
 import FormActions from '../actions/FormActions';
 import CommentActions from '../actions/CommentActions';
@@ -15,7 +17,8 @@ class FormStore {
       handleUpdateComment: FormActions.UPDATE_COMMENT,
       handleSubmitComment: FormActions.SUBMIT_COMMENT,
       handleFetchComments: CommentActions.FETCH_COMMENTS,
-      handleUpdateComments: CommentActions.UPDATE_COMMENTS
+      handleUpdateComments: CommentActions.UPDATE_COMMENTS,
+      handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR
     });
   }
 
@@ -39,6 +42,10 @@ class FormStore {
   }
 
   handleUpdateComments(comments) {
+    this.ajaxSending = false;
+  }
+
+  handleUpdateCommentsError(comments) {
     this.ajaxSending = false;
   }
 }

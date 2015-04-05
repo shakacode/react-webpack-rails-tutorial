@@ -1,3 +1,5 @@
+'use strict';
+
 import alt from '../FluxAlt';
 import React from 'react/addons';
 import CommentActions from '../actions/CommentActions';
