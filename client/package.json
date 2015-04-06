@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/justin808/react-webpack-rails-tutorial",
   "dependencies": {
+    "alt": "^0.14.5",
     "babel-core": "^5.0.8",
     "babel-loader": "^5.0.0",
     "body-parser": "^1.12.2",
