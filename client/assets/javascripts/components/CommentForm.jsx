@@ -1,17 +1,19 @@
 'use strict';
+
 import React from 'react/addons';
 import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import FormActions from '../actions/FormActions';
+import FormStore from '../stores/FormStore';
 
 var CommentForm = React.createClass({
   displayName: 'CommentForm',
 
   propTypes: {
-    onCommentSubmit: React.PropTypes.func.isRequired,
-    onChange: React.PropTypes.func.isRequired,
+    url: React.PropTypes.string.isRequired,
     formData: React.PropTypes.object.isRequired,
     ajaxSending: React.PropTypes.bool.isRequired
   },
@@ -22,33 +24,33 @@ var CommentForm = React.createClass({
     };
   },
 
-  handleSubmit: function(e) {
-    e.preventDefault();
-    this.props.onCommentSubmit();
-  },
-
   handleSelect: function(selectedKey) {
     this.setState({formMode: selectedKey});
   },
 
-  handleChange: function() {
+ handleChange() {
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
-    var obj;
+    let obj;
     if (this.state.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
         text: this.refs.text.getValue()
       };
     } else {
-      // This is different because the input is a native HTML element rather than a React element
+      // This is different because the input is a native HTML element
+      // rather than a React element.
       obj = {
         author: this.refs.inlineAuthor.getDOMNode().value,
         text: this.refs.inlineText.getDOMNode().value
       };
     }
+    FormActions.updateComment(obj);
+  },
 
-    this.props.onChange(obj);
+  handleSubmit(e) {
+    e.preventDefault();
+    FormActions.submitComment(this.props.url, FormStore.getState().comment);
   },
 
   formHorizontal: function() {
@@ -126,8 +128,8 @@ var CommentForm = React.createClass({
     );
   },
 
-  render: function() {
-    var inputForm;
+  render() {
+    let inputForm;
     switch (this.state.formMode) {
       case 0:
         inputForm = this.formHorizontal();
@@ -143,7 +145,7 @@ var CommentForm = React.createClass({
     }
     return (
       <div>
-        <Nav bsStyle='pills' activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>

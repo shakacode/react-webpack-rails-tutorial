@@ -23,6 +23,7 @@ config.entry.push('./scripts/rails_only');
 
 config.module.loaders.push(
   {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
+  {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
 
   // Next 2 lines expose jQuery and $ to any JavaScript files loaded after client-bundle.js
   // in the Rails Asset Pipeline. Thus, load this one prior.

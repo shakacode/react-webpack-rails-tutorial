@@ -11,11 +11,11 @@ var Comment = React.createClass({
     text: React.PropTypes.string.isRequired
   },
 
-  render: function() {
+  render() {
     var rawMarkup = marked(this.props.text);
     return (
       <div className='comment'>
-        <h2 className='comment-author foobar'>
+        <h2 className='comment-author'>
           {this.props.author}
         </h2>
         <span dangerouslySetInnerHTML={{__html: rawMarkup}}/>
