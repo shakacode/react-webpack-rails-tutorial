@@ -60,6 +60,8 @@ group :development, :test do
   gem "factory_girl_rails"
 
   gem "rubocop", require: false
+
+  gem "ruby-lint", require: false
 end
 
 gem "spring-commands-rspec", group: :development

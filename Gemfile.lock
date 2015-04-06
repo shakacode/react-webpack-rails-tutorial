@@ -173,6 +173,9 @@ GEM
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
+    ruby-lint (2.0.3)
+      parser (~> 2.1, >= 2.1.1)
+      slop (~> 3.4, >= 3.4.7)
     ruby-progressbar (1.7.5)
     sass (3.4.13)
     sass-rails (5.0.1)
@@ -184,6 +187,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    slop (3.6.0)
     spring (1.3.3)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -242,6 +246,7 @@ DEPENDENCIES
   rails_12factor
   rspec-rails
   rubocop
+  ruby-lint
   sass-rails
   sdoc
   spring
