@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature 'Add new comment' do
-
   scenario ' add post via horizontal, stacked, or inline form', js: true do
     visit root_path
 
@@ -27,5 +26,3 @@ feature 'Add new comment' do
     expect(page).to have_css('.commentList .comment', text: 'dude!')
   end
 end
-
-
