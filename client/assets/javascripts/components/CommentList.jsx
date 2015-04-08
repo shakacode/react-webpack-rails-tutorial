@@ -21,6 +21,7 @@ var CommentList = React.createClass({
         <Comment author={comment.author} key={index} text={comment.text}/>
       );
     });
+
     return (
       <div className="commentList">
         {commentNodes}

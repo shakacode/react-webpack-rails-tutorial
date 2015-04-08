@@ -28,7 +28,7 @@ var CommentForm = React.createClass({
     this.setState({formMode: selectedKey});
   },
 
- handleChange() {
+  handleChange() {
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
     let obj;
@@ -45,6 +45,7 @@ var CommentForm = React.createClass({
         text: this.refs.inlineText.getDOMNode().value
       };
     }
+
     FormActions.updateComment(obj);
   },
 
