@@ -32,7 +32,7 @@ You can see this tutorial live here: [http://react-webpack-rails-tutorial.heroku
 
 In no particular order:
 
-- Example of Rails 4.2 with ReactJs with Webpack and ES6.
+- Example of Rails 4.2 with ReactJs/Flux with Webpack and ES6.
 - Enable development of a JS client independently from Rails using Webpack Hot Module Reload.
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
@@ -44,10 +44,11 @@ See package.json and Gemfile for versions
 
 1. React (for front-end app)
 2. React-bootstrap
-3. Webpack with hot-reload (for local dev)
-4. ES6 transpiler (es6-loader)
-5. Rails 4.2 (for backend app)
-6. Heroku (for deployment)
+3. [Flux Alt](https://github.com/goatslacker/alt)
+4. Webpack with hot-reload (for local dev)
+5. ES6 transpiler (es6-loader)
+6. Rails 4.2 (for backend app)
+7. Heroku (for deployment)
 
 # Basic Setup
 1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node version `v0.10.33`.
@@ -55,7 +56,7 @@ See package.json and Gemfile for versions
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.1.5 and the gemset Rails 4.2 (this might change in the future)
 1. `bundle install`
-1. `npm install`
+1. `npm install` (you may have to manually install Alt: `npm install alt`)
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
 1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
@@ -244,7 +245,7 @@ brew uninstall qt
 brew install qt5
 ```
 
-Then you need to run  
+Then you need to run
 ```
 gem uninstall capybara-webkit
 QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
@@ -272,4 +273,3 @@ Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools
 [RubyMine](https://www.jetbrains.com/ruby/) and [WebStorm](https://www.jetbrains.com/webstorm/).
 The developers of this project use RubyMine at the top level, mostly for Ruby work, and we use
 WebStorm opened up to the `client` directory to focus on JSX and Sass files.
-

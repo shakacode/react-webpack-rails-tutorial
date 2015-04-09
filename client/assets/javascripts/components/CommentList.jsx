@@ -1,15 +1,17 @@
 'use strict';
+
 import React from 'react';
 import Comment from './Comment';
 
 var CommentList = React.createClass({
   displayName: 'CommentList',
+
   propTypes: {
-    data: React.PropTypes.array
+    comments: React.PropTypes.array
   },
 
-  render: function() {
-    var reversedData = this.props.data.slice(0).reverse();
+  render() {
+    var reversedData = this.props.comments.slice(0).reverse();
     var commentNodes = reversedData.map((comment, index) => {
 
       // `key` is a React-specific concept and is not mandatory for the
@@ -19,8 +21,9 @@ var CommentList = React.createClass({
         <Comment author={comment.author} key={index} text={comment.text}/>
       );
     });
+
     return (
-      <div className='commentList'>
+      <div className="commentList">
         {commentNodes}
       </div>
     );

@@ -1,7 +1,8 @@
 'use strict';
-import React from 'react';
-import CommentBox from './CommentBox';
+
 import $ from 'jquery';
+import React from 'react';
+import CommentBox from './components/CommentBox';
 
 $(function() {
   function render() {
