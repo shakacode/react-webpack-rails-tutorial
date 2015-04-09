@@ -1,3 +1,4 @@
 #!/bin/sh
 find . -path ./node_modules -prune -o -name "*.js" -o -name "*.jsx" -exec eslint {} \;
 npm run jscs .
+
