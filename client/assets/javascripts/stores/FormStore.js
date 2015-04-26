@@ -1,5 +1,3 @@
-'use strict';
-
 import alt from '../FluxAlt';
 import FormActions from '../actions/FormActions';
 import CommentActions from '../actions/CommentActions';
@@ -24,7 +22,7 @@ class FormStore {
     this.comment = comment;
   }
 
-  handleSubmitComment(comment) {
+  handleSubmitComment() {
     this.ajaxSending = true;
     this.comment = emptyComment;
   }
@@ -35,11 +33,11 @@ class FormStore {
     }
   }
 
-  handleUpdateComments(comments) {
+  handleUpdateComments() {
     this.ajaxSending = false;
   }
 
-  handleUpdateCommentsError(comments) {
+  handleUpdateCommentsError() {
     this.ajaxSending = false;
   }
 }

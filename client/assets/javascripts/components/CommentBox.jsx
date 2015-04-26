@@ -1,5 +1,3 @@
-'use strict';
-
 import $ from 'jquery';
 import React from 'react';
 import CommentForm from './CommentForm';
@@ -9,7 +7,7 @@ import FormStore from '../stores/FormStore';
 import CommentActions from '../actions/CommentActions';
 import FormActions from '../actions/FormActions';
 
-var CommentBox = React.createClass({
+const CommentBox = React.createClass({
   displayName: 'CommentBox',
 
   propTypes: {

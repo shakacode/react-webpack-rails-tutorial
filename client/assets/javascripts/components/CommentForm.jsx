@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react/addons';
 import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
@@ -9,7 +7,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import FormActions from '../actions/FormActions';
 import FormStore from '../stores/FormStore';
 
-var CommentForm = React.createClass({
+const CommentForm = React.createClass({
   displayName: 'CommentForm',
 
   propTypes: {

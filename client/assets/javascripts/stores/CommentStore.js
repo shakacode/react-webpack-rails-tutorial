@@ -1,5 +1,3 @@
-'use strict';
-
 import alt from '../FluxAlt';
 import React from 'react/addons';
 import CommentActions from '../actions/CommentActions';
@@ -15,12 +13,12 @@ class CommentStore {
     });
   }
 
-  handleFetchComments(displaySpinner) {
+  handleFetchComments() {
     return false;
   }
 
   handleUpdateComments(comments) {
-    this.comments = comments
+    this.comments = comments;
     this.errorMessage = null;
   }
 
@@ -30,8 +28,7 @@ class CommentStore {
 
   handleAddComment(comment) {
     const oldComments = this.comments;
-    var newComments = React.addons.update(oldComments, {$push: [comment]});
-    this.comments = newComments;
+    this.comments = React.addons.update(oldComments, {$push: [comment]});
   }
 }
 
