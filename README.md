@@ -56,7 +56,7 @@ See package.json and Gemfile for versions
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.1.5 and the gemset Rails 4.2 (this might change in the future)
 1. `bundle install`
-1. `npm install` (you may have to manually install Alt: `npm install alt`)
+1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
 1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
