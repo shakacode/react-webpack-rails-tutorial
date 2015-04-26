@@ -1,9 +1,7 @@
-'use strict';
-
 import marked from 'marked';
 import React from 'react';
 
-var Comment = React.createClass({
+const Comment = React.createClass({
   displayName: 'Comment',
 
   propTypes: {
@@ -12,7 +10,7 @@ var Comment = React.createClass({
   },
 
   render() {
-    var rawMarkup = marked(this.props.text);
+    const rawMarkup = marked(this.props.text);
     return (
       <div className='comment'>
         <h2 className='comment-author'>

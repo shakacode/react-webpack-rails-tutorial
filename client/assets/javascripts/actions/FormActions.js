@@ -1,5 +1,3 @@
-'use strict';
-
 import alt from '../FluxAlt';
 import CommentActions from '../actions/CommentActions';
 import CommentsManager from '../utils/CommentsManager';

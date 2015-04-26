@@ -1,5 +1,3 @@
-'use strict';
-
 // Only used by rails
 
 // Example of including es5 shims for supporting older browsers

@@ -1,10 +1,8 @@
-'use strict';
-
 import $ from 'jquery';
 import React from 'react';
 import CommentBox from './components/CommentBox';
 
-$(function() {
+$(function onLoad() {
   function render() {
     if ($('#content').length > 0) {
       React.render(

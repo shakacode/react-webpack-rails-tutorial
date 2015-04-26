@@ -1,5 +1,3 @@
-'use strict';
-
 import alt from '../FluxAlt';
 import CommentsManager from '../utils/CommentsManager';
 

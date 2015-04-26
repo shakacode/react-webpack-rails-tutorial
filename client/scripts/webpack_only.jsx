@@ -1,5 +1,3 @@
-'use strict';
-
 // These are only loaded by the webpack dev server
 
 require('test-stylesheet.css');
