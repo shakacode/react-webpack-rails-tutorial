@@ -1,3 +1,4 @@
+# Not currently using ruby-lint
 ---
 presenter: syntastic
 
@@ -6,17 +7,17 @@ directories:
   - config
   - spec
 
-ignore_paths:
-  - client
-  - node_modules
-  - client/**/*
+#ignore_paths:
+#  - client
+#  - node_modules
+#  - client/**/*
 
 analysis_classes:
-#  - argument_amount
+  #  - argument_amount
   - pedantics
   - shadowing_variables
-# Too many false positives for these
-#  - undefined_methods
-#  - undefined_variables
-#  - unused_variables
+  # Too many false positives for these
+  #  - undefined_methods
+  #  - undefined_variables
+  #  - unused_variables
   - useless_equality_checks

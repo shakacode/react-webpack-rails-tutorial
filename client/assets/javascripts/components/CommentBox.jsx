@@ -9,10 +9,6 @@ import FormStore from '../stores/FormStore';
 import CommentActions from '../actions/CommentActions';
 import FormActions from '../actions/FormActions';
 
-// Next line is necessary for exposing React to browser for
-// the React Developer Tools: http://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
-// require("expose?React!react");
-
 var CommentBox = React.createClass({
   displayName: 'CommentBox',
 

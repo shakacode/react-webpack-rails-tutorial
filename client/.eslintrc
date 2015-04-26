@@ -125,7 +125,7 @@ rules:
   key-spacing: [2, {beforeColon: false, afterColon: true}]
   max-depth: [1, 4]
   # Different from 80 chars of AirBnb Javascript
-  max-len: [2, 100]
+  max-len: [2, 120]
   max-nested-callbacks: [1, 2]
   max-params: [1, 4]
   max-statements: [0, 10]
