@@ -1,7 +1,10 @@
 Please see parent directory README.md.
 
-(We may move client side specific README material here in the near future).
+ESLint
+==========================
+The `.eslintrc` file is based on the AirBnb [eslintrc](https://github.com/airbnb/javascript/blob/master/linters/.eslintrc).
 
+It also includes many eslint defaults that the AirBnb eslint does not include.
 
 Running linter:
 ===========================
