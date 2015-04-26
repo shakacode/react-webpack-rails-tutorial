@@ -7,7 +7,7 @@ $(function onLoad() {
     if ($('#content').length > 0) {
       React.render(
         <div>
-          <CommentBox url='comments.json' pollInterval={2000}/>
+          <CommentBox url='comments.json' pollInterval={5000}/>
 
           <div className='container'>
             <a href='http://www.railsonmaui.com'>

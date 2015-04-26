@@ -14,7 +14,8 @@ class FormStore {
       handleSubmitComment: FormActions.SUBMIT_COMMENT,
       handleFetchComments: CommentActions.FETCH_COMMENTS,
       handleUpdateComments: CommentActions.UPDATE_COMMENTS,
-      handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR
+      handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR,
+      handleAddComment: CommentActions.ADD_COMMENT
     });
   }
 
@@ -38,6 +39,10 @@ class FormStore {
   }
 
   handleUpdateCommentsError() {
+    this.ajaxSending = false;
+  }
+
+  handleAddComment() {
     this.ajaxSending = false;
   }
 }
