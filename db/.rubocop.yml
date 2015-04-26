@@ -1,0 +1,7 @@
+AllCops:
+  Exclude:
+    - 'schema.rb'
+    - 'seeds.rb'
+
+Style/Documentation:
+  Enabled: false

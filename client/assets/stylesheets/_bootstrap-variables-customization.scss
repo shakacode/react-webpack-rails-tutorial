@@ -31,8 +31,3 @@ $image-url-path: "/assets/images/" !default;
     @return url("#{$image-url-path}#{$image}");
   }
 }
-
-//$image-url-path: "../images/" !default;
-//@function image-url($url) {
-//  @return url("#{$image-url-path}#{$url}");
-//}
