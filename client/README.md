@@ -20,7 +20,3 @@ So don't use `npm run gulp lint` yet.
 For now: 
 
     bin/lint
-
-
-
-
