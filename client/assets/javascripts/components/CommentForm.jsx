@@ -16,29 +16,30 @@ const CommentForm = React.createClass({
     ajaxSending: React.PropTypes.bool.isRequired
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       formMode: 0
     };
   },
 
-  handleSelect: function(selectedKey) {
+  handleSelect(selectedKey) {
     this.setState({formMode: selectedKey});
   },
 
   handleChange() {
+    let obj;
+
     // This could also be done using ReactLink:
     // http://facebook.github.io/react/docs/two-way-binding-helpers.html
-    let obj;
     if (this.state.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
         text: this.refs.text.getValue()
       };
     } else {
-      // This is different because the input is a native HTML element
-      // rather than a React element.
       obj = {
+        // This is different because the input is a native HTML element
+        // rather than a React element.
         author: this.refs.inlineAuthor.getDOMNode().value,
         text: this.refs.inlineText.getDOMNode().value
       };
@@ -52,7 +53,7 @@ const CommentForm = React.createClass({
     FormActions.submitComment(this.props.url, FormStore.getState().comment);
   },
 
-  formHorizontal: function() {
+  formHorizontal() {
     return (
       <div>
         <hr/>
@@ -79,7 +80,7 @@ const CommentForm = React.createClass({
     );
   },
 
-  formStacked: function() {
+  formStacked() {
     return (
       <div>
         <hr/>
@@ -97,7 +98,7 @@ const CommentForm = React.createClass({
     );
   },
 
-  formInline: function() {
+  formInline() {
     return (
       <div>
         <hr/>

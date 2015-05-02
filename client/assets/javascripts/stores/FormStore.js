@@ -2,7 +2,7 @@ import alt from '../FluxAlt';
 import FormActions from '../actions/FormActions';
 import CommentActions from '../actions/CommentActions';
 
-const emptyComment = { author: '', text: '' };
+const emptyComment = {author: '', text: ''};
 
 class FormStore {
   constructor() {

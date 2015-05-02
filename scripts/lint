@@ -1,0 +1,14 @@
+#!/bin/sh
+echo Linting with Rubocop, ruby-lint, eslint, jsrc, and slim-lint
+rubocop .
+
+# NOTE: Ruby-lint is experimental. Did not add value to rubocop
+echo Linting with ruby-lint
+ruby-lint app config spec
+
+echo Linting with eslint and jscs
+(cd client && bin/lint)
+
+scss-lint client/assets/stylesheets/*.scss app/assets/stylesheets/*.scss
+
+echo Done linting with Rubocop, ruby-lint, eslint, jsrc, and slim-lint

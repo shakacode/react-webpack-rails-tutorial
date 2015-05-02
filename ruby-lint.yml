@@ -7,10 +7,9 @@ directories:
   - config
   - spec
 
-#ignore_paths:
-#  - client
-#  - node_modules
-#  - client/**/*
+ignore_paths:
+  - client
+  - node_modules
 
 analysis_classes:
   #  - argument_amount

@@ -6,20 +6,16 @@ body {
   padding-top: 20px;
 }
 
-#main-entry-point {
-  color: pink;
-}
-
 .doc-content {
   padding-top: 10px;
 }
 
 .logo {
-  background: img-url("railsonmaui.png") no-repeat left bottom;
-  height: 40px;
-  width: 146px;
-  margin-right: 10px;
+  background: img-url('railsonmaui.png') no-repeat left bottom;
   display: inline-block;
+  height: 40px;
+  margin-right: 10px;
+  width: 146px;
 }
 
 .twitter-image {
@@ -34,6 +30,8 @@ body {
 
 // ## Nav
 // When nav is affixed, set it's position and size.
+
+// scss-lint:disable IdSelector
 #nav.affix {
   position: fixed;
   top: 3px;
@@ -41,42 +39,3 @@ body {
   z-index: 10;
 }
 
-// ## Code
-// Set up table to render two column view
-// of documentation on left and code, syntax
-// highlighted on the right.
-table.file-table {
-  width: 100%;
-  border-radius: $border-radius-base;
-  border: 0;
-  border-spacing: 0;
-  display: table;
-  table-layout: fixed;
-
-  td.file-docs {
-    background-color: #fff;
-    width: 30%;
-    max-width: 30%;
-    text-overflow: ellipsis;
-    padding: 5px;
-    vertical-align: top;
-  }
-
-  td.file-code {
-    border-left: 1px groove darken(#f5f5f5, 20%);
-    background-color: #f5f5f5;
-    color: #333;
-    width: 70%;
-    max-width: 70%;
-    text-overflow: ellipsis;
-    padding-left: 5px;
-    vertical-align: bottom;
-  }
-  // Remove extra separation between the code
-  // so it looks more like one continuous block.
-  pre.prettyprint {
-    padding: 0 !important;
-    border: 0 !important;
-    margin: 0 0 !important;
-  }
-}

@@ -163,7 +163,12 @@
     "no-wrap-func": 2,               // http://eslint.org/docs/rules/no-wrap-func
     "no-underscore-dangle": 0,       // http://eslint.org/docs/rules/no-underscore-dangle
     "one-var": [2, "never"],         // http://eslint.org/docs/rules/one-var
-    "padded-blocks": [1, "never"],   // http://eslint.org/docs/rules/padded-blocks
+
+  # Change after this issue is fixed:
+  # https://github.com/babel/babel-eslint/issues/33
+    "padded-blocks": 0,   // http://eslint.org/docs/rules/padded-blocks
+#    "padded-blocks": [1, "never"],   // http://eslint.org/docs/rules/padded-blocks
+
     "semi": [2, "always"],           // http://eslint.org/docs/rules/semi
     "semi-spacing": [2, {            // http://eslint.org/docs/rules/semi-spacing
       "before": false,

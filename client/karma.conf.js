@@ -1,8 +1,6 @@
-'use strict';
+const webpack = require('webpack');
 
-var webpack = require('webpack');
-
-module.exports = function(config) {
+module.exports = function karmaMain(config) {
   config.set({
 
     browserNoActivityTimeout: 30000,

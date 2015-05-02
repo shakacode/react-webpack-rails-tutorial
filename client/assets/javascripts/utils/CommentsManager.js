@@ -26,7 +26,7 @@ const CommentsManager = {
       url: url,
       dataType: 'json',
       type: 'POST',
-      data: { comment: comment }
+      data: {comment: comment}
     });
   }
 };

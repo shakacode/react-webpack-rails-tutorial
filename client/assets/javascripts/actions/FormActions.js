@@ -22,8 +22,8 @@ class FormActions {
   submitComment(url, comment) {
     this.dispatch();
     CommentsManager.submitComment(url, comment)
-      .then((comment) => {
-        CommentActions.addComment(comment);
+      .then((returnedComment) => {
+        CommentActions.addComment(returnedComment);
       },
 
       (errorMessage) => {

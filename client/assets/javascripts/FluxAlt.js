@@ -1,5 +1,3 @@
-'use strict';
-
 import Alt from 'alt';
 const alt = new Alt();
 
