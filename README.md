@@ -276,3 +276,10 @@ Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools
 [RubyMine](https://www.jetbrains.com/ruby/) and [WebStorm](https://www.jetbrains.com/webstorm/).
 The developers of this project use RubyMine at the top level, mostly for Ruby work, and we use
 WebStorm opened up to the `client` directory to focus on JSX and Sass files.
+
+# Misc Tips
+
+## Cleanup local branches merged to master 
+```
+alias git-cleanup-merged-branches='git branch --merged master | grep -v master | xargs git branch -d'
+```
