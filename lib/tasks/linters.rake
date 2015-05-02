@@ -1,20 +1,5 @@
 if %w(development test).include? Rails.env
-  require "rubocop/rake_task"
-  RuboCop::RakeTask.new
-
-  task(:default).clear
-
-  desc "JS Linting"
-  task :js_lint do
-    sh "cd client && bin/lint"
-  end
-
-  task default: [:spec, :rubocop]
-end
-
-if %w(development test).include? Rails.env
   # require "rubocop/rake_task"
-  # require "slim_lint/rake_task"
   require "scss_lint/rake_task"
 
   # This fails: https://github.com/bbatsov/rubocop/issues/1840
@@ -26,6 +11,8 @@ if %w(development test).include? Rails.env
     sh "rubocop ."
   end
 
+  # If we had slim
+  # require "slim_lint/rake_task"
   # SlimLint::RakeTask.new
 
   SCSSLint::RakeTask.new do |t|
