@@ -1,4 +1,4 @@
-'use strict';
+/*eslint-disable no-console, func-names, no-var */
 var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');

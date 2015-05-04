@@ -1,8 +1,6 @@
 // IMPORTANT: Make sure to keep the customizations defined in this file
 //            in-sync with the ones defined in app/assets/stylesheets/_bootstrap-custom.scss.
 
-'use strict';
-
 module.exports = {
   bootstrapCustomizations: './assets/stylesheets/_bootstrap-variables-customization.scss',
   mainSass: './assets/stylesheets/_app-styling-post-bootstrap-loading.scss',

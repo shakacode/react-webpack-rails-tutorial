@@ -4,7 +4,7 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server.js",
   "engines": {
-    "node": "0.10.32"
+    "node": "0.12.2"
   },
   "scripts": {
     "postinstall": "cd ./client && npm install",

@@ -62,6 +62,12 @@ group :development, :test do
   gem "rubocop", require: false
 
   gem "ruby-lint", require: false
+
+  gem "scss-lint", require: false
+
+  gem "brakeman", require: false
+
+  gem "bundler-audit", require: false
 end
 
 gem "spring-commands-rspec", group: :development

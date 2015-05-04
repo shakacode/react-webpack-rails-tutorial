@@ -37,6 +37,7 @@ In no particular order:
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
 - Enable the use of the JavaScript ES6 transpiler.
+- Example setting up Ruby and ES6 linting in a real project.
 
 # Technologies involved
 
@@ -216,18 +217,6 @@ To deploy the app on Heroku:
 git push heroku master
 ```
 
-# Update Node Modules
-```
-rm npm-shrinkwrap.json
-npm-check-updates -u
-npm install
-npm shrinkwrap
-```
-
-Then confirm that the hot reload server and the rails server both work fine. You
-may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
-shrinkwrap`.
-
 # Running Tests
 *Default rake task runs tests and linting*
 
@@ -258,14 +247,26 @@ QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
 Then run `rspec` and you should see the tests have passed.
 
 # Linting and Code Inspection
-* Default rake task runs tests and linting (yes, repeating this!)
+## Running Lint and CI tasks
+* Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
 * See file [README.md](client/README.md) for how to run ESLint and JSCS
+* See scripts `scripts/lint` and `client/bin/lint`.
 * Create a custom scope like this for RubyMine, named "Inspection Scope" 
 
     file[react-rails-tutorial]:*/&&!file[react-rails-tutorial]:tmp//*&&!file[react-rails-tutorial]:log//*&&!file[react-rails-tutorial]:client/node_modules//*&&!file[react-rails-tutorial]:client/assets/fonts//*&&!file[react-rails-tutorial]:app/assets/fonts//*&&!file[react-rails-tutorial]:bin//*&&!file[react-rails-tutorial]:app/assets/javascripts//*
 
 * Install the code style and inspection files in [client/jetbrains](client/jetbrains)
 * Use the installed inspection settings and new Inspection Scope for code inspection.
+* RubyMine configuration is optional. All linters run from the command line.
+
+## Linters
+  1. [Rubocop](https://github.com/bbatsov/rubocop)
+  2. [Ruby-Lint](https://github.com/YorickPeterse/ruby-lint)
+  3. [Eslint](http://eslint.org/)
+  4. [JSCS](https://github.com/jscs-dev/node-jscs)
+  5. [scss-lint](https://github.com/brigade/scss-lint)
+  6. [brakeman](http://brakemanscanner.org/)
+  7. [bundle-audit](https://github.com/rubysec/bundler-audit)
 
 # Contributors
 * [Martin Breining](https://github.com/mbreining)

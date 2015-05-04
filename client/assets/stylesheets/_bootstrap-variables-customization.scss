@@ -23,11 +23,12 @@ $font-size-base: 15px;
 
 // Sass 3 removes image-url helper
 // https://github.com/sass/libsass/issues/489
-$image-url-path: "/assets/images/" !default;
+$image-url-path: '/assets/images/' !default;
+
 @function img-url($image) {
   @if $rails {
     @return image-url($image);
   } @else {
-    @return url("#{$image-url-path}#{$image}");
+    @return url('#{$image-url-path}#{$image}');
   }
 }

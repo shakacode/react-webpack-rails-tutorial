@@ -1,11 +1,9 @@
 // Run like this:
 // cd client && node server.js
 
-'use strict';
-
-var path = require('path');
-var config = require('./webpack.common.config');
-var webpack = require('webpack');
+const path = require('path');
+const config = require('./webpack.common.config');
+const webpack = require('webpack');
 
 // We're using the bootstrap-sass loader.
 // See: https://github.com/justin808/bootstrap-sass-loader

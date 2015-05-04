@@ -1,8 +1,6 @@
 // Common webpack configuration used by webpack.hot.config and webpack.rails.config.
 
-'use strict';
-
-var path = require('path');
+const path = require('path');
 
 module.exports = {
 

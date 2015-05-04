@@ -1,11 +1,9 @@
-import $ from 'jquery';
 import React from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import CommentStore from '../stores/CommentStore';
 import FormStore from '../stores/FormStore';
 import CommentActions from '../actions/CommentActions';
-import FormActions from '../actions/FormActions';
 
 const CommentBox = React.createClass({
   displayName: 'CommentBox',
