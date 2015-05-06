@@ -7,7 +7,7 @@ class CommentActions {
    *
    * @param {String} url
    * @param {Boolean} displaySpinner
-   * @return undefined
+   * @returns {undefined}
    */
   fetchComments(url, displaySpinner) {
     this.dispatch(displaySpinner);
@@ -20,7 +20,7 @@ class CommentActions {
    * A new list of comments is available, refresh the store.
    *
    * @param {Array} comments
-   * @return undefined
+   *  @returns {undefined}
    */
   updateComments(comments) {
     this.dispatch(comments);
@@ -30,7 +30,7 @@ class CommentActions {
    * An error occurred while fetching comments, dispatch error message.
    *
    * @param {String} errorMessage
-   * @return undefined
+   *  @returns {undefined}
    */
   updateCommentsError(errorMessage) {
     this.dispatch(errorMessage);
@@ -40,7 +40,7 @@ class CommentActions {
    * A new comment has been submitted to the server, dispatch it.
    *
    * @param {Array} comment
-   * @return undefined
+   *  @returns {undefined}
    */
   addComment(comment) {
     this.dispatch(comment);

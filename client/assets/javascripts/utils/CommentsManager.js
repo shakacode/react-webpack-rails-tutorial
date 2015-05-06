@@ -5,7 +5,7 @@ const CommentsManager = {
    * Retrieve comments from server using AJAX call.
    *
    * @param {String} url
-   * @return Object
+   *  @returns {Object}
    */
   fetchComments(url) {
     return $.ajax({
@@ -19,7 +19,7 @@ const CommentsManager = {
    *
    * @param {String} url
    * @param {Object} comment
-   * @return Object
+   *  @returns {Object}
    */
   submitComment(url, comment) {
     return $.ajax({

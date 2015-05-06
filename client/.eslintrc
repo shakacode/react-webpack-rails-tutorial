@@ -239,7 +239,7 @@
 
   // https://github.com/babel/babel-eslint/issues/85
   // Disabling until this issue is resolved
-  "valid-jsdoc": 0,
+  "valid-jsdoc": 2,
 
   "valid-typeof": 2,
   "wrap-iife": 0,

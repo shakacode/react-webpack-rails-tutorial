@@ -7,7 +7,7 @@ class FormActions {
    * Text is being entered in the comment form, update the state.
    *
    * @param {String} comment
-   * @return undefined
+   *  @returns {undefined}
    */
   updateComment(comment) {
     this.dispatch(comment);
@@ -17,7 +17,7 @@ class FormActions {
    * Submit a new comment to the server.
    *
    * @param {String} comment
-   * @return undefined
+   *  @returns {undefined}
    */
   submitComment(url, comment) {
     this.dispatch();
