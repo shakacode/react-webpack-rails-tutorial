@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.1.5"
+ruby "2.2.1"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -68,6 +68,8 @@ group :development, :test do
   gem "brakeman", require: false
 
   gem "bundler-audit", require: false
+
+  gem "rainbow"
 end
 
 gem "spring-commands-rspec", group: :development

@@ -6,8 +6,8 @@ class FormActions {
   /**
    * Text is being entered in the comment form, update the state.
    *
-   * @param {String} comment
-   *  @returns {undefined}
+   * @param {String} comment - Comment to update from form input.
+   * @return {void}
    */
   updateComment(comment) {
     this.dispatch(comment);
@@ -16,8 +16,9 @@ class FormActions {
   /**
    * Submit a new comment to the server.
    *
-   * @param {String} comment
-   *  @returns {undefined}
+   * @param {String} url - Url used for remote request to sumbmit the comment.
+   * @param {String} comment - New comment from UI to send to the server.
+   * @return {void}
    */
   submitComment(url, comment) {
     this.dispatch();
