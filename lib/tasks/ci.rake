@@ -26,10 +26,8 @@ if Rails.env.development?
     end
   end
 
-  task :ci do
-    Rake::Task["ci:all"].invoke
-  end
+  task ci: "ci:all"
 
-  task(:default).clear
-  task default: [:ci]
+  task(:default).clear.enhance([:ci])
+
 end
