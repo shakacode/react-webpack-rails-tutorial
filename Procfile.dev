@@ -1,3 +1,4 @@
 web: rails s -p 4000
 client: cd client && $(npm bin)/webpack -w --config webpack.rails.config.js
 hot: cd client && node server.js
+log: tail -f log/development.log
