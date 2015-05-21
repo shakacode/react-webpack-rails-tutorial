@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.1.5"
+ruby "2.2.1"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -54,6 +54,8 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
 
+  gem "spring-commands-rspec"
+
   # Manage application processes
   gem "foreman"
 
@@ -68,9 +70,9 @@ group :development, :test do
   gem "brakeman", require: false
 
   gem "bundler-audit", require: false
-end
 
-gem "spring-commands-rspec", group: :development
+  gem "rainbow"
+end
 
 group :test  do
   gem "rspec-rails"

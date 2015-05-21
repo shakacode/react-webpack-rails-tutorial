@@ -9,7 +9,7 @@ before_fork do |_, _|
     Process.kill "QUIT", Process.pid
   end
 
-  defined?(ActiveRecord::Base) &&  ActiveRecord::Base.connection.disconnect!
+  defined?(ActiveRecord::Base) && ActiveRecord::Base.connection.disconnect!
 end
 
 # noinspection RubyUnusedLocalVariable
