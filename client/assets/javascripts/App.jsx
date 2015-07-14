@@ -7,6 +7,7 @@ class App extends React.Component {
         return (
             <div>
                 <CommentBox url='comments.json' pollInterval={5000}/>
+                <Footer />
             </div>
         )
     }

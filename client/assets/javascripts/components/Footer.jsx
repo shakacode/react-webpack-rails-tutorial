@@ -18,6 +18,3 @@ export default class Footer extends React.Component {
         );
     }
 }
-
-//Expose this as global so that the index.html.erb file has access to it.
-global.Footer = Footer;
