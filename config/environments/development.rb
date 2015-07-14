@@ -38,4 +38,17 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  #React integration with rails
+    #MyApp::Application.configure do
+      config.react.variant = :development
+      config.react.addons = true
+    #end
+
+    config.react.jsx_transform_options = {
+      blacklist: ['spec.functionName', 'validation.react'], # default options
+      optional: ["transformerName"],  # pass extra babel options
+      whitelist: ["useStrict"] # even more options
+    }
+
 end

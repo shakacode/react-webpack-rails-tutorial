@@ -4,6 +4,9 @@ ruby "2.2.1"
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~>4.2"
+
+gem 'react-rails', '~> 1.0'
+
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", group: :development
 gem "pg", group: :production
@@ -78,7 +81,6 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
   gem "database_cleaner"
   gem "launchy"
 end

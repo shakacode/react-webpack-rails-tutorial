@@ -73,4 +73,17 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  #React integration with rails
+      #MyApp::Application.configure do
+        config.react.variant = :production
+        config.react.addons = true
+      #end
+
+      config.react.jsx_transform_options = {
+        blacklist: ['spec.functionName', 'validation.react'], # default options
+        optional: ["transformerName"],  # pass extra babel options
+        whitelist: ["useStrict"] # even more options
+      }
+
 end
