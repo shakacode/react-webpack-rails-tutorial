@@ -64,5 +64,22 @@
     "gulp": "gulp",
     "jscs": "jscs --verbose",
     "eslint": "eslint"
+  },
+  "devDependencies": {
+    "jest-cli": "^0.4.15",
+    "react-tools": "^0.13.3"
+  },
+  "scripts": {
+    "test": "node ./node_modules/jest-cli/bin/jest.js"
+  },
+  "jest": {
+    "rootDir": "./app/assets/javascripts/components",
+    "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",
+    "moduleFileExtensions": [ "js", "jsx"],
+    "unmockedModulePathPatterns": [
+      "react"
+    ],
+    "testFileExtensions": ["js", "jsx"],
+    "testPathIgnorePatterns": [ "preprocessor.js" ]
   }
 }

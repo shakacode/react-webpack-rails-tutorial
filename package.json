@@ -26,22 +26,5 @@
   "bugs": {
     "url": "https://github.com/justin808/react-webpack-rails-tutorial/issues"
   },
-  "homepage": "https://github.com/justin808/react-webpack-rails-tutorial",
-  "devDependencies": {
-    "jest-cli": "^0.4.15",
-    "react-tools": "^0.13.3"
-  },
-  "scripts": {
-    "test": "node ./node_modules/jest-cli/bin/jest.js"
-  },
-  "jest": {
-    "rootDir": "./app/assets/javascripts/components",
-    "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",
-    "moduleFileExtensions": [ "js", "jsx"],
-    "unmockedModulePathPatterns": [
-      "react"
-    ],
-    "testFileExtensions": ["js", "jsx"],
-    "testPathIgnorePatterns": [ "preprocessor.js" ]
-  }
+  "homepage": "https://github.com/justin808/react-webpack-rails-tutorial"
 }
