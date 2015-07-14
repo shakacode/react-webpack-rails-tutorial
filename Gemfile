@@ -81,6 +81,7 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
+  gem "capybara-webkit"
   gem "database_cleaner"
   gem "launchy"
 end
