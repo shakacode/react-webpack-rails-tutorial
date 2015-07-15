@@ -38,6 +38,8 @@ gem "unicorn"
 
 gem "autoprefixer-rails"
 
+gem "react-rails", path: "~/a/react-rails"
+
 # Use Capistrano for deployment
 # gem "capistrano-rails", group: :development
 group :production do
