@@ -39,16 +39,11 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  #React integration with rails
-    #MyApp::Application.configure do
-      config.react.variant = :development
-      config.react.addons = true
-    #end
-
-    config.react.jsx_transform_options = {
-      blacklist: ['spec.functionName', 'validation.react'], # default options
-      optional: ["transformerName"],  # pass extra babel options
-      whitelist: ["useStrict"] # even more options
-    }
-
+  # config.react.server_renderer_pool_size  ||= 1  # ExecJS doesn't allow more than one on MRI
+  # config.react.server_renderer_timeout    ||= 20 # seconds
+  # config.react.server_renderer = React::ServerRendering::SprocketsRenderer
+  config.react.server_renderer_options = {
+    files: ["jquery", "generated/client-bundle"], # files to load for prerendering
+    replay_console: true,                 # if true, console.* will be replayed client-side
+  }
 end

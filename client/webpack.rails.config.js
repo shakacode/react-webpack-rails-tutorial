@@ -4,6 +4,8 @@
 
 // NOTE: All style sheets handled by the asset pipeline in rails
 
+var webpack = require('webpack');
+
 const config = require('./webpack.common.config');
 
 config.output = {
@@ -29,6 +31,10 @@ config.module.loaders.push(
   {test: require.resolve('jquery'), loader: 'expose?$'}
 );
 module.exports = config;
+
+new webpack.ProvidePlugin({
+    global: "global"
+})
 
 // Next line is Heroku specific. You'll have BUILDPACK_URL defined for your Heroku install.
 const devBuild = (typeof process.env.BUILDPACK_URL) === 'undefined';

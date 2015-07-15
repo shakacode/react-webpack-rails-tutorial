@@ -12,5 +12,4 @@ class App extends React.Component {
         )
     }
 }
-
-global.App = App; //Make this global to reference from html.
+export default App;
