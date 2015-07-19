@@ -58,7 +58,7 @@ See package.json and Gemfile for versions
 1. Check that you have Ruby 2.1.5 and the gemset Rails 4.2 (this might change in the future)
 1. `bundle install`
 1. `cd client` and `npm install`
-1. `rake db:setup`
+1. Go back to react-webpack-rails-tutorial directory and `rake db:setup`
 1. `foreman start -f Procfile.dev`
 1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
 1. Open a browser tab to [http://0.0.0.0:3000]() for the Hot Module Replacement Example.
