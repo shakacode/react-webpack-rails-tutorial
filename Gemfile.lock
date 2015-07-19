@@ -205,7 +205,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    scss-lint (0.38.0)
+    scss_lint (0.40.1)
       rainbow (~> 2.0)
       sass (~> 3.4.1)
     sdoc (0.4.1)
@@ -274,7 +274,7 @@ DEPENDENCIES
   rubocop
   ruby-lint
   sass-rails
-  scss-lint
+  scss_lint
   sdoc
   spring
   spring-commands-rspec
