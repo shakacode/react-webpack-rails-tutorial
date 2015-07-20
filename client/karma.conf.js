@@ -9,10 +9,10 @@ module.exports = function karmaMain(config) {
 
     singleRun: process.env.CONTINUOUS_INTEGRATION === 'true',
 
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai'],
 
     files: [
-      'tests.webpack.js'
+      'tests.webpack.js',
     ],
 
     preprocessors: {
