@@ -4,22 +4,14 @@ const CommentNote = React.createClass({
   displayName = 'CommentNote',
 
   render() {
-    const alertInstance = (
-      return (
-        <Alert bsStyle="danger">
-          <p><strong>Warning!</strong></p>
-          <br />
-          <p>Comments are living only 24 hours.</p><br />
-          <p>After this, it will be <strong>removed.</strong></p>
-        </Alert>
-      );
+    return (
+      <Alert bsStyle="warning">
+        <strong>Warning!</strong>
+        <br />
+        Comments are removed every <strong>24 hours.</strong>
+      </Alert>
     );
   }
 });
 
 export default CommentNote;
-
-//React.render(
-//  alertInstance,
-//  document.getElementById("note")
-//);
