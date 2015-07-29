@@ -55,7 +55,7 @@ See package.json and Gemfile for versions
 1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node version `v0.10.33`.
 1. `git clone git@github.com:justin808/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.2.1 and the gemset Rails 4.2 (this might change in the future)
+1. Check that you have Ruby 2.2.1
 1. `bundle install`
 1. `npm install`
 1. `rake db:setup`
