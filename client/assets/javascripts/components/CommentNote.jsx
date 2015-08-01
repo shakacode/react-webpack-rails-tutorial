@@ -5,13 +5,17 @@ const CommentNote = React.createClass({
 
   render() {
     return (
-      <Alert bsStyle="warning">
-        <strong>Warning!</strong>
-        <br />
-        Comments are removed every <strong>24 hours.</strong>
-      </Alert>
+      const alertInstance = (
+        <Alert bsStyle="warning">
+          <strong>Warning!</strong>
+          <br />
+          Comments are removed every <strong>24 hours.</strong>
+        </Alert>
+      );
     );
   }
 });
+
+React.render(alertInstance, document.body);
 
 export default CommentNote;
