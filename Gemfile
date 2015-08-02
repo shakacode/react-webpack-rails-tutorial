@@ -26,6 +26,7 @@ gem "turbolinks"
 gem "jbuilder"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
+gem "es5-shim-rails"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
@@ -78,7 +79,7 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem "poltergeist"
   gem "database_cleaner"
   gem "launchy"
 end

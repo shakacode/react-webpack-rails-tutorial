@@ -17,5 +17,6 @@
 
 // Important to import jquery_ujs before rails-bundle as that patches jquery xhr to use the authenticity token!
 
+//= require es5-shim/es5-shim
 //= require generated/client-bundle
 //= require turbolinks
