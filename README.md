@@ -26,7 +26,7 @@ choose the form layout. `react-bootstrap` is used for the React components.
 
 A pure Rails UI generated from scaffolding is shown for comparison.
 
-You can see this tutorial live here: [http://react-webpack-rails-tutorial.herokuapp.com/](http://react-webpack-rails-tutorial.herokuapp.com/)
+You can see this tutorial live here: [http://reactrails.com/](http://reactrails.com/)
 
 # Motivation
 
@@ -38,6 +38,7 @@ In no particular order:
 - Easily enable retrofitting such a JS framework into an existing Rails app.
 - Enable the use of the JavaScript ES6 transpiler.
 - Example setting up Ruby and ES6 linting in a real project.
+- Example of thorough use of Ruby and JavaScript linters, and other CI tasks.
 
 # Technologies involved
 
@@ -52,10 +53,12 @@ See package.json and Gemfile for versions
 7. Heroku (for deployment)
 
 # Basic Setup
-1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node version `v0.10.33`.
+1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node
+   version `v0.12.7`. See this article [Updating and using nvm](http://forum.railsonmaui.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:justin808/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.2.1
+1. Check that you have Ruby 2.2.2
+1. Check that you're using the right version of node. Run `nvm list` to check.
 1. `bundle install`
 1. `npm install`
 1. `rake db:setup`
@@ -251,13 +254,18 @@ Then run `rspec` and you should see the tests have passed.
 * Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
 * See file [README.md](client/README.md) for how to run ESLint and JSCS
 * See scripts `scripts/lint` and `client/bin/lint`.
-* Create a custom scope like this for RubyMine, named "Inspection Scope" 
+* We're using the [AirBnb JavaScript style guidelines](https://github.com/airbnb/javascript).
+
+### RubyMine/Webstorm Linting Configuration
+  * I started out trying to make RubyMine and WebStorm catch and fix linting errors. However, I find
+    it faster to just do this with the command line. Your mileage may vary.
+  * Create a custom scope like this for RubyMine, named "Inspection Scope" 
 
     file[react-rails-tutorial]:*/&&!file[react-rails-tutorial]:tmp//*&&!file[react-rails-tutorial]:log//*&&!file[react-rails-tutorial]:client/node_modules//*&&!file[react-rails-tutorial]:client/assets/fonts//*&&!file[react-rails-tutorial]:app/assets/fonts//*&&!file[react-rails-tutorial]:bin//*&&!file[react-rails-tutorial]:app/assets/javascripts//*
 
-* Install the code style and inspection files in [client/jetbrains](client/jetbrains)
-* Use the installed inspection settings and new Inspection Scope for code inspection.
-* RubyMine configuration is optional. All linters run from the command line.
+  * Install the code style and inspection files in [client/jetbrains](client/jetbrains)
+  * Use the installed inspection settings and new Inspection Scope for code inspection.
+  * RubyMine configuration is optional. All linters run from the command line.
 
 ## Linters
   1. [Rubocop](https://github.com/bbatsov/rubocop)
