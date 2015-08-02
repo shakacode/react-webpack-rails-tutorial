@@ -10,7 +10,7 @@ const CommentsManager = {
   fetchComments(url) {
     return $.ajax({
       url: url,
-      dataType: 'json'
+      dataType: 'json',
     });
   },
 
@@ -26,9 +26,9 @@ const CommentsManager = {
       url: url,
       dataType: 'json',
       type: 'POST',
-      data: {comment: comment}
+      data: {comment: comment},
     });
-  }
+  },
 };
 
 export default CommentsManager;

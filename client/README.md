@@ -29,9 +29,10 @@ Updating Node Dependenencies
 npm install -g npm-check-updates
 ```
  
-Make sure you are in the client directory, then run:
   
 ```
+# Make sure you are in the `client` directory, then run:
+cd client 
 rm npm-shrinkwrap.json
 npm-check-updates -u
 npm install

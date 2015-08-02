@@ -6,13 +6,13 @@ var config = require('./webpack.hot.config');
 var sleep = require('sleep');
 
 var comments = [{author: 'Pete Hunt', text: 'Hey there!'},
-  {author: 'Justin Gordon', text: 'Aloha from @railsonmaui'}];
+  {author: 'Justin Gordon', text: 'Aloha from @railsonmaui'},];
 
 var server = new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   noInfo: false,
-  stats: {colors: true}
+  stats: {colors: true},
 });
 
 server.app.use(bodyParser.json(null));

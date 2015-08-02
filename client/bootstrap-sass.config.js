@@ -31,7 +31,7 @@ module.exports = {
     popover: true,
     scrollspy: true,
     tab: true,
-    affix: true
+    affix: true,
   },
 
   // ### Styles
@@ -83,6 +83,6 @@ module.exports = {
     carousel: true,
 
     utilities: true,
-    'responsive-utilities': true
-  }
+    'responsive-utilities': true,
+  },
 };

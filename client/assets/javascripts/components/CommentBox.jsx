@@ -10,13 +10,13 @@ const CommentBox = React.createClass({
 
   propTypes: {
     url: React.PropTypes.string.isRequired,
-    pollInterval: React.PropTypes.number.isRequired
+    pollInterval: React.PropTypes.number.isRequired,
   },
 
   getStoreState() {
     return {
       comments: CommentStore.getState(),
-      form: FormStore.getState()
+      form: FormStore.getState(),
     };
   },
 
@@ -45,7 +45,7 @@ const CommentBox = React.createClass({
 
   render() {
     return (
-      <div className="commentBox container">
+      <div className='commentBox container'>
         <h1>Comments { this.state.form.ajaxSending ? 'SENDING AJAX REQUEST!' : '' }</h1>
         <CommentForm formData={this.state.form.comment}
                      url={this.props.url}
@@ -53,7 +53,7 @@ const CommentBox = React.createClass({
         <CommentList comments={this.state.comments.comments} />
       </div>
     );
-  }
+  },
 });
 
 export default CommentBox;

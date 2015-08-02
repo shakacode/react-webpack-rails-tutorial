@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.2.1"
+ruby "2.2.2"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -26,6 +26,7 @@ gem "turbolinks"
 gem "jbuilder"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
+gem "es5-shim-rails"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
@@ -49,7 +50,7 @@ group :development, :test do
   gem "byebug"
 
   # Access an IRB console on exceptions page and /console in development
-  gem "web-console", "~> 2.0.0.beta2"
+  gem "web-console"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
@@ -78,7 +79,7 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem "poltergeist"
   gem "database_cleaner"
   gem "launchy"
 end

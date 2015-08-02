@@ -13,12 +13,12 @@ const CommentForm = React.createClass({
   propTypes: {
     url: React.PropTypes.string.isRequired,
     formData: React.PropTypes.object.isRequired,
-    ajaxSending: React.PropTypes.bool.isRequired
+    ajaxSending: React.PropTypes.bool.isRequired,
   },
 
   getInitialState() {
     return {
-      formMode: 0
+      formMode: 0,
     };
   },
 
@@ -34,14 +34,14 @@ const CommentForm = React.createClass({
     if (this.state.formMode < 2) {
       obj = {
         author: this.refs.author.getValue(),
-        text: this.refs.text.getValue()
+        text: this.refs.text.getValue(),
       };
     } else {
       obj = {
         // This is different because the input is a native HTML element
         // rather than a React element.
         author: this.refs.inlineAuthor.getDOMNode().value,
-        text: this.refs.inlineText.getDOMNode().value
+        text: this.refs.inlineText.getDOMNode().value,
       };
     }
 
@@ -145,7 +145,7 @@ const CommentForm = React.createClass({
     }
     return (
       <div>
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle='pills' activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>
@@ -153,7 +153,7 @@ const CommentForm = React.createClass({
         {inputForm}
       </div>
     );
-  }
+  },
 });
 
 export default CommentForm;

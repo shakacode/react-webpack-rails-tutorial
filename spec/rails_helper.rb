@@ -4,6 +4,7 @@ require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rspec"
+require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -47,7 +48,8 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.javascript_driver = :webkit
+
+  Capybara.javascript_driver = :poltergeist
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

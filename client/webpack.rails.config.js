@@ -8,7 +8,7 @@ const config = require('./webpack.common.config');
 
 config.output = {
   filename: 'client-bundle.js',
-  path: '../app/assets/javascripts/generated'
+  path: '../app/assets/javascripts/generated',
 };
 
 // load jQuery from cdn or rails asset pipeline

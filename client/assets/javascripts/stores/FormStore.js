@@ -15,7 +15,7 @@ class FormStore {
       handleFetchComments: CommentActions.FETCH_COMMENTS,
       handleUpdateComments: CommentActions.UPDATE_COMMENTS,
       handleUpdateCommentsError: CommentActions.UPDATE_COMMENTS_ERROR,
-      handleAddComment: CommentActions.ADD_COMMENT
+      handleAddComment: CommentActions.ADD_COMMENT,
     });
   }
 
