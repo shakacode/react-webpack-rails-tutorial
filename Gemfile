@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.2.1"
+ruby "2.2.2"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -49,7 +49,7 @@ group :development, :test do
   gem "byebug"
 
   # Access an IRB console on exceptions page and /console in development
-  gem "web-console", "~> 2.0.0.beta2"
+  gem "web-console"
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"

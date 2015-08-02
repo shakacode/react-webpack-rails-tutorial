@@ -22,6 +22,9 @@ config.output = {
 config.plugins = [new webpack.HotModuleReplacementPlugin()];
 config.devtool = 'eval-source-map';
 
+// Add the styles
+config.resolve.root.push(path.join(__dirname, 'assets/stylesheets'));
+
 // All the styling loaders only apply to hot-reload, not rails
 config.module.loaders.push(
   {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/},

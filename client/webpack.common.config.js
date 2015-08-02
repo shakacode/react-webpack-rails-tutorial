@@ -14,8 +14,7 @@ module.exports = {
   // },
   resolve: {
     root: [path.join(__dirname, 'scripts'),
-           path.join(__dirname, 'assets/javascripts'),
-           path.join(__dirname, 'assets/stylesheets')],
+           path.join(__dirname, 'assets/javascripts')],
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js']
   },
   module: {
