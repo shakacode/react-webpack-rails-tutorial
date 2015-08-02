@@ -5,7 +5,7 @@ const CommentList = React.createClass({
   displayName: 'CommentList',
 
   propTypes: {
-    comments: React.PropTypes.array
+    comments: React.PropTypes.array,
   },
 
   render() {
@@ -20,11 +20,11 @@ const CommentList = React.createClass({
     });
 
     return (
-      <div className="commentList">
+      <div className='commentList'>
         {commentNodes}
       </div>
     );
-  }
+  },
 });
 
 export default CommentList;

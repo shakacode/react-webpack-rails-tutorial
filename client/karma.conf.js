@@ -12,11 +12,11 @@ module.exports = function karmaMain(config) {
     frameworks: ['mocha'],
 
     files: [
-      'tests.webpack.js'
+      'tests.webpack.js',
     ],
 
     preprocessors: {
-      'tests.webpack.js': ['webpack', 'sourcemap']
+      'tests.webpack.js': ['webpack', 'sourcemap'],
     },
 
     reporters: ['dots'],
@@ -25,19 +25,19 @@ module.exports = function karmaMain(config) {
       devtool: 'inline-source-map',
       module: {
         loaders: [
-          {test: /\.js$/, loader: 'babel-loader'}
-        ]
+          {test: /\.js$/, loader: 'babel-loader'},
+        ],
       },
       plugins: [
         new webpack.DefinePlugin({
-          'process.env.NODE_ENV': JSON.stringify('test')
-        })
-      ]
+          'process.env.NODE_ENV': JSON.stringify('test'),
+        }),
+      ],
     },
 
     webpackServer: {
-      noInfo: true
-    }
+      noInfo: true,
+    },
 
   });
 };

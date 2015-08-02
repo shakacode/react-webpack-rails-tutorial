@@ -6,7 +6,7 @@ const Comment = React.createClass({
 
   propTypes: {
     author: React.PropTypes.string.isRequired,
-    text: React.PropTypes.string.isRequired
+    text: React.PropTypes.string.isRequired,
   },
 
   render() {
@@ -19,7 +19,7 @@ const Comment = React.createClass({
         <span dangerouslySetInnerHTML={{__html: rawMarkup}}/>
       </div>
     );
-  }
+  },
 });
 
 export default Comment;

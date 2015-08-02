@@ -17,7 +17,7 @@ config.output = {
 
   // this file is served directly by webpack
   filename: 'express-bundle.js',
-  path: __dirname
+  path: __dirname,
 };
 config.plugins = [new webpack.HotModuleReplacementPlugin()];
 config.devtool = 'eval-source-map';
@@ -32,7 +32,7 @@ config.module.loaders.push(
   {
     test: /\.scss$/,
     loader: 'style!css!sass?outputStyle=expanded&imagePath=/assets/images&includePaths[]=' +
-    path.resolve(__dirname, './assets/stylesheets')
+    path.resolve(__dirname, './assets/stylesheets'),
   },
 
   // The url-loader uses DataUrls. The file-loader emits files.
