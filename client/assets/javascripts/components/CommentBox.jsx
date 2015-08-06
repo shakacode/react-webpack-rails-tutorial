@@ -1,57 +1,29 @@
 import React from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import CommentStore from '../stores/CommentStore';
-import FormStore from '../stores/FormStore';
-import CommentActions from '../actions/CommentActions';
 
 const CommentBox = React.createClass({
   displayName: 'CommentBox',
 
   propTypes: {
-    url: React.PropTypes.string.isRequired,
     pollInterval: React.PropTypes.number.isRequired,
-  },
-
-  getStoreState() {
-    return {
-      comments: CommentStore.getState(),
-      form: FormStore.getState(),
-    };
-  },
-
-  getInitialState() {
-    return this.getStoreState();
+    actions: PropTypes.object.isRequired,
   },
 
   componentDidMount() {
-    CommentStore.listen(this.onChange);
-    FormStore.listen(this.onChange);
-    CommentActions.fetchComments(this.props.url, true);
-    setInterval(CommentActions.fetchComments,
-                this.props.pollInterval,
-                this.props.url,
-                false);
-  },
-
-  componentWillUnmount() {
-    CommentStore.unlisten(this.onChange);
-    FormStore.unlisten(this.onChange);
-  },
-
-  onChange() {
-    this.setState(this.getStoreState());
+    let fetchComments = this.props.actions.fetchComments;
+    fetchComments();
+    setInterval(fetchComments,
+      this.props.pollInterval);
   },
 
   render() {
     return (
       <div className='commentBox container'>
-        <h1>Comments { this.state.form.ajaxSending ? 'SENDING AJAX REQUEST!' : '' }</h1>
+        <h1>Comments { this.props.ajaxCounter > 0 ? `SENDING AJAX REQUEST! Ajax Counter is ${this.props.ajaxCounter}` : '' }</h1>
         <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
-        <CommentForm formData={this.state.form.comment}
-                     url={this.props.url}
-                     ajaxSending={this.state.form.ajaxSending} />
-        <CommentList comments={this.state.comments.comments} />
+        <CommentForm ajaxSending={this.props.ajaxCounter > 0} actions={this.props.actions}/>
+        <CommentList comments={this.props.comments}/>
       </div>
     );
   },
