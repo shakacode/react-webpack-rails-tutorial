@@ -7,7 +7,7 @@ const CommentBox = React.createClass({
 
   propTypes: {
     pollInterval: React.PropTypes.number.isRequired,
-    actions: PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
   },
 
   componentDidMount() {

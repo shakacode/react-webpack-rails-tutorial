@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import commentReducer from '../reducers/commentReducer';
 import loggerMiddleware from '../middleware/loggerMiddleware';
 
