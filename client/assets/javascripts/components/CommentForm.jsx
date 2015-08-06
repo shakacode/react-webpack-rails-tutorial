@@ -13,7 +13,7 @@ const CommentForm = React.createClass({
 
   propTypes: {
     ajaxSending: React.PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
