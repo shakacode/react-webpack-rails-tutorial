@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchComments, submitComment }  from '../actions/CommentActionCreators';
 
-const CommentActionsCreators = [fetchComments, submitComment];
+const CommentActionsCreators = { fetchComments, submitComment };
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?
@@ -20,7 +20,7 @@ const CommentScreen = React.createClass({
 
   render() {
     const { dispatch, ...other } = this.props;
-    const actions = bindActionCreators(CommentActionCreators, dispatch);
+    const actions = bindActionCreators(CommentActionsCreators, dispatch);
     return (
       <div>
         <CommentBox pollInterval={5000} {...other}

@@ -1,32 +1,32 @@
-import * from '../constants/ActionTypes';
+import * as actionTypes from '../constants/ActionTypes';
 
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
-const initialState = Immutable.Map({
+const initialState = Map({
   comments: [],
   ajaxCounter: 0,
   fetchCommentError: '',
   submitCommentError: '',
 });
 
-export default function commentReducer(state = initialState, action) {
+export default function comments(state = initialState, action) {
   switch (action.type) {
-    case FETCH_COMMENTS_SUCCESS:
-      return state.merge({ comments: action.comments, fetchCommentError: '' });
-    case FETCH_COMMENTS_FAILURE:
-      return state.merge({ fetchCommentError: action.error });
-    case SUBMIT_COMMENT_SUCCESS:
-      return state.withMutatations(mState => {
-        mState.updateIn(['comments'], comments => comments.unshift(action.comment)).
-          merge({ submitCommentError: '' });
-      });
-    case SUBMIT_COMMENT_FAILURE:
-      return state.merge({ submitCommentError: action.error });
-    case INCREMENT_AJAX_COUNTER:
-      return state.merge({ ajaxCounter: state.get('ajaxCounter') + 1 });
-    case DECREMENT_AJAX_COUNTER:
-      return state.merge({ ajaxCounter: state.get('ajaxCounter') - 1 });
-    default:
-      return state;
+  case actionTypes.FETCH_COMMENTS_SUCCESS:
+    return state.merge({ comments: action.comments, fetchCommentError: '' });
+  case actionTypes.FETCH_COMMENTS_FAILURE:
+    return state.merge({ fetchCommentError: action.error });
+  case actionTypes.SUBMIT_COMMENT_SUCCESS:
+    return state.withMutatations(mState => {
+      mState.updateIn(['comments'], comments => comments.unshift(action.comment)).    // Seems to me this is a mutation, for `comments` we should use List type instead
+        merge({ submitCommentError: '' });
+    });
+  case actionTypes.SUBMIT_COMMENT_FAILURE:
+    return state.merge({ submitCommentError: action.error });
+  case actionTypes.INCREMENT_AJAX_COUNTER:
+    return state.merge({ ajaxCounter: state.get('ajaxCounter') + 1 });
+  case actionTypes.DECREMENT_AJAX_COUNTER:
+    return state.merge({ ajaxCounter: state.get('ajaxCounter') - 1 });
+  default:
+    return state;
   }
 }

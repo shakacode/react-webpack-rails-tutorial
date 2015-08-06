@@ -12,8 +12,8 @@ const Comment = React.createClass({
   render() {
     const rawMarkup = marked(this.props.text);
     return (
-      <div className='comment'>
-        <h2 className='comment-author'>
+      <div className="comment">
+        <h2 className="comment-author">
           {this.props.author}
         </h2>
         <span dangerouslySetInnerHTML={{__html: rawMarkup}}/>
