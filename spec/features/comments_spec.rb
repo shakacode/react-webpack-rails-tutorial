@@ -12,6 +12,14 @@ feature "Add new comment" do
     expect(page).to have_css(".commentList .comment", text: "Tommy")
     expect(page).to have_css(".commentList .comment", text: "Surf's up dude!")
 
+    click_link "Horizontal Form"
+    fill_in "Your Name", with: "Jason"
+    fill_in "Say something...", with: "<iframe src=\"http://www.w3schools.com\"></iframe>"
+    click_button "Post"
+    expect(page).to have_css(".commentList .comment", text: "Jason")
+    expect(page).not_to have_css("iframe")
+    expect(page).to have_css(".commentList .comment", text: "<iframe src=\"http://www.w3schools.com\"")
+
     click_link "Stacked Form"
     fill_in "Your Name", with: "Spicoli"
     fill_in hint_text, with: "Cowabunga dude!"

@@ -23,6 +23,7 @@ const CommentBox = React.createClass({
     return (
       <div className='commentBox container'>
         <h1>Comments { this.props.ajaxCounter > 0 ? `SENDING AJAX REQUEST! Ajax Counter is ${this.props.ajaxCounter}` : '' }</h1>
+        <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
         <CommentForm ajaxSending={this.props.ajaxCounter > 0} actions={actions}/>
         <CommentList comments={data.get('comments')}/>
       </div>

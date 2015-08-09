@@ -48,7 +48,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-
   Capybara.javascript_driver = :poltergeist
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

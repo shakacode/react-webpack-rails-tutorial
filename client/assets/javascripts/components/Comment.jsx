@@ -10,7 +10,7 @@ const Comment = React.createClass({
   },
 
   render() {
-    const rawMarkup = marked(this.props.text);
+    const rawMarkup = marked(this.props.text, { gfm: true, sanitize: true });
     return (
       <div className="comment">
         <h2 className="comment-author">
