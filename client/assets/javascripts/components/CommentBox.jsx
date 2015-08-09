@@ -47,6 +47,7 @@ const CommentBox = React.createClass({
     return (
       <div className='commentBox container'>
         <h1>Comments { this.state.form.ajaxSending ? 'SENDING AJAX REQUEST!' : '' }</h1>
+        <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
         <CommentForm formData={this.state.form.comment}
                      url={this.props.url}
                      ajaxSending={this.state.form.ajaxSending} />
