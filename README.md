@@ -11,7 +11,7 @@ By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 - If this work interests you and you are looking for full or part-time remote work, please
   [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
 - Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
-- We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial)
+- We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial).
 
 A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/02/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
 
