@@ -1,5 +1,7 @@
 # React, React-Bootstrap, and ES-6 on Rails via WebPack
 
+[![Join the chat at https://gitter.im/justin808/react-webpack-rails-tutorial](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/justin808/react-webpack-rails-tutorial?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 
 - If you came to here from the blog article, this example project has evolved. See CHANGELOG.md for 
