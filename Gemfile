@@ -66,7 +66,7 @@ group :development, :test do
 
   gem "ruby-lint", require: false
 
-  gem "scss-lint", require: false
+  gem "scss_lint", require: false
 
   gem "brakeman", require: false
 
