@@ -13,7 +13,7 @@ By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 - Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
 - We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial).
 
-A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/02/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
+A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
 
 Note, this source code repository is going to be ahead of the tutorial. We plan to update the tutorial soon.
 
