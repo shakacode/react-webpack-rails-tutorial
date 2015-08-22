@@ -59,8 +59,8 @@ export function submitComment(comment) {
     dispatch(incrementAjaxCounter());
     return CommentsManager.submitComment(comment).then(
         comment => dispatch(submitCommentSuccess(comment)),
-            error => dispatch(submitCommentFailure(error))).then(
-      dispatchDecrementAjaxCounter(dispatch),
-      dispatchDecrementAjaxCounter(dispatch));
+        error => dispatch(submitCommentFailure(error))).then(
+      () => dispatchDecrementAjaxCounter(dispatch)
+    );
   }
 }

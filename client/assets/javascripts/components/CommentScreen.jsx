@@ -25,7 +25,8 @@ const CommentScreen = React.createClass({
       <div>
         <CommentBox pollInterval={5000}
                     data={data}
-                    actions={actions}/>
+                    actions={actions}
+                    ajaxCounter={data.get('ajaxCounter')}/>
 
         <div className='container'>
           <a href='http://www.railsonmaui.com'>
