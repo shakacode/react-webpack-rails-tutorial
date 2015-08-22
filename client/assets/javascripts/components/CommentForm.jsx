@@ -49,8 +49,10 @@ const CommentForm = React.createClass({
     this.setState({comment});
   },
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({comment: emptyComment});
+
     this.props.actions.submitComment(this.state.comment);
   },
 

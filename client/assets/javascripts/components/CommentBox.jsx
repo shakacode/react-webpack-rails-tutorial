@@ -8,6 +8,7 @@ const CommentBox = React.createClass({
   propTypes: {
     pollInterval: React.PropTypes.number.isRequired,
     actions: React.PropTypes.object.isRequired,
+    data: React.PropTypes.object.isRequired,
   },
 
   componentDidMount() {
@@ -17,14 +18,24 @@ const CommentBox = React.createClass({
       this.props.pollInterval);
   },
 
+  ajaxCounter() {
+    return this.props.data.get('ajaxCounter');
+  },
+
+  isSendingAjax() {
+    return this.ajaxCounter() > 0;
+  },
+
   render() {
     const { actions, data } = this.props;
 
     return (
       <div className='commentBox container'>
-        <h1>Comments { this.props.ajaxCounter > 0 ? `SENDING AJAX REQUEST! Ajax Counter is ${this.props.ajaxCounter}` : '' }</h1>
+        <h1>
+          Comments { this.isSendingAjax() ? `SENDING AJAX REQUEST! Ajax Counter is ${this.ajaxCounter()}` : '' }
+        </h1>
         <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
-        <CommentForm ajaxSending={this.props.ajaxCounter > 0} actions={actions}/>
+        <CommentForm ajaxSending={this.isSendingAjax()} actions={actions}/>
         <CommentList comments={data.get('comments')}/>
       </div>
     );
