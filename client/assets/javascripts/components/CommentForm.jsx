@@ -62,12 +62,13 @@ const CommentForm = React.createClass({
   resetAndFocus() {
     //don't reset a form that didn't submit, this results in data loss
     if (this.props.error) return;
-    this.setState({comment:emptyComment});
+    const comment = {author:this.state.comment.author,text:''}
+    this.setState({comment});
     let ref;
     if (this.state.formMode < 2){
-      ref = this.refs.author.getInputDOMNode()
+      ref = this.refs.text.getInputDOMNode()
     } else {
-      ref = React.findDOMNode(this.refs.inlineAuthor)
+      ref = React.findDOMNode(this.refs.inlineText)
     }
     ref.focus();
   },
