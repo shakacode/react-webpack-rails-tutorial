@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import Alert from 'react-bootstrap/lib/Alert';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
 const emptyComment = {author: '', text: ''};
 const textPlaceholder = 'Say something using markdown...';
@@ -14,6 +16,7 @@ const CommentForm = React.createClass({
   propTypes: {
     ajaxSending: React.PropTypes.bool.isRequired,
     actions: React.PropTypes.object.isRequired,
+    error: React.PropTypes.any.isRequired,
   },
 
   getInitialState() {
@@ -51,7 +54,22 @@ const CommentForm = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.actions.submitComment(this.state.comment);
+    this.props.actions.submitComment(this.state.comment).then(
+      () => this.resetAndFocus()
+    );
+  },
+
+  resetAndFocus() {
+    //don't reset a form that didn't submit, this results in data loss
+    if (this.props.error) return;
+    this.setState({comment:emptyComment});
+    let ref;
+    if (this.state.formMode < 2){
+      ref = this.refs.author.getInputDOMNode()
+    } else {
+      ref = React.findDOMNode(this.refs.inlineAuthor)
+    }
+    ref.focus();
   },
 
   formHorizontal() {
@@ -129,6 +147,17 @@ const CommentForm = React.createClass({
     );
   },
 
+  errorWarning() {
+    //If there is no error, there is nothing to add to the DOM
+    if (!this.props.error) return undefined;
+    return (
+      <Alert bsStyle='danger' key='commentSubmissionError'>
+        <strong>Your comment was not saved!</strong> A server error prevented your comment from being saved. Please try again.
+      </Alert>
+    )    
+  },
+
+
   render() {
     let inputForm;
     switch (this.state.formMode) {
@@ -146,6 +175,11 @@ const CommentForm = React.createClass({
     }
     return (
       <div>
+        
+        <ReactCSSTransitionGroup transitionName="element">
+          {this.errorWarning()}
+        </ReactCSSTransitionGroup>
+
         <Nav bsStyle='pills' activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
