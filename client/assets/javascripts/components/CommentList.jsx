@@ -16,7 +16,7 @@ const CommentList = React.createClass({
     if (!this.props.error) return undefined;
     return (
       <Alert bsStyle='danger' key='commentFetchError'>
-        <strong>Comments could not be retrieved.</strong> A server error prevented loading coments. Please try again.
+        <strong>Comments could not be retrieved.</strong> A server error prevented loading comments. Please try again.
       </Alert>
     )    
   },

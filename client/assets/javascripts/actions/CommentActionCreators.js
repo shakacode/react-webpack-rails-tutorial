@@ -57,10 +57,10 @@ function dispatchDecrementAjaxCounter(dispatch) {
 export function submitComment(comment) {
   return dispatch => {
     dispatch(incrementAjaxCounter());
-    return CommentsManager.submitComment(comment).then(
+    return CommentsManager.submitComment(comment)
+      .then(
         comment => dispatch(submitCommentSuccess(comment)),
-        error => dispatch(submitCommentFailure(error))).then(
-      () => dispatchDecrementAjaxCounter(dispatch)
-    );
-  }
+        error => dispatch(submitCommentFailure(error)))
+      .then(() => dispatchDecrementAjaxCounter(dispatch));
+  };
 }

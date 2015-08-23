@@ -155,7 +155,7 @@ const CommentForm = React.createClass({
       <Alert bsStyle='danger' key='commentSubmissionError'>
         <strong>Your comment was not saved!</strong> A server error prevented your comment from being saved. Please try again.
       </Alert>
-    )    
+    )
   },
 
 
@@ -176,7 +176,7 @@ const CommentForm = React.createClass({
     }
     return (
       <div>
-        
+
         <ReactCSSTransitionGroup transitionName="element">
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
