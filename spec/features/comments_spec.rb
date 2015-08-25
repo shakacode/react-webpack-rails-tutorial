@@ -1,37 +1,64 @@
 require "rails_helper"
 
+shared_context "Form Submitted" do |name: "Spicoli", text: "dude!"|
+  let(:hint_name) { "Your Name" }
+  let(:hint_text) { "Say something using markdown..." }
+  let(:name) { name }
+  let(:text) { text }
+
+  background do
+    fill_in hint_name, with: name
+    fill_in hint_text, with: text
+
+    click_button "Post"
+  end
+end
+
+shared_examples "Form" do
+  include_context "Form Submitted"
+
+  scenario "submits form", js: true do
+    expect(page).to have_css(".commentList .comment", text: name)
+    expect(page).to have_css(".commentList .comment", text: text)
+  end
+end
+
 feature "Add new comment" do
-  scenario " add post via horizontal, stacked, or inline form", js: true do
-    hint_text = "Say something using markdown..."
+  background do
     visit root_path
+  end
 
-    click_link "Horizontal Form"
-    fill_in "Your Name", with: "Tommy"
-    fill_in hint_text, with: "Surf's up dude!"
-    click_button "Post"
-    expect(page).to have_css(".commentList .comment", text: "Tommy")
-    expect(page).to have_css(".commentList .comment", text: "Surf's up dude!")
+  context "Horizonal Form" do
+    background do
+      click_link "Horizontal Form"
+    end
 
-    click_link "Horizontal Form"
-    fill_in "Your Name", with: "Jason"
-    fill_in "Say something...", with: "<iframe src=\"http://www.w3schools.com\"></iframe>"
-    click_button "Post"
-    expect(page).to have_css(".commentList .comment", text: "Jason")
-    expect(page).not_to have_css("iframe")
-    expect(page).to have_css(".commentList .comment", text: "<iframe src=\"http://www.w3schools.com\"")
+    it_behaves_like "Form"
 
-    click_link "Stacked Form"
-    fill_in "Your Name", with: "Spicoli"
-    fill_in hint_text, with: "Cowabunga dude!"
-    click_button "Post"
-    expect(page).to have_css(".commentList .comment", text: "Spicoli")
-    expect(page).to have_css(".commentList .comment", text: "Cowabunga dude!")
+    context "iframe text" do
+      let(:iframe_text) { "<iframe src=\"http://www.w3schools.com\"></iframe>" }
 
-    click_link "Inline Form"
-    fill_in "Your Name", with: "Wilbur Kookmeyer"
-    fill_in hint_text, with: "dude!"
-    click_button "Post"
-    expect(page).to have_css(".commentList .comment", text: "Wilbur Kookmeyer")
-    expect(page).to have_css(".commentList .comment", text: "dude!")
+      include_context "Form Submitted", text: :iframe_text
+
+      scenario "doesn't add an iframe", js: true do
+        expect(page).not_to have_css("iframe")
+      end
+    end
+  end
+
+  context "Inline Form" do
+    background do
+      click_link "Inline Form"
+    end
+
+    it_behaves_like "Form"
+  end
+
+  context "Stacked Form" do
+    background do
+      click_link "Stacked Form"
+    end
+
+    it_behaves_like "Form"
   end
 end

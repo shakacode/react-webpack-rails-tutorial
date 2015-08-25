@@ -80,6 +80,7 @@ group :test  do
   gem "capybara"
   gem "capybara-screenshot"
   gem "poltergeist"
+  gem "phantomjs", require: "phantomjs/poltergeist"
   gem "database_cleaner"
   gem "launchy"
 end

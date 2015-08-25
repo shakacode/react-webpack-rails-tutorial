@@ -39,3 +39,20 @@ body {
   z-index: 10;
 }
 
+.element-enter {
+  opacity: 0.01;
+}
+
+.element-enter.element-enter-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.element-leave {
+  opacity: 1;
+}
+
+.element-leave.element-leave-active {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
