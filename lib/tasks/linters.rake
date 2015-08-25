@@ -1,43 +1,71 @@
 if %w(development test).include? Rails.env
-  # require "rubocop/rake_task"
-  require "scss_lint/rake_task"
+  namespace :lint do
+    # require "rubocop/rake_task"
+    # require "slim_lint/rake_task"
+    require "scss_lint/rake_task"
 
-  # This fails: https://github.com/bbatsov/rubocop/issues/1840
-  # RuboCop::RakeTask.new
+    # This fails: https://github.com/bbatsov/rubocop/issues/1840
+    # RuboCop::RakeTask.new
 
-  desc "Run Rubocop lint as shell"
-  task :rubocop_lint do
-    puts "Running Rubocop Linters"
-    sh "rubocop ."
+    desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
+    task :rubocop, [:fix] => [] do |_t, args|
+      def to_bool(str)
+        return true if str =~ (/^(true|t|yes|y|1)$/i)
+        return false if str.blank? || str =~ (/^(false|f|no|n|0)$/i)
+        fail ArgumentError, "invalid value for Boolean: \"#{str}\""
+      end
+
+      fix = (args.fix == "fix") || to_bool(args.fix)
+      cmd = "rubocop -S -D#{fix ? ' -a' : ''} ."
+      puts "Running Rubocop Linters via `#{cmd}`#{fix ? ' auto-correct is turned on!' : ''}"
+      sh cmd
+    end
+
+    desc "Run ruby-lint as shell"
+    task :ruby do
+      cmd = "ruby-lint app config spec lib"
+      puts "Running ruby-lint Linters via `#{cmd}`"
+      sh cmd
+    end
+
+    # SlimLint::RakeTask.new do |t|
+    #   t.files = ["app/views"]
+    # end
+
+    SCSSLint::RakeTask.new do |t|
+      t.files = ["app/assets/stylesheets/", "client/assets/stylesheets/"]
+    end
+
+    desc "eslint"
+    task :eslint do
+      cmd = "cd client && npm run eslint . -- --ext .jsx,.js"
+      puts "Running eslint via `#{cmd}`"
+      sh cmd
+    end
+
+    desc "jscs"
+    task :jscs do
+      cmd = "cd client && npm run jscs ."
+      puts "Running jscs via `#{cmd}`"
+      sh cmd
+    end
+
+    desc "JS Linting"
+    task js: [:eslint, :jscs] do
+      puts "Completed running all JavaScript Linters"
+    end
+
+    # desc "See docs for task 'slim_lint'"
+    # task slim: :slim_lint
+
+    desc "See docs for task 'scss_lint'"
+    task scss: :scss_lint
+
+    task lint: [:rubocop, :ruby, :js, :scss] do
+      puts "Completed all linting"
+    end
   end
 
-  # If we had slim
-  # require "slim_lint/rake_task"
-  # SlimLint::RakeTask.new
-
-  SCSSLint::RakeTask.new do |t|
-    t.files = ["app/assets/stylesheets/", "client/assets/stylesheets/"]
-  end
-
-  desc "eslint"
-  task :eslint_lint do
-    puts "Running eslint"
-    sh "cd client && npm run eslint . -- --ext .jsx,.js"
-  end
-
-  desc "jscs"
-  task :jscs_lint do
-    puts "Running jscs"
-    sh "cd client && npm run jscs ."
-  end
-
-  desc "JS Linting"
-  task js_lint: [:eslint_lint, :jscs_lint] do
-    puts "Running JavaScript Linters"
-  end
-
-  # could add :slim_lint here
-  task lint: [:rubocop_lint, :js_lint, :scss_lint] do
-    puts "Completed All Linting"
-  end
+  desc "Runs all linters. Run `rake -D lint` to see all available lint options"
+  task lint: ["lint:lint"]
 end

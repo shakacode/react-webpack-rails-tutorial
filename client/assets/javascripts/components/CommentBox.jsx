@@ -34,7 +34,9 @@ const CommentBox = React.createClass({
         <h1>
           Comments { this.isSendingAjax() ? `SENDING AJAX REQUEST! Ajax Counter is ${this.ajaxCounter()}` : '' }
         </h1>
-        <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
+        <p>
+          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
+          <b>Name</b> is preserved, <b>Text</b> is reset, between submits.</p>
         <CommentForm
           ajaxSending={this.isSendingAjax()}
           error={data.get('submitCommentError')}
