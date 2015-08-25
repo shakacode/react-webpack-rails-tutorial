@@ -16,6 +16,7 @@ const CommentScreen = React.createClass({
 
   propTypes: {
     dispatch: React.PropTypes.func.isRequired,
+    data: React.PropTypes.object.isRequired,
   },
 
   render() {
@@ -42,7 +43,7 @@ const CommentScreen = React.createClass({
         </div>
       </div>
     );
-  }
+  },
 });
 
 // Don't forget to actually use connect!

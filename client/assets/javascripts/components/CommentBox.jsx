@@ -12,7 +12,7 @@ const CommentBox = React.createClass({
   },
 
   componentDidMount() {
-    let fetchComments = this.props.actions.fetchComments;
+    const { fetchComments } = this.props.actions;
     fetchComments();
     setInterval(fetchComments,
       this.props.pollInterval);

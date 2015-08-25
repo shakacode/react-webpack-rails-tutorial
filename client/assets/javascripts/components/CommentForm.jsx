@@ -60,16 +60,19 @@ const CommentForm = React.createClass({
   },
 
   resetAndFocus() {
-    //don't reset a form that didn't submit, this results in data loss
+    // Don't reset a form that didn't submit, this results in data loss
     if (this.props.error) return;
-    const comment = {author:this.state.comment.author,text:''}
+
+    const comment = {author: this.state.comment.author, text: ''};
     this.setState({comment});
+
     let ref;
-    if (this.state.formMode < 2){
-      ref = this.refs.text.getInputDOMNode()
+    if (this.state.formMode < 2) {
+      ref = this.refs.text.getInputDOMNode();
     } else {
-      ref = React.findDOMNode(this.refs.inlineText)
+      ref = React.findDOMNode(this.refs.inlineText);
     }
+
     ref.focus();
   },
 
@@ -149,15 +152,15 @@ const CommentForm = React.createClass({
   },
 
   errorWarning() {
-    //If there is no error, there is nothing to add to the DOM
+    // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
       <Alert bsStyle='danger' key='commentSubmissionError'>
-        <strong>Your comment was not saved!</strong> A server error prevented your comment from being saved. Please try again.
+        <strong>Your comment was not saved!</strong> A server error prevented your comment from being saved. Please try
+        again.
       </Alert>
-    )
+    );
   },
-
 
   render() {
     let inputForm;
@@ -172,12 +175,12 @@ const CommentForm = React.createClass({
         inputForm = this.formInline();
         break;
       default:
-        throw `Unknown form mode: ${this.state.formMode}.`;
+        throw new Error(`Unknown form mode: ${this.state.formMode}.`);
     }
     return (
       <div>
 
-        <ReactCSSTransitionGroup transitionName="element">
+        <ReactCSSTransitionGroup transitionName='element'>
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
 

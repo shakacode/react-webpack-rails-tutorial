@@ -1,3 +1,5 @@
+/* eslint new-cap: 0 */
+
 import * as actionTypes from '../constants/ActionTypes';
 
 import { Map, List } from 'immutable';
@@ -21,6 +23,7 @@ export default function commentsReducer(state = initialState, action) {
           .updateIn(['comments'], comments => comments.push(Map(action.comment)))
           .merge({submitCommentError: ''});
       });
+
     case actionTypes.SUBMIT_COMMENT_FAILURE:
       return state.merge({submitCommentError: action.error});
     case actionTypes.INCREMENT_AJAX_COUNTER:

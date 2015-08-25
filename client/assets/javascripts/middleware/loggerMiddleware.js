@@ -15,6 +15,7 @@ export default function logger({ getState }) {
         readableState[storeItem] = immutableState[storeItem].toJS();
       }
     }
+
     console.log('state after dispatch', readableState);
 
     // This will likely be the action itself, unless
