@@ -1,15 +1,17 @@
 # React, React-Bootstrap, and ES-6 on Rails via WebPack
 
+## Now with Redux!
+
 By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 
-- If you came to here from the blog article, this example project has evolved. See CHANGELOG.md for 
-  what's changed.
-- Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
-  Rails project.
-- Please file issues for problems and feature requests.
-- Pull requests are welcome!
+- If you came to here from the blog article, this example project has evolved.
+  See [pull requests](https://github.com/justin808/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
 - If this work interests you and you are looking for full or part-time remote work, please
   [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
+- Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
+  Rails project and are interested in help from our experienced team.
+- Please file issues for problems and feature requests.
+- Pull requests are welcome! (and a great way to get on the team)
 - Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
 - We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial).
 
@@ -33,7 +35,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 In no particular order:
 
-- Example of Rails 4.2 with ReactJs/Flux with Webpack and ES6.
+- Example of Rails 4.2 with ReactJs/Redux with Webpack and ES6.
 - Enable development of a JS client independently from Rails using Webpack Hot Module Reload.
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
