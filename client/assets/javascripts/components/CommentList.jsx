@@ -12,13 +12,13 @@ const CommentList = React.createClass({
   },
 
   errorWarning() {
-    //If there is no error, there is nothing to add to the DOM
+    // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
       <Alert bsStyle='danger' key='commentFetchError'>
         <strong>Comments could not be retrieved.</strong> A server error prevented loading comments. Please try again.
       </Alert>
-    )    
+    );
   },
 
   render() {

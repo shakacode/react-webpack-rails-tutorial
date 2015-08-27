@@ -59,7 +59,7 @@ export function submitComment(comment) {
     dispatch(incrementAjaxCounter());
     return CommentsManager.submitComment(comment)
       .then(
-        comment => dispatch(submitCommentSuccess(comment)),
+        _comment => dispatch(submitCommentSuccess(_comment)),
         error => dispatch(submitCommentFailure(error)))
       .then(() => dispatchDecrementAjaxCounter(dispatch));
   };
