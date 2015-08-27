@@ -13,8 +13,10 @@ module.exports = {
   //   jquery: 'var jQuery'
   // },
   resolve: {
-    root: [path.join(__dirname, 'scripts'),
-           path.join(__dirname, 'assets/javascripts'),],
+    root: [
+      path.join(__dirname, 'scripts'),
+      path.join(__dirname, 'assets/javascripts'),
+    ],
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
   },
   module: {

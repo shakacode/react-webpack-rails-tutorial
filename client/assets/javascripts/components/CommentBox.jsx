@@ -1,57 +1,49 @@
 import React from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import CommentStore from '../stores/CommentStore';
-import FormStore from '../stores/FormStore';
-import CommentActions from '../actions/CommentActions';
 
 const CommentBox = React.createClass({
   displayName: 'CommentBox',
 
   propTypes: {
-    url: React.PropTypes.string.isRequired,
     pollInterval: React.PropTypes.number.isRequired,
-  },
-
-  getStoreState() {
-    return {
-      comments: CommentStore.getState(),
-      form: FormStore.getState(),
-    };
-  },
-
-  getInitialState() {
-    return this.getStoreState();
+    actions: React.PropTypes.object.isRequired,
+    data: React.PropTypes.object.isRequired,
   },
 
   componentDidMount() {
-    CommentStore.listen(this.onChange);
-    FormStore.listen(this.onChange);
-    CommentActions.fetchComments(this.props.url, true);
-    setInterval(CommentActions.fetchComments,
-                this.props.pollInterval,
-                this.props.url,
-                false);
+    const { fetchComments } = this.props.actions;
+    fetchComments();
+    setInterval(fetchComments,
+      this.props.pollInterval);
   },
 
-  componentWillUnmount() {
-    CommentStore.unlisten(this.onChange);
-    FormStore.unlisten(this.onChange);
+  ajaxCounter() {
+    return this.props.data.get('ajaxCounter');
   },
 
-  onChange() {
-    this.setState(this.getStoreState());
+  isSendingAjax() {
+    return this.ajaxCounter() > 0;
   },
 
   render() {
+    const { actions, data } = this.props;
+
     return (
       <div className='commentBox container'>
-        <h1>Comments { this.state.form.ajaxSending ? 'SENDING AJAX REQUEST!' : '' }</h1>
-        <p>Text take Github Flavored Markdown. Comments older than 24 hours are deleted.</p>
-        <CommentForm formData={this.state.form.comment}
-                     url={this.props.url}
-                     ajaxSending={this.state.form.ajaxSending} />
-        <CommentList comments={this.state.comments.comments} />
+        <h1>
+          Comments { this.isSendingAjax() ? `SENDING AJAX REQUEST! Ajax Counter is ${this.ajaxCounter()}` : '' }
+        </h1>
+        <p>
+          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
+          <b>Name</b> is preserved, <b>Text</b> is reset, between submits.</p>
+        <CommentForm
+          ajaxSending={this.isSendingAjax()}
+          error={data.get('submitCommentError')}
+          actions={actions}/>
+        <CommentList
+          comments={data.get('comments')}
+          error={data.get('fetchCommentError')}/>
       </div>
     );
   },
