@@ -49,9 +49,9 @@ See package.json and Gemfile for versions
 
 1. React (for front-end app)
 2. React-bootstrap
-3. [Flux Alt](https://github.com/goatslacker/alt)
+3. [Redux](https://github.com/rackt/redux)
 4. Webpack with hot-reload (for local dev)
-5. ES6 transpiler (es6-loader)
+5. Babel transpiler (https://github.com/babel/babel)
 6. Rails 4.2 (for backend app)
 7. Heroku (for deployment)
 
