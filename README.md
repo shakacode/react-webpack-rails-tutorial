@@ -1,8 +1,8 @@
-# React, React-Bootstrap, and ES-6 on Rails via WebPack
+# React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack
 
-## Now with Redux!
+## Now with Redux and ES7! Servering Rendering ASAP!
 
-By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
+By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
 
 - If you came to here from the blog article, this example project has evolved.
   See [pull requests](https://github.com/justin808/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
@@ -17,7 +17,7 @@ By Justin Gordon and the Rails On Maui Team, http://www.railsonmaui.com
 
 A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
 
-Note, this source code repository is going to be ahead of the tutorial. We plan to update the tutorial soon.
+Note, this source code repository is way ahead of the tutorial. We plan to update the tutorial as soon as can catch our breath!
 
 [Discussion forum regarding the tutorial](http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/10)
 
@@ -35,22 +35,22 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 In no particular order:
 
-- Example of Rails 4.2 with ReactJs/Redux with Webpack and ES6.
-- Enable development of a JS client independently from Rails using Webpack Hot Module Reload.
+- Example of Rails 4.2 with ReactJs/Redux with Webpack and ES7.
+- Enable development of a JS client independently from Rails using Webpack Hot Module Reload. You can see this by starting the app and visiting http://localhost:3000
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
-- Enable the use of the JavaScript ES6 transpiler.
-- Example setting up Ruby and ES6 linting in a real project.
+- Enable the use of the JavaScript ES7 transpiler.
+- Example setting up Ruby and ES7 linting in a real project.
 - Example of thorough use of Ruby and JavaScript linters, and other CI tasks.
 
 # Technologies involved
 
 See package.json and Gemfile for versions
 
-1. React (for front-end app)
-2. React-bootstrap
+1. [React](http://facebook.github.io/react/) (for front-end app)
+2. [react-bootstrap](https://react-bootstrap.github.io/)
 3. [Redux](https://github.com/rackt/redux)
-4. Webpack with hot-reload (for local dev)
+4. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 5. Babel transpiler (https://github.com/babel/babel)
 6. Rails 4.2 (for backend app)
 7. Heroku (for deployment)
@@ -251,6 +251,9 @@ QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
 **IMPORTANT** Be sure that the path indicated for the QMAKE corresponds to a correct path.
 
 Then run `rspec` and you should see the tests have passed.
+
+# Rails Asset Pipeline Magic
+Be sure to see [assets.rake](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/lib/tasks/assets.rake) for how webpack is invoked during asset compilation.
 
 # Linting and Code Inspection
 ## Running Lint and CI tasks
