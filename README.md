@@ -299,3 +299,8 @@ WebStorm opened up to the `client` directory to focus on JSX and Sass files.
 ```
 alias git-cleanup-merged-branches='git branch --merged master | grep -v master | xargs git branch -d'
 ```
+
+# Open Code of Conduct
+This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to uphold this code.
+[code-of-conduct](http://todogroup.org/opencodeofconduct/#fetch/opensource@github.com)
+
