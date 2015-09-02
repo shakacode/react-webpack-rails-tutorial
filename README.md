@@ -164,6 +164,9 @@ search path. See config `config/application.rb`. Keep that in mind as you
 customize the Bootstrap Sass variables.
 
 # Notes on Rails assets
+## Rails Asset Pipeline Magic
+Be sure to see [assets.rake](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/lib/tasks/assets.rake) for how webpack is invoked during asset compilation.
+
 ## Javascript
 The `webpack.rails.config.js` file generates client-bundle.js which is then included
 by the Rails asset pipeline.
@@ -252,8 +255,6 @@ QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
 
 Then run `rspec` and you should see the tests have passed.
 
-# Rails Asset Pipeline Magic
-Be sure to see [assets.rake](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/lib/tasks/assets.rake) for how webpack is invoked during asset compilation.
 
 # Linting and Code Inspection
 ## Running Lint and CI tasks
