@@ -1,6 +1,6 @@
 # React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack
 
-## Now with Redux and ES7! Servering Rendering ASAP!
+## Now with Redux and ES7! Servering Rendering ASAP (Shaka Code's react_on_rails gem)!
 
 By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
 
@@ -14,6 +14,7 @@ By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
 - Pull requests are welcome! (and a great way to get on the team)
 - Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
 - We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial).
+- Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
 
 A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
 
