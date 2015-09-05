@@ -43,9 +43,10 @@ export function submitCommentFailure(error) {
 
 export function fetchComments() {
   return dispatch => {
-    return CommentsManager.fetchComments()
-      .then(comments => dispatch(fetchCommentsSuccess(comments)))
-      .catch(error => dispatch(fetchCommentsFailure(error)));
+    return CommentsManager.fetchComments().then(
+      comments => dispatch(fetchCommentsSuccess(comments)),
+      error => dispatch(fetchCommentsFailure(error))
+    );
   };
 }
 
@@ -57,8 +58,9 @@ export function submitComment(comment) {
   return dispatch => {
     dispatch(incrementAjaxCounter());
     return CommentsManager.submitComment(comment)
-      .then(commentFromServer => dispatch(submitCommentSuccess(commentFromServer)))
-      .catch(error => dispatch(submitCommentFailure(error)))
+      .then(
+        _comment => dispatch(submitCommentSuccess(_comment)),
+        error => dispatch(submitCommentFailure(error)))
       .then(() => dispatchDecrementAjaxCounter(dispatch));
   };
 }
