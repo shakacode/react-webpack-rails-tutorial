@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/justin808/react-webpack-rails-tutorial.git"
+    "url": "https://github.com/shakacode/react-webpack-rails-tutorial.git"
   },
   "keywords": [
     "react",
@@ -19,9 +19,9 @@
   "author": "justin808",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/justin808/react-webpack-rails-tutorial/issues"
+    "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
-  "homepage": "https://github.com/justin808/react-webpack-rails-tutorial",
+  "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "dependencies": {
     "babel-core": "^5.8.20",
     "babel-loader": "^5.3.2",
