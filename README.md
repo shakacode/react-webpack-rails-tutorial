@@ -67,8 +67,8 @@ See package.json and Gemfile for versions
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
-1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
-1. Open a browser tab to [http://0.0.0.0:3000]() for the Hot Module Replacement Example.
+1. Open a browser tab to http://0.0.0.0:4000 for the Rail app example.
+1. Open a browser tab to http://0.0.0.0:3000 for the Hot Module Replacement Example.
 
 # Javascript development without Rails using Hot Module Replacement (HMR)
 
@@ -79,7 +79,7 @@ cd client
 node server.js
 ```
 
-Point your browser to [http://0.0.0.0:3000]().
+Point your browser to http://0.0.0.0:3000.
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -116,7 +116,7 @@ rake db:setup
 rails s -p 4000
 ```
 
-Now point your browser to [http://0.0.0.0:4000]().
+Now point your browser to http://0.0.0.0:4000.
 
 Note that it's important to run the Rails server on a different port than the node server.
 
