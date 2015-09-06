@@ -43,6 +43,7 @@
     "webpack": "^1.10.5"
   },
   "devDependencies": {
+    "es6-promise": "^2.3.0",
     "babel-eslint": "^4.0.5",
     "bootstrap-sass": "^3.3.5",
     "bootstrap-sass-loader": "^1.0.8",
