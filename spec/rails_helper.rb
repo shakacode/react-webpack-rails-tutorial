@@ -34,6 +34,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 RSpec.configure do |config|
   # config taken directly from RSpec example in the DatabaseCleaner README
   config.before(:suite) do
+    `cd client && $(npm bin)/webpack --config webpack.rails.config.js`
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
   end
