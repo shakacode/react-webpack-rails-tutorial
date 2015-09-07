@@ -5,7 +5,7 @@
 By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
 
 - If you came to here from the blog article, this example project has evolved.
-  See [pull requests](https://github.com/justin808/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
+  See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
 - If this work interests you and you are looking for full or part-time remote work, please
   [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
 - Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
@@ -13,7 +13,7 @@ By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
 - Please file issues for problems and feature requests.
 - Pull requests are welcome! (and a great way to get on the team)
 - Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
-- We now have a [gitter chat room for this topic](https://gitter.im/justin808/react-webpack-rails-tutorial).
+- We now have a [gitter chat room for this topic](https://gitter.im/shakacode/react-webpack-rails-tutorial).
 - Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
 
 A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
@@ -59,7 +59,7 @@ See package.json and Gemfile for versions
 # Basic Setup
 1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node
    version `v0.12.7`. See this article [Updating and using nvm](http://forum.railsonmaui.com/t/updating-and-using-nvm/293).
-1. `git clone git@github.com:justin808/react-webpack-rails-tutorial.git`
+1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.2.2
 1. Check that you're using the right version of node. Run `nvm list` to check.
@@ -67,8 +67,8 @@ See package.json and Gemfile for versions
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
-1. Open a browser tab to [http://0.0.0.0:4000]() for the Rail app example.
-1. Open a browser tab to [http://0.0.0.0:3000]() for the Hot Module Replacement Example.
+1. Open a browser tab to http://0.0.0.0:4000 for the Rail app example.
+1. Open a browser tab to http://0.0.0.0:3000 for the Hot Module Replacement Example.
 
 # Javascript development without Rails using Hot Module Replacement (HMR)
 
@@ -79,7 +79,7 @@ cd client
 node server.js
 ```
 
-Point your browser to [http://0.0.0.0:3000]().
+Point your browser to http://0.0.0.0:3000.
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -116,7 +116,7 @@ rake db:setup
 rails s -p 4000
 ```
 
-Now point your browser to [http://0.0.0.0:4000]().
+Now point your browser to http://0.0.0.0:4000.
 
 Note that it's important to run the Rails server on a different port than the node server.
 
