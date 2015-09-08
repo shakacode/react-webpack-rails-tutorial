@@ -20,6 +20,9 @@ module.exports = {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
   },
   module: {
-    loaders: [],
+    loaders: [
+      // React is necessary for the client rendering:
+      {test: require.resolve('react'), loader: 'expose?React'}
+    ],
   },
 };
