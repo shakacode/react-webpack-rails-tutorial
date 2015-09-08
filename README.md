@@ -1,4 +1,4 @@
-# React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack
+# React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack and the react_on_rails gem
 
 ## Now with Redux and ES7! Servering Rendering ASAP (Shaka Code's react_on_rails gem)!
 
