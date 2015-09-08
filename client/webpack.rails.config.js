@@ -25,7 +25,10 @@ config.module.loaders.push(
   // Next 2 lines expose jQuery and $ to any JavaScript files loaded after client-bundle.js
   // in the Rails Asset Pipeline. Thus, load this one prior.
   {test: require.resolve('jquery'), loader: 'expose?jQuery'},
-  {test: require.resolve('jquery'), loader: 'expose?$'}
+  {test: require.resolve('jquery'), loader: 'expose?$'},
+
+  // React is necessary for the client rendering:
+  {test: require.resolve('react'), loader: 'expose?React'}
 );
 module.exports = config;
 
