@@ -769,6 +769,11 @@
       "from": "es6-promise@>=3.0.2 <4.0.0",
       "resolved": "https://registry.npmjs.org/es6-promise/-/es6-promise-3.0.2.tgz"
     },
+    "expose-loader": {
+      "version": "0.7.0",
+      "from": "expose-loader@*",
+      "resolved": "https://registry.npmjs.org/expose-loader/-/expose-loader-0.7.0.tgz"
+    },
     "immutable": {
       "version": "3.7.5",
       "from": "immutable@>=3.7.5 <4.0.0",
