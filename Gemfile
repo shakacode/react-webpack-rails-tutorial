@@ -37,6 +37,8 @@ gem "rails-html-sanitizer"
 # Use Unicorn as the app server
 gem "unicorn"
 
+gem "react_on_rails", "~> 0.1.1"
+
 gem "autoprefixer-rails"
 
 # Use Capistrano for deployment
