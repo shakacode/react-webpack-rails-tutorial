@@ -63,6 +63,7 @@ See package.json and Gemfile for versions
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.2.2
 1. Check that you're using the right version of node. Run `nvm list` to check.
+1. Check that you have Postgres installed. Run `which postgres` to check.
 1. `bundle install`
 1. `npm install`
 1. `rake db:setup`
