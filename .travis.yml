@@ -1,0 +1,6 @@
+rvm:
+  - 2.2.2
+install:
+  - bundle install
+  - npm install
+  - cd client && $(npm bin)/webpack --config webpack.rails.config.js
