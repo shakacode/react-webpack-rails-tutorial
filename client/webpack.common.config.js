@@ -20,7 +20,7 @@ module.exports = {
 
       // React is necessary for the client rendering:
       {test: require.resolve('react'), loader: 'expose?React'},
-      {test: require.resolve('jquery'), loader: 'expose?jQuery'}
+      {test: require.resolve('jquery'), loader: 'expose?jQuery'},
     ],
   },
 };
