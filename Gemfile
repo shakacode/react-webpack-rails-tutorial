@@ -18,8 +18,7 @@ gem "coffee-rails"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 
-# Use jquery as the JavaScript library
-# gem "jquery-rails"
+# jquery as the JavaScript library has been moved under /client and managed by npm
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem "turbolinks"

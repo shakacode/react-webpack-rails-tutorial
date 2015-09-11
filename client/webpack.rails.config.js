@@ -11,9 +11,6 @@ config.output = {
   path: '../app/assets/javascripts/generated',
 };
 
-// load jQuery from cdn or rails asset pipeline
-// config.externals = {jquery: 'var jQuery'};
-
 // You can add entry points specific to rails here
 config.entry.push('./scripts/rails_only');
 
