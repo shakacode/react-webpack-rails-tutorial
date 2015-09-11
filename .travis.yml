@@ -1,0 +1,14 @@
+language:
+  - ruby
+rvm:
+  - 2.2.2
+install:
+  - bundle install
+  - npm install
+  - cd client && $(npm bin)/webpack --config webpack.rails.config.js
+env:
+  - export RAILS_ENV=test
+script:
+  - bundle exec rake db:schema:load
+  - bundle exec rake
+  - bundle exec rake lint
