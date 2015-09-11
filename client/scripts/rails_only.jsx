@@ -8,3 +8,7 @@ require('es5-shim/es5-sham');
 // Due to issue: https://github.com/ariya/phantomjs/issues/12401
 // Phantomjs does not like promises
 require('es6-promise').polyfill();
+
+require('expose?jQuery!jquery');
+require('expose?$!jquery');
+require('expose?jquery-ujs!jquery-ujs');

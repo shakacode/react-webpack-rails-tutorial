@@ -173,6 +173,14 @@ Be sure to see [assets.rake](https://github.com/shakacode/react-webpack-rails-tu
 The `webpack.rails.config.js` file generates client-bundle.js which is then included
 by the Rails asset pipeline.
 
+##jQuery with Rails and Webpack
+jQuery and jQuery-ujs are not required within `app/assets/javascript/application.js`
+and have been moved under`/client` and managed by npm. The modules are exposed as global via entry point
+`script/rails_only.jsx` by `webpack.rails.config.js`.
+
+Please refer to [Considerations for jQuery with Rails and Webpack](http://forum.railsonmaui.com/t/considerations-for-jquery-with-rails-and-webpack/344) for further info.
+
+
 ## Sass and images
 1. The Webpack server loads the images from the **symlink** of the
    `app/assets/images` directory.

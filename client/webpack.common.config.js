@@ -8,10 +8,6 @@ module.exports = {
   context: __dirname,
   entry: ['./assets/javascripts/App'],
 
-  // In case you wanted to load jQuery from the CDN, this is how you would do it:
-  // externals: {
-  //   jquery: 'var jQuery'
-  // },
   resolve: {
     root: [
       path.join(__dirname, 'scripts'),
