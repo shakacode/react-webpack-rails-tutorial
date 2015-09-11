@@ -175,8 +175,8 @@ by the Rails asset pipeline.
 
 ##jQuery with Rails and Webpack
 jQuery and jQuery-ujs are not required within `app/assets/javascript/application.js`
-and have been moved under`/client` and managed by npm. The modules are exposed as global via entry point
-`script/rails_only.jsx` by `webpack.rails.config.js`.
+and have been moved under`/client` and managed by npm. The modules are exposed via entry point
+by `webpack.common.config.js`.
 
 Please refer to [Considerations for jQuery with Rails and Webpack](http://forum.railsonmaui.com/t/considerations-for-jquery-with-rails-and-webpack/344) for further info.
 
