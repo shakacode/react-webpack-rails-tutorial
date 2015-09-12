@@ -178,6 +178,9 @@ jQuery and jQuery-ujs are not required within `app/assets/javascript/application
 and have been moved under`/client` and managed by npm. The modules are exposed via entry point
 by `webpack.common.config.js`.
 
+In `application.js`, it's critical that any libraries that depend on jQuery come after the inclusion 
+of the Webpack bundle, such as the twitter bootstrap javascript.
+
 Please refer to [Considerations for jQuery with Rails and Webpack](http://forum.railsonmaui.com/t/considerations-for-jquery-with-rails-and-webpack/344) for further info.
 
 
