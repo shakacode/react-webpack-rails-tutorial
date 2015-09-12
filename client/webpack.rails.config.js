@@ -11,21 +11,13 @@ config.output = {
   path: '../app/assets/javascripts/generated',
 };
 
-// load jQuery from cdn or rails asset pipeline
-config.externals = {jquery: 'var jQuery'};
-
 // You can add entry points specific to rails here
 config.entry.push('./scripts/rails_only');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
 config.module.loaders.push(
-  {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'},
-
-  // Next 2 lines expose jQuery and $ to any JavaScript files loaded after client-bundle.js
-  // in the Rails Asset Pipeline. Thus, load this one prior.
-  {test: require.resolve('jquery'), loader: 'expose?jQuery'},
-  {test: require.resolve('jquery'), loader: 'expose?$'}
+  {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}
 );
 module.exports = config;
 

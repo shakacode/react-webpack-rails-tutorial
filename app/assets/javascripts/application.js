@@ -9,14 +9,11 @@
 //
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
-//
-//= require jquery
-//= require jquery_ujs
 
-//= require bootstrap-sprockets
-
-// Important to import jquery_ujs before rails-bundle as that patches jquery xhr to use the authenticity token!
-
+// Need to be on top to allow Poltergeist test to work with React.
 //= require es5-shim/es5-shim
+
+// It is important that generated/client-bundle must be before bootstrap since it is exposing jQuery and jQuery-ujs
 //= require generated/client-bundle
+//= require bootstrap-sprockets
 //= require turbolinks

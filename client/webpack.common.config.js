@@ -6,12 +6,8 @@ module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['./assets/javascripts/App'],
+  entry: ['jquery', 'jquery-ujs', './assets/javascripts/App'],
 
-  // In case you wanted to load jQuery from the CDN, this is how you would do it:
-  // externals: {
-  //   jquery: 'var jQuery'
-  // },
   resolve: {
     root: [
       path.join(__dirname, 'scripts'),
@@ -24,6 +20,8 @@ module.exports = {
 
       // React is necessary for the client rendering:
       {test: require.resolve('react'), loader: 'expose?React'},
+      {test: require.resolve('jquery'), loader: 'expose?jQuery'},
+      {test: require.resolve('jquery'), loader: 'expose?$'},
     ],
   },
 };

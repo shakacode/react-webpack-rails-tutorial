@@ -18,8 +18,10 @@ gem "coffee-rails"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 
-# Use jquery as the JavaScript library
-gem "jquery-rails"
+# jquery as the JavaScript library has been moved under /client and managed by npm.
+# It is critical to not include any of the jquery gems when following this pattern or
+# else you might have multiple jQuery versions.
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem "turbolinks"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
