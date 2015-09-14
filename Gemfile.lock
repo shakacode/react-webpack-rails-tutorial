@@ -260,7 +260,7 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.1)
+    uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unf (0.1.4)
@@ -318,7 +318,7 @@ DEPENDENCIES
   spring-commands-rspec
   sqlite3
   turbolinks
-  uglifier
+  uglifier (~> 2.7.2)
   unicorn
   web-console
 
