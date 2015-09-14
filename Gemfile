@@ -80,6 +80,7 @@ group :development, :test do
 end
 
 group :test  do
+  gem "coveralls", require: false
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
