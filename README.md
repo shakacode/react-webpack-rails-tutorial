@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
+
 # React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack and the react_on_rails gem
 
 ## Now with Redux and ES7! Servering Rendering ASAP (Shaka Code's react_on_rails gem)!
