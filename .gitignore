@@ -20,6 +20,7 @@ client-bundle.js.map
 .env
 node_modules
 npm-debug.log
+/coverage
 
 # Ignore bundle dependencies
 vendor/ruby

@@ -1,3 +1,7 @@
+[![Codeship Status for justin808/react-webpack-rails-tutorial](https://codeship.com/projects/287b26d0-0c05-0133-7a33-02e67aca5f06/status?branch=master)](https://codeship.com/projects/90975)
+[![Build Status](https://travis-ci.org/shakacode/react-webpack-rails-tutorial.svg?branch=code_coverage-linting)](https://travis-ci.org/shakacode/react-webpack-rails-tutorial)
+[![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
+[![Dependency Status](https://gemnasium.com/shakacode/react-webpack-rails-tutorial.svg)](https://gemnasium.com/shakacode/react-webpack-rails-tutorial)
 # React, Redux, React-Bootstrap, and ES-7 on Rails via WebPack and the react_on_rails gem
 
 ## Now with Redux and ES7! Servering Rendering ASAP (Shaka Code's react_on_rails gem)!
