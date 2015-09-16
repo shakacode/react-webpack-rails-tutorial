@@ -250,29 +250,6 @@ We have feature tests in /spec/features
 
 Run the tests with `rspec`.
 
-If you get errors when running rspec in that it can't find expected DOM elements, then you'll want to
-check if you have qt-4.x installed. You need at least qt-5 installed.
-
-```
-brew info qt
-```
-Check the output. Does the version say less than 5? If so, install qt5.
-```
-brew uninstall qt
-brew install qt5
-```
-
-Then you need to run
-```
-gem uninstall capybara-webkit
-QMAKE=/usr/local/Cellar/qt5/5.4.0/bin/qmake bundle install
-```
-
-**IMPORTANT** Be sure that the path indicated for the QMAKE corresponds to a correct path.
-
-Then run `rspec` and you should see the tests have passed.
-
-
 # Linting and Code Inspection
 ## Running Lint and CI tasks
 * Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
