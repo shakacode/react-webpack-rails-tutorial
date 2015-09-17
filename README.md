@@ -12,7 +12,7 @@ By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
   See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
 - If this work interests you and you are looking for full or part-time remote work, please
   [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
-- Please email us at [justin@railsonmaui.com](mailto:justin@railsonmaui.com) if you have a ReactJs +
+- Please email us at [justin@shakacode.com](mailto:justin@shakacode.com) if you have a ReactJs +
   Rails project and are interested in help from our experienced team.
 - Please file issues for problems and feature requests.
 - Pull requests are welcome! (and a great way to get on the team)
@@ -295,6 +295,4 @@ alias git-cleanup-merged-branches='git branch --merged master | grep -v master |
 ```
 
 # Open Code of Conduct
-This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to uphold this code.
-[code-of-conduct](http://todogroup.org/opencodeofconduct/#fetch/opensource@github.com)
-
+This project adheres to the [Open Code of Conduct](http://todogroup.org/opencodeofconduct/#fetch/opensource@github.com). By participating, you are expected to uphold this code.
