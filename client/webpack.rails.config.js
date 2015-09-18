@@ -1,5 +1,5 @@
 // Run like this:
-// cd client && $(npm bin)/webpack -w --config webpack.rails.config.js
+// cd client && npm run build:dev
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 // NOTE: All style sheets handled by the asset pipeline in rails

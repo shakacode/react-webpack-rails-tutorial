@@ -102,7 +102,7 @@ the JS bundle. We've chosen to let Rails handle CSS, SCSS, images, fonts.
 
 ```
 cd client
-$(npm bin)/webpack -w --config webpack.rails.config.js
+npm run build:dev
 ```
 
 `client-bundle.js` is generated and saved to `app/assets/javascripts`. This is included in the
@@ -182,7 +182,7 @@ jQuery and jQuery-ujs are not required within `app/assets/javascript/application
 and have been moved under`/client` and managed by npm. The modules are exposed via entry point
 by `webpack.common.config.js`.
 
-In `application.js`, it's critical that any libraries that depend on jQuery come after the inclusion 
+In `application.js`, it's critical that any libraries that depend on jQuery come after the inclusion
 of the Webpack bundle, such as the twitter bootstrap javascript.
 
 Please refer to [Considerations for jQuery with Rails and Webpack](http://forum.railsonmaui.com/t/considerations-for-jquery-with-rails-and-webpack/344) for further info.
@@ -260,7 +260,7 @@ Run the tests with `rspec`.
 ### RubyMine/Webstorm Linting Configuration
   * I started out trying to make RubyMine and WebStorm catch and fix linting errors. However, I find
     it faster to just do this with the command line. Your mileage may vary.
-  * Create a custom scope like this for RubyMine, named "Inspection Scope" 
+  * Create a custom scope like this for RubyMine, named "Inspection Scope"
 
     file[react-rails-tutorial]:*/&&!file[react-rails-tutorial]:tmp//*&&!file[react-rails-tutorial]:log//*&&!file[react-rails-tutorial]:client/node_modules//*&&!file[react-rails-tutorial]:client/assets/fonts//*&&!file[react-rails-tutorial]:app/assets/fonts//*&&!file[react-rails-tutorial]:bin//*&&!file[react-rails-tutorial]:app/assets/javascripts//*
 
@@ -289,7 +289,7 @@ WebStorm opened up to the `client` directory to focus on JSX and Sass files.
 
 # Misc Tips
 
-## Cleanup local branches merged to master 
+## Cleanup local branches merged to master
 ```
 alias git-cleanup-merged-branches='git branch --merged master | grep -v master | xargs git branch -d'
 ```
