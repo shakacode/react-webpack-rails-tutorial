@@ -7,7 +7,7 @@
     "node": "0.12.7"
   },
   "scripts": {
-    "postinstall": "cd ./client && npm install",
+    "postinstall": "cd client && npm install",
     "test": "rspec && (cd client && npm run lint)"
   },
   "repository": {
