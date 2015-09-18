@@ -14,6 +14,7 @@
 //= require es5-shim/es5-shim
 
 // It is important that generated/client-bundle must be before bootstrap since it is exposing jQuery and jQuery-ujs
-//= require generated/client-bundle
+//= require generated/vendor
+//= require generated/app
 //= require bootstrap-sprockets
 //= require turbolinks

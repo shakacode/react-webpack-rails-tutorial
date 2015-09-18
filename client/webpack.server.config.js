@@ -8,7 +8,7 @@ config.output = {
   libaryTarget: 'this',
 };
 
-config.entry.push('./assets/javascripts/serverGlobals');
+config.entry.app.push('./assets/javascripts/serverGlobals');
 
 config.module.loaders.push({ loader: 'babel-loader' });
 module.exports = config;
