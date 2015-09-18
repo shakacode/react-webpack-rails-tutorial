@@ -8,8 +8,7 @@
   },
   "scripts": {
     "postinstall": "cd ./client && npm install",
-    "gulp": "cd ./client && npm run gulp",
-    "test": "rspec && client/bin/lint && (cd client && npm run jscs .)"
+    "test": "rspec && (cd client && npm run lint)"
   },
   "repository": {
     "type": "git",
