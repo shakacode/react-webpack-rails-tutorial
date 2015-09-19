@@ -9,19 +9,10 @@ It also includes many eslint defaults that the AirBnb eslint does not include.
 Running linter:
 ===========================
 
-Soon to be in gulpfile....but gulp-eslint depends on eslint depends on 
+`npm lint`
 
-```
-    "eslint-plugin-react": "^2.0.2",
-```
+`npm jscs`
 
-So don't use `npm run gulp lint` yet. 
-
-For now: 
-
-    bin/lint
-    
-    
 Updating Node Dependenencies
 ===========================
 

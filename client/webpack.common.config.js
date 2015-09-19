@@ -16,6 +16,9 @@ module.exports = {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
   },
   module: {
+    preLoaders: [
+      { test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ },
+    ],
     loaders: [
 
       // React is necessary for the client rendering:
