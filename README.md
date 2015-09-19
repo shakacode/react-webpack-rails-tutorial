@@ -254,7 +254,7 @@ Run the tests with `rspec`.
 Add those lines to your CI scripts after `bundle install`
 ```
 npm install
-cd client && $(npm bin)/webpack --config webpack.rails.config.js
+cd client && npm run build
 ```
 
 # Linting and Code Inspection
