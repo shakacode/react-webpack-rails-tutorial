@@ -250,6 +250,13 @@ We have feature tests in /spec/features
 
 Run the tests with `rspec`.
 
+## CI configuration
+Add those lines to your CI scripts after `bundle install`
+```
+npm install
+cd client && $(npm bin)/webpack --config webpack.rails.config.js
+```
+
 # Linting and Code Inspection
 ## Running Lint and CI tasks
 * Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
