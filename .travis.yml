@@ -6,7 +6,7 @@ install:
   - bundle install
   - npm install
   - cd client && NODE_ENV=production $(npm bin)/webpack --config webpack.rails.config.js
-  - cd client && NODE_ENV=production $(npm bin)/webpack --config webpack.server.config.js
+  - NODE_ENV=production $(npm bin)/webpack --config webpack.server.config.js
 
 env:
   - export RAILS_ENV=test
