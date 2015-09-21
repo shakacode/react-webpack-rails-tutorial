@@ -15,10 +15,6 @@
 /log/*.log
 /tmp
 /public/assets
-client-bundle.js
-client-bundle.js.map
-server-bundle.js
-server-bundle.js.map
 .env
 node_modules
 npm-debug.log
@@ -29,3 +25,6 @@ vendor/ruby
 
 # RVM gemset
 .ruby-gemset
+
+# Generated js bundles
+/app/assets/javascripts/generated/*
