@@ -6,7 +6,7 @@ module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['jquery', 'jquery-ujs', './assets/javascripts/App'],
+  entry: ['jquery', 'jquery-ujs'],
 
   resolve: {
     root: [

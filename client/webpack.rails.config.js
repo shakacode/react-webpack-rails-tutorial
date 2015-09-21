@@ -12,7 +12,7 @@ config.output = {
 };
 
 // You can add entry points specific to rails here
-config.entry.push('./scripts/rails_only');
+config.entry.push('./scripts/rails_only', './assets/javascripts/clientGlobals');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
