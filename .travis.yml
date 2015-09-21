@@ -5,7 +5,9 @@ rvm:
 install:
   - bundle install
   - npm install
-  - cd client && $(npm bin)/webpack --config webpack.rails.config.js
+  - cd client && $(npm bin)/webpack --config webpack.rails.config.js \
+    && $(npm bin)/webpack --config webpack.server.config.js
+
 env:
   - export RAILS_ENV=test
 script:
