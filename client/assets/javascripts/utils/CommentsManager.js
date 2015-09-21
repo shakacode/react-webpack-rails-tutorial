@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import request from 'axios';
 
 const API_URL = 'comments.json';
 
@@ -10,10 +10,11 @@ const CommentsManager = {
    * @returns {Promise} - jqXHR result of ajax call.
    */
   fetchComments() {
-    return Promise.resolve($.ajax({
+    return request({
+      method: 'GET',
       url: API_URL,
-      dataType: 'json',
-    }));
+      responseType: 'json',
+    });
   },
 
   /**
@@ -23,13 +24,33 @@ const CommentsManager = {
    * @returns {Promise} - jqXHR result of ajax call.
    */
   submitComment(comment) {
-    return Promise.resolve($.ajax({
+    return request({
+      method: 'POST',
       url: API_URL,
-      dataType: 'json',
-      type: 'POST',
-      data: {comment: comment},
-    }));
+      responseType: 'json',
+      headers: {
+        'X-CSRF-Token': this.getCSRFToken(),
+      },
+      data: { comment },
+    });
   },
+
+  /**
+   * Get CSRF Token from the DOM.
+   *
+   * @returns {String} - CSRF Token.
+   */
+  getCSRFToken() {
+    const metas = document.getElementsByTagName('meta');
+    for (let i = 0; i < metas.length; i++) {
+      const meta = metas[i];
+      if (meta.getAttribute('name') === 'csrf-token') {
+        return meta.getAttribute('content');
+      }
+    }
+    return null;
+  },
+
 };
 
 export default CommentsManager;

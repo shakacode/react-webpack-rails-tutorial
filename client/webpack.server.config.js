@@ -10,12 +10,5 @@ config.output = {
 
 config.entry.push('./assets/javascripts/serverGlobals');
 
-config.module.loaders.push(
-
-      { loader: 'babel-loader' },
-
-      // require Resolve must go first
-      // 1. React must be exposed (BOILERPLATE)
-      { test: require.resolve('react'), loader: 'expose?React' }
-);
+config.module.loaders.push({ loader: 'babel-loader' });
 module.exports = config;
