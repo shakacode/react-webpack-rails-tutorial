@@ -6,7 +6,6 @@ require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rspec"
-require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -49,33 +48,11 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  driver = ENV["DRIVER"].try(:to_sym)
-  if driver.nil? || driver == :poltergeist
-    require "capybara/poltergeist"
-    Capybara.default_driver = :poltergeist
-    Capybara.current_driver = :poltergeist
-    Capybara.javascript_driver = :poltergeist
-  elsif driver == :webkit
-    Capybara.default_driver = :webkit
-    Capybara.current_driver = :webkit
-    Capybara.javascript_driver = :webkit
-  elsif driver == :selenium
-    Capybara.default_driver = :selenium
-    Capybara.current_driver = :selenium
-    Capybara.javascript_driver = :selenium
-  else # to use chrome, for example, with selenium
-    Capybara.register_driver :selenium do |app|
-      Capybara::Selenium::Driver.new(app, browser: driver)
-    end
-    Capybara.default_driver = :selenium
-    Capybara.current_driver = :selenium
-    Capybara.javascript_driver = :selenium
+  Capybara.register_driver :selenium_chrome do |app|
+    Capybara::Selenium::Driver.new(app, browser: :chrome)
   end
 
-  puts "Capybara using driver: #{Capybara.default_driver}"
-
-  Capybara::Screenshot.prune_strategy = { keep: 10 }
+  Capybara.javascript_driver = :selenium_chrome
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

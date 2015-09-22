@@ -87,10 +87,8 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "poltergeist"
-  gem "phantomjs", require: "phantomjs/poltergeist"
   gem "selenium-webdriver"
-  gem "capybara-webkit"
+  gem "chromedriver-helper"
   gem "database_cleaner"
   gem "launchy"
 end
