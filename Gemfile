@@ -44,6 +44,8 @@ gem "therubyracer"
 
 gem "autoprefixer-rails"
 
+gem "awesome_print"
+
 # Use Capistrano for deployment
 # gem "capistrano-rails", group: :development
 group :production do
@@ -87,6 +89,8 @@ group :test  do
   gem "capybara-screenshot"
   gem "poltergeist"
   gem "phantomjs", require: "phantomjs/poltergeist"
+  gem "selenium-webdriver"
+  gem "capybara-webkit"
   gem "database_cleaner"
   gem "launchy"
 end

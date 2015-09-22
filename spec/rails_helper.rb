@@ -50,7 +50,32 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.javascript_driver = :poltergeist
+  driver = ENV["DRIVER"].try(:to_sym)
+  if driver.nil? || driver == :poltergeist
+    require "capybara/poltergeist"
+    Capybara.default_driver = :poltergeist
+    Capybara.current_driver = :poltergeist
+    Capybara.javascript_driver = :poltergeist
+  elsif driver == :webkit
+    Capybara.default_driver = :webkit
+    Capybara.current_driver = :webkit
+    Capybara.javascript_driver = :webkit
+  elsif driver == :selenium
+    Capybara.default_driver = :selenium
+    Capybara.current_driver = :selenium
+    Capybara.javascript_driver = :selenium
+  else # to use chrome, for example, with selenium
+    Capybara.register_driver :selenium do |app|
+      Capybara::Selenium::Driver.new(app, browser: driver)
+    end
+    Capybara.default_driver = :selenium
+    Capybara.current_driver = :selenium
+    Capybara.javascript_driver = :selenium
+  end
+
+  puts "Capybara using driver: #{Capybara.default_driver}"
+
+  Capybara::Screenshot.prune_strategy = { keep: 10 }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
