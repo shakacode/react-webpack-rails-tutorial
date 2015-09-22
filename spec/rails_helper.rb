@@ -48,12 +48,24 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-  Capybara.register_driver :selenium_chrome do |app|
-    Capybara::Selenium::Driver.new(app, browser: :chrome)
+
+  driver = ENV["DRIVER"].try(:to_sym)
+  if driver.nil? || driver == :selenium_chrome_
+    Capybara.register_driver :selenium_chrome do |app|
+      Capybara::Selenium::Driver.new(app, browser: :chrome)
+    end
+    Capybara.javascript_driver = :selenium_chrome
+  else
+    Capybara.register_driver :selenium_firefox do |app|
+      Capybara::Selenium::Driver.new(app, browser: :firefox)
+    end
+    Capybara.javascript_driver = :selenium_firefox
   end
 
-  Capybara.javascript_driver = :selenium_chrome
+  puts "Capybara using driver: #{Capybara.javascript_driver}"
 
+
+  Capybara::Screenshot.prune_strategy = { keep: 10 }
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
