@@ -12,12 +12,14 @@ config.output = {
 };
 
 // You can add entry points specific to rails here
-config.entry.push('./scripts/rails_only');
+config.entry.push('./scripts/rails_only', 'jquery', 'jquery-ujs', './assets/javascripts/clientGlobals');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
 config.module.loaders.push(
-  {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}
+  {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'},
+  {test: require.resolve('jquery'), loader: 'expose?jQuery'},
+  {test: require.resolve('jquery'), loader: 'expose?$'}
 );
 module.exports = config;
 

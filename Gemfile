@@ -39,9 +39,12 @@ gem "rails-html-sanitizer"
 # Use Unicorn as the app server
 gem "unicorn"
 
-gem "react_on_rails", "~> 0.1.1"
+gem "react_on_rails", "~> 0.1.3"
+gem "therubyracer"
 
 gem "autoprefixer-rails"
+
+gem "awesome_print"
 
 # Use Capistrano for deployment
 # gem "capistrano-rails", group: :development
@@ -84,8 +87,8 @@ group :test  do
   gem "rspec-rails"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "poltergeist"
-  gem "phantomjs", require: "phantomjs/poltergeist"
+  gem "selenium-webdriver"
+  gem "chromedriver-helper"
   gem "database_cleaner"
   gem "launchy"
 end

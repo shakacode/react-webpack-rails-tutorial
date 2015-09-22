@@ -13,7 +13,5 @@ const App = () => {
   return reactComponent;
 };
 
-window.App = App;
-
 // Export is needed for the hot reload server
 export default App;

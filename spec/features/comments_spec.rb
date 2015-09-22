@@ -14,7 +14,7 @@ shared_context "Form Submitted" do |name: "Spicoli", text: "dude!"|
   end
 end
 
-shared_examples "Form" do
+shared_examples "Comments Form" do
   include_context "Form Submitted"
 
   scenario "submits form", js: true do
@@ -33,7 +33,7 @@ feature "Add new comment" do
       click_link "Horizontal Form"
     end
 
-    it_behaves_like "Form"
+    it_behaves_like "Comments Form"
 
     context "iframe text" do
       let(:iframe_text) { "<iframe src=\"http://www.w3schools.com\"></iframe>" }
@@ -51,7 +51,7 @@ feature "Add new comment" do
       click_link "Inline Form"
     end
 
-    it_behaves_like "Form"
+    it_behaves_like "Comments Form"
   end
 
   context "Stacked Form" do
@@ -59,6 +59,6 @@ feature "Add new comment" do
       click_link "Stacked Form"
     end
 
-    it_behaves_like "Form"
+    it_behaves_like "Comments Form"
   end
 end

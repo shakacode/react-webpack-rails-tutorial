@@ -5,10 +5,16 @@ rvm:
 install:
   - bundle install
   - npm install
-  - cd client && $(npm bin)/webpack --config webpack.rails.config.js
+  - cd client && NODE_ENV=production $(npm bin)/webpack --config webpack.rails.config.js
+  - NODE_ENV=production $(npm bin)/webpack --config webpack.server.config.js
+
 env:
   - export RAILS_ENV=test
+
+before_script:
+   - export DISPLAY=:99.0
+   - sh -e /etc/init.d/xvfb start
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake
+  - DRIVER=selenium_firefox bundle exec rake
   - bundle exec rake lint

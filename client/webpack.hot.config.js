@@ -10,6 +10,9 @@ const webpack = require('webpack');
 config.entry.push('webpack-dev-server/client?http://localhost:3000',
   'webpack/hot/dev-server',
   './scripts/webpack_only',
+  'jquery',
+  'jquery-ujs',
+  './assets/javascripts/clientGlobals',
 
   // custom bootstrap
   'bootstrap-sass!./bootstrap-sass.config.js');
@@ -28,6 +31,10 @@ config.resolve.root.push(path.join(__dirname, 'assets/stylesheets'));
 // All the styling loaders only apply to hot-reload, not rails
 config.module.loaders.push(
   {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/},
+
+  {test: require.resolve('jquery'), loader: 'expose?jQuery'},
+  {test: require.resolve('jquery'), loader: 'expose?$'},
+
   {test: /\.css$/, loader: 'style-loader!css-loader'},
   {
     test: /\.scss$/,

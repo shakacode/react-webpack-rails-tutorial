@@ -1,3 +1,4 @@
 web: rails s -p 4000
 client: sh -c 'cd client && $(npm bin)/webpack -w --config webpack.rails.config.js'
+server: sh -c 'cd client && $(npm bin)/webpack -w --config webpack.server.config.js'
 hot: sh -c 'cd client && node server.js'
