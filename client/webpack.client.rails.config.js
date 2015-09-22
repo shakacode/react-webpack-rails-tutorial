@@ -5,7 +5,7 @@
 // NOTE: All style sheets handled by the asset pipeline in rails
 
 const webpack = require('webpack');
-const config = require('./webpack.common.config');
+const config = require('./webpack.client.base.config');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 
@@ -15,19 +15,13 @@ config.output = {
 };
 
 // You can add entry points specific to rails here
-config.entry.vendor.push(
-  './scripts/rails_only',
-  'jquery',
-  'jquery-ujs'
-);
+config.entry.vendor.unshift('./scripts/rails_only');
 config.entry.app.push('./assets/javascripts/clientGlobals');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
 config.module.loaders.push(
-  {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'},
-  {test: require.resolve('jquery'), loader: 'expose?jQuery'},
-  {test: require.resolve('jquery'), loader: 'expose?$'}
+  {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/}
 );
 
 module.exports = config;

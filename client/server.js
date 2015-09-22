@@ -2,7 +2,7 @@
 var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.hot.config');
+var config = require('./webpack.client.hot.config');
 var sleep = require('sleep');
 
 var comments = [
