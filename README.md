@@ -16,7 +16,7 @@ By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
   Rails project and are interested in help from our experienced team.
 - Please file issues for problems and feature requests.
 - Pull requests are welcome! (and a great way to get on the team)
-- Feel free to open discussions at [forum.railsonmaui.com](http://www.forum.railsonmaui.com).
+- Feel free to open discussions at [forum.railsonmaui.com](http://forum.railsonmaui.com).
 - We now have a [gitter chat room for this topic](https://gitter.im/shakacode/react-webpack-rails-tutorial).
 - Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
 
