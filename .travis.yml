@@ -10,8 +10,7 @@ install:
 
 env:
   - export RAILS_ENV=test
-  - export DRIVER=selenium_firefox
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake
+  - DRIVER=selenium_firefox bundle exec rake
   - bundle exec rake lint
