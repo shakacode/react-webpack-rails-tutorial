@@ -12,7 +12,8 @@ env:
   - export RAILS_ENV=test
 
 before_script:
-  - xvfb-run -a
+   - export DISPLAY=:99.0
+   - sh -e /etc/init.d/xvfb start
 script:
   - bundle exec rake db:schema:load
   - DRIVER=selenium_firefox bundle exec rake
