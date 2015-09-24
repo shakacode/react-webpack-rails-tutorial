@@ -8,7 +8,8 @@ if Rails.env.development?
 
   task :security_audit do
     puts Rainbow("Running security audit on code (brakeman)").green
-    Rake::Task["brakeman:run"].invoke("tmp/brakeman-report.html")
+
+    sh "brakeman --exit-on-warn --quiet -A -z"
   end
 
   namespace :ci do
@@ -29,5 +30,4 @@ if Rails.env.development?
   task ci: "ci:all"
 
   task(:default).clear.enhance([:ci])
-
 end
