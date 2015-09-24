@@ -53,9 +53,6 @@ group :production do
 end
 
 group :development, :test do
-  # Call "debugger" anywhere in the code to stop execution and get a debugger console
-  gem "byebug"
-
   # Access an IRB console on exceptions page and /console in development
   gem "web-console"
 
@@ -80,6 +77,14 @@ group :development, :test do
   gem "bundler-audit", require: false
 
   gem "rainbow"
+
+  # Favorite debugging gems
+  gem "pry"
+  gem "pry-doc"
+  gem "pry-rails"
+  gem "pry-stack_explorer"
+  gem "pry-rescue"
+  gem "pry-byebug"
 end
 
 group :test  do
