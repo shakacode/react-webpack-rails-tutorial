@@ -1,12 +1,10 @@
-// Common webpack configuration used by webpack.hot.config and webpack.rails.config.
-
-const path = require('path');
+// Common webpack configuration for server bundle
 
 module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['./assets/javascripts/serverGlobals'],
+  entry: ['./app/startup/serverGlobals'],
   output: {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
@@ -15,10 +13,6 @@ module.exports = {
     libaryTarget: 'this',
   },
   resolve: {
-    root: [
-      path.join(__dirname, 'scripts'),
-      path.join(__dirname, 'assets/javascripts'),
-    ],
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
   },
   module: {

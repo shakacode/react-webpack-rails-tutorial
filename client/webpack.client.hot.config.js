@@ -9,23 +9,27 @@ const config = require('./webpack.client.base.config');
 // See: https://github.com/shakacode/bootstrap-sass-loader
 config.entry.vendor.push('bootstrap-sass!./bootstrap-sass.config.js');
 config.entry.app.push(
+
+  // Webpack dev server
   'webpack-dev-server/client?http://localhost:3000',
   'webpack/hot/dev-server',
-  './scripts/webpack_only',
-  './assets/javascripts/clientGlobals'
+
+  // Test out Css & Sass
+  './assets/stylesheets/test-stylesheet.css',
+  './assets/stylesheets/test-sass-stylesheet.scss',
+
+  // App entry point
+  './app/startup/clientGlobals'
 );
 
 config.output = {
 
   // this file is served directly by webpack
-  filename: '[name].js',
+  filename: '[name]-bundle.js',
   path: __dirname,
 };
 config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 config.devtool = 'eval-source-map';
-
-// Add the styles
-config.resolve.root.push(path.join(__dirname, 'assets/stylesheets'));
 
 // All the styling loaders only apply to hot-reload, not rails
 config.module.loaders.push(

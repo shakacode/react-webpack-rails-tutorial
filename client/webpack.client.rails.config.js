@@ -10,13 +10,16 @@ const config = require('./webpack.client.base.config');
 const devBuild = process.env.NODE_ENV !== 'production';
 
 config.output = {
-  filename: '[name].js',
+  filename: '[name]-bundle.js',
   path: '../app/assets/javascripts/generated',
 };
 
 // You can add entry points specific to rails here
-config.entry.vendor.unshift('./scripts/rails_only');
-config.entry.app.push('./assets/javascripts/clientGlobals');
+config.entry.vendor.unshift(
+  'es5-shim/es5-shim',
+  'es5-shim/es5-sham'
+);
+config.entry.app.push('./app/startup/clientGlobals');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
