@@ -1,12 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import commentsStore from '../stores/commentsStore';
+import createStore from '../stores/commentsStore';
 import CommentScreen from '../components/CommentScreen';
 
-const App = () => {
+const App = props => {
+  const store = createStore(props);
   const reactComponent = (
-    <Provider store={commentsStore}>
+    <Provider store={store}>
       {() => <CommentScreen />}
     </Provider>
   );
