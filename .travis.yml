@@ -5,12 +5,10 @@ rvm:
 install:
   - bundle install
   - npm install
-  - cd client && NODE_ENV=production $(npm bin)/webpack --config webpack.rails.config.js
-  - NODE_ENV=production $(npm bin)/webpack --config webpack.server.config.js
-
+  - cd client && npm run build:client
+  - npm run build:server
 env:
   - export RAILS_ENV=test
-
 before_script:
    - export DISPLAY=:99.0
    - sh -e /etc/init.d/xvfb start

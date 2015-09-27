@@ -1,40 +1,39 @@
 // Run like this:
 // cd client && node server.js
 
-const path = require('path');
-const config = require('./webpack.common.config');
 const webpack = require('webpack');
+const path = require('path');
+const config = require('./webpack.client.base.config');
 
 // We're using the bootstrap-sass loader.
 // See: https://github.com/shakacode/bootstrap-sass-loader
-config.entry.push('webpack-dev-server/client?http://localhost:3000',
-  'webpack/hot/dev-server',
-  './scripts/webpack_only',
-  'jquery',
-  'jquery-ujs',
-  './assets/javascripts/clientGlobals',
+config.entry.vendor.push('bootstrap-sass!./bootstrap-sass.config.js');
+config.entry.app.push(
 
-  // custom bootstrap
-  'bootstrap-sass!./bootstrap-sass.config.js');
+  // Webpack dev server
+  'webpack-dev-server/client?http://localhost:3000',
+  'webpack/hot/dev-server',
+
+  // Test out Css & Sass
+  './assets/stylesheets/test-stylesheet.css',
+  './assets/stylesheets/test-sass-stylesheet.scss',
+
+  // App entry point
+  './app/startup/clientGlobals'
+);
+
 config.output = {
 
   // this file is served directly by webpack
-  filename: 'express-bundle.js',
+  filename: '[name]-bundle.js',
   path: __dirname,
 };
-config.plugins = [new webpack.HotModuleReplacementPlugin()];
+config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 config.devtool = 'eval-source-map';
-
-// Add the styles
-config.resolve.root.push(path.join(__dirname, 'assets/stylesheets'));
 
 // All the styling loaders only apply to hot-reload, not rails
 config.module.loaders.push(
   {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/},
-
-  {test: require.resolve('jquery'), loader: 'expose?jQuery'},
-  {test: require.resolve('jquery'), loader: 'expose?$'},
-
   {test: /\.css$/, loader: 'style-loader!css-loader'},
   {
     test: /\.scss$/,

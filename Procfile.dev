@@ -1,4 +1,4 @@
 web: rails s -p 4000
-client: sh -c 'cd client && $(npm bin)/webpack -w --config webpack.rails.config.js'
-server: sh -c 'cd client && $(npm bin)/webpack -w --config webpack.server.config.js'
-hot: sh -c 'cd client && node server.js'
+client: sh -c 'rm app/assets/javascripts/generated/* || true && cd client && npm run build:dev:client'
+server: sh -c 'cd client && npm run build:dev:server'
+hot: sh -c 'cd client && npm start'

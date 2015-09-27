@@ -39,7 +39,7 @@ gem "rails-html-sanitizer"
 # Use Unicorn as the app server
 gem "unicorn"
 
-gem "react_on_rails", "~> 0.1.3"
+gem "react_on_rails", "~> 0.1.6"
 gem "therubyracer"
 
 gem "autoprefixer-rails"

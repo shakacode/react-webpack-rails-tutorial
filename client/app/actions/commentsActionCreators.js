@@ -1,5 +1,5 @@
-import CommentsManager from '../utils/CommentsManager';
-import * as actionTypes from '../constants/ActionTypes';
+import commentsManager from '../utils/commentsManager';
+import * as actionTypes from '../constants/commentsConstants';
 
 export function incrementAjaxCounter() {
   return {
@@ -44,25 +44,23 @@ export function submitCommentFailure(error) {
 export function fetchComments() {
   return dispatch => {
     return (
-      CommentsManager.fetchComments()
+      commentsManager
+        .fetchComments()
         .then(res => dispatch(fetchCommentsSuccess(res.data)))
         .catch(res => dispatch(fetchCommentsFailure(res.data)))
     );
   };
 }
 
-function dispatchDecrementAjaxCounter(dispatch) {
-  return dispatch(decrementAjaxCounter());
-}
-
 export function submitComment(comment) {
   return dispatch => {
     dispatch(incrementAjaxCounter());
     return (
-      CommentsManager.submitComment(comment)
+      commentsManager
+        .submitComment(comment)
         .then(res => dispatch(submitCommentSuccess(res.data)))
         .catch(res => dispatch(submitCommentFailure(res.data)))
-        .then(() => dispatchDecrementAjaxCounter(dispatch))
+        .then(() => dispatch(decrementAjaxCounter()))
     );
   };
 }

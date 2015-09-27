@@ -7,7 +7,7 @@ const CommentsManager = {
   /**
    * Retrieve comments from server using AJAX call.
    *
-   * @returns {Promise} - jqXHR result of ajax call.
+   * @returns {Promise} - result of ajax call.
    */
   fetchComments() {
     return request({
@@ -21,7 +21,7 @@ const CommentsManager = {
    * Submit new comment to server using AJAX call.
    *
    * @param {Object} comment - Comment body to post.
-   * @returns {Promise} - jqXHR result of ajax call.
+   * @returns {Promise} - result of ajax call.
    */
   submitComment(comment) {
     return request({
