@@ -48,6 +48,7 @@ const CommentsManager = {
         return meta.getAttribute('content');
       }
     }
+
     return null;
   },
 
