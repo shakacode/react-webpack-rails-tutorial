@@ -92,6 +92,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
+    connection_pool (2.2.0)
     coveralls (0.8.2)
       json (~> 1.8)
       rest-client (>= 1.6.8, < 2)
@@ -206,9 +207,10 @@ GEM
     raindrops (0.15.0)
     rake (10.4.2)
     rdoc (4.2.0)
-    react_on_rails (0.1.6)
+    react_on_rails (0.1.7)
+      connection_pool
       execjs (~> 2.5)
-      rails (~> 4.2)
+      rails (>= 4.0)
     ref (2.0.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -351,7 +353,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (~> 0.1.6)
+  react_on_rails (~> 0.1.7)
   rspec-rails
   rubocop
   ruby-lint
