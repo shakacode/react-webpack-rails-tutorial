@@ -254,7 +254,7 @@ Run the tests with `rspec`.
 Add those lines to your CI scripts after `bundle install`
 ```
 npm install
-cd client && npm run build
+cd client && npm run build:client && npm run build:server
 ```
 
 # Linting and Code Inspection
