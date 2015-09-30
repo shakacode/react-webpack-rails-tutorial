@@ -51,7 +51,7 @@ RSpec.configure do |config|
 
   # selenium_firefox webdriver only works for Travis-CI builds.
   driver = ENV["DRIVER"].try(:to_sym)
-  if driver.nil? || driver == :selenium_chrome_
+  if driver.nil? || driver == :selenium_chrome
     Capybara.register_driver :selenium_chrome do |app|
       Capybara::Selenium::Driver.new(app, browser: :chrome)
     end
