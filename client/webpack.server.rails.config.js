@@ -10,7 +10,7 @@ module.exports = {
     path: '../app/assets/javascripts/generated',
 
     // CRITICAL for enabling Rails to find the globally exposed variables.
-    libaryTarget: 'this',
+    libraryTarget: 'this',
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
