@@ -40,6 +40,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 In no particular order:
 
+- Example of using the [react_on_rails](https://github.com/shakacode/react_on_rails)
 - Example of Rails 4.2 with ReactJs/Redux with Webpack and ES7.
 - Enable development of a JS client independently from Rails using Webpack Hot Module Reload. You can see this by starting the app and visiting http://localhost:3000
 - Easily enable use of npm modules with a Rails application.
@@ -255,6 +256,55 @@ Add those lines to your CI scripts after `bundle install`
 ```
 npm install
 cd client && npm run build:client && npm run build:server
+```
+
+# JBuilder Notes
+There's a bunch of gotchas with using [Jbuilder](https://github.com/rails/jbuilder) to create the
+string version of the props to be sent to the react_on_rails_gem:
+
+See the notes in this the example code. The two critical things:
+
+1. Use `render_to_string` to create string of JSON.
+2. Be sure to call `respond_to` afterwards. 
+
+app/controllers/pages_controller.rb
+
+```ruby
+   class PagesController < ApplicationController
+     def index
+       # NOTE: this could be an alternate syntax if you wanted to pass comments as a variable to a partial
+       # @comments_json_string = render_to_string(partial: "/comments/comments.json.jbuilder", locals: { comments: Comment.all }, format: :json)
+       @comments = Comment.all
+   
+       # NOTE: @comments is used by the render_to_string call
+       @comments_json_string = render_to_string("/comments/index.json.jbuilder")
+   
+       # NOTE: It's CRITICAL to call respond_to after calling render_to_string, or else Rails will
+       # not render the HTML version of the index page properly.
+       respond_to do |format|
+         format.html
+       end
+     end
+   end
+```
+
+### comments/_comment.json.jbuilder:
+
+```ruby
+json.extract! comment, :id, :author, :text, :created_at, :updated_at
+```
+
+### comments/index.json.jbuilder:
+
+```ruby
+# Specify the partial, as well as the name of the variable used in the partial
+json.array! @comments, { partial: "comments/comment", as: :comment }
+```
+
+### comments/show.json.jbuilder:
+
+```ruby
+json.partial! 'comment', comment: @comment
 ```
 
 # Linting and Code Inspection

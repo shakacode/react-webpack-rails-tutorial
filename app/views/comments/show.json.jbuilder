@@ -1,1 +1,1 @@
-json.extract! @comment, :id, :author, :text, :created_at, :updated_at
+json.partial! 'comment', comment: @comment

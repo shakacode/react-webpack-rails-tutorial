@@ -1,4 +1,2 @@
-json.array!(@comments) do |comment|
-  json.extract! comment, :id, :author, :text
-  json.url comment_url(comment, format: :json)
-end
+# Specify the partial, as well as the name of the variable used in the partial
+json.array! @comments, { partial: "comments/comment", as: :comment }
