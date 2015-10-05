@@ -3,10 +3,10 @@
   <li>
     If this work interests you and you're a developer or designer looking for full or part-time remote work: please
     <%= link_to "click here",
-      "http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156" %>
+      "http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156/3" %>
     and
     <%= link_to "here",
-     "http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156/2" %>.
+     "http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156/2" %>.
   </li>
   <li>
     Please see the
@@ -16,4 +16,6 @@
   </li>
 </ul>
 <hr/>
-<%= react_component('App', @comments, generator_function: true, prerender: true) %>
+
+<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
+    generator_function: true, prerender: true) %>
