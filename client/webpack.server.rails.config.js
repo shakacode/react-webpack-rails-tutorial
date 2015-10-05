@@ -9,8 +9,11 @@ module.exports = {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
 
-    // CRITICAL for enabling Rails to find the globally exposed variables.
-    libaryTarget: 'this',
+    // CRITICAL to set libraryTarget: 'this' for enabling Rails to find the exposed modules IF you
+    //   use the "expose" webpackfunctionality. See startup/serverGlobals.jsx.
+    // NOTE: This is NOT necessary if you use the syntax of global.MyComponent = MyComponent syntax.
+    // See http://webpack.github.io/docs/configuration.html#externals for documentation of this option
+    //libraryTarget: 'this',
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
