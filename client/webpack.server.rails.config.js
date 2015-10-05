@@ -1,5 +1,7 @@
 // Common webpack configuration for server bundle
 
+const webpack = require('webpack');
+
 module.exports = {
 
   // the project dir
@@ -8,13 +10,17 @@ module.exports = {
   output: {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
-
-    // CRITICAL for enabling Rails to find the globally exposed variables.
-    libaryTarget: 'this',
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production'),
+      },
+    }),
+  ],
   module: {
     loaders: [
       {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/},
