@@ -260,33 +260,24 @@ cd client && npm run build:client && npm run build:server
 
 # JBuilder Notes
 There's a bunch of gotchas with using [Jbuilder](https://github.com/rails/jbuilder) to create the
-string version of the props to be sent to the react_on_rails_gem:
+string version of the props to be sent to the react_on_rails_gem. The main thing is that if you
+follow the example and call Jbuilder like this, you don't run into a number of issues.
 
-See the notes in this the example code. The two critical things:
+```erb
+<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
+    generator_function: true, prerender: true) %>
+```
+
+However, if you try to set the value of the JSON string inside of the controller, then you will 
+run into several issues with rendering the Jbuilder template from the controller.
+See the notes in this the example code for app/controllers/pages_controller.rb.
+
+The two critical things:
 
 1. Use `render_to_string` to create string of JSON.
 2. Be sure to call `respond_to` afterwards. 
 
-app/controllers/pages_controller.rb
-
-```ruby
-   class PagesController < ApplicationController
-     def index
-       # NOTE: this could be an alternate syntax if you wanted to pass comments as a variable to a partial
-       # @comments_json_string = render_to_string(partial: "/comments/comments.json.jbuilder", locals: { comments: Comment.all }, format: :json)
-       @comments = Comment.all
-   
-       # NOTE: @comments is used by the render_to_string call
-       @comments_json_string = render_to_string("/comments/index.json.jbuilder")
-   
-       # NOTE: It's CRITICAL to call respond_to after calling render_to_string, or else Rails will
-       # not render the HTML version of the index page properly.
-       respond_to do |format|
-         format.html
-       end
-     end
-   end
-```
+Here's the samples of Jbuilder that we use:
 
 ### comments/_comment.json.jbuilder:
 

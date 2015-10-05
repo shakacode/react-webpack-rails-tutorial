@@ -16,4 +16,6 @@
   </li>
 </ul>
 <hr/>
-<%= react_component('App', @comments_json_string, generator_function: true, prerender: true) %>
+
+<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
+    generator_function: true, prerender: true) %>
