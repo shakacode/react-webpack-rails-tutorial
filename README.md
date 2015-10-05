@@ -272,11 +272,6 @@ However, if you try to set the value of the JSON string inside of the controller
 run into several issues with rendering the Jbuilder template from the controller.
 See the notes in this the example code for app/controllers/pages_controller.rb.
 
-The two critical things:
-
-1. Use `render_to_string` to create string of JSON.
-2. Be sure to call `respond_to` afterwards. 
-
 Here's the samples of Jbuilder that we use:
 
 ### comments/_comment.json.jbuilder:
