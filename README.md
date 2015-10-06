@@ -73,7 +73,7 @@ See package.json and Gemfile for versions
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
-1. Open a browser tab to http://0.0.0.0:4000 for the Rail app example.
+1. Open a browser tab to http://0.0.0.0:4000 for the Rails app example.
 1. Open a browser tab to http://0.0.0.0:3000 for the Hot Module Replacement Example.
 
 # Javascript development without Rails using Hot Module Replacement (HMR)
