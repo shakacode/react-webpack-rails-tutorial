@@ -22,7 +22,7 @@ For now:
     bin/lint
     
     
-Updating Node Dependenencies
+Updating Node Dependencies
 ===========================
 
 ```
