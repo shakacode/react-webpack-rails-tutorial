@@ -46,7 +46,7 @@ config.module.loaders.push(
               transform: 'react-transform-hmr',
               imports: ['react'],
               locals: ['module'],
-            }
+            },
           ],
         },
       },
