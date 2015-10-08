@@ -7,7 +7,7 @@ var sleep = require('sleep');
 var config = require('./webpack.client.hot.config');
 
 var comments = [
-  { author: 'Pete Hunt',     text: 'Hey there!' },
+  { author: 'Pete Hunt', text: 'Hey there!' },
   { author: 'Justin Gordon', text: 'Aloha from @railsonmaui' },
 ];
 
