@@ -8,7 +8,7 @@ const App = props => {
   const store = createStore(props);
   const reactComponent = (
     <Provider store={store}>
-      {() => <CommentScreen />}
+      <CommentScreen />
     </Provider>
   );
   return reactComponent;
