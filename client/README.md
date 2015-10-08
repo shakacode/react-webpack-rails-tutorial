@@ -36,12 +36,16 @@ cd client
 rm npm-shrinkwrap.json
 npm-check-updates -u
 npm install
+npm prune
 npm shrinkwrap
 ```
 
 Then confirm that the hot reload server and the rails server both work fine. You
 may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
 shrinkwrap`.
+
+Note: `npm prune` is required before running `npm shrinkwrap` to remove dependencies that are no longer needed after doing updates.
+
 
 Adding Node Modules
 =====================================
