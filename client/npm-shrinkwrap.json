@@ -789,61 +789,6 @@
       "from": "expose-loader@>=0.7.0 <0.8.0",
       "resolved": "https://registry.npmjs.org/expose-loader/-/expose-loader-0.7.0.tgz"
     },
-    "history": {
-      "version": "1.12.3",
-      "from": "history@>=1.12.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/history/-/history-1.12.3.tgz",
-      "dependencies": {
-        "deep-equal": {
-          "version": "1.0.1",
-          "from": "deep-equal@>=1.0.0 <2.0.0",
-          "resolved": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
-        },
-        "invariant": {
-          "version": "2.1.1",
-          "from": "invariant@>=2.0.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/invariant/-/invariant-2.1.1.tgz",
-          "dependencies": {
-            "loose-envify": {
-              "version": "1.0.0",
-              "from": "loose-envify@>=1.0.0 <2.0.0",
-              "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.0.0.tgz",
-              "dependencies": {
-                "js-tokens": {
-                  "version": "1.0.1",
-                  "from": "js-tokens@>=1.0.1 <2.0.0",
-                  "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-1.0.1.tgz"
-                }
-              }
-            }
-          }
-        },
-        "qs": {
-          "version": "4.0.0",
-          "from": "qs@>=4.0.0 <5.0.0",
-          "resolved": "https://registry.npmjs.org/qs/-/qs-4.0.0.tgz"
-        },
-        "warning": {
-          "version": "2.1.0",
-          "from": "warning@>=2.0.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/warning/-/warning-2.1.0.tgz",
-          "dependencies": {
-            "loose-envify": {
-              "version": "1.0.0",
-              "from": "loose-envify@>=1.0.0 <2.0.0",
-              "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.0.0.tgz",
-              "dependencies": {
-                "js-tokens": {
-                  "version": "1.0.1",
-                  "from": "js-tokens@>=1.0.1 <2.0.0",
-                  "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-1.0.1.tgz"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "immutable": {
       "version": "3.7.5",
       "from": "immutable@>=3.7.5 <4.0.0",
