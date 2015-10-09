@@ -225,8 +225,11 @@ const CommentForm = React.createClass({
     }
     return (
       <div>
-
-        <ReactCSSTransitionGroup transitionName="element">
+        <ReactCSSTransitionGroup
+          transitionName="element"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+        >
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
 
