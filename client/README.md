@@ -39,9 +39,10 @@ Updating Node Dependencies
 npm install -g npm-check-updates
 ```
  
-  
+Then run this to update the dependencies (starting at the top level).
+
 ```
-# Make sure you are in the `client` directory, then run:
+# Make sure you are in the top directory, then run:
 cd client 
 rm npm-shrinkwrap.json
 npm-check-updates -u
