@@ -27,6 +27,7 @@ module.exports = {
 
       // React is necessary for the client rendering:
       {test: require.resolve('react'), loader: 'expose?React'},
+      {test: require.resolve('react-dom/server'), loader: 'expose?ReactDOMServer'},
     ],
   },
 };
