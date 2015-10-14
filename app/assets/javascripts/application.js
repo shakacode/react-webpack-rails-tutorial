@@ -20,3 +20,8 @@
 
 //= require bootstrap-sprockets
 //= require turbolinks
+
+$(document).on('ready page:load', function () {
+  $('nav a').parents('li,ul').removeClass('active');
+  $('nav a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
+});

@@ -12,14 +12,14 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :author %><br>
+    <%= f.label :author, 'Your Name' %><br>
     <%= f.text_field :author %>
   </div>
   <div class="field">
-    <%= f.label :text %><br>
+    <%= f.label :text, 'Say something using markdown...' %><br>
     <%= f.text_area :text %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Post' %>
   </div>
 <% end %>

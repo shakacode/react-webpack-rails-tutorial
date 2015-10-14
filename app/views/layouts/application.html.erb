@@ -22,9 +22,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/">React Demo</a></li>
+        <li class="active"><%= link_to "React Demo", root_path %></li>
+        <li><%= link_to "Simple React", simple_path %></li>
         <li><%= link_to "Classic Rails", comments_path %></li>
-        <li><%= link_to "by Justin Gordon, www.railsonmaui.com", "http://www.railsonmaui.com" %></li>
+        <li><%= link_to "www.shakacode.com", "http://www.shakacode.com" %></li>
         <li><%= link_to "Source on Github", "https://github.com/shakacode/react-webpack-rails-tutorial" %></li>
         <li><%= link_to "Tutorial Article", "http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/" %></li>
         <li><%= link_to "Forum Discussion", "http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/22" %></li>

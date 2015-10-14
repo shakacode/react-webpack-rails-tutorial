@@ -21,4 +21,7 @@ class PagesController < ApplicationController
     #   format.html
     # end
   end
+
+  def simple
+  end
 end

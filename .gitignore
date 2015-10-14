@@ -28,3 +28,6 @@ vendor/ruby
 
 # Generated js bundles
 /app/assets/javascripts/generated/*
+
+# Rubymine/IntelliJ
+.idea

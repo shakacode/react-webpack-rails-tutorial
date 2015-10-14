@@ -1,14 +1,16 @@
-<p id="notice"><%= notice %></p>
+<div class="comment">
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Author:</strong>
-  <%= @comment.author %>
-</p>
+  <p>
+    <strong>Author:</strong>
+    <%= @comment.author %>
+  </p>
 
-<p>
-  <strong>Text:</strong>
-  <%= @comment.text %>
-</p>
+  <p>
+    <strong>Text:</strong>
+    <%= @comment.text %>
+  </p>
+</div>
 
 <%= link_to 'Edit', edit_comment_path(@comment) %> |
 <%= link_to 'Back', comments_path %>
