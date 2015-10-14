@@ -202,7 +202,7 @@ const CommentForm = React.createClass({
     if (!this.props.error) return undefined;
     return (
       <Alert bsStyle="danger" key="commentSubmissionError">
-        <strong>Your comment was not saved!</strong>
+        <strong>Your comment was not saved! </strong>
         A server error prevented your comment from being saved. Please try again.
       </Alert>
     );

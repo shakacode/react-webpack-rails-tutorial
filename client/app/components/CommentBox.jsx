@@ -31,9 +31,9 @@ const CommentBox = React.createClass({
 
     return (
       <div className="commentBox container">
-        <h1>
+        <h2>
           Comments { this.isSendingAjax() && `SENDING AJAX REQUEST! Ajax Counter is ${this.ajaxCounter()}` }
-        </h1>
+        </h2>
         <p>
           Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
           <b>Name</b> is preserved, <b>Text</b> is reset, between submits.
