@@ -41,7 +41,7 @@ In no particular order:
 
 - Example of using the [react_on_rails](https://github.com/shakacode/react_on_rails)
 - Example of Rails 4.2 with ReactJs/Redux with Webpack and ES7.
-- Enable development of a JS client independently from Rails using Webpack Hot Module Reload. You can see this by starting the app and visiting http://localhost:3000
+- Enable development of a JS client independently from Rails using Webpack Hot Module Reload. You can see this by starting the app and visiting http://localhost:4000
 - Easily enable use of npm modules with a Rails application.
 - Easily enable retrofitting such a JS framework into an existing Rails app.
 - Enable the use of the JavaScript ES7 transpiler.
@@ -72,8 +72,8 @@ See package.json and Gemfile for versions
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
-1. Open a browser tab to http://0.0.0.0:4000 for the Rails app example.
-1. Open a browser tab to http://0.0.0.0:3000 for the Hot Module Replacement Example.
+1. Open a browser tab to http://0.0.0.0:3000 for the Rails app example.
+1. Open a browser tab to http://0.0.0.0:4000 for the Hot Module Replacement Example.
 
 # Javascript development without Rails using Hot Module Replacement (HMR)
 
@@ -84,7 +84,7 @@ cd client
 node server.js
 ```
 
-Point your browser to http://0.0.0.0:3000.
+Point your browser to http://0.0.0.0:4000.
 
 Save a change to a JSX file and see it update immediately in the browser! Note,
 any browser state still exists, such as what you've typed in the comments box.
@@ -118,10 +118,10 @@ the Rails server.
 ```
 cd <rails_project_name>
 rake db:setup
-rails s -p 4000
+rails s
 ```
 
-Now point your browser to http://0.0.0.0:4000.
+Now point your browser to http://0.0.0.0:3000.
 
 Note that it's important to run the Rails server on a different port than the node server.
 
@@ -267,7 +267,7 @@ follow the example and call Jbuilder like this, you don't run into a number of i
     generator_function: true, prerender: true) %>
 ```
 
-However, if you try to set the value of the JSON string inside of the controller, then you will 
+However, if you try to set the value of the JSON string inside of the controller, then you will
 run into several issues with rendering the Jbuilder template from the controller.
 See the notes in this the example code for app/controllers/pages_controller.rb.
 

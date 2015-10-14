@@ -51,7 +51,7 @@ server.app.use('/', function(req, res) {
   res.send(html);
 });
 
-server.listen(3000, 'localhost', function(err) {
+server.listen(4000, 'localhost', function(err) {
   if (err) console.log(err);
-  console.log('Listening at localhost:3000...');
+  console.log('Listening at localhost:4000...');
 });

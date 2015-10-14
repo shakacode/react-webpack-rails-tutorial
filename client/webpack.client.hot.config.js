@@ -11,7 +11,7 @@ config.entry.vendor.push('bootstrap-sass!./bootstrap-sass.config.js');
 config.entry.app.push(
 
   // Webpack dev server
-  'webpack-dev-server/client?http://localhost:3000',
+  'webpack-dev-server/client?http://localhost:4000',
   'webpack/hot/dev-server',
 
   // Test out Css & Sass
