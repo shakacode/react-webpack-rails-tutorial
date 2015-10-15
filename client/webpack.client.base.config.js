@@ -11,7 +11,7 @@ module.exports = {
       'jquery',
       'jquery-ujs',
     ],
-    app: [],
+    app: ['babel-core/polyfill'],
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
