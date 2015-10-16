@@ -6,15 +6,10 @@ const MetaTagsManager = {
    * @returns {String} - CSRF Token.
    */
   getCSRFToken() {
-    const metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-      const meta = metas[i];
-      if (meta.getAttribute('name') === 'csrf-token') {
-        return meta.getAttribute('content');
-      }
-    }
+    const token = Array.from(document.getElementsByTagName('meta'))
+      .find(tag => tag.name === 'csrf-token');
 
-    return null;
+    return token ? token.content : null;
   },
 };
 
