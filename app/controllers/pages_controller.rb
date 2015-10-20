@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   def index
     @comments = Comment.all
+    @git_commit_sha = GitCommitSha.current_sha
 
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as
     # compared to he view. However, it's more convenient to use Jbuilder from the view. See
