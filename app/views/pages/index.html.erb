@@ -1,8 +1,8 @@
 <h2>Using React + Redux + Rails Backend (using the react_on_rails gem)</h2>
-<p>current Git commit:
-  <span id="current-git-commit-sha">
-    <%= @git_commit_sha %>
-  </span>
+<p>Current Commit:
+  <%= link_to git_commit_sha_short,
+      "https://github.com/shakacode/react-webpack-rails-tutorial/commit/#{git_commit_sha}",
+      id: "git-commit-sha" %>
 </p>
 <ul>
   <li>

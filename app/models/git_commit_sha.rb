@@ -1,7 +1,6 @@
 class GitCommitSha
   def self.current_sha
-    return @commit_sha unless @commit_sha.blank?
-    @commit_sha = (retrieve_sha_from_env_var || retrieve_sha_from_git_folder)
+    @commit_sha ||= retrieve_sha_from_env_var.presence || retrieve_sha_from_git_folder
   end
 
   def self.current_sha=(sha)
@@ -9,7 +8,7 @@ class GitCommitSha
   end
 
   def self.reset_current_sha
-    self.current_sha = ""
+    self.current_sha = nil
   end
 
   def self.retrieve_sha_from_git_folder
@@ -18,6 +17,6 @@ class GitCommitSha
 
   def self.retrieve_sha_from_env_var
     env_var = ENV["DEPLOYMENT_SHA"]
-    env_var.blank? ? false : env_var
+    env_var.blank? ? nil : env_var
   end
 end
