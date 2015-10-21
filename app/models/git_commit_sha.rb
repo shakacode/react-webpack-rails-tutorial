@@ -1,6 +1,6 @@
 class GitCommitSha
   def self.current_sha
-    @commit_sha ||= retrieve_sha_from_env_var.presence || retrieve_sha_from_git_folder
+    @commit_sha ||= retrieve_sha_from_env_var.presence || retrieve_sha_from_git
   end
 
   def self.current_sha=(sha)
@@ -11,7 +11,7 @@ class GitCommitSha
     self.current_sha = nil
   end
 
-  def self.retrieve_sha_from_git_folder
+  def self.retrieve_sha_from_git
     `git rev-parse HEAD 2>/dev/null`.to_s.strip
   end
 
