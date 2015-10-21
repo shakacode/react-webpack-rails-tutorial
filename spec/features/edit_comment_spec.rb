@@ -2,12 +2,10 @@ require "rails_helper"
 require "features/shared/examples"
 require "features/shared/contexts"
 
-feature "Edit a comment" do
-  include_context "Existing Comment"
+feature "Edit a comment", existing_comment: true do
   let(:comment) { Comment.first }
 
-  context "from classic page" do
-    include_context "Classic Page"
+  context "from classic page", page: :classic do
     background { click_link "Edit", match: :first }
 
     context "when edit is submitted" do
@@ -20,9 +18,7 @@ feature "Edit a comment" do
       end
     end
 
-    context "when edit is submitted with blank fields" do
-      include_context "Form Submitted with Blank Fields"
-
+    context "when edit is submitted with blank fields", blank_form_submitted: true do
       scenario "comment is not updated" do
         expect(page).not_to have_success_message
         expect(page).to have_failure_message

@@ -1,10 +1,8 @@
 require "rails_helper"
 require "features/shared/contexts"
 
-feature "Destroy a comment" do
-  include_context "Existing Comment"
-  context "from classic page" do
-    include_context "Classic Page"
+feature "Destroy a comment", existing_comment: true do
+  context "from classic page", page: :classic do
     let(:comment) { Comment.first }
 
     scenario "clicking destroy link destroys comment" do

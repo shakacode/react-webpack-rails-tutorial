@@ -13,9 +13,8 @@ shared_examples "New Comment Submission" do
     end
   end
 
-  context "when the new comment is submmited with blank fields" do
+  context "when the new comment is submmited with blank fields", blank_form_submitted: true do
     let!(:comments_count) { all(".comment").size }
-    include_context "Form Submitted with Blank Fields"
 
     scenario "comment is not added" do
       expect(page).to have_selector(".comment", count: comments_count)
