@@ -25,6 +25,7 @@ feature "Edit a comment" do
 
       scenario "comment is not updated" do
         expect(page).not_to have_success_message
+        expect(page).to have_failure_message
         expect(page).not_to have_css(".comment", text: "")
       end
     end
@@ -35,4 +36,8 @@ private
 
 def have_success_message # rubocop:disable Style/PredicateName
   have_css("#notice", "Comment was successfully created.")
+end
+
+def have_failure_message # rubocop:disable Style/PredicateName
+  have_css("#error_explanation")
 end
