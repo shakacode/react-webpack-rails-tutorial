@@ -11,19 +11,20 @@ shared_examples "Git Commit SHA" do
 end
 
 feature "Git Commit SHA" do
-  context "when env var is not set" do
+  context "when .source_version file does not exist" do
     let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5x" }
     let(:expected_text) { "5eead5x" }
     before { GitCommitSha.current_sha = sha }
     it_behaves_like "Git Commit SHA"
   end
-  context "when env var is set" do
+  context "when .source_version file exists" do
     let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5y" }
     let(:expected_text) { "5eead5y" }
     before do
-      ENV["DEPLOYMENT_SHA"] = sha
+      `cd #{Rails.root} && echo #{sha} > .source_version`
       GitCommitSha.reset_current_sha
     end
+    after { `cd #{Rails.root} && rm .source_version` }
     it_behaves_like "Git Commit SHA"
   end
 end

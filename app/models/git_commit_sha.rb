@@ -1,6 +1,7 @@
+# Retrieves the current git commit SHA of the project
 class GitCommitSha
   def self.current_sha
-    @commit_sha ||= retrieve_sha_from_env_var.presence || retrieve_sha_from_git
+    @commit_sha ||= retrieve_sha_from_file.presence || retrieve_sha_from_git
   end
 
   def self.current_sha=(sha)
@@ -15,8 +16,8 @@ class GitCommitSha
     `git rev-parse HEAD 2>/dev/null`.to_s.strip
   end
 
-  def self.retrieve_sha_from_env_var
-    env_var = ENV["DEPLOYMENT_SHA"]
-    env_var.blank? ? nil : env_var
+  def self.retrieve_sha_from_file
+    expected_filepath = Rails.root.join(".source_version")
+    File.exist?(expected_filepath) ? File.read(expected_filepath) : nil
   end
 end
