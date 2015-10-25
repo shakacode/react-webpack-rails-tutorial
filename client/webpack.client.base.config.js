@@ -1,4 +1,4 @@
-// Common webpack configuration used by webpack.hot.config and webpack.rails.config.
+// Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 
 const webpack = require('webpack');
 
