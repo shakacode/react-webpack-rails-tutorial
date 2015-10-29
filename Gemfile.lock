@@ -106,9 +106,6 @@ GEM
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
-    es5-shim-rails (4.0.1)
-      actionpack (>= 3.1)
-      railties (>= 3.1)
     execjs (2.5.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -337,7 +334,6 @@ DEPENDENCIES
   coffee-rails
   coveralls
   database_cleaner
-  es5-shim-rails
   factory_girl_rails
   foreman
   jbuilder
