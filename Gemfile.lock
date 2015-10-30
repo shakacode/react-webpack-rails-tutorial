@@ -350,7 +350,6 @@ DEPENDENCIES
   rails (~> 4.2)
   rails-html-sanitizer
   rails_12factor
-  rainbow
   react_on_rails (~> 1.0.0.pre)
   rspec-rails
   rubocop
