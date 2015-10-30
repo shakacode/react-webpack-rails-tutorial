@@ -4,6 +4,7 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem "sqlite3"
 #
+# NOTE: Real world apps would not have a different DB for development
 default: &default
   adapter: sqlite3
   pool: 5
