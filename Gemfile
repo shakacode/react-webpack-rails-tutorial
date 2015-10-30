@@ -10,9 +10,9 @@ gem "pg", group: :production
 
 # Use SCSS for stylesheets
 gem "sass-rails"
-gem "bootstrap-sass", "~> 3.3.1"
+gem "bootstrap-sass", "~> 3.3"
 # Use Uglifier as compressor for JavaScript assets
-gem "uglifier", "~> 2.7.2"
+gem "uglifier"
 # Use CoffeeScript for .js.coffee assets and views
 gem "coffee-rails"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -65,16 +65,14 @@ group :development, :test do
 
   gem "factory_girl_rails"
 
+  # Linters and Security
   gem "rubocop", require: false
-
   gem "ruby-lint", require: false
-
   gem "scss_lint", require: false
-
   gem "brakeman", require: false
-
   gem "bundler-audit", require: false
 
+  # Allow printing with colors to terminal
   gem "rainbow"
 
   # Favorite debugging gems
