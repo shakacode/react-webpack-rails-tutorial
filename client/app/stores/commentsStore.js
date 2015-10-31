@@ -17,8 +17,6 @@ export default props => {
   const composedStore = compose(
     applyMiddleware(thunkMiddleware, loggerMiddleware)
   );
-  const storeCreator = composedStore(createStore);
-  const store = storeCreator(reducer, initialState);
 
-  return store;
+  return composedStore(createStore)(reducer, initialState);
 };

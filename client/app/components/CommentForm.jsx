@@ -10,31 +10,27 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
-const CommentForm = React.createClass({
-  displayName: 'CommentForm',
+class CommentForm extends React.Component {
+  state = {
+    formMode: 0,
+    comment: emptyComment,
+  };
 
-  propTypes: {
+  static displayName = 'CommentForm';
+
+  static propTypes = {
     ajaxSending: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
-  },
+  };
 
-  getInitialState() {
-    return {
-      formMode: 0,
-      comment: emptyComment,
-    };
-  },
-
-  handleSelect(selectedKey) {
+  handleSelect = (selectedKey) => {
     this.setState({ formMode: selectedKey });
-  },
+  };
 
-  handleChange() {
+  handleChange = () => {
     let comment;
 
-    // This could also be done using ReactLink:
-    // http://facebook.github.io/react/docs/two-way-binding-helpers.html
     if (this.state.formMode < 2) {
       comment = {
         author: this.refs.author.getValue(),
@@ -50,17 +46,17 @@ const CommentForm = React.createClass({
     }
 
     this.setState({ comment });
-  },
+  };
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { actions } = this.props;
     actions
       .submitComment(this.state.comment)
       .then(this.resetAndFocus);
-  },
+  };
 
-  resetAndFocus() {
+  resetAndFocus = () => {
     // Don't reset a form that didn't submit, this results in data loss
     if (this.props.error) return;
 
@@ -75,7 +71,7 @@ const CommentForm = React.createClass({
     }
 
     ref.focus();
-  },
+  }
 
   formHorizontal() {
     return (
@@ -117,7 +113,7 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
   formStacked() {
     return (
@@ -151,7 +147,7 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
   formInline() {
     return (
@@ -195,7 +191,7 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
   errorWarning() {
     // If there is no error, there is nothing to add to the DOM
@@ -206,7 +202,7 @@ const CommentForm = React.createClass({
         A server error prevented your comment from being saved. Please try again.
       </Alert>
     );
-  },
+  }
 
   render() {
     let inputForm;
@@ -241,7 +237,7 @@ const CommentForm = React.createClass({
         {inputForm}
       </div>
     );
-  },
-});
+  }
+}
 
 export default CommentForm;

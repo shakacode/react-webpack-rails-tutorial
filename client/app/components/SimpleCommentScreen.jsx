@@ -5,29 +5,27 @@ import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import metaTagsManager from '../utils/metaTagsManager';
 
-const SimpleCommentScreen = React.createClass({
-  displayName: 'SimpleCommentScreen',
+class SimpleCommentScreen extends React.Component {
+  state = {
+    $$comments: Immutable.fromJS([]),
+    ajaxSending: false,
+    fetchCommentsError: null,
+    submitCommentError: null,
+  };
 
-  getInitialState() {
-    return {
-      $$comments: Immutable.fromJS([]),
-      ajaxSending: false,
-      fetchCommentsError: null,
-      submitCommentError: null,
-    };
-  },
+  static displayName = 'SimpleCommentScreen';
 
   componentDidMount() {
     this.fetchComments();
-  },
+  }
 
   fetchComments() {
     return request.get('comments.json', { responseType: 'json' })
       .then(res => this.setState({ $$comments: Immutable.fromJS(res.data) }))
       .catch(error => this.setState({ fetchCommentsError: error }));
-  },
+  }
 
-  handleCommentSubmit(comment) {
+  handleCommentSubmit = (comment) => {
     this.setState({ ajaxSending: true });
 
     const requestConfig = {
@@ -53,7 +51,7 @@ const SimpleCommentScreen = React.createClass({
           ajaxSending: false,
         });
       });
-  },
+  };
 
   render() {
     return (
@@ -65,7 +63,7 @@ const SimpleCommentScreen = React.createClass({
         </p>
         <CommentForm
           ajaxSending={this.state.ajaxSending}
-          actions={{ submitComment: this.handleCommentSubmit }}
+          actions={{ submitComment: this.handleCommentSubmit}}
           error={this.state.submitCommentError}
         />
         <CommentList
@@ -74,7 +72,7 @@ const SimpleCommentScreen = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 export default SimpleCommentScreen;

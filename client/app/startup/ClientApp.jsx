@@ -6,12 +6,11 @@ import CommentScreen from '../components/CommentScreen';
 
 const App = props => {
   const store = createStore(props);
-  const reactComponent = (
-    <Provider store={store}>
-      <CommentScreen />
-    </Provider>
+  return (
+      <Provider store={store}>
+        <CommentScreen />
+      </Provider>
   );
-  return reactComponent;
 };
 
 // Export is needed for the hot reload server

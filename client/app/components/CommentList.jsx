@@ -5,13 +5,13 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
 import Comment from './Comment';
 
-const CommentList = React.createClass({
-  displayName: 'CommentList',
+class CommentList extends React.Component {
+  static displayName = 'CommentList';
 
-  propTypes: {
+  static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
-  },
+  };
 
   errorWarning() {
     // If there is no error, there is nothing to add to the DOM
@@ -22,7 +22,7 @@ const CommentList = React.createClass({
         A server error prevented loading comments. Please try again.
       </Alert>
     );
-  },
+  }
 
   render() {
     const { $$comments } = this.props;
@@ -53,7 +53,7 @@ const CommentList = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 export default CommentList;

@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
 import marked from 'marked';
 
-const Comment = React.createClass({
-  displayName: 'Comment',
-
-  propTypes: {
+class Comment extends React.Component {
+  static displayName = 'Comment';
+  static propTypes = {
     author: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
-  },
+  };
 
   render() {
     const { author, text } = this.props;
@@ -20,7 +19,7 @@ const Comment = React.createClass({
         <span dangerouslySetInnerHTML={{__html: rawMarkup}}/>
       </div>
     );
-  },
-});
+  }
+}
 
 export default Comment;

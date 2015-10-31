@@ -3,28 +3,27 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 
-const CommentBox = React.createClass({
-  displayName: 'CommentBox',
-
-  propTypes: {
+class CommentBox extends React.Component {
+  static displayName = 'CommentBox';
+  static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
-  },
+  };
 
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
     setInterval(fetchComments, this.props.pollInterval);
-  },
+  }
 
   ajaxCounter() {
     return this.props.data.get('ajaxCounter');
-  },
+  }
 
   isSendingAjax() {
     return this.ajaxCounter() > 0;
-  },
+  }
 
   render() {
     const { actions, data } = this.props;
@@ -49,7 +48,7 @@ const CommentBox = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 export default CommentBox;
