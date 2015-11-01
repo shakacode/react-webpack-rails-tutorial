@@ -10,14 +10,14 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 
-// It is important that generated/vendor-bundle must be before bootstrap since it is exposing jQuery and jQuery-ujs
+// CRITICAL that generated/vendor-bundle must be BEFORE bootstrap-sprockets and turbolinks since it is
+// exposing jQuery and jQuery-ujs
 //= require generated/vendor-bundle
 //= require generated/app-bundle
 
-// Must go after the vendor-bundle, b/c vendor-bundle has jQuery.
-//= require bootstrap-sprockets
-
+// Next two depend on jQuery
 //= require turbolinks
+//= require bootstrap-sprockets
 
 //= require react_on_rails
 
