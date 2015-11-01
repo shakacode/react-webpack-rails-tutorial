@@ -10,16 +10,18 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 
-// Need to be on top to allow Poltergeist test to work with React: es5-shim/es5-shim. This is lincluded in app-bundle.
-//= require react_on_rails
-
 // It is important that generated/vendor-bundle must be before bootstrap since it is exposing jQuery and jQuery-ujs
 //= require generated/vendor-bundle
 //= require generated/app-bundle
 
+// Must go after the vendor-bundle, b/c vendor-bundle has jQuery.
 //= require bootstrap-sprockets
+
 //= require turbolinks
 
+//= require react_on_rails
+
+// TODO: move to this separate file.
 $(document).on('ready page:load', function () {
   $('nav a').parents('li,ul').removeClass('active');
   $('nav a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
