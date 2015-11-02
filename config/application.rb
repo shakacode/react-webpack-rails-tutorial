@@ -22,8 +22,5 @@ module RailsReactTutorial
 
     # For not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-
-    # Add client/assets/stylesheets to asset pipeline's search path.
-    config.assets.paths << Rails.root.join("client", "assets", "stylesheets")
   end
 end
