@@ -126,10 +126,16 @@ Now point your browser to http://0.0.0.0:3000.
 Note that it's important to run the Rails server on a different port than the node server.
 
 # Webpack configuration
-- `webpack.hot.config.js`: Used by server.js to run the demo HMR server.
-- `webpack.rails.config.js`: Used to generate the Rails bundles.
-- `webpack.common.config.js`: Common configuration file to minimize code duplication
+## Config Files
+- `webpack.client.base.config.js`: Common configuration file to minimize code duplication for client.rails and client.hot.
+- `webpack.client.rails.config.js`: Used to generate the Rails bundles for Rails use.
+- `webpack.client.hot.config.js`: Used by server.js to run the Webpack Dev server.
+- `webpack.server.rails.config.js`: Common configuration file to minimize code duplication
 between the HMR and Rails configurations.
+
+## Webpack Resources
+- Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
+- [Webpack Docs](http://webpack.github.io/docs/)
 
 # Bootstrap integration
 Notice that Bootstrap Sass is installed as both a gem and an npm package.
