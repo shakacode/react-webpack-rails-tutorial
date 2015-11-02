@@ -6,26 +6,32 @@ import CommentList from './CommentList';
 import metaTagsManager from '../utils/metaTagsManager';
 
 class SimpleCommentScreen extends React.Component {
-  state = {
-    $$comments: Immutable.fromJS([]),
-    ajaxSending: false,
-    fetchCommentsError: null,
-    submitCommentError: null,
-  };
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      $$comments: Immutable.fromJS([]),
+      ajaxSending: false,
+      fetchCommentsError: null,
+      submitCommentError: null,
+    };
+
+    this._fetchComments = this._fetchComments.bind(this);
+    this._handleCommentSubmit = this._handleCommentSubmit.bind(this);
+  }
 
   static displayName = 'SimpleCommentScreen';
 
   componentDidMount() {
-    this.fetchComments();
+    this._fetchComments();
   }
 
-  fetchComments() {
+  _fetchComments() {
     return request.get('comments.json', { responseType: 'json' })
       .then(res => this.setState({ $$comments: Immutable.fromJS(res.data) }))
       .catch(error => this.setState({ fetchCommentsError: error }));
   }
 
-  handleCommentSubmit = (comment) => {
+  _handleCommentSubmit(comment) {
     this.setState({ ajaxSending: true });
 
     const requestConfig = {
@@ -51,7 +57,7 @@ class SimpleCommentScreen extends React.Component {
           ajaxSending: false,
         });
       });
-  };
+  }
 
   render() {
     return (
@@ -63,7 +69,7 @@ class SimpleCommentScreen extends React.Component {
         </p>
         <CommentForm
           ajaxSending={this.state.ajaxSending}
-          actions={{ submitComment: this.handleCommentSubmit}}
+          actions={{ submitComment: this._handleCommentSubmit}}
           error={this.state.submitCommentError}
         />
         <CommentList

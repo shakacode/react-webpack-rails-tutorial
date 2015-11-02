@@ -6,6 +6,13 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Comment from './Comment';
 
 class CommentList extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
+
+    this._errorWarning = this._errorWarning.bind(this);
+  }
+
   static displayName = 'CommentList';
 
   static propTypes = {
@@ -13,7 +20,7 @@ class CommentList extends React.Component {
     error: PropTypes.any,
   };
 
-  errorWarning() {
+  _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
@@ -46,7 +53,7 @@ class CommentList extends React.Component {
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
         >
-          {this.errorWarning()}
+          {this._errorWarning()}
         </ReactCSSTransitionGroup>
         <div className="commentList">
           {commentNodes}

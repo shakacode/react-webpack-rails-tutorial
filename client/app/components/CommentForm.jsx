@@ -11,10 +11,18 @@ const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
 class CommentForm extends React.Component {
-  state = {
-    formMode: 0,
-    comment: emptyComment,
-  };
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      formMode: 0,
+      comment: emptyComment,
+    };
+
+    this._handleSelect = this._handleSelect.bind(this);
+    this._handleChange = this._handleChange.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
+    this._resetAndFocus = this._resetAndFocus.bind(this);
+  }
 
   static displayName = 'CommentForm';
 
@@ -24,11 +32,11 @@ class CommentForm extends React.Component {
     error: PropTypes.any,
   };
 
-  handleSelect = (selectedKey) => {
+  _handleSelect(selectedKey) {
     this.setState({ formMode: selectedKey });
-  };
+  }
 
-  handleChange = () => {
+  _handleChange() {
     let comment;
 
     if (this.state.formMode < 2) {
@@ -46,17 +54,17 @@ class CommentForm extends React.Component {
     }
 
     this.setState({ comment });
-  };
+  }
 
-  handleSubmit = (e) => {
+  _handleSubmit(e) {
     e.preventDefault();
     const { actions } = this.props;
     actions
       .submitComment(this.state.comment)
-      .then(this.resetAndFocus);
-  };
+      .then(this._resetAndFocus);
+  }
 
-  resetAndFocus = () => {
+  _resetAndFocus() {
     // Don't reset a form that didn't submit, this results in data loss
     if (this.props.error) return;
 
@@ -73,11 +81,11 @@ class CommentForm extends React.Component {
     ref.focus();
   }
 
-  formHorizontal() {
+  _formHorizontal() {
     return (
       <div>
         <hr />
-        <form className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
+        <form className="commentForm form-horizontal" onSubmit={this._handleSubmit}>
           <Input
             type="text"
             label="Name"
@@ -86,7 +94,7 @@ class CommentForm extends React.Component {
             wrapperClassName="col-sm-10"
             ref="author"
             value={this.state.comment.author}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <Input
@@ -97,7 +105,7 @@ class CommentForm extends React.Component {
             wrapperClassName="col-sm-10"
             ref="text"
             value={this.state.comment.text}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <div className="form-group">
@@ -115,18 +123,18 @@ class CommentForm extends React.Component {
     );
   }
 
-  formStacked() {
+  _formStacked() {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form" onSubmit={this._handleSubmit}>
           <Input
             type="text"
             label="Name"
             placeholder="Your Name"
             ref="author"
             value={this.state.comment.author}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <Input
@@ -135,7 +143,7 @@ class CommentForm extends React.Component {
             placeholder={textPlaceholder}
             ref="text"
             value={this.state.comment.text}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <input
@@ -149,11 +157,11 @@ class CommentForm extends React.Component {
     );
   }
 
-  formInline() {
+  _formInline() {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form" onSubmit={this._handleSubmit}>
           <Input label="Inline Form" wrapperClassName="wrapper">
             <Row>
               <Col xs={3}>
@@ -163,7 +171,7 @@ class CommentForm extends React.Component {
                   placeholder="Your Name"
                   ref="inlineAuthor"
                   value={this.state.comment.author}
-                  onChange={this.handleChange}
+                  onChange={this._handleChange}
                   disabled={this.props.ajaxSending}
                 />
               </Col>
@@ -174,7 +182,7 @@ class CommentForm extends React.Component {
                   placeholder={textPlaceholder}
                   ref="inlineText"
                   value={this.state.comment.text}
-                  onChange={this.handleChange}
+                  onChange={this._handleChange}
                   disabled={this.props.ajaxSending}
                 />
               </Col>
@@ -193,7 +201,7 @@ class CommentForm extends React.Component {
     );
   }
 
-  errorWarning() {
+  _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
@@ -208,13 +216,13 @@ class CommentForm extends React.Component {
     let inputForm;
     switch (this.state.formMode) {
       case 0:
-        inputForm = this.formHorizontal();
+        inputForm = this._formHorizontal();
         break;
       case 1:
-        inputForm = this.formStacked();
+        inputForm = this._formStacked();
         break;
       case 2:
-        inputForm = this.formInline();
+        inputForm = this._formInline();
         break;
       default:
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
@@ -226,10 +234,10 @@ class CommentForm extends React.Component {
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
         >
-          {this.errorWarning()}
+          {this._errorWarning()}
         </ReactCSSTransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this._handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>
