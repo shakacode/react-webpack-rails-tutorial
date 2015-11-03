@@ -17,7 +17,7 @@ const Comment = React.createClass({
         <h2 className="comment-author">
           {author}
         </h2>
-        <span dangerouslySetInnerHTML={{__html: rawMarkup}}/>
+        <span dangerouslySetInnerHTML={{__html: rawMarkup}} className="comment-text"/>
       </div>
     );
   },

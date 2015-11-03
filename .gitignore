@@ -17,7 +17,7 @@
 /public/assets
 .env
 node_modules
-npm-debug.log
+npm-debug.log*
 /coverage
 
 # Ignore bundle dependencies
