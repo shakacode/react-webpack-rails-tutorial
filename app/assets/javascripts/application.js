@@ -21,8 +21,4 @@
 
 //= require react_on_rails
 
-// TODO: move to this separate file.
-$(document).on('ready page:load', function () {
-  $('nav a').parents('li,ul').removeClass('active');
-  $('nav a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
-});
+//= require rails_startup
