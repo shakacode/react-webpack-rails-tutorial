@@ -18,10 +18,7 @@ class CommentForm extends React.Component {
       comment: emptyComment,
     };
 
-    this._handleSelect = this._handleSelect.bind(this);
-    this._handleChange = this._handleChange.bind(this);
-    this._handleSubmit = this._handleSubmit.bind(this);
-    this._resetAndFocus = this._resetAndFocus.bind(this);
+    _.bindAll(this, '_handleSelect', '_handleChange', '_handleSubmit', '_resetAndFocus');
   }
 
   static displayName = 'CommentForm';

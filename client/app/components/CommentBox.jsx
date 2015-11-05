@@ -8,8 +8,7 @@ class CommentBox extends React.Component {
     super(props, context);
     this.state = {};
 
-    this._ajaxCounter = this._ajaxCounter.bind(this);
-    this._isSendingAjax = this._isSendingAjax.bind(this);
+    _.bindAll(this, '_ajaxCounter', '_isSendingAjax');
   }
 
   static displayName = 'CommentBox';
