@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import _ from 'lodash';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';

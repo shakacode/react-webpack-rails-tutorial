@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
+import _ from 'lodash';
 
 class CommentBox extends React.Component {
   constructor(props, context) {
