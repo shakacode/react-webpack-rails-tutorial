@@ -15,7 +15,7 @@ class SimpleCommentScreen extends React.Component {
       fetchCommentsError: null,
       submitCommentError: null,
     };
-    
+
     _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
   }
 
