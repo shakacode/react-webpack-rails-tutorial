@@ -1,3 +1,5 @@
+import _find from 'lodash/collection/find';
+
 const MetaTagsManager = {
 
   /**
@@ -6,9 +8,7 @@ const MetaTagsManager = {
    * @returns {String} - CSRF Token.
    */
   getCSRFToken() {
-    const token = Array.from(document.getElementsByTagName('meta'))
-      .find(tag => tag.name === 'csrf-token');
-
+    const token = _find(document.querySelectorAll('meta'), 'name', 'csrf-token');
     return token ? token.content : null;
   },
 };
