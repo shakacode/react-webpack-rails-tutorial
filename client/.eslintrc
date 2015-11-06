@@ -9,6 +9,7 @@ plugins:
 env:
   browser: true
   node: true
+  mocha: true
 
 rules:
   indent: [1, 2, { SwitchCase: 1, VariableDeclarator: 2 }]
