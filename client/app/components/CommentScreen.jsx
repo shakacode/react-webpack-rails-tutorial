@@ -9,13 +9,13 @@ function select(state) {
   return { data: state.$$commentsStore };
 }
 
-const CommentScreen = React.createClass({
-  displayName: 'CommentScreen',
+class CommentScreen extends React.Component {
+  static displayName = 'CommentScreen';
 
-  propTypes: {
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
-  },
+  };
 
   render() {
     const { dispatch, data } = this.props;
@@ -42,8 +42,8 @@ const CommentScreen = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 // Don't forget to actually use connect!
 export default connect(select)(CommentScreen);

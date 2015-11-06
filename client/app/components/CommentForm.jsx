@@ -6,35 +6,37 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import _ from 'lodash';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
-const CommentForm = React.createClass({
-  displayName: 'CommentForm',
-
-  propTypes: {
-    ajaxSending: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
-    error: PropTypes.any,
-  },
-
-  getInitialState() {
-    return {
+class CommentForm extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
       formMode: 0,
       comment: emptyComment,
     };
-  },
 
-  handleSelect(selectedKey) {
+    _.bindAll(this, '_handleSelect', '_handleChange', '_handleSubmit', '_resetAndFocus');
+  }
+
+  static displayName = 'CommentForm';
+
+  static propTypes = {
+    ajaxSending: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired,
+    error: PropTypes.any,
+  };
+
+  _handleSelect(selectedKey) {
     this.setState({ formMode: selectedKey });
-  },
+  }
 
-  handleChange() {
+  _handleChange() {
     let comment;
 
-    // This could also be done using ReactLink:
-    // http://facebook.github.io/react/docs/two-way-binding-helpers.html
     if (this.state.formMode < 2) {
       comment = {
         author: this.refs.author.getValue(),
@@ -50,17 +52,17 @@ const CommentForm = React.createClass({
     }
 
     this.setState({ comment });
-  },
+  }
 
-  handleSubmit(e) {
+  _handleSubmit(e) {
     e.preventDefault();
     const { actions } = this.props;
     actions
       .submitComment(this.state.comment)
-      .then(this.resetAndFocus);
-  },
+      .then(this._resetAndFocus);
+  }
 
-  resetAndFocus() {
+  _resetAndFocus() {
     // Don't reset a form that didn't submit, this results in data loss
     if (this.props.error) return;
 
@@ -75,13 +77,13 @@ const CommentForm = React.createClass({
     }
 
     ref.focus();
-  },
+  }
 
-  formHorizontal() {
+  _formHorizontal() {
     return (
       <div>
         <hr />
-        <form className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
+        <form className="commentForm form-horizontal" onSubmit={this._handleSubmit}>
           <Input
             type="text"
             label="Name"
@@ -90,7 +92,7 @@ const CommentForm = React.createClass({
             wrapperClassName="col-sm-10"
             ref="author"
             value={this.state.comment.author}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <Input
@@ -101,7 +103,7 @@ const CommentForm = React.createClass({
             wrapperClassName="col-sm-10"
             ref="text"
             value={this.state.comment.text}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <div className="form-group">
@@ -117,20 +119,20 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
-  formStacked() {
+  _formStacked() {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form" onSubmit={this._handleSubmit}>
           <Input
             type="text"
             label="Name"
             placeholder="Your Name"
             ref="author"
             value={this.state.comment.author}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <Input
@@ -139,7 +141,7 @@ const CommentForm = React.createClass({
             placeholder={textPlaceholder}
             ref="text"
             value={this.state.comment.text}
-            onChange={this.handleChange}
+            onChange={this._handleChange}
             disabled={this.props.ajaxSending}
           />
           <input
@@ -151,13 +153,13 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
-  formInline() {
+  _formInline() {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form" onSubmit={this._handleSubmit}>
           <Input label="Inline Form" wrapperClassName="wrapper">
             <Row>
               <Col xs={3}>
@@ -167,7 +169,7 @@ const CommentForm = React.createClass({
                   placeholder="Your Name"
                   ref="inlineAuthor"
                   value={this.state.comment.author}
-                  onChange={this.handleChange}
+                  onChange={this._handleChange}
                   disabled={this.props.ajaxSending}
                 />
               </Col>
@@ -178,7 +180,7 @@ const CommentForm = React.createClass({
                   placeholder={textPlaceholder}
                   ref="inlineText"
                   value={this.state.comment.text}
-                  onChange={this.handleChange}
+                  onChange={this._handleChange}
                   disabled={this.props.ajaxSending}
                 />
               </Col>
@@ -195,9 +197,9 @@ const CommentForm = React.createClass({
         </form>
       </div>
     );
-  },
+  }
 
-  errorWarning() {
+  _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
@@ -206,19 +208,19 @@ const CommentForm = React.createClass({
         A server error prevented your comment from being saved. Please try again.
       </Alert>
     );
-  },
+  }
 
   render() {
     let inputForm;
     switch (this.state.formMode) {
       case 0:
-        inputForm = this.formHorizontal();
+        inputForm = this._formHorizontal();
         break;
       case 1:
-        inputForm = this.formStacked();
+        inputForm = this._formStacked();
         break;
       case 2:
-        inputForm = this.formInline();
+        inputForm = this._formInline();
         break;
       default:
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
@@ -230,10 +232,10 @@ const CommentForm = React.createClass({
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
         >
-          {this.errorWarning()}
+          {this._errorWarning()}
         </ReactCSSTransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this._handleSelect}>
           <NavItem eventKey={0}>Horizontal Form</NavItem>
           <NavItem eventKey={1}>Stacked Form</NavItem>
           <NavItem eventKey={2}>Inline Form</NavItem>
@@ -241,7 +243,7 @@ const CommentForm = React.createClass({
         {inputForm}
       </div>
     );
-  },
-});
+  }
+}
 
 export default CommentForm;

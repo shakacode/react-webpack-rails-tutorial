@@ -5,15 +5,22 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 
 import Comment from './Comment';
 
-const CommentList = React.createClass({
-  displayName: 'CommentList',
+class CommentList extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
 
-  propTypes: {
+    this._errorWarning = this._errorWarning.bind(this);
+  }
+
+  static displayName = 'CommentList';
+
+  static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
-  },
+  };
 
-  errorWarning() {
+  _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return undefined;
     return (
@@ -22,7 +29,7 @@ const CommentList = React.createClass({
         A server error prevented loading comments. Please try again.
       </Alert>
     );
-  },
+  }
 
   render() {
     const { $$comments } = this.props;
@@ -46,14 +53,14 @@ const CommentList = React.createClass({
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
         >
-          {this.errorWarning()}
+          {this._errorWarning()}
         </ReactCSSTransitionGroup>
         <div className="commentList">
           {commentNodes}
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 export default CommentList;

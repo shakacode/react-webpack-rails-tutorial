@@ -11,7 +11,7 @@ export const $$initialState = Immutable.fromJS({
   submitCommentError: null,
 });
 
-export default function commentsReducer($$state = $$initialState, action) {
+export default function commentsReducer($$state = $$initialState, action = null) {
   const { type, comment, comments, error } = action;
 
   switch (type) {

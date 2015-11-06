@@ -4,30 +4,34 @@ import request from 'axios';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import metaTagsManager from '../utils/metaTagsManager';
+import _ from 'lodash';
 
-const SimpleCommentScreen = React.createClass({
-  displayName: 'SimpleCommentScreen',
-
-  getInitialState() {
-    return {
+class SimpleCommentScreen extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
       $$comments: Immutable.fromJS([]),
       ajaxSending: false,
       fetchCommentsError: null,
       submitCommentError: null,
     };
-  },
+
+    _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
+  }
+
+  static displayName = 'SimpleCommentScreen';
 
   componentDidMount() {
-    this.fetchComments();
-  },
+    this._fetchComments();
+  }
 
-  fetchComments() {
+  _fetchComments() {
     return request.get('comments.json', { responseType: 'json' })
       .then(res => this.setState({ $$comments: Immutable.fromJS(res.data) }))
       .catch(error => this.setState({ fetchCommentsError: error }));
-  },
+  }
 
-  handleCommentSubmit(comment) {
+  _handleCommentSubmit(comment) {
     this.setState({ ajaxSending: true });
 
     const requestConfig = {
@@ -53,7 +57,7 @@ const SimpleCommentScreen = React.createClass({
           ajaxSending: false,
         });
       });
-  },
+  }
 
   render() {
     return (
@@ -65,7 +69,7 @@ const SimpleCommentScreen = React.createClass({
         </p>
         <CommentForm
           ajaxSending={this.state.ajaxSending}
-          actions={{ submitComment: this.handleCommentSubmit }}
+          actions={{ submitComment: this._handleCommentSubmit}}
           error={this.state.submitCommentError}
         />
         <CommentList
@@ -74,7 +78,7 @@ const SimpleCommentScreen = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 export default SimpleCommentScreen;
