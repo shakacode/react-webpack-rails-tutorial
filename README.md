@@ -62,10 +62,10 @@ See package.json and Gemfile for versions
 
 # Basic Setup
 1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node
-   version `v4.2.1`. See this article [Updating and using nvm](http://forum.railsonmaui.com/t/updating-and-using-nvm/293).
+   version `v5.0`. See this article [Updating and using nvm](http://forum.railsonmaui.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.2.2
+1. Check that you have Ruby 2.2.3
 1. Check that you're using the right version of node. Run `nvm list` to check.
 1. Check that you have Postgres installed. Run `which postgres` to check.
 1. `bundle install`
