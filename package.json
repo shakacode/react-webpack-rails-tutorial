@@ -4,7 +4,7 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server.js",
   "engines": {
-    "node": "4.2.0",
+    "node": "5.0.0",
     "npm": "3.3.6"
   },
   "scripts": {
