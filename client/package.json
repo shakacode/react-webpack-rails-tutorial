@@ -50,6 +50,7 @@
     "loader-utils": "^0.2.11",
     "lodash": "^3.10.1",
     "marked": "^0.3.5",
+    "node-uuid": "^1.4.7",
     "react": "^0.14.2",
     "react-bootstrap": "^0.27.3",
     "react-dom": "^0.14.2",

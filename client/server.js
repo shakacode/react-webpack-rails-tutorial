@@ -5,10 +5,11 @@ var WebpackDevServer = require('webpack-dev-server');
 var jade = require('jade');
 var sleep = require('sleep');
 var config = require('./webpack.client.hot.config');
+var uuid = require('node-uuid')
 
 var comments = [
-  { author: 'Pete Hunt', text: 'Hey there!' },
-  { author: 'Justin Gordon', text: 'Aloha from @railsonmaui' },
+  { author: 'Pete Hunt', text: 'Hey there!', id: uuid.v4() },
+  { author: 'Justin Gordon', text: 'Aloha from @railsonmaui', id: uuid.v4() },
 ];
 
 var server = new WebpackDevServer(webpack(config), {
@@ -33,13 +34,16 @@ server.app.get('/comments.json', function(req, res) {
 });
 
 server.app.post('/comments.json', function(req, res) {
-  console.log('Processing comment: %j', req.body.comment);
+  const comment = req.body.comment;
+  comment.id = uuid.v4();
+
+  console.log('Processing comment: %j', comment);
   console.log('(shhhh...napping 1 seconds)');
   sleep.sleep(1);
   console.log('Just got done with nap!');
-  comments.push(req.body.comment);
+  comments.push(comment);
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(req.body.comment));
+  res.send(JSON.stringify(comment));
 });
 
 server.app.use('/', function(req, res) {
