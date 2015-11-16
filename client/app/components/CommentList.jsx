@@ -39,7 +39,7 @@ class CommentList extends React.Component {
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
       return (
         <Comment
-          key={index}
+          key={$$comment.get('id')}
           author={$$comment.get('author')}
           text={$$comment.get('text')}
         />
@@ -50,14 +50,21 @@ class CommentList extends React.Component {
       <div>
         <ReactCSSTransitionGroup
           transitionName="element"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
         >
           {this._errorWarning()}
         </ReactCSSTransitionGroup>
-        <div className="commentList">
+
+        <ReactCSSTransitionGroup
+            transitionName="element"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
+            className="commentList"
+            component="div"
+        >
           {commentNodes}
-        </div>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
