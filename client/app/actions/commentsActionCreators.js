@@ -1,15 +1,15 @@
 import commentsManager from '../utils/commentsManager';
 import * as actionTypes from '../constants/commentsConstants';
 
-export function incrementAjaxCounter() {
+export function setIsFetching() {
   return {
-    type: actionTypes.INCREMENT_AJAX_COUNTER,
+    type: actionTypes.SET_IS_FETCHING,
   };
 }
 
-export function decrementAjaxCounter() {
+export function setIsSaving() {
   return {
-    type: actionTypes.DECREMENT_AJAX_COUNTER,
+    type: actionTypes.SET_IS_SAVING,
   };
 }
 
@@ -43,6 +43,7 @@ export function submitCommentFailure(error) {
 
 export function fetchComments() {
   return dispatch => {
+    dispatch(setIsFetching());
     return (
       commentsManager
         .fetchComments()
@@ -54,13 +55,12 @@ export function fetchComments() {
 
 export function submitComment(comment) {
   return dispatch => {
-    dispatch(incrementAjaxCounter());
+    dispatch(setIsSaving());
     return (
       commentsManager
         .submitComment(comment)
         .then(res => dispatch(submitCommentSuccess(res.data)))
         .catch(res => dispatch(submitCommentFailure(res.data)))
-        .then(() => dispatch(decrementAjaxCounter()))
     );
   };
 }
