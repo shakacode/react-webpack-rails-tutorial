@@ -5,7 +5,7 @@
 # React, Redux, React-Bootstrap, ES7, Webpack Rails
 ## Servering Rendering via the react_on_rails gem
 
-By Justin Gordon and the Shaka Code Team, http://www.railsonmaui.com
+By Justin Gordon and the Shaka Code Team, http://www.shakacode.com
 
 - If you came to here from the blog article, this example project has evolved.
   See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
