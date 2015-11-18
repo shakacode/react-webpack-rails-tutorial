@@ -1,6 +1,8 @@
 import commentsManager from '../utils/commentsManager';
 import * as actionTypes from '../constants/commentsConstants';
 
+const minimumDelay = 500;
+
 export function setIsFetching() {
   return {
     type: actionTypes.SET_IS_FETCHING,
@@ -45,21 +47,31 @@ export function fetchComments() {
   return dispatch => {
     dispatch(setIsFetching());
     return (
-      commentsManager
-        .fetchComments()
-        .then(res => dispatch(fetchCommentsSuccess(res.data)))
-        .catch(res => dispatch(fetchCommentsFailure(res.data)))
+        commentsManager
+            .fetchComments()
+            .then(res => dispatch(fetchCommentsSuccess(res.data)))
+            .catch(res => dispatch(fetchCommentsFailure(res.data)))
     );
   };
 }
 
 export function submitComment(comment) {
+  const startTime = (new Date()).getTime();
   return dispatch => {
     dispatch(setIsSaving());
     return (
       commentsManager
         .submitComment(comment)
-        .then(res => dispatch(submitCommentSuccess(res.data)))
+        .then(res => {
+          const result = res.data;
+          const successTime = (new Date()).getTime();
+          const timeDiff = successTime - startTime;
+          if (timeDiff < minimumDelay) {
+            setTimeout(dispatch, minimumDelay - timeDiff, submitCommentSuccess(result));
+          } else {
+            dispatch(submitCommentSuccess(result));
+          }
+        })
         .catch(res => dispatch(submitCommentFailure(res.data)))
     );
   };

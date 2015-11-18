@@ -28,7 +28,6 @@ server.app.use(bodyParser.json(null));
 server.app.use(bodyParser.urlencoded({extended: true}));
 
 server.app.get('/comments.json', function(req, res) {
-  sleep.sleep(1);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(comments));
 });
@@ -36,7 +35,6 @@ server.app.get('/comments.json', function(req, res) {
 server.app.post('/comments.json', function(req, res) {
   console.log('Processing comment: %j', req.body.comment);
   console.log('(shhhh...napping 1 seconds)');
-  sleep.sleep(1);
   console.log('Just got done with nap!');
   comments.push(req.body.comment);
   res.setHeader('Content-Type', 'application/json');
