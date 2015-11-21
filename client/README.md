@@ -31,6 +31,10 @@ For now:
 
     bin/lint
     
+Or (from either top level or within `client` directory)
+
+    npm run lint
+    
     
 Updating Node Dependencies
 ===========================
