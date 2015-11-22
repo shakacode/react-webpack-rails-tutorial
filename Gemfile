@@ -12,6 +12,7 @@ group :production do
   # Pg is used for Heroku
   gem "pg"
   gem "rails_12factor" # Never include this for development or tests
+  gem "puma"
 end
 
 # Use SCSS for stylesheets
@@ -36,9 +37,6 @@ gem "sdoc", group: :doc
 
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
-
-# Use Unicorn as the app server
-gem "unicorn"
 
 gem "react_on_rails", "~> 1.0.0.pre"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes

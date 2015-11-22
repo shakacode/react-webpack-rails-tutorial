@@ -129,7 +129,6 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.3)
-    kgio (2.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.13)
@@ -167,6 +166,8 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    puma (2.11.3)
+      rack (>= 1.1, < 2.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -200,7 +201,6 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rainbow (2.0.0)
-    raindrops (0.15.0)
     rake (10.4.2)
     rdoc (4.2.0)
     react_on_rails (1.0.1)
@@ -305,10 +305,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
-    unicorn (5.0.0)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     web-console (2.2.1)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -345,6 +341,7 @@ DEPENDENCIES
   pry-rails
   pry-rescue
   pry-stack_explorer
+  puma
   rails (~> 4.2)
   rails-html-sanitizer
   rails_12factor
@@ -362,7 +359,6 @@ DEPENDENCIES
   therubyracer
   turbolinks
   uglifier
-  unicorn
   web-console
 
 BUNDLED WITH
