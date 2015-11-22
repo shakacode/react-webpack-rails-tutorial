@@ -39,7 +39,7 @@ class CommentBox extends React.Component {
     return (
       <div className="commentBox container">
         <h2>
-          Comments { this._isSendingAjax() && `SENDING AJAX REQUEST! Ajax Counter is ${this._ajaxCounter()}` }
+          Comments {this._isSendingAjax() && `SENDING AJAX REQUEST! Ajax Counter is ${this._ajaxCounter()}`}
         </h2>
         <p>
           Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
