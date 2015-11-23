@@ -2,6 +2,9 @@
 
 const webpack = require('webpack');
 
+const devBuild = process.env.NODE_ENV !== 'production';
+const nodeEnv = devBuild ? 'development' : 'production';
+
 module.exports = {
 
   // the project dir
@@ -24,6 +27,11 @@ module.exports = {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(nodeEnv),
+      },
+    }),
 
     // https://webpack.github.io/docs/list-of-plugins.html#2-explicit-vendor-chunk
     new webpack.optimize.CommonsChunkPlugin({

@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
-  def index
-    @comments = Comment.all
+  before_action :set_comments
 
+  def index
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as
     # compared to he view. However, it's more convenient to use Jbuilder from the view. See
     # app/views/pages/index.html.erb:20
@@ -22,6 +22,16 @@ class PagesController < ApplicationController
     # end
   end
 
+  # Declaring no_router and simple to indicate we have views for them
+  def no_router
+  end
+
   def simple
+  end
+
+  private
+
+  def set_comments
+    @comments = Comment.all
   end
 end

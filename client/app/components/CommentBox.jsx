@@ -19,7 +19,11 @@ class CommentBox extends React.Component {
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    setInterval(fetchComments, this.props.pollInterval);
+    this.intervalId = setInterval(fetchComments, this.props.pollInterval);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
 
   render() {
@@ -28,11 +32,11 @@ class CommentBox extends React.Component {
     return (
       <div className="commentBox container">
         <h2>
-          Comments { data.get('isFetching') && 'Loading...' }
+          Comments {data.get('isFetching') && 'Loading...'}
         </h2>
         <p>
-          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
-          <b>Name</b> is preserved, <b>Text</b> is reset, between submits.
+          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.<br/>
+          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
           isSaving={data.get('isSaving')}
