@@ -28,6 +28,7 @@ server.app.use(bodyParser.json(null));
 server.app.use(bodyParser.urlencoded({extended: true}));
 
 server.app.get('/comments.json', function(req, res) {
+  sleep.sleep(1);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(comments));
 });
