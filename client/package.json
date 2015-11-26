@@ -5,7 +5,7 @@
   "main": "server.js",
   "engines": {
     "node": "5.0.0",
-    "npm": "3.3.11"
+    "npm": "3.5.0"
   },
   "repository": {
     "type": "git",
