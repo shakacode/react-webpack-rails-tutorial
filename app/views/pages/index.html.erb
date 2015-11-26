@@ -1,27 +1,6 @@
-<h2>Using React (Server rendering) + Redux + Rails Backend (using the 
+<h2>Using React (Server rendering) + Redux + React Router + Rails Backend (using the
   <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
-<p>Current Commit:
-  <%= link_to git_commit_sha_short,
-      "https://github.com/shakacode/react-webpack-rails-tutorial/commit/#{git_commit_sha}",
-      id: "git-commit-sha" %>
-</p>
-<ul>
-  <li>
-    If this work interests you and you're a developer or designer looking for full or part-time remote work: please
-    <%= link_to "click here",
-      "http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156/3" %>
-    and
-    <%= link_to "here",
-     "http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156/2" %>.
-  </li>
-  <li>
-    Please see the
-    <%= link_to "github.com/shakacode/react-webpack-rails-tutorial/README.md",
-        "https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/README.md" %>
-    for details of how this example site was built.
-  </li>
-</ul>
-<hr/>
+<%= render "header" %>
 
-<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
-    generator_function: true, prerender: true) %>
+<%= react_component('RouterApp', render(template: "/comments/index.json.jbuilder"),
+    generator_function: true, prerender: true, raise_on_prerender_error: true) %>

@@ -64,8 +64,8 @@ class SimpleCommentScreen extends React.Component {
       <div className="commentBox container">
         <h2>Comments</h2>
         <p>
-          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
-          <b> Name</b> is preserved, <b>Text</b> is reset, between submits.
+          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.<br/>
+          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
           ajaxSending={this.state.ajaxSending}

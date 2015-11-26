@@ -56,3 +56,10 @@ body {
     transition: opacity 0.5s ease-in;
   }
 }
+
+.active:visited,
+.active {
+  color: purple;
+  font-weight: bold;
+  text-decoration: underline;
+}

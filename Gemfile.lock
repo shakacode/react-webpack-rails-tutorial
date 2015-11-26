@@ -204,7 +204,7 @@ GEM
     raindrops (0.15.0)
     rake (10.4.2)
     rdoc (4.2.0)
-    react_on_rails (1.0.3)
+    react_on_rails (1.1.0)
       connection_pool
       execjs (~> 2.5)
       rails (>= 3.2)
@@ -350,7 +350,7 @@ DEPENDENCIES
   rails (~> 4.2)
   rails-html-sanitizer
   rails_12factor
-  react_on_rails (~> 1.0.0.pre)
+  react_on_rails
   rspec-rails
   rubocop
   ruby-lint

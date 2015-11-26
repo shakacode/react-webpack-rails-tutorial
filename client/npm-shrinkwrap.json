@@ -2016,6 +2016,18 @@
       "from": "hawk@>=3.1.0 <3.2.0",
       "resolved": "https://registry.npmjs.org/hawk/-/hawk-3.1.2.tgz"
     },
+    "history": {
+      "version": "1.13.1",
+      "from": "history@>=1.12.5 <2.0.0",
+      "resolved": "https://registry.npmjs.org/history/-/history-1.13.1.tgz",
+      "dependencies": {
+        "qs": {
+          "version": "4.0.0",
+          "from": "qs@>=4.0.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/qs/-/qs-4.0.0.tgz"
+        }
+      }
+    },
     "hoek": {
       "version": "2.16.3",
       "from": "hoek@>=2.0.0 <3.0.0",
@@ -3540,6 +3552,11 @@
       "version": "4.0.0",
       "from": "react-redux@>=4.0.0 <5.0.0",
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-4.0.0.tgz"
+    },
+    "react-router": {
+      "version": "1.0.0",
+      "from": "react-router@>=1.0.0-rc3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-router/-/react-router-1.0.0.tgz"
     },
     "read": {
       "version": "1.0.7",
