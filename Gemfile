@@ -40,7 +40,8 @@ gem "rails-html-sanitizer"
 # Use Unicorn as the app server
 gem "unicorn"
 
-gem "react_on_rails", "~> 1.0.0.pre"
+gem "react_on_rails"
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"
 

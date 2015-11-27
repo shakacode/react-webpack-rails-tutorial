@@ -25,7 +25,7 @@ class CommentForm extends React.Component {
   static displayName = 'CommentForm';
 
   static propTypes = {
-    ajaxSending: PropTypes.bool.isRequired,
+    isSaving: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
   };
@@ -93,7 +93,7 @@ class CommentForm extends React.Component {
             ref="author"
             value={this.state.comment.author}
             onChange={this._handleChange}
-            disabled={this.props.ajaxSending}
+            disabled={this.props.isSaving}
           />
           <Input
             type="textarea"
@@ -104,15 +104,15 @@ class CommentForm extends React.Component {
             ref="text"
             value={this.state.comment.text}
             onChange={this._handleChange}
-            disabled={this.props.ajaxSending}
+            disabled={this.props.isSaving}
           />
           <div className="form-group">
             <div className="col-sm-offset-2 col-sm-10">
               <input
                 type="submit"
                 className="btn btn-primary"
-                value="Post"
-                disabled={this.props.ajaxSending}
+                value={this.props.isSaving ? 'Saving...' : 'Post'}
+                disabled={this.props.isSaving}
               />
             </div>
           </div>
@@ -133,7 +133,7 @@ class CommentForm extends React.Component {
             ref="author"
             value={this.state.comment.author}
             onChange={this._handleChange}
-            disabled={this.props.ajaxSending}
+            disabled={this.props.isSaving}
           />
           <Input
             type="textarea"
@@ -142,13 +142,13 @@ class CommentForm extends React.Component {
             ref="text"
             value={this.state.comment.text}
             onChange={this._handleChange}
-            disabled={this.props.ajaxSending}
+            disabled={this.props.isSaving}
           />
           <input
             type="submit"
             className="btn btn-primary"
-            value="Post"
-            disabled={this.props.ajaxSending}
+            value={this.props.isSaving ? 'Saving...' : 'Post'}
+            disabled={this.props.isSaving}
           />
         </form>
       </div>
@@ -170,7 +170,7 @@ class CommentForm extends React.Component {
                   ref="inlineAuthor"
                   value={this.state.comment.author}
                   onChange={this._handleChange}
-                  disabled={this.props.ajaxSending}
+                  disabled={this.props.isSaving}
                 />
               </Col>
               <Col xs={8}>
@@ -181,15 +181,15 @@ class CommentForm extends React.Component {
                   ref="inlineText"
                   value={this.state.comment.text}
                   onChange={this._handleChange}
-                  disabled={this.props.ajaxSending}
+                  disabled={this.props.isSaving}
                 />
               </Col>
               <Col xs={1}>
                 <input
                   type="submit"
                   className="btn btn-primary"
-                  value="Post"
-                  disabled={this.props.ajaxSending}
+                  value={this.props.isSaving ? 'Saving...' : 'Post'}
+                  disabled={this.props.isSaving}
                 />
               </Col>
             </Row>

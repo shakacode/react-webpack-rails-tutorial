@@ -2,14 +2,11 @@ import React, { PropTypes } from 'react';
 
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import _ from 'lodash';
 
 class CommentBox extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
-
-    _.bindAll(this, '_ajaxCounter', '_isSendingAjax');
   }
 
   static displayName = 'CommentBox';
@@ -22,15 +19,11 @@ class CommentBox extends React.Component {
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    setInterval(fetchComments, this.props.pollInterval);
+    this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
 
-  _ajaxCounter() {
-    return this.props.data.get('ajaxCounter');
-  }
-
-  _isSendingAjax() {
-    return this._ajaxCounter() > 0;
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
 
   render() {
@@ -39,14 +32,14 @@ class CommentBox extends React.Component {
     return (
       <div className="commentBox container">
         <h2>
-          Comments {this._isSendingAjax() && `SENDING AJAX REQUEST! Ajax Counter is ${this._ajaxCounter()}`}
+          Comments {data.get('isFetching') && 'Loading...'}
         </h2>
         <p>
-          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.
-          <b>Name</b> is preserved, <b>Text</b> is reset, between submits.
+          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.<br/>
+          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
-          ajaxSending={this._isSendingAjax()}
+          isSaving={data.get('isSaving')}
           error={data.get('submitCommentError')}
           actions={actions}
         />

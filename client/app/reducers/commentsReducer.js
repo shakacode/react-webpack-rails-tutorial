@@ -6,9 +6,10 @@ import * as actionTypes from '../constants/commentsConstants';
 
 export const $$initialState = Immutable.fromJS({
   $$comments: [],
-  ajaxCounter: 0,
   fetchCommentError: null,
   submitCommentError: null,
+  isFetching: false,
+  isSaving: false,
 });
 
 export default function commentsReducer($$state = $$initialState, action = null) {
@@ -20,12 +21,14 @@ export default function commentsReducer($$state = $$initialState, action = null)
       return $$state.merge({
         $$comments: comments,
         fetchCommentError: null,
+        isFetching: false,
       });
     }
 
     case actionTypes.FETCH_COMMENTS_FAILURE: {
       return $$state.merge({
         fetchCommentError: error,
+        isFetching: false,
       });
     }
 
@@ -36,25 +39,29 @@ export default function commentsReducer($$state = $$initialState, action = null)
             ['$$comments'],
             $$comments => $$comments.push(Immutable.fromJS(comment))
           )
-          .merge({ submitCommentError: null })
+          .merge({
+            submitCommentError: null,
+            isSaving: false,
+          })
       ));
     }
 
     case actionTypes.SUBMIT_COMMENT_FAILURE: {
       return $$state.merge({
         submitCommentError: error,
+        isSaving: false,
       });
     }
 
-    case actionTypes.INCREMENT_AJAX_COUNTER: {
+    case actionTypes.SET_IS_FETCHING: {
       return $$state.merge({
-        ajaxCounter: $$state.get('ajaxCounter') + 1,
+        isFetching: true,
       });
     }
 
-    case actionTypes.DECREMENT_AJAX_COUNTER: {
+    case actionTypes.SET_IS_SAVING: {
       return $$state.merge({
-        ajaxCounter: $$state.get('ajaxCounter') - 1,
+        isSaving: true,
       });
     }
 

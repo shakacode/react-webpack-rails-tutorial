@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
 [![Dependency Status](https://gemnasium.com/shakacode/react-webpack-rails-tutorial.svg)](https://gemnasium.com/shakacode/react-webpack-rails-tutorial)
 # React, Redux, React-Bootstrap, ES7, Webpack Rails
-## Servering Rendering via the react_on_rails gem
+## Server Rendering via the react_on_rails gem
 
 By Justin Gordon and the Shaka Code Team, http://www.shakacode.com
 

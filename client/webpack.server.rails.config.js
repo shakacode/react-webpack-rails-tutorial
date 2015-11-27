@@ -2,11 +2,14 @@
 
 const webpack = require('webpack');
 
+const devBuild = process.env.NODE_ENV !== 'production';
+const nodeEnv = devBuild ? 'development' : 'production';
+
 module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['./app/startup/serverGlobals'],
+  entry: ['./app/startup/serverGlobals', 'react-dom/server', 'react'],
   output: {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
@@ -17,7 +20,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify(nodeEnv),
       },
     }),
   ],
