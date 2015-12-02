@@ -4,6 +4,7 @@ rvm:
   - 2.2.3
 install:
   - bundle install
+  - nvm use 5.0.0
   - npm install -g npm
   - npm install
   - cd client && npm run build:client
