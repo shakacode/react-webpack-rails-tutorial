@@ -5,7 +5,7 @@ rvm:
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -q
-  - sudo apt-get install gcc-4.9 -y
+  - sudo apt-get install g++-4.9 -y
 env:
   global:
     - RAILS_ENV=test
@@ -14,7 +14,6 @@ install:
   - bundle install
   - nvm install 5.0
   - nvm use 5.0
-  - npm install -g npm
   - npm install
   - cd client && npm run build:client
   - npm run build:server
