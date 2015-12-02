@@ -20,6 +20,12 @@ config.entry.vendor.unshift(
   'es5-shim/es5-sham'
 );
 
+// jquery-ujs MUST GO AFTER jquery, so must use 'push'
+config.entry.app.push(
+  'jquery-ujs',
+  './app/startup/clientGlobals'
+);
+
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
 config.module.loaders.push(

@@ -16,7 +16,6 @@ module.exports = {
     vendor: [
       'babel-core/polyfill',
       'jquery',
-      'jquery-ujs',
       'react',
       'react-dom',
     ],
