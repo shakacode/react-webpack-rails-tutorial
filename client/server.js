@@ -5,7 +5,7 @@ var WebpackDevServer = require('webpack-dev-server');
 var jade = require('jade');
 var sleep = require('sleep');
 var config = require('./webpack.client.hot.config');
-var uuid = require('node-uuid')
+var uuid = require('node-uuid');
 
 var comments = [
   { author: 'Pete Hunt', text: 'Hey there!', id: uuid.v4() },

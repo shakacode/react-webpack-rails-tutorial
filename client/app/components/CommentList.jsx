@@ -33,7 +33,7 @@ class CommentList extends React.Component {
 
   render() {
     const { $$comments } = this.props;
-    const commentNodes = $$comments.reverse().map(($$comment, index) => {
+    const commentNodes = $$comments.reverse().map($$comment => {
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
