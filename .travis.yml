@@ -2,9 +2,14 @@ language:
   - ruby
 rvm:
   - 2.2.3
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -q
+  - sudo apt-get install gcc-4.9 -y
 env:
-  - export RAILS_ENV=test
-  - CXX=g++-4.9
+  global:
+    - RAILS_ENV=test
+    - CXX=g++-4.9
 install:
   - bundle install
   - nvm install 5.0
