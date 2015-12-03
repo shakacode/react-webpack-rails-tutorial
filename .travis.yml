@@ -2,10 +2,13 @@ language:
   - ruby
 rvm:
   - 2.2.3
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -q
-  - sudo apt-get install g++-4.9 -y
+sudo: false
+addons:
+  apt:
+    sources:
+      ubuntu-toolchain-r/test
+    packages:
+      g++-4.9
 env:
   global:
     - RAILS_ENV=test
