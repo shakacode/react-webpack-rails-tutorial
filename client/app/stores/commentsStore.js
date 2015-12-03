@@ -1,4 +1,6 @@
+// react/prop-types rule is ignored because of this issue: https://github.com/yannickcr/eslint-plugin-react/issues/9
 /* eslint react/prop-types: 0 */
+
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from '../middlewares/loggerMiddleware';
