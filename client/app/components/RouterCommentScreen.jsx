@@ -3,7 +3,6 @@ import CommentScreen from './CommentScreen';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
-import _ from 'lodash';
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?
@@ -11,12 +10,6 @@ function select(state) {
 }
 
 class RouterCommentScreen extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    _.bindAll(this, '_renderNotification');
-  }
-
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
