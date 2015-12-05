@@ -33,13 +33,13 @@ class CommentList extends React.Component {
 
   render() {
     const { $$comments } = this.props;
-    const commentNodes = $$comments.reverse().map(($$comment, index) => {
+    const commentNodes = $$comments.reverse().map($$comment => {
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
       return (
         <Comment
-          key={index}
+          key={$$comment.get('id')}
           author={$$comment.get('author')}
           text={$$comment.get('text')}
         />
@@ -50,14 +50,21 @@ class CommentList extends React.Component {
       <div>
         <ReactCSSTransitionGroup
           transitionName="element"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
         >
           {this._errorWarning()}
         </ReactCSSTransitionGroup>
-        <div className="commentList">
+
+        <ReactCSSTransitionGroup
+            transitionName="element"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
+            className="commentList"
+            component="div"
+        >
           {commentNodes}
-        </div>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
