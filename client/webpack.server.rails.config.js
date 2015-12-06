@@ -1,6 +1,7 @@
 // Common webpack configuration for server bundle
 
 const webpack = require('webpack');
+const path = require('path');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -9,13 +10,16 @@ module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['./app/startup/serverGlobals', 'react-dom/server', 'react'],
+  entry: ['./app/bundles/Comments/startup/serverGlobals', 'react-dom/server', 'react'],
   output: {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
+    alias: {
+      lib: path.join(process.cwd(), 'app', 'lib'),
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
