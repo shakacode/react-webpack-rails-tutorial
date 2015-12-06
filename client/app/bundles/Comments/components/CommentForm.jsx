@@ -46,8 +46,8 @@ class CommentForm extends React.Component {
       comment = {
         // This is different because the input is a native HTML element
         // rather than a React element.
-        author: this.refs.inlineAuthor.getDOMNode().value,
-        text: this.refs.inlineText.getDOMNode().value,
+        author: this.refs.inlineAuthor.value,
+        text: this.refs.inlineText.value,
       };
     }
 

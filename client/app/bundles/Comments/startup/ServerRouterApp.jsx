@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { match, RoutingContext } from 'react-router';
 
-import createStore from '../stores/commentsStore';
+import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
 
 const RouterApp = (props, location) => {
