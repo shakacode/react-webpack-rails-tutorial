@@ -1,7 +1,7 @@
 import { React, expect, TestUtils } from '../test_helper';
 import { List, Map } from 'immutable';
-import CommentList from '../../app/components/CommentList';
-import Comment from '../../app/components/Comment';
+import CommentList from '../../app/bundles/Comments/components/CommentList';
+import Comment from '../../app/bundles/Comments/components/Comment';
 
 const {
   renderIntoDocument,

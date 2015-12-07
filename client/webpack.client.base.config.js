@@ -1,6 +1,7 @@
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 
 const webpack = require('webpack');
+const path = require('path');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -21,10 +22,15 @@ module.exports = {
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
-    app: [],
+    app: [
+      './app/bundles/Comments/startup/clientGlobals',
+    ],
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js'],
+    alias: {
+      lib: path.join(process.cwd(), 'app', 'lib'),
+    },
   },
   plugins: [
     new webpack.DefinePlugin({

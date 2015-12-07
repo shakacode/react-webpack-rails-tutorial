@@ -1,5 +1,5 @@
 import { React, expect, TestUtils } from '../test_helper';
-import Comment from '../../app/components/Comment';
+import Comment from '../../app/bundles/Comments/components/Comment';
 
 const {
   renderIntoDocument,

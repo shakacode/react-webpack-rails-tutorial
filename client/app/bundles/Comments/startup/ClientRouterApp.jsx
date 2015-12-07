@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import Router from 'react-router';
 import createHistory from 'history/lib/createBrowserHistory';
 
-import createStore from '../stores/commentsStore';
+import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
 
 const RouterApp = (props, location) => {

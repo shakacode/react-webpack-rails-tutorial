@@ -16,10 +16,7 @@ config.entry.app.push(
 
   // Test out Css & Sass
   './assets/stylesheets/test-stylesheet.css',
-  './assets/stylesheets/test-sass-stylesheet.scss',
-
-  // App entry point
-  './app/startup/clientGlobals'
+  './assets/stylesheets/test-sass-stylesheet.scss'
 );
 
 config.output = {
