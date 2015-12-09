@@ -7,4 +7,3 @@ import RouterApp from './ServerRouterApp';
 // NodeJs: https://nodejs.org/api/globals.html#globals_global
 global.App = App;
 global.RouterApp = RouterApp;
-
