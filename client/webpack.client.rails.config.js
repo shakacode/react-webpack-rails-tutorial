@@ -23,14 +23,14 @@ config.entry.vendor.unshift(
 // jquery-ujs MUST GO AFTER jquery, so must use 'push'
 config.entry.app.push(
   'jquery-ujs',
-  './app/startup/clientGlobals'
+  './app/bundles/Comments/startup/clientGlobals'
 );
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
 config.module.loaders.push(
-  {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/},
-  {test: require.resolve('react'), loader: 'imports?shim=es5-shim/es5-shim&sham=es5-shim/es5-sham'}
+  { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
+  { test: require.resolve('react'), loader: 'imports?shim=es5-shim/es5-shim&sham=es5-shim/es5-sham' }
 );
 
 module.exports = config;
