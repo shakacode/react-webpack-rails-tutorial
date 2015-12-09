@@ -21,10 +21,7 @@ config.entry.vendor.unshift(
 );
 
 // jquery-ujs MUST GO AFTER jquery, so must use 'push'
-config.entry.app.push(
-  'jquery-ujs',
-  './app/bundles/Comments/startup/clientGlobals'
-);
+config.entry.app.push('jquery-ujs');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
