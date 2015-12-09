@@ -3573,7 +3573,11 @@
           "dependencies": {
             "minimatch": {
               "version": "2.0.10",
+<<<<<<< HEAD
               "from": "minimatch@>=2.0.1 <3.0.0",
+=======
+              "from": "minimatch@2.0.10",
+>>>>>>> Including pure render decorator
               "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-2.0.10.tgz"
             }
           }
@@ -4093,6 +4097,11 @@
       "from": "punycode@>=1.2.4 <2.0.0",
       "resolved": "https://registry.npmjs.org/punycode/-/punycode-1.4.0.tgz"
     },
+    "pure-render-decorator": {
+      "version": "0.2.0",
+      "from": "pure-render-decorator@latest",
+      "resolved": "https://registry.npmjs.org/pure-render-decorator/-/pure-render-decorator-0.2.0.tgz"
+    },
     "q": {
       "version": "1.4.1",
       "from": "q@>=1.1.2 <2.0.0",
@@ -4154,6 +4163,11 @@
       "version": "0.14.3",
       "from": "react@>=0.14.3 <0.15.0",
       "resolved": "https://registry.npmjs.org/react/-/react-0.14.3.tgz"
+    },
+    "react-addons-shallow-compare": {
+      "version": "0.14.3",
+      "from": "react-addons-shallow-compare@latest",
+      "resolved": "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-0.14.3.tgz"
     },
     "react-bootstrap": {
       "version": "0.28.1",
@@ -5172,9 +5186,16 @@
       "from": "webpack@>=1.12.8 <2.0.0",
       "resolved": "https://registry.npmjs.org/webpack/-/webpack-1.12.9.tgz",
       "dependencies": {
+<<<<<<< HEAD
         "loader-utils": {
           "version": "0.2.12",
           "from": "loader-utils@>=0.2.11 <0.3.0"
+=======
+        "esprima": {
+          "version": "2.7.0",
+          "from": "esprima@2.7.0",
+          "resolved": "https://registry.npmjs.org/esprima/-/esprima-2.7.0.tgz"
+>>>>>>> Including pure render decorator
         },
         "supports-color": {
           "version": "3.1.2",

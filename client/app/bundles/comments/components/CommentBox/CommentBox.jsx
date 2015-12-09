@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
+import pureRender from 'pure-render-decorator';
 
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
-
 import css from './CommentBox.scss';
 
 export default class CommentBox extends React.Component {
-
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.object.isRequired,

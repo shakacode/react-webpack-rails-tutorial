@@ -8,12 +8,11 @@ import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 
 export default class SimpleCommentScreen extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     this.state = {
       $$comments: Immutable.fromJS([]),
-      ajaxSending: false,
+      isSaving: false,
       fetchCommentsError: null,
       submitCommentError: null,
     };
@@ -35,7 +34,7 @@ export default class SimpleCommentScreen extends React.Component {
   }
 
   _handleCommentSubmit(comment) {
-    this.setState({ ajaxSending: true });
+    this.setState({ isSaving: true });
 
     const requestConfig = {
       responseType: 'json',
@@ -53,13 +52,13 @@ export default class SimpleCommentScreen extends React.Component {
 
           this.setState({
             $$comments: $$comments.push($$comment),
-            ajaxSending: false,
+            isSaving: false,
           });
         })
         .catch(error => {
           this.setState({
             submitCommentError: error,
-            ajaxSending: false,
+            isSaving: false,
           });
         })
     );
@@ -74,7 +73,7 @@ export default class SimpleCommentScreen extends React.Component {
           <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
-          ajaxSending={this.state.ajaxSending}
+          isSaving={this.state.isSaving}
           actions={{ submitComment: this._handleCommentSubmit }}
           error={this.state.submitCommentError}
         />

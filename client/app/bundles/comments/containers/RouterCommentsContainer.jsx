@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
-import CommentScreen from '../components/CommentScreen/CommentScreen';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import pureRender from 'pure-render-decorator';
+
+import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 
 function select(state) {
@@ -10,7 +12,6 @@ function select(state) {
 }
 
 class RouterCommentsContainer extends React.Component {
-
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,

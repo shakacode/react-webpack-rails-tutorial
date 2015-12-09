@@ -1,5 +1,7 @@
 import React from 'react';
+import pureRender from 'pure-render-decorator';
 
+@pureRender
 export default class TestReactRouterRedirect extends React.Component {
 
   static checkAuth(nextState, replaceState) {

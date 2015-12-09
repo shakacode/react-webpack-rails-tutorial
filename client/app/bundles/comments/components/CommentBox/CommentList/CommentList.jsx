@@ -7,7 +7,6 @@ import _ from 'lodash';
 import Comment from './Comment/Comment';
 
 export default class CommentList extends React.Component {
-
   static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
