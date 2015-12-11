@@ -16,7 +16,7 @@ class Comment extends React.Component {
         <h2 className="comment-author">
           {author}
         </h2>
-        <span dangerouslySetInnerHTML={{__html: rawMarkup}} className="comment-text"/>
+        <span dangerouslySetInnerHTML={{ __html: rawMarkup }} className="comment-text"/>
       </div>
     );
   }

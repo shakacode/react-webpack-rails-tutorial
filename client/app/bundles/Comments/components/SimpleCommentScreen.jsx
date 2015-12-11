@@ -69,7 +69,7 @@ class SimpleCommentScreen extends React.Component {
         </p>
         <CommentForm
           ajaxSending={this.state.ajaxSending}
-          actions={{ submitComment: this._handleCommentSubmit}}
+          actions={{ submitComment: this._handleCommentSubmit }}
           error={this.state.submitCommentError}
         />
         <CommentList

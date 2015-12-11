@@ -36,7 +36,7 @@ class RouterCommentScreen extends React.Component {
     return (
       <div>
         {this._renderNotification()}
-        <CommentScreen {...{actions, data}} />
+        <CommentScreen {...{ actions, data }} />
       </div>
     );
   }

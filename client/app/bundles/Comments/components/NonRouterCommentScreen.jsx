@@ -19,7 +19,7 @@ class NonRouterCommentScreen extends React.Component {
     const { dispatch, data } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
     return (
-      <CommentScreen {...{actions, data}} />
+      <CommentScreen {...{ actions, data }} />
     );
   }
 }
