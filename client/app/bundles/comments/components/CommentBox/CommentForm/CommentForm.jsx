@@ -8,7 +8,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
-import pureRender from 'pure-render-decorator';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
@@ -34,6 +34,10 @@ export default class CommentForm extends React.Component {
       '_handleSubmit',
       '_resetAndFocus',
     ]);
+  }
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
   }
 
   _handleSelect(selectedKey) {

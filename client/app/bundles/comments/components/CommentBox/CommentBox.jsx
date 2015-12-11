@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import pureRender from 'pure-render-decorator';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
@@ -11,6 +11,10 @@ export default class CommentBox extends React.Component {
     actions: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
   };
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
+  }
 
   componentDidMount() {
     const { fetchComments } = this.props.actions;

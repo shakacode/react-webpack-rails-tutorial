@@ -1,8 +1,10 @@
 import React from 'react';
-import pureRender from 'pure-render-decorator';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-@pureRender
 export default class TestReactRouterRedirect extends React.Component {
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
+  }
 
   static checkAuth(nextState, replaceState) {
     // Hard code this to demonstrate the effect

@@ -1,21 +1,18 @@
 import React, { PropTypes } from 'react';
 import marked from 'marked';
-import pureRender from 'pure-render-decorator';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-<<<<<<< HEAD:client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.jsx
 import css from './Comment.scss';
 
 export default class Comment extends React.Component {
-
-=======
-@pureRender
-class Comment extends React.Component {
-  static displayName = 'Comment';
->>>>>>> Including pure render decorator:client/app/bundles/Comments/components/Comment.jsx
   static propTypes = {
     author: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
   };
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
+  }
 
   render() {
     const { author, text } = this.props;

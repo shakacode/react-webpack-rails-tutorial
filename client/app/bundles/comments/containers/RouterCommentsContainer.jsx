@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import pureRender from 'pure-render-decorator';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
@@ -19,6 +19,10 @@ class RouterCommentsContainer extends React.Component {
       state: PropTypes.object,
     }).isRequired,
   };
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
+  }
 
   render() {
     const { dispatch, data } = this.props;

@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import Comment from './Comment/Comment';
 
@@ -17,6 +18,10 @@ export default class CommentList extends React.Component {
     super(props, context);
     this.state = {};
     _.bindAll(this, '_errorWarning');
+  }
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
   }
 
   _errorWarning() {

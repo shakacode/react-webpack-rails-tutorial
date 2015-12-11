@@ -2,6 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
 import _ from 'lodash';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
@@ -18,6 +19,10 @@ export default class SimpleCommentScreen extends React.Component {
     };
 
     _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
+  }
+
+  shouldComponentUpdate() {
+    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
   }
 
   componentDidMount() {
