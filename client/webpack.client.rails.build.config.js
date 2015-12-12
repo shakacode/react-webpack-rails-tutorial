@@ -1,5 +1,5 @@
 // Run like this:
-// cd client && npm run build:dev:client
+// cd client && npm run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 const webpack = require('webpack');
@@ -18,11 +18,9 @@ config.output = {
 config.entry.vendor.unshift(
   'es5-shim/es5-shim',
   'es5-shim/es5-sham',
+  'jquery-ujs',
   'bootstrap-loader/extractStyles'
 );
-
-// jquery-ujs MUST GO AFTER jquery, so must use 'push'
-config.entry.app.push('jquery-ujs');
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
 
@@ -56,7 +54,7 @@ config.plugins.push(
 
 if (devBuild) {
   console.log('Webpack dev build for Rails'); // eslint-disable-line no-console
-  module.exports.devtool = 'eval-source-map';
+  config.devtool = 'eval-source-map';
 } else {
   console.log('Webpack production build for Rails'); // eslint-disable-line no-console
 }
