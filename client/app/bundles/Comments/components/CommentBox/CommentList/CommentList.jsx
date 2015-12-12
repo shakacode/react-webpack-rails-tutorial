@@ -2,27 +2,26 @@ import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import _ from 'lodash';
 
-import Comment from './Comment';
+import Comment from './Comment/Comment';
 
-class CommentList extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {};
-
-    this._errorWarning = this._errorWarning.bind(this);
-  }
-
-  static displayName = 'CommentList';
+export default class CommentList extends React.Component {
 
   static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
   };
 
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
+    _.bindAll(this, '_errorWarning');
+  }
+
   _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
-    if (!this.props.error) return undefined;
+    if (!this.props.error) return null;
     return (
       <Alert bsStyle="danger" key="commentFetchError">
         <strong>Comments could not be retrieved. </strong>
@@ -69,5 +68,3 @@ class CommentList extends React.Component {
     );
   }
 }
-
-export default CommentList;

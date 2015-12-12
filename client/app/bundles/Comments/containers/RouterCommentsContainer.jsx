@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import CommentScreen from './CommentScreen';
+import CommentScreen from '../components/CommentScreen/CommentScreen';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
@@ -9,7 +9,7 @@ function select(state) {
   return { data: state.$$commentsStore };
 }
 
-class RouterCommentScreen extends React.Component {
+class RouterCommentsContainer extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
@@ -43,4 +43,4 @@ class RouterCommentScreen extends React.Component {
 }
 
 // Don't forget to actually use connect!
-export default connect(select)(RouterCommentScreen);
+export default connect(select)(RouterCommentsContainer);

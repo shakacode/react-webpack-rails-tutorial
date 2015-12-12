@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
+    "test": "NODE_PATH=./app mocha --compilers js:babel-core/register --require ./app/libs/testHelper.js 'app/**/*.spec.@(js|jsx)'",
     "test:debug": "npm run test -- --debug-brk",
     "start": "node server.js",
     "build:client": "NODE_ENV=production webpack --config webpack.client.rails.config.js",
@@ -52,7 +52,7 @@
     "es6-promise": "^3.0.2",
     "expose-loader": "^0.7.1",
     "file-loader": "^0.8.4",
-    "history": "^1.12.5",
+    "history": "^1.13.1",
     "immutable": "^3.7.5",
     "imports-loader": "^0.6.5",
     "jquery": "^2.1.4",

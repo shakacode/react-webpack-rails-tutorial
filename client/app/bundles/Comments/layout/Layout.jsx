@@ -13,13 +13,20 @@ export default class Layout extends React.Component {
         <header>
           <ul>
             <li>
-              <IndexLink to="/" activeClassName="active">Comments (Root URL)</IndexLink>
+              <IndexLink to="/" activeClassName="active">
+                Comments (Root URL)
+              </IndexLink>
             </li>
             <li>
-              <Link to="/react-router" activeClassName="active">Test React Router ('/react-router')</Link>
+              <Link to="/react-router" activeClassName="active">
+                Test React Router ('/react-router')
+              </Link>
             </li>
             <li>
-              <Link to="/react-router/redirect" activeClassName="active">Test Redirect (url to '/react-router/redirect' which goes to root '/')</Link>
+              <Link to="/react-router/redirect" activeClassName="active">
+                Test Redirect
+                (url to '/react-router/redirect' which goes to root '/')
+              </Link>
             </li>
           </ul>
         </header>

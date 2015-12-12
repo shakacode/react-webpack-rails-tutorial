@@ -1,4 +1,4 @@
-import commentsManager from '../utils/commentsManager';
+import requestsManager from 'libs/requestsManager';
 import * as actionTypes from '../constants/commentsConstants';
 
 export function setIsFetching() {
@@ -45,8 +45,8 @@ export function fetchComments() {
   return dispatch => {
     dispatch(setIsFetching());
     return (
-      commentsManager
-        .fetchComments()
+      requestsManager
+        .fetchEntities()
         .then(res => dispatch(fetchCommentsSuccess(res.data)))
         .catch(res => dispatch(fetchCommentsFailure(res.data)))
     );
@@ -57,8 +57,8 @@ export function submitComment(comment) {
   return dispatch => {
     dispatch(setIsSaving());
     return (
-      commentsManager
-        .submitComment(comment)
+      requestsManager
+        .submitEntity({ comment })
         .then(res => dispatch(submitCommentSuccess(res.data)))
         .catch(res => dispatch(submitCommentFailure(res.data)))
     );

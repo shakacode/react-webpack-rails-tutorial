@@ -2,16 +2,13 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import createStore from '../store/commentsStore';
-import NonRouterCommentScreen from '../components/NonRouterCommentScreen';
+import NonRouterCommentsContainer from '../containers/NonRouterCommentsContainer';
 
-const App = props => {
+export default props => {
   const store = createStore(props);
   return (
       <Provider store={store}>
-        <NonRouterCommentScreen />
+        <NonRouterCommentsContainer />
       </Provider>
   );
 };
-
-// Export is needed for the hot reload server
-export default App;

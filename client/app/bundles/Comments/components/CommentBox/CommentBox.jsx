@@ -1,15 +1,10 @@
 import React, { PropTypes } from 'react';
 
-import CommentForm from './CommentForm';
-import CommentList from './CommentList';
+import CommentForm from './CommentForm/CommentForm';
+import CommentList from './CommentList/CommentList';
 
-class CommentBox extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {};
-  }
+export default class CommentBox extends React.Component {
 
-  static displayName = 'CommentBox';
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.object.isRequired,
@@ -51,5 +46,3 @@ class CommentBox extends React.Component {
     );
   }
 }
-
-export default CommentBox;

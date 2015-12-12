@@ -11,7 +11,14 @@ import _ from 'lodash';
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
-class CommentForm extends React.Component {
+export default class CommentForm extends React.Component {
+
+  static propTypes = {
+    isSaving: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired,
+    error: PropTypes.any,
+  };
+
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -19,16 +26,13 @@ class CommentForm extends React.Component {
       comment: emptyComment,
     };
 
-    _.bindAll(this, '_handleSelect', '_handleChange', '_handleSubmit', '_resetAndFocus');
+    _.bindAll(this, [
+      '_handleSelect',
+      '_handleChange',
+      '_handleSubmit',
+      '_resetAndFocus',
+    ]);
   }
-
-  static displayName = 'CommentForm';
-
-  static propTypes = {
-    isSaving: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
-    error: PropTypes.any,
-  };
 
   _handleSelect(selectedKey) {
     this.setState({ formMode: selectedKey });
@@ -201,7 +205,7 @@ class CommentForm extends React.Component {
 
   _errorWarning() {
     // If there is no error, there is nothing to add to the DOM
-    if (!this.props.error) return undefined;
+    if (!this.props.error) return null;
     return (
       <Alert bsStyle="danger" key="commentSubmissionError">
         <strong>Your comment was not saved! </strong>
@@ -245,5 +249,3 @@ class CommentForm extends React.Component {
     );
   }
 }
-
-export default CommentForm;

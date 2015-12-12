@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
-import CommentBox from './CommentBox';
+import CommentBox from '../CommentBox/CommentBox';
 
-class CommentScreen extends React.Component {
+export default class CommentScreen extends React.Component {
+
   static propTypes = {
     actions: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
@@ -34,5 +35,3 @@ class CommentScreen extends React.Component {
     );
   }
 }
-
-export default CommentScreen;

@@ -3,14 +3,14 @@ import metaTagsManager from './metaTagsManager';
 
 const API_URL = 'comments.json';
 
-const CommentsManager = {
+export default {
 
   /**
-   * Retrieve comments from server using AJAX call.
+   * Retrieve list of entities from server using AJAX call.
    *
-   * @returns {Promise} - result of ajax call.
+   * @returns {Promise} - Result of ajax call.
    */
-  fetchComments() {
+  fetchEntities() {
     return request({
       method: 'GET',
       url: API_URL,
@@ -19,12 +19,12 @@ const CommentsManager = {
   },
 
   /**
-   * Submit new comment to server using AJAX call.
+   * Submit new entity to server using AJAX call.
    *
-   * @param {Object} comment - Comment body to post.
-   * @returns {Promise} - result of ajax call.
+   * @param {Object} entity - Request body to post.
+   * @returns {Promise} - Result of ajax call.
    */
-  submitComment(comment) {
+  submitEntity(entity) {
     return request({
       method: 'POST',
       url: API_URL,
@@ -32,10 +32,8 @@ const CommentsManager = {
       headers: {
         'X-CSRF-Token': metaTagsManager.getCSRFToken(),
       },
-      data: { comment },
+      data: entity,
     });
   },
 
 };
-
-export default CommentsManager;

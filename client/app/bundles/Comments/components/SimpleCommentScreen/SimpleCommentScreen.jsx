@@ -1,12 +1,14 @@
 import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
-import CommentForm from './CommentForm';
-import CommentList from './CommentList';
-import metaTagsManager from '../utils/metaTagsManager';
 import _ from 'lodash';
 
-class SimpleCommentScreen extends React.Component {
+import metaTagsManager from 'libs/metaTagsManager';
+import CommentForm from '../CommentBox/CommentForm/CommentForm';
+import CommentList from '../CommentBox/CommentList/CommentList';
+
+export default class SimpleCommentScreen extends React.Component {
+
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -19,16 +21,17 @@ class SimpleCommentScreen extends React.Component {
     _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
   }
 
-  static displayName = 'SimpleCommentScreen';
-
   componentDidMount() {
     this._fetchComments();
   }
 
   _fetchComments() {
-    return request.get('comments.json', { responseType: 'json' })
-      .then(res => this.setState({ $$comments: Immutable.fromJS(res.data) }))
-      .catch(error => this.setState({ fetchCommentsError: error }));
+    return (
+      request
+        .get('comments.json', { responseType: 'json' })
+        .then(res => this.setState({ $$comments: Immutable.fromJS(res.data) }))
+        .catch(error => this.setState({ fetchCommentsError: error }))
+    );
   }
 
   _handleCommentSubmit(comment) {
@@ -41,22 +44,25 @@ class SimpleCommentScreen extends React.Component {
       },
     };
 
-    return request.post('comments.json', { comment }, requestConfig)
-      .then(() => {
-        const { $$comments } = this.state;
-        const $$comment = Immutable.fromJS(comment);
+    return (
+      request
+        .post('comments.json', { comment }, requestConfig)
+        .then(() => {
+          const { $$comments } = this.state;
+          const $$comment = Immutable.fromJS(comment);
 
-        this.setState({
-          $$comments: $$comments.push($$comment),
-          ajaxSending: false,
-        });
-      })
-      .catch(error => {
-        this.setState({
-          submitCommentError: error,
-          ajaxSending: false,
-        });
-      });
+          this.setState({
+            $$comments: $$comments.push($$comment),
+            ajaxSending: false,
+          });
+        })
+        .catch(error => {
+          this.setState({
+            submitCommentError: error,
+            ajaxSending: false,
+          });
+        })
+    );
   }
 
   render() {
@@ -80,5 +86,3 @@ class SimpleCommentScreen extends React.Component {
     );
   }
 }
-
-export default SimpleCommentScreen;

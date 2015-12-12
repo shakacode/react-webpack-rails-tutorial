@@ -5,7 +5,7 @@ import { match, RoutingContext } from 'react-router';
 import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
 
-const RouterApp = (props, location) => {
+export default (props, location) => {
   const store = createStore(props);
 
   let error;
@@ -33,5 +33,3 @@ const RouterApp = (props, location) => {
     </Provider>
   );
 };
-
-export default RouterApp;

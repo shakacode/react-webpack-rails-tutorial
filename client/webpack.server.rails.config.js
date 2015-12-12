@@ -10,15 +10,19 @@ module.exports = {
 
   // the project dir
   context: __dirname,
-  entry: ['./app/bundles/Comments/startup/serverGlobals', 'react-dom/server', 'react'],
+  entry: [
+    'react',
+    'react-dom/server',
+    './app/bundles/comments/startup/serverGlobals',
+  ],
   output: {
     filename: 'server-bundle.js',
     path: '../app/assets/javascripts/generated',
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'config.js'],
+    extensions: ['', '.js', '.jsx'],
     alias: {
-      lib: path.join(process.cwd(), 'app', 'lib'),
+      libs: path.join(process.cwd(), 'app', 'libs'),
     },
   },
   plugins: [

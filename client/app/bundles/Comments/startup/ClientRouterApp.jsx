@@ -6,7 +6,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
 
-const RouterApp = (props, location) => {
+export default (props, location) => {
   const store = createStore(props);
   const history = createHistory();
 
@@ -16,6 +16,3 @@ const RouterApp = (props, location) => {
     </Provider>
   );
 };
-
-// Export is needed for the hot reload server
-export default RouterApp;
