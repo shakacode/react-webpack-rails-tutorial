@@ -10,6 +10,7 @@ function select(state) {
 }
 
 class RouterCommentsContainer extends React.Component {
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
@@ -18,26 +19,13 @@ class RouterCommentsContainer extends React.Component {
     }).isRequired,
   };
 
-  _renderNotification() {
-    const locationState = this.props.location.state;
-    if (!locationState || !locationState.redirectFrom) return null;
-
-    return (
-      <div className="notification bg-success">
-        You've been redirected from <strong>{locationState.redirectFrom}</strong>
-      </div>
-    );
-  }
-
   render() {
     const { dispatch, data } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
+    const locationState = this.props.location.state;
 
     return (
-      <div>
-        {this._renderNotification()}
-        <CommentScreen {...{ actions, data }} />
-      </div>
+      <CommentScreen {...{ actions, data, locationState }} />
     );
   }
 }

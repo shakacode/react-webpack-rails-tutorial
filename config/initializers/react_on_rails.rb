@@ -4,7 +4,7 @@ ReactOnRails.configure do |config|
 
   # Server bundle is a single file for all server rendering of components.
   # If you wish to use render_js in your views without any file, set this to "" to avoid warnings.
-  config.server_bundle_js_file = "app/assets/javascripts/generated/server-bundle.js" # This is the default
+  config.server_bundle_js_file = "app/assets/webpack/server-bundle.js" # This is the default
 
   # Below options can be overriden by passing to the helper method.
   config.prerender = true # default is false

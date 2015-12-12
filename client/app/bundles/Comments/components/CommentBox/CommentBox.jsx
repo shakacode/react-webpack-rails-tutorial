@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
 
+import css from './CommentBox.scss';
+
 export default class CommentBox extends React.Component {
 
   static propTypes = {
@@ -23,6 +25,12 @@ export default class CommentBox extends React.Component {
 
   render() {
     const { actions, data } = this.props;
+    const cssTransitionGroupClassNames = {
+      enter: css.elementEnter,
+      enterActive: css.elementEnterActive,
+      leave: css.elementLeave,
+      leaveActive: css.elementLeaveActive,
+    };
 
     return (
       <div className="commentBox container">
@@ -37,10 +45,12 @@ export default class CommentBox extends React.Component {
           isSaving={data.get('isSaving')}
           error={data.get('submitCommentError')}
           actions={actions}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
         <CommentList
           $$comments={data.get('$$comments')}
           error={data.get('fetchCommentError')}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
       </div>
     );

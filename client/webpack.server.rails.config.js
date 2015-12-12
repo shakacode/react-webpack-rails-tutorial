@@ -17,7 +17,7 @@ module.exports = {
   ],
   output: {
     filename: 'server-bundle.js',
-    path: '../app/assets/javascripts/generated',
+    path: '../app/assets/webpack',
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
@@ -35,10 +35,27 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
+      {
+        test: /\.css$/,
+        loaders: [
+          'css/locals?modules&importLoaders=0&localIdentName=[name]__[local]__[hash:base64:5]',
+        ],
+      },
+      {
+        test: /\.scss$/,
+        loaders: [
+          'css/locals?modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
+          'sass',
+          'sass-resources',
+        ],
+      },
 
       // React is necessary for the client rendering:
       { test: require.resolve('react'), loader: 'expose?React' },
       { test: require.resolve('react-dom/server'), loader: 'expose?ReactDOMServer' },
     ],
   },
+
+  sassResources: ['./app/assets/styles/app-variables.scss'],
+
 };

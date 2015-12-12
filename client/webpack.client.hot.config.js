@@ -2,21 +2,15 @@
 // cd client && node server.js
 
 const webpack = require('webpack');
-const path = require('path');
+
 const config = require('./webpack.client.base.config');
 
-// We're using the bootstrap-sass loader.
-// See: https://github.com/shakacode/bootstrap-sass-loader
-config.entry.vendor.push('bootstrap-sass!./bootstrap-sass.config.js');
+config.entry.vendor.push('bootstrap-loader');
 config.entry.app.push(
 
   // Webpack dev server
   'webpack-dev-server/client?http://localhost:4000',
-  'webpack/hot/dev-server',
-
-  // Test out Css & Sass
-  './assets/stylesheets/test-stylesheet.css',
-  './assets/stylesheets/test-sass-stylesheet.scss'
+  'webpack/hot/dev-server'
 );
 
 config.output = {
@@ -25,7 +19,10 @@ config.output = {
   filename: '[name]-bundle.js',
   path: __dirname,
 };
-config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
+config.plugins.unshift(
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.NoErrorsPlugin()
+);
 config.devtool = 'eval-source-map';
 
 // All the styling loaders only apply to hot-reload, not rails
@@ -51,19 +48,24 @@ config.module.loaders.push(
       ],
     },
   },
-  { test: /\.css$/, loader: 'style-loader!css-loader' },
+  {
+    test: /\.css$/,
+    loaders: [
+      'style',
+      'css?modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
+      'postcss',
+    ],
+  },
   {
     test: /\.scss$/,
-    loader: 'style!css!sass?outputStyle=expanded&imagePath=/assets/images&includePaths[]=' +
-    path.resolve(__dirname, './assets/stylesheets'),
-  },
-
-  // The url-loader uses DataUrls. The file-loader emits files.
-  { test: /\.woff$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
-  { test: /\.woff2$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
-  { test: /\.ttf$/, loader: 'file-loader' },
-  { test: /\.eot$/, loader: 'file-loader' },
-  { test: /\.svg$/, loader: 'file-loader' }
+    loaders: [
+      'style',
+      'css?modules&importLoaders=3&localIdentName=[name]__[local]__[hash:base64:5]',
+      'postcss',
+      'sass',
+      'sass-resources',
+    ],
+  }
 );
 
 module.exports = config;

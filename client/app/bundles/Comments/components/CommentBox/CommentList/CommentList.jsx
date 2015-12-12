@@ -11,6 +11,7 @@ export default class CommentList extends React.Component {
   static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
+    cssTransitionGroupClassNames: PropTypes.object.isRequired,
   };
 
   constructor(props, context) {
@@ -31,7 +32,7 @@ export default class CommentList extends React.Component {
   }
 
   render() {
-    const { $$comments } = this.props;
+    const { $$comments, cssTransitionGroupClassNames } = this.props;
     const commentNodes = $$comments.reverse().map($$comment => {
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
@@ -48,7 +49,7 @@ export default class CommentList extends React.Component {
     return (
       <div>
         <ReactCSSTransitionGroup
-          transitionName="element"
+          transitionName={cssTransitionGroupClassNames}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
         >
@@ -56,11 +57,11 @@ export default class CommentList extends React.Component {
         </ReactCSSTransitionGroup>
 
         <ReactCSSTransitionGroup
-            transitionName="element"
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={500}
-            className="commentList"
-            component="div"
+          transitionName={cssTransitionGroupClassNames}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+          className="commentList"
+          component="div"
         >
           {commentNodes}
         </ReactCSSTransitionGroup>

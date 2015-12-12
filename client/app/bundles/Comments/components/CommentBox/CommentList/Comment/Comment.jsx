@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import marked from 'marked';
 
+import css from './Comment.scss';
+
 export default class Comment extends React.Component {
 
   static propTypes = {
@@ -13,8 +15,8 @@ export default class Comment extends React.Component {
     const rawMarkup = marked(text, { gfm: true, sanitize: true });
 
     return (
-      <div className="comment">
-        <h2 className="comment-author">
+      <div className={css.comment}>
+        <h2 className={css.commentAuthor}>
           {author}
         </h2>
         <span

@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -54,12 +55,33 @@ module.exports = {
   ],
   module: {
     loaders: [
+      { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
+      { test: /\.(ttf|eot)$/, loader: 'file' },
+      { test: /\.(jpe?g|png|gif|svg|ico)$/, loader: 'url?limit=10000' },
 
-      // React is necessary for the client rendering:
+      // React is necessary for the client rendering
       { test: require.resolve('react'), loader: 'expose?React' },
       { test: require.resolve('react-dom'), loader: 'expose?ReactDOM' },
       { test: require.resolve('jquery'), loader: 'expose?jQuery' },
       { test: require.resolve('jquery'), loader: 'expose?$' },
+
+      // Use one of these to serve jQuery for Bootstrap scripts:
+
+      // Bootstrap 3
+      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
+
+      // Bootstrap 4
+      { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' },
     ],
   },
+
+  // Place here all postCSS plugins here, so postcss-loader will apply them
+  postcss: [autoprefixer],
+
+  // Place here all SASS files with variables, mixins etc.
+  // And sass-resources-loader will load them in every CSS Module (SASS file) for you
+  // (so don't need to @import them explicitly)
+  // https://github.com/shakacode/sass-resources-loader
+  sassResources: ['./app/assets/styles/app-variables.scss'],
+
 };

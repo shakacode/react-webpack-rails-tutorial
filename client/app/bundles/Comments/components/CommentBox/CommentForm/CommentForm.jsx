@@ -17,6 +17,7 @@ export default class CommentForm extends React.Component {
     isSaving: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
+    cssTransitionGroupClassNames: PropTypes.object.isRequired,
   };
 
   constructor(props, context) {
@@ -229,10 +230,13 @@ export default class CommentForm extends React.Component {
       default:
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
     }
+
+    const { cssTransitionGroupClassNames } = this.props;
+
     return (
       <div>
         <ReactCSSTransitionGroup
-          transitionName="element"
+          transitionName={cssTransitionGroupClassNames}
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
         >
