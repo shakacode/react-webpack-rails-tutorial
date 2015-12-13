@@ -37,6 +37,9 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
+
+    # Next line will ensure that assets are built if webpack -w is not running
+    EnsureAssetsCompiled.check_built_assets
   end
 
   config.around(:each) do |example|

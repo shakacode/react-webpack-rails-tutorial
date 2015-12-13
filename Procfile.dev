@@ -1,4 +1,11 @@
 web: rails s
+
+# Run the hot reload server for client development
 client: sh -c 'rm app/assets/webpack/* || true && cd client && HOT_RAILS_PORT=3500 npm run build:dev:client'
+
+# Keep the JS fresh for specs
+client-spec: sh -c 'cd client && npm run build:test:client'
+
+# Keep the JS fresh for server rendering
 server: sh -c 'cd client && npm run build:dev:server'
 hot: sh -c 'cd client && HOT_PORT=4000 npm start'

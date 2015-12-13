@@ -15,10 +15,16 @@ namespace :assets do
   task :webpack do
     sh "cd client && npm run build:client"
     sh "cd client && npm run build:server"
+    sh "mkdir -p public/assets"
+
+    # Critical to manually copy non js/css assets to public/assets as we don't want to fingerprint them
+    sh "cp -rf app/assets/webpack/*.woff* app/assets/webpack/*.svg app/assets/webpack/*.ttf "\
+       "app/assets/webpack/*.eot* public/assets"
+
+    # TODO: We should be gzipping these
   end
 
   task :clobber do
-    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/generated/client-bundle.js"
-    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/generated/server-bundle.js"
+    rm_rf "#{Rails.application.config.root}/app/assets/webpack"
   end
 end

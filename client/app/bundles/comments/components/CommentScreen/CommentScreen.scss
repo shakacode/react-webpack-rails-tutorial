@@ -3,7 +3,7 @@
 }
 
 .logo {
-  background: url(./images/railsonmaui.png) no-repeat left bottom;
+  background: url('./images/railsonmaui.png') no-repeat left bottom;
   display: inline-block;
   height: 40px;
   margin-right: 10px;
@@ -11,7 +11,7 @@
 }
 
 .twitterImage {
-  background: url(./images/twitter_64.png) no-repeat;
+  background: url('./images/twitter_64.png') no-repeat;
   height: 64px;
   width: 64px;
 }

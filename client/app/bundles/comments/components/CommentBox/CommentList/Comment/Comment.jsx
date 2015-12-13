@@ -16,12 +16,12 @@ export default class Comment extends React.Component {
 
     return (
       <div className={css.comment}>
-        <h2 className={css.commentAuthor}>
+        <h2 className={`${css.commentAuthor} js-comment-author`}>
           {author}
         </h2>
         <span
           dangerouslySetInnerHTML={{ __html: rawMarkup }}
-          className="comment-text"
+          className="js-comment-text"
         />
       </div>
     );

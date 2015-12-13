@@ -62,6 +62,7 @@ module.exports = {
       // React is necessary for the client rendering
       { test: require.resolve('react'), loader: 'expose?React' },
       { test: require.resolve('react-dom'), loader: 'expose?ReactDOM' },
+      { test: require.resolve('jquery-ujs'), loader: 'imports?jQuery=jquery' },
       { test: require.resolve('jquery'), loader: 'expose?jQuery' },
       { test: require.resolve('jquery'), loader: 'expose?$' },
 

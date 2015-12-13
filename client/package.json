@@ -28,9 +28,10 @@
     "test:debug": "npm run test -- --debug-brk",
     "start": "node server.js",
     "build:client": "NODE_ENV=production webpack --config webpack.client.rails.build.config.js",
-    "build:server": "NODE_ENV=production webpack --config webpack.server.rails.config.js",
+    "build:server": "NODE_ENV=production webpack --config webpack.server.rails.build.config.js",
     "build:dev:client": "babel-node server.rails.hot.js",
-    "build:dev:server": "webpack -w --config webpack.server.rails.config.js",
+    "build:dev:server": "webpack -w --config webpack.server.rails.build.config.js",
+    "build:test:client": "webpack -w --config webpack.client.rails.build.config.js",
     "lint": "npm run eslint && npm run jscs",
     "eslint": "eslint --ext .js,.jsx .",
     "jscs": "jscs --verbose ."
