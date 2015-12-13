@@ -20,7 +20,7 @@ describe('Comment', () => {
     // const author = findRenderedDOMComponentWithTag(component, 'h2');
     // expect(author.className).to.equal('comment-author');
     const text = findRenderedDOMComponentWithTag(component, 'span');
-    expect(text.className).to.equal('comment-text');
+    expect(text.className).to.equal('js-comment-text');
   });
 
   it('shows the author', () => {
@@ -28,7 +28,7 @@ describe('Comment', () => {
       <Comment author="Frank" text="Hi!"/>
     );
 
-    const author = findRenderedDOMComponentWithClass(component, 'comment-author');
+    const author = findRenderedDOMComponentWithClass(component, 'js-comment-author');
     expect(author.textContent).to.equal('Frank');
   });
 
@@ -37,7 +37,7 @@ describe('Comment', () => {
       <Comment author="Frank" text="Hi!"/>
     );
 
-    const comment = findRenderedDOMComponentWithClass(component, 'comment-text');
+    const comment = findRenderedDOMComponentWithClass(component, 'js-comment-text');
     expect(comment.textContent).to.equal('Hi!\n');
   });
 });
