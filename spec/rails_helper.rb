@@ -74,7 +74,7 @@ RSpec.configure do |config|
     end
   end
 
-  Capybara.default_wait_time = 15
+  Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
 
   Capybara::Screenshot.prune_strategy = { keep: 10 }
