@@ -12,9 +12,19 @@ if Rails.env.development?
     sh "brakeman --exit-on-warn --quiet -A -z"
   end
 
+  task :js_tests do
+    puts Rainbow("Running JavaScript tests").green
+    sh "npm run test:client"
+  end
+
+  task :rspec_tests do
+    puts Rainbow("Running RSpec tests").green
+    sh "rspec"
+  end
+
   namespace :ci do
     desc "Run all audits and tests"
-    task all: [:environment, :lint, :spec, :bundle_audit, :security_audit] do
+    task all: [:environment, :lint, :rspec_tests, :js_tests, :bundle_audit, :security_audit] do
       begin
         puts Rainbow("PASSED").green
         puts ""

@@ -2,7 +2,7 @@
   "name": "react-webpack-rails-tutorial",
   "version": "1.1.1",
   "description": "Code from the React Webpack tutorial.",
-  "main": "server.js",
+  "main": "server-express.js",
   "engines": {
     "node": "5.0.0",
     "npm": "3.3.6"
@@ -17,7 +17,8 @@
     "build:server": "(cd client && npm run build:server --silent)",
     "build:dev:client": "(cd client && npm run build:dev:client --silent)",
     "build:dev:server": "(cd client && npm run build:dev:server --silent)",
-    "build:test:client": "(cd client && npm run build:test:client --silent)"
+    "build:test:client": "(cd client && npm run build:test:client --silent)",
+    "start": "(cd client && npm run start --silent)"
   },
   "repository": {
     "type": "git",

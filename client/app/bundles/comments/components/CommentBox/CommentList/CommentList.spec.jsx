@@ -10,13 +10,22 @@ const {
   scryRenderedComponentsWithType,
 } = TestUtils;
 
+const cssTransitionGroupClassNames = {
+  enter: 'elementEnter',
+  enterActive: 'elementEnterActive',
+  leave: 'elementLeave',
+  leaveActive: 'elementLeaveActive',
+};
+
 describe('CommentList', () => {
   const comments = List.of(
     new Map({
+      id: 1,
       author: 'Frank',
       text: 'hi',
     }),
     new Map({
+      id: 2,
       author: 'Furter',
       text: 'ho',
     }),
@@ -24,7 +33,10 @@ describe('CommentList', () => {
 
   it('renders a list of Comments in reverse order', () => {
     const component = renderIntoDocument(
-      <CommentList $$comments={comments}/>
+      <CommentList
+        $$comments={comments}
+        cssTransitionGroupClassNames={cssTransitionGroupClassNames}
+      />
     );
     const list = scryRenderedComponentsWithType(component, Comment);
     expect(list.length).to.equal(2);
@@ -34,7 +46,10 @@ describe('CommentList', () => {
 
   it('renders an alert if errors', () => {
     const component = renderIntoDocument(
-      <CommentList $$comments={comments} error="zomg" />
+      <CommentList
+        $$comments={comments} error="zomg"
+        cssTransitionGroupClassNames={cssTransitionGroupClassNames}
+      />
     );
 
     const alert = findRenderedDOMComponentWithTag(component, 'strong');

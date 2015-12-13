@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var jade = require('jade');
 var sleep = require('sleep');
-var config = require('./webpack.client.hot.config');
+var config = require('./webpack.client.express.config');
 var uuid = require('node-uuid');
 
 var comments = [

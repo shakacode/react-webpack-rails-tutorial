@@ -1,5 +1,5 @@
 // Run like this:
-// cd client && node server.js
+// cd client && node server-express.js
 
 const webpack = require('webpack');
 
