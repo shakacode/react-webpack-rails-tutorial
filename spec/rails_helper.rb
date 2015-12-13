@@ -37,6 +37,9 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
+
+    # Next line will ensure that assets are built if webpack -w is not running
+    EnsureAssetsCompiled.check_built_assets
   end
 
   config.around(:each) do |example|
@@ -71,7 +74,7 @@ RSpec.configure do |config|
     end
   end
 
-  Capybara.default_wait_time = 15
+  Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
 
   Capybara::Screenshot.prune_strategy = { keep: 10 }

@@ -26,7 +26,7 @@ var server = new WebpackDevServer(webpack(config), {
 });
 
 server.app.use(bodyParser.json(null));
-server.app.use(bodyParser.urlencoded({extended: true}));
+server.app.use(bodyParser.urlencoded({ extended: true }));
 
 server.app.get('/comments.json', function(req, res) {
   sleep.sleep(1);

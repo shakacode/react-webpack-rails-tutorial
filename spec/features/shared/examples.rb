@@ -8,8 +8,8 @@ shared_examples "New Comment Submission" do
     include_context "Form Submitted", name: :name, text: :text
 
     scenario "comment is added" do
-      expect(page).to have_css(".comment", text: name)
-      expect(page).to have_css(".comment", text: text)
+      expect(page).to have_css(".js-comment-author", text: name)
+      expect(page).to have_css(".js-comment-text", text: text)
     end
   end
 

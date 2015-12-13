@@ -127,11 +127,14 @@ Note that it's important to run the Rails server on a different port than the no
 
 # Webpack configuration
 ## Config Files
+
 - `webpack.client.base.config.js`: Common configuration file to minimize code duplication for client.rails and client.hot.
-- `webpack.client.rails.config.js`: Used to generate the Rails bundles for Rails use.
-- `webpack.client.hot.config.js`: Used by server.js to run the Webpack Dev server.
-- `webpack.server.rails.config.js`: Common configuration file to minimize code duplication
-between the HMR and Rails configurations.
+- `webpack.client.rails.build.config.js`: Client side js bundle.
+- `webpack.server.rails.build.config.js`: Server side js bundle
+
+These are used for hot reloading (Webpack Dev Server):
+- `webpack.client.rails.hot.config.js`: Used to generate the Rails bundles for Rails use so you get hot reloading within your Rails app.
+- `webpack.client.hot.config.js`: Used by server.js to run the Webpack Dev server for stubbing the api end points
 
 ## Webpack Resources
 - Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)

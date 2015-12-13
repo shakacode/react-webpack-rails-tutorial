@@ -1,0 +1,10 @@
+// These variables get loaded BEFORE Bootstrap thus overriding them in Bootstrap.
+@import './app-variables';
+
+// This path is relative to this file!
+$fonts-url-path: '../fonts';
+
+@font-face {
+  font-family: 'OpenSans-Light';
+  src: url('#{$fonts-url-path}/OpenSans-Light.ttf') format('truetype');
+}

@@ -87,6 +87,7 @@ end
 group :test  do
   gem "coveralls", require: false
   gem "rspec-rails"
+  gem "rspec-retry"
   gem "capybara"
   gem "capybara-screenshot"
   gem "selenium-webdriver"

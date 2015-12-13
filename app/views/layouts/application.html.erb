@@ -2,8 +2,10 @@
 <html>
 <head>
   <title>RailsReactTutorial</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= env_stylesheet_link_tag 'application_prod', 'application_dev', media: 'all', 'data-turbolinks-track' => true  %>
+  <%= env_javascript_include_tag nil, 'http://localhost:3500/vendor-bundle.js' %>
+  <%= env_javascript_include_tag nil, 'http://localhost:3500/app-bundle.js' %>
+  <%= env_javascript_include_tag 'application_prod', 'application_dev', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
