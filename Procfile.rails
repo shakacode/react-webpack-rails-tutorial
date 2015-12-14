@@ -1,0 +1,11 @@
+# Basic procfile for dev work using Rails
+# Development rails requires both rails and rails-assets
+# (and rails-server-assets if server rendering)
+# You can still run tests, and they will build the webpack file for each test run.
+# Start another shell and run the Procfile.spec to make test runs faster.
+
+rails: rails s
+# Run the hot reload server for client development
+rails-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm run build:dev:client'
+# Keep the JS fresh for server rendering. Remove if not server rendering
+rails-server-assets: sh -c 'npm run build:dev:server'

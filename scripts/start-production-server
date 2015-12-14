@@ -1,0 +1,9 @@
+# Script to test out production mode
+
+echo Be SURE to run rake assets:clobber after you quit with ctrl-c!
+echo Or else you will not see changes made during development possibly!
+
+rake assets:clobber && \
+ RAILS_ENV=production bin/rake assets:precompile && \
+ SECRET_KEY_BASE=227a31d0cf655c89fa860d111c9baccb3bf9ceeccd364fd5f5d49cd17e025c4b22d200ce3eada35cdeb1045d2ce9581ef9516ccc717851066d80fa71fecf2f2e \
+ rails s -e production

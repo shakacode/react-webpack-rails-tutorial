@@ -1,6 +1,6 @@
 // Run with Rails server like this:
 // rails s
-// cd client && babel-node server.rails.hot.js
+// cd client && babel-node server-rails-hot.js
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 const path = require('path');

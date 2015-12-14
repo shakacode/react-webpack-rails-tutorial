@@ -38,7 +38,7 @@ export default class CommentScreen extends React.Component {
             ajaxCounter={data.get('ajaxCounter')}
           />
           <div className="container">
-            <a href="http://www.railsonmaui.com">
+            <a href="http://www.shakacode.com">
               <h3>
                 <div className={css.logo} />
                 Example of styling using image-url and Open Sans Light custom font

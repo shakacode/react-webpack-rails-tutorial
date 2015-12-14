@@ -5,33 +5,23 @@
 # React, Redux, React-Bootstrap, ES7, Webpack Rails
 ## Server Rendering via the react_on_rails gem
 
-By Justin Gordon and the Shaka Code Team, http://www.shakacode.com
+#### Live at [www.reactrails.com](http://www.reactrails.com/)
 
-- If you came to here from the blog article, this example project has evolved.
-  See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
-- If this work interests you and you are looking for full or part-time remote work, please
-  [click here](http://forum.railsonmaui.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
-- Please email us at [justin@shakacode.com](mailto:justin@shakacode.com) if you have a ReactJs +
-  Rails project and are interested in help from our experienced team.
+By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakacode.com)
+
+- If this work interests you and you are looking for full or part-time remote work, please [click here](http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
+- Please email us at [justin@shakacode.com](mailto:justin@shakacode.com) if you have a ReactJs + Rails project and are interested in help from our experienced team.
 - Please file issues for problems and feature requests.
-- Pull requests are welcome! (and a great way to get on the team)
-- Feel free to open discussions at [forum.railsonmaui.com](http://forum.railsonmaui.com).
-- We now have a [gitter chat room for this topic](https://gitter.im/shakacode/react-webpack-rails-tutorial).
+- Pull requests are welcome! (and a great way to get on the ShakaCode team)
+- Feel free to open discussions at [forum.shakacode.com](http://forum.shakacode.com). We love to help!
+- We now have a [gitter chat room for this topic](https://gitter.im/shakacode/react-webpack-rails-tutorial) but we prefer our Slack Channel ([email us](mailto:contact@shakacode.com) for an invite).
 - Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
+- If you came to here from the blog article, this example project has evolved. See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
 
-A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/)
-
-Note, this source code repository is way ahead of the tutorial. We plan to update the tutorial as soon as can catch our breath!
-
-[Discussion forum regarding the tutorial](http://forum.railsonmaui.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/10)
+A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial. We plan to update the tutorial article as soon as we can catch our breath!
 
 # Example Application
-This is a simple example application that illustrates the use of ReactJs to implement a commenting
-system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails.
-It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to
-choose the form layout. `react-bootstrap` is used for the React components.
-
-A pure Rails UI generated from scaffolding is shown for comparison.
+This is a simple example application that illustrates the use of ReactJs to implement a commenting system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails. It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to choose the form layout. `react-bootstrap` is used for the React components. A pure Rails UI generated from scaffolding is shown for comparison.
 
 You can see this tutorial live here: [http://reactrails.com/](http://reactrails.com/)
 
@@ -39,30 +29,31 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 In no particular order:
 
-- Example of using the [react_on_rails](https://github.com/shakacode/react_on_rails)
-- Example of Rails 4.2 with ReactJs/Redux with Webpack and ES7.
-- Enable development of a JS client independently from Rails using Webpack Hot Module Reload. You can see this by starting the app and visiting http://localhost:4000
-- Easily enable use of npm modules with a Rails application.
-- Easily enable retrofitting such a JS framework into an existing Rails app.
-- Enable the use of the JavaScript ES7 transpiler.
-- Example setting up Ruby and ES7 linting in a real project.
-- Example of thorough use of Ruby and JavaScript linters, and other CI tasks.
+- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
+- Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
+- Example of enabling hot reloading of both JS and CSS from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
+- Example of Rails 4.2 with ReactJs/Redux/React-Router with Webpack and ES7.
+- Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.github.io/docs/webpack-dev-server.html). You can see this by starting the app and visiting http://localhost:4000
+- Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
+- Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
+- Example setting up Ruby and JavaScript linting in a real project, with corresponding CI rake tasks.
 
 # Technologies involved
 
 See package.json and Gemfile for versions
 
+1. [react_on_rails gem](https://github.com/shakacode/react_on_rails/)
 1. [React](http://facebook.github.io/react/) (for front-end app)
-2. [react-bootstrap](https://react-bootstrap.github.io/)
-3. [Redux](https://github.com/rackt/redux)
-4. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
-5. Babel transpiler (https://github.com/babel/babel)
-6. Rails 4.2 (for backend app)
-7. Heroku (for deployment)
+1. [react-bootstrap](https://react-bootstrap.github.io/)
+1. [bootstrap-loader](https://www.npmjs.com/package/bootstrap-loader/)
+1. [Redux](https://github.com/rackt/redux)
+1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
+1. [Babel transpiler](https://github.com/babel/babel)
+1. [Ruby on Rails 4.2](http://rubyonrails.org/) for backend app and comparision with plain HTML
+1. [Heroku for Rails 4.2 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails4)
 
 # Basic Setup
-1. Be sure that you have Node installed. I use [nvm](https://github.com/creationix/nvm), with node
-   version `v5.0`. See this article [Updating and using nvm](http://forum.railsonmaui.com/t/updating-and-using-nvm/293).
+1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v5.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.2.3
@@ -72,169 +63,77 @@ See package.json and Gemfile for versions
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.dev`
-1. Open a browser tab to http://0.0.0.0:3000 for the Rails app example.
-1. Open a browser tab to http://0.0.0.0:4000 for the Hot Module Replacement Example.
+1. Open a browser tab to http://localhost:3000 for the Rails app example.
+1. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example.
+1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the sceen update without refreshing the window. This applies to port 3000 and port 4000.
+1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically. 
 
-# Javascript development without Rails using Hot Module Replacement (HMR)
+# KEY COMMANDS
+1. Run all linters and tests: `rake ci`
+1. See all npm commands: `npm run`
+1. Start all development processes: `foreman start -f Procfile.dev`
+1. Start all Rails only development processes: `foreman start -f Procfile.rails`
+1. Start development without Rails, using the Webpack Dev Server only: `npm start` (or `foreman start -f Procfile.express`)
 
-Setup node and run the node server with file `server.js`.
 
-```
-cd client
-node server.js
-```
+# Javascript development without Rails using the Webpack Dev Server
 
-Point your browser to http://0.0.0.0:4000.
+1. Run the node server with file `server-express.js` with command `npm run` or `cd client && node server-express.js`.
+2. Point your browser to [http://localhost:4000](http://localhost:4000)
 
-Save a change to a JSX file and see it update immediately in the browser! Note,
-any browser state still exists, such as what you've typed in the comments box.
-That's totally different than [Live Reload](http://livereload.com/) which refreshes
-the browser.
+Save a change to a JSX file and see it update immediately in the browser! Note, any browser state still exists, such as what you've typed in the comments box. That's totally different than [Live Reload](http://livereload.com/) which refreshes the browser. Note, we just got this working with your regular Rails server!
 
 # Rails integration
 
-## Build JS/CSS bundles
+## JS and CSS assets
+We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modules within Rails! 
 
-Run `webpack` to build the JS/CSS bundles and have them saved in the
-Rails asset pipeline (app/assets). Although not shown in this tutorial, the
-Webpack ExtractTextPlugin can optionally be used to extract the CSS out of
-the JS bundle. We've chosen to let Rails handle CSS, SCSS, images, fonts.
-
-```
-cd client
-npm run build:dev
-```
-
-`client-bundle.js` is generated and saved to `app/assets/javascripts`. This is included in the
-Rails asset pipeline.
-
-Observe how the bundles are automatically re-generated whenever your JSX changes.
-
-## Run Rails server
-
-Once the JS bundle has been generated into the Rails asset pipeline, you can start
-the Rails server.
-
-```
-cd <rails_project_name>
-rake db:setup
-rails s
-```
-
-Now point your browser to http://0.0.0.0:3000.
-
-Note that it's important to run the Rails server on a different port than the node server.
+1. **Production Deployment**: See [assets.rake](lib/tasks/assets.rake) for we modify the Rails precompile task to deploy assets for production. 
+2. **Development mode**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) uses precompiled files.
+  ```erb
+  <%= env_stylesheet_link_tag 'application_prod', 'application_dev', media: 'all', 'data-turbolinks-track' => true  %>
+  <%= env_javascript_include_tag nil, 'http://localhost:3500/vendor-bundle.js' %>
+  <%= env_javascript_include_tag nil, 'http://localhost:3500/app-bundle.js' %>
+  <%= env_javascript_include_tag 'application_prod', 'application_dev', 'data-turbolinks-track' => true %>
+  ```
 
 # Webpack configuration
 ## Config Files
 
-- `webpack.client.base.config.js`: Common configuration file to minimize code duplication for client.rails and client.hot.
-- `webpack.client.rails.build.config.js`: Client side js bundle.
-- `webpack.server.rails.build.config.js`: Server side js bundle
-
-These are used for hot reloading (Webpack Dev Server):
-- `webpack.client.rails.hot.config.js`: Used to generate the Rails bundles for Rails use so you get hot reloading within your Rails app.
-- `webpack.client.hot.config.js`: Used by server.js to run the Webpack Dev server for stubbing the api end points
+- `webpack.client.base.config.js`: Common **client** configuration file to minimize code duplication for `webpack.client.rails.build.config`, `webpack.client.rails.hot.config`, `webpack.client.express.config`
+- `webpack.client.express.config.js`: Webpack configuration for [client/server-express.js](client/server-express.js)
+- `webpack.client.rails.build.config.js`: Client side js bundle for deployment and tests.
+- `webpack.client.rails.hot.config.js`: Webpack Dev Server bundler for serving rails assets on port 3500, used by [client/server-rails-hot.js](client/server-rails-hot.js), for hot reloading JS and CSS within Rails.
+- `webpack.server.rails.build.config.js`: Server side js bundle, used by server rendering.
 
 ## Webpack Resources
-- Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
 - [Webpack Docs](http://webpack.github.io/docs/)
+- [Webpack Cookbook](https://christianalfoni.github.io/react-webpack-cookbook/)
+- Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
 
-# Bootstrap integration
-Notice that Bootstrap Sass is installed as both a gem and an npm package.
-When running the Rails app, the bootstrap-sass gem assets are loaded directly
-through the asset pipeline without going through Webpack.
+# Sass, CSS Modules, and Twitter Bootstrap integration
+We're using Webpack to handle Sass assets so that we can use CSS modules. The best way to understand how we're handling assets is to close follow this example. We'll be working on more docs soon. If you'd like to give us a hand, that's a great way to learn about this!
 
-See `app/assets/application.css.scss`.
+For example in [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx), see how we use standard JavaScript import syntax to refer to class names that come from CSS modules:
 
-On the other hand when running the Webpack dev server, the bootrap-sass npm
-assets are loaded through Webpack (with help of the bootstrap-sass-loader).
-See `webpack/webpack.hot.config.js`.
+```javascript
+import css from './CommentBox.scss';
 
-Bootstrap can be customized by hand-picking which modules to load and/or overwriting
-some of the Sass variables defined by the framework.
-
-## Bootstrap modules customization
-
-If you are not using all the Bootstrap modules then you'll likely want to customize
-it to avoid loading unused assets. This customization is done in separate files
-for the Rails app versus the Webpack dev server so it's important to keep these
-in-sync as you develop your app in parallel using the Rails and the Webpack HMR
-environments.
-
-- Rails Bootstrap customization file: `app/assets/stylesheets/_bootstrap-custom.scss`
-- Webpack HMR Bootstrap customization file: `webpack/bootstrap-sass.config.js`
-
-## Bootstrap variables customization
-
-If you need to customize some of the Sass variables defined in Bootstrap you
-can do so by overwriting these variables in a separate file and have it loaded
-before other Bootstrap modules.
-
-To avoid duplicating this customization between Rails and Webpack HMR,
-this custom code has been consolidated under Webpack in
-`webpack/assets/stylesheets/_bootstrap-variables-customization.scss` and the
-`webpack/assets/stylesheets` directory has been added to the Rails asset pipeline
-search path. See config `config/application.rb`. Keep that in mind as you
-customize the Bootstrap Sass variables.
-
-## Bourbon integration
-
-To use [bourbon](https://github.com/thoughtbot/bourbon) take the following steps:
-
-- Install node-bourbon `cd client && npm install --save node-bourbon`
-- Update [bootstrap-sass.js](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/bootstrap-sass.config.js) to use the right paths:
-```
-// Add this
-var bourbonPaths = require('node-bourbon').includePaths;
-module.exports = {
-  // ...
-  // And update this
-  styleLoader: 'style-loader!css-loader!sass-loader?imagePath=/assets/images&includePaths[]=' + bourbonPaths,
-```
-- `@import 'bourbon';` Import bourbon from your [scss file](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/assets/stylesheets/_app-styling-post-bootstrap-loading.scss)
-
-# Notes on Rails assets
-## Rails Asset Pipeline Magic
-Be sure to see [assets.rake](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/lib/tasks/assets.rake) for how webpack is invoked during asset compilation.
-
-## Javascript
-The `webpack.rails.config.js` file generates client-bundle.js which is then included
-by the Rails asset pipeline.
-
-##jQuery with Rails and Webpack
-jQuery and jQuery-ujs are not required within `app/assets/javascript/application.js`
-and have been moved under`/client` and managed by npm. The modules are exposed via entry point
-by `webpack.common.config.js`.
-
-In `application.js`, it's critical that any libraries that depend on jQuery come after the inclusion
-of the Webpack bundle, such as the twitter bootstrap javascript.
-
-Please refer to [Considerations for jQuery with Rails and Webpack](http://forum.railsonmaui.com/t/considerations-for-jquery-with-rails-and-webpack/344) for further info.
-
-
-## Sass and images
-1. The Webpack server loads the images from the **symlink** of the
-   `app/assets/images` directory.
-2. Since the images are not moved, Rails loads images via the normal asset
-   pipeline features.
-3. The `image-url` sass helper takes care of mapping the correct directories for
-   images. The image directory for the webpack server is configured by this
-   line:
-
-```
-{ test: /\.scss$/, loader: "style!css!sass?outputStyle=expanded&imagePath=/assets/images"}
+export default class CommentBox extends React.Component {
+  render() {
+    const { actions, data } = this.props;
+    const cssTransitionGroupClassNames = {
+      enter: css.elementEnter,
+      enterActive: css.elementEnterActive,
+      leave: css.elementLeave,
+      leaveActive: css.elementLeaveActive,
+    };
+  }
+}
 ```
 
 ## Sass and fonts
-The tutorial makes use of a custom font OpenSans-Light. The font files are located
-under `app/assets/font` and are loaded by both the Rails asset pipeline and
-the Webpack HMR server. See the **symlink** under `webpack/assets/fonts` which
-points to `app/assets/fonts`.
-
-Note that the libsass C library, which is used by the Webpack sass-loader, does not
-support the font-url() helper so we use url() instead. See the hack in
-`webpack/assets/stylesheets/_bootstrap-variables-customization.scss`.
+The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server. 
 
 # Process management
 Run the following command in your development environment to invoke both Webpack and Rails.
@@ -242,144 +141,32 @@ Run the following command in your development environment to invoke both Webpack
 bundle exec foreman start -f Procfile.dev
 ```
 
-# Source Maps
-They work for both Rails and the Webpack Server!
+## Contributors
+[The Shaka Code team!](http://www.shakacode.com/about/) and many others!
 
-# Deploying to Heroku
+Notable contributions include (please submit PR if I miss any!):
 
-In order to deploy to heroku, you'll need to run this command once to set a custom
-buildpack:
+* [Justin Gordon](https://github.com/justin808/): Started this, leads this 
+* [Alex Fedoseev](https://github.com/alexfedoseev): Added integration of Rails hot loading and CSS modules, plus much more
+* [Martin Breining](https://github.com/mbreining): For adding flux at first
+* [Dylan Grafmyre](https://github.com/Dgrafmyre): For ci setup
+* [Rob Wise](https://github.com/robwise): Many doc improvements
+* [Josias Schneider](https://github.com/josiasd): Conversion to the new react_on_rails format
 
-```
-heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
-```
-
-This runs the two buildpacks in the `.buildpacks` directory.
-
-Also make sure you are running the latest heroku stack, cedar-14, to avoid running
-into the [following issue](https://github.com/sass/node-sass/issues/467#issuecomment-61729195).
-
-```
-heroku stack:set cedar-14 -a react-webpack-rails-tutorial
-```
-
-To deploy the app on Heroku:
-```
-git push heroku master
-```
-
-# Running Tests
-*Default rake task runs feature specs, mocha tests and linting*
-
-We have;
-
-* feature tests in /spec/features
-* component unit tests in /client/test/
-* javascript linting
-
-From the root of the project, you can run all specs+tests+linter with
-
-      npm run test
-
-Run the feature specs individually with `rspec`.
-
-Run the React unit tests (all .js and .jsx files) from the `client` dir with;
-
-      cd client
-      npm run test --silent
-
-In lieu of having `mocha --watch` working properly (pull request welcome!), you can have your js tests continually running with `watch`
-
-      npm install -g watch
-      cd client
-      watch 'npm run test --silent' test/ app/
-
-
-## CI configuration
-Add those lines to your CI scripts after `bundle install`
-```
-npm install
-cd client && npm run build:client && npm run build:server
-```
-
-# JBuilder Notes
-There's a bunch of gotchas with using [Jbuilder](https://github.com/rails/jbuilder) to create the
-string version of the props to be sent to the react_on_rails_gem. The main thing is that if you
-follow the example and call Jbuilder like this, you don't run into a number of issues.
-
-```erb
-<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
-    generator_function: true, prerender: true) %>
-```
-
-However, if you try to set the value of the JSON string inside of the controller, then you will
-run into several issues with rendering the Jbuilder template from the controller.
-See the notes in this the example code for app/controllers/pages_controller.rb.
-
-Here's the samples of Jbuilder that we use:
-
-### comments/_comment.json.jbuilder:
-
-```ruby
-json.extract! comment, :id, :author, :text, :created_at, :updated_at
-```
-
-### comments/index.json.jbuilder:
-
-```ruby
-# Specify the partial, as well as the name of the variable used in the partial
-json.array! @comments, { partial: "comments/comment", as: :comment }
-```
-
-### comments/show.json.jbuilder:
-
-```ruby
-json.partial! 'comment', comment: @comment
-```
-
-# Linting and Code Inspection
-## Running Lint and CI tasks
-* Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
-* See file [README.md](client/README.md) for how to run ESLint and JSCS
-* See scripts `scripts/lint` and `client/bin/lint`.
-* We're using the [AirBnb JavaScript style guidelines](https://github.com/airbnb/javascript).
-
-### RubyMine/Webstorm Linting Configuration
-  * I started out trying to make RubyMine and WebStorm catch and fix linting errors. However, I find
-    it faster to just do this with the command line. Your mileage may vary.
-  * Create a custom scope like this for RubyMine, named "Inspection Scope"
-
-    file[react-rails-tutorial]:*/&&!file[react-rails-tutorial]:tmp//*&&!file[react-rails-tutorial]:log//*&&!file[react-rails-tutorial]:client/node_modules//*&&!file[react-rails-tutorial]:client/assets/fonts//*&&!file[react-rails-tutorial]:app/assets/fonts//*&&!file[react-rails-tutorial]:bin//*&&!file[react-rails-tutorial]:app/assets/javascripts//*
-
-  * Install the code style and inspection files in [client/jetbrains](client/jetbrains)
-  * Use the installed inspection settings and new Inspection Scope for code inspection.
-  * RubyMine configuration is optional. All linters run from the command line.
-
-## Linters
-  1. [Rubocop](https://github.com/bbatsov/rubocop)
-  2. [Ruby-Lint](https://github.com/YorickPeterse/ruby-lint)
-  3. [Eslint](http://eslint.org/)
-  4. [JSCS](https://github.com/jscs-dev/node-jscs)
-  5. [scss-lint](https://github.com/brigade/scss-lint)
-  6. [brakeman](http://brakemanscanner.org/)
-  7. [bundle-audit](https://github.com/rubysec/bundler-audit)
-
-# Contributors
-* [Martin Breining](https://github.com/mbreining)
-* [Dylan Grafmyre](https://github.com/Dgrafmyre)
-
-# RubyMine and WebStorm
-Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools
-[RubyMine](https://www.jetbrains.com/ruby/) and [WebStorm](https://www.jetbrains.com/webstorm/).
-The developers of this project use RubyMine at the top level, mostly for Ruby work, and we use
-WebStorm opened up to the `client` directory to focus on JSX and Sass files.
-
-# Misc Tips
-
-## Cleanup local branches merged to master
-```
-alias git-cleanup-merged-branches='git branch --merged master | grep -v master | xargs git branch -d'
-```
+See the full list of [Contributors](https://github.com/shakacode/react-webpack-rails-tutorial/graphs/contributors)
 
 # Open Code of Conduct
 This project adheres to the [Open Code of Conduct](http://todogroup.org/opencodeofconduct/#fetch/opensource@github.com). By participating, you are expected to uphold this code.
+
+# RubyMine and WebStorm
+Special thanks to [JetBrains](https://www.jetbrains.com) for their great tools: [RubyMine](https://www.jetbrains.com/ruby/) and [WebStorm](https://www.jetbrains.com/webstorm/). Some developers of this project use RubyMine at the top level, mostly for Ruby work, and we use WebStorm opened up to the `client` directory to focus on JSX and Sass files.
+
+## About [ShakaCode](http://www.shakacode.com/)
+
+We hope you read [Who Is ShakaCode](http://www.shakacode.com/2015/09/17/who-is-shaka-code.html) and [Success the ShakaCode Way!](http://www.shakacode.com/2015/11/26/success-the-shakacode-way.html)
+
+Visit [our forums!](http://forum.shakacode.com). We've got a [category dedicated to react_on_rails](http://forum.shakacode.com/c/rails/reactonrails).
+
+If you're looking for consulting on a project using React and Rails, email us at [contact@shakacode.com](mailto:contact@shakacode.com)! You can also join our slack room for some free advice. Email us for an invite.
+
+We're looking for great developers that want to work with Rails + React with a super-run, remote-first, distributed, worldwide team, for our own products, client work, and open source. [More info here](http://www.shakacode.com/about/index.html#work-with-us).

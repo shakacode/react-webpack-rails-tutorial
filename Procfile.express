@@ -1,0 +1,8 @@
+# Basic procfile for express server dev work.
+# Only run the express server!
+# Use this if you want to mock out your endpoints.
+# It's a great way to prototype UI especially with non-Rails developers!
+# You can still run tests, and they will build the webpack file for each test run.
+# Hot reloading of JS and CSS is enabled!
+
+express: sh -c 'HOT_PORT=4000 npm start'

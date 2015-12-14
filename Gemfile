@@ -51,10 +51,12 @@ gem "awesome_print"
 # It is critical to not include any of the jquery gems when following this pattern or
 # else you might have multiple jQuery versions.
 
-group :development, :test do
+group :development do
   # Access an IRB console on exceptions page and /console in development
   gem "web-console"
+end
 
+group :development, :test do
   ################################################################################
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
@@ -82,6 +84,10 @@ group :development, :test do
   gem "pry-stack_explorer"
   gem "pry-rescue"
   gem "pry-byebug"
+
+  ################################################################################
+  # Color console output
+  gem "rainbow"
 end
 
 group :test  do

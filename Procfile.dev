@@ -1,11 +1,20 @@
-web: rails s
+# Basic procfile for dev work.
+# Runs all processes. Development is faster if you pick one of the other Procfiles if you don't need
+# some of the processes: Procfile.rails or Procfile.express
 
+# Development rails requires both rails and rails-assets
+# (and rails-server-assets if server rendering)
+rails: rails s
 # Run the hot reload server for client development
-client: sh -c 'rm app/assets/webpack/* || true && cd client && HOT_RAILS_PORT=3500 npm run build:dev:client'
+rails-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm run build:dev:client'
+# Keep the JS fresh for server rendering. Remove if not server rendering
+rails-server-assets: sh -c 'npm run build:dev:server'
 
-# Keep the JS fresh for specs
-client-spec: sh -c 'cd client && npm run build:test:client'
+# If you don't keep this process going, you will rebuild the assets per spec run. This is configured
+# in rails_helper.rb.
+rails-spec: sh -c 'npm run build:test:client'
 
-# Keep the JS fresh for server rendering
-server: sh -c 'cd client && npm run build:dev:server'
-hot: sh -c 'cd client && HOT_PORT=4000 npm start'
+# Run an express server if you want to mock out your endpoints. No Rails involved!
+# Disable this if you are not using it.
+# It's a great way to prototype UI especially with non-Rails developers!
+express: sh -c 'HOT_PORT=4000 npm start'
