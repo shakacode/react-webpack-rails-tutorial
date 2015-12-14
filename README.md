@@ -29,7 +29,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 In no particular order:
 
-- Example of using the [react_on_rails](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
+- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
 - Example of enabling hot reloading of both JS and CSS from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
 - Example of Rails 4.2 with ReactJs/Redux/React-Router with Webpack and ES7.
@@ -45,6 +45,7 @@ See package.json and Gemfile for versions
 1. [react_on_rails gem](https://github.com/shakacode/react_on_rails/)
 1. [React](http://facebook.github.io/react/) (for front-end app)
 1. [react-bootstrap](https://react-bootstrap.github.io/)
+1. [bootstrap-loader](https://www.npmjs.com/package/bootstrap-loader/)
 1. [Redux](https://github.com/rackt/redux)
 1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
