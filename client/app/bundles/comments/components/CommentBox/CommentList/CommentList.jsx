@@ -3,11 +3,11 @@ import Immutable from 'immutable';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import Comment from './Comment/Comment';
+import BaseComponent from '../../BaseComponent';
 
-export default class CommentList extends React.Component {
+export default class CommentList extends BaseComponent {
   static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,
@@ -18,10 +18,6 @@ export default class CommentList extends React.Component {
     super(props, context);
     this.state = {};
     _.bindAll(this, '_errorWarning');
-  }
-
-  shouldComponentUpdate() {
-    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
   }
 
   _errorWarning() {

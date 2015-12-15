@@ -1,11 +1,8 @@
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-export default class TestReactRouter extends React.Component {
-  shouldComponentUpdate() {
-    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
-  }
+import BaseComponent from '../BaseComponent';
 
+export default class TestReactRouter extends BaseComponent {
   render() {
     return (
       <div className="container">

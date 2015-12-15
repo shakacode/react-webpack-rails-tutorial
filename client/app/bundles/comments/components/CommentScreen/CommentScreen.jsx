@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
 import CommentBox from '../CommentBox/CommentBox';
-
 import css from './CommentScreen.scss';
+import BaseComponent from '../BaseComponent';
 
-export default class CommentScreen extends React.Component {
+export default class CommentScreen extends BaseComponent {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,

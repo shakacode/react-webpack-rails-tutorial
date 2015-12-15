@@ -2,14 +2,14 @@ import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
 import _ from 'lodash';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
+import BaseComponent from '../BaseComponent';
 
-export default class SimpleCommentScreen extends React.Component {
+export default class SimpleCommentScreen extends BaseComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -20,10 +20,6 @@ export default class SimpleCommentScreen extends React.Component {
     };
 
     _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
-  }
-
-  shouldComponentUpdate() {
-    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
   }
 
   componentDidMount() {

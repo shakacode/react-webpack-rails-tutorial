@@ -1,17 +1,17 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
+import BaseComponent from '../components/BaseComponent';
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?
   return { data: state.$$commentsStore };
 }
 
-class RouterCommentsContainer extends React.Component {
+class RouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
@@ -19,10 +19,6 @@ class RouterCommentsContainer extends React.Component {
       state: PropTypes.object,
     }).isRequired,
   };
-
-  shouldComponentUpdate() {
-    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
-  }
 
   render() {
     const { dispatch, data } = this.props;

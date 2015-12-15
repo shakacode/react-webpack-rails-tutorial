@@ -1,20 +1,16 @@
 import React, { PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import BaseComponent from '../BaseComponent';
 
-export default class CommentBox extends React.Component {
+export default class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
   };
-
-  shouldComponentUpdate() {
-    return PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
-  }
 
   componentDidMount() {
     const { fetchComments } = this.props.actions;
