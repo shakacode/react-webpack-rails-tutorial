@@ -25,3 +25,8 @@ To deploy the app on Heroku:
 git push heroku master
 ```
 
+
+## GOTCHA: Use "dependencies" and not "devDependencies" for anything deployment related
+
+Be sure to put all normall "dev only" tools in "dependencies" and not "devDependencies" in your `client/package.json`. This is because the Heroku default buildpack will only install what's in "dependencies". So only use `npm --save-dev` for things like linters and anything **only** related to the Webpack Dev Server.
+
