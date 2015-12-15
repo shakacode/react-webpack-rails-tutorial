@@ -7,6 +7,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
+import css from './SimpleCommentScreen.scss';
 
 export default class SimpleCommentScreen extends React.Component {
   constructor(props, context) {
@@ -70,6 +71,13 @@ export default class SimpleCommentScreen extends React.Component {
   }
 
   render() {
+    const cssTransitionGroupClassNames = {
+      enter: css.elementEnter,
+      enterActive: css.elementEnterActive,
+      leave: css.elementLeave,
+      leaveActive: css.elementLeaveActive,
+    };
+
     return (
       <div className="commentBox container">
         <h2>Comments</h2>
@@ -81,10 +89,12 @@ export default class SimpleCommentScreen extends React.Component {
           isSaving={this.state.isSaving}
           actions={{ submitComment: this._handleCommentSubmit }}
           error={this.state.submitCommentError}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
         <CommentList
           $$comments={this.state.$$comments}
           error={this.state.fetchCommentsError}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
       </div>
     );
