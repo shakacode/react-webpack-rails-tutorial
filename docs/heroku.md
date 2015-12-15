@@ -26,7 +26,7 @@ git push heroku master
 ```
 
 
-## GOTCHA: Use "dependencies" and not "devDependencies" for anything deployment related
+## GOTCHAS
 
-Be sure to put all normall "dev only" tools in "dependencies" and not "devDependencies" in your `client/package.json`. This is because the Heroku default buildpack will only install what's in "dependencies". So only use `npm --save-dev` for things like linters and anything **only** related to the Webpack Dev Server.
-
+1. Use "dependencies" and not "devDependencies" for anything deployment related. Be sure to put all normall "dev only" tools in "dependencies" and not "devDependencies" in your `client/package.json`. This is because the Heroku default buildpack will only install what's in "dependencies". So only use `npm --save-dev` for things like linters and anything **only** related to the Webpack Dev Server.
+2. The file system is case sensitive on Heroku, so don't mix the case of your import with the real file name. For example, if you name a file `BaseApi` and you do this: `import BaseAPI from 'lib/utils/BaseAPI'`, that will work locally, but when you deploy, you'll get an error like: `Uncaught Error: Cannot find module "lib/utils/baseAPI"`
