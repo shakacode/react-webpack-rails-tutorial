@@ -5,9 +5,9 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
 
 import Comment from './Comment/Comment';
+import BaseComponent from 'libs/components/BaseComponent';
 
-export default class CommentList extends React.Component {
-
+export default class CommentList extends BaseComponent {
   static propTypes = {
     $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
     error: PropTypes.any,

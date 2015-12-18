@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -8,11 +9,12 @@ import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
 
+import BaseComponent from 'libs/components/BaseComponent';
+
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
-export default class CommentForm extends React.Component {
-
+export default class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
@@ -78,7 +80,7 @@ export default class CommentForm extends React.Component {
     if (this.state.formMode < 2) {
       ref = this.refs.text.getInputDOMNode();
     } else {
-      ref = React.findDOMNode(this.refs.inlineText);
+      ref = ReactDOM.findDOMNode(this.refs.inlineText);
     }
 
     ref.focus();

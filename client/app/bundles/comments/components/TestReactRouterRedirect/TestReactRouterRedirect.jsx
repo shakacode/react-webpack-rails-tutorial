@@ -1,7 +1,8 @@
 import React from 'react';
 
-export default class TestReactRouterRedirect extends React.Component {
+import BaseComponent from 'libs/components/BaseComponent';
 
+export default class TestReactRouterRedirect extends BaseComponent {
   static checkAuth(nextState, replaceState) {
     // Hard code this to demonstrate the effect
     const notAuthorized = true;

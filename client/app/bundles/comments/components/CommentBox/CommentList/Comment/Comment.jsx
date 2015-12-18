@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import marked from 'marked';
 
 import css from './Comment.scss';
+import BaseComponent from 'libs/components/BaseComponent';
 
-export default class Comment extends React.Component {
-
+export default class Comment extends BaseComponent {
   static propTypes = {
     author: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,

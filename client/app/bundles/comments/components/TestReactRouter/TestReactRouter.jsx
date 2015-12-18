@@ -1,7 +1,8 @@
 import React from 'react';
 
-export default class TestReactRouter extends React.Component {
+import BaseComponent from 'libs/components/BaseComponent';
 
+export default class TestReactRouter extends BaseComponent {
   render() {
     return (
       <div className="container">

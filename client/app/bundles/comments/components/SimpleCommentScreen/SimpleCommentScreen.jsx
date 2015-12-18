@@ -6,14 +6,15 @@ import _ from 'lodash';
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
+import css from './SimpleCommentScreen.scss';
+import BaseComponent from 'libs/components/BaseComponent';
 
-export default class SimpleCommentScreen extends React.Component {
-
+export default class SimpleCommentScreen extends BaseComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {
       $$comments: Immutable.fromJS([]),
-      ajaxSending: false,
+      isSaving: false,
       fetchCommentsError: null,
       submitCommentError: null,
     };
@@ -35,7 +36,7 @@ export default class SimpleCommentScreen extends React.Component {
   }
 
   _handleCommentSubmit(comment) {
-    this.setState({ ajaxSending: true });
+    this.setState({ isSaving: true });
 
     const requestConfig = {
       responseType: 'json',
@@ -53,19 +54,26 @@ export default class SimpleCommentScreen extends React.Component {
 
           this.setState({
             $$comments: $$comments.push($$comment),
-            ajaxSending: false,
+            isSaving: false,
           });
         })
         .catch(error => {
           this.setState({
             submitCommentError: error,
-            ajaxSending: false,
+            isSaving: false,
           });
         })
     );
   }
 
   render() {
+    const cssTransitionGroupClassNames = {
+      enter: css.elementEnter,
+      enterActive: css.elementEnterActive,
+      leave: css.elementLeave,
+      leaveActive: css.elementLeaveActive,
+    };
+
     return (
       <div className="commentBox container">
         <h2>Comments</h2>
@@ -74,13 +82,15 @@ export default class SimpleCommentScreen extends React.Component {
           <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
-          ajaxSending={this.state.ajaxSending}
+          isSaving={this.state.isSaving}
           actions={{ submitComment: this._handleCommentSubmit }}
           error={this.state.submitCommentError}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
         <CommentList
           $$comments={this.state.$$comments}
           error={this.state.fetchCommentsError}
+          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
       </div>
     );
