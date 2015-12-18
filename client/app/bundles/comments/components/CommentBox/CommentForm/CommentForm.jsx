@@ -9,7 +9,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
 
-import BaseComponent from '../../BaseComponent';
+import BaseComponent from 'libs/components/BaseComponent';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';

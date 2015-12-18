@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
-import BaseComponent from '../components/BaseComponent';
+import BaseComponent from 'libs/components/BaseComponent';
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?

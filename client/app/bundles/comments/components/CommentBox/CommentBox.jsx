@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
 import css from './CommentBox.scss';
-import BaseComponent from '../BaseComponent';
+import BaseComponent from 'libs/components/BaseComponent';
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {

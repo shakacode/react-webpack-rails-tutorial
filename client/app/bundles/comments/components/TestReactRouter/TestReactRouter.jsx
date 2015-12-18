@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BaseComponent from '../BaseComponent';
+import BaseComponent from 'libs/components/BaseComponent';
 
 export default class TestReactRouter extends BaseComponent {
   render() {

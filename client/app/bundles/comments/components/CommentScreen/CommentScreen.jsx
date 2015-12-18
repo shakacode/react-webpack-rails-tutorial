@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import CommentBox from '../CommentBox/CommentBox';
 import css from './CommentScreen.scss';
-import BaseComponent from '../BaseComponent';
+import BaseComponent from 'libs/components/BaseComponent';
 
 export default class CommentScreen extends BaseComponent {
 
