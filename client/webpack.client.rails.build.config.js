@@ -19,6 +19,8 @@ config.entry.vendor.unshift(
   'es5-shim/es5-shim',
   'es5-shim/es5-sham',
   'jquery-ujs',
+
+  // Configures extractStyles to be true if NODE_ENV is production
   'bootstrap-loader/extractStyles'
 );
 

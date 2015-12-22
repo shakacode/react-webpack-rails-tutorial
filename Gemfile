@@ -17,7 +17,6 @@ end
 
 # Use SCSS for stylesheets
 gem "sass-rails"
-gem "bootstrap-sass", "~> 3.3"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 # Use CoffeeScript for .js.coffee assets and views
