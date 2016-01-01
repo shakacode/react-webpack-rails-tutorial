@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { match, RoutingContext } from 'react-router';
+import { match, RouterContext } from 'react-router';
 
 import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
@@ -29,7 +29,7 @@ export default (props, location) => {
   // Important that you don't do this if you are redirecting or have an error.
   return (
     <Provider store={store}>
-      <RoutingContext {...routeProps} />
+      <RouterContext {...routeProps} />
     </Provider>
   );
 };
