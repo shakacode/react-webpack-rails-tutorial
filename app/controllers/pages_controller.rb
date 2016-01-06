@@ -32,6 +32,6 @@ class PagesController < ApplicationController
   private
 
   def set_comments
-    @comments = Comment.all
+    @comments = Comment.all.order("id DESC")
   end
 end

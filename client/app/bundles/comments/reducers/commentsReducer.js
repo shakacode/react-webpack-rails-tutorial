@@ -37,7 +37,7 @@ export default function commentsReducer($$state = $$initialState, action = null)
         state
           .updateIn(
             ['$$comments'],
-            $$comments => $$comments.push(Immutable.fromJS(comment))
+            $$comments => $$comments.unshift(Immutable.fromJS(comment))
           )
           .merge({
             submitCommentError: null,
