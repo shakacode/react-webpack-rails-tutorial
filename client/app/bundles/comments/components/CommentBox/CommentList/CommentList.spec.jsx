@@ -31,7 +31,7 @@ describe('CommentList', () => {
     }),
   );
 
-  it('renders a list of Comments in reverse order', () => {
+  it('renders a list of Comments in normal order', () => {
     const component = renderIntoDocument(
       <CommentList
         $$comments={comments}
@@ -40,8 +40,8 @@ describe('CommentList', () => {
     );
     const list = scryRenderedComponentsWithType(component, Comment);
     expect(list.length).to.equal(2);
-    expect(list[0].props.author).to.equal('Furter');
-    expect(list[1].props.author).to.equal('Frank');
+    expect(list[0].props.author).to.equal('Frank');
+    expect(list[1].props.author).to.equal('Furter');
   });
 
   it('renders an alert if errors', () => {

@@ -53,7 +53,7 @@ export default class SimpleCommentScreen extends BaseComponent {
           const $$comment = Immutable.fromJS(comment);
 
           this.setState({
-            $$comments: $$comments.push($$comment),
+            $$comments: $$comments.unshift($$comment),
             isSaving: false,
           });
         })
