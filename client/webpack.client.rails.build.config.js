@@ -46,7 +46,10 @@ config.module.loaders.push(
       '!sass-resources'
     ),
   },
-  { test: require.resolve('react'), loader: 'imports?shim=es5-shim/es5-shim&sham=es5-shim/es5-sham' }
+  {
+    test: require.resolve('react'),
+    loader: 'imports?shim=es5-shim/es5-shim&sham=es5-shim/es5-sham',
+  }
 );
 
 config.plugins.push(
