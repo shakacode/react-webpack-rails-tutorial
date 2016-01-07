@@ -37,7 +37,8 @@ export default class CommentBox extends BaseComponent {
           Comments {data.get('isFetching') && 'Loading...'}
         </h2>
         <p>
-          <b>Text</b> supports Github Flavored Markdown. Comments older than 24 hours are deleted.<br/>
+          <b>Text</b> supports Github Flavored Markdown.
+          Comments older than 24 hours are deleted.<br/>
           <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
         </p>
         <CommentForm
