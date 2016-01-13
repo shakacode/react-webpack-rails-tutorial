@@ -17,13 +17,11 @@ module.exports = {
     vendor: [
       'babel-polyfill',
       'jquery',
-      'react',
-      'react-dom',
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
     app: [
-      './app/bundles/comments/startup/clientGlobals',
+      './app/bundles/comments/startup/clientRegistration',
     ],
   },
   resolve: {
