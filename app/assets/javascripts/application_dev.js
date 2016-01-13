@@ -17,7 +17,4 @@
 // This one depends on jQuery
 //= require turbolinks
 
-// This will soon be removed as it will be in vendor-bundle with react_on_rails 2.0
-//= require react_on_rails
-
 //= require rails_startup

@@ -11,8 +11,7 @@ module.exports = {
   // the project dir
   context: __dirname,
   entry: [
-    'react',
-    'react-dom/server',
+    'babel-polyfill',
     './app/bundles/comments/startup/serverGlobals',
   ],
   output: {
@@ -49,10 +48,6 @@ module.exports = {
           'sass-resources',
         ],
       },
-
-      // React is necessary for the client rendering:
-      { test: require.resolve('react'), loader: 'expose?React' },
-      { test: require.resolve('react-dom/server'), loader: 'expose?ReactDOMServer' },
     ],
   },
 

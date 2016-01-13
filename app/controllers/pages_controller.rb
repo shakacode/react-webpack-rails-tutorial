@@ -7,7 +7,7 @@ class PagesController < ApplicationController
     # app/views/pages/index.html.erb:20
     #
     #  <%= react_component('App', render(template: "/comments/index.json.jbuilder"),
-    #     generator_function: true, prerender: true) %>
+    #     prerender: true) %>
     #
     #
     # NOTE: this could be an alternate syntax if you wanted to pass comments as a variable to a partial

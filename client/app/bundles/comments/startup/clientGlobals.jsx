@@ -1,7 +1,12 @@
 import App from './ClientApp';
 import RouterApp from './ClientRouterApp';
 import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
+import ReactOnRails from 'react-on-rails';
 
-window.App = App;
-window.RouterApp = RouterApp;
-window.SimpleCommentScreen = SimpleCommentScreen;
+ReactOnRails.register(
+  {
+    App,
+    RouterApp,
+    SimpleCommentScreen,
+  }
+);

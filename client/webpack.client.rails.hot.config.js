@@ -67,6 +67,10 @@ config.module.loaders.push(
       'sass',
       'sass-resources',
     ],
+  },
+  {
+    test: require.resolve('jquery-ujs'),
+    loader: 'imports?jQuery=jquery'
   }
 );
 

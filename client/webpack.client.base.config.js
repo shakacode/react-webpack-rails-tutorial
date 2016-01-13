@@ -30,6 +30,8 @@ module.exports = {
     extensions: ['', '.js', '.jsx'],
     alias: {
       libs: path.join(process.cwd(), 'app', 'libs'),
+      react: path.resolve('./node_modules/react'),
+      'react-dom': path.resolve('./node_modules/react-dom'),
     },
   },
   plugins: [
@@ -59,10 +61,6 @@ module.exports = {
       { test: /\.(ttf|eot)$/, loader: 'file' },
       { test: /\.(jpe?g|png|gif|svg|ico)$/, loader: 'url?limit=10000' },
 
-      // React is necessary for the client rendering
-      { test: require.resolve('react'), loader: 'expose?React' },
-      { test: require.resolve('react-dom'), loader: 'expose?ReactDOM' },
-      { test: require.resolve('jquery-ujs'), loader: 'imports?jQuery=jquery' },
       { test: require.resolve('jquery'), loader: 'expose?jQuery' },
       { test: require.resolve('jquery'), loader: 'expose?$' },
 

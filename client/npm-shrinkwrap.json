@@ -4074,6 +4074,11 @@
       "from": "react-dom@>=0.14.3 <0.15.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.5.tgz"
     },
+    "react-on-rails": {
+      "version": "2.0.0-rc.3",
+      "from": "react-on-rails@2.0.0-rc.3",
+      "resolved": "https://registry.npmjs.org/react-on-rails/-/react-on-rails-2.0.0-rc.3.tgz"
+    },
     "react-overlays": {
       "version": "0.5.4",
       "from": "react-overlays@>=0.5.2 <0.6.0",

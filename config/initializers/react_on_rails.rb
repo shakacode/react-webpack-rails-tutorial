@@ -8,7 +8,6 @@ ReactOnRails.configure do |config|
 
   # Below options can be overriden by passing to the helper method.
   config.prerender = true # default is false
-  config.generator_function = true # default is false, meaning that you expose ReactComponents directly
   config.trace = Rails.env.development? # default is true for development, off otherwise
 
   # For server rendering. This can be set to false so that server side messages are discarded.
