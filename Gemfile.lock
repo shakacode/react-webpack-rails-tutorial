@@ -201,7 +201,7 @@ GEM
     rainbow (2.0.0)
     rake (10.4.2)
     rdoc (4.2.0)
-    react_on_rails (2.0.0.rc.4)
+    react_on_rails (2.0.0)
       connection_pool
       execjs (~> 2.5)
       rails (>= 3.2)
@@ -347,7 +347,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (= 2.0.0.rc.4)
+  react_on_rails (= 2.0.0)
   rspec-rails
   rspec-retry
   rubocop
