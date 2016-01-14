@@ -3,7 +3,7 @@ There's a bunch of gotchas with using [Jbuilder](https://github.com/rails/jbuild
 
 ```erb
 <%= react_component('App', render(template: "/comments/index.json.jbuilder"),
-    generator_function: true, prerender: true) %>
+    prerender: true) %>
 ```
 
 However, if you try to set the value of the JSON string inside of the controller, then you will run into several issues with rendering the Jbuilder template from the controller. See the notes in this the example code for app/controllers/pages_controller.rb.

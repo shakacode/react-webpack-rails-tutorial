@@ -201,10 +201,11 @@ GEM
     rainbow (2.0.0)
     rake (10.4.2)
     rdoc (4.2.0)
-    react_on_rails (1.2.0)
+    react_on_rails (2.0.0.rc.4)
       connection_pool
       execjs (~> 2.5)
       rails (>= 3.2)
+      rainbow (~> 2.0)
     ref (2.0.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -346,7 +347,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails
+  react_on_rails (= 2.0.0.rc.4)
   rspec-rails
   rspec-retry
   rubocop
@@ -364,4 +365,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
