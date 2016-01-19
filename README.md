@@ -75,7 +75,7 @@ See package.json and Gemfile for versions
 1. Open a browser tab to http://localhost:3000 for the Rails app example.
 1. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example.
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the sceen update without refreshing the window. This applies to port 3000 and port 4000.
-1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically. 
+1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
 
 # KEY COMMANDS
 1. Run all linters and tests: `rake ci`
@@ -95,15 +95,15 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
 # Rails integration
 
 ## JS and CSS assets
-We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modules within Rails! 
+We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modules within Rails!
 
-1. **Production Deployment**: See [assets.rake](lib/tasks/assets.rake) for we modify the Rails precompile task to deploy assets for production. 
+1. **Production Deployment**: See [assets.rake](lib/tasks/assets.rake) for we modify the Rails precompile task to deploy assets for production.
 2. **Development mode**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) uses precompiled files.
+
   ```erb
-  <%= env_stylesheet_link_tag 'application_prod', 'application_dev', media: 'all', 'data-turbolinks-track' => true  %>
-  <%= env_javascript_include_tag nil, 'http://localhost:3500/vendor-bundle.js' %>
-  <%= env_javascript_include_tag nil, 'http://localhost:3500/app-bundle.js' %>
-  <%= env_javascript_include_tag 'application_prod', 'application_dev', 'data-turbolinks-track' => true %>
+  <%= env_stylesheet_link_tag(static: 'application_static', hot: 'application_non_webpack', options: { media: 'all', 'data-turbolinks-track' => true })  %>
+  <%= env_javascript_include_tag(hot: ['http://localhost:3500/vendor-bundle.js', 'http://localhost:3500/app-bundle.js']) %>
+  <%= env_javascript_include_tag(static: 'application_static', hot: 'application_non_webpack', options: { 'data-turbolinks-track' => true }) %>
   ```
 
 # Webpack configuration
@@ -142,7 +142,7 @@ export default class CommentBox extends React.Component {
 ```
 
 ## Sass and fonts
-The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server. 
+The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server.
 
 # Process management
 Run the following command in your development environment to invoke both Webpack and Rails.
@@ -155,7 +155,7 @@ bundle exec foreman start -f Procfile.dev
 
 Notable contributions include (please submit PR if I miss any!):
 
-* [Justin Gordon](https://github.com/justin808/): Started this, leads this 
+* [Justin Gordon](https://github.com/justin808/): Started this, leads this
 * [Alex Fedoseev](https://github.com/alexfedoseev): Added integration of Rails hot loading and CSS modules, plus much more
 * [Martin Breining](https://github.com/mbreining): For adding flux at first
 * [Dylan Grafmyre](https://github.com/Dgrafmyre): For ci setup
