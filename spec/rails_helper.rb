@@ -6,6 +6,12 @@ require "rspec/rails"
 require "capybara/rspec"
 require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
+
+# This will insert a <base> tag with the asset host into the pages created by
+# save_and_open_page, meaning that relative links will be loaded from the
+# development server if it is running.
+Capybara.asset_host = "http://localhost:4000"
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
