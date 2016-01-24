@@ -4,15 +4,17 @@
 
 # Development rails requires both rails and rails-assets
 # (and rails-server-assets if server rendering)
-rails: rails s
+rails: REACT_ON_RAILS_ENV=HOT rails s
+
 # Run the hot reload server for client development
 rails-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm run build:dev:client'
+
 # Keep the JS fresh for server rendering. Remove if not server rendering
 rails-server-assets: sh -c 'npm run build:dev:server'
 
 # If you don't keep this process going, you will rebuild the assets per spec run. This is configured
 # in rails_helper.rb.
-rails-spec: sh -c 'npm run build:test:client'
+rails-test: sh -c 'npm run build:test:client'
 
 # Run an express server if you want to mock out your endpoints. No Rails involved!
 # Disable this if you are not using it.

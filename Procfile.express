@@ -1,4 +1,3 @@
-# Basic procfile for express server dev work.
 # Only run the express server!
 # Use this if you want to mock out your endpoints.
 # It's a great way to prototype UI especially with non-Rails developers!

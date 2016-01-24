@@ -39,13 +39,13 @@ ActiveRecord::Migration.maintain_test_schema!
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
+  # Next line will ensure that assets are built if webpack -w is not running
+  config.include ReactOnRails::EnsureAssetsCompiled, type: :feature
+
   # config taken directly from RSpec example in the DatabaseCleaner README
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
-
-    # Next line will ensure that assets are built if webpack -w is not running
-    EnsureAssetsCompiled.check_built_assets
   end
 
   config.around(:each) do |example|

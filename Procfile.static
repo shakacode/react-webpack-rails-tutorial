@@ -1,0 +1,5 @@
+# Run Rails without hot reloading (static assets)
+rails: rails s
+
+# Keep the JS fresh for server rendering. Remove if not server rendering
+rails-server-assets: sh -c 'npm run build:dev:server'
