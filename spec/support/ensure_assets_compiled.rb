@@ -4,15 +4,9 @@ module ReactOnRails
   module EnsureAssetsCompiled
     def self.check_built_assets
       return if @checked_built_assets
-      build_all_assets
-    end
-
-    def self.running_webpack_watch?(type)
-      running = `pgrep -fl '\\-w \\-\\-config webpack\\.#{type}\\.rails\\.build\\.config\\.js'`
-      if running.present?
-        puts "Found process, so skipping rebuild => #{running.ai}"
-        return true
-      end
+      build_assets_for_type("client")
+      build_assets_for_type("server")
+      @checked_built_assets = true
     end
 
     def self.build_assets_for_type(type)
@@ -26,10 +20,12 @@ module ReactOnRails
       end
     end
 
-    def self.build_all_assets
-      build_assets_for_type("client")
-      build_assets_for_type("server")
-      @checked_built_assets = true
+    def self.running_webpack_watch?(type)
+      running = `pgrep -fl '\\-w \\-\\-config webpack\\.#{type}\\.rails\\.build\\.config\\.js'`
+      if running.present?
+        puts "Found process, so skipping rebuild => #{running.ai}"
+        return true
+      end
     end
 
     # Runs on require
