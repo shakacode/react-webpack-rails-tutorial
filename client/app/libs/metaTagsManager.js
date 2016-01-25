@@ -8,7 +8,7 @@ export default {
    * @returns {String} - CSRF Token.
    */
   getCSRFToken() {
-    const token = _.find(document.querySelectorAll('meta'), 'name', 'csrf-token');
+    const token = _.find(document.querySelectorAll('meta'), ['name', 'csrf-token']);
     return token ? token.content : null;
   },
 
