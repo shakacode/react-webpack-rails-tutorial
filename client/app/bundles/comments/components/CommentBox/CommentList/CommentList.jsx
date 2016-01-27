@@ -33,18 +33,17 @@ export default class CommentList extends BaseComponent {
 
   render() {
     const { $$comments, cssTransitionGroupClassNames } = this.props;
-    const commentNodes = $$comments.map($$comment => {
+    const commentNodes = $$comments.map($$comment =>
+
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-      return (
-        <Comment
-          key={$$comment.get('id')}
-          author={$$comment.get('author')}
-          text={$$comment.get('text')}
-        />
-      );
-    });
+      <Comment
+        key={$$comment.get('id')}
+        author={$$comment.get('author')}
+        text={$$comment.get('text')}
+      />
+    );
 
     return (
       <div>

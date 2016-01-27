@@ -28,13 +28,13 @@ var server = new WebpackDevServer(webpack(config), {
 server.app.use(bodyParser.json(null));
 server.app.use(bodyParser.urlencoded({ extended: true }));
 
-server.app.get('/comments.json', function(req, res) {
+server.app.get('/comments.json', (req, res) => {
   sleep.sleep(1);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(comments));
 });
 
-server.app.post('/comments.json', function(req, res) {
+server.app.post('/comments.json', (req, res) => {
   const comment = req.body.comment;
   comment.id = uuid.v4();
 
@@ -47,16 +47,16 @@ server.app.post('/comments.json', function(req, res) {
   res.send(JSON.stringify(comment));
 });
 
-server.app.use('/', function(req, res) {
+server.app.use('/', (req, res) => {
   var locals = {
     props: JSON.stringify(comments),
   };
-  var layout = process.cwd() + '/index.jade';
+  var layout = `${process.cwd()}/index.jade`;
   var html = jade.compileFile(layout, { pretty: true })(locals);
   res.send(html);
 });
 
-server.listen(4000, 'localhost', function(err) {
+server.listen(4000, 'localhost', (err) => {
   if (err) console.log(err);
   console.log('Listening at localhost:4000...');
 });
