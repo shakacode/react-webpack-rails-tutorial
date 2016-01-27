@@ -10,7 +10,7 @@ const hotRailsPort = process.env.HOT_RAILS_PORT || 3500;
 const compiler = webpack(webpackConfig);
 
 const devServer = new WebpackDevServer(compiler, {
-  contentBase: 'http://lvh.me:' + hotRailsPort,
+  contentBase: `http://lvh.me:${hotRailsPort}`,
   publicPath: webpackConfig.output.publicPath,
   hot: true,
   inline: true,
@@ -30,6 +30,6 @@ const devServer = new WebpackDevServer(compiler, {
 devServer.listen(3500, 'localhost', err => {
   if (err) console.error(err);
   console.log(
-    '=> 🔥  Webpack development server is running on port ' + hotRailsPort
+    `=> 🔥  Webpack development server is running on port ${hotRailsPort}`
   );
 });

@@ -11,7 +11,7 @@ config.entry.vendor.push('bootstrap-loader');
 config.entry.app.push(
 
   // Webpack dev server
-  'webpack-dev-server/client?http://localhost:' + hotPort,
+  `webpack-dev-server/client?http://localhost:${hotPort}`,
   'webpack/hot/dev-server'
 );
 

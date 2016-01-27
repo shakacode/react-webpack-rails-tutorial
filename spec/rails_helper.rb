@@ -40,7 +40,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   # Next line will ensure that assets are built if webpack -w is not running
-  config.include ReactOnRails::EnsureAssetsCompiled, type: :feature
+  ReactOnRails.configure_rspec_to_compile_assets(config)
 
   # config taken directly from RSpec example in the DatabaseCleaner README
   config.before(:suite) do
