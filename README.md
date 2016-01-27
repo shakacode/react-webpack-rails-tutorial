@@ -10,7 +10,8 @@
 By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakacode.com)
 
 - If this work interests you and you are looking for full or part-time remote work, please [click here](http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
-- Please email us at [justin@shakacode.com](mailto:justin@shakacode.com) if you have a ReactJs + Rails project and are interested in help from our experienced team.
+- [ShakaCode](http://www.shakacode.com) is doing Skype plus Slack/Github based coaching for "React on Rails". [Click here](http://www.shakacode.com/work/index.html) for more information.
+- Please email us at [contact@shakacode.com](mailto:contact@shakacode.com) if you have a ReactJs + Rails project and are interested in help from our experienced team.
 - Please file issues for problems and feature requests.
 - Pull requests are welcome! (and a great way to get on the ShakaCode team)
 - Feel free to open discussions at [forum.shakacode.com](http://forum.shakacode.com). We love to help!
@@ -21,12 +22,12 @@ By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakaco
 A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial. We plan to update the tutorial article as soon as we can catch our breath!
 
 # NEWS
-We have not yet updated the react_on_rails gem generators for the following tasks. We're looking for help to migrate this, if you're interested in contributing to the project. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
+We have not yet updated the `react_on_rails` gem generators for the following tasks. We're looking for help to migrate this, if you're interested in contributing to the project. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
 
 1. **Handling of Sass and Bootstrap**: The tutorial uses CSS modules via Webpack. This is totally different than the older way of having Rails handle Sass/Bootstrap, and having NPM/Webpack handle the Webpack Dev Server. The tutorial now has NPM handle all visual assets. We are using this technique on a new app, and it's awesome!
 2. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
 
-If you did generate a fresh app from react_on_rails and want to move to CSS Modules, then see [PR 175: Babel 6 / CSS Modules / Rails hot reloading](https://github.com/shakacode/react-webpack-rails-tutorial/pull/175). Note, while there are probably fixes after this PR was accepted, this has the majority of the changes.
+If you did generate a fresh app from React On Rails and want to move to CSS Modules, then see [PR 175: Babel 6 / CSS Modules / Rails hot reloading](https://github.com/shakacode/react-webpack-rails-tutorial/pull/175). Note, while there are probably fixes after this PR was accepted, this has the majority of the changes.
 
 
 # Example Application

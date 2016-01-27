@@ -23,4 +23,3 @@
   5. [scss-lint](https://github.com/brigade/scss-lint)
   6. [brakeman](http://brakemanscanner.org/)
   7. [bundle-audit](https://github.com/rubysec/bundler-audit)
-
