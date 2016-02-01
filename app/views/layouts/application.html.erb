@@ -2,13 +2,16 @@
 <html>
 <head>
   <title>RailsReactTutorial</title>
+
   <%= env_stylesheet_link_tag(static: 'application_static',
                               hot: 'application_non_webpack',
                               media: 'all',
                               'data-turbolinks-track' => true)  %>
+
   <!-- These do not use turbolinks -->
   <%= env_javascript_include_tag(hot: ['http://localhost:3500/vendor-bundle.js',
                                        'http://localhost:3500/app-bundle.js']) %>
+
   <!-- These do use turbolinks -->
   <%= env_javascript_include_tag(static: 'application_static',
                                  hot: 'application_non_webpack',

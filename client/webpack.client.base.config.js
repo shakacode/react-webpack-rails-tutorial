@@ -32,11 +32,13 @@ module.exports = {
       'react-dom': path.resolve('./node_modules/react-dom'),
     },
   },
+
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
+      TRACE_TURBOLINKS: devBuild,
     }),
 
     // https://webpack.github.io/docs/list-of-plugins.html#2-explicit-vendor-chunk

@@ -13,11 +13,13 @@
     "test:client": "(cd client && npm run test --silent)",
     "lint": "(cd client && npm run lint --silent)",
     "build:clean": "rm app/assets/webpack/*",
-    "build:client": "(cd client && npm run build:client --silent)",
-    "build:server": "(cd client && npm run build:server --silent)",
+    "build:production:client": "(cd client && npm run build:production:client --silent)",
+    "build:production:server": "(cd client && npm run build:production:server --silent)",
     "build:dev:client": "(cd client && npm run build:dev:client --silent)",
+    "build:client": "(cd client && npm run build:client --silent",
     "build:dev:server": "(cd client && npm run build:dev:server --silent)",
-    "build:test:client": "(cd client && npm run build:test:client --silent)",
+    "build:server": "(cd client && npm run build:server --silent)",
+    "hot-assets": "(cd client && npm run hot-assets)",
     "start": "(cd client && npm run start --silent)"
   },
   "repository": {
