@@ -7,14 +7,13 @@
 rails: REACT_ON_RAILS_ENV=HOT rails s
 
 # Run the hot reload server for client development
-rails-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm run build:dev:client'
+hot-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm run hot-assets'
 
-# Keep the JS fresh for server rendering. Remove if not server rendering
-rails-server-assets: sh -c 'npm run build:dev:server'
+# Render static client assets
+rails-static-client-assets: sh -c 'npm run build:dev:client'
 
-# If you don't keep this process going, you will rebuild the assets per spec run. This is configured
-# in rails_helper.rb.
-rails-test: sh -c 'npm run build:test:client'
+# Render static client assets. Remove if not server rendering
+rails-static-server-assets: sh -c 'npm run build:dev:server'
 
 # Run an express server if you want to mock out your endpoints. No Rails involved!
 # Disable this if you are not using it.
