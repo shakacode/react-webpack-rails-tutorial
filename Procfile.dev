@@ -12,10 +12,6 @@ rails-assets: sh -c 'rm app/assets/webpack/* || true && HOT_RAILS_PORT=3500 npm 
 # Keep the JS fresh for server rendering. Remove if not server rendering
 rails-server-assets: sh -c 'npm run build:dev:server'
 
-# If you don't keep this process going, you will rebuild the assets per spec run. This is configured
-# in rails_helper.rb.
-rails-test: sh -c 'npm run build:test:client'
-
 # Run an express server if you want to mock out your endpoints. No Rails involved!
 # Disable this if you are not using it.
 # It's a great way to prototype UI especially with non-Rails developers!

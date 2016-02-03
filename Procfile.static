@@ -1,4 +1,5 @@
-# Run Rails without hot reloading (static assets)
+# Run Rails without hot reloading (static assets). Useful for running during
+# tests.
 rails: rails s
 
 # Build client assets, watching for changes.
