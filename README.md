@@ -106,7 +106,7 @@ We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modu
   <%= env_javascript_include_tag(hot: ['http://localhost:3500/vendor-bundle.js', 'http://localhost:3500/app-bundle.js']) %>
   <%= env_javascript_include_tag(static: 'application_static', hot: 'application_non_webpack', options: { 'data-turbolinks-track' => true }) %>
   ```
-1. **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the ` config.include ReactOnRails::EnsureAssetsCompiled, type: :feature` line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
+1. **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails.configure_rspec_to_compile_assets(config)` line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
 # Webpack configuration
 ## Config Files
