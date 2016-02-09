@@ -6,7 +6,7 @@ class PagesController < ApplicationController
     # compared to he view. However, it's more convenient to use Jbuilder from the view. See
     # app/views/pages/index.html.erb:20
     #
-    #  <%= react_component('App', props: render(template: "/comments/index.json.jbuilder"),
+    #  <%= react_component('App', render(template: "/comments/index.json.jbuilder"),
     #     prerender: true) %>
     #
     #
