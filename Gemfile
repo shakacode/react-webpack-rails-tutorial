@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.2.3"
+ruby "2.2.4"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -37,7 +37,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails"
+gem "react_on_rails", git: "git@github.com:shakacode/react_on_rails.git", tag: "3.0.0-beta.1"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"

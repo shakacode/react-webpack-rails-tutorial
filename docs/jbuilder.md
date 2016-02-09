@@ -2,7 +2,7 @@
 There's a bunch of gotchas with using [Jbuilder](https://github.com/rails/jbuilder) to create the string version of the props to be sent to the react_on_rails_gem. The main thing is that if you follow the example and call Jbuilder like this, you don't run into a number of issues.
 
 ```erb
-<%= react_component('App', render(template: "/comments/index.json.jbuilder"),
+<%= react_component('App', props: render(template: "/comments/index.json.jbuilder"),
     prerender: true) %>
 ```
 
