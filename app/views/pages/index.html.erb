@@ -2,5 +2,5 @@
   <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
 <%= render "header" %>
 
-<%= react_component('RouterApp', props: render(template: "/comments/index.json.jbuilder"),
+<%= react_component('RouterApp', render(template: "/comments/index.json.jbuilder"),
     prerender: true, raise_on_prerender_error: true) %>
