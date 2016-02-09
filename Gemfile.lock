@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:shakacode/react_on_rails.git
+  remote: https://github.com/shakacode/react_on_rails.git
   revision: 562c58f2b37e13cecc86fd4bd4e85edb10acd86d
   tag: 3.0.0-beta.1
   specs:
