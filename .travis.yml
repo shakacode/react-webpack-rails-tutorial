@@ -1,7 +1,7 @@
 language:
   - ruby
 rvm:
-  - 2.2.3
+  - 2.2.4
 sudo: false
 addons:
   apt:
