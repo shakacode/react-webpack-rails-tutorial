@@ -4200,9 +4200,9 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.7.tgz"
     },
     "react-on-rails": {
-      "version": "3.0.0-beta.1",
-      "from": "react-on-rails@3.0.0-beta.1",
-      "resolved": "https://registry.npmjs.org/react-on-rails/-/react-on-rails-3.0.0-beta.1.tgz"
+      "version": "3.0.0-rc.1",
+      "from": "react-on-rails@3.0.0-rc.1",
+      "resolved": "https://registry.npmjs.org/react-on-rails/-/react-on-rails-3.0.0-rc.1.tgz"
     },
     "react-overlays": {
       "version": "0.5.4",
@@ -4239,9 +4239,9 @@
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-4.4.0.tgz"
     },
     "react-router": {
-      "version": "2.0.0-rc6",
+      "version": "2.0.0",
       "from": "react-router@>=2.0.0-rc5 <3.0.0",
-      "resolved": "https://registry.npmjs.org/react-router/-/react-router-2.0.0-rc6.tgz"
+      "resolved": "https://registry.npmjs.org/react-router/-/react-router-2.0.0.tgz"
     },
     "read": {
       "version": "1.0.7",

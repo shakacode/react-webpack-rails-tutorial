@@ -37,7 +37,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", git: "https://github.com/shakacode/react_on_rails.git", tag: "3.0.0-beta.1"
+gem "react_on_rails", "~> 3.0.0-rc.1"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"
