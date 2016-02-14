@@ -201,9 +201,10 @@ GEM
     rake (10.5.0)
     rdoc (4.2.1)
       json (~> 1.4)
-    react_on_rails (2.3.0)
+    react_on_rails (3.0.0.rc.1)
       connection_pool
       execjs (~> 2.5)
+      foreman
       rails (>= 3.2)
       rainbow (~> 2.1)
     ref (2.0.0)
@@ -345,7 +346,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails
+  react_on_rails (~> 3.0.0.pre.rc.1)
   rspec-rails
   rspec-retry
   rubocop

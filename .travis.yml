@@ -1,7 +1,7 @@
 language:
   - ruby
 rvm:
-  - 2.2.3
+  - 2.2.4
 sudo: false
 addons:
   apt:
@@ -15,8 +15,8 @@ env:
     - CXX=g++-4.9
 install:
   - bundle install
-  - nvm install 5.0
-  - nvm use 5.0
+  - nvm install 5.5
+  - nvm use 5.5
   - npm install
 before_script:
    - export DISPLAY=:99.0
