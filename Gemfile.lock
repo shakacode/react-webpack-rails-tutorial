@@ -297,8 +297,9 @@ GEM
     thread_safe (0.3.5)
     tilt (2.0.2)
     tins (1.6.0)
-    turbolinks (2.5.3)
-      coffee-rails
+    turbolinks (5.0.0.beta1)
+      turbolinks-source
+    turbolinks-source (5.0.0.beta1.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -346,7 +347,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (~> 3.0.0.pre.rc.1)
+  react_on_rails (~> 3.0.0.pre.rc.2)
   rspec-rails
   rspec-retry
   rubocop
@@ -359,7 +360,7 @@ DEPENDENCIES
   spring-commands-rspec
   sqlite3
   therubyracer
-  turbolinks
+  turbolinks (>= 5.0.0.beta1)
   uglifier
   web-console
 
