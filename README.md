@@ -56,7 +56,9 @@ See package.json and Gemfile for versions
 1. [React](http://facebook.github.io/react/) (for front-end app)
 1. [react-bootstrap](https://react-bootstrap.github.io/)
 1. [bootstrap-loader](https://www.npmjs.com/package/bootstrap-loader/)
-1. [Redux](https://github.com/rackt/redux)
+1. [Redux](https://github.com/reactjs/redux)
+1. [react-router](https://github.com/reactjs/react-router)
+1. [react-router-redux](https://github.com/reactjs/react-router-redux)
 1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
 1. [Ruby on Rails 4.2](http://rubyonrails.org/) for backend app and comparision with plain HTML
