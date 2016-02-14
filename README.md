@@ -63,6 +63,7 @@ See package.json and Gemfile for versions
 1. [Babel transpiler](https://github.com/babel/babel)
 1. [Ruby on Rails 4.2](http://rubyonrails.org/) for backend app and comparision with plain HTML
 1. [Heroku for Rails 4.2 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails4)
+1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
 # Basic Setup
 1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v5.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
