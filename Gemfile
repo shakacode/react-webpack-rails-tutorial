@@ -23,7 +23,7 @@ gem "uglifier"
 gem "coffee-rails"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem "turbolinks"
+gem 'turbolinks', '>= 5.0.0.beta1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
@@ -37,7 +37,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", "~> 3.0.0-rc.1"
+gem "react_on_rails", "~> 3.0.0-rc.2"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"
