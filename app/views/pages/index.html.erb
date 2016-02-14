@@ -1,5 +1,8 @@
 <h2>Using React (Server rendering) + Redux + React Router + Rails Backend (using the
   <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
+<h3>Now with
+  <%= link_to "react-router-redux" , "https://github.com/reactjs/react-router-redux" %>!
+</h3>
 <%= render "header" %>
 
 <%= react_component('RouterApp', props: render(template: "/comments/index.json.jbuilder"),
