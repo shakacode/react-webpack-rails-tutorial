@@ -3,5 +3,3 @@
 // b/c it exposes jQuery for turbolinks and another non-webpack JS (if any)
 
 //= require turbolinks
-
-//= require rails_startup
