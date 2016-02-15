@@ -154,11 +154,18 @@ export default class CommentBox extends React.Component {
 ## Sass and fonts
 The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server.
 
-# Process management
-Run the following command in your development environment to invoke both Webpack and Rails.
+# Process management during development
 ```
-bundle exec foreman start -f Procfile.dev
+bundle exec foreman start -f <Procfile>
 ```
+
+1. `Procfile.dev`: Starts the Webpack Dev Server and Rails with Hot Reloading.
+2. `Procfile.hot`: Starts the Rails server and the webpack server to provide hot reloading of assets, JavaScript and CSS.
+3. `Procfile.static`: Starts the Rails server and generates static assets that are used for tests.
+4. `Procfile.express`: Starts only the Webpack Dev Server.
+5. `Procfile.spec`: Starts webpack to create the static files for tests. **Good to know:** If you want to start `rails s` separately to debug in `pry`, then run `Procfile.spec` to generate the assets and run `rails s` in a separate console.
+6. `Procfile.static.trace`: Same as `Procfile.static` but prints tracing information useful for debugging server rendering.
+ 
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/) and many others!
