@@ -91,6 +91,7 @@
     "chai": "^3.5.0",
     "chai-immutable": "^1.5.3",
     "eslint": "^1.10.3",
+    "eslint-config-shakacode": "^1.0.0",
     "eslint-config-airbnb": "^5.0.0",
     "eslint-plugin-react": "^3.16.1",
     "express": "^4.13.4",
