@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { find } from 'lodash/find';
 
 export default {
 
@@ -8,7 +8,7 @@ export default {
    * @returns {String} - CSRF Token.
    */
   getCSRFToken() {
-    const token = _.find(document.querySelectorAll('meta'), ['name', 'csrf-token']);
+    const token = find(document.querySelectorAll('meta'), ['name', 'csrf-token']);
     return token ? token.content : null;
   },
 

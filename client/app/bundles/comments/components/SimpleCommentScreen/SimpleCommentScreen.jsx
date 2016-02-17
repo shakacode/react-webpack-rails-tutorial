@@ -1,7 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
-import _ from 'lodash';
+import { bindAll } from 'lodash';
 
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
@@ -19,7 +19,7 @@ export default class SimpleCommentScreen extends BaseComponent {
       submitCommentError: null,
     };
 
-    _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
+    bindAll(this, '_fetchComments', '_handleCommentSubmit');
   }
 
   componentDidMount() {

@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import _ from 'lodash';
+import { bindAll } from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
 
@@ -29,7 +29,7 @@ export default class CommentForm extends BaseComponent {
       comment: emptyComment,
     };
 
-    _.bindAll(this, [
+    bindAll(this, [
       '_handleSelect',
       '_handleChange',
       '_handleSubmit',
