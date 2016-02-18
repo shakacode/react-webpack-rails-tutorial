@@ -13,8 +13,8 @@ namespace :assets do
 
   desc "Compile assets with webpack"
   task :webpack do
-    sh "cd client && npm run build:client"
-    sh "cd client && npm run build:server"
+    sh "cd client && npm run build:production:client"
+    sh "cd client && npm run build:production:server"
     sh "mkdir -p public/assets"
 
     # Critical to manually copy non js/css assets to public/assets as we don't want to fingerprint them
