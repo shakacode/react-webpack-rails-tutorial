@@ -32,8 +32,8 @@ config.module.loaders.push(
     loader: 'babel-loader',
     exclude: /node_modules/,
     query: {
-      plugins: ['lodash']
-    }
+      plugins: ['lodash'],
+    },
   },
   {
     test: /\.css$/,
