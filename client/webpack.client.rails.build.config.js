@@ -31,6 +31,9 @@ config.module.loaders.push(
     test: /\.jsx?$/,
     loader: 'babel-loader',
     exclude: /node_modules/,
+    query: {
+      plugins: ['lodash'],
+    },
   },
   {
     test: /\.css$/,

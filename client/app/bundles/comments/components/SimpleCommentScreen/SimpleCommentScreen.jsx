@@ -1,7 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
-import _ from 'lodash';
+import _ from 'libs/slim_lodash';
 
 import metaTagsManager from 'libs/metaTagsManager';
 import CommentForm from '../CommentBox/CommentForm/CommentForm';

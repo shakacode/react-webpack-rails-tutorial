@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import _ from 'lodash';
+import _ from 'libs/slim_lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
 

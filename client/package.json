@@ -86,6 +86,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0-beta8",
+    "babel-plugin-lodash": "^2.0.1",
     "babel-plugin-react-transform": "^2.0.0",
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",

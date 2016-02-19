@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'libs/slim_lodash';
 
 export default {
 
