@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const glob = require('glob');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -12,7 +13,7 @@ module.exports = {
   context: __dirname,
   entry: [
     'babel-polyfill',
-    './app/bundles/comments/startup/serverRegistration',
+    ...glob.sync("./app/bundles/**/startup/serverRegistration.js*")
   ],
   output: {
     filename: 'server-bundle.js',
