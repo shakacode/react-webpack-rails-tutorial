@@ -21,7 +21,7 @@ module.exports = {
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
-    app: glob.sync("./app/bundles/**/startup/clientRegistration.js*"),
+    app: glob.sync('./app/bundles/**/startup/clientRegistration.js*'),
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],

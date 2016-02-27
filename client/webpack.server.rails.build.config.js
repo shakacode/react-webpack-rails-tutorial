@@ -13,7 +13,7 @@ module.exports = {
   context: __dirname,
   entry: [
     'babel-polyfill',
-    ...glob.sync("./app/bundles/**/startup/serverRegistration.js*")
+    ...glob.sync('./app/bundles/**/startup/serverRegistration.js*'),
   ],
   output: {
     filename: 'server-bundle.js',
