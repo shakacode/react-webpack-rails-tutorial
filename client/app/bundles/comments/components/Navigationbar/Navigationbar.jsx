@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import BaseComponent from 'libs/components/BaseComponent';
 
 export default class Navigationbar extends BaseComponent {
-  componentDidMount() {}
+  static propTypes = {
+    data: PropTypes.object.isRequired,
+  };
 
-  componentWillUnmount() {}
+  constructor(props) {
+    super(props);
+    // set @comment_count prop to state
+    // for updating the count of comments
+    this.state = {
+      comment_count: this.props.comments_count
+    };
+  }
+
+  componentDidUpdate() {
+    if (this.props.data) {
+      this.setState({comment_count: this.props.data.get('$$comments').size});
+    }
+  }
 
   render() {
     return (
@@ -52,6 +68,9 @@ export default class Navigationbar extends BaseComponent {
                   't/fast-rich-client-rails-development' +
                   '-with-webpack-and-the-es6-transpiler/82/22'
                }>Forum Discussion</a>
+              </li>
+              <li>
+                Comments: {this.state.comment_count}
               </li>
             </ul>
           </div>
