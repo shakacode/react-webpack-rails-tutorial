@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 import BaseComponent from 'libs/components/BaseComponent';
 
 export default class Navigationbar extends BaseComponent {
@@ -12,13 +11,13 @@ export default class Navigationbar extends BaseComponent {
     // set @comment_count prop to state
     // for updating the count of comments
     this.state = {
-      comment_count: this.props.comments_count
+      comment_count: this.props.comments_count,
     };
   }
 
   componentDidUpdate() {
     if (this.props.data) {
-      this.setState({comment_count: this.props.data.get('$$comments').size});
+      this.setState({ comment_count: this.props.data.get('$$comments').size });
     }
   }
 
