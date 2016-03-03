@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import Navigationbar from '../components/Navigationbar/Navigationbar';
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 import BaseComponent from 'libs/components/BaseComponent';
@@ -26,7 +27,10 @@ class RouterCommentsContainer extends BaseComponent {
     const locationState = this.props.location.state;
 
     return (
-      <CommentScreen {...{ actions, data, locationState }} />
+      <div>
+        <Navigationbar {...{ actions, data, locationState }} />
+        <CommentScreen {...{ actions, data, locationState }} />
+      </div>
     );
   }
 }

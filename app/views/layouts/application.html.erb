@@ -19,7 +19,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <%= react_component 'Navigationbar', props: {} %>
+<%= react_component 'Navigationbar', props: { comments_count: @comments_count } %>
 
 <div class="container">
   <%= yield %>
