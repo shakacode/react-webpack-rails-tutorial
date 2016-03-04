@@ -1,0 +1,19 @@
+---
+- name: Add Passenger apt server key
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=561F9B9CAC40B2F7
+
+- name: Add HTTPS support for apt
+  apt: name={{ item }}
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+
+- name: Add Passenger apt repo
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ ansible_lsb.codename }} main'
+
+- name: Install Passenger
+  apt: pkg={{ item }}
+  with_items:
+    - nginx-extras
+    - passenger
+  notify: restart application

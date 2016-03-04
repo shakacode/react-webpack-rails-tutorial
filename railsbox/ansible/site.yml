@@ -1,0 +1,28 @@
+---
+- hosts: vm
+  roles:
+    - swap
+
+- hosts: all
+  gather_facts: no
+  roles:
+    - { role: apt_proxy, when: use_apt_proxy }
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+- hosts: postgresql
+  roles:
+    - postgresql
+
+
+- hosts: application
+  handlers:
+  roles:
+    - base
+    - { role: ruby, tags: ruby }
+    - vim
+    - webserver
+    - pablocrivella.nvm 

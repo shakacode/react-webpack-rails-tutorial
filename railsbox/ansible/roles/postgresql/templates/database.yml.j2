@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+default: &default
+  adapter: postgresql
+  pool: 5
+
+{{ rails_env }}:
+  <<: *default
+  database: {{ postgresql_db_name }}
+
+  username: {{ postgresql_db_user }}
+  password: {{ postgresql_db_password }}
+
+test:
+  <<: *default
+  database: {{ postgresql_db_name }}_test

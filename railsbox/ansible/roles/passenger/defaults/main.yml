@@ -1,0 +1,2 @@
+---
+server_restart_command: /etc/init.d/nginx restart

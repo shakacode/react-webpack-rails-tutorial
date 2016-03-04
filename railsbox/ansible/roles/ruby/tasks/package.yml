@@ -1,0 +1,10 @@
+---
+- name: Add brightbox/ruby-ng repository
+  apt_repository: repo='ppa:brightbox/ruby-ng'
+
+- name: Install ruby
+  apt: name={{ item }}
+  with_items:
+    - "{{ ruby_version }}"
+    - "{{ ruby_version }}-dev"
+    - ruby-switch

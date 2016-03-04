@@ -1,0 +1,37 @@
+---
+- name: Install libffi-dev
+  apt: name=libffi-dev
+
+- name: Clone rbenv repository to ~/.rbenv
+  git: repo={{ rbenv_repo }} dest={{ rbenv_path }} version={{ rbenv_version }} accept_hostkey=yes
+  sudo_user: '{{ user_name }}'
+
+- name: Create rbenv.sh
+  template: src=rbenv.sh.j2 dest={{ profile_d_path }}/rbenv.sh owner={{ user_name }} group={{ group_name }}
+
+- name: Create plugins directory
+  file: path={{ rbenv_plugins_path }} state=directory owner={{ user_name }} group={{ group_name }}
+
+- name: Install plugins
+  git: repo={{ item.git }} dest={{ rbenv_plugins_path }}/{{ item.name }} version={{ item.version }} accept_hostkey=yes
+  sudo_user: '{{ user_name }}'
+  with_items: rbenv_plugins
+
+- name: Check if ruby installed
+  shell: '{{ rbenv_bin }} versions | grep -q {{ rbenv_ruby_version }}'
+  register: ruby_installed
+  ignore_errors: yes
+  sudo_user: '{{ user_name }}'
+
+- name: Install ruby
+  command: '{{ rbenv_bin }} install {{ rbenv_ruby_version }}'
+  sudo_user: '{{ user_name }}'
+  when: ruby_installed|failed
+
+- name: Set global ruby version
+  command: '{{ rbenv_bin }} global {{ rbenv_ruby_version }}'
+  sudo_user: '{{ user_name }}'
+
+- name: Rehash rbenv
+  command: '{{ rbenv_bin }} rehash'
+  sudo_user: '{{ user_name }}'

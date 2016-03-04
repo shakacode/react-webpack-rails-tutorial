@@ -1,0 +1,32 @@
+# file: build-essential/tasks/main.yml
+
+- name: Read the family variables
+  include_vars: "{{ansible_os_family}}.yml"
+
+- name: Make sure the packages are installed (Debian)
+  apt:
+    pkg: "{{item}}"
+    state: present
+  with_items: buildessential_packages
+  when: ansible_os_family == "Debian"
+
+- name: Make sure the packages are installed (Fedora)
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items: buildessential_packages
+  when: ansible_os_family == "Fedora"
+
+- name: Make sure the packages are installed (RedHat)
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items: buildessential_packages
+  when: ansible_os_family == "RedHat"
+
+- name: Make sure the packages are installed (Suse)
+  zypper:
+    name: "{{item}}"
+    state: present
+  with_items: buildessential_packages
+  when: ansible_os_family == "Suse"

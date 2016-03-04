@@ -1,0 +1,9 @@
+- hosts: all
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+    - vars/test.yml
+  pre_tasks:
+    - apt: name=git state=installed
+  tasks:
+    - include: tasks/main.yml

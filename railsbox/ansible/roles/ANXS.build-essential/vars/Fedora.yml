@@ -1,0 +1,13 @@
+# file: build-essential/vars/Fedora.yml
+
+buildessential_packages:
+ - autoconf
+ - gcc
+ - bison
+ - flex
+ - gcc-c++
+ - gettext
+ - kernel-devel
+ - make
+ - m4
+ - ncurses-devel

@@ -1,0 +1,22 @@
+# file: git/tasks/source.yml
+
+- name: Git | Make sure the build dependencies are installed
+  apt:
+    update_cache: yes
+    pkg: "{{item}}"
+    state: present
+  with_items: ["libcurl4-openssl-dev", "libexpat1-dev", "libz-dev", "libssl-dev"]
+
+- name: Git | Download the Git source in /tmp
+  get_url:
+    url: "{{git_source_url}}"
+    dest: "/tmp/git-{{git_version}}.tar.gz"
+
+- name: Git | Unpack the compressed Git source
+  command: tar -xvzf /tmp/git-{{git_version}}.tar.gz chdir=/tmp creates=/tmp/git-{{git_version}}/README
+
+- name: Git | Build Git from source - pt. 1 (Make)
+  command: make prefix={{git_prefix}} all chdir=/tmp/git-{{git_version}}
+
+- name: Git | Build Git from source - pt. 2 (Make install)
+  command: make prefix={{git_prefix}} install chdir=/tmp/git-{{git_version}}

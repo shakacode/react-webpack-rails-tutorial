@@ -1,0 +1,10 @@
+# file: git/defaults/main.yml
+
+git_install_from_source: no
+git_prefix: "/usr/local"
+git_version: "1.9.0"
+git_source_url: "https://nodeload.github.com/git/git/tar.gz/v{{git_version}}"
+
+git_install_server: no
+git_server_base_path: "/srv/git"
+git_server_export_all: yes

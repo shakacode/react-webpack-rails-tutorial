@@ -1,0 +1,5 @@
+---
+postgresql_version: 9.3
+postgresql_ext_postgis_version: 2.1
+postgresql_extensions: []
+postgresql_admin_user: postgres

@@ -1,0 +1,34 @@
+# {{ ansible_managed }}
+
+upstream app {
+  server {{ puma_bind_path }} fail_timeout=0;
+}
+
+server {
+  listen 80;
+  listen 443 ssl;
+
+  sendfile off;
+
+  server_name {{ server_name }};
+
+  ssl_certificate {{ ssl_certificate_path }};
+  ssl_certificate_key {{ ssl_certificate_key_path }};
+  ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;  # don’t use SSLv3 ref: POODLE
+
+  root {{ app_public_path }};
+
+  try_files $uri/index.html $uri @app;
+
+  location @app {
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://app;
+  }
+
+  error_page 500 502 503 504 /500.html;
+  client_max_body_size 4G;
+  keepalive_timeout 10;
+}

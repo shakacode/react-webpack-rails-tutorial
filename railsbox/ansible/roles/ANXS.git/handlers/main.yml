@@ -1,0 +1,6 @@
+# file: git/handlers/main.yml
+
+- name: restart xinetd
+  service:
+    name: xinetd
+    state: restarted

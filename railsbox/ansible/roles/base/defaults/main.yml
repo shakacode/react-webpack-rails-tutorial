@@ -1,0 +1,2 @@
+---
+profile_d_path: '{{ user_home_path }}/profile.d'

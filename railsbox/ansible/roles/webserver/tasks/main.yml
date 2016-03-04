@@ -1,0 +1,11 @@
+---
+- include: remote.yml
+  when: target == 'server'
+
+- name: Create and migrate DB
+  command: /bin/bash -l -c 'rake db:create db:migrate' chdir={{ app_path }}
+  sudo_user: '{{ user_name }}'
+  ignore_errors: yes
+  tags:
+    - rails
+    - db

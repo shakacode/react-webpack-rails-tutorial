@@ -1,0 +1,10 @@
+---
+nvm_env: system
+nvm_version: v0.26.0
+nvm_default_node_version: stable
+
+nvm_node_versions:
+  - stable
+
+nvm_global_packages: []
+nvm_users: []

@@ -1,0 +1,6 @@
+# file: git/tasks/default.yml
+
+- name: Git | Make sure Git is installed
+  apt:
+    pkg: git
+    state: present

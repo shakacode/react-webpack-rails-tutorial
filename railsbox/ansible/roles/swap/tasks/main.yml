@@ -1,0 +1,28 @@
+---
+- name: Create swap file
+  command: fallocate -l {{ vm_swap }}M {{ swap_file_path }} creates={{ swap_file_path }}
+
+- name: Change swap permissions
+  file: path={{ swap_file_path }} mode=0600
+
+- name: Check swap file type
+  command: file {{ swap_file_path }}
+  register: swapfile
+
+- name: Make swap file
+  command: mkswap {{ swap_file_path }}
+  when: swapfile.stdout.find('swap file') == -1
+
+- name: Write swap entry in fstab
+  mount: name=none
+         src={{ swap_file_path }}
+         fstype=swap
+         opts=sw
+         passno=0
+         dump=0
+         state=present
+  register: write_swap_entry
+
+- name: Mount swap
+  command: "swapon {{ swap_file_path }}"
+  when: write_swap_entry|changed

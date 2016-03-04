@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+server {
+  listen 80;
+  listen 443 ssl;
+
+  passenger_enabled on;
+  passenger_app_env {{ rails_env }};
+
+  sendfile off;
+
+  server_name {{ server_name }};
+
+  ssl_certificate {{ ssl_certificate_path }};
+  ssl_certificate_key {{ ssl_certificate_key_path }};
+
+  root {{ app_public_path }};
+
+  error_page 500 502 503 504 /500.html;
+  client_max_body_size 4G;
+  keepalive_timeout 10;
+}

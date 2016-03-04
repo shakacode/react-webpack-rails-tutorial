@@ -1,0 +1,38 @@
+---
+rvm1_install_path: '/home/{{ ansible_ssh_user }}/.rvm'
+rvm1_rvm: '{{ rvm1_install_path }}/bin/rvm'
+rvm1_install_flags: '--auto-dotfiles --user-install'
+rvm1_user: '{{ user_name }}'
+rvm1_rvm_latest_installer: 'https://raw.githubusercontent.com/wayneeseguin/rvm/master/binscripts/rvm-installer'
+rvm1_rvm_version: 'stable'
+rvm1_rvm_check_for_updates: no
+rvm1_gpg_keys: 'D39DC0E3'
+rvm1_gpg_key_server: 'hkp://keys.gnupg.net'
+rvm1_temp_download_path: '/tmp'
+rvm1_default_ruby_version: '{{ manual_ruby_version or ruby_version }}'
+rvm1_symlink_binaries:
+  - 'bundle'
+  - 'bundler'
+  - 'erb'
+  - 'executable-hooks-uninstaller'
+  - 'gem'
+  - 'irb'
+  - 'rake'
+  - 'rdoc'
+  - 'ri'
+  - 'ruby'
+  - 'testrb'
+rvm1_symlink_to: '/usr/local/bin'
+rvm1_rubies:
+  - "{{ rvm1_default_ruby_version }}"
+
+rbenv_repo: https://github.com/sstephenson/rbenv.git
+rbenv_version: master
+rbenv_path: '{{ user_home_path }}/.rbenv'
+rbenv_bin: '{{ rbenv_path }}/bin/rbenv'
+rbenv_plugins_path: '{{ rbenv_path }}/plugins'
+rbenv_plugins:
+  - name: ruby-build
+    git: https://github.com/sstephenson/ruby-build.git
+    version: master
+rbenv_ruby_version: '{{ manual_ruby_version or ruby_version }}'

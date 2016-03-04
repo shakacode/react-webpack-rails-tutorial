@@ -1,0 +1,9 @@
+---
+nvm_default_node_version: v0.12.7
+nvm_version: v0.25.4
+nvm_node_versions:
+  - v0.12.7
+  - v0.10.36
+nvm_global_packages:: []
+nvm_users:
+  - vagrant

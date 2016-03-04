@@ -1,0 +1,8 @@
+# file: git/tasks/main.yml
+
+- include: default.yml
+  when: git_install_from_source == false
+- include: source.yml
+  when: git_install_from_source == true
+- include: server.yml
+  when: git_install_server == true
