@@ -85,14 +85,12 @@
     "webpack": "^1.12.14"
   },
   "devDependencies": {
-    "babel-eslint": "^5.0.0",
     "babel-plugin-react-transform": "^2.0.2",
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",
     "chai-immutable": "^1.5.3",
     "eslint": "^2.3.0",
     "eslint-config-shakacode": "^3.0.0",
-    "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.2.0",
     "express": "^4.13.4",
     "jade": "^1.11.0",
