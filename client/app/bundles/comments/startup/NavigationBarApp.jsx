@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
-import RouterCommentsContainer from '../containers/RouterCommentsContainer';
+import NavigationBarContainer from '../containers/NavigationBarContainer';
 import { Provider } from 'react-redux';
 
 /*
@@ -13,11 +13,25 @@ import { Provider } from 'react-redux';
  */
 export default () => {
   // This is where we get the existing store.
-  const store = ReactOnRails.getStore('routerCommentsStore');
-
-  return (
+  const stores = ReactOnRails.stores();
+  let store;
+  if (stores.has('routerCommentsStore')) {
+    store = ReactOnRails.getStore('routerCommentsStore');
+    return (
       <Provider store={store}>
-        <RouterCommentsContainer />
+        <NavigationBarContainer />
       </Provider>
+      );
+  } else if (stores.has('commentsStore')) {
+    store = ReactOnRails.getStore('commentsStore');
+    return (
+      <Provider store={store}>
+        <NavigationBarContainer />
+      </Provider>
+      );
+  } else {
+    return (
+      <NavigationBarContainer />
     );
+  }
 };

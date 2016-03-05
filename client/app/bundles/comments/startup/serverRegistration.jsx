@@ -2,19 +2,19 @@
 import App from './ServerApp';
 import RouterApp from './ServerRouterApp';
 import ReactOnRails from 'react-on-rails';
-import Navigationbar from '../components/Navigationbar/Navigationbar';
+import NavigationBarApp from './NavigationBarApp';
 import routerCommentsStore from '../store/routerCommentsStore';
-import ReduxSharedStoreApp from './ServerReduxSharedStoreApp';
+import commentsStore from '../store/commentsStore';
 
 ReactOnRails.register(
   {
     App,
     RouterApp,
-    ReduxSharedStoreApp,
-    Navigationbar,
+    NavigationBarApp,
   }
 );
 
 ReactOnRails.registerStore({
   routerCommentsStore,
+  commentsStore,
 });

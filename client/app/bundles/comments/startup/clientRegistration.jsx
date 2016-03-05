@@ -1,9 +1,9 @@
 import App from './ClientApp';
 import RouterApp from './ClientRouterApp';
-import Navigationbar from '../components/Navigationbar/Navigationbar';
 import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
 import routerCommentsStore from '../store/routerCommentsStore';
-import ReduxSharedStoreApp from './ClientReduxSharedStoreApp';
+import commentsStore from '../store/commentsStore';
+import NavigationBarApp from './NavigationBarApp';
 import ReactOnRails from 'react-on-rails';
 
 ReactOnRails.setOptions({
@@ -13,11 +13,11 @@ ReactOnRails.setOptions({
 ReactOnRails.register({
   App,
   RouterApp,
-  ReduxSharedStoreApp,
+  NavigationBarApp,
   SimpleCommentScreen,
-  Navigationbar,
 });
 
 ReactOnRails.registerStore({
   routerCommentsStore,
+  commentsStore,
 });

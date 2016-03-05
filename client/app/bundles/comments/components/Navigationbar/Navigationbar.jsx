@@ -1,27 +1,10 @@
 import React, { PropTypes } from 'react';
+import ReactOnRails from 'react-on-rails';
 import BaseComponent from 'libs/components/BaseComponent';
 
-export default class Navigationbar extends BaseComponent {
-  static propTypes = {
-    data: PropTypes.object.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    // set @comment_count prop to state
-    // for updating the count of comments
-    this.state = {
-      comment_count: this.props.comments_count,
-    };
-  }
-
-  componentDidUpdate() {
-    if (this.props.data) {
-      this.setState({ comment_count: this.props.data.get('$$comments').size });
-    }
-  }
-
+export default class NavigationBar extends BaseComponent {
   render() {
+    const { data } = this.props;
     return (
       <nav className="navbar navbar-default" role="navigation">
         <div className="container">
@@ -69,7 +52,7 @@ export default class Navigationbar extends BaseComponent {
                }>Forum Discussion</a>
               </li>
               <li>
-                Comments: {this.state.comment_count}
+                Comments: {data.get('$$comments').size}
               </li>
             </ul>
           </div>

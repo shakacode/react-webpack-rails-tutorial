@@ -19,7 +19,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= react_component 'Navigationbar', props: { comments_count: @comments_count } %>
+<%= yield :redux_store %>
+<%= react_component "NavigationBarApp" %>
 
 <div class="container">
   <%= yield %>

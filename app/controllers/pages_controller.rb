@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   before_action :set_comments
-  before_action :set_comments_count
 
   def index
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as
@@ -34,9 +33,5 @@ class PagesController < ApplicationController
 
   def set_comments
     @comments = Comment.all.order("id DESC")
-  end
-
-  def set_comments_count
-    @comments_count = Comment.all.order("id DESC").size
   end
 end

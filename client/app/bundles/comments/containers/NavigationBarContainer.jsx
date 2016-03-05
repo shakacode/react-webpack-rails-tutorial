@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import CommentScreen from '../components/CommentScreen/CommentScreen';
+import NavigationBar from '../components/NavigationBar/NavigationBar';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 import BaseComponent from 'libs/components/BaseComponent';
 
@@ -11,25 +11,20 @@ function select(state) {
   return { data: state.$$commentsStore };
 }
 
-class RouterCommentsContainer extends BaseComponent {
+class NavigationBarContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
-    location: PropTypes.shape({
-      state: PropTypes.object,
-    }).isRequired,
   };
 
   render() {
     const { dispatch, data } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
-    const locationState = this.props.location.state;
-
     return (
-      <CommentScreen {...{ actions, data, locationState }} />
+      <NavigationBar {...{ actions, data }} />
     );
   }
 }
 
 // Don't forget to actually use connect!
-export default connect(select)(RouterCommentsContainer);
+export default connect(select)(NavigationBarContainer);

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Navigationbar from '../components/Navigationbar/Navigationbar';
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 import BaseComponent from 'libs/components/BaseComponent';
@@ -22,10 +21,7 @@ class NonRouterCommentsContainer extends BaseComponent {
     const { dispatch, data } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
     return (
-      <div>
-        <Navigationbar {...{ actions, data }} />
-        <CommentScreen {...{ actions, data }} />
-      </div>
+      <CommentScreen {...{ actions, data }} />
     );
   }
 }
