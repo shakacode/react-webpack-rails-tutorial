@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
+const glob = require('glob');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -20,9 +21,7 @@ module.exports = {
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
-    app: [
-      './app/bundles/comments/startup/clientRegistration',
-    ],
+    app: glob.sync('./app/bundles/**/startup/clientRegistration.js*'),
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
