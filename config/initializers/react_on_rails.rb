@@ -17,4 +17,6 @@ ReactOnRails.configure do |config|
   # Server rendering:
   config.server_renderer_pool_size  = 1   # increase if you're on JRuby
   config.server_renderer_timeout    = 20  # seconds
+
+  config.generated_assets_dirs = File.join(%w(app assets webpack))
 end
