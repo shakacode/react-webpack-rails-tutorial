@@ -5,7 +5,7 @@ import reducers from '../reducers';
 import { initalStates } from '../reducers';
 
 export default props => {
-  const initialComments = props;
+  const initialComments = props.comments;
   const { $$commentsState } = initalStates;
   const initialState = {
     $$commentsStore: $$commentsState.merge({
