@@ -4,6 +4,7 @@ ruby "2.2.4"
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~>4.2"
+gem 'actioncable', github: 'rails/actioncable', branch: 'archive'
 
 # Note: We're using sqllite3 for development and testing
 gem "sqlite3", group: [:development, :test]

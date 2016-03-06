@@ -3,3 +3,6 @@ $(document).on('ready turbolinks:load', function () {
   $('nav a').parents('li,ul').removeClass('active');
   $('nav a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
 });
+
+var App = {};
+App.cable = Cable.createConsumer('ws://localhost:28080');

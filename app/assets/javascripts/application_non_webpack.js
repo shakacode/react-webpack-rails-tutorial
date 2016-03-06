@@ -4,4 +4,5 @@
 
 //= require turbolinks
 
+//= require cable
 //= require rails_startup

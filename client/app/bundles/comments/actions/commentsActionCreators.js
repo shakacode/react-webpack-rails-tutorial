@@ -13,6 +13,13 @@ export function setIsSaving() {
   };
 }
 
+export function addComment(comment) {
+  return {
+    type: actionTypes.ADD_COMMENT,
+    comment,
+  };
+}
+
 export function fetchCommentsSuccess(comments) {
   return {
     type: actionTypes.FETCH_COMMENTS_SUCCESS,

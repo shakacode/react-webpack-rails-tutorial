@@ -25,6 +25,19 @@ export default function commentsReducer($$state = $$initialState, action = null)
       });
     }
 
+    case actionTypes.ADD_COMMENT: {
+      const { type, comment } = action;
+      const data = comment.get('data')
+
+      return $$state.withMutations(state => (
+        state
+          .updateIn(
+            ['$$comments'],
+            $$comments => $$comments.unshift(data)
+          )
+      ));
+    }
+
     case actionTypes.FETCH_COMMENTS_FAILURE: {
       return $$state.merge({
         fetchCommentError: error,

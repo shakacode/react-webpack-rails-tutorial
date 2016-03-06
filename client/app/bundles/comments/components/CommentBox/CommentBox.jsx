@@ -5,6 +5,8 @@ import CommentList from './CommentList/CommentList';
 import css from './CommentBox.scss';
 import BaseComponent from 'libs/components/BaseComponent';
 
+import Immutable from 'immutable';
+
 export default class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
@@ -12,9 +14,19 @@ export default class CommentBox extends BaseComponent {
     data: PropTypes.object.isRequired,
   };
 
+  setupSubscription(){
+    const { addComment } = this.props.actions;
+    App.comments = App.cable.subscriptions.create("CommentsChannel", {
+      received: function (data) {
+        addComment(Immutable.fromJS(data));
+      }
+    });
+  }
+
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
+    this.setupSubscription();
     this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
 

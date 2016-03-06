@@ -19,3 +19,5 @@ rails-static-server-assets: sh -c 'npm run build:dev:server'
 # Disable this if you are not using it.
 # It's a great way to prototype UI especially with non-Rails developers!
 express: sh -c 'HOT_PORT=4000 npm start'
+
+cable: bundle exec puma -p 28080 cable/config.ru

@@ -17,6 +17,8 @@
   <%= env_javascript_include_tag(static: 'application_static',
                                  hot: 'application_non_webpack',
                                  'data-turbolinks-track' => true) %>
+
+  <%= action_cable_meta_tag %>
   <%= csrf_meta_tags %>
 </head>
 <body>
