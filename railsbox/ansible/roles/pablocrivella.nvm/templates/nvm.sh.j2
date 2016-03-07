@@ -1,0 +1,7 @@
+{% if nvm_env == 'system' %}
+source {{ nvm_root }}/nvm.sh
+{% else %}
+if [ -d "$HOME/.nvm" ]; then
+  source {{ nvm_root }}/nvm.sh
+fi
+{% endif %}

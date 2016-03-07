@@ -1,0 +1,6 @@
+---
+- name: install packages
+  shell: bash -lc "nvm use {{ item.0 }} && npm install -g {{ item.1 }}"
+  with_nested:
+    - nvm_node_versions
+    - nvm_global_packages

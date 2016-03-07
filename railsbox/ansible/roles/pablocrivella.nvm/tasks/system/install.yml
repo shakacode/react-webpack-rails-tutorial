@@ -1,0 +1,6 @@
+- name: checkout nvm_repo
+  git: >
+    repo={{ nvm_repo }}
+    dest={{ nvm_root }}
+    version={{ nvm_version }}
+    accept_hostkey=true

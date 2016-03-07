@@ -1,0 +1,10 @@
+service git
+{
+        disable         = no
+        socket_type     = stream
+        wait            = no
+        user            = nobody
+        server          = /usr/lib/git-core/git-daemon
+        server_args     = --base-path={{git_server_base_path}} {% if git_server_export_all %}--export-all {% endif %}--syslog --inetd --verbose
+        log_on_failure  += USERID
+}

@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Pablo Crivella
+  description: Ansible Role for installing nvm and nodejs and iojs versions.
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - development
+    - system
+dependencies:
+  - role: ANXS.git

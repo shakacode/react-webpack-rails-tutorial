@@ -1,0 +1,26 @@
+---
+language: python
+python: "2.7"
+
+env:
+  - NVM_ENV=system
+  - NVM_ENV=user
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq git
+install:
+  - pip install ansible==1.8.4
+script:
+  - echo localhost > inventory
+  - ansible-playbook -i inventory test.yml --syntax-check
+  - >
+    ansible-playbook -i inventory test.yml --connection=local --sudo
+    -e "nvm_env=$NVM_ENV"
+    -e "nvm_root=/tmp/.nvm"
+    -e "nvm_users=['travis']"
+  # - >
+  #   ansible-playbook -i inventory test.yml --connection=local --sudo -e "nvm_env=$NVM_ENV"
+  #   | grep -q 'changed=0.*failed=0'
+  #   && (echo 'Idempotence test: pass' && exit 0)
+  #   || (echo 'Idempotence test: fail' && exit 1)

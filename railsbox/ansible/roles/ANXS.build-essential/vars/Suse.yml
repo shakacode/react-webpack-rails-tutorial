@@ -1,0 +1,11 @@
+# file: build-essential/vars/Suse.yml
+
+buildessential_packages:
+  - autoconf
+  - bison
+  - flex
+  - gcc
+  - gcc-c++
+  - kernel-default-devel
+  - make
+  - m4

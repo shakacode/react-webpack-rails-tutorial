@@ -1,0 +1,38 @@
+---
+- name: Authorize current user
+  authorized_key: user={{ user_name }} key='{{ lookup('file', '~/.ssh/id_rsa.pub') }}'
+
+- name: Allow to start / stop app with sudo
+  template: src=sudoers.d.conf.j2 dest=/etc/sudoers.d/{{ app_name }} validate='visudo -cf %s'
+
+- name: Create directories
+  file: path={{ item }} state=directory owner={{ user_name }} group={{ group_name }}
+  with_items:
+    - '{{ path }}'
+    - '{{ releases_path }}'
+    - '{{ shared_path }}'
+    - '{{ shared_path }}/tmp'
+    - '{{ shared_path }}/log'
+    - '{{ shared_path }}/config'
+    - '{{ shared_path }}/vendor'
+    - '{{ shared_path }}/vendor/bundle'
+
+- name: Check if config/{{ item }}.yml exists
+  stat:
+    path: ../../config/{{ item }}.yml
+  connection: local
+  sudo: no
+  register: configs
+  with_items:
+    - database
+    - secrets
+
+- name: Copy config/{{ item.item }}.yml to {{ shared_path }}/config
+  copy: 
+    src: ../../../../../config/{{ item.item }}.yml
+    dest: '{{ shared_path }}/config/{{ item.item }}.yml'
+    owner: '{{ user_name }}'
+    group: '{{ group_name }}'
+    mode: 0600
+  with_items: configs.results
+  when: item.stat.exists

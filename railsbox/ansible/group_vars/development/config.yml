@@ -1,0 +1,12 @@
+---
+rails_env: development
+target: virtualbox
+autoconf: true
+vm_memory: 1024
+vm_swap: 1024
+vm_cores: 2
+vm_share_type: nfs
+vm_ip: 192.168.20.50
+host: 
+port: 
+username: 

@@ -1,0 +1,29 @@
+# file: build-essential/meta/main.yml
+
+galaxy_info:
+  author: pjan vandaele
+  company: ANXS
+  description: Install packages required for compiling C software from source.
+  min_ansible_version: 1.4
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    version:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: RedHat
+    versions:
+    - all
+  - name: Suse
+    versions:
+    - all
+  categories:
+  - system
+  - development
+
+dependencies: []

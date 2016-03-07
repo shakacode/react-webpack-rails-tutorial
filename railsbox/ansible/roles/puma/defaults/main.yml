@@ -1,0 +1,3 @@
+---
+puma_app_name: "{{ app_name }}"
+server_restart_command: /sbin/restart {{ app_name }}

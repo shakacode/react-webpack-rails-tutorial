@@ -1,0 +1,12 @@
+---
+- name: install versions
+  shell: bash -lc "nvm install {{ item }}"
+  register: output
+  changed_when: "'already installed.' not in output.stderr"
+  with_items: nvm_node_versions
+
+- name: create alias directory
+  file: path="{{ nvm_root }}/alias" state=directory
+
+- name: set {{ nvm_default_node_version }} as default version
+  copy: dest="{{ nvm_root }}/alias/default" content="{{ nvm_default_node_version }}"

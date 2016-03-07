@@ -1,0 +1,81 @@
+---
+vm_name: react-webpack-rails-tutorial
+path: /react-webpack-rails-tutorial
+git_branch: master
+vm_os: ubuntu/trusty64
+environments:
+  - development
+package_bundles:
+  - curl
+  - graphics
+  - qt
+packages:
+  - curl
+  - libcurl3
+  - libcurl3-gnutls
+  - libcurl4-openssl-dev
+  - imagemagick
+  - qt5-default
+  - libqt5webkit5-dev
+manual_ruby_version: 2.2.4
+server_name: localhost
+rails_version: 4
+ruby_install: rvm
+ruby_version: 2.2.4
+environment_file: /react-webpack-rails-tutorial/.envrc
+databases:
+  - postgresql
+background_jobs:
+postgresql_orm: activerecord
+mysql_orm: none
+mongodb_orm: none
+redis_orm: none
+mongodb_db_name: myapp
+mysql_db_name: myapp
+mysql_db_user: vagrant
+mysql_db_password:
+postgresql_db_name: react-webpack-rails-tutorial
+postgresql_db_user: vagrant
+postgresql_db_password:
+postgresql_extensions:
+  - hstore
+delayed_job_command: script/delayed_job run
+sidekiq_command: sidekiq
+resque_command: rake resque:work
+server_type: nginx_puma
+git_url:
+
+app_name: '{{ vm_name }}'
+user_name: '{{ "vagrant" if target == "virtualbox" else app_name }}'
+group_name: '{{ user_name }}'
+
+user_home_path: '/home/{{ user_name }}'
+
+ssl_certificate_path: /etc/nginx/ssl/{{ server_name }}.crt
+ssl_certificate_key_path: /etc/nginx/ssl/{{ server_name }}.key
+
+releases_path: '{{ path }}/releases'
+shared_path: '{{ path }}/shared'
+
+app_path: '{{ path }}{{ "/current" if target != "virtualbox" else "" }}'
+app_public_path: "{{ app_path }}/public"
+app_config_path: '{{ app_path }}/config'
+shared_config_path: '{{ app_path if target == "virtualbox" else shared_path }}/config'
+app_temp_path: "/tmp{{ app_path }}"
+app_logs_path: "{{ app_path }}/log"
+
+unicorn_sock_path: "/tmp/unicorn.{{ rails_env }}.sock"
+unicorn_config_path: "{{ app_config_path }}/unicorn.{{ rails_env }}.rb"
+unicorn_pid_path: "{{ app_temp_path }}/unicorn.{{ rails_env }}.pid"
+unicorn_stderr_path: "{{ app_logs_path }}/unicorn.err.log"
+unicorn_stdout_path: "{{ app_logs_path }}/unicorn.log"
+
+puma_bind_path: "unix://{{ app_temp_path }}/sockets/puma.{{ rails_env }}.sock"
+puma_config_path: "{{ app_config_path }}/puma.{{ rails_env }}.rb"
+puma_pidfile_path: "{{ app_temp_path }}/pids/puma.{{ rails_env }}.pid"
+puma_stderr_redirect_path: "{{ app_logs_path }}/puma.{{ rails_env }}.err.log"
+puma_stdout_redirect_path: "{{ app_logs_path }}/puma.{{ rails_env }}.log"
+
+ruby_user_name: '{{ "root" if ruby_install == "package" else user_name }}'
+
+use_apt_proxy: false

@@ -1,0 +1,10 @@
+# file: build-essential/vars/Debian.yml
+
+buildessential_packages:
+  - autoconf
+  - binutils-doc
+  - bison
+  - build-essential
+  - flex
+  - gettext
+  - ncurses-dev

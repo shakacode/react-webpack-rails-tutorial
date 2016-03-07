@@ -1,0 +1,30 @@
+---
+
+- include_vars: "{{ nvm_env }}.yml"
+
+- include: "system/install.yml"
+  when: "nvm_env == 'system'"
+
+- include: "user/install.yml"
+  when:  "nvm_env == 'user'"
+
+- name: add nvm initialization to profile
+  template: >
+    src=nvm.sh.j2
+    dest=/etc/profile.d/nvm.sh
+    owner=root
+    group=root
+    mode=0755
+  sudo: true
+
+- include: "system/install_versions.yml"
+  when: "nvm_env == 'system'"
+
+- include: "system/install_packages.yml"
+  when: "nvm_env == 'system'"
+
+- include: "user/install_versions.yml"
+  when: "nvm_env == 'user'"
+
+- include: "user/install_packages.yml"
+  when: "nvm_env == 'user'"

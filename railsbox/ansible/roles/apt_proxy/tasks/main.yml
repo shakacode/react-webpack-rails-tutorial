@@ -1,0 +1,3 @@
+---
+- name: Setup apt-get proxy
+  template: src=01proxy.j2 dest=/etc/apt/apt.conf.d/01proxy

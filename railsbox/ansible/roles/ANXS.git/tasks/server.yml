@@ -1,0 +1,24 @@
+# file: git/tasks/server.yml
+
+- name: Git | Server | Make sure xinetd is installed
+  apt:
+    pkg: xinetd
+    state: present
+
+- name: Git | Server | Make sure the server base path directory is present
+  file:
+    name: "{{git_server_base_path}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Git | Server | Configure xinetd for Git
+  template:
+    src: etc_xinetd.d_git
+    dest: /etc/xinetd.d/git
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart xinetd

@@ -1,0 +1,58 @@
+---
+- include_vars: ../../puma/defaults/main.yml
+
+- set_fact: this_release_path={{ releases_path }}/{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}
+
+- debug: msg='New release path {{ this_release_path }}'
+
+- name: Create new release dir
+  file: path={{ this_release_path }} state=directory
+
+- name: Update code
+  git: repo={{ git_url }} dest={{ this_release_path }} version={{ git_branch }} accept_hostkey=yes
+  register: git
+
+- debug: msg='Updated repo from {{ git.before }} to {{ git.after }}'
+
+- name: Delete log directory
+  file: path={{ this_release_path }}/log state=absent
+
+- name: Symlink shared files
+  file: src={{ shared_path }}/{{ item }} dest={{ this_release_path }}/{{ item }} state=link force=yes
+  with_items:
+    - config/database.yml
+    - config/secrets.yml
+    - config/puma.{{ rails_env }}.rb
+    - log
+    - tmp
+    - vendor/bundle
+
+- name: Install gems
+  command: /bin/bash -lc 'bundle install --deployment --without="development test"'
+  args:
+    chdir: '{{ this_release_path }}'
+
+- name: Precompile assets
+  command: /bin/bash -lc 'bundle exec rake assets:precompile'
+  environment:
+    RAILS_ENV: '{{ rails_env }}'
+  args:
+    chdir: '{{ this_release_path }}'
+
+- name: Migrate database
+  command: /bin/bash -lc 'bundle exec rake db:migrate'
+  environment:
+    RAILS_ENV: '{{ rails_env }}'
+  args:
+    chdir: '{{ this_release_path }}'
+
+- name: Symlink new release
+  file: src={{ this_release_path }} dest={{ app_path }} state=link force=yes
+
+- name: Restart webserver
+  command: sudo {{ server_restart_command }}
+
+- name: Cleanup
+  shell: "ls -1t {{ releases_path }}|tail -n +{{ keep_releases + 1 }}|xargs rm -rf"
+  args:
+    chdir: '{{ releases_path }}'
