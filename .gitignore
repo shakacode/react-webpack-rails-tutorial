@@ -31,3 +31,5 @@ vendor/ruby
 
 # Rubymine/IntelliJ
 .idea
+
+spec/examples.txt

@@ -91,12 +91,14 @@ end
 
 group :test  do
   gem "coveralls", require: false
-  gem "rspec-rails"
-  gem "rspec-retry"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "selenium-webdriver"
-  gem "chromedriver-helper"
+  gem "capybara-webkit"
+  gem "chromedriver-helper", require: ["selenium_chrome"].include?(ENV["DRIVER"])
   gem "database_cleaner"
   gem "launchy"
+  gem "poltergeist"# , require: ["poltergeist", "poltergeist_errors_ok"].include?(ENV["DRIVER"])
+  gem "rspec-rails"
+  gem "rspec-retry"
+  gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end

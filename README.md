@@ -16,9 +16,9 @@ By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakaco
 - Feel free to open discussions at [forum.shakacode.com](http://forum.shakacode.com). We love to help!
 - We now have a [gitter chat room for this topic](https://gitter.im/shakacode/react-webpack-rails-tutorial) but we prefer our Slack Channel ([email us](mailto:contact@shakacode.com) for an invite).
 - Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
-- If you came to here from the blog article, this example project has evolved. See [pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr).
+- If you came to here from the blog article, this example project has evolved. See [merged pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Amerged) and the [CHANGELOG.md](./CHANGELOG.md).
 
-A Full tutorial article can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial. We plan to update the tutorial article as soon as we can catch our breath!
+An outdated full tutorial article behind of the motivation of this system can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial. 
 
 # NEWS
 We have not yet updated the `react_on_rails` gem generators for the following tasks. We're looking for help to migrate this, if you're interested in contributing to the project. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
@@ -27,7 +27,6 @@ We have not yet updated the `react_on_rails` gem generators for the following ta
 2. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
 
 If you did generate a fresh app from React On Rails and want to move to CSS Modules, then see [PR 175: Babel 6 / CSS Modules / Rails hot reloading](https://github.com/shakacode/react-webpack-rails-tutorial/pull/175). Note, while there are probably fixes after this PR was accepted, this has the majority of the changes.
-
 
 # Example Application
 This is a simple example application that illustrates the use of ReactJs to implement a commenting system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails. It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to choose the form layout. `react-bootstrap` is used for the React components. A pure Rails UI generated from scaffolding is shown for comparison.
@@ -40,7 +39,7 @@ In no particular order:
 
 - Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
-- Example of enabling hot reloading of both JS and CSS from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
+- Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
 - Example of Rails 4.2 with ReactJs/Redux/React-Router with Webpack and ES7.
 - Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.github.io/docs/webpack-dev-server.html). You can see this by starting the app and visiting http://localhost:4000
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
@@ -74,15 +73,23 @@ See package.json and Gemfile for versions
 1. `bundle install`
 1. `npm install`
 1. `rake db:setup`
-1. `foreman start -f Procfile.dev`
-1. Open a browser tab to http://localhost:3000 for the Rails app example.
-1. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example.
+1. `foreman start -f Procfile.hot`
+  1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING
+  2. Try Hot Reloading steps below! 
+1.  `foreman start -f Procfile.express`
+  1. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example just using an express server (no Rails involved). This is good for fast prototyping of React components. However, this setup is not as useful now that we have hot reloading working for Rails!
+  2. Try Hot Reloading steps below! 
+1. `foreman start -f Procfile.static`
+  1. Open a browser tab to http://localhost:3000 for the Rails app example.
+  2. When you make changes, you have to refresh the browser page.
+
+## Hot Reloading Example (applies to both `Procfile.hot` and `Procfile.express`.
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the sceen update without refreshing the window. This applies to port 3000 and port 4000.
 1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
 1. Be sure to take a look at the different Procfiles in this directory, as described below.
 
 # KEY COMMANDS
-1. Run all linters and tests: `rake ci`
+1. Run all linters and tests: `rake`
 1. See all npm commands: `npm run`
 1. Start all development processes: `foreman start -f Procfile.dev`
 1. Start all Rails only development processes: `foreman start -f Procfile.rails`
@@ -169,18 +176,7 @@ bundle exec foreman start -f <Procfile>
 In genereral, you want to avoid running more webpack watch processes than you need. The `Procfile.dev`, for example, runs both the express server (Webpack dev server) and the Rails hot assets reloading server.
 
 ## Contributors
-[The Shaka Code team!](http://www.shakacode.com/about/) and many others!
-
-Notable contributions include (please submit PR if I miss any!):
-
-* [Justin Gordon](https://github.com/justin808/): Started this, leads this
-* [Alex Fedoseev](https://github.com/alexfedoseev): Added integration of Rails hot loading and CSS modules, plus much more
-* [Martin Breining](https://github.com/mbreining): For adding flux at first
-* [Dylan Grafmyre](https://github.com/Dgrafmyre): For ci setup
-* [Rob Wise](https://github.com/robwise): Many doc improvements
-* [Josias Schneider](https://github.com/josiasd): Conversion to the new react_on_rails format
-
-See the full list of [Contributors](https://github.com/shakacode/react-webpack-rails-tutorial/graphs/contributors)
+[The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
 
 # Open Code of Conduct
 This project adheres to the [Open Code of Conduct](http://todogroup.org/opencodeofconduct/#fetch/opensource@github.com). By participating, you are expected to uphold this code.

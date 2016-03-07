@@ -13,10 +13,10 @@ export function setIsSaving() {
   };
 }
 
-export function fetchCommentsSuccess(comments) {
+export function fetchCommentsSuccess(data) {
   return {
     type: actionTypes.FETCH_COMMENTS_SUCCESS,
-    comments,
+    comments: data.comments,
   };
 }
 
