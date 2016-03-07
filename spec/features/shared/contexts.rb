@@ -1,8 +1,11 @@
 require "rails_helper"
 
 # Pages
-shared_context "Main Page", page: :main do
+shared_context "React Router Demo", page: :main do
   background { visit root_path }
+end
+shared_context "React Demo", page: :react_demo do
+  background { visit no_router_path }
 end
 shared_context "Simple Page", page: :simple do
   background { visit simple_path }
