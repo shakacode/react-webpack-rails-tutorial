@@ -84,7 +84,7 @@ See package.json and Gemfile for versions
   1. Open a browser tab to http://localhost:3000 for the Rails app example.
   2. When you make changes, you have to refresh the browser page.
 
-## Hot Reloading Example (applies to both `Procfile.hot` and `Procfile.express`.
+## Hot Reloading Example: applies to both `Procfile.hot` and `Procfile.express`
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the sceen update without refreshing the window. This applies to port 3000 and port 4000.
 1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
 1. Be sure to take a look at the different Procfiles in this directory, as described below.
