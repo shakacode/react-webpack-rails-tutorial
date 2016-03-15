@@ -6,7 +6,7 @@
   <%= env_stylesheet_link_tag(static: 'application_static',
                               hot: 'application_non_webpack',
                               media: 'all',
-                              'data-turbolinks-track' => true)  %>
+                              'data-turbolinks-track' => "reload")  %>
 
   <!-- These do not use turbolinks, so no data-turbolinks-track -->
   <!-- This is to load the hot assets. -->
@@ -16,7 +16,7 @@
   <!-- These do use turbolinks -->
   <%= env_javascript_include_tag(static: 'application_static',
                                  hot: 'application_non_webpack',
-                                 'data-turbolinks-track' => true) %>
+                                 'data-turbolinks-track' => "reload") %>
   <%= csrf_meta_tags %>
 </head>
 <body>

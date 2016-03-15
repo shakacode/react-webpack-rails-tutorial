@@ -2,6 +2,12 @@
 ReactOnRails.configure do |config|
   # Client bundles are configured in application.js
 
+  config.generated_assets_dir = File.join(%w(app assets webpack))
+
+  # Define the files for we need to check for webpack compilation when running tests
+  config.webpack_generated_files = %w( app-bundle.js vendor-bundle.js app-bundle.css
+                                       vendor-bundle.css server-bundle.js )
+
   # Server bundle is a single file for all server rendering of components.
   # If you wish to use render_js in your views without any file, set this to "" to avoid warnings.
   config.server_bundle_js_file = "app/assets/webpack/server-bundle.js" # This is the default
@@ -17,6 +23,4 @@ ReactOnRails.configure do |config|
   # Server rendering:
   config.server_renderer_pool_size  = 1   # increase if you're on JRuby
   config.server_renderer_timeout    = 20  # seconds
-
-  config.generated_assets_dirs = File.join(%w(app assets webpack))
 end

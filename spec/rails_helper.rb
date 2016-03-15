@@ -66,23 +66,18 @@ RSpec.configure do |config|
       Capybara::Poltergeist::Driver.new(app, opts.merge(js_errors: false))
     end
   when :selenium_chrome
-    Capybara.register_driver :selenium_chrome do |app|
-      Capybara::Selenium::Driver.new(app, browser: :chrome)
-    end
-    Capybara::Screenshot.register_driver(:selenium_chrome) do |js_driver, path|
-      js_driver.browser.save_screenshot(path)
-    end
+    DriverRegistration.register_selenium_chrome
   when :selenium_firefox, :selenium
-    Capybara.register_driver :selenium_firefox do |app|
-      Capybara::Selenium::Driver.new(app, browser: :firefox)
-    end
-    Capybara::Screenshot.register_driver(:selenium_firefox) do |js_driver, path|
-      js_driver.browser.save_screenshot(path)
-    end
+    DriverRegistration.register_selenium_firefox
     driver = :selenium_firefox
   end
 
   Capybara.javascript_driver = driver
+
+  Capybara.server do |app, port|
+    require "rack/handler/puma"
+    Rack::Handler::Puma.run(app, Port: port)
+  end
 
   # Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
@@ -131,5 +126,19 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+
+  def js_errors_driver
+    Capybara.javascript_driver == :poltergeist ? :poltergeist_errors_ok : Capybara.javascript_driver
+  end
+
+  def js_selenium_driver
+    driver = Capybara.javascript_driver == :selenium_firefox ? :selenium_firefox : :selenium_chrome
+    if driver == :selenium_firefox
+      DriverRegistration.register_selenium_firefox
+    else
+      DriverRegistration.register_selenium_chrome
+    end
+    driver
   end
 end
