@@ -23,7 +23,6 @@ class PagesController < ApplicationController
     # end
 
     redux_store("routerCommentsStore", comments_json_string)
-    puts "setup redux_store with #{comments_json_string.inspect}"
     render_html
   end
 
