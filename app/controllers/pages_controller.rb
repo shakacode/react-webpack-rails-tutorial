@@ -22,13 +22,13 @@ class PagesController < ApplicationController
     #   format.html
     # end
 
-    redux_store("routerCommentsStore", comments_json_string)
+    redux_store("routerCommentsStore", props: comments_json_string)
     render_html
   end
 
   # Declaring no_router and simple to indicate we have views for them
   def no_router
-    redux_store("commentsStore", comments_json_string)
+    redux_store("commentsStore", props: comments_json_string)
     render_html
   end
 
