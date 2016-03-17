@@ -15,9 +15,8 @@ config.entry.app.push(
   'webpack/hot/only-dev-server'
 );
 
+// These are Rails specific
 config.entry.vendor.push(
-  'es5-shim/es5-shim',
-  'es5-shim/es5-sham',
   'jquery-ujs',
   'bootstrap-loader'
 );

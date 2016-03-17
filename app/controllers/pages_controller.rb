@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  include ReactOnRails::Controller
   before_action :set_comments
 
   def index
@@ -20,10 +21,16 @@ class PagesController < ApplicationController
     # respond_to do |format|
     #   format.html
     # end
+
+    redux_store("routerCommentsStore", comments_json_string)
+    puts "setup redux_store with #{comments_json_string.inspect}"
+    render_html
   end
 
   # Declaring no_router and simple to indicate we have views for them
   def no_router
+    redux_store("commentsStore", comments_json_string)
+    render_html
   end
 
   def simple
@@ -33,5 +40,16 @@ class PagesController < ApplicationController
 
   def set_comments
     @comments = Comment.all.order("id DESC")
+  end
+
+  def comments_json_string
+    render_to_string(template: "/comments/index.json.jbuilder",
+                     locals: { comments: Comment.all }, format: :json)
+  end
+
+  def render_html
+    respond_to do |format|
+      format.html
+    end
   end
 end

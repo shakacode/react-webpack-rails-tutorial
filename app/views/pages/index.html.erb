@@ -1,7 +1,3 @@
-<% content_for :redux_store do %>
-<%= redux_store("routerCommentsStore") %>
-<% end %>
-
 <h2>
   Featuring the <%= link_to "React on Rails gem", "https://github.com/shakacode/react_on_rails" %>
 </h2>
@@ -13,5 +9,5 @@
 </h3>
 <%= render "header" %>
 
-<%= react_component('RouterApp', props: render(template: "/comments/index.json.jbuilder"),
+<%= react_component('RouterApp',
     prerender: true, raise_on_prerender_error: true) %>

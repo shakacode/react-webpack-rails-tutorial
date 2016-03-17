@@ -3,8 +3,12 @@ import ReactOnRails from 'react-on-rails';
 import BaseComponent from 'libs/components/BaseComponent';
 
 export default class NavigationBar extends BaseComponent {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    const { data } = this.props;
+
     return (
       <nav className="navbar navbar-default" role="navigation">
         <div className="container">
@@ -42,17 +46,19 @@ export default class NavigationBar extends BaseComponent {
                   'blog/2014/10/03/integrating' +
                   '-webpack-and-the-es6-transpiler' +
                   '-into-an-existing-rails-project/'
-               }>Tutorial Article</a>
+               }>Tutorials</a>
               </li>
               <li>
                 <a href={
                   'http://forum.shakacode.com/' +
                   't/fast-rich-client-rails-development' +
                   '-with-webpack-and-the-es6-transpiler/82/22'
-               }>Forum Discussion</a>
+               }>Forum</a>
               </li>
               <li>
-                Comments: {data.get('$$comments').size}
+                <a href='https://github.com/shakacode/react_on_rails/blob/master/README.md#multiple-react-components-on-a-page-with-one-store'>
+                  Comments: {this.props.commentsCount}
+                </a>
               </li>
             </ul>
           </div>

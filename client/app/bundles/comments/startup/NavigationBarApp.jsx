@@ -15,23 +15,20 @@ export default () => {
   // This is where we get the existing store.
   const stores = ReactOnRails.stores();
   let store;
-  if (stores.has('routerCommentsStore')) {
-    store = ReactOnRails.getStore('routerCommentsStore');
-    return (
-      <Provider store={store}>
-        <NavigationBarContainer />
-      </Provider>
-      );
-  } else if (stores.has('commentsStore')) {
-    store = ReactOnRails.getStore('commentsStore');
-    return (
-      <Provider store={store}>
-        <NavigationBarContainer />
-      </Provider>
-      );
-  } else {
+  store = ReactOnRails.getStore('routerCommentsStore', false);
+  if (!store) {
+    store = ReactOnRails.getStore('commentsStore', false);
+  }
+
+  if (!store) {
     return (
       <NavigationBarContainer />
     );
   }
+
+  return (
+    <Provider store={store}>
+      <NavigationBarContainer />
+    </Provider>
+    );
 };
