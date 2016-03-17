@@ -10,6 +10,8 @@ shared_examples "New Comment Submission" do
     scenario "comment is added" do
       expect(page).to have_css(".js-comment-author", text: name)
       expect(page).to have_css(".js-comment-text", text: text)
+      expect(page).to have_css(".js-comment-count",
+        text: "Comments: #{Comment.count}")
     end
   end
 
@@ -18,6 +20,8 @@ shared_examples "New Comment Submission" do
 
     scenario "comment is not added" do
       expect(page).to have_selector(".comment", count: comments_count)
+      expect(page).to have_css(".js-comment-count",
+        text: "Comments: #{Comment.count}")
     end
   end
 

@@ -56,7 +56,8 @@ export default class NavigationBar extends BaseComponent {
                }>Forum</a>
               </li>
               <li>
-                <a href='https://github.com/shakacode/react_on_rails/blob/master/README.md#multiple-react-components-on-a-page-with-one-store'>
+                <a id='js-comment-count' 
+                  href='https://github.com/shakacode/react_on_rails/blob/master/README.md#multiple-react-components-on-a-page-with-one-store'>
                   Comments: {this.props.commentsCount}
                 </a>
               </li>
