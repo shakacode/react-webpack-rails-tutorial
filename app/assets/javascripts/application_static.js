@@ -7,10 +7,8 @@
 // CRITICAL that webpack/vendor-bundle must be BEFORE turbolinks
 // since it is exposing jQuery and jQuery-ujs
 
-<% if ENV["REACT_ON_RAILS_ENV"] != "HOT" %>
-  <% require_asset "vendor-bundle" %>
-  <% require_asset "app-bundle" %>
-<% end %>
+//= require vendor-bundle
+//= require app-bundle
 
 // Non-webpack assets incl turbolinks
 //= require application_non_webpack
