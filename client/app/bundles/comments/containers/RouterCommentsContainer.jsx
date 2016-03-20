@@ -25,6 +25,7 @@ class RouterCommentsContainer extends BaseComponent {
     const actions = bindActionCreators(commentsActionCreators, dispatch);
     const locationState = this.props.location.state;
 
+
     return (
       <CommentScreen {...{ actions, data, locationState }} />
     );

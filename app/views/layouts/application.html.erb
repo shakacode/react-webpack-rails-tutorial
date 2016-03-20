@@ -20,36 +20,16 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="http://www.shakacode.com">ShakaCode</a>
-    </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><%= link_to "React Router Demo", root_path %></li>
-        <li><%= link_to "React Demo", no_router_path %></li>
-        <li><%= link_to "Simple React", simple_path %></li>
-        <li><%= link_to "Classic Rails", comments_path %></li>
-        <li><%= link_to "Source on Github", "https://github.com/shakacode/react-webpack-rails-tutorial" %></li>
-        <li><%= link_to "Tutorial Article", "http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/" %></li>
-        <li><%= link_to "Forum Discussion", "http://forum.shakacode.com/t/fast-rich-client-rails-development-with-webpack-and-the-es6-transpiler/82/22" %></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+<%= react_component "NavigationBarApp" %>
 
 <div class="container">
   <%= yield %>
 </div>
+
+<!-- This is a placeholder for ReactOnRails to know where to render the store props for
+     client side hydration -->
+<%= redux_store_hydration_data %>
 
 </body>
 </html>
