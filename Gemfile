@@ -25,7 +25,8 @@ gem "coffee-rails"
 
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '>= 5.0.0.beta2'
+# Get turbolinks from npm!
+# gem 'turbolinks', '>= 5.0.0.beta2'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"

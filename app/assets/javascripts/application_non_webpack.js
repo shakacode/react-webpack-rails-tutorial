@@ -1,7 +1,5 @@
 // All webpack assets in development will be loaded via webpack dev server
-// It's important to include them in layout view above this asset
-// b/c it exposes jQuery for turbolinks and another non-webpack JS (if any)
 
-//= require turbolinks
+// turbolinks comes from npm and is listed in webpack.client.base.config.js
 
 //= require rails_startup
