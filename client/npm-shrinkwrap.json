@@ -4151,8 +4151,9 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.7.tgz"
     },
     "react-on-rails": {
-      "version": "4.0.0",
-      "from": "react-on-rails@>=4.0.0 <5.0.0"
+      "version": "4.0.2",
+      "from": "react-on-rails@4.0.2",
+      "resolved": "https://registry.npmjs.org/react-on-rails/-/react-on-rails-4.0.2.tgz"
     },
     "react-overlays": {
       "version": "0.6.0",
@@ -4912,6 +4913,10 @@
       "version": "0.4.2",
       "from": "tunnel-agent@>=0.4.1 <0.5.0",
       "resolved": "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.4.2.tgz"
+    },
+    "turbolinks": {
+      "version": "0.0.2",
+      "from": "turbolinks@latest"
     },
     "tv4": {
       "version": "1.2.7",
