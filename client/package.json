@@ -93,6 +93,7 @@
     "eslint": "^2.3.0",
     "eslint-config-shakacode": "^3.0.0",
     "eslint-plugin-react": "^4.2.0",
+    "estraverse-fb": "^1.3.1",
     "express": "^4.13.4",
     "jade": "^1.11.0",
     "jscs": "^2.11.0",
