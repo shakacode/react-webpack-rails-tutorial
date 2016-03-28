@@ -1,8 +1,8 @@
 # Run Rails without hot reloading (static assets).
-rails: TRACE_REACT_ON_RAILS=TRUE rails s
+rails: TRACE_REACT_ON_RAILS=TRUE rails s -b 0.0.0.0
 
 # Build client assets, watching for changes.
-rails-client-assets: sh -c 'npm run build:dev:client'
+rails-client-assets: npm run build:dev:client
 
 # Build server assets, watching for changes. Remove if not server rendering.
-rails-server-assets: sh -c 'npm run build:dev:server'
+rails-server-assets: npm run build:dev:server

@@ -38,5 +38,9 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {}
+  "dependencies": {
+    "babel-polyfill": "^6.6.1",
+    "estraverse": "^4.1.1",
+    "estraverse-fb": "^1.3.1"
+  }
 }

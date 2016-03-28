@@ -2,6 +2,8 @@
 # Check out: https://github.com/bbatsov/rubocop
 
 AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.2
   Include:
     - '**/Rakefile'
     - '**/config.ru'

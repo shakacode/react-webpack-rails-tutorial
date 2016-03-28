@@ -3,9 +3,10 @@ import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 import reducers from '../reducers';
 import { initalStates } from '../reducers';
+import DevTools from '../containers/DevTools';
 
 export default props => {
-  const initialComments = props;
+  const initialComments = props.comments;
   const { $$commentsState } = initalStates;
   const initialState = {
     $$commentsStore: $$commentsState.merge({
@@ -15,7 +16,8 @@ export default props => {
 
   const reducer = combineReducers(reducers);
   const composedStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
+    applyMiddleware(thunkMiddleware, loggerMiddleware),
+    DevTools.instrument()
   );
 
   return composedStore(createStore)(reducer, initialState);

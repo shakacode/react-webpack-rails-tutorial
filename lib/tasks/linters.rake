@@ -51,7 +51,7 @@ if %w(development test).include? Rails.env
     end
 
     desc "JS Linting"
-    task js: [:eslint, :jscs] do
+    task js: [:jscs, :eslint] do
       puts "Completed running all JavaScript Linters"
     end
 

@@ -4,9 +4,10 @@ import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 import reducers from '../reducers';
 import { routerReducer } from 'react-router-redux';
 import { initalStates } from '../reducers';
+import DevTools from '../containers/DevTools';
 
 export default props => {
-  const initialComments = props;
+  const initialComments = props.comments;
   const { $$commentsState } = initalStates;
   const initialState = {
     $$commentsStore: $$commentsState.merge({
@@ -22,7 +23,8 @@ export default props => {
 
   // Sync dispatched route actions to the history
   const finalCreateStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
+    applyMiddleware(thunkMiddleware, loggerMiddleware),
+    DevTools.instrument()
   )(createStore);
 
   return finalCreateStore(reducer, initialState);

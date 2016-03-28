@@ -12,8 +12,9 @@ group :production do
   # Pg is used for Heroku
   gem "pg"
   gem "rails_12factor" # Never include this for development or tests
-  gem "puma"
 end
+
+gem "puma"
 
 # Use SCSS for stylesheets
 gem "sass-rails"
@@ -22,8 +23,10 @@ gem "uglifier"
 # Use CoffeeScript for .js.coffee assets and views
 gem "coffee-rails"
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', '>= 5.0.0.beta1'
+# Turbolinks makes following links in your web application faster.
+# Read more: https://github.com/turbolinks/turbolinks
+# Get turbolinks from npm!
+# gem 'turbolinks', '>= 5.0.0.beta2'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
@@ -37,7 +40,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", "~> 3.0.0-rc.2"
+gem "react_on_rails", "~> 4.0.0"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"
@@ -91,12 +94,15 @@ end
 
 group :test  do
   gem "coveralls", require: false
-  gem "rspec-rails"
-  gem "rspec-retry"
   gem "capybara"
   gem "capybara-screenshot"
-  gem "selenium-webdriver"
-  gem "chromedriver-helper"
+  gem "capybara-webkit"
+  gem "chromedriver-helper", require: ["selenium_chrome"].include?(ENV["DRIVER"])
   gem "database_cleaner"
+  gem "generator_spec"
   gem "launchy"
+  gem "poltergeist"
+  gem "rspec-rails"
+  gem "rspec-retry"
+  gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end
