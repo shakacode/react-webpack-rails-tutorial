@@ -71,6 +71,7 @@ See package.json and Gemfile for versions
 1. Check that you have Ruby 2.2.4 or greater
 1. Check that you're using the right version of node. Run `nvm list` to check. Use 5.5 or greater.
 1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
+1. Check that you have `qmake` installed. Run `which qmake` to check. If missing, follow these instructions: [Installing Qt and compiling capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
 1. `bundle install`
 1. `npm install`
 1. `rake db:setup`
