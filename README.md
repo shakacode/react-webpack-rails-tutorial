@@ -68,11 +68,12 @@ See package.json and Gemfile for versions
 1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v5.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.2.4 or greater
+1. Check that you have Ruby 2.3.0 or greater
 1. Check that you're using the right version of node. Run `nvm list` to check. Use 5.5 or greater.
 1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
 1. Check that you have `qmake` installed. Run `which qmake` to check. If missing, follow these instructions: [Installing Qt and compiling capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
 1. `bundle install`
+  1. If you get an error installing libv8 on OSX El Capitan, follow these instructions:  [Install therubyracer gem on OSX 10.11 El Capitan](http://stackoverflow.com/questions/33475709/install-therubyracer-gem-on-osx-10-11-el-capitan/33475710#33475710)
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.hot`
@@ -86,7 +87,7 @@ See package.json and Gemfile for versions
   2. When you make changes, you have to refresh the browser page.
 
 ## Hot Reloading Example: applies to both `Procfile.hot` and `Procfile.express`
-1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the sceen update without refreshing the window. This applies to port 3000 and port 4000.
+1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the screen update without refreshing the window. This applies to port 3000 and port 4000.
 1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
 1. Be sure to take a look at the different Procfiles in this directory, as described below.
 
@@ -171,11 +172,11 @@ bundle exec foreman start -f <Procfile>
 1. [`Procfile.dev`](Procfile.dev): Starts the Webpack Dev Server and Rails with Hot Reloading.
 2. [`Procfile.hot`](Procfile.hot): Starts the Rails server and the webpack server to provide hot reloading of assets, JavaScript and CSS.
 3. [`Procfile.static`](Procfile.static): Starts the Rails server and generates static assets that are used for tests.
-4. [`Procfile.express`(Procfile.express): Starts only the Webpack Dev Server.
-5. [`Procfile.spec`](Procfile.spec]: Starts webpack to create the static files for tests. **Good to know:** If you want to start `rails s` separately to debug in `pry`, then run `Procfile.spec` to generate the assets and run `rails s` in a separate console.
-6. [`Procfile.static.trace`][Procfile.static.trace]: Same as `Procfile.static` but prints tracing information useful for debugging server rendering.
+4. [`Procfile.express`](Procfile.express): Starts only the Webpack Dev Server.
+5. [`Procfile.spec`](Procfile.spec): Starts webpack to create the static files for tests. **Good to know:** If you want to start `rails s` separately to debug in `pry`, then run `Procfile.spec` to generate the assets and run `rails s` in a separate console.
+6. [`Procfile.static.trace`](Procfile.static.trace): Same as `Procfile.static` but prints tracing information useful for debugging server rendering.
 
-In genereral, you want to avoid running more webpack watch processes than you need. The `Procfile.dev`, for example, runs both the express server (Webpack dev server) and the Rails hot assets reloading server.
+In general, you want to avoid running more webpack watch processes than you need. The `Procfile.dev`, for example, runs both the express server (Webpack dev server) and the Rails hot assets reloading server.
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
