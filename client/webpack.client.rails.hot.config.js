@@ -37,6 +37,7 @@ config.module.loaders.push(
         [
           'react-transform',
           {
+            superClasses: ['React.Component', 'BaseComponent', 'Component'],
             transforms: [
               {
                 transform: 'react-transform-hmr',
