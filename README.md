@@ -73,7 +73,7 @@ See package.json and Gemfile for versions
 1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
 1. Check that you have `qmake` installed. Run `which qmake` to check. If missing, follow these instructions: [Installing Qt and compiling capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
 1. `bundle install`
-  1. If you get an error installing libv8 on OSX El Capitan, follow these instructions:  [Install therubyracer gem on OSX 10.11 El Capitan](http://stackoverflow.com/questions/33475709/install-therubyracer-gem-on-osx-10-11-el-capitan/33475710#33475710)
+  1. If you get an error installing libv8 on OSX El Capitan, follow these instructions:  [Install therubyracer gem on OSX 10.11 El Capitan](http://stackoverflow.com/a/36388150/1009332) or [this one](http://stackoverflow.com/questions/33475709/install-therubyracer-gem-on-osx-10-11-el-capitan/33475710#33475710).
 1. `npm install`
 1. `rake db:setup`
 1. `foreman start -f Procfile.hot`
