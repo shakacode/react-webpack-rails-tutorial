@@ -28,7 +28,7 @@ describe('CommentList', () => {
       id: 2,
       author: 'Furter',
       text: 'ho',
-    }),
+    })
   );
 
   it('renders a list of Comments in normal order', () => {
