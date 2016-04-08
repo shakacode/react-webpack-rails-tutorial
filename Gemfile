@@ -3,7 +3,7 @@ ruby "2.3.0"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~>4.2"
+gem "rails", "5.0.0.beta3"
 
 # Note: We're using sqllite3 for development and testing
 gem "sqlite3", group: [:development, :test]
@@ -102,7 +102,7 @@ group :test  do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails"
+  gem "rspec-rails", "3.5.0.beta3"
   gem "rspec-retry"
   gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end
