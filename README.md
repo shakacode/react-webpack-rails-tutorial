@@ -41,7 +41,7 @@ In no particular order:
 - Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
 - Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
-- Example of Rails 4.2 with ReactJs/Redux/React-Router with Webpack and ES7.
+- Example of Rails 5 with ReactJs/Redux/React-Router with Webpack and ES7.
 - Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.github.io/docs/webpack-dev-server.html). You can see this by starting the app and visiting http://localhost:4000
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
 - Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
@@ -60,8 +60,8 @@ See package.json and Gemfile for versions
 1. [react-router-redux](https://github.com/reactjs/react-router-redux)
 1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
-1. [Ruby on Rails 4.2](http://rubyonrails.org/) for backend app and comparision with plain HTML
-1. [Heroku for Rails 4.2 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails4)
+1. [Ruby on Rails 5](http://rubyonrails.org/) for backend app and comparison with plain HTML
+1. [Heroku for Rails 5 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails5)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
 # Basic Setup
