@@ -130,6 +130,9 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.13)
+    listen (3.0.6)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9.7)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -209,6 +212,9 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     rake (10.5.0)
+    rb-fsevent (0.9.7)
+    rb-inotify (0.9.7)
+      ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
     react_on_rails (5.1.1)
@@ -340,6 +346,7 @@ DEPENDENCIES
   generator_spec
   jbuilder
   launchy
+  listen
   pg
   poltergeist
   pry
