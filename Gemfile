@@ -4,6 +4,7 @@ ruby "2.3.0"
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "5.0.0.beta3"
+gem "listen"
 
 # Note: We're using sqllite3 for development and testing
 gem "sqlite3", group: [:development, :test]
