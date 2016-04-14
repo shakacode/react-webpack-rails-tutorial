@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-ruby "2.3.0"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -44,7 +43,7 @@ gem "rails-html-sanitizer"
 gem "react_on_rails", "~> 5.1.1"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem "therubyracer"
+gem "therubyracer", platform: :ruby
 
 gem "autoprefixer-rails"
 
@@ -67,7 +66,7 @@ group :development, :test do
 
   ################################################################################
   # Manage application processes
-  gem "foreman"
+  gem "foreman", platform: :ruby
   gem "factory_girl_rails"
 
   ################################################################################
@@ -97,7 +96,7 @@ group :test  do
   gem "coveralls", require: false
   gem "capybara"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem "capybara-webkit", platform: :ruby
   gem "chromedriver-helper", require: ["selenium_chrome"].include?(ENV["DRIVER"])
   gem "database_cleaner"
   gem "generator_spec"
@@ -107,3 +106,7 @@ group :test  do
   gem "rspec-retry"
   gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'wdm', '>= 0.1.0' if Gem.win_platform? # for listen
