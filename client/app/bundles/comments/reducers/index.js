@@ -5,6 +5,6 @@ export default {
   $$commentsStore: commentsReducer,
 };
 
-export const initalStates = {
+export const initialStates = {
   $$commentsState,
 };
