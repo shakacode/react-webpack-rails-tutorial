@@ -82,6 +82,7 @@ RSpec.configure do |config|
   # Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
 
+  Capybara.save_path = "#{$APPLICATION_ROOT}/tmp/capybara"
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
