@@ -1,7 +1,7 @@
 require "rails_helper"
 require "features/shared/contexts"
 
-shared_examples "New Comment Submission" do
+shared_examples "New Comment Submission" do |expect_comment_count|
   context "when the new comment is submitted" do
     let(:name) { "John Smith" }
     let(:text) { "Hello there!" }
@@ -10,6 +10,10 @@ shared_examples "New Comment Submission" do
     scenario "comment is added" do
       expect(page).to have_css(".js-comment-author", text: name)
       expect(page).to have_css(".js-comment-text", text: text)
+      if expect_comment_count
+        expect(page).to have_css("#js-comment-count",
+                                 text: "Comments: #{Comment.count}")
+      end
     end
   end
 
@@ -18,6 +22,10 @@ shared_examples "New Comment Submission" do
 
     scenario "comment is not added" do
       expect(page).to have_selector(".comment", count: comments_count)
+      if expect_comment_count
+        expect(page).to have_css("#js-comment-count",
+                                 text: "Comments: #{Comment.count}")
+      end
     end
   end
 
