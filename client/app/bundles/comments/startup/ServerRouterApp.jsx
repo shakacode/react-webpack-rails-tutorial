@@ -2,11 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { match, RouterContext } from 'react-router';
 
-import createStore from '../store/commentsStore';
 import routes from '../routes/routes';
 
 export default (props, railsContext) => {
-  const store = createStore(props);
+  const store = ReactOnRails.getStore('routerCommentsStore');
 
   let error;
   let redirectLocation;

@@ -32,7 +32,7 @@ export default class CommentScreen extends BaseComponent {
         {this._renderNotification()}
         <div>
           <CommentBox
-            pollInterval={10000}
+            pollInterval={60000}
             data={data}
             actions={actions}
             ajaxCounter={data.get('ajaxCounter')}

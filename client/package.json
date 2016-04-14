@@ -55,6 +55,7 @@
     "babel-runtime": "^6.9.2",
     "bootstrap-loader": "^1.0.10",
     "bootstrap-sass": "^3.3.6",
+    "classnames": "^2.2.3",
     "css-loader": "^0.23.1",
     "es5-shim": "^4.5.9",
     "expose-loader": "^0.7.1",

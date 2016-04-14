@@ -1,9 +1,10 @@
 class PagesController < ApplicationController
+  include ReactOnRails::Controller
   before_action :set_comments
 
   def index
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as
-    # compared to he view. However, it's more convenient to use Jbuilder from the view. See
+    # compared to the view. However, it's more convenient to use Jbuilder from the view. See
     # app/views/pages/index.html.erb:20
     #
     #  <%= react_component('App', props: render(template: "/comments/index.json.jbuilder"),
@@ -20,10 +21,15 @@ class PagesController < ApplicationController
     # respond_to do |format|
     #   format.html
     # end
+
+    redux_store("routerCommentsStore", props: comments_json_string)
+    render_html
   end
 
   # Declaring no_router and simple to indicate we have views for them
   def no_router
+    redux_store("commentsStore", props: comments_json_string)
+    render_html
   end
 
   def simple
@@ -33,5 +39,16 @@ class PagesController < ApplicationController
 
   def set_comments
     @comments = Comment.all.order("id DESC")
+  end
+
+  def comments_json_string
+    render_to_string(template: "/comments/index.json.jbuilder",
+                     locals: { comments: Comment.all }, format: :json)
+  end
+
+  def render_html
+    respond_to do |format|
+      format.html
+    end
   end
 end
