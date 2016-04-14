@@ -2,7 +2,7 @@
 var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var jade = require('jade');
+var pug = require('pug');
 var sleep = require('sleep');
 var config = require('./webpack.client.express.config');
 var uuid = require('node-uuid');
@@ -51,8 +51,8 @@ server.app.use('/', (req, res) => {
   var locals = {
     props: JSON.stringify(comments),
   };
-  var layout = `${process.cwd()}/index.jade`;
-  var html = jade.compileFile(layout, { pretty: true })(locals);
+  var layout = `${process.cwd()}/index.pug`;
+  var html = pug.compileFile(layout, { pretty: true })(locals);
   res.send(html);
 });
 
