@@ -74,7 +74,7 @@ RSpec.configure do |config|
 
   Capybara.javascript_driver = driver
 
-  Capybara.server do |app, port|
+  Capybara.register_server(Capybara.javascript_driver) do |app, port|
     require "rack/handler/puma"
     Rack::Handler::Puma.run(app, Port: port)
   end
@@ -82,6 +82,7 @@ RSpec.configure do |config|
   # Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
 
+  Capybara.save_and_open_page_path = Rails.root.join(*%w( tmp capybara ))
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
