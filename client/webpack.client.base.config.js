@@ -19,6 +19,7 @@ module.exports = {
       'es5-shim/es5-shim',
       'es5-shim/es5-sham',
       'jquery',
+      'jquery-ujs',
       'turbolinks',
     ],
 
