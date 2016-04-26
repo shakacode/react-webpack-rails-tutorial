@@ -17,7 +17,7 @@ config.output = {
 // You can add entry points specific to rails here
 config.entry.vendor.unshift(
   // Configures extractStyles to be true if NODE_ENV is production
-  'bootstrap-loader/extractStyles',
+  'bootstrap-loader/extractStyles'
 );
 
 // See webpack.common.config for adding modules common to both the webpack dev server and rails
