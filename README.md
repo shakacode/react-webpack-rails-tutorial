@@ -113,7 +113,7 @@ We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modu
 
 1. **Production Deployment**: See [assets.rake](lib/tasks/assets.rake) for we modify the Rails precompile task to deploy assets for production.
 1. **Development Mode**: Two flavors: Hot reloading assets (JavaScript & CSS) and Static loading.
-   1. **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) uses precompiled files. See `Procfile.hot`. `Procfile.dev` also starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
+   1. **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) use precompiled files. See `Procfile.hot`. `Procfile.dev` also starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
   2. **Static Loading**: This uses webpack to create physical files of the assets, both JavaScript and CSS. This is essentially what we had before we enabled *Hot Loading*. You have to *refresh* the page to see changes to JavaScript or CSS. See `Procfile.static`. It is important to note that tests will use the same statically generated files.
   3. Note, the following view helpers do the magic to make this work:
    ```erb
