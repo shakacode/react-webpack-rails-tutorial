@@ -11,7 +11,7 @@ export default (props, railsContext) => {
   let error;
   let redirectLocation;
   let routeProps;
-  const location = { railsContext };
+  const { location } = railsContext;
 
   // See https://github.com/reactjs/react-router/blob/master/docs/guides/ServerRendering.md
   match({ routes, location }, (_error, _redirectLocation, _routeProps) => {
