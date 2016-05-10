@@ -41,5 +41,9 @@
   "dependencies": {
   },
   "devDependencies": {
-  }
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ]
 }
