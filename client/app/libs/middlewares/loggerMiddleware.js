@@ -10,13 +10,13 @@ export default function logger({ getState }) {
     // We can't _read_ immutable objects in console out-of-the-box.
     const state = getState();
     const readableState = {};
-    for (const storeItem in state) {
-      if (state.hasOwnProperty(storeItem)) {
-        readableState[storeItem] = (
-          state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem]
-        );
-      }
-    }
+
+    Object.keys(state).forEach(storeItem => {
+      readableState[storeItem] = (
+        state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem]
+      );
+      return;
+    });
 
     console.log('state after dispatch', readableState);
 

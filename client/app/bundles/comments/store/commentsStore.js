@@ -1,8 +1,7 @@
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
-import reducers from '../reducers';
-import { initialStates } from '../reducers';
+import reducers, { initialStates } from '../reducers';
 
 export default props => {
   const initialComments = props.comments;
