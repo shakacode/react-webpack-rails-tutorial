@@ -30,10 +30,10 @@ end
 
 private
 
-def have_success_message # rubocop:disable Style/PredicateName
+def have_success_message
   have_css("#notice", "Comment was successfully created.")
 end
 
-def have_failure_message # rubocop:disable Style/PredicateName
+def have_failure_message
   have_css("#error_explanation")
 end
