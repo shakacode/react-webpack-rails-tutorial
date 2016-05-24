@@ -74,7 +74,7 @@
     "react-addons-pure-render-mixin": "^0.14.8",
     "react-bootstrap": "^0.28.5",
     "react-dom": "^0.14.8",
-    "react-on-rails": "^6.0.0-rc.5",
+    "react-on-rails": "^6.0.0-rc.6",
     "react-redux": "^4.4.4",
     "react-router": "^2.2.1",
     "react-router-redux": "^4.0.2",
