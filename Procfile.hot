@@ -1,6 +1,5 @@
-# Basic procfile for dev work.
-# Runs all processes. Development is faster if you pick one of the other Procfiles if you don't need
-# some of the processes: Procfile.rails or Procfile.express
+# Basic procfile for rails-related part of dev processes
+# using a webpack development server to load JavaScript and CSS
 
 # Development rails requires both rails and rails-assets
 # (and rails-server-assets if server rendering)
