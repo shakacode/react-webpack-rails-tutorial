@@ -4959,8 +4959,8 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.8.tgz"
     },
     "react-on-rails": {
-      "version": "6.0.0-rc.6",
-      "from": "react-on-rails@>=6.0.0-rc.6 <7.0.0"
+      "version": "6.0.2",
+      "from": "react-on-rails@6.0.2"
     },
     "react-overlays": {
       "version": "0.6.2",

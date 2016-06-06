@@ -94,14 +94,14 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
-    execjs (2.6.0)
+    execjs (2.7.0)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.7.0)
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
     ffi (1.9.10)
-    foreman (0.81.0)
+    foreman (0.82.0)
       thor (~> 0.19.1)
     generator_spec (0.9.3)
       activesupport (>= 3.0.0)
@@ -127,11 +127,11 @@ GEM
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
-    mime-types (3.0)
+    mime-types (3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0221)
+    mime-types-data (3.2016.0521)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
+    minitest (5.9.0)
     multi_json (1.12.0)
     nio4r (1.2.1)
     nokogiri (1.6.7.2)
@@ -206,7 +206,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
-    react_on_rails (6.0.0.rc.6)
+    react_on_rails (6.0.2)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -298,7 +298,7 @@ GEM
       debug_inspector
       railties (>= 4.2)
     websocket (1.2.3)
-    websocket-driver (0.6.3)
+    websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     xpath (2.0.0)
@@ -339,7 +339,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (~> 6.0.0.rc.6)
+  react_on_rails (~> 6.0.2)
   rspec-rails (= 3.5.0.beta3)
   rspec-retry
   rubocop
