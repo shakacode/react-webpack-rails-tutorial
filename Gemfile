@@ -3,7 +3,7 @@ ruby "2.3.1"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "5.0.0.rc1"
+gem "rails"
 gem "listen"
 
 # Note: We're using sqllite3 for development and testing
@@ -41,7 +41,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", "~> 6.0.2"
+gem "react_on_rails", "~> 6"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "therubyracer"
