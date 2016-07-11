@@ -1,4 +1,4 @@
-if Rails.env.development?
+if Rails.env.development? || Rails.env.test?
   # See tasks/linters.rake
 
   task :bundle_audit do
@@ -26,6 +26,7 @@ if Rails.env.development?
     desc "Run all audits and tests"
     task all: [:environment, :lint, :rspec_tests, :js_tests, :bundle_audit, :security_audit] do
       begin
+        puts "All CI tasks"
         puts Rainbow("PASSED").green
         puts ""
       rescue Exception => e

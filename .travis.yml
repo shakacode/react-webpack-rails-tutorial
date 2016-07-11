@@ -17,8 +17,8 @@ env:
     - CXX=g++-4.9
 install:
   - bundle install
-  - nvm install 5.5
-  - nvm use 5.5
+  - nvm install 6.3
+  - nvm use 6.3
   - npm install
 before_script:
    - export DISPLAY=:99.0
@@ -26,4 +26,3 @@ before_script:
 script:
   - bundle exec rake db:schema:load
   - DRIVER=selenium_firefox bundle exec rake
-  - bundle exec rake lint
