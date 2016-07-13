@@ -1,4 +1,4 @@
-import App from './ClientApp';
+import App from './App';
 import RouterApp from './ClientRouterApp';
 import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
 import routerCommentsStore from '../store/routerCommentsStore';

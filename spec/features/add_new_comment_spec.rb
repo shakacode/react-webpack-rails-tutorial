@@ -5,42 +5,42 @@ require "features/shared/contexts"
 feature "Add new comment" do
   context "React Router", page: :main, js: true do
     context "via Horizontal Form", form: :horizontal do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
     context "via Inline Form", form: :inline do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
     context "via Stacked Form", form: :stacked do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
   end
 
   context "React/Redux", page: :react_demo, js: true do
     context "via Horizontal Form", form: :horizontal do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
     context "via Inline Form", form: :inline do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
     context "via Stacked Form", form: :stacked do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", true
     end
   end
 
   context "simple page", page: :simple, js: true do
     context "via Horizontal Form", form: :horizontal do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", false
     end
     context "via Inline Form", form: :inline do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", false
     end
     context "via the Stacked Form", form: :stacked, driver: js_selenium_driver do
-      include_examples "New Comment Submission"
+      include_examples "New Comment Submission", false
     end
   end
 
   context "from classic page", page: :classic do
     background { click_link "New Comment" }
-    include_examples "New Comment Submission"
+    include_examples "New Comment Submission", false
   end
 end
