@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/shakacode/react-webpack-rails-tutorial.svg?branch=code_coverage-linting)](https://travis-ci.org/shakacode/react-webpack-rails-tutorial) [![Dependency Status](https://gemnasium.com/shakacode/react-webpack-rails-tutorial.svg)](https://gemnasium.com/shakacode/react-webpack-rails-tutorial) [![Code Climate](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial/badges/gpa.svg)](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial) [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
 
-Aloha from Justin Gordon and the [ShakaCode](http://www.shakacode.com) Team! We need your help. Venture capital funding has slowed and, for the first time, my ShakaCode team is actively looking for our next  project. If you like **React on Rails**, please consider contacting me if we could potentially help you in any way. I'm offering a free half hour project consultation, on anything from React on Rails to any aspect of web application development, including both consumer and enterprise products. You can read more about my background [here](http://www.railsonmaui.com/about). Whether you have a new project, or need help on an existing project, please email me directly at [justin@shakacode.com](mailto:justin@shakacode.com). And thanks in advance for any referrals! Your support keeps this project going.
+Aloha from Justin Gordon and the [ShakaCode](http://www.shakacode.com) Team! We need your help. The ShakaCode team is actively looking for new projects. If you like **React on Rails**, please consider contacting me if we could potentially help you in any way. I'm offering a free half hour project consultation, on anything from React on Rails to any aspect of web application development, including both consumer and enterprise products. You can read more about my background [here](http://www.railsonmaui.com/about). Whether you have a new project, or need help on an existing project, please email me directly at [justin@shakacode.com](mailto:justin@shakacode.com). We're also doing **react-native**! And thanks in advance for any referrals! Your support keeps this project going.
 
 # React, Redux, React-Bootstrap, ES7, Webpack Rails
 ## Server Rendering via the react_on_rails gem
@@ -11,7 +11,7 @@ By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakaco
 
 - If this work interests you and you are looking for full or part-time remote work, please [click here](http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
 - [ShakaCode](http://www.shakacode.com) is doing Skype plus Slack/Github based coaching for "React on Rails". [Click here](http://www.shakacode.com/work/index.html) for more information.
-- Please email us at [contact@shakacode.com](mailto:contact@shakacode.com) if you have a ReactJs + Rails project and are interested in help from our experienced team.
+- Please email us at [contact@shakacode.com](mailto:contact@shakacode.com) if you have a **React** + Rails project, including **react-native**, and are interested in help from our experienced team.
 - Please file issues for problems and feature requests.
 - Pull requests are welcome! (and a great way to get on the ShakaCode team)
 - Feel free to open discussions at [forum.shakacode.com](http://forum.shakacode.com). We love to help!
@@ -117,7 +117,7 @@ We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modu
       ```
       heroku buildpacks:set heroku/ruby --app your-app
       heroku buildpacks:add --index 1 heroku/nodejs --app your-app
-      heroku buildpacks:add --index 3 https://github.com/sreid/heroku-buildpack-sourceversion --app your-app
+      heroku buildpacks:set --index 3 https://github.com/tempoautomation/heroku-buildpack-sourceversion.git --app your-app
       ```
 1. **Development Mode**: Two flavors: Hot reloading assets (JavaScript & CSS) and Static loading.
    1. **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) use precompiled files. See `Procfile.hot`. `Procfile.dev` also starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
@@ -202,4 +202,4 @@ Visit [our forums!](http://forum.shakacode.com). We've got a [category dedicated
 
 If you're looking for consulting on a project using React and Rails, email us at [contact@shakacode.com](mailto:contact@shakacode.com)! You can also join our slack room for some free advice. Email us for an invite.
 
-We're looking for great developers that want to work with Rails + React with a super-run, remote-first, distributed, worldwide team, for our own products, client work, and open source. [More info here](http://www.shakacode.com/about/index.html#work-with-us).
+We're looking for great developers that want to work with Rails + React (and react-native!) with a remote-first, distributed, worldwide team, for our own products, client work, and open source. [More info here](http://www.shakacode.com/about/index.html#work-with-us).
