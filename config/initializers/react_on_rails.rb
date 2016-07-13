@@ -28,7 +28,9 @@ ReactOnRails.configure do |config|
   # Below options can be overriden by passing options to the react_on_rails
   # `render_component` view helper method.
   ################################################################################
-  # default is false
+
+  # Default is false. Can be overriden at the component level.
+  # Set to false for debugging issues before turning on to true.
   config.prerender = true
 
   # default is true for development, off otherwise
@@ -36,6 +38,8 @@ ReactOnRails.configure do |config|
 
   ################################################################################
   # SERVER RENDERING OPTIONS
+  # Applicable options can be overriden by passing options to the react_on_rails
+  # `render_component` view helper method.
   ################################################################################
 
   # If set to true, this forces Rails to reload the server bundle if it is modified
@@ -48,7 +52,10 @@ ReactOnRails.configure do |config|
   # Default is true. Logs server rendering messages to Rails.logger.info
   config.logging_on_server = true
 
-  config.raise_on_prerender_error = false # change to true to raise exception on server if the JS code throws
+  # Change to true to raise exception on server if the JS code throws. Let's do this only if not
+  # in production, as the JS code might still work on the client and we don't want to blow up the
+  # whole Rails page.
+  config.raise_on_prerender_error = !Rails.env.production?
 
   # Server rendering only (not for render_component helper)
   # You can configure your pool of JS virtual machines and specify where it should load code:
