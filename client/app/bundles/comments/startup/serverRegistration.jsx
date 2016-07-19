@@ -1,5 +1,5 @@
 // Example of React + Redux
-import App from './ServerApp';
+import App from './App';
 import RouterApp from './ServerRouterApp';
 import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
 import ReactOnRails from 'react-on-rails';
