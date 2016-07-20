@@ -9,6 +9,7 @@ Aloha from Justin Gordon and the [ShakaCode](http://www.shakacode.com) Team! We 
 
 By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakacode.com)
 
+- We have a [react-native client for this project](https://github.com/shakacode/react-native-tutorial).
 - If this work interests you and you are looking for full or part-time remote work, please [click here](http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
 - [ShakaCode](http://www.shakacode.com) is doing Skype plus Slack/Github based coaching for "React on Rails". [Click here](http://www.shakacode.com/work/index.html) for more information.
 - Please email us at [contact@shakacode.com](mailto:contact@shakacode.com) if you have a **React** + Rails project, including **react-native**, and are interested in help from our experienced team.
