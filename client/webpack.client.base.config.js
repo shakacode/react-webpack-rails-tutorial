@@ -20,6 +20,22 @@ module.exports = {
       'es5-shim/es5-sham',
       'jquery',
       'turbolinks',
+
+      // Below libraries are listed as entry points to be sure they get included in the
+      // vendor-bundle.js. Note, if we added some library here, but don't use it in the
+      // app-bundle.js, then we just wasted a bunch of space.
+      'axios',
+      'classnames',
+      'immutable',
+      'lodash',
+      'marked',
+      'react-addons-pure-render-mixin',
+      'react-bootstrap',
+      'react-dom',
+      'react-redux',
+      'react-on-rails',
+      'react-router-redux',
+      'redux-thunk',
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
