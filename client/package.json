@@ -80,7 +80,6 @@
     "react-router": "^2.5.2",
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
-    "redux-promise": "^0.5.3",
     "redux-thunk": "^2.1.0",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
