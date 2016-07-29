@@ -2,7 +2,7 @@
 rails: TRACE_REACT_ON_RAILS=TRUE rails s -b 0.0.0.0
 
 # Build client assets, watching for changes.
-rails-client-assets: npm run build:dev:client
+rails_client_assets: npm run build:dev:client
 
 # Build server assets, watching for changes. Remove if not server rendering.
-rails-server-assets: npm run build:dev:server
+rails_server_assets: npm run build:dev:server
