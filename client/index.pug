@@ -10,5 +10,14 @@ html
 
     script(src="vendor-bundle.js")
     script(src="app-bundle.js")
+
+    // Next call is not available.
+    // https://github.com/shakacode/react_on_rails/issues/504
+    // script.
+    //  ReactOnRails.reduxStore('routerCommentsStore', !{props});
+    // script.
+    //  ReactOnRails.render('RouterApp', !{}, 'app');
+    //
+    // Instead, we'll pass the props and special case in startup
     script.
-      ReactOnRails.render("RouterApp", !{props}, 'app');
+      ReactOnRails.render('RouterAppExpress', !{props}, 'app');
