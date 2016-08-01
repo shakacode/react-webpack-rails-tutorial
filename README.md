@@ -23,7 +23,7 @@ By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakaco
 An outdated full tutorial article behind of the motivation of this system can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial.
 
 # NEWS
-We have not yet updated the `react_on_rails` gem generators for the following tasks. We're looking for help to migrate this, if you're interested in contributing to the project. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
+We have not yet updated the `react_on_rails` gem generators for the following tasks, and we probably never will. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
 
 1. NOTE: Any references to localhost:3000 *might* need to use 0.0.0.0:3000 until Puma fixes an issue regarding this.
 1. **Handling of Sass and Bootstrap**: The tutorial uses CSS modules via Webpack. This is totally different than the older way of having Rails handle Sass/Bootstrap, and having NPM/Webpack handle the Webpack Dev Server. The tutorial now has NPM handle all visual assets. We are using this technique on a new app, and it's awesome!
@@ -81,9 +81,6 @@ See package.json and Gemfile for versions
 1. `foreman start -f Procfile.hot`
   1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING
   2. Try Hot Reloading steps below!
-1.  `foreman start -f Procfile.express`
-  1. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example just using an express server (no Rails involved). This is good for fast prototyping of React components. However, this setup is not as useful now that we have hot reloading working for Rails!
-  2. Try Hot Reloading steps below!
 1. `foreman start -f Procfile.static`
   1. Open a browser tab to http://localhost:3000 for the Rails app example.
   2. When you make changes, you have to refresh the browser page.
@@ -98,7 +95,6 @@ See package.json and Gemfile for versions
 1. See all npm commands: `npm run`
 1. Start all development processes: `foreman start -f Procfile.dev`
 1. Start all Rails only development processes: `foreman start -f Procfile.hot`
-1. Start development without Rails, using the Webpack Dev Server only: `npm start` (or `foreman start -f Procfile.express`)
 
 
 # Javascript development without Rails using the Webpack Dev Server
@@ -138,7 +134,7 @@ line in the `rails_helper.rb` file. If you are using this project as an example 
 ## Config Files
 
 - `webpack.client.base.config.js`: Common **client** configuration file to minimize code duplication for `webpack.client.rails.build.config`, `webpack.client.rails.hot.config`, `webpack.client.express.config`
-- `webpack.client.express.config.js`: Webpack configuration for [client/server-express.js](client/server-express.js)
+- `webpack.client.express.config.js`: Webpack configuration for Express server [client/server-express.js](client/server-express.js)
 - `webpack.client.rails.build.config.js`: Client side js bundle for deployment and tests.
 - `webpack.client.rails.hot.config.js`: Webpack Dev Server bundler for serving rails assets on port 3500, used by [client/server-rails-hot.js](client/server-rails-hot.js), for hot reloading JS and CSS within Rails.
 - `webpack.server.rails.build.config.js`: Server side js bundle, used by server rendering.
@@ -180,11 +176,26 @@ bundle exec foreman start -f <Procfile>
 1. [`Procfile.dev`](Procfile.dev): Starts the Webpack Dev Server and Rails with Hot Reloading.
 2. [`Procfile.hot`](Procfile.hot): Starts the Rails server and the webpack server to provide hot reloading of assets, JavaScript and CSS.
 3. [`Procfile.static`](Procfile.static): Starts the Rails server and generates static assets that are used for tests.
-4. [`Procfile.express`](Procfile.express): Starts only the Webpack Dev Server.
 5. [`Procfile.spec`](Procfile.spec): Starts webpack to create the static files for tests. **Good to know:** If you want to start `rails s` separately to debug in `pry`, then run `Procfile.spec` to generate the assets and run `rails s` in a separate console.
 6. [`Procfile.static.trace`](Procfile.static.trace): Same as `Procfile.static` but prints tracing information useful for debugging server rendering.
+4. [`Procfile.express`](Procfile.express): Starts only the Webpack Dev Server for rendering your components with only an Express server.
 
-In general, you want to avoid running more webpack watch processes than you need. The `Procfile.dev`, for example, runs both the express server (Webpack dev server) and the Rails hot assets reloading server.
+In general, you want to avoid running more webpack watch processes than you need.
+
+## Rendering With an Express Server
+UPDATE: 2016-07-31
+
+We no longer recommend using an express server with Rails. It's simply not necessary because:
+
+1. Rails can hot reload
+2. There's extra maintenance in keeping this synchronized.
+3. React on Rails does not have a shared_store JS rendering, per [issue #504](https://github.com/shakacode/react_on_rails/issues/504)
+
+### Here's how to run the express server setup
+
+1. `foreman start -f Procfile.express`
+2. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example just using an express server (no Rails involved). This is good for fast prototyping of React components. However, this setup is not as useful now that we have hot reloading working for Rails!
+3. Try Hot Reloading steps below!
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
