@@ -31,7 +31,7 @@ server.app.use(bodyParser.urlencoded({ extended: true }));
 server.app.get('/comments.json', (req, res) => {
   sleep.sleep(1);
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(comments));
+  res.send(JSON.stringify({ comments }));
 });
 
 server.app.post('/comments.json', (req, res) => {
@@ -49,7 +49,7 @@ server.app.post('/comments.json', (req, res) => {
 
 server.app.use('/', (req, res) => {
   var locals = {
-    props: JSON.stringify(comments),
+    props: JSON.stringify({ comments }),
   };
   var layout = `${process.cwd()}/index.pug`;
   var html = pug.compileFile(layout, { pretty: true })(locals);

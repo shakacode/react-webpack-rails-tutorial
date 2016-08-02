@@ -10,6 +10,10 @@ const hotPort = process.env.HOT_PORT || 4000;
 config.entry.vendor.push('bootstrap-loader');
 config.entry.app.push(
 
+  // Shouldn't be necessary:
+  // https://github.com/shakacode/react_on_rails/issues/504
+  './app/bundles/comments/startup/ClientRouterAppExpress',
+
   // Webpack dev server
   `webpack-dev-server/client?http://localhost:${hotPort}`,
   'webpack/hot/dev-server'
