@@ -10,6 +10,7 @@
     "node_modules/**"
   ],
   "esprima": "babel-jscs",
+  "requirePaddingNewLinesAfterBlocks": false,
   "validateQuoteMarks": {
     "mark": "'",
     "escape": true,

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { match, RouterContext } from 'react-router';
+import ReactOnRails from 'react-on-rails';
 
 import routes from '../routes/routes';
 

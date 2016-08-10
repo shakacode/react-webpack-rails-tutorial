@@ -3,9 +3,10 @@
 
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
+import { Provider } from 'react-redux';
+
 import NavigationBar from '../components/NavigationBar/NavigationBar';
 import NavigationBarContainer from '../containers/NavigationBarContainer';
-import { Provider } from 'react-redux';
 import * as paths from '../constants/paths';
 
 /*
@@ -15,7 +16,6 @@ import * as paths from '../constants/paths';
  */
 export default (_props, railsContext) => {
   // This is where we get the existing store.
-  const stores = ReactOnRails.stores();
   const { pathname } = railsContext;
   let store;
   if (pathname === paths.ROUTER_PATH) {
