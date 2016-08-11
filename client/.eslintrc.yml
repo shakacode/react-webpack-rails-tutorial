@@ -27,7 +27,15 @@ rules:
   no-underscore-dangle: 0
 
   ### Imports
+  # Can't do next one because of alias in webpack
   import/no-unresolved: 0
+  import/extensions: [2, { js: "never", jsx: "never" }]
+
+  # https://github.com/benmosher/eslint-plugin-import/issues/340
+  import/no-extraneous-dependencies: 0
+
+  # https://github.com/eslint/eslint/issues/6876 SFC's marked as invalid
+  new-cap: 0
 
   ### React
   jsx-quotes: [1, prefer-double]
@@ -47,7 +55,6 @@ rules:
   react/no-unknown-property: 2
   react/prop-types: 1
   react/react-in-jsx-scope: 2
-  react/require-extension: [1, { extensions: [.js, .jsx] }]
   react/self-closing-comp: 2
   react/sort-comp: 0                                                            # Should be 1. `statics` should be on top.
-  react/wrap-multilines: 2
+  react/jsx-wrap-multilines: 2

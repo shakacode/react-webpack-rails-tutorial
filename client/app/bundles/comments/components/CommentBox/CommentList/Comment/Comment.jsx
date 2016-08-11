@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
-import marked from 'marked';
-
-import css from './Comment.scss';
 import BaseComponent from 'libs/components/BaseComponent';
+import React, { PropTypes } from 'react';
+
+import marked from 'marked';
+import css from './Comment.scss';
 
 export default class Comment extends BaseComponent {
   static propTypes = {

@@ -3,11 +3,12 @@ import Immutable from 'immutable';
 import request from 'axios';
 import _ from 'lodash';
 
+import BaseComponent from 'libs/components/BaseComponent';
 import metaTagsManager from 'libs/metaTagsManager';
+
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
-import BaseComponent from 'libs/components/BaseComponent';
 
 export default class SimpleCommentScreen extends BaseComponent {
   constructor(props, context) {

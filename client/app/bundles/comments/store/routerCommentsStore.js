@@ -1,8 +1,10 @@
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
-import reducers, { initialStates } from '../reducers';
 import { routerReducer } from 'react-router-redux';
+import thunkMiddleware from 'redux-thunk';
+
+import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
+
+import reducers, { initialStates } from '../reducers';
 
 export default (props, railsContext) => {
   const initialComments = props.comments;

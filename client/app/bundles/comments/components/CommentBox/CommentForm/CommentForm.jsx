@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -44,18 +43,29 @@ export default class CommentForm extends BaseComponent {
   _handleChange() {
     let comment;
 
-    if (this.state.formMode < 2) {
-      comment = {
-        author: this.refs.author.getValue(),
-        text: this.refs.text.getValue(),
-      };
-    } else {
-      comment = {
-        // This is different because the input is a native HTML element
-        // rather than a React element.
-        author: this.refs.inlineAuthor.value,
-        text: this.refs.inlineText.value,
-      };
+    switch (this.state.formMode) {
+      case 0:
+        comment = {
+          author: this.horizontalAuthorNode.getValue(),
+          text: this.horizontalTextNode.getValue(),
+        };
+        break;
+      case 1:
+        comment = {
+          author: this.stackedAuthorNode.getValue(),
+          text: this.stackedTextNode.getValue(),
+        };
+        break;
+      case 2:
+        comment = {
+          // This is different because the input is a native HTML element
+          // rather than a React element.
+          author: this.inlineAuthorNode.value,
+          text: this.inlineTextNode.value,
+        };
+        break;
+      default:
+        throw new Error(`Unexpected state.formMode ${this.state.formMode}`);
     }
 
     this.setState({ comment });
@@ -77,10 +87,18 @@ export default class CommentForm extends BaseComponent {
     this.setState({ comment });
 
     let ref;
-    if (this.state.formMode < 2) {
-      ref = this.refs.text.getInputDOMNode();
-    } else {
-      ref = ReactDOM.findDOMNode(this.refs.inlineText);
+    switch (this.state.formMode) {
+      case 0:
+        ref = this.horizontalTextNode.getInputDOMNode();
+        break;
+      case 1:
+        ref = this.stackedTextNode.getInputDOMNode();
+        break;
+      case 2:
+        ref = this.inlineTextNode;
+        break;
+      default:
+        throw new Error(`Unexpected state.formMode ${this.state.formMode}`);
     }
 
     ref.focus();
@@ -97,7 +115,7 @@ export default class CommentForm extends BaseComponent {
             placeholder="Your Name"
             labelClassName="col-sm-2"
             wrapperClassName="col-sm-10"
-            ref="author"
+            ref={node => { this.horizontalAuthorNode = node; }}
             value={this.state.comment.author}
             onChange={this._handleChange}
             disabled={this.props.isSaving}
@@ -108,7 +126,7 @@ export default class CommentForm extends BaseComponent {
             placeholder={textPlaceholder}
             labelClassName="col-sm-2"
             wrapperClassName="col-sm-10"
-            ref="text"
+            ref={node => { this.horizontalTextNode = node; }}
             value={this.state.comment.text}
             onChange={this._handleChange}
             disabled={this.props.isSaving}
@@ -137,7 +155,7 @@ export default class CommentForm extends BaseComponent {
             type="text"
             label="Name"
             placeholder="Your Name"
-            ref="author"
+            ref={node => { this.stackedAuthorNode = node; }}
             value={this.state.comment.author}
             onChange={this._handleChange}
             disabled={this.props.isSaving}
@@ -146,7 +164,7 @@ export default class CommentForm extends BaseComponent {
             type="textarea"
             label="Text"
             placeholder={textPlaceholder}
-            ref="text"
+            ref={node => { this.stackedTextNode = node; }}
             value={this.state.comment.text}
             onChange={this._handleChange}
             disabled={this.props.isSaving}
@@ -174,7 +192,7 @@ export default class CommentForm extends BaseComponent {
                   type="text"
                   className="form-control"
                   placeholder="Your Name"
-                  ref="inlineAuthor"
+                  ref={node => { this.inlineAuthorNode = node; }}
                   value={this.state.comment.author}
                   onChange={this._handleChange}
                   disabled={this.props.isSaving}
@@ -185,7 +203,7 @@ export default class CommentForm extends BaseComponent {
                   type="text"
                   className="form-control"
                   placeholder={textPlaceholder}
-                  ref="inlineText"
+                  ref={node => { this.inlineTextNode = node; }}
                   value={this.state.comment.text}
                   onChange={this._handleChange}
                   disabled={this.props.isSaving}
