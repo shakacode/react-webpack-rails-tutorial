@@ -16,9 +16,6 @@ env:
   mocha: true
 
 rules:
-  ### Stylistic issues
-  no-underscore-dangle: 0
-
   ### Imports
   # Can't do next one because of alias in webpack
   import/no-unresolved: 0

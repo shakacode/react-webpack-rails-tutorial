@@ -20,14 +20,14 @@ export default class SimpleCommentScreen extends BaseComponent {
       submitCommentError: null,
     };
 
-    _.bindAll(this, '_fetchComments', '_handleCommentSubmit');
+    _.bindAll(this, 'fetchComments', 'handleCommentSubmit');
   }
 
   componentDidMount() {
-    this._fetchComments();
+    this.fetchComments();
   }
 
-  _fetchComments() {
+  fetchComments() {
     return (
       request
         .get('comments.json', { responseType: 'json' })
@@ -36,7 +36,7 @@ export default class SimpleCommentScreen extends BaseComponent {
     );
   }
 
-  _handleCommentSubmit(comment) {
+  handleCommentSubmit(comment) {
     this.setState({ isSaving: true });
 
     const requestConfig = {
@@ -84,7 +84,7 @@ export default class SimpleCommentScreen extends BaseComponent {
         </p>
         <CommentForm
           isSaving={this.state.isSaving}
-          actions={{ submitComment: this._handleCommentSubmit }}
+          actions={{ submitComment: this.handleCommentSubmit }}
           error={this.state.submitCommentError}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
