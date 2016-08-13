@@ -55,6 +55,7 @@ export default class SimpleCommentScreen extends BaseComponent {
 
           this.setState({
             $$comments: $$comments.unshift($$comment),
+            submitCommentError: null,
             isSaving: false,
           });
         })
