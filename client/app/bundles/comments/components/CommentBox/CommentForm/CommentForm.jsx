@@ -225,12 +225,22 @@ export default class CommentForm extends BaseComponent {
   }
 
   errorWarning() {
+    const error = this.props.error;
     // If there is no error, there is nothing to add to the DOM
-    if (!this.props.error) return null;
+    if (!error) return null;
+
+    const errorData = error.response && error.response.data;
+
+    const errorElements = _.transform(errorData, (result, errorText, errorFor) => {
+      result.push(<li key={errorFor}><b>{_.upperFirst(errorFor)}:</b> {errorText}</li>);
+    }, []);
+
     return (
       <Alert bsStyle="danger" key="commentSubmissionError">
-        <strong>Your comment was not saved! </strong>
-        A server error prevented your comment from being saved. Please try again.
+        <strong>Your comment was not saved!</strong>
+        <ul>
+          {errorElements}
+        </ul>
       </Alert>
     );
   }
