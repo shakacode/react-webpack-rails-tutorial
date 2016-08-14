@@ -1,5 +1,5 @@
-import request from 'axios';
-import metaTagsManager from './metaTagsManager';
+import fetch from 'isomorphic-fetch';
+import ror from './ror';
 
 const API_URL = 'comments.json';
 
@@ -11,11 +11,11 @@ export default {
    * @returns {Promise} - Result of ajax call.
    */
   fetchEntities() {
-    return request({
-      method: 'GET',
-      url: API_URL,
-      responseType: 'json',
-    });
+    return (fetch(API_URL)
+      .then(res => ror.checkStatus(res))
+      .then(res => res.json())
+      .then(res => ({ data: res }))
+    );
   },
 
   /**
@@ -25,15 +25,10 @@ export default {
    * @returns {Promise} - Result of ajax call.
    */
   submitEntity(entity) {
-    return request({
-      method: 'POST',
-      url: API_URL,
-      responseType: 'json',
-      headers: {
-        'X-CSRF-Token': metaTagsManager.getCSRFToken(),
-      },
-      data: entity,
-    });
+    return (fetch(API_URL, ror.makeJsonPostHeader(entity))
+      .then(res => ror.checkStatus(res))
+      .then(res => res.json())
+      .then(res => ({ data: res }))
+    );
   },
-
 };
