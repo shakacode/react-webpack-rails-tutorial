@@ -13,7 +13,7 @@ export default class CommentScreen extends BaseComponent {
     locationState: PropTypes.object,
   };
 
-  _renderNotification() {
+  renderNotification() {
     const { locationState } = this.props;
 
     if (!locationState || !locationState.redirectFrom) return null;
@@ -30,7 +30,7 @@ export default class CommentScreen extends BaseComponent {
 
     return (
       <div>
-        {this._renderNotification()}
+        {this.renderNotification()}
         <div>
           <CommentBox
             pollInterval={60000}

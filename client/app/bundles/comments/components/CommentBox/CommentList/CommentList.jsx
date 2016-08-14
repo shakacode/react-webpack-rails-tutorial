@@ -17,10 +17,10 @@ export default class CommentList extends BaseComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {};
-    _.bindAll(this, '_errorWarning');
+    _.bindAll(this, 'errorWarning');
   }
 
-  _errorWarning() {
+  errorWarning() {
     // If there is no error, there is nothing to add to the DOM
     if (!this.props.error) return null;
     return (
@@ -52,7 +52,7 @@ export default class CommentList extends BaseComponent {
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
         >
-          {this._errorWarning()}
+          {this.errorWarning()}
         </ReactCSSTransitionGroup>
 
         <ReactCSSTransitionGroup
