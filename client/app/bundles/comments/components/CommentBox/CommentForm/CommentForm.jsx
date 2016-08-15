@@ -128,7 +128,7 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
-            hasFeedback={true}
+            hasFeedback
             bsStyle={bsStyleFor('author', this.props.error)}
           />
           <Input
@@ -141,7 +141,7 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
-            hasFeedback={true}
+            hasFeedback
             bsStyle={bsStyleFor('text', this.props.error)}
           />
           <div className="form-group">
@@ -172,7 +172,7 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
-            hasFeedback={true}
+            hasFeedback
             bsStyle={bsStyleFor('author', this.props.error)}
           />
           <Input
@@ -183,7 +183,7 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
-            hasFeedback={true}
+            hasFeedback
             bsStyle={bsStyleFor('text', this.props.error)}
           />
           <input
