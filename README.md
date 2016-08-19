@@ -36,7 +36,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
   + [Technologies Involved](#technologies-involved)
 + [Basic Demo Setup](#basic-demo-setup)
   + [Basic Command Line](#basic-command-line)
-  + [Experimenting with Hot Reloading](#experimenting-with-hot-reloading)
+  + [Experimenting with Hot Reloading](#experimenting-with-hot-reloading-applies-to-both-procfilehot-and-procfileexpress)
 + [Javascript Development without Rails](#javascript-development-without-rails-using-the-webpack-dev-server)
 + [Rails Integration](#rails-integration)
 + [Webpack](#webpack)
@@ -49,7 +49,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
   + [Setup](#setup)
 + [Contributors](#contributors)
   + [About ShakaCode](#about-shakacode)
-  + [RubyMine and WebStorm](#rubyMine-and-webstorm)
+  + [RubyMine and WebStorm](#rubymine-and-webstorm)
 + [Open Code of Conduct](#open-code-of-conduct)
 
 ## Demoed Functionality
