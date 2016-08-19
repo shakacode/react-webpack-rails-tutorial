@@ -10,15 +10,6 @@ Your support keeps this project going.
 
 (Want to become a contributor? [Contact us](mailto:contact@shakacode.com) for an Slack team invite! Also, see ["easy" issues](https://github.com/shakacode/react_on_rails/labels/easy) and [issues for the full tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy).)
 
-# React, Redux, React-Bootstrap, ES7, Webpack, Rails Demo
-## Server Rendering via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
-
-#### Live at [www.reactrails.com](http://www.reactrails.com/)
-##### Check out our [react-native client for this project!](https://github.com/shakacode/react-native-tutorial)
-This is a simple example application that illustrates the use of ReactJs to implement a commenting system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails. It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to choose the form layout. `react-bootstrap` is used for the React components. A pure Rails UI generated from scaffolding is shown for comparison.
-
-You can see this tutorial live here: [http://reactrails.com/](http://reactrails.com/)
-
 ## NEWS
 This demo demonstrates support for the some functionality that our React on Rails generators do not currently implement. *We do support this functionality, but we don't generate the code.*
 
@@ -28,6 +19,15 @@ Specific functionality in question:
 3. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
 
 If you want to implement CSS Modules and hot reloading after using React on Rails generators, then see [Hot Reloading of Assets For Rails Development](docs/additional-reading/hot-reloading-rails-development.md).
+
+# React, Redux, React-Bootstrap, ES7, Webpack, Rails Demo
+## Server Rendering via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
+
+#### Live at [www.reactrails.com](http://www.reactrails.com/)
+##### Check out our [react-native client for this project!](https://github.com/shakacode/react-native-tutorial)
+This is a simple example application that illustrates the use of ReactJs to implement a commenting system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails. It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to choose the form layout. `react-bootstrap` is used for the React components. A pure Rails UI generated from scaffolding is shown for comparison.
+
+You can see this tutorial live here: [http://reactrails.com/](http://reactrails.com/)
 
 ## Table of Contents
 
