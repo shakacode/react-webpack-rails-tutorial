@@ -14,6 +14,7 @@ Your support keeps this project going.
 This demo demonstrates support for the some functionality that our React on Rails generators do not currently implement. *We do support this functionality, but we don't generate the code.*
 
 Specific functionality in question:
+
 1. NOTE: Any references to localhost:3000 *might* need to use 0.0.0.0:3000 until Puma fixes an issue regarding this.
 2. **Handling of Sass and Bootstrap**: The tutorial uses CSS modules via Webpack. This is totally different than the older way of having Rails handle Sass/Bootstrap, and having NPM/Webpack handle the Webpack Dev Server. The tutorial now has NPM handle all visual assets. We are using this technique on a new app, and it's awesome!
 3. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
