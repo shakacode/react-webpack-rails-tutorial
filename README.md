@@ -9,6 +9,7 @@ Aloha from Justin Gordon and the [ShakaCode](http://www.shakacode.com) Team! We 
 
 By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakacode.com)
 
+- Your first step might be to take a loook at this [simple tutorial of using React on Rails](https://github.com/shakacode/react_on_rails/blob/master/docs/tutorial.md).
 - We have a [react-native client for this project](https://github.com/shakacode/react-native-tutorial).
 - If this work interests you and you are looking for full or part-time remote work, please [click here](http://forum.shakacode.com/t/railsonmaui-is-hiring-and-partnering-part-time-remote-is-ok/156).
 - [ShakaCode](http://www.shakacode.com) is doing Skype plus Slack/Github based coaching for "React on Rails". [Click here](http://www.shakacode.com/work/index.html) for more information.
@@ -20,7 +21,7 @@ By Justin Gordon and the Shaka Code Team, [www.shakacode.com](http://www.shakaco
 - Check out the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy webpack integration.
 - If you came to here from the blog article, this example project has evolved. See [merged pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Amerged) and the [CHANGELOG.md](./CHANGELOG.md).
 
-An outdated full tutorial article behind of the motivation of this system can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial.
+An outdated full tutorial article behind of the motivation of this system can be found at: [Fast Rich Client Rails Development With Webpack and the ES6 Transpiler](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/). Note, this source code repository is way ahead of the tutorial. Much has changed in the last 2 years!
 
 # NEWS
 We have not yet updated the `react_on_rails` gem generators for the following tasks, and we probably never will. *The tutorial* refers to this repo. The following changes have resulted in lots of differences for the webpack files and visual assets:
