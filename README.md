@@ -11,9 +11,7 @@ Your support keeps this project going.
 (Want to become a contributor? [Contact us](mailto:contact@shakacode.com) for an Slack team invite! Also, see ["easy" issues](https://github.com/shakacode/react_on_rails/labels/easy) and [issues for the full tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy).)
 
 ## NEWS
-This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the /client directory, React on Rails supports just about anything that Webpack and JavaScript can do.
-
-Specific functionality in question:
+This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the /client directory, React on Rails supports just about anything that Webpack and JavaScript can do, such as:
 
 1. **Handling of Sass and Bootstrap**: This tutorial uses CSS modules via Webpack so that NPM can manage all visual assets and we gain a better separation of concerns (Rails for server-side functionality & NPM/Webpack for all things client side). However, [react_on_rails](https://github.com/shakacode/react_on_rails) still supports (and in fact uses) the Rails Asset Pipeline so traditional use of visual assets through the pipeline is possible.
 1. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
