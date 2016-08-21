@@ -48,7 +48,7 @@ export function fetchComments() {
       requestsManager
         .fetchEntities()
         .then(res => dispatch(fetchCommentsSuccess(res.data)))
-        .catch(res => dispatch(fetchCommentsFailure(res.data)))
+        .catch(error => dispatch(fetchCommentsFailure(error)))
     );
   };
 }
@@ -60,7 +60,7 @@ export function submitComment(comment) {
       requestsManager
         .submitEntity({ comment })
         .then(res => dispatch(submitCommentSuccess(res.data)))
-        .catch(res => dispatch(submitCommentFailure(res.data)))
+        .catch(error => dispatch(submitCommentFailure(error)))
     );
   };
 }

@@ -13,6 +13,15 @@ import BaseComponent from 'libs/components/BaseComponent';
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
 
+function bsStyleFor(propName, error) {
+  if (error) {
+    const errorData = (error && error.response && error.response.data) || {};
+    return (propName in errorData) ? 'error' : 'success';
+  }
+
+  return null;
+}
+
 export default class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
@@ -119,6 +128,8 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
+            hasFeedback
+            bsStyle={bsStyleFor('author', this.props.error)}
           />
           <Input
             type="textarea"
@@ -130,6 +141,8 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
+            hasFeedback
+            bsStyle={bsStyleFor('text', this.props.error)}
           />
           <div className="form-group">
             <div className="col-sm-offset-2 col-sm-10">
@@ -159,6 +172,8 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
+            hasFeedback
+            bsStyle={bsStyleFor('author', this.props.error)}
           />
           <Input
             type="textarea"
@@ -168,6 +183,8 @@ export default class CommentForm extends BaseComponent {
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
+            hasFeedback
+            bsStyle={bsStyleFor('text', this.props.error)}
           />
           <input
             type="submit"
@@ -225,12 +242,23 @@ export default class CommentForm extends BaseComponent {
   }
 
   errorWarning() {
+    const error = this.props.error;
+
     // If there is no error, there is nothing to add to the DOM
-    if (!this.props.error) return null;
+    if (!error) return null;
+
+    const errorData = error.response && error.response.data;
+
+    const errorElements = _.transform(errorData, (result, errorText, errorFor) => {
+      result.push(<li key={errorFor}><b>{_.upperFirst(errorFor)}:</b> {errorText}</li>);
+    }, []);
+
     return (
       <Alert bsStyle="danger" key="commentSubmissionError">
-        <strong>Your comment was not saved! </strong>
-        A server error prevented your comment from being saved. Please try again.
+        <strong>Your comment was not saved!</strong>
+        <ul>
+          {errorElements}
+        </ul>
       </Alert>
     );
   }
