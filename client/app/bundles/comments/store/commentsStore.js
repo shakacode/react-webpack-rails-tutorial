@@ -1,5 +1,5 @@
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 import reducers, { initialStates } from '../reducers';
 
@@ -14,9 +14,19 @@ export default (props, railsContext) => {
   };
 
   const reducer = combineReducers(reducers);
-  const composedStore = compose(
+  /*  const composedStore = compose(
     applyMiddleware(thunkMiddleware, loggerMiddleware)
   );
 
-  return composedStore(createStore)(reducer, initialState);
+  return composedStore(createStore)(reducer, initialState);*/
+  const sagaMiddleware = createSagaMiddleware();
+  const store = { ...createStore(reducer, initialState,
+    compose(applyMiddleware(sagaMiddleware, loggerMiddleware),
+    typeof window === 'object' && typeof window.devToolsExtension !==
+        'undefined' ? window.devToolsExtension() : f => f)
+    ),
+    runSaga: sagaMiddleware.run,
+  };
+
+  return store;
 };

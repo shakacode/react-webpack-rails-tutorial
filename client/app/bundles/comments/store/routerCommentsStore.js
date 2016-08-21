@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 
@@ -23,9 +23,20 @@ export default (props, railsContext) => {
   });
 
   // Sync dispatched route actions to the history
-  const finalCreateStore = compose(
+  /*  const finalCreateStore = compose(
     applyMiddleware(thunkMiddleware, loggerMiddleware)
   )(createStore);
 
-  return finalCreateStore(reducer, initialState);
+  return finalCreateStore(reducer, initialState);*/
+
+  const sagaMiddleware = createSagaMiddleware();
+  const store = { ...createStore(reducer, initialState,
+    compose(applyMiddleware(sagaMiddleware, loggerMiddleware),
+      typeof window === 'object' && typeof window.devToolsExtension !==
+      'undefined' ? window.devToolsExtension() : f => f)
+  ),
+  runSaga: sagaMiddleware.run,
+};
+
+  return store;
 };

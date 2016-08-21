@@ -35,7 +35,7 @@ module.exports = {
       'react-redux',
       'react-on-rails',
       'react-router-redux',
-      'redux-thunk',
+      'redux-saga',
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config

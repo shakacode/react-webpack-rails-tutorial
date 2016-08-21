@@ -1,4 +1,3 @@
-import requestsManager from 'libs/requestsManager';
 import * as actionTypes from '../constants/commentsConstants';
 
 export function setIsFetching() {
@@ -42,25 +41,12 @@ export function submitCommentFailure(error) {
 }
 
 export function fetchComments() {
-  return dispatch => {
-    dispatch(setIsFetching());
-    return (
-      requestsManager
-        .fetchEntities()
-        .then(res => dispatch(fetchCommentsSuccess(res.data)))
-        .catch(res => dispatch(fetchCommentsFailure(res.data)))
-    );
-  };
+  return setIsFetching();
 }
 
 export function submitComment(comment) {
-  return dispatch => {
-    dispatch(setIsSaving());
-    return (
-      requestsManager
-        .submitEntity({ comment })
-        .then(res => dispatch(submitCommentSuccess(res.data)))
-        .catch(res => dispatch(submitCommentFailure(res.data)))
-    );
+  return {
+    type: actionTypes.SET_IS_SAVING,
+    comment,
   };
 }
