@@ -1,5 +1,5 @@
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 import reducers, { initialStates } from '../reducers';
 
@@ -14,9 +14,18 @@ export default (props, railsContext) => {
   };
 
   const reducer = combineReducers(reducers);
-  const composedStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
-  );
 
-  return composedStore(createStore)(reducer, initialState);
+  const sagaMiddleware = createSagaMiddleware();
+
+  // https://github.com/zalmoxisus/redux-devtools-extension
+  const reduxDevtoolsExtension = (typeof window === 'object' &&
+    typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f);
+
+  const store = { ...createStore(reducer, initialState,
+    compose(applyMiddleware(sagaMiddleware, loggerMiddleware),
+      reduxDevtoolsExtension)),
+    runSaga: sagaMiddleware.run,
+  };
+
+  return store;
 };
