@@ -11,14 +11,14 @@ Your support keeps this project going.
 (Want to become a contributor? [Contact us](mailto:contact@shakacode.com) for an Slack team invite! Also, see ["easy" issues](https://github.com/shakacode/react_on_rails/labels/easy) and [issues for the full tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy).)
 
 ## NEWS
-This demo demonstrates support for the some functionality that our React on Rails generators do not currently implement. *We do support this functionality, but we don't generate the code.*
+This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the /client directory, React on Rails supports just about anything that Webpack and JavaScript can do.
 
 Specific functionality in question:
 
 1. **Handling of Sass and Bootstrap**: This tutorial uses CSS modules via Webpack so that NPM can manage all visual assets and we gain a better separation of concerns (Rails for server-side functionality & NPM/Webpack for all things client side). However, [react_on_rails](https://github.com/shakacode/react_on_rails) still supports (and in fact uses) the Rails Asset Pipeline so traditional use of visual assets through the pipeline is possible.
 1. **Hot Reloading with Rails**: The tutorial has different startup scripts than the generators. The dev mode has the WebapackDev server providing the JS and CSS assets to the tutorial. This means you get **HOT RELOADING** of your JS and CSS within your Rails app.
 
-If you want to implement CSS Modules and hot reloading after using React on Rails generators, then see [Hot Reloading of Assets For Rails Development](docs/additional-reading/hot-reloading-rails-development.md).
+If you want to implement hot reloading after using React on Rails generators, then see [Hot Reloading of Assets For Rails Development](docs/additional-reading/hot-reloading-rails-development.md). We are currently working on a tutorial for implementing CSS Modules via Webpack.
 
 # React, Redux, React-Bootstrap, ES7, Webpack, Rails Demo
 ## Server Rendering via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
@@ -221,7 +221,7 @@ This project adheres to the [Open Code of Conduct](http://todogroup.org/opencode
 ## About [ShakaCode](http://www.shakacode.com/)
 If you would like to know more about ShakaCode, please read [Who Is ShakaCode](http://www.shakacode.com/2015/09/17/who-is-shaka-code.html) and [Success the ShakaCode Way!](http://www.shakacode.com/2015/11/26/success-the-shakacode-way.html)
 
-Also feel free to visit [our forums!](http://forum.shakacode.com). We've got a [category dedicated to react_on_rails](http://forum.shakacode.com/c/rails/reactonrails).
+Please visit [our forums!](http://forum.shakacode.com). We've got a [category dedicated to react_on_rails](http://forum.shakacode.com/c/rails/reactonrails).
 
 If you're looking for consulting on a project using React and Rails, email us at [contact@shakacode.com](mailto:contact@shakacode.com)! You can also join our slack room for some free advice. Email us for an invite.
 
