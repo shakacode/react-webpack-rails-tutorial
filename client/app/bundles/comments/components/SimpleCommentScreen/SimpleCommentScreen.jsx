@@ -1,10 +1,10 @@
 import React from 'react';
 import Immutable from 'immutable';
-import request from 'axios';
 import _ from 'lodash';
+import fetch from 'isomorphic-fetch';
 
 import BaseComponent from 'libs/components/BaseComponent';
-import metaTagsManager from 'libs/metaTagsManager';
+import ror from 'libs/ror';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
@@ -29,8 +29,10 @@ export default class SimpleCommentScreen extends BaseComponent {
 
   fetchComments() {
     return (
-      request
-        .get('comments.json', { responseType: 'json' })
+      fetch('comments.json')
+        .then(res => ror.checkStatus(res))
+        .then(res => res.json())
+        .then(res => ({ data: res }))
         .then(res => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
         .catch(error => this.setState({ fetchCommentsError: error }))
     );
@@ -39,16 +41,11 @@ export default class SimpleCommentScreen extends BaseComponent {
   handleCommentSubmit(comment) {
     this.setState({ isSaving: true });
 
-    const requestConfig = {
-      responseType: 'json',
-      headers: {
-        'X-CSRF-Token': metaTagsManager.getCSRFToken(),
-      },
-    };
-
     return (
-      request
-        .post('comments.json', { comment }, requestConfig)
+      fetch('comments.json', ror.makeJsonPostHeader(comment))
+        .then(res => ror.checkStatus(res))
+        .then(res => res.json())
+        .then(res => ({ data: res }))
         .then(() => {
           const { $$comments } = this.state;
           const $$comment = Immutable.fromJS(comment);
