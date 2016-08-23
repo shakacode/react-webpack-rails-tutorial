@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import createSagaMiddleware from 'redux-saga';
+import thunkMiddleware from 'redux-thunk';
 
 import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
 
@@ -22,17 +22,10 @@ export default (props, railsContext) => {
     routing: routerReducer,
   });
 
-  const sagaMiddleware = createSagaMiddleware();
+  // Sync dispatched route actions to the history
+  const finalCreateStore = compose(
+    applyMiddleware(thunkMiddleware, loggerMiddleware)
+  )(createStore);
 
-  // https://github.com/zalmoxisus/redux-devtools-extension
-  const reduxDevtoolsExtension = (typeof window === 'object' &&
-    typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f);
-
-  const store = { ...createStore(reducer, initialState,
-    compose(applyMiddleware(sagaMiddleware, loggerMiddleware),
-      reduxDevtoolsExtension)),
-  runSaga: sagaMiddleware.run,
-};
-
-  return store;
+  return finalCreateStore(reducer, initialState);
 };

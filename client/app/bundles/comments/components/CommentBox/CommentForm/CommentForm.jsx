@@ -84,7 +84,7 @@ export default class CommentForm extends BaseComponent {
     e.preventDefault();
     const { actions } = this.props;
     actions.submitComment(this.state.comment);
-    this.resetAndFocus();
+    this.resetAndFocus;
   }
 
   resetAndFocus() {

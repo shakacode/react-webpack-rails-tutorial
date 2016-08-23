@@ -35,6 +35,9 @@ const NavigationBar = (props) => {
             <li className={classNames({ active: (pathname === paths.NO_ROUTER_PATH) })}>
               <a href={paths.NO_ROUTER_PATH}>React Demo</a>
             </li>
+            <li className={classNames({ active: (pathname === paths.SAGA_PATH) })}>
+              <a href={paths.SAGA_PATH}>React Saga Demo</a>
+            </li>
             <li className={classNames({ active: (pathname === paths.SIMPLE_REACT_PATH) })}>
               <a href={paths.SIMPLE_REACT_PATH}>Simple React</a>
             </li>

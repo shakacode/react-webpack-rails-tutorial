@@ -81,6 +81,7 @@
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.11.0",
+    "redux-thunk": "^2.1.0",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
     "sass-resources-loader": "1.1.0",
