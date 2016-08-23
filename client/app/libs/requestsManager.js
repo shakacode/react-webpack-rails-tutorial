@@ -1,5 +1,5 @@
 import request from 'axios';
-import metaTagsManager from './metaTagsManager';
+import ReactOnRails from 'react-on-rails';
 
 const API_URL = 'comments.json';
 
@@ -29,9 +29,7 @@ export default {
       method: 'POST',
       url: API_URL,
       responseType: 'json',
-      headers: {
-        'X-CSRF-Token': metaTagsManager.getCSRFToken(),
-      },
+      headers: ReactOnRails.authenticityHeaders(),
       data: entity,
     });
   },

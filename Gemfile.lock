@@ -205,7 +205,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
-    react_on_rails (6.0.5)
+    react_on_rails (6.1.0)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -336,7 +336,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (~> 6)
+  react_on_rails (~> 6.1)
   rspec-rails (= 3.5.0.beta3)
   rspec-retry
   rubocop
@@ -355,4 +355,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.3
+   1.12.5

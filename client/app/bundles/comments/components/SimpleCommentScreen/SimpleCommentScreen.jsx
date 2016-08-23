@@ -1,10 +1,9 @@
 import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
-import _ from 'lodash';
+import ReactOnRails from 'react-on-rails';
 
 import BaseComponent from 'libs/components/BaseComponent';
-import metaTagsManager from 'libs/metaTagsManager';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
@@ -41,9 +40,7 @@ export default class SimpleCommentScreen extends BaseComponent {
 
     const requestConfig = {
       responseType: 'json',
-      headers: {
-        'X-CSRF-Token': metaTagsManager.getCSRFToken(),
-      },
+      headers: ReactOnRails.authenticityHeaders(),
     };
 
     return (
