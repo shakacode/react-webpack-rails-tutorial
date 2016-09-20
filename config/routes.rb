@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resources :comments
 
-  scope '/graphql' do
-    post '/', to: "graphql#create"
+  scope "/graphql" do
+    post "/", to: "graphql#create"
   end
 end

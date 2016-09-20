@@ -16,8 +16,8 @@ module RailsReactTutorial
 
     # GraphQL
     config.middleware.use GraphQLReloader
-    config.autoload_paths << Rails.root.join('app', 'graph')
-    config.autoload_paths << Rails.root.join('app', 'graph', 'mutations')
-    config.autoload_paths << Rails.root.join('app', 'graph', 'types')
+    config.autoload_paths << Rails.root.join("app", "graph")
+    config.autoload_paths << Rails.root.join("app", "graph", "mutations")
+    config.autoload_paths << Rails.root.join("app", "graph", "types")
   end
 end

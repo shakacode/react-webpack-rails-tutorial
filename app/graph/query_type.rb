@@ -7,9 +7,8 @@ QueryType = GraphQL::ObjectType.define do
 
   field :viewer, ViewerType do
     description "Global node"
-    resolve -> (obj, args, ctx) {
-      ''
+    resolve -> (_obj, _args, _ctx) {
+      ""
     }
   end
-
 end

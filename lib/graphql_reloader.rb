@@ -1,7 +1,6 @@
-require 'digest/md5'
+require "digest/md5"
 
 class GraphQLReloader < Struct.new :app
-
   delegate :changed?, to: :class
   delegate :checksum, to: :class
 
