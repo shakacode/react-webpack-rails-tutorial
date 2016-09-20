@@ -5,7 +5,7 @@ ViewerType = GraphQL::ObjectType.define do
   field :comments, GraphQL::ListType.new(of_type: CommentType) do
     description 'Get all comments'
     resolve -> (obj, args, ctx) {
-      Comment.all
+      Comment.order('id DESC')
     }
   end
 

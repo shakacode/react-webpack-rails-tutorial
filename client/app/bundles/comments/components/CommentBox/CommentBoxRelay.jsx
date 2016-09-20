@@ -8,13 +8,9 @@ import css from './CommentBox.scss';
 
 class CommentBox extends BaseComponent {
   static propTypes = {
-    relay: React.PropTypes.object.isRequired,
+    relay: PropTypes.object.isRequired,
     viewer: PropTypes.object.isRequired,
   };
-
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
 
   render() {
     const { viewer } = this.props;

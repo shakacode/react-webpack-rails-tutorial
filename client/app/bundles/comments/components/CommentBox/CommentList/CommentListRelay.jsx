@@ -9,8 +9,8 @@ import Comment from './Comment/Comment';
 
 class CommentList extends BaseComponent {
   static propTypes = {
-    viewer: React.PropTypes.shape({
-      comments: React.PropTypes.array.isRequired,
+    viewer: PropTypes.shape({
+      comments: PropTypes.array.isRequired,
     }),
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
