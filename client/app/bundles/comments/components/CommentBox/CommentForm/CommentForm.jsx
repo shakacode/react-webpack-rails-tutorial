@@ -25,6 +25,7 @@ function bsStyleFor(propName, error) {
 export default class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
   };
