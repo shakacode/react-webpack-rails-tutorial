@@ -9,6 +9,7 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
+import CommentCreateMutation from '../../../mutations/CommentCreateMutation';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
@@ -24,6 +25,7 @@ function bsStyleFor(propName, error) {
 
 export default class CommentForm extends BaseComponent {
   static propTypes = {
+    relay: React.PropTypes.object.isRequired,
     isSaving: PropTypes.bool.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
@@ -81,10 +83,23 @@ export default class CommentForm extends BaseComponent {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { actions } = this.props;
-    actions
-      .submitComment(this.state.comment)
-      .then(this.resetAndFocus);
+    this.setState({ isSaving: true, error: '' });
+    this.props.relay.commitUpdate(
+      new CommentCreateMutation({
+        comment: this.state.comment,
+        viewer: null,
+      }), {
+        onFailure: transaction => {
+          const error = transaction.getError() || new Error('Mutation failed.');
+          this.setState({ isSaving: false, error: error.message });
+        },
+        onSuccess: () => {
+          this.setState({ isSaving: false, error: '' });
+          this.props.relay.forceFetch();
+          this.resetAndFocus();
+        },
+      }
+    );
   }
 
   resetAndFocus() {

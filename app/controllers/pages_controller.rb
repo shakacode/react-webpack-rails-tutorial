@@ -32,6 +32,9 @@ class PagesController < ApplicationController
     render_html
   end
 
+  def relay_router
+  end
+
   def simple
   end
 

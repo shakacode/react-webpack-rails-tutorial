@@ -30,10 +30,13 @@ const NavigationBar = (props) => {
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul className="nav navbar-nav">
             <li className={classNames({ active: (pathname === paths.ROUTER_PATH) })}>
-              <a href={paths.ROUTER_PATH}>React Router Demo</a>
+              <a href={paths.ROUTER_PATH}>React Router</a>
+            </li>
+            <li className={classNames({ active: (pathname === paths.RELAY_ROUTER_PATH) })}>
+              <a href={paths.RELAY_ROUTER_PATH}>React Relay Router</a>
             </li>
             <li className={classNames({ active: (pathname === paths.NO_ROUTER_PATH) })}>
-              <a href={paths.NO_ROUTER_PATH}>React Demo</a>
+              <a href={paths.NO_ROUTER_PATH}>React</a>
             </li>
             <li className={classNames({ active: (pathname === paths.SIMPLE_REACT_PATH) })}>
               <a href={paths.SIMPLE_REACT_PATH}>Simple React</a>

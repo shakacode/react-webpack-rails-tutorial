@@ -2,6 +2,7 @@ import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
 import ReactOnRails from 'react-on-rails';
+import _ from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
 

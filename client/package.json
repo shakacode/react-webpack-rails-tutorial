@@ -40,6 +40,11 @@
     "eslint": "eslint --ext .js,.jsx .",
     "jscs": "jscs --verbose ."
   },
+  "metadata": {
+    "graphql": {
+      "schema": "../app/assets/javascripts/relay/schema.json"
+    }
+  },
   "dependencies": {
     "autoprefixer": "^6.4.0",
     "axios": "^0.13.1",
@@ -47,11 +52,14 @@
     "babel-cli": "^6.11.4",
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
     "babel-plugin-transform-es2015-modules-amd": "^6.8.0",
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
+    "babel-relay-plugin": "^0.9.3",
+    "babel-relay-plugin-loader": "^0.9.0",
     "babel-runtime": "^6.11.6",
     "bootstrap-loader": "^1.2.0-beta.1",
     "bootstrap-sass": "^3.3.7",
@@ -61,6 +69,8 @@
     "expose-loader": "^0.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
+    "graphql": "^0.7.0",
+    "history": "^4.2.0",
     "immutable": "^3.8.1",
     "imports-loader": "^0.6.5",
     "jquery": "^3.1.0",
@@ -77,8 +87,10 @@
     "react-dom": "^15.2.1",
     "react-on-rails": "^6.1.0",
     "react-redux": "^4.4.5",
+    "react-relay": "^0.9.3",
     "react-router": "^2.5.2",
     "react-router-redux": "^4.0.5",
+    "react-router-relay": "^0.13.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "resolve-url-loader": "^1.6.0",
@@ -87,6 +99,7 @@
     "style-loader": "^0.13.1",
     "turbolinks": "^5.0.0",
     "url-loader": "^0.5.7",
+    "use-named-routes": "^0.3.1",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
