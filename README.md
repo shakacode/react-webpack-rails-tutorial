@@ -10,6 +10,12 @@ Your support keeps this project going.
 
 (Want to become a contributor? [Contact us](mailto:contact@shakacode.com) for an Slack team invite! Also, see ["easy" issues](https://github.com/shakacode/react_on_rails/labels/easy) and [issues for the full tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy).)
 
+
+## Videos
+1. [Overview of React on Rails](https://youtu.be/F4oymbUHvoY)
+2. [Running the React on Rails generator](https://youtu.be/_bjScw60FBk)
+3. [React on Rails Generator Code Walkthrough](https://youtu.be/McQ9UM-_ocQ)
+
 ## NEWS
 This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the `/client` directory, React on Rails supports just about anything that Webpack and JavaScript can do, such as:
 
