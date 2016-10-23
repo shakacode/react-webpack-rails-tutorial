@@ -108,6 +108,9 @@ GEM
       railties (>= 3.0.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    graphql (0.18.13)
+    graphql-relay (0.12.0)
+      graphql (~> 0.17)
     i18n (0.7.0)
     interception (0.5)
     io-like (0.3.0)
@@ -319,6 +322,8 @@ DEPENDENCIES
   factory_girl_rails
   foreman
   generator_spec
+  graphql
+  graphql-relay
   jbuilder
   launchy
   listen
@@ -355,4 +360,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.5
+   1.13.1

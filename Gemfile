@@ -43,6 +43,9 @@ gem "rails-html-sanitizer"
 
 gem "react_on_rails", "~> 6.1"
 
+gem 'graphql'
+gem 'graphql-relay'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer
 gem "mini_racer"
