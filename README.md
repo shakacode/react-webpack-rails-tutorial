@@ -84,6 +84,13 @@ See package.json and Gemfile for versions
 1. [Heroku for Rails 5 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails5)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
+## Basic Demo Setup with docker
+1. `docker pull sub2u/react-webpack-rails-tutorial`
+2. `run -d -p 5000:5000 sub2u/react-webpack-rails-tutorial`
+3.
+  1. Open a browser tab to http://localhost:5000 for the Rails app example.
+  2. When you make changes, you have to refresh the browser page.
+  
 ## Basic Demo Setup
 1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v6.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
