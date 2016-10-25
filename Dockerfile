@@ -1,7 +1,7 @@
 FROM sub2u/ruby-2.3.1-node-6.8.0
 MAINTAINER sub2u
 
-COPY ./ app/
+ADD ./ app/
 
 WORKDIR /app
 
