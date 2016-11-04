@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 
 export default function logger({ getState }) {
-  return next => (action) => {
+  return (next) => (action) => {
     console.log('will dispatch', action);
 
     // Call the next dispatch method in the middleware chain.

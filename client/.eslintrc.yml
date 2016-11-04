@@ -16,11 +16,12 @@ env:
   mocha: true
 
 rules:
-  ### Imports
-  # Can't do next two because of alias in webpack
-  import/no-unresolved: 0
-
-  # https://github.com/benmosher/eslint-plugin-import/issues/340
-  import/no-extraneous-dependencies: 0
-
   import/extensions: [2, { js: "never", jsx: "never" }]
+
+  # Good idea, but let's go to flow before fixing all these
+  react/forbid-prop-types: 0
+
+settings:
+  import/resolver:
+    webpack:
+      config: 'webpack.client.base.config.js'

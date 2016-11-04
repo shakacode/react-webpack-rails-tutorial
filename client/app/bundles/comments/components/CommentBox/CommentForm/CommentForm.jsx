@@ -200,7 +200,7 @@ export default class CommentForm extends BaseComponent {
   formInline() {
     return (
       <div>
-        <hr/>
+        <hr />
         <form className="commentForm form" onSubmit={this.handleSubmit}>
           <Input label="Inline Form" wrapperClassName="wrapper">
             <Row>

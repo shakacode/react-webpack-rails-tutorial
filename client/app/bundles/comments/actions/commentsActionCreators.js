@@ -47,8 +47,8 @@ export function fetchComments() {
     return (
       requestsManager
         .fetchEntities()
-        .then(res => dispatch(fetchCommentsSuccess(res.data)))
-        .catch(error => dispatch(fetchCommentsFailure(error)))
+        .then((res) => dispatch(fetchCommentsSuccess(res.data)))
+        .catch((error) => dispatch(fetchCommentsFailure(error)))
     );
   };
 }
@@ -59,8 +59,8 @@ export function submitComment(comment) {
     return (
       requestsManager
         .submitEntity({ comment })
-        .then(res => dispatch(submitCommentSuccess(res.data)))
-        .catch(error => dispatch(submitCommentFailure(error)))
+        .then((res) => dispatch(submitCommentSuccess(res.data)))
+        .catch((error) => dispatch(submitCommentFailure(error)))
     );
   };
 }
