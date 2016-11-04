@@ -10,6 +10,7 @@ import * as paths from '../../constants/paths';
 const NavigationBar = (props) => {
   const { commentsCount, pathname } = props;
 
+  /* eslint-disable new-cap */
   return (
     <nav className="navbar navbar-default" role="navigation">
       <div className="container">

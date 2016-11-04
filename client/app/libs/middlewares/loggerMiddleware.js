@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 
 export default function logger({ getState }) {
-  return next => action => {
+  return next => (action) => {
     console.log('will dispatch', action);
 
     // Call the next dispatch method in the middleware chain.
@@ -11,7 +11,7 @@ export default function logger({ getState }) {
     const state = getState();
     const readableState = {};
 
-    Object.keys(state).forEach(storeItem => {
+    Object.keys(state).forEach((storeItem) => {
       readableState[storeItem] = (
         state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem]
       );

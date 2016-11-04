@@ -12,7 +12,7 @@ global.window = win;
 
 // from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
 function propagateToGlobal(window) {
-  Object.keys(window).forEach(key => {
+  Object.keys(window).forEach((key) => {
     if (key in global) return;
     global[key] = window[key];
   });

@@ -43,15 +43,8 @@ if %w(development test).include? Rails.env
       sh cmd
     end
 
-    desc "jscs"
-    task :jscs do
-      cmd = "cd client && $(npm bin)/jscs ."
-      puts "Running jscs via `#{cmd}`"
-      sh cmd
-    end
-
     desc "JS Linting"
-    task js: [:jscs, :eslint] do
+    task js: [:eslint] do
       puts "Completed running all JavaScript Linters"
     end
 

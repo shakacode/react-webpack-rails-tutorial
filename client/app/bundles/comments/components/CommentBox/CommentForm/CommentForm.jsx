@@ -124,7 +124,7 @@ export default class CommentForm extends BaseComponent {
             placeholder="Your Name"
             labelClassName="col-sm-2"
             wrapperClassName="col-sm-10"
-            ref={node => { this.horizontalAuthorNode = node; }}
+            ref={(node) => { this.horizontalAuthorNode = node; }}
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
@@ -137,7 +137,7 @@ export default class CommentForm extends BaseComponent {
             placeholder={textPlaceholder}
             labelClassName="col-sm-2"
             wrapperClassName="col-sm-10"
-            ref={node => { this.horizontalTextNode = node; }}
+            ref={(node) => { this.horizontalTextNode = node; }}
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
@@ -168,7 +168,7 @@ export default class CommentForm extends BaseComponent {
             type="text"
             label="Name"
             placeholder="Your Name"
-            ref={node => { this.stackedAuthorNode = node; }}
+            ref={(node) => { this.stackedAuthorNode = node; }}
             value={this.state.comment.author}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
@@ -179,7 +179,7 @@ export default class CommentForm extends BaseComponent {
             type="textarea"
             label="Text"
             placeholder={textPlaceholder}
-            ref={node => { this.stackedTextNode = node; }}
+            ref={(node) => { this.stackedTextNode = node; }}
             value={this.state.comment.text}
             onChange={this.handleChange}
             disabled={this.props.isSaving}
@@ -200,7 +200,7 @@ export default class CommentForm extends BaseComponent {
   formInline() {
     return (
       <div>
-        <hr />
+        <hr/>
         <form className="commentForm form" onSubmit={this.handleSubmit}>
           <Input label="Inline Form" wrapperClassName="wrapper">
             <Row>
@@ -209,7 +209,7 @@ export default class CommentForm extends BaseComponent {
                   type="text"
                   className="form-control"
                   placeholder="Your Name"
-                  ref={node => { this.inlineAuthorNode = node; }}
+                  ref={(node) => { this.inlineAuthorNode = node; }}
                   value={this.state.comment.author}
                   onChange={this.handleChange}
                   disabled={this.props.isSaving}
@@ -220,7 +220,7 @@ export default class CommentForm extends BaseComponent {
                   type="text"
                   className="form-control"
                   placeholder={textPlaceholder}
-                  ref={node => { this.inlineTextNode = node; }}
+                  ref={(node) => { this.inlineTextNode = node; }}
                   value={this.state.comment.text}
                   onChange={this.handleChange}
                   disabled={this.props.isSaving}

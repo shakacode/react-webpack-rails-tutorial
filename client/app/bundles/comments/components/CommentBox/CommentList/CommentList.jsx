@@ -7,12 +7,14 @@ import _ from 'lodash';
 
 import Comment from './Comment/Comment';
 
+export const commentPropTypes = {
+  $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
+  error: PropTypes.any,
+  cssTransitionGroupClassNames: PropTypes.object.isRequired,
+};
+
 export default class CommentList extends BaseComponent {
-  static propTypes = {
-    $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
-    error: PropTypes.any,
-    cssTransitionGroupClassNames: PropTypes.object.isRequired,
-  };
+  static propTypes = commentPropTypes;
 
   constructor(props, context) {
     super(props, context);

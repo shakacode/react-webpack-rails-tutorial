@@ -1,6 +1,7 @@
-import React from 'react';
-import Immutable from 'immutable';
 import request from 'axios';
+import Immutable from 'immutable';
+import _ from 'lodash';
+import React from 'react';
 import ReactOnRails from 'react-on-rails';
 
 import BaseComponent from 'libs/components/BaseComponent';
@@ -56,7 +57,7 @@ export default class SimpleCommentScreen extends BaseComponent {
             isSaving: false,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState({
             submitCommentError: error,
             isSaving: false,
