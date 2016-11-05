@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jtibbertsma/react_on_rails.git
-  revision: 97ca102ee670359b43430a5bcb99cb0dffe033dd
+  revision: d09a6b6e2224f7b3a8da8f98ff347f61909a7a2f
   branch: skip-version-check
   specs:
     react_on_rails (6.1.2)

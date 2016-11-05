@@ -10,3 +10,5 @@ config.output.publicPath = "/assets/"
 config.entry.app = [
   './app/bundles/comments/startup/clientRegistrationCodeSplitting'
 ];
+
+exports.default = config;
