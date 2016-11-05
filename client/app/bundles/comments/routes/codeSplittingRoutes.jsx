@@ -7,13 +7,7 @@ import Layout from '../layout/Layout';
 // import T from '../components/TestReactRouterRedirect/TestReactRouterRedirect';
 // import RouterCommentsContainer from '../containers/RouterCommentsContainer';
 
-function checkAuth(nextState, replace) {
-  // Hard code this to demonstrate the effect
-  const notAuthorized = true;
-  if (notAuthorized) {
-    replace({ pathname: '/', state: { redirectFrom: nextState.location.pathname } });
-  }
-}
+import checkAuth from '../util/checkAuth';
 
 export default (
   <Route path="/" component={Layout}>

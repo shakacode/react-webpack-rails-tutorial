@@ -4,6 +4,7 @@ import Layout from '../layout/Layout';
 import TestReactRouter from '../components/TestReactRouter/TestReactRouter';
 import TestReactRouterRedirect from '../components/TestReactRouterRedirect/TestReactRouterRedirect';
 import RouterCommentsContainer from '../containers/RouterCommentsContainer';
+import checkAuth from '../util/checkAuth';
 
 export default (
   <Route path="/" component={Layout}>
@@ -17,7 +18,7 @@ export default (
     <Route
       path="react-router/redirect"
       component={TestReactRouterRedirect}
-      onEnter={TestReactRouterRedirect.checkAuth}
+      onEnter={checkAuth}
     />
   </Route>
 );
