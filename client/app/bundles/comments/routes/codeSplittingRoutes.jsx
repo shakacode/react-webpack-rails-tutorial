@@ -4,7 +4,7 @@ import Layout from '../layout/Layout';
 
 // These components will be loaded dynamically.
 // import TestReactRouter from '../components/TestReactRouter/TestReactRouter';
-// import TestReactRouterRedirect from '../components/TestReactRouterRedirect/TestReactRouterRedirect';
+// import T from '../components/TestReactRouterRedirect/TestReactRouterRedirect';
 // import RouterCommentsContainer from '../containers/RouterCommentsContainer';
 
 function checkAuth(nextState, replace) {
@@ -21,24 +21,27 @@ export default (
       getComponent={(nextState, callback) => {
         require.ensure([], require => {
           callback(null, require('../containers/RouterCommentsContainer').default);
-        }
-      )}}
+        });
+      }}
     />
     <Route
       path="react-router"
       getComponent={(nextState, callback) => {
         require.ensure([], require => {
-          callback(null, require('../components/TestReactRouter/TestReactRouter').default)
-        }
-      )}}
+          callback(null, require('../components/TestReactRouter/TestReactRouter').default);
+        });
+      }}
     />
     <Route
       path="react-router/redirect"
       getComponent={(nextState, callback) => {
         require.ensure([], require => {
-          callback(null, require('../components/TestReactRouterRedirect/TestReactRouterRedirect').default)
-        }
-      )}}
+          callback(
+            null,
+            require('../components/TestReactRouterRedirect/TestReactRouterRedirect').default
+          );
+        });
+      }}
       onEnter={checkAuth}
     />
   </Route>
