@@ -1,7 +1,14 @@
+// NOTE: https://github.com/react-bootstrap/react-bootstrap/issues/1850 seesm to require string
+// refs and not the callback kind.
+/* eslint-disable react/no-find-dom-node, react/no-string-refs */
 import React, { PropTypes } from 'react';
-
-import Row from 'react-bootstrap/lib/Row';
+import ReactDOM from 'react-dom';
 import Col from 'react-bootstrap/lib/Col';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
@@ -10,7 +17,7 @@ import _ from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
 
-import Input from '../../Input';
+import css from './CommentForm.scss';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';
@@ -57,22 +64,22 @@ export default class CommentForm extends BaseComponent {
     switch (this.state.formMode) {
       case 0:
         comment = {
-          author: this.horizontalAuthorNode.getValue(),
-          text: this.horizontalTextNode.getValue(),
+          author: ReactDOM.findDOMNode(this.refs.horizontalAuthorNode).value,
+          text: ReactDOM.findDOMNode(this.refs.horizontalTextNode).value,
         };
         break;
       case 1:
         comment = {
-          author: this.stackedAuthorNode.getValue(),
-          text: this.stackedTextNode.getValue(),
+          author: ReactDOM.findDOMNode(this.refs.stackedAuthorNode).value,
+          text: ReactDOM.findDOMNode(this.refs.stackedTextNode).value,
         };
         break;
       case 2:
         comment = {
           // This is different because the input is a native HTML element
           // rather than a React element.
-          author: this.inlineAuthorNode.value,
-          text: this.inlineTextNode.value,
+          author: ReactDOM.findDOMNode(this.refs.inlineAuthorNode).value,
+          text: ReactDOM.findDOMNode(this.refs.inlineTextNode).value,
         };
         break;
       default:
@@ -100,13 +107,13 @@ export default class CommentForm extends BaseComponent {
     let ref;
     switch (this.state.formMode) {
       case 0:
-        ref = this.horizontalTextNode.getInputDOMNode();
+        ref = ReactDOM.findDOMNode(this.refs.horizontalTextNode);
         break;
       case 1:
-        ref = this.stackedTextNode.getInputDOMNode();
+        ref = ReactDOM.findDOMNode(this.refs.stackedTextNode);
         break;
       case 2:
-        ref = this.inlineTextNode;
+        ref = ReactDOM.findDOMNode(this.refs.inlineTextNode);
         break;
       default:
         throw new Error(`Unexpected state.formMode ${this.state.formMode}`);
@@ -119,44 +126,52 @@ export default class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <form className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
-          <Input
-            type="text"
-            label="Name"
-            placeholder="Your Name"
-            labelClassName="col-sm-2"
-            wrapperClassName="col-sm-10"
-            ref={(node) => { this.horizontalAuthorNode = node; }}
-            value={this.state.comment.author}
-            onChange={this.handleChange}
-            disabled={this.props.isSaving}
-            hasFeedback
-            bsStyle={bsStyleFor('author', this.props.error)}
-          />
-          <Input
-            type="textarea"
-            label="Text"
-            placeholder={textPlaceholder}
-            labelClassName="col-sm-2"
-            wrapperClassName="col-sm-10"
-            ref={(node) => { this.horizontalTextNode = node; }}
-            value={this.state.comment.text}
-            onChange={this.handleChange}
-            disabled={this.props.isSaving}
-            hasFeedback
-            bsStyle={bsStyleFor('text', this.props.error)}
-          />
-          <div className="form-group">
-            <div className="col-sm-offset-2 col-sm-10">
-              <input
+        <Form horizontal className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
+          <FormGroup controlId="formHorizontalName">
+            <Col componentClass={ControlLabel} sm={2}>
+              Name
+            </Col>
+            <Col sm={10}>
+              <FormControl
+                type="text"
+                placeholder="Your Name"
+                ref="horizontalAuthorNode"
+                value={this.state.comment.author}
+                onChange={this.handleChange}
+                disabled={this.props.isSaving}
+                bsStyle={bsStyleFor('author', this.props.error)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup controlId="formHorizontalName">
+            <Col componentClass={ControlLabel} sm={2}>
+              Text
+            </Col>
+            <Col sm={10}>
+              <FormControl
+                type="textarea"
+                label="Text"
+                placeholder={textPlaceholder}
+                ref="horizontalTextNode"
+                value={this.state.comment.text}
+                onChange={this.handleChange}
+                disabled={this.props.isSaving}
+                bsStyle={bsStyleFor('text', this.props.error)}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup controlId="formHorizontalSubmit">
+            <Col smOffset={2} sm={10}>
+              <Button
                 type="submit"
                 className="btn btn-primary"
-                value={this.props.isSaving ? 'Saving...' : 'Post'}
                 disabled={this.props.isSaving}
-              />
-            </div>
-          </div>
-        </form>
+              >
+                {this.props.isSaving ? 'Saving...' : 'Post'}
+              </Button>
+            </Col>
+          </FormGroup>
+        </Form>
       </div>
     );
   }
@@ -166,79 +181,92 @@ export default class CommentForm extends BaseComponent {
       <div>
         <hr />
         <form className="commentForm form" onSubmit={this.handleSubmit}>
-          <Input
-            type="text"
-            label="Name"
-            placeholder="Your Name"
-            ref={(node) => { this.stackedAuthorNode = node; }}
-            value={this.state.comment.author}
-            onChange={this.handleChange}
-            disabled={this.props.isSaving}
-            hasFeedback
-            bsStyle={bsStyleFor('author', this.props.error)}
-          />
-          <Input
-            type="textarea"
-            label="Text"
-            placeholder={textPlaceholder}
-            ref={(node) => { this.stackedTextNode = node; }}
-            value={this.state.comment.text}
-            onChange={this.handleChange}
-            disabled={this.props.isSaving}
-            hasFeedback
-            bsStyle={bsStyleFor('text', this.props.error)}
-          />
-          <input
-            type="submit"
-            className="btn btn-primary"
-            value={this.props.isSaving ? 'Saving...' : 'Post'}
-            disabled={this.props.isSaving}
-          />
+          <FormGroup controlId="formBasicName">
+            <ControlLabel>Name</ControlLabel>
+            <FormControl
+              type="text"
+              placeholder="Your Name"
+              ref="stackedAuthorNode"
+              value={this.state.comment.author}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+              bsStyle={bsStyleFor('author', this.props.error)}
+            />
+          </FormGroup>
+          <FormGroup
+            controlId="formBasicText"
+          >
+            <ControlLabel>Text</ControlLabel>
+            <FormControl
+              type="textarea"
+              label="Text"
+              placeholder={textPlaceholder}
+              ref="stackedTextNode"
+              value={this.state.comment.text}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+              bsStyle={bsStyleFor('text', this.props.error)}
+            />
+          </FormGroup>
+          <FormGroup controlId="formBasicSubmit">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={this.props.isSaving}
+            >
+              {this.props.isSaving ? 'Saving...' : 'Post'}
+            </Button>
+          </FormGroup>
         </form>
       </div>
     );
   }
 
+  // Head up! We have some CSS modules going on here with the className props below.
   formInline() {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
-          <Input label="Inline Form" wrapperClassName="wrapper">
-            <Row>
-              <Col xs={3}>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Your Name"
-                  ref={(node) => { this.inlineAuthorNode = node; }}
-                  value={this.state.comment.author}
-                  onChange={this.handleChange}
-                  disabled={this.props.isSaving}
-                />
-              </Col>
-              <Col xs={8}>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={textPlaceholder}
-                  ref={(node) => { this.inlineTextNode = node; }}
-                  value={this.state.comment.text}
-                  onChange={this.handleChange}
-                  disabled={this.props.isSaving}
-                />
-              </Col>
-              <Col xs={1}>
-                <input
-                  type="submit"
-                  className="btn btn-primary"
-                  value={this.props.isSaving ? 'Saving...' : 'Post'}
-                  disabled={this.props.isSaving}
-                />
-              </Col>
-            </Row>
-          </Input>
-        </form>
+        <Form inline className="commentForm form-inline" onSubmit={this.handleSubmit}>
+          <FormGroup controlId="formInlineName" >
+            <ControlLabel>
+              Name
+            </ControlLabel>
+            <FormControl
+              type="text"
+              placeholder="Your Name"
+              ref="inlineAuthorNode"
+              value={this.state.comment.author}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+              bsStyle={bsStyleFor('author', this.props.error)}
+              className={css.nameFormControl}
+            />
+          </FormGroup>
+          <FormGroup controlId="formInlineName">
+            <ControlLabel>
+              Text
+            </ControlLabel>
+            <FormControl
+              type="textarea"
+              label="Text"
+              placeholder={textPlaceholder}
+              ref="inlineTextNode"
+              value={this.state.comment.text}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+              bsStyle={bsStyleFor('text', this.props.error)}
+              className={css.textFormControl}
+            />
+          </FormGroup>
+          <Button
+            type="submit"
+            className="btn btn-primary"
+            disabled={this.props.isSaving}
+          >
+            {this.props.isSaving ? 'Saving...' : 'Post'}
+          </Button>
+        </Form>
       </div>
     );
   }
