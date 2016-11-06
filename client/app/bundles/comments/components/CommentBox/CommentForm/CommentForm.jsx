@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Input from 'react-bootstrap/lib/Input';
+
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Nav from 'react-bootstrap/lib/Nav';
@@ -9,6 +9,8 @@ import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import _ from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
+
+import Input from '../../Input';
 
 const emptyComment = { author: '', text: '' };
 const textPlaceholder = 'Say something using markdown...';

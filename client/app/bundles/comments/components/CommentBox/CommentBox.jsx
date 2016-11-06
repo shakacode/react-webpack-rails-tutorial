@@ -1,7 +1,6 @@
 import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
 
-import actionPropTypes from '../../actions/actionPropTypes';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
@@ -9,7 +8,9 @@ import css from './CommentBox.scss';
 export default class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
-    actions: actionPropTypes,
+    actions: PropTypes.shape({
+      fetchComments: React.PropTypes.function,
+    }),
     data: PropTypes.shape({
       isFetching: React.PropTypes.boolean,
       isSaving: React.PropTypes.boolean,
