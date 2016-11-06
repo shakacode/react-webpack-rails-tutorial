@@ -31,8 +31,8 @@ export default class SimpleCommentScreen extends BaseComponent {
     return (
       request
         .get('comments.json', { responseType: 'json' })
-        .then((res) => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
-        .catch((error) => this.setState({ fetchCommentsError: error }))
+        .then(res => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
+        .catch(error => this.setState({ fetchCommentsError: error }))
     );
   }
 
@@ -57,7 +57,7 @@ export default class SimpleCommentScreen extends BaseComponent {
             isSaving: false,
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             submitCommentError: error,
             isSaving: false,
