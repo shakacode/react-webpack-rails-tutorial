@@ -16,3 +16,5 @@ Rails.application.config.assets.precompile +=
     "application_#{type}.js",
     "application_#{type}.css"
   ]
+
+Rails.application.config.assets.precompile += %w(i18n.js)
