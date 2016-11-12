@@ -1,0 +1,20 @@
+de:
+  type: "Deutsch"
+  comments: "Kommentare"
+  description:
+    support_markdown: "Text unterstützt Github Flavored Markdown."
+    delete_rule: "Die ältere als 24 Stunden Kommentare werden gelöscht."
+    submit_rule: "Name wird beibehalten. Text wird zurücksetzt während der Sendung."
+  form:
+    horizontal: "Horizontale Form"
+    stacked: "Gestapelte Form"
+    inline: "Inline Form"
+  input:
+    name:
+      label: "Name"
+      placeholder: "Dein Name"
+    text:
+      label: "Text"
+      placeholder: "Sagen Sie etwas mit markdown..."
+    saving: "Speichern"
+    post: "Posten"
