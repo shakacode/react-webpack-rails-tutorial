@@ -1,9 +1,10 @@
 import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
-
+import I18n from 'i18n-js';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import { SelectLanguage, SetI18nLocale } from '../../common/i18n';
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {
@@ -30,17 +31,20 @@ export default class CommentBox extends BaseComponent {
       leave: css.elementLeave,
       leaveActive: css.elementLeaveActive,
     };
+    const locale = data.get('locale');
+    SetI18nLocale(locale);
 
     return (
       <div className="commentBox container">
         <h2>
-          Comments {data.get('isFetching') && 'Loading...'}
+          { I18n.t('comments') } {data.get('isFetching') && 'Loading...'}
         </h2>
-        <p>
-          <b>Text</b> supports Github Flavored Markdown.
-          Comments older than 24 hours are deleted.<br />
-          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-        </p>
+        { SelectLanguage(actions.setLocale) }
+        <ul>
+          <li>{ I18n.t('description.support_markdown') }</li>
+          <li>{ I18n.t('description.delete_rule') }</li>
+          <li>{ I18n.t('description.submit_rule') }</li>
+        </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
           error={data.get('submitCommentError')}
