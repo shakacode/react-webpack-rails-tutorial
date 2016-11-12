@@ -2,6 +2,7 @@
 // eslint-disable new-cap
 
 import classNames from 'classnames';
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 
 import CommentsCount from './CommentsCount';
@@ -10,6 +11,7 @@ import * as paths from '../../constants/paths';
 const NavigationBar = (props) => {
   const { commentsCount, pathname } = props;
 
+  /* eslint-disable new-cap */
   return (
     <nav className="navbar navbar-default" role="navigation">
       <div className="container">
@@ -48,29 +50,17 @@ const NavigationBar = (props) => {
                   'shakacode/react-webpack-rails-tutorial'
                }
               >
-                Source on Github
+                Source
               </a>
             </li>
             <li>
               <a
                 href={
-                  'http://www.railsonmaui.com/' +
-                  'blog/2014/10/03/integrating' +
-                  '-webpack-and-the-es6-transpiler' +
-                  '-into-an-existing-rails-project/'
-               }
-              >Tutorials</a>
-            </li>
-            <li>
-              <a
-                href={
-                  'http://forum.shakacode.com/' +
-                  't/fast-rich-client-rails-development' +
-                  '-with-webpack-and-the-es6-transpiler/82/22'
+                  'https://forum.shakacode.com/c/reactjs'
                }
               >Forum</a>
             </li>
-            {commentsCount && CommentsCount({ commentsCount })}
+            {_.isNumber(commentsCount) && CommentsCount({ commentsCount })}
           </ul>
         </div>
       </div>

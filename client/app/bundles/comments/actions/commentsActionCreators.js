@@ -42,7 +42,7 @@ export function submitCommentFailure(error) {
 }
 
 export function fetchComments() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(setIsFetching());
     return (
       requestsManager
@@ -54,7 +54,7 @@ export function fetchComments() {
 }
 
 export function submitComment(comment) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(setIsSaving());
     return (
       requestsManager

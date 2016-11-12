@@ -6,7 +6,7 @@ import ReactOnRails from 'react-on-rails';
 
 import routes from '../routes/routes';
 
-export default (props, railsContext) => {
+export default (_props, railsContext) => {
   const store = ReactOnRails.getStore('routerCommentsStore');
 
   let error;

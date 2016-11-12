@@ -1,7 +1,7 @@
 # Linting and Code Inspection
 ## Running Lint and CI tasks
 * Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
-* See file [README.md](client/README.md) for how to run ESLint and JSCS
+* See file [README.md](client/README.md) for how to run ESLint
 * See scripts `scripts/lint` and `client/bin/lint`.
 * We're using the [AirBnb JavaScript style guidelines](https://github.com/airbnb/javascript).
 
@@ -19,7 +19,6 @@
   1. [Rubocop](https://github.com/bbatsov/rubocop)
   2. [Ruby-Lint](https://github.com/YorickPeterse/ruby-lint)
   3. [Eslint](http://eslint.org/)
-  4. [JSCS](https://github.com/jscs-dev/node-jscs)
   5. [scss-lint](https://github.com/brigade/scss-lint)
   6. [brakeman](http://brakemanscanner.org/)
   7. [bundle-audit](https://github.com/rubysec/bundler-audit)

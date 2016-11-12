@@ -104,7 +104,7 @@ group :test  do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails", "3.5.0.beta3"
+  gem "rspec-rails", "~> 3"
   gem "rspec-retry"
-  gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
+  gem "selenium-webdriver", "<3.0.0", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end
