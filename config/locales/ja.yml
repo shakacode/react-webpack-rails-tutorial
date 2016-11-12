@@ -1,0 +1,20 @@
+ja:
+  type: "日本語"
+  comments: "コメント"
+  description:
+    support_markdown: "テキストは Github Flavored Markdown をサポートしています。"
+    delete_rule: "コメントは24時間後削除されます。"
+    submit_rule: "送信の間に名前は保存され、テキストがリセットされます。"
+  form:
+    horizontal: "水平フォーム"
+    stacked: "積み上げフォーム"
+    inline: "インラインフォーム"
+  input:
+    name:
+      label: "名前"
+      placeholder: "あなたの名前"
+    text:
+      label: "本文"
+      placeholder: "何かが Markdown を使用して言います..."
+    saving: "保存"
+    post: "サブミット"
