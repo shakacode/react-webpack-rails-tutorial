@@ -1,0 +1,21 @@
+zh-TW:
+  type: "正體中文"
+  comments: "評論 "
+  loading: "載入中..."
+  description:
+    support_markdown: "支援 Github Flavored Markdown。"
+    delete_rule: "評論於24小時後移除。"
+    submit_rule: "送出評論後， 名字保留並清除內容。"
+  form:
+    horizontal: "水平格式"
+    stacked: "堆疊格式"
+    inline: "內嵌格式"
+  input:
+    name:
+      label: "名字"
+      placeholder: "你的名字"
+    text:
+      label: "內容"
+      placeholder: "使用markdown說些什麼..."
+    saving: "儲存"
+    post: "發表"
