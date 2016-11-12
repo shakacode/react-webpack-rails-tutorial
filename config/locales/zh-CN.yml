@@ -1,0 +1,23 @@
+zh-CN:
+  type: "简体中文"
+  comments: "评论 "
+  loading: "载入中..."
+  description:
+    force_refrech: "强制更新所有评论。"
+    support_markdown: "支援 Github Flavored Markdown。"
+    delete_rule: "评论于24小时后移除。"
+    submit_rule: "送出评论后， 名字保留并清除内容。"
+    see_action_cable: "要查看 Action Cable 立即更新两个浏览器，打开两个浏览器并提交评论!"
+  form:
+    horizontal: "水平格式"
+    stacked: "堆叠格式"
+    inline: "内嵌格式"
+  input:
+    name:
+      label: "名字"
+      placeholder: "你的名字"
+    text:
+      label: "内容"
+      placeholder: "使用markdown说些什么..."
+    saving: "储存"
+    post: "发表"
