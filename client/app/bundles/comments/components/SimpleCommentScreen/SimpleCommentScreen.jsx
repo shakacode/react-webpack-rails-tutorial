@@ -2,28 +2,38 @@ import React from 'react';
 import Immutable from 'immutable';
 import request from 'axios';
 import ReactOnRails from 'react-on-rails';
-
+import I18n from 'i18n-js';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
+import { InitI18n, SelectLanguage, SetI18nLocale } from '../../common/i18n';
 
-export default class SimpleCommentScreen extends BaseComponent {
-  constructor(props, context) {
-    super(props, context);
+export default (props, railsContext) => (
+  <SimpleCommentScreen {...props} railsContext={railsContext} />
+);
+
+class SimpleCommentScreen extends BaseComponent {
+  constructor(props) {
+    super(props);
+    const { railsContext } = props;
+
     this.state = {
       $$comments: Immutable.fromJS([]),
       isSaving: false,
       fetchCommentsError: null,
       submitCommentError: null,
+      locale: null,
     };
 
-    _.bindAll(this, 'fetchComments', 'handleCommentSubmit');
+    InitI18n(railsContext);
+    _.bindAll(this, 'fetchComments', 'handleCommentSubmit', 'handleSetLocale');
   }
 
   componentDidMount() {
     this.fetchComments();
+    this.handleSetLocale(this.props.railsContext.i18nLocale);
   }
 
   fetchComments() {
@@ -65,6 +75,10 @@ export default class SimpleCommentScreen extends BaseComponent {
     );
   }
 
+  handleSetLocale(locale) {
+    this.setState({ locale: locale });
+  }
+
   render() {
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
@@ -73,13 +87,18 @@ export default class SimpleCommentScreen extends BaseComponent {
       leaveActive: css.elementLeaveActive,
     };
 
+    const { locale } = this.state;
+    SetI18nLocale(locale);
+
     return (
       <div className="commentBox container">
-        <h2>Comments</h2>
-        <p>
-          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.<br />
-          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-        </p>
+        <h2>{ I18n.t('comments') }</h2>
+        { SelectLanguage(this.handleSetLocale) }
+        <ul>
+          <li>{ I18n.t('description.support_markdown') }</li>
+          <li>{ I18n.t('description.delete_rule') }</li>
+          <li>{ I18n.t('description.submit_rule') }</li>
+        </ul>
         <CommentForm
           isSaving={this.state.isSaving}
           actions={{ submitComment: this.handleCommentSubmit }}

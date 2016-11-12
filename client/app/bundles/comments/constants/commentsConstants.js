@@ -6,3 +6,5 @@ export const SUBMIT_COMMENT_FAILURE = 'SUBMIT_COMMENT_FAILURE';
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
 export const SET_IS_SAVING = 'SET_IS_SAVING';
+
+export const SET_LOCALE = 'SET_LOCALE';
