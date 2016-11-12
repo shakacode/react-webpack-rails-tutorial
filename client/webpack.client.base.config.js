@@ -38,6 +38,7 @@ module.exports = {
       'react-on-rails',
       'react-router-redux',
       'redux-thunk',
+      'i18n-js',
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
