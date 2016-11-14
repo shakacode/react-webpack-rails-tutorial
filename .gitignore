@@ -33,3 +33,6 @@ vendor/ruby
 .idea
 
 spec/examples.txt
+
+# i18n-js
+/public/javascripts/i18n.js

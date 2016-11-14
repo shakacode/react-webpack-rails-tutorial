@@ -109,6 +109,8 @@ GEM
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
+    i18n-js (3.0.0.rc14)
+      i18n (~> 0.6, >= 0.6.6)
     interception (0.5)
     io-like (0.3.0)
     jbuilder (2.6.0)
@@ -319,6 +321,7 @@ DEPENDENCIES
   factory_girl_rails
   foreman
   generator_spec
+  i18n-js (>= 3.0.0.rc11)
   jbuilder
   launchy
   listen

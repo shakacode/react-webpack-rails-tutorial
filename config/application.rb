@@ -11,5 +11,8 @@ module RailsReactTutorial
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    # i18n-js
+    config.middleware.use I18n::JS::Middleware
   end
 end
