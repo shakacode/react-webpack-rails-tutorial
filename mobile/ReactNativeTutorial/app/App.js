@@ -2,15 +2,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './setup/store';
-import Comments from './bundles/comments/Comments';
+import Router from './setup/Router';
 
-type PropsType = {
-
-}
-
-const App = (props: PropsType) => (
+const App = () => (
   <Provider store={store}>
-    <Comments />
+    <Router />
   </Provider>
 );
 
