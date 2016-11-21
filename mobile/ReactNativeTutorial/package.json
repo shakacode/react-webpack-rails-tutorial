@@ -12,6 +12,7 @@
     "react": "15.3.2",
     "react-native": "0.37.0",
     "react-native-elements": "^0.6.3",
+    "react-native-router-flux": "^3.37.0",
     "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",
