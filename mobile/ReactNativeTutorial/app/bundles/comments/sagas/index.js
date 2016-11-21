@@ -3,8 +3,8 @@ import { call, put } from 'redux-saga/effects';
 
 import { actions as reduxActions } from '../../../reducers'
 
-const FETCH = 'COMMENTS:FETCH';
-const UPDATE_FORM = 'COMMENTS:UPDATE_FORM';
+const FETCH = 'SAGA:COMMENTS:FETCH';
+const UPDATE_FORM = 'SAGA:COMMENTS:UPDATE_FORM';
 
 function* fetchHandler() {
   // try {
