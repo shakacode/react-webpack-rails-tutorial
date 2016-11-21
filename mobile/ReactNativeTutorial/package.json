@@ -11,8 +11,11 @@
     "lodash": "^4.17.2",
     "react": "15.3.2",
     "react-native": "0.37.0",
+    "react-native-elements": "^0.6.3",
+    "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",
+    "redux-immutable": "^3.0.8",
     "redux-saga": "^0.13.0",
     "reselect": "^2.5.4",
     "whatwg-fetch": "^2.0.1"
