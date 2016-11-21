@@ -4,6 +4,10 @@ rvm:
   - 2.3.1
 sudo: false
 addons:
+  sauce_connect:
+    username: "judahmeek"
+  jwt:
+    secure: "A/bVoePCHtwLGH4wVLCHK39+tml2axc/M/Mjnpg4m4bjgMI7GD4YqlnZMNrUBzNAv+Q66pp0sWjTy/Xm4tDaYnSxJFrWjD2wn5ZPpMEyB162nR+QqYqWl5DqP+jlOuIK+7iRmrRTlDS4LLTl43+nWxvRB16aat2U01P/+GKtQ+o="
   apt:
     sources:
       - ubuntu-toolchain-r-test
@@ -15,6 +19,7 @@ env:
   global:
     - RAILS_ENV=test
     - CXX=g++-4.9
+    - SAUCE_LABS_URL=http://$SAUCE_USERNAME:$SAUCE_ACCESS_KEY@ondemand.saucelabs.com:80/wd/hub
 install:
   - bundle install
   - nvm install 6.3
