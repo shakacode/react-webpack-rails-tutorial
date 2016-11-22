@@ -2,6 +2,7 @@
 import React from 'react';
 import { ListView } from 'react-native';
 import Item from './Item/Item';
+import _ from 'lodash/fp';
 
 import styles from './ListStyle';
 
@@ -26,7 +27,12 @@ class List extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ dataSource: this.state.dataSource.cloneWithRows(nextProps.comments) })
+    const data = _.compose(
+      _.reverse,
+      _.sortBy(_.get('id')),
+      _.values
+    )(nextProps.comments);
+    this.setState({ dataSource: this.state.dataSource.cloneWithRows(data) })
   }
 
   render() {
