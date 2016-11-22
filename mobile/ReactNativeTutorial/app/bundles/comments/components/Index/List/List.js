@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { ListView } from 'react-native';
+import { ListView, RefreshControl } from 'react-native';
 import Item from './Item/Item';
 import _ from 'lodash/fp';
 
@@ -23,6 +23,13 @@ const List = (props: PropsType) => {
       style={styles.container}
       dataSource={dataSource}
       renderRow={(item) => <Item {...item} />}
+      refreshControl={
+          <RefreshControl
+            refreshing={props.meta.loading}
+            onRefresh={props.actions.fetch}
+            tintColor="#4641B5"
+          />
+        }
     >
     </ListView>
   );
