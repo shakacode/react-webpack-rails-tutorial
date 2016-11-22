@@ -15,12 +15,15 @@ const UPDATE_FORM = 'SAGA:COMMENTS:UPDATE_FORM';
 
 
 function* fetchHandler() {
+  yield put(reduxActions.setLoadingComments(true));
   try {
     const response = yield call(api.fetchComments);
     yield put(reduxActions.createComments(response.entities.comments))
   } catch (e) {
     console.log(e);
     yield call(Alert.alert, 'Error', 'Could not connect to server', [{text: 'OK'}]);
+  } finally {
+    yield put(reduxActions.setLoadingComments(false));
   }
 }
 
