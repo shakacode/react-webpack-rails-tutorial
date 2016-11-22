@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { View, Text } from 'react-native';
-import { FormLabel, FormInput } from 'react-native-elements'
+import { FormLabel, FormInput, Button } from 'react-native-elements'
 
 import withAddProps from '../../hocs/withAddProps'
 
@@ -14,9 +14,16 @@ type PropsType = {
 const Add = (props: PropsType) => (
   <View style={styles.container}>
     <FormLabel>Author name</FormLabel>
-    <FormInput onChangeText={(text) => {props.actions.updateForm({name: text})}}/>
+    <FormInput onChangeText={(text) => {props.actions.updateForm({author: text})}}/>
     <FormLabel>Comment</FormLabel>
-    <FormInput onChangeText={(text) => {props.actions.updateForm({comment: text})}}/>
+    <FormInput onChangeText={(text) => {props.actions.updateForm({ text })}}/>
+    <Button
+      raised
+      buttonStyle={styles.button}
+      icon={{name: 'send'}}
+      title='Send'
+      onPress={props.actions.createComment}
+    />
   </View>
 );
 
