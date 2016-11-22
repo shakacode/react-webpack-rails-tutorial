@@ -14,6 +14,7 @@ const Footer = (props: PropsType) => (
   <View style={styles.container}>
     <Icon
       raised
+      reverse
       name='add'
       color='#f50'
       onPress={() => Actions.CommentsAdd()}
