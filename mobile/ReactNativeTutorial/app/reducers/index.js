@@ -12,12 +12,12 @@ import commentFormReducer, {
 
 
 export default combineReducers({
-  comments: commentsStoreReducer,
+  commentsStore: commentsStoreReducer,
   commentForm: commentFormReducer
 });
 
 export const initialState = Map({
-  comments: commentsStoreInitialState,
+  commentsStore: commentsStoreInitialState,
   commentForm: commentFormInitialState
 });
 

@@ -9,6 +9,7 @@
   "dependencies": {
     "immutable": "^3.8.1",
     "lodash": "^4.17.2",
+    "normalizr": "^2.2.1",
     "react": "15.3.2",
     "react-native": "0.37.0",
     "react-native-elements": "^0.6.3",
