@@ -7,12 +7,15 @@ const API_URL = __DEV__ ? 'http://localhost:3000/' : 'http://www.reactrails.com/
 function* apiRequest(url, method, payload) {
   let options = {
     method,
-    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-Auth': 'tutorial_secret',
+    }
   };
   if (payload) options = {...options, body: JSON.stringify(payload)};
   const response = yield call(fetch, `${API_URL}${url}`, options);
-  const json = yield call(response.json.bind(response));
-  return json;
+  return yield call(response.json.bind(response));
 }
 
 function* getRequest(url) {
@@ -28,4 +31,11 @@ export function* fetchComments() {
   const camelizedResponse = _.mapKeys(_.camelCase, response);
   const commentSchema = new Schema('comments');
   return normalize(camelizedResponse, { comments: arrayOf(commentSchema) });
+}
+
+export function* postComment(payload) {
+  const response = yield* postRequest('comments.json', { comment: payload });
+  const camelizedResponse = _.mapKeys(_.camelCase, response);
+  const commentSchema = new Schema('comments');
+  return normalize(camelizedResponse, commentSchema);
 }
