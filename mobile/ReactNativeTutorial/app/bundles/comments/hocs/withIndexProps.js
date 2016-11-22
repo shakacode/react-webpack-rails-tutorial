@@ -6,7 +6,13 @@ import { createSelector } from 'reselect';
 import commentsStoreSelector from '../../../selectors/commentsStoreSelector';
 import { actions } from '../sagas';
 
-const mapStateToProps = createSelector(commentsStoreSelector, commentsStore => commentsStore.toJS());
+const mapStateToProps = createSelector(
+  commentsStoreSelector,
+  commentsStore => ({
+    comments: commentsStore.delete('meta').toJS(),
+    meta: commentsStore.get('meta').toJS(),
+  })
+);
 
 const mapDispatchToProps = (dispatch: Function) => ({
   actions: bindActionCreators(actions, dispatch),
