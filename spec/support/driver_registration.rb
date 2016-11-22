@@ -10,7 +10,7 @@ module DriverRegistration
     @selenium_chrome_registered = true
   end
 
-  def driver_caps(app)
+  def self.driver_caps(app)
     caps = Selenium::WebDriver::Remote::Capabilities.firefox
     caps["platform"] = "OS X 10.11"
     caps["version"] = "49.0"
