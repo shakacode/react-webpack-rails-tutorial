@@ -11,10 +11,10 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - travis-ci/sqlite3
     packages:
       - g++-4.9
-      - sqlite3
+services:
+  - postgresql
 env:
   global:
     - RAILS_ENV=test
@@ -30,7 +30,7 @@ install:
   - nvm install 6.7
   - nvm use 6.7
   - npm install
-
+  - rake db:setup
 # No need to run xvfb if running headless testing
 #before_script:
 #   - export DISPLAY=:99.0
