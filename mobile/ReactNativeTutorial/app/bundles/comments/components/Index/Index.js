@@ -4,12 +4,11 @@ import { View } from 'react-native';
 import List from './List/List';
 import Footer from './Footer/Footer';
 import withIndexProps from '../../hocs/withIndexProps';
+import type { IndexPropsType } from '../../hocs/withIndexProps';
 
 import styles from './IndexStyle';
 
-type PropsType = {
-
-}
+type PropsType = IndexPropsType;
 
 class Index extends React.Component {
 

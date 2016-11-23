@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "flow": "flow",
+    "flow": "node_modules/flow-bin/cli.js",
     "lint": "node_modules/eslint/bin/eslint.js --config .eslintrc.yml app"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
     "eslint-plugin-react-native": "^2.1.0",
+    "flow-bin": "^0.33.0",
     "jest": "17.0.3",
     "jest-react-native": "17.0.3",
     "react-test-renderer": "15.3.2"

@@ -4,12 +4,11 @@ import { View } from 'react-native';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import withAddProps from '../../hocs/withAddProps';
+import type { AddPropsType } from '../../hocs/withAddProps';
 
 import styles from './AddStyle';
 
-type PropsType = {
-
-}
+type PropsType = AddPropsType;
 
 const Add = (props: PropsType) => (
   <View>

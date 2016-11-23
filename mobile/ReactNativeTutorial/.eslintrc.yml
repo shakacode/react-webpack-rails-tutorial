@@ -30,6 +30,7 @@
     no-console: 0
     import/imports-first: 2
     import/prefer-default-export: 2
+    no-duplicate-imports: 0
 
     # Delegating proptypes check to flow
     react/prop-types: 0
