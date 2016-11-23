@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
+import * as colors from 'ReactNativeTutorial/app/styles/colors';
 
 const styles = StyleSheet.create({
   container: {
     minHeight: 80,
     marginVertical: 10,
     marginHorizontal: 20,
-    backgroundColor: '#F0F0F0',
-    shadowColor: '#000000',
+    backgroundColor: colors.ITEM_BACKGROUND,
+    shadowColor: colors.SHADOW,
     shadowRadius: 11,
     shadowOpacity: 0.25,
     shadowOffset: {
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   body: {
     marginHorizontal: 10,
     marginBottom: 10,
-    color: '#555555',
+    color: colors.BODY_TEXT,
   },
 });
 
