@@ -30,10 +30,13 @@ install:
   - nvm install 6.7
   - nvm use 6.7
   - npm install
+
+# No need to run xvfb if running headless testing
 #before_script:
 #   - export DISPLAY=:99.0
 #   - sh -e /etc/init.d/xvfb start
+
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rspec
   - DRIVER=selenium_firefox bundle exec rake
+  - bundle exec rake
