@@ -7,13 +7,9 @@ gem "rails"
 gem "listen"
 
 # Note: We're using sqllite3 for development and testing
-gem "sqlite3", group: [:development, :test]
+# gem "sqlite3", group: [:development, :test]
 
-group :production do
-  # Pg is used for Heroku
-  gem "pg"
-  gem "rails_12factor" # Never include this for development or tests
-end
+gem "pg"
 
 gem "puma"
 
