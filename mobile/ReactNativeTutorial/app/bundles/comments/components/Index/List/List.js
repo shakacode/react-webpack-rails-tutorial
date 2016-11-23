@@ -2,12 +2,12 @@
 import React from 'react';
 import { ListView, RefreshControl } from 'react-native';
 import _ from 'lodash/fp';
+import type { IndexPropsType } from '../../../hocs/withIndexProps';
 import Item from './Item/Item';
 
 import styles from './ListStyle';
 
-type PropsType = {
-}
+type PropsType = IndexPropsType;
 
 const List = (props: PropsType) => {
   const data = _.compose(
