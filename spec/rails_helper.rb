@@ -41,7 +41,7 @@ RSpec.configure do |config|
   # Maybe selenium_firefox webdriver only works for Travis-CI builds.
   # 2016-03-06: Phantomjs, all options fails on MacOs
   # Same for webkit
-  default_driver = :selenium_chrome
+  default_driver = :poltergeist # :selenium_chrome
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
@@ -56,7 +56,9 @@ RSpec.configure do |config|
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
     require "capybara/poltergeist"
     opts = {
-      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"]
+      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"],
+      window_size: [1280, 720],
+      screen_size: [1600, 1200]
     }
 
     Capybara.register_driver :poltergeist_no_animations do |app|
@@ -83,7 +85,7 @@ RSpec.configure do |config|
   # Capybara.default_max_wait_time = 15
   puts "Capybara using driver: #{Capybara.javascript_driver}"
 
-  Capybara.save_path = Rails.root.join(*%w(tmp capybara))
+  Capybara.save_path = Rails.root.join("tmp", "capybara")
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

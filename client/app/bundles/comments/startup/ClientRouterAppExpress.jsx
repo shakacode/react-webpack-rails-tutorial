@@ -23,7 +23,9 @@ const RouterAppExpress = (_props, _railsContext) => {
 
   return (
     <Provider store={store}>
-      <Router history={history} children={routes} />
+      <Router history={history}>
+        {routes}
+      </Router>
     </Provider>
   );
 };
