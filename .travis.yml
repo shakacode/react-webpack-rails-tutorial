@@ -20,14 +20,19 @@ env:
     - RAILS_ENV=test
     - CXX=g++-4.9
     - SAUCE_LABS_URL=http://judahmeek:1ed6d81c-c3e0-4fd0-9012-1d2274c4b261@ondemand.saucelabs.com:80/wd/hub
+before_install:
+  - mkdir $PWD/travis-phantomjs
+  - curl -sSL https://github.com/Medium/phantomjs/releases/download/v2.1.1/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
+  - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
 install:
   - bundle install
-  - nvm install 6.3
-  - nvm use 6.3
+  - nvm install 6.7
+  - nvm use 6.7
   - npm install
-before_script:
-   - export DISPLAY=:99.0
-   - sh -e /etc/init.d/xvfb start
+#before_script:
+#   - export DISPLAY=:99.0
+#   - sh -e /etc/init.d/xvfb start
 script:
   - bundle exec rake db:schema:load
   - bundle exec rspec
