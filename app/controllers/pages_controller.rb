@@ -32,6 +32,11 @@ class PagesController < ApplicationController
     render_html
   end
 
+  def saga
+    redux_store("sagaCommentsStore", props: comments_json_string)
+    render_html
+  end
+
   def simple
   end
 

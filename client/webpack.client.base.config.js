@@ -35,6 +35,7 @@ module.exports = {
       'react-redux',
       'react-on-rails',
       'react-router-redux',
+      'redux-saga',
       'redux-thunk',
     ],
 
