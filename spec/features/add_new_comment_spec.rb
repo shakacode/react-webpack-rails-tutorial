@@ -42,7 +42,7 @@ feature "Add new comment" do
       include_examples "New Comment Submission", false
       include_examples "Validation errors displaying"
     end
-    context "via the Stacked Form", form: :stacked, driver: js_selenium_driver do
+    context "via the Stacked Form", form: :stacked do
       include_examples "New Comment Submission", false
       include_examples "Validation errors displaying"
     end
