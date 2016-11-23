@@ -4,10 +4,6 @@ rvm:
   - 2.3.1
 sudo: false
 addons:
-#  sauce_connect:
-#    username: "judahmeek"
-#  jwt:
-#    secure: "A/bVoePCHtwLGH4wVLCHK39+tml2axc/M/Mjnpg4m4bjgMI7GD4YqlnZMNrUBzNAv+Q66pp0sWjTy/Xm4tDaYnSxJFrWjD2wn5ZPpMEyB162nR+QqYqWl5DqP+jlOuIK+7iRmrRTlDS4LLTl43+nWxvRB16aat2U01P/+GKtQ+o="
   apt:
     sources:
       - ubuntu-toolchain-r-test
@@ -27,8 +23,8 @@ before_install:
   - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
 install:
   - bundle install
-  - nvm install 6.7
-  - nvm use 6.7
+  - nvm install 6.9.1
+  - nvm use 6.9.1
   - npm install
   - rake db:setup
 # No need to run xvfb if running headless testing
