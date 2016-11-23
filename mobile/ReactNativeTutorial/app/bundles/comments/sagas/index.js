@@ -6,7 +6,7 @@ import { reduxUtils } from '../../../utils';
 import commentsStoreSelector from '../../../selectors/commentsStoreSelector';
 import commentFormSelector from '../../../selectors/commentFormSelector';
 
-import { actions as reduxActions } from '../../../reducers'
+import { actions as reduxActions } from '../../../reducers';
 import * as api from '../../../api';
 
 const FETCH = 'SAGA:COMMENTS:FETCH';
@@ -18,16 +18,16 @@ function* fetchHandler() {
   yield put(reduxActions.setLoadingComments(true));
   try {
     const response = yield call(api.fetchComments);
-    yield put(reduxActions.createComments(response.entities.comments))
+    yield put(reduxActions.createComments(response.entities.comments));
   } catch (e) {
     console.log(e);
-    yield call(Alert.alert, 'Error', 'Could not connect to server', [{text: 'OK'}]);
+    yield call(Alert.alert, 'Error', 'Could not connect to server', [{ text: 'OK' }]);
   } finally {
     yield put(reduxActions.setLoadingComments(false));
   }
 }
 
-function* fetchSaga () {
+function* fetchSaga() {
   yield* takeLatest(FETCH, fetchHandler);
 }
 
@@ -36,7 +36,7 @@ function* updateFormHandler(action) {
   yield put(reduxActions.updateCommentForm(action.payload));
 }
 
-function* updateFormSaga () {
+function* updateFormSaga() {
   yield* takeLatest(UPDATE_FORM, updateFormHandler);
 }
 
@@ -47,7 +47,7 @@ function* createCommentHandler() {
   const tempId = reduxUtils.getNewId(commentsStore);
 
   const comment = commentFormSelector(state).merge({ id: tempId }).delete('meta');
-  const reduxComment = {[tempId]: comment.toJS()};
+  const reduxComment = { [tempId]: comment.toJS() };
   yield put(reduxActions.createComments(reduxComment));
   yield call(navigationActions.pop);
   try {
@@ -56,20 +56,20 @@ function* createCommentHandler() {
     yield put(reduxActions.resetCommentForm());
   } catch (e) {
     console.log(e);
-    yield call(Alert.alert, 'Error', 'Could not post your comment', [{text: 'OK'}]);
+    yield call(Alert.alert, 'Error', 'Could not post your comment', [{ text: 'OK' }]);
   } finally {
     yield put(reduxActions.removeComment(tempId));
   }
 }
 
-function* createCommentSaga () {
+function* createCommentSaga() {
   yield* takeLatest(CREATE_COMMENT, createCommentHandler);
 }
 
 export default [
   fetchSaga,
   updateFormSaga,
-  createCommentSaga
+  createCommentSaga,
 ];
 
 const fetch = () => ({ type: FETCH });
@@ -79,5 +79,5 @@ const createComment = (payload) => ({ type: CREATE_COMMENT, payload });
 export const actions = {
   fetch,
   updateForm,
-  createComment
+  createComment,
 };

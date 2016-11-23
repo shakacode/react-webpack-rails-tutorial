@@ -4,12 +4,10 @@ const UPDATE = 'COMMENT_FORM:UPDATE';
 const RESET = 'COMMENT_FORM:RESET';
 
 export const initialState = fromJS({
-  meta: {}
+  meta: {},
 });
 
-const update = (state, action) => {
-  return state.merge(action.payload);
-};
+const update = (state, action) => state.merge(action.payload);
 
 export default (state, action) => {
   if (!state) {
@@ -25,15 +23,10 @@ export default (state, action) => {
   }
 };
 
-const updateCommentForm = (payload) => {
-  return {type: UPDATE, payload};
-};
-
-const resetCommentForm = () => {
-  return {type: RESET};
-};
+const updateCommentForm = (payload) => ({ type: UPDATE, payload });
+const resetCommentForm = () => ({ type: RESET });
 
 export const actions = {
   updateCommentForm,
-  resetCommentForm
+  resetCommentForm,
 };

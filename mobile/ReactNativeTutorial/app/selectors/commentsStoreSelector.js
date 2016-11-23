@@ -1,1 +1,1 @@
-export default state => state.get('commentsStore')
+export default state => state.get('commentsStore');

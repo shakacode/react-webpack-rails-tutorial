@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 10,
     color: '#555555',
-  }
+  },
 });
 
 export default styles;

@@ -1,0 +1,61 @@
+---
+  extends:
+    - "eslint-config-shakacode"
+  plugins:
+    - "react-native"
+    - "flowtype"
+
+  env:
+    node: true
+  settings:
+    import/resolver:
+      node:
+        extensions:
+          - ".js"
+          - ".android.js"
+          - ".ios.js"
+        moduleDirectory:
+          - "."
+          - "node_modules"
+    flowtype:
+      onlyFilesWithFlowAnnotation: true
+  globals:
+    __DEV__: true
+    ReactClass: true
+    ReactElement: true
+    fetch: true
+  rules:
+    new-cap: 0
+    react/sort-comp: 0
+    no-console: 0
+    import/imports-first: 2
+    import/prefer-default-export: 2
+
+    # Delegating proptypes check to flow
+    react/prop-types: 0
+
+    react-native/no-unused-styles: 2
+    react-native/split-platform-components: 2
+    react-native/no-inline-styles: 2
+
+    react/jsx-filename-extension:
+      - 1
+      - extensions: [".js", ".jsx"]
+
+    flowtype/require-parameter-type: 1
+    flowtype/require-return-type:
+      - 0
+      - "always"
+      - annotateUndefined: "never"
+    flowtype/require-valid-file-annotation:
+      - 2
+      - "always"
+    flowtype/space-after-type-colon:
+      - 2
+      - "always"
+    flowtype/space-before-type-colon:
+      - 2
+      - "never"
+    flowtype/type-id-match:
+      - 2
+      - "^([A-Z][a-z0-9]+)+Type$"

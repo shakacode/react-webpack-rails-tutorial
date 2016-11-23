@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { ListView, RefreshControl } from 'react-native';
-import Item from './Item/Item';
 import _ from 'lodash/fp';
+import Item from './Item/Item';
 
 import styles from './ListStyle';
 
@@ -15,23 +15,22 @@ const List = (props: PropsType) => {
     _.sortBy(_.get('id')),
     _.values
   )(props.comments);
-  const dataSource = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+  const dataSource = new ListView.DataSource({ rowHasChanged: (r1: any, r2: any) => r1 !== r2 })
     .cloneWithRows(data);
   return (
     <ListView
       enableEmptySections
       style={styles.container}
       dataSource={dataSource}
-      renderRow={(item) => <Item {...item} />}
+      renderRow={(item: any) => <Item {...item} />}
       refreshControl={
-          <RefreshControl
-            refreshing={props.meta.loading}
-            onRefresh={props.actions.fetch}
-            tintColor="#4641B5"
-          />
-        }
-    >
-    </ListView>
+        <RefreshControl
+          refreshing={props.meta.loading}
+          onRefresh={props.actions.fetch}
+          tintColor="#4641B5"
+        />
+      }
+    />
   );
 };
 

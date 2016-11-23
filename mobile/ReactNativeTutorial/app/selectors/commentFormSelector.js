@@ -1,1 +1,1 @@
-export default state => state.get('commentForm')
+export default state => state.get('commentForm');

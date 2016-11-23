@@ -2,7 +2,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './setup/store';
-import Router from './setup/Router';
+import Router from './setup/Router/Router';
 
 const App = () => (
   <Provider store={store}>
