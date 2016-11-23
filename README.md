@@ -64,6 +64,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
 - Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
 - Example setting up Ruby and JavaScript linting in a real project, with corresponding CI rake tasks.
+- Example setting up code splitting.
 
 ### Technologies involved
 
@@ -105,6 +106,9 @@ See package.json and Gemfile for versions
 1. See all npm commands: `npm run`
 1. To start all development processes: `foreman start -f Procfile.dev`
 1. To start only all Rails development processes: `foreman start -f Procfile.hot`
+
+### Code Splitting
+Run `foreman start -f Procfile.static.splitting` to see dynamically loaded code chunks in action. Navigate to [http://localhost:5000](http://localhost:5000), then open the network tab of Chrome devtools and watch as a script gets fetched when you click on "Test react router". Then, try clicking on "Test Redirect". Notice that nothing gets fetched. This is because the route is redirected by the `onEnter` hook.
 
 ### Experimenting with Hot Reloading: applies to both `Procfile.hot` and `Procfile.express`
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the screen update without refreshing the window. This applies to port 3000 and port 4000.

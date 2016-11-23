@@ -1,3 +1,16 @@
+GIT
+  remote: git://github.com/jtibbertsma/react_on_rails.git
+  revision: d09a6b6e2224f7b3a8da8f98ff347f61909a7a2f
+  branch: skip-version-check
+  specs:
+    react_on_rails (6.1.2)
+      addressable
+      connection_pool
+      execjs (~> 2.5)
+      foreman
+      rails (>= 3.2)
+      rainbow (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -205,13 +218,6 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
-    react_on_rails (6.1.0)
-      addressable
-      connection_pool
-      execjs (~> 2.5)
-      foreman
-      rails (>= 3.2)
-      rainbow (~> 2.1)
     rspec-core (3.5.0.beta3)
       rspec-support (= 3.5.0.beta3)
     rspec-expectations (3.5.0.beta3)
@@ -336,7 +342,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_12factor
   rainbow
-  react_on_rails (~> 6.1)
+  react_on_rails!
   rspec-rails (= 3.5.0.beta3)
   rspec-retry
   rubocop

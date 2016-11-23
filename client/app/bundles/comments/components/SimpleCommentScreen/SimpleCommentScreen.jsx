@@ -19,7 +19,9 @@ export default class SimpleCommentScreen extends BaseComponent {
       submitCommentError: null,
     };
 
+    /* eslint-disable no-undef */
     _.bindAll(this, 'fetchComments', 'handleCommentSubmit');
+    /* eslint-enable no-undef */
   }
 
   componentDidMount() {
