@@ -254,7 +254,7 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    selenium-webdriver (3.0.0)
+    selenium-webdriver (2.53.4)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
@@ -343,7 +343,7 @@ DEPENDENCIES
   sass-rails
   scss_lint
   sdoc
-  selenium-webdriver
+  selenium-webdriver (< 3.0.0)
   spring
   spring-commands-rspec
   sqlite3
