@@ -4,10 +4,10 @@ rvm:
   - 2.3.1
 sudo: false
 addons:
-  sauce_connect:
-    username: "judahmeek"
-  jwt:
-    secure: "A/bVoePCHtwLGH4wVLCHK39+tml2axc/M/Mjnpg4m4bjgMI7GD4YqlnZMNrUBzNAv+Q66pp0sWjTy/Xm4tDaYnSxJFrWjD2wn5ZPpMEyB162nR+QqYqWl5DqP+jlOuIK+7iRmrRTlDS4LLTl43+nWxvRB16aat2U01P/+GKtQ+o="
+#  sauce_connect:
+#    username: "judahmeek"
+#  jwt:
+#    secure: "A/bVoePCHtwLGH4wVLCHK39+tml2axc/M/Mjnpg4m4bjgMI7GD4YqlnZMNrUBzNAv+Q66pp0sWjTy/Xm4tDaYnSxJFrWjD2wn5ZPpMEyB162nR+QqYqWl5DqP+jlOuIK+7iRmrRTlDS4LLTl43+nWxvRB16aat2U01P/+GKtQ+o="
   apt:
     sources:
       - ubuntu-toolchain-r-test
@@ -38,5 +38,5 @@ install:
 
 script:
   - bundle exec rake db:schema:load
-  - DRIVER=selenium_firefox bundle exec rake
+  #  - DRIVER=selenium_firefox bundle exec rake
   - bundle exec rake
