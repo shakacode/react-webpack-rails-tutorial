@@ -30,4 +30,5 @@ before_script:
    - sh -e /etc/init.d/xvfb start
 script:
   - bundle exec rake db:schema:load
+  - bundle exec rspec
   - DRIVER=selenium_firefox bundle exec rake
