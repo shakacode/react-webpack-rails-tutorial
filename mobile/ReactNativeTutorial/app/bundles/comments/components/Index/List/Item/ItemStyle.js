@@ -8,18 +8,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     backgroundColor: colors.ITEM_BACKGROUND,
     shadowColor: colors.SHADOW,
-    shadowRadius: 11,
+    shadowRadius: 5,
     shadowOpacity: 0.25,
     shadowOffset: {
       height: 2,
       width: 0,
     },
+    elevation: 5,
   },
   header: {
     marginVertical: 5,
     fontWeight: 'bold',
     fontSize: 17,
     textAlign: 'center',
+    color: colors.HEADER_TEXT,
   },
   body: {
     marginHorizontal: 10,
