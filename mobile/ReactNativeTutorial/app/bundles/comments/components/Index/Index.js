@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { View } from 'react-native';
-import _ from 'lodash/fp';
 import List from './List/List';
 import Footer from './Footer/Footer';
 import withIndexProps from '../../hocs/withIndexProps';
@@ -16,10 +15,6 @@ class Index extends React.Component {
 
   props: PropsType;
 
-  constructor(props: PropsType) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.actions.fetch();
   }
@@ -30,7 +25,7 @@ class Index extends React.Component {
         <List {...this.props} />
         <Footer />
       </View>
-    )
+    );
   }
 }
 

@@ -6,7 +6,10 @@ import { createSelector } from 'reselect';
 import commentFormSelector from '../../../selectors/commentFormSelector';
 import { actions } from '../sagas';
 
-const mapStateToProps = createSelector(commentFormSelector, commentForm => commentForm.toJS());
+const mapStateToProps = createSelector(
+  commentFormSelector,
+  (commentForm: any) => commentForm.toJS()
+);
 
 const mapDispatchToProps = (dispatch: Function) => ({
   actions: bindActionCreators(actions, dispatch),

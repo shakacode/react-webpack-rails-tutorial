@@ -8,7 +8,7 @@ import { actions } from '../sagas';
 
 const mapStateToProps = createSelector(
   commentsStoreSelector,
-  commentsStore => ({
+  (commentsStore: any) => ({
     comments: commentsStore.delete('meta').toJS(),
     meta: commentsStore.get('meta').toJS(),
   })

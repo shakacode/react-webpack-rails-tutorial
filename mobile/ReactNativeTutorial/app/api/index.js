@@ -8,12 +8,12 @@ function* apiRequest(url, method, payload) {
   let options = {
     method,
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       'X-Auth': 'tutorial_secret',
-    }
+    },
   };
-  if (payload) options = {...options, body: JSON.stringify(payload)};
+  if (payload) options = { ...options, body: JSON.stringify(payload) };
   const response = yield call(fetch, `${API_URL}${url}`, options);
   return yield call(response.json.bind(response));
 }

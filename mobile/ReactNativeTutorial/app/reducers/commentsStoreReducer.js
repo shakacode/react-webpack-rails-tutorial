@@ -10,17 +10,9 @@ export const initialState = fromJS({
   },
 });
 
-const create = (state, action) => {
-  return state.merge(action.entities);
-};
-
-const remove = (state, action) => {
-  return state.delete(action.id);
-};
-
-const setLoading = (state, action) => {
-  return state.setIn(['meta', 'loading'], action.loading);
-};
+const create = (state, action) => state.merge(action.entities);
+const remove = (state, action) => state.delete(action.id);
+const setLoading = (state, action) => state.setIn(['meta', 'loading'], action.loading);
 
 export default (state, action) => {
   if (!state) {
@@ -39,17 +31,9 @@ export default (state, action) => {
   }
 };
 
-const createComments = (entities) => {
-  return {type: CREATE, entities};
-};
-
-const removeComment = (id) => {
-  return {type: REMOVE, id };
-};
-
-const setLoadingComments = (loading) => {
-  return {type: SET_LOADING, loading};
-};
+const createComments = (entities) => ({ type: CREATE, entities });
+const removeComment = (id) => ({ type: REMOVE, id });
+const setLoadingComments = (loading) => ({ type: SET_LOADING, loading });
 
 export const actions = {
   createComments,

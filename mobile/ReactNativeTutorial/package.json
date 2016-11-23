@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "flow": "flow",
+    "lint": "node_modules/eslint/bin/eslint.js --config .eslintrc.yml app"
   },
   "dependencies": {
     "immutable": "^3.8.1",
@@ -30,9 +32,11 @@
     "babel-preset-react-native": "1.9.0",
     "eslint": "^3.10.2",
     "eslint-config-shakacode": "^13.1.0",
+    "eslint-plugin-flowtype": "^2.25.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
+    "eslint-plugin-react-native": "^2.1.0",
     "jest": "17.0.3",
     "jest-react-native": "17.0.3",
     "react-test-renderer": "15.3.2"

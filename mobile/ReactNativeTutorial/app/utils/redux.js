@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import _ from 'lodash/fp';
 
 export const getNewId = (store) => {
