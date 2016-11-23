@@ -1,4 +1,4 @@
-/* eslint no-var: 0, no-console: 0 */
+/* eslint no-var: 0, no-console: 0, import/no-extraneous-dependencies: 0 */
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
@@ -27,7 +27,7 @@ const devServer = new WebpackDevServer(compiler, {
   },
 });
 
-devServer.listen(hotRailsPort, 'localhost', err => {
+devServer.listen(hotRailsPort, 'localhost', (err) => {
   if (err) console.error(err);
   console.log(
     `=> 🔥  Webpack development server is running on port ${hotRailsPort}`

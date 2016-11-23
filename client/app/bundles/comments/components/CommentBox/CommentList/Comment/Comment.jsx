@@ -14,6 +14,7 @@ export default class Comment extends BaseComponent {
     const { author, text } = this.props;
     const rawMarkup = marked(text, { gfm: true, sanitize: true });
 
+    /* eslint-disable react/no-danger */
     return (
       <div className={css.comment}>
         <h2 className={`${css.commentAuthor} js-comment-author`}>
