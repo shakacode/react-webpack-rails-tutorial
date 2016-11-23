@@ -2,7 +2,11 @@ import _ from 'lodash/fp';
 import { call } from 'redux-saga/effects';
 import { normalize, Schema, arrayOf } from 'normalizr';
 
-const API_URL = __DEV__ ? 'http://localhost:3000/' : 'http://www.reactrails.com/';
+// You can use localhost for development, but only on iOS. Android emulator is considered
+// a standalone machine with it's own localhost. Workaround is to specify the actual
+// IP address of your PC.
+// const API_URL = __DEV__ ? 'http://localhost:3000/' : 'http://www.reactrails.com/';
+const API_URL = 'http://www.reactrails.com/';
 
 function* apiRequest(url, method, payload) {
   let options = {
