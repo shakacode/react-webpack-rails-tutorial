@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 
 import BaseComponent from 'libs/components/BaseComponent';
@@ -180,7 +180,7 @@ export default class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formBasicName">
             <ControlLabel>Name</ControlLabel>
             <FormControl
@@ -227,7 +227,7 @@ export default class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form inline className="commentForm form-inline" onSubmit={this.handleSubmit}>
+        <Form inline className="commentForm" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formInlineName" >
             <ControlLabel>
               Name
@@ -311,12 +311,16 @@ export default class CommentForm extends BaseComponent {
 
     const { cssTransitionGroupClassNames } = this.props;
 
+    // For animation with ReactCSSTransitionGroup
+    //   https://facebook.github.io/react/docs/animation.html
+    // The 500 must correspond to the 0.5s in:
+    //   client/app/bundles/comments/components/CommentBox/CommentBox.scss:6
     return (
       <div>
         <ReactCSSTransitionGroup
           transitionName={cssTransitionGroupClassNames}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
         >
           {this.errorWarning()}
         </ReactCSSTransitionGroup>

@@ -4,8 +4,8 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server-express.js",
   "engines": {
-    "node": "5.0.0",
-    "npm": "3.5.0"
+    "node": "7.2.0",
+    "npm": "4.0.2"
   },
   "repository": {
     "type": "git",
@@ -70,6 +70,7 @@
     "node-uuid": "^1.4.7",
     "postcss-loader": "^1.1.1",
     "react": "^15.4.1",
+    "react-addons-css-transition-group": "^15.4.1",
     "react-addons-pure-render-mixin": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",

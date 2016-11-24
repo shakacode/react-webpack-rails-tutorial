@@ -114,6 +114,8 @@ See package.json and Gemfile for versions
 
 ## Javascript development without Rails: using the Webpack Dev Server
 
+We include a sample setup for developing your JavaScript files without Rails. However, this is no longer recommended as it's best to create your APIs in Rails, and take advantage of the hot reloading of your react components provided by this project.
+
 1. Run the node server with file `server-express.js` with command `npm run` or `cd client && node server-express.js`.
 2. Point your browser to [http://localhost:4000](http://localhost:4000)
 
@@ -141,6 +143,9 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
   <%= env_javascript_include_tag(static: 'application_static', hot: 'application_non_webpack', options: { 'data-turbolinks-track' => true }) %>
   ```
 
+## Testing
+
++ Be sure to see [Integration Test Notes](./docs/integration-test-notes.md) for advice on running your integration tests.
 
 + **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
