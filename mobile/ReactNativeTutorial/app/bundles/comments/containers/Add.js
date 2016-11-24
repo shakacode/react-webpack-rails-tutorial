@@ -1,10 +1,12 @@
 // @flow
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import commentFormSelector from '../../../selectors/commentFormSelector';
 import { actions } from '../sagas';
+import Add from '../components/Add/Add';
 
 export type AddPropsType = {
   author?: string,
@@ -25,5 +27,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   actions: bindActionCreators(actions, dispatch),
 });
 
-export default (Component: ReactClass<AddPropsType>): ReactClass<{}> =>
-  connect(mapStateToProps, mapDispatchToProps)(Component);
+const AddContainer = (props: AddPropsType) => <Add {...props} />;
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddContainer);

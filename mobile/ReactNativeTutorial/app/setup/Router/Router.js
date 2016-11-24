@@ -1,7 +1,7 @@
 import React from 'react';
 import { Scene, Router, Reducer } from 'react-native-router-flux';
-import Add from '../../bundles/comments/components/Add/Add';
-import Index from '../../bundles/comments/components/Index/Index';
+import Add from '../../bundles/comments/containers/Add';
+import Index from '../../bundles/comments/containers/Index';
 
 import styles from './RouterStyle';
 

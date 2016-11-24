@@ -1,10 +1,14 @@
+/* eslint-disable react/no-unused-prop-types */
 // @flow
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import commentsStoreSelector from '../../../selectors/commentsStoreSelector';
 import { actions } from '../sagas';
+
+import Index from '../components/Index/Index';
 
 type CommentType = {
   author?: string,
@@ -23,6 +27,19 @@ export type IndexPropsType = {
   }
 }
 
+class IndexContainer extends React.Component {
+
+  props: IndexPropsType;
+
+  componentDidMount() {
+    this.props.actions.fetch();
+  }
+
+  render() {
+    return <Index {...this.props} />;
+  }
+}
+
 const mapStateToProps = createSelector(
   commentsStoreSelector,
   (commentsStore: any) => ({
@@ -35,5 +52,4 @@ const mapDispatchToProps = (dispatch: Function) => ({
   actions: bindActionCreators(actions, dispatch),
 });
 
-export default (Component: ReactClass<IndexPropsType>): ReactClass<{}> =>
-  connect(mapStateToProps, mapDispatchToProps)(Component);
+export default connect(mapStateToProps, mapDispatchToProps)(IndexContainer);
