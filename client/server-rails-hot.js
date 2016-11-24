@@ -30,6 +30,6 @@ const devServer = new WebpackDevServer(compiler, {
 devServer.listen(hotRailsPort, 'localhost', (err) => {
   if (err) console.error(err);
   console.log(
-    `=> 🔥  Webpack development server is running on port ${hotRailsPort}`
+    `=> 🔥  Webpack development server is running on port ${hotRailsPort}`,
   );
 });

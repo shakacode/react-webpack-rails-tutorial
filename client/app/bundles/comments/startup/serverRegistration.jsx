@@ -14,7 +14,7 @@ ReactOnRails.register(
     RouterApp,
     NavigationBarApp,
     SimpleCommentScreen,
-  }
+  },
 );
 
 ReactOnRails.registerStore({

@@ -44,7 +44,7 @@ export default class CommentList extends BaseComponent {
         key={$$comment.get('id') || index}
         author={$$comment.get('author')}
         text={$$comment.get('text')}
-      />
+      />,
     );
 
     return (

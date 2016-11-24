@@ -11,7 +11,7 @@ const {
 describe('Comment', () => {
   it('renders an author and comment with proper css classes', () => {
     const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />
+      <Comment author="Frank" text="Hi!" />,
     );
 
     // TODO: Setup testing of CSS Modules classNames
@@ -25,7 +25,7 @@ describe('Comment', () => {
 
   it('shows the author', () => {
     const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />
+      <Comment author="Frank" text="Hi!" />,
     );
 
     const author = findRenderedDOMComponentWithClass(component, 'js-comment-author');
@@ -34,7 +34,7 @@ describe('Comment', () => {
 
   it('shows the comment text in markdown', () => {
     const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />
+      <Comment author="Frank" text="Hi!" />,
     );
 
     const comment = findRenderedDOMComponentWithClass(component, 'js-comment-text');

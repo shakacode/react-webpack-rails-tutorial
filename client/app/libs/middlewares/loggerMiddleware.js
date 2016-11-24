@@ -15,7 +15,6 @@ export default function logger({ getState }) {
       readableState[storeItem] = (
         state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem]
       );
-      return;
     });
 
     console.log('state after dispatch', readableState);

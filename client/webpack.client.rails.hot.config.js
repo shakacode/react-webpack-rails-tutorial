@@ -1,3 +1,6 @@
+/* eslint comma-dangle: ["error",
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+
 // Run with Rails server like this:
 // rails s
 // cd client && babel-node server-rails-hot.js

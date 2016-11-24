@@ -1,3 +1,6 @@
+/* eslint comma-dangle: ["error",
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+
 // Common webpack configuration for server bundle
 
 const webpack = require('webpack');
