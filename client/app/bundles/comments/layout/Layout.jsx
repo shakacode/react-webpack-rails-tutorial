@@ -10,6 +10,7 @@ export default class Layout extends BaseComponent {
     children: PropTypes.object.isRequired,
   };
 
+  /* eslint-disable react/no-unescaped-entities */
   render() {
     return (
       <section>

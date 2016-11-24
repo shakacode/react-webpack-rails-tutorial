@@ -21,6 +21,9 @@ AllCops:
 Metrics/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Max: 25
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 

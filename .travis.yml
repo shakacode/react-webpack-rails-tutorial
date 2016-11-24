@@ -7,22 +7,31 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - travis-ci/sqlite3
     packages:
       - g++-4.9
-      - sqlite3
+services:
+  - postgresql
 env:
   global:
     - RAILS_ENV=test
     - CXX=g++-4.9
+before_install:
+  - mkdir $PWD/travis-phantomjs
+  - curl -sSL https://github.com/Medium/phantomjs/releases/download/v2.1.1/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
+  - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
 install:
   - bundle install
-  - nvm install 6.3
-  - nvm use 6.3
+  - nvm install 6.9.1
+  - nvm use 6.9.1
   - npm install
-before_script:
-   - export DISPLAY=:99.0
-   - sh -e /etc/init.d/xvfb start
+  - rake db:setup
+# No need to run xvfb if running headless testing
+#before_script:
+#   - export DISPLAY=:99.0
+#   - sh -e /etc/init.d/xvfb start
+
 script:
   - bundle exec rake db:schema:load
-  - DRIVER=selenium_firefox bundle exec rake
+  #  - DRIVER=selenium_firefox bundle exec rake
+  - bundle exec rake

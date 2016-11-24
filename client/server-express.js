@@ -1,4 +1,4 @@
-/* eslint-disable no-console, func-names, no-var */
+/* eslint-disable no-console, func-names, no-var, import/no-extraneous-dependencies */
 var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
@@ -28,7 +28,7 @@ var server = new WebpackDevServer(webpack(config), {
 server.app.use(bodyParser.json(null));
 server.app.use(bodyParser.urlencoded({ extended: true }));
 
-server.app.get('/comments.json', (req, res) => {
+server.app.get('/comments.json', (_req, res) => {
   sleep.sleep(1);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ comments }));
@@ -47,7 +47,7 @@ server.app.post('/comments.json', (req, res) => {
   res.send(JSON.stringify(comment));
 });
 
-server.app.use('/', (req, res) => {
+server.app.use('/', (_req, res) => {
   var locals = {
     props: JSON.stringify({ comments }),
   };

@@ -7,13 +7,9 @@ gem "rails"
 gem "listen"
 
 # Note: We're using sqllite3 for development and testing
-gem "sqlite3", group: [:development, :test]
+# gem "sqlite3", group: [:development, :test]
 
-group :production do
-  # Pg is used for Heroku
-  gem "pg"
-  gem "rails_12factor" # Never include this for development or tests
-end
+gem "pg"
 
 gem "puma"
 
@@ -104,7 +100,7 @@ group :test  do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails", "3.5.0.beta3"
+  gem "rspec-rails", "~> 3"
   gem "rspec-retry"
-  gem "selenium-webdriver", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
+  gem "selenium-webdriver", "<3.0.0", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
 end
