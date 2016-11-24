@@ -36,7 +36,7 @@ describe('CommentList', () => {
       <CommentList
         $$comments={comments}
         cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-      />
+      />,
     );
     const list = scryRenderedComponentsWithType(component, Comment);
     expect(list.length).to.equal(2);
@@ -49,7 +49,7 @@ describe('CommentList', () => {
       <CommentList
         $$comments={comments} error="zomg"
         cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-      />
+      />,
     );
 
     const alert = findRenderedDOMComponentWithTag(component, 'strong');

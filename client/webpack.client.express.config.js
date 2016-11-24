@@ -1,3 +1,6 @@
+/* eslint comma-dangle: ["error",
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+
 // Run like this:
 // cd client && node server-express.js
 

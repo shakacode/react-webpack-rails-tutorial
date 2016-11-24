@@ -94,7 +94,7 @@
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
     "eslint": "^3.10.2",
-    "eslint-config-shakacode": "^13.1.0",
+    "eslint-config-shakacode": "^13.2.0-beta.1",
     "eslint-import-resolver-webpack": "^0.7.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",

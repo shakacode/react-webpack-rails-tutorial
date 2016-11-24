@@ -18,7 +18,7 @@ const RouterAppExpress = (_props, _railsContext) => {
   // Create an enhanced history that syncs navigation events with the store
   const history = syncHistoryWithStore(
     browserHistory,
-    store
+    store,
   );
 
   return (

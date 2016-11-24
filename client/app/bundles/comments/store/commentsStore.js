@@ -15,7 +15,7 @@ export default (props, railsContext) => {
 
   const reducer = combineReducers(reducers);
   const composedStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
+    applyMiddleware(thunkMiddleware, loggerMiddleware),
   );
 
   return composedStore(createStore)(reducer, initialState);
