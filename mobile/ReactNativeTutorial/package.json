@@ -25,7 +25,10 @@
     "whatwg-fetch": "^2.0.1"
   },
   "jest": {
-    "preset": "jest-react-native"
+    "preset": "jest-react-native",
+    "setupFiles": [
+      "./.jest.js"
+    ]
   },
   "devDependencies": {
     "babel-jest": "17.0.2",
@@ -40,6 +43,7 @@
     "flow-bin": "^0.33.0",
     "jest": "17.0.3",
     "jest-react-native": "17.0.3",
-    "react-test-renderer": "15.3.2"
+    "react-test-renderer": "15.3.2",
+    "redux-mock-store": "^1.2.1"
   }
 }
