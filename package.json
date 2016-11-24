@@ -1,11 +1,11 @@
 {
   "name": "react-webpack-rails-tutorial",
-  "version": "1.1.1",
-  "description": "Code from the React Webpack tutorial.",
+  "version": "2.0.0",
+  "description": "ShakaCode's example of React on Rails plus React Native",
   "main": "server-express.js",
   "engines": {
-    "node": "5.0.0",
-    "npm": "3.3.6"
+    "node": "7.2.0",
+    "npm": "4.0.2"
   },
   "scripts": {
     "postinstall": "cd client && npm install",
@@ -24,8 +24,8 @@
     "start": "(cd client && npm run start --silent)"
   },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/shakacode/react-webpack-rails-tutorial.git"
+    "url": "https://github.com/shakacode/react-webpack-rails-tutorial.git",
+    "type": "git"
   },
   "keywords": [
     "react",
@@ -39,10 +39,8 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "cacheDirectories": [
     "node_modules",
     "client/node_modules"

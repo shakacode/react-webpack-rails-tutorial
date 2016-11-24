@@ -40,7 +40,7 @@ RSpec.configure do |config|
     # Show retry status in spec process
     config.verbose_retry = true
     # Try twice (retry once)
-    config.default_retry_count = 6
+    config.default_retry_count = 4
     # Only retry when Selenium raises Net::ReadTimeout
     # config.exceptions_to_retry = [Net::ReadTimeout]
   end
@@ -92,7 +92,7 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  # config.order = :random
+  config.order = :random
 
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce

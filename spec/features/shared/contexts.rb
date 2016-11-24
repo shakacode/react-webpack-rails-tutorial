@@ -16,13 +16,26 @@ end
 
 # Forms
 shared_context "Horizontal Form", form: :horizontal do
-  background { click_link "Horizontal Form" }
+  background do
+    # added an extra click on this the non-default link to try to tease out a poltergeist crash
+    click_link "Inline Form"
+    expect(page).to have_css("form.commentForm.form-inline")
+
+    click_link "Horizontal Form"
+    expect(page).to have_css("form.commentForm.form-horizontal")
+  end
 end
 shared_context "Inline Form", form: :inline do
-  background { click_link "Inline Form" }
+  background do
+    click_link "Inline Form"
+    expect(page).to have_css("form.commentForm.form-inline")
+  end
 end
 shared_context "Stacked Form", form: :stacked do
-  background { click_link "Stacked Form" }
+  background do
+    click_link "Stacked Form"
+    expect(page).to have_css("form.commentForm.form-stacked")
+  end
 end
 
 # Form Submission

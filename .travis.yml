@@ -3,6 +3,8 @@ language:
 rvm:
   - 2.3.1
 sudo: false
+notifications:
+  slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
 addons:
   apt:
     sources:
@@ -22,16 +24,18 @@ before_install:
   - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
 install:
   - bundle install
-  - nvm install 6.9.1
-  - nvm use 6.9.1
+  - chromedriver-update
+  - nvm install stable && nvm alias default stable
+  - npm install npm@latest -g
+  - npm --version
   - npm install
+  - npm run build:client && npm run build:server
   - rake db:setup
 # No need to run xvfb if running headless testing
-#before_script:
-#   - export DISPLAY=:99.0
-#   - sh -e /etc/init.d/xvfb start
+before_script:
+   - export DISPLAY=:99.0
+   - sh -e /etc/init.d/xvfb start
 
 script:
   - bundle exec rake db:schema:load
-  #  - DRIVER=selenium_firefox bundle exec rake
-  - bundle exec rake
+  - DRIVER=poltergeist_errors_ok bundle exec rake

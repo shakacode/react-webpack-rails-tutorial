@@ -6,6 +6,7 @@ require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rspec"
+require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
 require "database_cleaner"
 
@@ -38,10 +39,12 @@ RSpec.configure do |config|
   # Next line will ensure that assets are built if webpack -w is not running
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
 
-  # Maybe selenium_firefox webdriver only works for Travis-CI builds.
-  # 2016-03-06: Phantomjs, all options fails on MacOs
-  # Same for webkit
-  default_driver = :poltergeist # :selenium_chrome
+  # For Poltergeist
+  # Turning animations off results in about a 10 sec difference:
+
+  # Using errors_ok as there is a timing issue causing crashes without this setting
+  # https://github.com/teampoltergeist/poltergeist/issues/830
+  default_driver = :poltergeist_errors_ok
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
@@ -54,19 +57,26 @@ RSpec.configure do |config|
 
   case driver
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
-    require "capybara/poltergeist"
-    opts = {
-      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"],
-      window_size: [1280, 720],
-      screen_size: [1600, 1200]
+    basic_opts = {
+      window_size: [1300, 1800],
+      phantomjs_options: ["--load-images=no", "--ignore-ssl-errors=true"],
+      timeout: 180
     }
 
+    Capybara.register_driver :poltergeist do |app|
+      Capybara::Poltergeist::Driver.new(app, basic_opts)
+    end
+
+    no_animation_opts = basic_opts.merge( # Leaving animations off, as a sleep was still needed.
+      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"]
+    )
+
     Capybara.register_driver :poltergeist_no_animations do |app|
-      Capybara::Poltergeist::Driver.new(app, opts)
+      Capybara::Poltergeist::Driver.new(app, no_animation_opts)
     end
 
     Capybara.register_driver :poltergeist_errors_ok do |app|
-      Capybara::Poltergeist::Driver.new(app, opts.merge(js_errors: false))
+      Capybara::Poltergeist::Driver.new(app, no_animation_opts.merge(js_errors: false))
     end
   when :selenium_chrome
     DriverRegistration.register_selenium_chrome
@@ -129,7 +139,12 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
+    # Experimental to fix failing poltergeist tests
+    # page.driver.restart if defined?(page.driver.restart)
     Capybara.reset_sessions!
+  end
+
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
