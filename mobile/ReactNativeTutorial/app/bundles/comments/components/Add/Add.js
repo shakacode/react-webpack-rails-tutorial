@@ -3,8 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
-import withAddProps from '../../hocs/withAddProps';
-import type { AddPropsType } from '../../hocs/withAddProps';
+import type { AddPropsType } from '../../containers/Add';
 
 import styles from './AddStyle';
 
@@ -26,4 +25,4 @@ const Add = (props: PropsType) => (
   </View>
 );
 
-export default withAddProps(Add);
+export default Add;

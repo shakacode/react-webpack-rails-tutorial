@@ -3,29 +3,17 @@ import React from 'react';
 import { View } from 'react-native';
 import List from './List/List';
 import Footer from './Footer/Footer';
-import withIndexProps from '../../hocs/withIndexProps';
-import type { IndexPropsType } from '../../hocs/withIndexProps';
+import type { IndexPropsType } from '../../containers/Index';
 
 import styles from './IndexStyle';
 
 type PropsType = IndexPropsType;
 
-class Index extends React.Component {
+const Index = (props: PropsType) => (
+  <View style={styles.container}>
+    <List {...props} />
+    <Footer />
+  </View>
+);
 
-  props: PropsType;
-
-  componentDidMount() {
-    this.props.actions.fetch();
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <List {...this.props} />
-        <Footer />
-      </View>
-    );
-  }
-}
-
-export default withIndexProps(Index);
+export default Index;

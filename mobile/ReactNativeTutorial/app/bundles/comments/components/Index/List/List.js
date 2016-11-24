@@ -2,7 +2,7 @@
 import React from 'react';
 import { ListView, RefreshControl } from 'react-native';
 import _ from 'lodash/fp';
-import type { IndexPropsType } from '../../../hocs/withIndexProps';
+import type { IndexPropsType } from '../../../containers/Index';
 import Item from './Item/Item';
 
 import styles from './ListStyle';
