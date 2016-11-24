@@ -1,4 +1,4 @@
-exports[`test renders correctly 1`] = `
+exports[`Index renders correctly when loaded 1`] = `
 <View
   style={
     Object {
@@ -8,7 +8,7 @@ exports[`test renders correctly 1`] = `
   <ScrollView
     dataSource={
       ListViewDataSource {
-        "items": 0,
+        "items": 2,
       }
     }
     enableEmptySections={true}
@@ -25,7 +25,7 @@ exports[`test renders correctly 1`] = `
     refreshControl={
       <RefreshControl
         onRefresh={[Function]}
-        refreshing={true}
+        refreshing={false}
         tintColor="#4641B5" />
     }
     removeClippedSubviews={true}
@@ -33,7 +33,100 @@ exports[`test renders correctly 1`] = `
     scrollEventThrottle={50}
     scrollRenderAheadDistance={1000}
     stickyHeaderIndices={Array []}
-    style={Object {}} />
+    style={Object {}}>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F0F0F0",
+          "elevation": 5,
+          "marginHorizontal": 20,
+          "marginVertical": 10,
+          "minHeight": 80,
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "bold",
+            "marginVertical": 5,
+            "textAlign": "center",
+          }
+        }>
+        Justin
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#555555",
+            "marginBottom": 10,
+            "marginHorizontal": 10,
+          }
+        }>
+        Another random comment
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F0F0F0",
+          "elevation": 5,
+          "marginHorizontal": 20,
+          "marginVertical": 10,
+          "minHeight": 80,
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "bold",
+            "marginVertical": 5,
+            "textAlign": "center",
+          }
+        }>
+        Alexey
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#555555",
+            "marginBottom": 10,
+            "marginHorizontal": 10,
+          }
+        }>
+        Just some random comment
+      </Text>
+    </View>
+  </ScrollView>
   <View
     style={
       Object {
@@ -104,7 +197,7 @@ exports[`test renders correctly 1`] = `
 </View>
 `;
 
-exports[`test renders correctly 2`] = `
+exports[`Index renders correctly when loading 1`] = `
 <View
   style={
     Object {
