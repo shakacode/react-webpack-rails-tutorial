@@ -35,6 +35,7 @@ export function* fetchComments() {
   const camelizedResponse = _.mapKeys(_.camelCase, response);
   const commentSchema = new Schema('comments');
   return normalize(camelizedResponse, { comments: arrayOf(commentSchema) });
+  // return {entities: {}}
 }
 
 export function* postComment(payload) {
