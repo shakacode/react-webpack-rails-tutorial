@@ -4,7 +4,7 @@ require "features/shared/contexts"
 # Set this slightly longer than longest animations
 #   client/app/bundles/comments/components/CommentBox/CommentBox.scss:6
 #   client/app/bundles/comments/components/CommentBox/CommentForm/CommentForm.jsx:320
-CAPYBARA_ANIMATION_SLEEP = 0.6
+# CAPYBARA_ANIMATION_SLEEP = 1
 
 shared_examples "New Comment Submission" do |expect_comment_count|
   context "when the new comment is submitted" do
@@ -27,9 +27,19 @@ shared_examples "New Comment Submission" do |expect_comment_count|
     let!(:comments_count) { all(".comment").size }
 
     scenario "comment is not added" do
-      sleep CAPYBARA_ANIMATION_SLEEP
+      # sleep CAPYBARA_ANIMATION_SLEEP
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      puts "1"
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+
       expect(page).to have_selector(".comment", count: comments_count)
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      puts "2"
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
       if expect_comment_count
+        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+        puts "3"
+        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
         expect(page).to have_css("#js-comment-count",
                                  text: "Comments: #{Comment.count}")
       end
@@ -52,7 +62,7 @@ shared_examples "Validation errors displaying" do
       # Sleeping is CRITICAL to this test not crashing on Travis
       # See builds here:
       # https://travis-ci.org/shakacode/react-webpack-rails-tutorial/builds/178794772
-      sleep CAPYBARA_ANIMATION_SLEEP
+      # sleep CAPYBARA_ANIMATION_SLEEP
 
       expect(page).to have_content("Your comment was not saved!")
       expect(page).to have_content("Author: can't be blank")

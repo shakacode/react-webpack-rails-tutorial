@@ -180,7 +180,7 @@ export default class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <form className="commentForm form" onSubmit={this.handleSubmit}>
+        <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formBasicName">
             <ControlLabel>Name</ControlLabel>
             <FormControl
@@ -227,7 +227,7 @@ export default class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form inline className="commentForm form-inline" onSubmit={this.handleSubmit}>
+        <Form inline className="commentForm" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formInlineName" >
             <ControlLabel>
               Name

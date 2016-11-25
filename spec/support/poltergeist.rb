@@ -1,4 +1,4 @@
-CAPYBARA_TIMEOUT_RETRIES = 9
+CAPYBARA_TIMEOUT_RETRIES = 5
 
 # HACK: workaround for Capybara Poltergeist StatusFailErrors, simply retries
 # based on https://gist.github.com/afn/c04ccfe71d648763b306

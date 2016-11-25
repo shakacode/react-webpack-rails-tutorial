@@ -16,13 +16,34 @@ end
 
 # Forms
 shared_context "Horizontal Form", form: :horizontal do
-  background { click_link "Horizontal Form" }
+  background {
+    click_link "Inline Form"
+    expect(page).to have_css("form.commentForm.form-inline")
+
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    puts "about to click link Horizontal form"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    click_link "Horizontal Form"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    puts "about to check for css of .form-horizontal"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    expect(page).to have_css("form.commentForm.form-horizontal")
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    puts "after clicking Horizontal form"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
 end
 shared_context "Inline Form", form: :inline do
-  background { click_link "Inline Form" }
+  background do
+    click_link "Inline Form"
+    expect(page).to have_css("form.commentForm.form-inline")
+  end
 end
 shared_context "Stacked Form", form: :stacked do
-  background { click_link "Stacked Form" }
+  background do
+    click_link "Stacked Form"
+    expect(page).to have_css("form.commentForm.form-stacked")
+  end
 end
 
 # Form Submission
@@ -33,8 +54,15 @@ shared_context "Form Submitted", form_submitted: true do |name: "Spicoli", text:
   let(:text) { text }
 
   background do
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    puts "filling in fields"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+
     fill_in hint_name, with: name
     fill_in hint_text, with: text
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+    puts "clicking post button"
+    puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
     click_button "Post"
   end
 end

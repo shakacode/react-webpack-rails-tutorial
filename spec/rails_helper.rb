@@ -6,6 +6,7 @@ require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rspec"
+require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
 require "database_cleaner"
 
@@ -53,7 +54,7 @@ RSpec.configure do |config|
   #    # with blank fields comment is not added
   # Randomized with seed 17902
 
-  default_driver = :poltergeist_no_animations
+  default_driver = :selenium_chrome
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
@@ -66,12 +67,10 @@ RSpec.configure do |config|
 
   case driver
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
-    require "capybara/poltergeist"
     basic_opts = {
       window_size: [1300, 1800],
       phantomjs_options: ["--load-images=no", "--ignore-ssl-errors=true"],
-      timeout: 180,
-      inspector: true
+      timeout: 180
     }
 
     Capybara.register_driver :poltergeist do |app|
@@ -150,7 +149,11 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
+    page.driver.restart if defined?(page.driver.restart)
     Capybara.reset_sessions!
+  end
+
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
