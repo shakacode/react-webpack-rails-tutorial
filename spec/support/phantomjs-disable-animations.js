@@ -4,6 +4,7 @@
 // No idea which of these is more helpful.
 // They both resulted in crashes:
 // https://travis-ci.org/shakacode/react-webpack-rails-tutorial/builds/178794772
+// http://marcgg.com/blog/2015/01/05/css-animations-failing-capybara-specs/
 var disableAnimationStyles =
   '-webkit-transition: none !important;' +
   '-moz-transition: none !important;' +
