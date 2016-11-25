@@ -1,3 +1,20 @@
+module RenderingExtension
+  def self.custom_context(_view_context)
+    { translations: translations }
+  end
+
+  def self.translations
+    translations = {}
+    locale_files.each do |f|
+      translations = translations.merge(YAML.load(File.open(f)))
+    end
+    translations.to_json
+  end
+
+  def self.locale_files
+    Dir[Rails.root.join("config", "locales", "*.yml")]
+  end
+end
 # Shown below are the defaults for configuration
 ReactOnRails.configure do |config|
   # Directory where your generated assets go. All generated assets must go to the same directory.
@@ -74,7 +91,7 @@ ReactOnRails.configure do |config|
 
   # This allows you to add additional values to the Rails Context. Implement one static method
   # called `custom_context(view_context)` and return a Hash.
-  config.rendering_extension = nil
+  config.rendering_extension = RenderingExtension
 
   # The server render method - either ExecJS or NodeJS
   config.server_render_method = "ExecJS"
