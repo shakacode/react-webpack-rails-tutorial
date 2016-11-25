@@ -1,7 +1,7 @@
-CAPYBARA_TIMEOUT_RETRIES = 6
+CAPYBARA_TIMEOUT_RETRIES = 9
 
 # HACK: workaround for Capybara Poltergeist StatusFailErrors, simply retries
-# from https://gist.github.com/afn/c04ccfe71d648763b306
+# based on https://gist.github.com/afn/c04ccfe71d648763b306
 RSpec.configure do |config|
   config.around(:each, type: :feature) do |ex|
     example = RSpec.current_example
@@ -10,39 +10,37 @@ RSpec.configure do |config|
       __init_memoized
       ex.run
 
-      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-      puts "poltergeist.rb: #{__LINE__},  method: #{__method__}"
-      puts "example.exception = #{example.exception.ai}"
-      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      example_ex = example.exception
 
-      is_multiple_exception = example.exception.is_a?(RSpec::Core::MultipleExceptionError)
+      break unless example_ex
 
-      break unless example.exception.is_a?(Capybara::Poltergeist::StatusFailError) ||
+      is_multiple_exception = example_ex.is_a?(RSpec::Core::MultipleExceptionError)
+
+      break unless example_ex.is_a?(Capybara::Poltergeist::StatusFailError) ||
+                   example_ex.is_a?(Capybara::Poltergeist::DeadClient) ||
                    is_multiple_exception
 
       if is_multiple_exception
-        m_exceptions = example.exception.all_exceptions
-        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-        puts "poltergeist.rb: #{__LINE__},  method: #{__method__}"
-        puts "m_exceptions = #{m_exceptions.ai}"
-        puts "m_exceptions.first.class < SystemCallError is "\
-             "{m_exceptions.first.class < SystemCallError}"
-        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+        m_exceptions = example_ex.all_exceptions
 
         idx = m_exceptions.find_index do |exception|
           exception.is_a?(Capybara::Poltergeist::StatusFailError) ||
+            exception.is_a?(Capybara::Poltergeist::DeadClient) ||
             exception.class < SystemCallError
         end
-        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-        puts "poltergeist.rb: #{__LINE__},  method: #{__method__}"
-        puts "idx = #{idx.ai}"
-        puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
 
         break unless idx
       end
 
-      puts("\nCapybara::Poltergeist::StatusFailError at #{example.location}\n   Restarting phantomjs and retrying...")
+      puts "\n"
+      puts "=" * 80
+      puts "Exception caught! #{example_ex.ai}"
+      puts "when running example:\n  #{example.full_description}"
+      puts "at #{example.location}"
+      puts "Restarting phantomjs and retrying..."
+      puts "  -> If this doesn't work, put a modest sleep before your last assertion."
       PhantomJSRestart.call
+      puts "=" * 80
     end
   end
 end

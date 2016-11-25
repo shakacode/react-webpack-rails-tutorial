@@ -38,11 +38,22 @@ RSpec.configure do |config|
   # Next line will ensure that assets are built if webpack -w is not running
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
 
-  # Maybe selenium_firefox webdriver only works for Travis-CI builds.
-  # 2016-03-06: Phantomjs, all options fails on MacOs
-  # Same for webkit
-  # default_driver = :poltergeist
-  default_driver = :poltergeist_no_animations # :selenium_chrome
+  # Turning animations off results in about a 10 sec difference:
+  # Finished in 55.52 seconds (files took 0.65099 seconds to load)
+  # 46 examples, 1 failure
+  # Failed examples:
+  # rspec './spec/features/add_new_comment_spec.rb[1:1:1:2:1]'
+  # Randomized with seed 17902
+  # vs
+  # Finished in 1 minute 2.49 seconds (files took 0.57081 seconds to load)
+  # 46 examples, 1 failure
+  # Failed examples:
+  # rspec './spec/features/add_new_comment_spec.rb[1:1:1:2:1]'
+  #    # Add new comment React Router via Horizontal Form when the new comment is submitted
+  #    # with blank fields comment is not added
+  # Randomized with seed 17902
+
+  default_driver = :poltergeist_no_animations
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
@@ -56,16 +67,18 @@ RSpec.configure do |config|
   case driver
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
     require "capybara/poltergeist"
-    window_opts = {
-      window_size: [1280, 720],
-      screen_size: [1600, 1200]
+    basic_opts = {
+      window_size: [1300, 1800],
+      phantomjs_options: ["--load-images=no", "--ignore-ssl-errors=true"],
+      timeout: 180,
+      inspector: true
     }
 
     Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, window_opts)
+      Capybara::Poltergeist::Driver.new(app, basic_opts)
     end
 
-    no_animation_opts = window_opts.merge( # Leaving animations off, as a sleep was still needed.
+    no_animation_opts = basic_opts.merge( # Leaving animations off, as a sleep was still needed.
       extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"]
     )
 

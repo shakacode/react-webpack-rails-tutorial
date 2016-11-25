@@ -1,6 +1,11 @@
 require "rails_helper"
 require "features/shared/contexts"
 
+# Set this slightly longer than longest animations
+#   client/app/bundles/comments/components/CommentBox/CommentBox.scss:6
+#   client/app/bundles/comments/components/CommentBox/CommentForm/CommentForm.jsx:320
+CAPYBARA_ANIMATION_SLEEP = 0.6
+
 shared_examples "New Comment Submission" do |expect_comment_count|
   context "when the new comment is submitted" do
     let(:name) { "John Smith" }
@@ -22,6 +27,7 @@ shared_examples "New Comment Submission" do |expect_comment_count|
     let!(:comments_count) { all(".comment").size }
 
     scenario "comment is not added" do
+      sleep CAPYBARA_ANIMATION_SLEEP
       expect(page).to have_selector(".comment", count: comments_count)
       if expect_comment_count
         expect(page).to have_css("#js-comment-count",
@@ -46,7 +52,7 @@ shared_examples "Validation errors displaying" do
       # Sleeping is CRITICAL to this test not crashing on Travis
       # See builds here:
       # https://travis-ci.org/shakacode/react-webpack-rails-tutorial/builds/178794772
-      # sleep 1
+      sleep CAPYBARA_ANIMATION_SLEEP
 
       expect(page).to have_content("Your comment was not saved!")
       expect(page).to have_content("Author: can't be blank")

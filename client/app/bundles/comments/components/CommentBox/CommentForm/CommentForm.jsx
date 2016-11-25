@@ -311,12 +311,16 @@ export default class CommentForm extends BaseComponent {
 
     const { cssTransitionGroupClassNames } = this.props;
 
+    // For animation with ReactCSSTransitionGroup
+    //   https://facebook.github.io/react/docs/animation.html
+    // The 500 must correspond to the 0.5s in:
+    //   client/app/bundles/comments/components/CommentBox/CommentBox.scss:6
     return (
       <div>
         <ReactCSSTransitionGroup
           transitionName={cssTransitionGroupClassNames}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
         >
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
