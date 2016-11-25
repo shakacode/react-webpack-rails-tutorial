@@ -56,7 +56,7 @@ RSpec.configure do |config|
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
     require "capybara/poltergeist"
     opts = {
-      # extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"],
+      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"],
       window_size: [1280, 720],
       screen_size: [1600, 1200]
     }
