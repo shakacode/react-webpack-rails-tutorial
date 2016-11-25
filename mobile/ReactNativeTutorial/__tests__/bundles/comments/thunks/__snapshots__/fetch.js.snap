@@ -1,0 +1,70 @@
+exports[`fetch failing fetch dispatches an action with error 1`] = `
+Array [
+  Object {
+    "loading": true,
+    "type": "COMMENTS_STORE:SET_LOADING",
+  },
+  Object {
+    "args": Array [],
+    "name": "fetchComments",
+    "type": "CALL",
+  },
+  Object {
+    "args": Array [
+      [Error: Invalid Json],
+    ],
+    "name": "bound log",
+    "type": "CALL",
+  },
+  Object {
+    "args": Array [
+      "Error",
+      "Could not connect to server",
+      Array [
+        Object {
+          "text": "OK",
+        },
+      ],
+    ],
+    "name": "alert",
+    "type": "CALL",
+  },
+  Object {
+    "loading": false,
+    "type": "COMMENTS_STORE:SET_LOADING",
+  },
+]
+`;
+
+exports[`fetch successful fetch saves comments into the store 1`] = `
+Array [
+  Object {
+    "loading": true,
+    "type": "COMMENTS_STORE:SET_LOADING",
+  },
+  Object {
+    "args": Array [],
+    "name": "fetchComments",
+    "type": "CALL",
+  },
+  Object {
+    "entities": Object {
+      "1": Object {
+        "author": "Alexey",
+        "id": 1,
+        "text": "Just some random comment",
+      },
+      "2": Object {
+        "author": "Justin",
+        "id": 2,
+        "text": "Another random comment",
+      },
+    },
+    "type": "COMMENTS_STORE:CREATE",
+  },
+  Object {
+    "loading": false,
+    "type": "COMMENTS_STORE:SET_LOADING",
+  },
+]
+`;

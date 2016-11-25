@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import commentsStoreSelector from 'ReactNativeTutorial/app/selectors/commentsStoreSelector';
-import * as actions from '../thunks';
+import * as actions from '../effects';
 
 
 import Index from '../components/Index/Index';

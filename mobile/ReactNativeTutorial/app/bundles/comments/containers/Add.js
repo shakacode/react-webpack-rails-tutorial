@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import commentFormSelector from 'ReactNativeTutorial/app/selectors/commentFormSelector';
-import * as actions from '../thunks';
+import * as actions from '../effects';
 import Add from '../components/Add/Add';
 
 export type AddPropsType = {
