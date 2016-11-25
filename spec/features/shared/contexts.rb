@@ -16,7 +16,7 @@ end
 
 # Forms
 shared_context "Horizontal Form", form: :horizontal do
-  background {
+  background do
     click_link "Inline Form"
     expect(page).to have_css("form.commentForm.form-inline")
 
@@ -31,7 +31,7 @@ shared_context "Horizontal Form", form: :horizontal do
     puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
     puts "after clicking Horizontal form"
     puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-  }
+  end
 end
 shared_context "Inline Form", form: :inline do
   background do
