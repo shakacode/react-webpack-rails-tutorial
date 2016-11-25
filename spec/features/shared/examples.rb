@@ -43,6 +43,15 @@ end
 shared_examples "Validation errors displaying" do
   context "when the new comment is submitted with blank fields", blank_form_submitted: true do
     scenario "validation errors displayed" do
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      puts "examples.rb: #{__LINE__},  method: #{__method__}"
+      puts "triggering sleep 1"
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      sleep 1
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      puts "After sleep 1"
+      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+
       expect(page).to have_content("Your comment was not saved!")
       expect(page).to have_content("Author: can't be blank")
       expect(page).to have_content("Text: can't be blank")
