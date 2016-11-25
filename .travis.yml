@@ -38,4 +38,4 @@ before_script:
 
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake
+  - DRIVER=poltergeist_errors_ok bundle exec rake
