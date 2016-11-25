@@ -4,7 +4,7 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server-express.js",
   "engines": {
-    "node": "6.9.1",
+    "node": "7.2.0",
     "npm": "4.0.2"
   },
   "repository": {
