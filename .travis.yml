@@ -25,6 +25,7 @@ before_install:
 install:
   - bundle install
   - nvm install stable && nvm alias default stable
+  - npm install npm@latest -g
   - npm --version
   - npm install
   - rake db:setup
