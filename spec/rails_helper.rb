@@ -41,7 +41,8 @@ RSpec.configure do |config|
   # Maybe selenium_firefox webdriver only works for Travis-CI builds.
   # 2016-03-06: Phantomjs, all options fails on MacOs
   # Same for webkit
-  default_driver = :poltergeist # :selenium_chrome
+  # default_driver = :poltergeist
+  default_driver = :poltergeist_no_animations # :selenium_chrome
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
@@ -56,6 +57,7 @@ RSpec.configure do |config|
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
     require "capybara/poltergeist"
     opts = {
+      # Leaving animations off, as a sleep was still needed.
       extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"],
       window_size: [1280, 720],
       screen_size: [1600, 1200]

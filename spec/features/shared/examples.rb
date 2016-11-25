@@ -43,14 +43,10 @@ end
 shared_examples "Validation errors displaying" do
   context "when the new comment is submitted with blank fields", blank_form_submitted: true do
     scenario "validation errors displayed" do
-      puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
-      puts "examples.rb: #{__LINE__},  method: #{__method__}"
-      # puts "triggering sleep 1"
-      puts "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
-      # # sleep 1
-      # # puts "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
-      # puts "After sleep 1"
-      # puts "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      # Sleeping is CRITICAL to this test not crashing on Travis
+      # See builds here:
+      # https://travis-ci.org/shakacode/react-webpack-rails-tutorial/builds/178794772
+      # sleep 1
 
       expect(page).to have_content("Your comment was not saved!")
       expect(page).to have_content("Author: can't be blank")

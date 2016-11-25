@@ -1,5 +1,9 @@
 // https://gist.github.com/andyjbas/9962218
 // disable_animations.js
+
+// No idea which of these is more helpful.
+// They both resulted in crashes:
+// https://travis-ci.org/shakacode/react-webpack-rails-tutorial/builds/178794772
 // var disableAnimationStyles = '-webkit-transition: none !important;' +
 //                              '-moz-transition: none !important;' +
 //                              '-ms-transition: none !important;' +
