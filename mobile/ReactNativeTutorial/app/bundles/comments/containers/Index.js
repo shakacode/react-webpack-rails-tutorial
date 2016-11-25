@@ -5,8 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import commentsStoreSelector from '../../../selectors/commentsStoreSelector';
-import { actions } from '../sagas';
+import commentsStoreSelector from 'ReactNativeTutorial/app/selectors/commentsStoreSelector';
+import * as actions from '../thunks';
+
 
 import Index from '../components/Index/Index';
 

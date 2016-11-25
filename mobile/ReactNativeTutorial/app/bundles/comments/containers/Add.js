@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import commentFormSelector from '../../../selectors/commentFormSelector';
-import { actions } from '../sagas';
+import commentFormSelector from 'ReactNativeTutorial/app/selectors/commentFormSelector';
+import * as actions from '../thunks';
 import Add from '../components/Add/Add';
 
 export type AddPropsType = {

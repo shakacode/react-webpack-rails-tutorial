@@ -8,7 +8,7 @@ import { normalize, Schema, arrayOf } from 'normalizr';
 // const API_URL = __DEV__ ? 'http://localhost:3000/' : 'http://www.reactrails.com/';
 const API_URL = 'http://www.reactrails.com/';
 
-function* apiRequest(url, method, payload) {
+const apiRequest = async (url, method, payload) => {
   let options = {
     method,
     headers: {
@@ -18,29 +18,23 @@ function* apiRequest(url, method, payload) {
     },
   };
   if (payload) options = { ...options, body: JSON.stringify(payload) };
-  const response = yield call(fetch, `${API_URL}${url}`, options);
-  return yield call(response.json.bind(response));
-}
+  const response = await fetch(`${API_URL}${url}`, options);
+  return await response.json();
+};
 
-function* getRequest(url) {
-  return yield* apiRequest(url, 'GET');
-}
+const getRequest = async (url) => apiRequest(url, 'GET');
+const postRequest = async (url, payload) => apiRequest(url, 'POST', payload);
 
-function* postRequest(url, payload) {
-  return yield* apiRequest(url, 'POST', payload);
-}
-
-export function* fetchComments() {
-  const response = yield* getRequest('comments.json');
+export const fetchComments = async () => {
+  const response = await getRequest('comments.json');
   const camelizedResponse = _.mapKeys(_.camelCase, response);
   const commentSchema = new Schema('comments');
   return normalize(camelizedResponse, { comments: arrayOf(commentSchema) });
-  // return {entities: {}}
-}
+};
 
-export function* postComment(payload) {
-  const response = yield* postRequest('comments.json', { comment: payload });
+export const postComment = async (payload) => {
+  const response = await postRequest('comments.json', { comment: payload });
   const camelizedResponse = _.mapKeys(_.camelCase, response);
   const commentSchema = new Schema('comments');
   return normalize(camelizedResponse, commentSchema);
-}
+};
