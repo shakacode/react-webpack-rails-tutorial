@@ -149,7 +149,8 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    page.driver.restart if defined?(page.driver.restart)
+    # Experimental to fix failing poltergeist tests
+    # page.driver.restart if defined?(page.driver.restart)
     Capybara.reset_sessions!
   end
 
