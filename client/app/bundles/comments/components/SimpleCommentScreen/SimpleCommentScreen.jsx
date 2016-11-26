@@ -3,38 +3,76 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
-import I18n from 'i18n-js';
+import { IntlProvider, injectIntl, intlShape } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
-import { InitI18n, SelectLanguage, SetI18nLocale } from '../../common/i18nHelper';
+import { SelectLanguage, InitI18nLocale, convertTranslations,
+          defaultMessages } from '../../common/i18nHelper';
 
-export default (props, railsContext) => (
-  <SimpleCommentScreen {...props} railsContext={railsContext} />
-);
+InitI18nLocale();
+
+export default (props, railsContext) => {
+  const { i18nLocale, translations } = railsContext;
+  return (
+    <I18nWrapper
+      {...props}
+      locale={i18nLocale}
+      translations={translations}
+    />
+  );
+};
+
+class I18nWrapper extends BaseComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      locale: props.locale,
+    };
+
+    _.bindAll(this, 'handleSetLocale');
+  }
+
+  handleSetLocale(locale) {
+    this.setState({ locale: locale });
+  }
+
+  render() {
+    const { locale } = this.state;
+    const { translations } = this.props;
+    const messages = convertTranslations(translations, locale);
+    const InjectedSimpleCommentScreen = injectIntl(SimpleCommentScreen);
+
+    return (
+      <IntlProvider locale={locale} key={locale} messages={messages}>
+        <InjectedSimpleCommentScreen
+          {...this.props}
+          selectLanguage={SelectLanguage.bind(this, this.handleSetLocale, locale)}
+        />
+      </IntlProvider>
+    );
+  }
+}
 
 class SimpleCommentScreen extends BaseComponent {
   constructor(props) {
     super(props);
-    const { railsContext } = props;
 
     this.state = {
       $$comments: Immutable.fromJS([]),
       isSaving: false,
       fetchCommentsError: null,
       submitCommentError: null,
-      locale: null,
     };
 
-    InitI18n(railsContext);
-    _.bindAll(this, 'fetchComments', 'handleCommentSubmit', 'handleSetLocale');
+    _.bindAll(this, 'fetchComments', 'handleCommentSubmit');
   }
 
   componentDidMount() {
     this.fetchComments();
-    this.handleSetLocale(this.props.railsContext.i18nLocale);
   }
 
   fetchComments() {
@@ -76,11 +114,9 @@ class SimpleCommentScreen extends BaseComponent {
     );
   }
 
-  handleSetLocale(locale) {
-    this.setState({ locale: locale });
-  }
-
   render() {
+    const { selectLanguage, intl } = this.props;
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
@@ -88,17 +124,16 @@ class SimpleCommentScreen extends BaseComponent {
       leaveActive: css.elementLeaveActive,
     };
 
-    const { locale } = this.state;
-    SetI18nLocale(locale);
-
     return (
-      <div className="commentBox container">
-        <h2>{ I18n.t('comments') }</h2>
-        { SelectLanguage(this.handleSetLocale) }
+      <div className='commentBox container'>
+        <h2>
+          {formatMessage(defaultMessages.comments)}
+        </h2>
+        { selectLanguage() }
         <ul>
-          <li>{ I18n.t('description.support_markdown') }</li>
-          <li>{ I18n.t('description.delete_rule') }</li>
-          <li>{ I18n.t('description.submit_rule') }</li>
+          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
+          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
         </ul>
         <CommentForm
           isSaving={this.state.isSaving}

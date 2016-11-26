@@ -4,8 +4,7 @@ import { Provider } from 'react-redux';
 import ReactOnRails from 'react-on-rails';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Router, browserHistory } from 'react-router';
-import { InitI18n } from '../common/i18nHelper';
-
+import { InitI18nLocale } from '../common/i18nHelper';
 import routes from '../routes/routes';
 
 export default (_props, _railsContext) => {
@@ -17,7 +16,7 @@ export default (_props, _railsContext) => {
     store,
   );
 
-  InitI18n(_railsContext);
+  InitI18nLocale();
 
   return (
     <Provider store={store}>

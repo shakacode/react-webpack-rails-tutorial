@@ -6,23 +6,35 @@ import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
+import { IntlProvider } from 'react-intl';
+import { convertTranslations, defaultLocale } from '../common/i18nHelper';
+
+// polyfill for server-side rendering, required by react-intl
+import Intl from 'intl';
+global.Intl = Intl;
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?
-  return { data: state.$$commentsStore };
+  return { data: state.$$commentsStore, railsContext: state.railsContext };
 }
 
 class NonRouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
+    railsContext: PropTypes.object.isRequired,
   };
 
   render() {
-    const { dispatch, data } = this.props;
+    const { dispatch, data, railsContext } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
+    const locale = data.get('locale') || defaultLocale;
+    const messages = convertTranslations(railsContext.translations, locale);
+
     return (
-      <CommentScreen {...{ actions, data }} />
+      <IntlProvider locale={locale} key={locale} messages={messages}>
+        <CommentScreen {...{ actions, data }} />
+      </IntlProvider>
     );
   }
 }

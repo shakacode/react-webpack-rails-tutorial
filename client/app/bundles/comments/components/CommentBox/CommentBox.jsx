@@ -1,12 +1,13 @@
 import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
-import I18n from 'i18n-js';
+import { FormattedMessage } from 'react-intl';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
-import { SelectLanguage, SetI18nLocale } from '../../common/i18nHelper';
+import { SelectLanguage, defaultMessages, defaultLocale } from '../../common/i18nHelper';
+import { injectIntl, intlShape } from 'react-intl';
 
-export default class CommentBox extends BaseComponent {
+class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
@@ -18,6 +19,7 @@ export default class CommentBox extends BaseComponent {
       submitCommentError: React.PropTypes.string,
       $$comments: React.PropTypes.arrayOf(CommentPropTypes),
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   componentDidMount() {
@@ -31,26 +33,26 @@ export default class CommentBox extends BaseComponent {
   }
 
   render() {
-    const { actions, data } = this.props;
+    const { actions, data, intl } = this.props;
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
       leave: css.elementLeave,
       leaveActive: css.elementLeaveActive,
     };
-    const locale = data.get('locale');
-    SetI18nLocale(locale);
+    const locale = data.get('locale') || defaultLocale;
 
     return (
       <div className="commentBox container">
         <h2>
-          { I18n.t('comments') } {data.get('isFetching') && 'Loading...'}
+          {formatMessage(defaultMessages.comments)}
         </h2>
-        { SelectLanguage(actions.setLocale) }
+        { SelectLanguage(actions.setLocale, locale) }
         <ul>
-          <li>{ I18n.t('description.support_markdown') }</li>
-          <li>{ I18n.t('description.delete_rule') }</li>
-          <li>{ I18n.t('description.submit_rule') }</li>
+          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
+          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
         </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
@@ -67,3 +69,5 @@ export default class CommentBox extends BaseComponent {
     );
   }
 }
+
+export default injectIntl(CommentBox);
