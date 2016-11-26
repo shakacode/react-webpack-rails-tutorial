@@ -14,13 +14,13 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
+import I18n from 'i18n-js';
 
 import BaseComponent from 'libs/components/BaseComponent';
 
 import css from './CommentForm.scss';
 
 const emptyComment = { author: '', text: '' };
-const textPlaceholder = 'Say something using markdown...';
 
 function bsStyleFor(propName, error) {
   if (error) {
@@ -129,12 +129,12 @@ export default class CommentForm extends BaseComponent {
         <Form horizontal className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-              Name
+              {I18n.t('input.name.label')}
             </Col>
             <Col sm={10}>
               <FormControl
                 type="text"
-                placeholder="Your Name"
+                placeholder={I18n.t('input.name.placeholder')}
                 ref="horizontalAuthorNode"
                 value={this.state.comment.author}
                 onChange={this.handleChange}
@@ -145,13 +145,13 @@ export default class CommentForm extends BaseComponent {
           </FormGroup>
           <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-              Text
+              {I18n.t('input.text.label')}
             </Col>
             <Col sm={10}>
               <FormControl
                 type="textarea"
                 label="Text"
-                placeholder={textPlaceholder}
+                placeholder={I18n.t('input.text.placeholder')}
                 ref="horizontalTextNode"
                 value={this.state.comment.text}
                 onChange={this.handleChange}
@@ -167,7 +167,7 @@ export default class CommentForm extends BaseComponent {
                 className="btn btn-primary"
                 disabled={this.props.isSaving}
               >
-                {this.props.isSaving ? 'Saving...' : 'Post'}
+                {this.props.isSaving ? `${I18n.t('input.saving')}...` : I18n.t('input.post')}
               </Button>
             </Col>
           </FormGroup>
@@ -182,10 +182,10 @@ export default class CommentForm extends BaseComponent {
         <hr />
         <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formBasicName">
-            <ControlLabel>Name</ControlLabel>
+            <ControlLabel>{I18n.t('input.name.label')}</ControlLabel>
             <FormControl
               type="text"
-              placeholder="Your Name"
+              placeholder={I18n.t('input.name.placeholder')}
               ref="stackedAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -196,11 +196,11 @@ export default class CommentForm extends BaseComponent {
           <FormGroup
             controlId="formBasicText"
           >
-            <ControlLabel>Text</ControlLabel>
+            <ControlLabel>{I18n.t('input.text.label')}</ControlLabel>
             <FormControl
               type="textarea"
               label="Text"
-              placeholder={textPlaceholder}
+              placeholder={I18n.t('input.text.placeholder')}
               ref="stackedTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -214,7 +214,7 @@ export default class CommentForm extends BaseComponent {
               className="btn btn-primary"
               disabled={this.props.isSaving}
             >
-              {this.props.isSaving ? 'Saving...' : 'Post'}
+              {this.props.isSaving ? `${I18n.t('input.saving')}...` : I18n.t('input.post')}
             </Button>
           </FormGroup>
         </form>
@@ -230,11 +230,11 @@ export default class CommentForm extends BaseComponent {
         <Form inline className="commentForm" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formInlineName" >
             <ControlLabel>
-              Name
+              {I18n.t('input.name.label')}
             </ControlLabel>
             <FormControl
               type="text"
-              placeholder="Your Name"
+              placeholder={I18n.t('input.name.placeholder')}
               ref="inlineAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -245,12 +245,12 @@ export default class CommentForm extends BaseComponent {
           </FormGroup>
           <FormGroup controlId="formInlineName">
             <ControlLabel>
-              Text
+              {I18n.t('input.text.label')}
             </ControlLabel>
             <FormControl
               type="textarea"
               label="Text"
-              placeholder={textPlaceholder}
+              placeholder={I18n.t('input.text.placeholder')}
               ref="inlineTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -264,7 +264,7 @@ export default class CommentForm extends BaseComponent {
             className="btn btn-primary"
             disabled={this.props.isSaving}
           >
-            {this.props.isSaving ? 'Saving...' : 'Post'}
+            {this.props.isSaving ? `${I18n.t('input.saving')}...` : I18n.t('input.post')}
           </Button>
         </Form>
       </div>
@@ -326,9 +326,9 @@ export default class CommentForm extends BaseComponent {
         </ReactCSSTransitionGroup>
 
         <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
-          <NavItem eventKey={0}>Horizontal Form</NavItem>
-          <NavItem eventKey={1}>Stacked Form</NavItem>
-          <NavItem eventKey={2}>Inline Form</NavItem>
+          <NavItem eventKey={0}>{I18n.t('form.horizontal')}</NavItem>
+          <NavItem eventKey={1}>{I18n.t('form.stacked')}</NavItem>
+          <NavItem eventKey={2}>{I18n.t('form.inline')}</NavItem>
         </Nav>
         {inputForm}
       </div>
