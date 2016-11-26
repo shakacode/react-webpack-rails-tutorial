@@ -31,11 +31,13 @@ install:
   - npm install
   - npm run build:client && npm run build:server
   - rake db:setup
-# No need to run xvfb if running headless testing
+
+# Tip: No need to run xvfb if running headless testing. However, we're going to start with
+# Poltergeist and switch to selenium if a test fails.
 before_script:
    - export DISPLAY=:99.0
    - sh -e /etc/init.d/xvfb start
 
 script:
   - bundle exec rake db:schema:load
-  - DRIVER=poltergeist_errors_ok bundle exec rake
+  - DRIVER=selenium bundle exec rake

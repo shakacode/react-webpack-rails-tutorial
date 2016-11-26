@@ -95,12 +95,12 @@ group :test  do
   gem "capybara"
   gem "capybara-screenshot"
   gem "capybara-webkit"
-  gem "chromedriver-helper", require: ["selenium_chrome"].include?(ENV["DRIVER"])
+  gem "chromedriver-helper"
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
   gem "rspec-rails", "~> 3"
   gem "rspec-retry"
-  gem "selenium-webdriver", "<3.0.0", require: !["poltergeist", "poltergeist_errors_ok", "webkit"].include?(ENV["DRIVER"])
+  gem "selenium-webdriver", "<3.0.0"
 end
