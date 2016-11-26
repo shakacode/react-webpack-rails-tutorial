@@ -1,10 +1,11 @@
 # Integration Test Notes
 
+See [Yak Shaving Failing Integration Tests with React and Rails](https://blog.shakacode.com/yak-shaving-failing-integration-tests-with-react-a93444886c8c#.io9464uvz)
 
 ## CI
 See the .travis.yml file, at the bottom, to see what driver is used by Travis.
 
-  `DRIVER=poltergeist_errors_ok bundle exec rake`
+  `DRIVER=selenium bundle exec rake`
 
 Codeship is set to use the default driver.  
   
@@ -18,6 +19,7 @@ Support is included for the following drivers:
 1. Poltergeist (`DRIVER=poltergeist rspec`)
 1. Poltergeist no animations (`DRIVER=poltergeist_no_animations rspec`)
 1. Poltergeist errors ok (`DRIVER=poltergeist_errors_ok rspec`)
+1. Webkit (`DRIVER=webkit rspec`). Note, webkit has more errors than the other drivers.
 
 You may want to experiment with using the different drivers.
 

@@ -144,6 +144,7 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
   ```
 
 ## Testing
++ See [Yak Shaving Failing Integration Tests with React and Rails](https://blog.shakacode.com/yak-shaving-failing-integration-tests-with-react-a93444886c8c#.io9464uvz)
 
 + Be sure to see [Integration Test Notes](./docs/integration-test-notes.md) for advice on running your integration tests.
 

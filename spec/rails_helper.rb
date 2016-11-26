@@ -36,6 +36,8 @@ ActiveRecord::Migration.maintain_test_schema!
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+
   # Next line will ensure that assets are built if webpack -w is not running
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
 
@@ -44,12 +46,14 @@ RSpec.configure do |config|
 
   # Using errors_ok as there is a timing issue causing crashes without this setting
   # https://github.com/teampoltergeist/poltergeist/issues/830
-  default_driver = :poltergeist_errors_ok
+
+  default_driver = :poltergeist_no_animations
 
   supported_drivers = %i( poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
                           selenium_chrome selenium_firefox selenium)
   driver = ENV["DRIVER"].try(:to_sym) || default_driver
+  Capybara.default_driver = driver
 
   unless supported_drivers.include?(driver)
     raise "Unsupported driver: #{driver} (supported = #{supported_drivers})"
@@ -59,6 +63,7 @@ RSpec.configure do |config|
   when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
     basic_opts = {
       window_size: [1300, 1800],
+      screen_size: [1400, 1900],
       phantomjs_options: ["--load-images=no", "--ignore-ssl-errors=true"],
       timeout: 180
     }
@@ -78,6 +83,16 @@ RSpec.configure do |config|
     Capybara.register_driver :poltergeist_errors_ok do |app|
       Capybara::Poltergeist::Driver.new(app, no_animation_opts.merge(js_errors: false))
     end
+    Capybara::Screenshot.register_driver(:poltergeist) do |js_driver, path|
+      js_driver.browser.save_screenshot(path)
+    end
+    Capybara::Screenshot.register_driver(:poltergeist_no_animations) do |js_driver, path|
+      js_driver.render(path, full: true)
+    end
+    Capybara::Screenshot.register_driver(:poltergeist_errors_ok) do |js_driver, path|
+      js_driver.render(path, full: true)
+    end
+
   when :selenium_chrome
     DriverRegistration.register_selenium_chrome
   when :selenium_firefox, :selenium
@@ -86,6 +101,7 @@ RSpec.configure do |config|
   end
 
   Capybara.javascript_driver = driver
+  Capybara.default_driver = driver
 
   Capybara.register_server(Capybara.javascript_driver) do |app, port|
     require "rack/handler/puma"
@@ -98,13 +114,49 @@ RSpec.configure do |config|
   Capybara.save_path = Rails.root.join("tmp", "capybara")
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.use_transactional_fixtures = false
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  config.use_transactional_fixtures = true
+  config.before(:suite) do
+    if config.use_transactional_fixtures?
+      raise(<<-MSG)
+          Delete line `config.use_transactional_fixtures = true` from rails_helper.rb
+          (or set it to false) to prevent uncommitted transactions being used in
+          JavaScript-dependent specs.
+
+          During testing, the app-under-test that the browser driver connects to
+          uses a different database connection to the database connection used by
+          the spec. The app's database connection would not be able to access
+          uncommitted transaction data setup over the spec's database connection.
+      MSG
+    end
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, type: :feature) do
+    # :rack_test driver's Rack app under test shares database connection
+    # with the specs, so continue to use transaction strategy for speed.
+    driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
+
+    unless driver_shares_db_connection_with_specs
+      # Driver is probably for an external browser with an app
+      # under test that does *not* share a database connection with the
+      # specs, so use truncation strategy.
+      DatabaseCleaner.strategy = :truncation
+    end
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:each) do
+    DatabaseCleaner.clean
+    Capybara.reset_sessions!
+  end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -125,28 +177,6 @@ RSpec.configure do |config|
   # save_and_open_page, meaning that relative links will be loaded from the
   # development server if it is running.
   Capybara.asset_host = "http://localhost:3000"
-
-  # config taken directly from RSpec example in the DatabaseCleaner README
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with :truncation
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-
-  config.after(:each) do
-    # Experimental to fix failing poltergeist tests
-    # page.driver.restart if defined?(page.driver.restart)
-    Capybara.reset_sessions!
-  end
-
-  config.append_after(:each) do
-    DatabaseCleaner.clean
-  end
 
   def js_errors_driver
     Capybara.javascript_driver == :poltergeist ? :poltergeist_errors_ok : Capybara.javascript_driver

@@ -1,3 +1,11 @@
+# This file supports 2 strategies:
+# 1. switch_to_selenium: switch drivers
+# 2. restart_poltergeist
+
+RESTART_PHANTOMJS = ENV["RESTART_PHANTOMJS"] &&
+                    %w(TRUE YES).include?(ENV["RESTART_PHANTOMJS"].upcase)
+puts "RESTART_PHANTOMJS = #{RESTART_PHANTOMJS}"
+
 CAPYBARA_TIMEOUT_RETRIES = 5
 
 # HACK: workaround for Capybara Poltergeist StatusFailErrors, simply retries
@@ -5,9 +13,21 @@ CAPYBARA_TIMEOUT_RETRIES = 5
 RSpec.configure do |config|
   config.around(:each, type: :feature) do |ex|
     example = RSpec.current_example
+    use_selenium = false
+    original_driver = Capybara.default_driver
     CAPYBARA_TIMEOUT_RETRIES.times do
       example.instance_variable_set("@exception", nil)
+
+      # Private method in rspec:
+      # rspec-core-3.5.4/lib/rspec/core/memoized_helpers.rb:139
       __init_memoized
+
+      if use_selenium
+        puts "Switching to selenium from #{Capybara.current_driver}"
+        Capybara.current_driver = js_selenium_driver
+        Capybara.javascript_driver = js_selenium_driver
+      end
+
       ex.run
 
       example_ex = example.exception
@@ -36,18 +56,25 @@ RSpec.configure do |config|
       puts "=" * 80
       puts "Exception caught! #{example_ex.ai}"
       puts "when running example:\n  #{example.full_description}"
-      puts "at #{example.location}"
-      puts "Restarting phantomjs and retrying..."
-      puts "  -> If this doesn't work, put a modest sleep before your last assertion."
-      PhantomJSRestart.call
+      puts "  at #{example.location} with driver #{Capybara.current_driver}."
+
+      if RESTART_PHANTOMJS
+        PhantomJSRestart.call
+      else
+        use_selenium = true
+      end
       puts "=" * 80
     end
+    Capybara.current_driver = original_driver
+    Capybara.javascript_driver = original_driver
+    Capybara.use_default_driver
   end
 end
 
+# Rather than using switching to use selenium, we could have restarted Phantomjs
 module PhantomJSRestart
   def self.call
-    puts "-> Restarting phantomjs: iterating through capybara sessions..."
+    puts "Restarting phantomjs: iterating through capybara sessions..."
     session_pool = Capybara.send("session_pool")
     session_pool.each do |mode, session|
       msg = "  => #{mode} -- "
