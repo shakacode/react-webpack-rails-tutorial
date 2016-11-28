@@ -33,4 +33,4 @@ const call = ({ dispatch }) => (f, ...args) => {
   return f.then ? Promise.resolve(result) : result;
 };
 
-export default { dispatch, getState, call }
+export default { dispatch, getState, call };

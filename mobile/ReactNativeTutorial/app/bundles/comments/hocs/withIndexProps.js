@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unused-prop-types */
 // @flow
-import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';

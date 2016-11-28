@@ -4,6 +4,7 @@
   plugins:
     - "react-native"
     - "flowtype"
+    - "babel"
 
   env:
     node: true
@@ -32,8 +33,11 @@
     import/prefer-default-export: 2
     no-duplicate-imports: 0
 
+    babel/no-await-in-loop: 1
+
     # Delegating proptypes check to flow
     react/prop-types: 0
+    generator-star-spacing: 0
 
     react-native/no-unused-styles: 2
     react-native/split-platform-components: 2

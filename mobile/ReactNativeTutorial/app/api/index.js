@@ -1,5 +1,4 @@
 import _ from 'lodash/fp';
-import { call } from 'redux-saga/effects';
 import { normalize, Schema, arrayOf } from 'normalizr';
 
 // You can use localhost for development, but only on iOS. Android emulator is considered
