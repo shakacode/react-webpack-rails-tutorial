@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
-import type { AddPropsType } from '../../containers/Add';
+import type { AddPropsType } from '../../hocs/withAddProps';
 
 import styles from './AddStyle';
 
