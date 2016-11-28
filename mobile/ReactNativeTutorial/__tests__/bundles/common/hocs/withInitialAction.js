@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash/fp';
-import withInitialAction from 'ReactNativeTutorial/app/bundles/comments/hocs/withInitialAction';
+import withInitialAction from 'ReactNativeTutorial/app/bundles/common/hocs/withInitialAction';
 import Mock from 'mock';
 import renderer from 'react-test-renderer';
 
