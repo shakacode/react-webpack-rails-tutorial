@@ -1,5 +1,5 @@
 import { fromJS } from 'Immutable';
-import { createMockStore } from 'redux-mock-store';
+import { createStoreFromState } from 'redux-mock-store';
 import { mockCalls, resetMockCalls }
   from 'ReactNativeTutorial/app/setup/effectCreators/mock';
 import * as actions from 'ReactNativeTutorial/app/bundles/comments/effects';
@@ -14,7 +14,7 @@ describe('createComment', () => {
       commentsStore: {},
       commentForm: { author: 'Alexey', text: 'Random comment' },
     };
-    const store = createMockStore(fromJS(data));
+    const store = createStoreFromState(fromJS(data));
     const response = {
       entities: {
         comments: {

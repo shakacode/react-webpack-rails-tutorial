@@ -1,8 +1,9 @@
 import configureMockStore from 'redux-mock-store';
 import { mockEffectsMiddleware } from 'ReactNativeTutorial/app/setup/effectsMiddleware';
 
-import { initialState } from 'ReactNativeTutorial/app/reducers';
+import { initialState as reduxInitialState } from 'ReactNativeTutorial/app/reducers';
 
-export const createMockStore = configureMockStore([mockEffectsMiddleware]);
+export const createStoreFromState = configureMockStore([mockEffectsMiddleware]);
+export const initialState = reduxInitialState;
 
-export default () => createMockStore(initialState);
+export default () => createStoreFromState(initialState);
