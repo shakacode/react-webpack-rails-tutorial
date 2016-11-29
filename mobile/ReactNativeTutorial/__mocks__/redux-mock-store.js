@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import { mockEffectsMiddleware } from 'ReactNativeTutorial/app/setup/effectsMiddleware';
+import { mockEffectsMiddleware } from 'redux-thunk-effects';
 
 import { initialState as reduxInitialState } from 'ReactNativeTutorial/app/reducers';
 

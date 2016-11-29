@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux';
+import effectsMiddleware from 'redux-thunk-effects';
 import loggerMiddleware from './loggerMiddleware';
-import { effectsMiddleware } from './effectsMiddleware';
 import appReducer, { initialState } from '../reducers';
 
 let composedStore;

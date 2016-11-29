@@ -1,14 +1,9 @@
-import { fromJS } from 'Immutable';
+import { fromJS } from 'immutable';
 import { createStoreFromState } from 'redux-mock-store';
-import { mockCalls, resetMockCalls }
-  from 'ReactNativeTutorial/app/setup/effectCreators/mock';
+import { mockCallEffects } from 'redux-thunk-effects';
 import * as actions from 'ReactNativeTutorial/app/bundles/comments/effects';
 
 describe('createComment', () => {
-  afterEach(() => {
-    resetMockCalls();
-  });
-
   it('creates a comment in the store and sends request to api', async() => {
     const data = {
       commentsStore: {},
@@ -22,7 +17,7 @@ describe('createComment', () => {
         },
       },
     };
-    mockCalls(null, response);
+    mockCallEffects(null, response);
     await store.dispatch(actions.createComment());
     expect(store.getActions()).toMatchSnapshot();
   });
