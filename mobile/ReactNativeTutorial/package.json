@@ -20,6 +20,7 @@
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.8",
+    "redux-thunk-effects": "^0.1.0",
     "reselect": "^2.5.4",
     "whatwg-fetch": "^2.0.1"
   },
