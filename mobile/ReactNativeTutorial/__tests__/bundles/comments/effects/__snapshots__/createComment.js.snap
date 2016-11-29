@@ -27,6 +27,10 @@ Array [
     "type": "CALL",
   },
   Object {
+    "id": "temp0",
+    "type": "COMMENTS_STORE:REMOVE",
+  },
+  Object {
     "entities": Object {
       "1": Object {
         "author": "Alexey",
@@ -38,10 +42,6 @@ Array [
   },
   Object {
     "type": "COMMENT_FORM:RESET",
-  },
-  Object {
-    "id": "temp0",
-    "type": "COMMENTS_STORE:REMOVE",
   },
 ]
 `;

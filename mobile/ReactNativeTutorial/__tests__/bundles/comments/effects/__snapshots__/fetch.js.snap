@@ -48,6 +48,10 @@ Array [
     "type": "CALL",
   },
   Object {
+    "loading": false,
+    "type": "COMMENTS_STORE:SET_LOADING",
+  },
+  Object {
     "entities": Object {
       "1": Object {
         "author": "Alexey",
@@ -61,10 +65,6 @@ Array [
       },
     },
     "type": "COMMENTS_STORE:CREATE",
-  },
-  Object {
-    "loading": false,
-    "type": "COMMENTS_STORE:SET_LOADING",
   },
 ]
 `;

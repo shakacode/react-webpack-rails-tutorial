@@ -10,15 +10,17 @@ import * as api from 'ReactNativeTutorial/app/api';
 export const fetch = () =>
   async function fetchCommentsEffect({ dispatch, call }) {
     dispatch(reduxActions.setLoadingComments(true));
+    let response;
     try {
-      const response = await call(api.fetchComments);
-      dispatch(reduxActions.createComments(response.entities.comments));
+      response = await call(api.fetchComments);
     } catch (e) {
       call(console.log, e);
       call(Alert.alert, 'Error', 'Could not connect to server', [{ text: 'OK' }]);
+      return;
     } finally {
       dispatch(reduxActions.setLoadingComments(false));
     }
+    dispatch(reduxActions.createComments(response.entities.comments));
   };
 
 export const updateForm = reduxActions.updateCommentForm;
@@ -33,14 +35,16 @@ export const createComment = () =>
     const reduxComment = { [tempId]: comment.toJS() };
     dispatch(reduxActions.createComments(reduxComment));
     call(navigationActions.pop);
+    let response;
     try {
-      const response = await call(api.postComment, comment);
-      dispatch(reduxActions.createComments(response.entities.comments));
-      dispatch(reduxActions.resetCommentForm());
+      response = await call(api.postComment, comment);
     } catch (e) {
       call(console.log, e);
       call(Alert.alert, 'Error', 'Could not post your comment', [{ text: 'OK' }]);
+      return;
     } finally {
       dispatch(reduxActions.removeComment(tempId));
     }
+    dispatch(reduxActions.createComments(response.entities.comments));
+    dispatch(reduxActions.resetCommentForm());
   };
