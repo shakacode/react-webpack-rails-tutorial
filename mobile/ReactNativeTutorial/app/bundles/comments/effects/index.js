@@ -8,7 +8,7 @@ import { actions as reduxActions } from 'ReactNativeTutorial/app/reducers';
 import * as api from 'ReactNativeTutorial/app/api';
 
 export const fetch = () =>
-  async function fetchCommentsEffect({ dispatch, call }) {
+  async function fetchCommentsEffect(dispatch, _, { call }) {
     dispatch(reduxActions.setLoadingComments(true));
     let response;
     try {
@@ -26,7 +26,7 @@ export const fetch = () =>
 export const updateForm = reduxActions.updateCommentForm;
 
 export const createComment = () =>
-  async function createCommentEffect({ dispatch, getState, call }) {
+  async function createCommentEffect(dispatch, getState, { call }) {
     const state = getState();
     const commentsStore = commentsStoreSelector(state);
     const tempId = reduxUtils.getNewId(commentsStore);
