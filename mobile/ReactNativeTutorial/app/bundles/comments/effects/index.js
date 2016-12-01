@@ -8,13 +8,12 @@ import { actions as reduxActions } from 'ReactNativeTutorial/app/reducers';
 import * as api from 'ReactNativeTutorial/app/api';
 
 export const fetch = () =>
-  async function fetchCommentsEffect(dispatch, _, { call }) {
+  async function fetchCommentsEffect(dispatch, _getState, { call }) {
     dispatch(reduxActions.setLoadingComments(true));
     let response;
     try {
       response = await call(api.fetchComments);
     } catch (e) {
-      call(console.log, e);
       call(Alert.alert, 'Error', 'Could not connect to server', [{ text: 'OK' }]);
       return;
     } finally {
@@ -39,7 +38,6 @@ export const createComment = () =>
     try {
       response = await call(api.postComment, comment);
     } catch (e) {
-      call(console.log, e);
       call(Alert.alert, 'Error', 'Could not post your comment', [{ text: 'OK' }]);
       return;
     } finally {

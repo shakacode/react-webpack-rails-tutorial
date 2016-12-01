@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import _ from 'lodash/fp';
 
 export default function logger({ getState }) {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { Scene, Router, Reducer } from 'react-native-router-flux';
 import Add from '../../bundles/comments/containers/Add';
