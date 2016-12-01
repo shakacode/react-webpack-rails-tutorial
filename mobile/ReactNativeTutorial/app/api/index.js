@@ -1,5 +1,6 @@
 import _ from 'lodash/fp';
-import { normalize, Schema, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
+import { commentSchema, commentsSchema } from './schemas';
 
 // You can use localhost for development, but only on iOS. Android emulator is considered
 // a standalone machine with it's own localhost. Workaround is to specify the actual
@@ -27,13 +28,11 @@ const postRequest = async (url, payload) => apiRequest(url, 'POST', payload);
 export const fetchComments = async () => {
   const response = await getRequest('comments.json');
   const camelizedResponse = _.mapKeys(_.camelCase, response);
-  const commentSchema = new Schema('comments');
-  return normalize(camelizedResponse, { comments: arrayOf(commentSchema) });
+  return normalize(camelizedResponse, { comments: commentsSchema });
 };
 
 export const postComment = async (payload) => {
   const response = await postRequest('comments.json', { comment: payload });
   const camelizedResponse = _.mapKeys(_.camelCase, response);
-  const commentSchema = new Schema('comments');
   return normalize(camelizedResponse, commentSchema);
 };

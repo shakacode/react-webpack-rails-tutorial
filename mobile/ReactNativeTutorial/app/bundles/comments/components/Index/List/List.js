@@ -1,26 +1,17 @@
 // @flow
 import React from 'react';
 import { ListView, RefreshControl } from 'react-native';
-import _ from 'lodash/fp';
 import type { IndexPropsType } from '../../../containers/Index';
 import Item from './Item/Item';
-
-import styles from './ListStyle';
 
 type PropsType = IndexPropsType;
 
 const List = (props: PropsType) => {
-  const data = _.compose(
-    _.reverse,
-    _.sortBy(_.get('id')),
-    _.values
-  )(props.comments);
   const dataSource = new ListView.DataSource({ rowHasChanged: (r1: any, r2: any) => r1 !== r2 })
-    .cloneWithRows(data);
+    .cloneWithRows(props.comments || []);
   return (
     <ListView
       enableEmptySections
-      style={styles.container}
       dataSource={dataSource}
       renderRow={(item: any) => <Item {...item} />}
       refreshControl={

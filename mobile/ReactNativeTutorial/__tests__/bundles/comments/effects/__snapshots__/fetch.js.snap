@@ -11,13 +11,6 @@ Array [
   },
   Object {
     "args": Array [
-      [Error: Invalid Json],
-    ],
-    "name": "bound log",
-    "type": "CALL",
-  },
-  Object {
-    "args": Array [
       "Error",
       "Could not connect to server",
       Array [

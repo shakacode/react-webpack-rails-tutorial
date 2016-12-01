@@ -13,7 +13,7 @@ const Footer = () => (
       reverse
       name="add"
       color="#f50"
-      onPress={() => Actions.commentsAdd()}
+      onPress={Actions.commentsAdd}
     />
   </View>
 );

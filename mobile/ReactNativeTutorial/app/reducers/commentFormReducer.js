@@ -9,11 +9,7 @@ export const initialState = fromJS({
 
 const update = (state, action) => state.merge(action.payload);
 
-export default (state, action) => {
-  if (!state) {
-    return initialState;
-  }
-
+export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE:
       return update(state, action);

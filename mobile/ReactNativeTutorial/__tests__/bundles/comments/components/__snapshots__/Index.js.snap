@@ -32,54 +32,7 @@ exports[`Index renders correctly when loaded 1`] = `
     renderRow={[Function]}
     scrollEventThrottle={50}
     scrollRenderAheadDistance={1000}
-    stickyHeaderIndices={Array []}
-    style={Object {}}>
-    <View
-      style={
-        Object {
-          "backgroundColor": "#F0F0F0",
-          "elevation": 5,
-          "marginHorizontal": 20,
-          "marginVertical": 10,
-          "minHeight": 80,
-          "shadowColor": "#000000",
-          "shadowOffset": Object {
-            "height": 2,
-            "width": 0,
-          },
-          "shadowOpacity": 0.25,
-          "shadowRadius": 5,
-        }
-      }>
-      <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
-        style={
-          Object {
-            "color": "#000000",
-            "fontSize": 17,
-            "fontWeight": "bold",
-            "marginVertical": 5,
-            "textAlign": "center",
-          }
-        }>
-        Justin
-      </Text>
-      <Text
-        accessible={true}
-        allowFontScaling={true}
-        ellipsizeMode="tail"
-        style={
-          Object {
-            "color": "#555555",
-            "marginBottom": 10,
-            "marginHorizontal": 10,
-          }
-        }>
-        Another random comment
-      </Text>
-    </View>
+    stickyHeaderIndices={Array []}>
     <View
       style={
         Object {
@@ -126,6 +79,52 @@ exports[`Index renders correctly when loaded 1`] = `
         Just some random comment
       </Text>
     </View>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F0F0F0",
+          "elevation": 5,
+          "marginHorizontal": 20,
+          "marginVertical": 10,
+          "minHeight": 80,
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "bold",
+            "marginVertical": 5,
+            "textAlign": "center",
+          }
+        }>
+        Justin
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#555555",
+            "marginBottom": 10,
+            "marginHorizontal": 10,
+          }
+        }>
+        Another random comment
+      </Text>
+    </View>
   </ScrollView>
   <View
     style={
@@ -138,9 +137,8 @@ exports[`Index renders correctly when loaded 1`] = `
         "justifyContent": "center",
       }
     }>
-    <TouchableHighlight
-      activeOpacity={0.85}
-      onPress={[Function]}
+    <View
+      onPress={undefined}
       style={
         Array [
           Object {
@@ -192,7 +190,7 @@ exports[`Index renders correctly when loaded 1`] = `
         }>
         
       </Text>
-    </TouchableHighlight>
+    </View>
   </View>
 </View>
 `;
@@ -231,8 +229,7 @@ exports[`Index renders correctly when loading 1`] = `
     renderRow={[Function]}
     scrollEventThrottle={50}
     scrollRenderAheadDistance={1000}
-    stickyHeaderIndices={Array []}
-    style={Object {}} />
+    stickyHeaderIndices={Array []} />
   <View
     style={
       Object {
@@ -244,9 +241,8 @@ exports[`Index renders correctly when loading 1`] = `
         "justifyContent": "center",
       }
     }>
-    <TouchableHighlight
-      activeOpacity={0.85}
-      onPress={[Function]}
+    <View
+      onPress={undefined}
       style={
         Array [
           Object {
@@ -298,7 +294,7 @@ exports[`Index renders correctly when loading 1`] = `
         }>
         
       </Text>
-    </TouchableHighlight>
+    </View>
   </View>
 </View>
 `;

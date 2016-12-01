@@ -2,9 +2,9 @@ exports[`createComment creates a comment in the store and sends request to api 1
 Array [
   Object {
     "entities": Object {
-      "temp0": Object {
+      "temp:0": Object {
         "author": "Alexey",
-        "id": "temp0",
+        "id": "temp:0",
         "text": "Random comment",
       },
     },
@@ -19,7 +19,7 @@ Array [
     "args": Array [
       Object {
         "author": "Alexey",
-        "id": "temp0",
+        "id": "temp:0",
         "text": "Random comment",
       },
     ],
@@ -27,7 +27,7 @@ Array [
     "type": "CALL",
   },
   Object {
-    "id": "temp0",
+    "id": "temp:0",
     "type": "COMMENTS_STORE:REMOVE",
   },
   Object {

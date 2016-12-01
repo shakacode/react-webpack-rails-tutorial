@@ -5,7 +5,7 @@ import commentsStoreSelector from './commentsStoreSelector';
 export default createSelector(
   commentsStoreSelector,
   commentsStore => Map({
-    comments: commentsStore.delete('meta').valueSeq().sort((a, b) => b.get('id') - a.get('id')),
+    comments: commentsStore.delete('meta').valueSeq().sortBy(x => x.get('id')).reverse(),
     meta: commentsStore.get('meta'),
   })
 );

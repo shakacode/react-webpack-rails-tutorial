@@ -6,12 +6,9 @@ import Index from '../../bundles/comments/containers/Index';
 
 import styles from './RouterStyle';
 
-const reducerCreate = params => {
-  const defaultReducer = Reducer(params);
-  return (state, action) => {
-    console.log('Executing navigation action', action);
-    return defaultReducer(state, action);
-  };
+const reducerCreate = params => (state, action) => {
+  console.log('Executing navigation action', action);
+  return Reducer(params)(state, action);
 };
 
 export default () => (

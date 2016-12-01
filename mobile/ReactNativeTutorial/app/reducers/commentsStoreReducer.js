@@ -14,11 +14,7 @@ const create = (state, action) => state.merge(action.entities);
 const remove = (state, action) => state.delete(action.id);
 const setLoading = (state, action) => state.setIn(['meta', 'loading'], action.loading);
 
-export default (state, action) => {
-  if (!state) {
-    return initialState;
-  }
-
+export default (state = initialState, action) => {
   switch (action.type) {
     case CREATE:
       return create(state, action);
