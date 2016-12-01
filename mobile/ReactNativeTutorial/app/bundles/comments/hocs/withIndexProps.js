@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import commentsPropsSelector from 'ReactNativeTutorial/app/selectors/commentsPropsSelector';
-import * as actions from '../effects';
+import * as actions from '../thunks';
 
 type CommentType = {
   author?: string,

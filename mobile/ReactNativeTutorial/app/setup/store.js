@@ -1,7 +1,9 @@
 import { applyMiddleware, createStore } from 'redux';
-import effectsMiddleware from 'redux-thunk-effects';
+import thunk from 'redux-thunk';
 import loggerMiddleware from './loggerMiddleware';
 import appReducer, { initialState } from '../reducers';
 
-const middlewares = __DEV__ ? [effectsMiddleware, loggerMiddleware] : [effectsMiddleware];
+const call = (f, ...args) => f(...args);
+const thunkMiddleware = thunk.withExtraArgument(call);
+const middlewares = __DEV__ ? [thunkMiddleware, loggerMiddleware] : [thunkMiddleware];
 export default createStore(appReducer, initialState, applyMiddleware(...middlewares));

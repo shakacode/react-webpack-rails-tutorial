@@ -1,6 +1,6 @@
 import createDefaultStore from 'redux-mock-store';
-import { mockCallEffects, resetMockCallEffects } from 'redux-thunk-effects';
-import * as actions from 'ReactNativeTutorial/app/bundles/comments/effects';
+import { mockCalls, resetMockCalls } from 'mockCall';
+import * as actions from 'ReactNativeTutorial/app/bundles/comments/thunks';
 
 describe('fetch', () => {
   let store;
@@ -10,7 +10,7 @@ describe('fetch', () => {
   });
 
   afterEach(() => {
-    resetMockCallEffects();
+    resetMockCalls();
   });
 
   describe('successful fetch', () => {
@@ -23,7 +23,7 @@ describe('fetch', () => {
           },
         },
       };
-      mockCallEffects(response);
+      mockCalls(response);
       await store.dispatch(actions.fetch());
       expect(store.getActions()).toMatchSnapshot();
     });
@@ -31,7 +31,7 @@ describe('fetch', () => {
 
   describe('failing fetch', () => {
     it('dispatches an action with error', async () => {
-      mockCallEffects(() => { throw new Error('Invalid Json'); });
+      mockCalls(() => { throw new Error('Invalid Json'); });
       await store.dispatch(actions.fetch());
       expect(store.getActions()).toMatchSnapshot();
     });
