@@ -5,7 +5,7 @@ This tutorial shows how to connect to the the https://www.reactrails.com API for
 ### Setup
 1. Install the latest version of Xcode from AppStore or https://developer.apple.com/download/ (Apple ID required)
 2. Install the latest version of Android Studio from https://developer.android.com/studio/index.html
-3. Install nvm (Node Version Manager )
+3. Install nvm (Node Version Manager)
 
   ```
   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
