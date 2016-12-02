@@ -51,7 +51,8 @@ The app is waiting for further user interactions.
 We deliberately picked libraries and approaches to make this tutorial a bootstrap
 for scalable react native app. The details for each part of the app are given below:
 
+- [Redux](Redux.md)
 - Selectors
 - Containers
 - UI components
-- Redux and thunks
+- [Thunks](Thunks.md)
