@@ -6,7 +6,7 @@ This is a tutorial for building a simple React Native app.
 In this app you can fetch comments made by other users from the remote api,
 as well as post your own comments.
 
-![App screen](/images/screen.png)
+![App screen](images/screen.png)
 
 ## Technology stack
 
@@ -23,7 +23,7 @@ React native is a pure UI rendering framework. To add business logic to the app 
 framework, which handles the job of updating application state and providing data to the UI.
 The overall scheme of the app is provided below:
 
-![Scheme](/images/scheme.png)
+![Scheme](images/scheme.png)
 
 The app therefore is functioning in the circular way: 
 
