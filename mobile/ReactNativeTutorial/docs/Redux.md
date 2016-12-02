@@ -62,19 +62,20 @@ action type = `{reducerName}:{actionName}`
 
 The state of the Redux must be immutable by design, i.e. on each state change you have
 to create new state, rather than modifying existing state. There are two approaches to
- handle that - one is to use JS plain objects as redux state and es6 destructuring for
- constructions a new state, e.g. 
+ handle that:
+ 1. Use JS plain objects as redux state and es6 destructuring for
+ constructing a new state, e.g. 
  `const setLoadingComments = (state, action) => {...state, action.loading}`
- The other approach is to use a library for immutable objects like 
+ 2. Use a library for immutable objects like 
  [Immutable.js](https://facebook.github.io/immutable-js/). This approach not only saves
  you from accidentally mutating your state, but also has advantages in caching computed 
- values (see [Selectors](selectors.md) for details).
+ values (see [Selectors](Selectors.md) for details).
  
  Next we define simple reducer for each action. These funtions use `Immutable.js` api for
  merging and updating the state (effectively it creates a new state with these changes)
  
  After that comments reducer combines individual reducers using `switch case` on action type.
  
- Further we define actions creators - functions that returns actions. Action creators
+ Further we define actions creators - functions that return actions. Action creators
  abstract the internal structure of the action and are useful in other parts of the app for
   dispatching the actions.
