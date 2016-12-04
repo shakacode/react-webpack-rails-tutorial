@@ -1,0 +1,6 @@
+exports[`commentFormSelector selects the comment form store 1`] = `
+Object {
+  "author": "Alexey",
+  "text": "Random comment",
+}
+`;

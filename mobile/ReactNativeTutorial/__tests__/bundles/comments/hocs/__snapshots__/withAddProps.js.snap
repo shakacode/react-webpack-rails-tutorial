@@ -1,0 +1,13 @@
+exports[`withAddProps adds AddProps to a component 1`] = `
+<Mock
+  actions={
+    Object {
+      "createComment": [Function],
+      "fetch": [Function],
+      "updateForm": [Function],
+    }
+  }
+  author="Alexey"
+  meta={Object {}}
+  text="Random comment" />
+`;

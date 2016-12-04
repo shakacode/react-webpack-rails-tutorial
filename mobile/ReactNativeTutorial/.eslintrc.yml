@@ -1,0 +1,45 @@
+---
+  extends:
+    - "eslint-config-shakacode"
+    - "plugin:lodash-fp/recommended"
+    - "plugin:flowtype/recommended"
+  plugins:
+    - "react-native"
+    - "flowtype"
+    - "babel"
+    - "lodash-fp"
+
+  env:
+    node: true
+  settings:
+    import/resolver:
+      node:
+        extensions:
+          - ".js"
+          - ".android.js"
+          - ".ios.js"
+        moduleDirectory:
+          - "."
+          - "node_modules"
+    flowtype:
+      onlyFilesWithFlowAnnotation: true
+  globals:
+    __DEV__: true
+    fetch: true
+  rules:
+    new-cap: 0
+    react/sort-comp: 2
+    no-console: 2
+
+    babel/no-await-in-loop: 1
+
+    generator-star-spacing: 0
+
+    react-native/no-unused-styles: 2
+    react-native/split-platform-components: 2
+    react-native/no-inline-styles: 2
+    react-native/no-color-literals: 2
+
+    react/jsx-filename-extension:
+      - 1
+      - extensions: [".js", ".jsx"]
