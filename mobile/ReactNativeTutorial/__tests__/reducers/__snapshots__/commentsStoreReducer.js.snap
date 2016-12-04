@@ -1,0 +1,46 @@
+exports[`commentsStoreReducer createComments adds comments to the store 1`] = `
+Object {
+  "1": Object {
+    "author": "Alexey",
+    "id": 1,
+    "text": "Random comment",
+  },
+  "2": Object {
+    "author": "Justin",
+    "id": 2,
+    "text": "Another random comment",
+  },
+  "meta": Object {
+    "loading": false,
+  },
+}
+`;
+
+exports[`commentsStoreReducer removeComment removes comment by id 1`] = `
+Object {
+  "2": Object {
+    "author": "Justin",
+    "id": 2,
+    "text": "Another random comment",
+  },
+  "meta": Object {
+    "loading": false,
+  },
+}
+`;
+
+exports[`commentsStoreReducer setLoadingComments sets the loading meta information 1`] = `
+Object {
+  "meta": Object {
+    "loading": true,
+  },
+}
+`;
+
+exports[`commentsStoreReducer setLoadingComments sets the loading meta information 2`] = `
+Object {
+  "meta": Object {
+    "loading": false,
+  },
+}
+`;

@@ -1,0 +1,24 @@
+exports[`commentsPropsSelector maps commentsStore to props 1`] = `
+Object {
+  "comments": Array [
+    Object {
+      "author": "John",
+      "id": 3,
+      "text": "Yet another random comment",
+    },
+    Object {
+      "author": "Justin",
+      "id": 2,
+      "text": "Another random comment",
+    },
+    Object {
+      "author": "Alexey",
+      "id": 1,
+      "text": "Just some random comment",
+    },
+  ],
+  "meta": Object {
+    "loading": false,
+  },
+}
+`;
