@@ -5,7 +5,7 @@ For a details of a Redux framework please refer to
 
 The basic idea of Redux is having a set of functions which takes state and actions as
 arguments and return a new state based on the action params, i.e. functions
-in the form `(state, action) => nextState`. Such functions are called reducers. E.g. comments 
+in the form `(state, action) => nextState`. These functions are called `reducers`. E.g. comments 
 reducer in our app looks like this:
 
 ```
@@ -71,8 +71,8 @@ to create new state, rather than modifying existing state. There are two approac
  you from accidentally mutating your state, but also has advantages in caching computed 
  values (see [Selectors](Selectors.md) for details).
  
- Next we define simple reducer for each action. These funtions use `Immutable.js` api for
- merging and updating the state (effectively it creates a new state with these changes)
+ Next we define simple reducer for each action. These functions use `Immutable.js` api for
+ merging and updating the state (effectively they create a new state with these changes)
  
  After that comments reducer combines individual reducers using `switch case` on action type.
  

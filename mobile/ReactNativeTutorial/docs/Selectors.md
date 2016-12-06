@@ -15,7 +15,7 @@ state => state.get('commentsStore');
 We use `reselect` library that memoizes the previous input and doesn't recompute if
 the input isn't changed. That is critical because on each action you receive a new Redux
  state and have to save time on recalculations of the parts that didn't change. Additionally
- this ensures, that you don't re-render the parts that didn't change. Here's the example\
+ this ensures, that you don't re-render the parts of the UI that didn't change. Here's the example
  of the reselect usage:
  ```
  export default createSelector(
@@ -44,5 +44,5 @@ the input isn't changed. That is critical because on each action you receive a n
  and other libs use shallow compare of objects, that means you have to be careful with
  respect to deep objects as their comparison in some circumstances can 
  give false positive and trigger selector recalculation as well as unnecessary re-render.
- Additionally since `Immutable.js` api is already used inside redux, it would be easier
+ Additionally since `Immutable.js` api is already used inside reducers, it would be easier
  to reuse it here, rather than introducing new libs like `lodash`.
