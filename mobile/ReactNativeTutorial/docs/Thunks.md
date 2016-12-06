@@ -73,5 +73,19 @@ simple Redux actions and all the complex state changes and fething the data for 
   `reduxActions.createComments(response.entities.comments)`. These are basically two state
   mutations and while it's not a problem in this app, this could be undesirable in some
   other circumstances
- 
+  
+  ##### P.S Call as a third argument to thunk
+  
+  While most times you'll see apps using just two arguments in thunks 
+  (`dispatch` and `getState`), we also add a third argument `call`. It is used for calling
+  side effects inside Thunks (see [Side effects](Containers.md)). `call` is taking function
+  with a side effect as a first argument and executes it. 
+  The rest of the `call` arguments are passed to the function being executed. E.g.
+   ```
+   const square = x => x * x;
+   const result = call(square, 3);
+   // result = 9
+   ```
+   
+  This little tweak allows us to test thunks very efficiently.  
  
