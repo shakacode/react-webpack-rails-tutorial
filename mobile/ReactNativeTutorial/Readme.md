@@ -74,4 +74,4 @@ npm run flow
 
 ### Detailed docs
 
-Can be found in `docs` folder. See [Introduction](Introduction.md) to start.
+Can be found in `docs` folder. See [Introduction](docs/Introduction.md) to start.

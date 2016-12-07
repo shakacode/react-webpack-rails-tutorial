@@ -24,7 +24,7 @@ The actual drawing occurs inside React Native framework. So this is not a side e
 a typical React Native component.
 
 Second, we don't consider user interactions triggering callbacks, defined
-in component to be a side effect of out component. That is because we think of side effects
+in component to be a side effect of a component. That is because we think of side effects
 as something that happens when we do render of a component. User interactions are 
 themselves come from the outer world and simply forwarded to thunks.
  
@@ -37,14 +37,14 @@ So in the scope of this app we have two side effects:
 Pure components have only `Props` as inputs and have no side effects. 
 A super simple criterion for checking that component is pure is to make sure it is
 implemented as a function, rather than class extending `React.Component`. 
-The whole purpose of keeping components pure is to make the testing of the rendering
+The whole purpose of keeping components pure is to make the testing of rendering
 super easy.
 
 ### Containers
 
 Containers on the other hand are entities that have side effects. Their single
 purpose is to accumulate side effects and delegate a set of props to pure
-components. So they don't contain any rendering logic and tested purely side
+components. So they don't contain any rendering logic and tested purely for side
 effects.
 
 To make testing easier we singled out each side effect into a higher order component.
@@ -52,7 +52,7 @@ To make testing easier we singled out each side effect into a higher order compo
  argument and returns another component. For example this HOC
  
  ```
-(initFunction: Function, Component: ReactClass<any>) =>
+export const withInitFunction(initFunction: Function, Component: ReactClass<any>) =>
    class ComponentWithInit extends React.Component {
      componentDidMount() {
        initFunction();
@@ -71,5 +71,5 @@ Then a container is just a set of such HOCs, e.g.
 import withAddProps from '../hocs/withAddProps';
 import Add from '../components/Add/Add';
 
-export default withAddProps(Add);
+export default withInitFunction(withAddProps(Add));
 ```
