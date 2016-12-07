@@ -74,7 +74,7 @@ Here's an example of thunk from our app
  mutations and while it's not a problem in this app, it could have some undesirable 
  effects in other circumstances
   
-##### P.S Call as a third argument to thunk
+##### P.S. Call as a third argument to thunk
   
  While most times you'll see apps using just two arguments in thunks 
  (`dispatch` and `getState`), we also add a third argument `call`. It is used for calling
