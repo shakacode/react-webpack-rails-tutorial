@@ -218,6 +218,10 @@ We no longer recommend using an express server with Rails. It's simply not neces
 2. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example just using an express server (no Rails involved). This is good for fast prototyping of React components. However, this setup is not as useful now that we have hot reloading working for Rails!
 3. Try Hot Reloading steps below!
 
+### React Native
+
+See React Native mobile app that works for both iOS and Android under the `mobile` folder.
+
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
 

@@ -71,3 +71,7 @@ This projects uses Eslint with React and React Native rules. To run linters type
 ```
 npm run flow
 ```
+
+### Detailed docs
+
+Can be found in `docs` folder. See [Introduction](Introduction.md) to start.
