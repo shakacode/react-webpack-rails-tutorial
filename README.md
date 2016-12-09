@@ -18,6 +18,10 @@ Your support keeps this project going.
 3. [Code Walkthrough](https://youtu.be/McQ9UM-_ocQ)
 
 ## NEWS
+
+* We're considering putting in a react-native client into this repo under a mobile folder. We have several open PRs on this.
+* We have [some other open PRs](https://github.com/shakacode/react-webpack-rails-tutorial/pulls) of things we may soon be incorporating, including localization and action cable! Stay tuned! If you have opinions of what should or should not get merged, get in touch with [justin@shakacode.com](mailto:justin@shakacode.com).
+
 This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the `/client` directory, React on Rails supports just about anything that Webpack and JavaScript can do, such as:
 
 1. **Handling of Sass and Bootstrap**: This tutorial uses [CSS modules via Webpack](https://github.com/css-modules/css-modules) so that all your client side configuration can be handled in a pure JavaScript tooling manner. This allows for hot reloading and a better separation of concerns (Rails for server-side functionality versus NPM/Webpack for all things client side). The alternative approach of using the traditional Rails Asset Pipeline for your CSS is simpler and supported by [React on Rails](https://github.com/shakacode/react_on_rails).
