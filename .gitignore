@@ -29,6 +29,10 @@ vendor/ruby
 # Generated js bundles
 /app/assets/webpack/
 
+# Ignore translations.js
+client/app/libs/i18n/translations.js
+client/app/libs/i18n/default.js
+
 # Rubymine/IntelliJ
 .idea
 
