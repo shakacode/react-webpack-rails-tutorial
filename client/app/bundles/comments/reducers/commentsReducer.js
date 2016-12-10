@@ -10,10 +10,11 @@ export const $$initialState = Immutable.fromJS({
   submitCommentError: null,
   isFetching: false,
   isSaving: false,
+  locale: null,
 });
 
 export default function commentsReducer($$state = $$initialState, action = null) {
-  const { type, comment, comments, error } = action;
+  const { type, comment, comments, error, locale } = action;
 
   switch (type) {
 
@@ -72,6 +73,12 @@ export default function commentsReducer($$state = $$initialState, action = null)
     case actionTypes.SET_IS_SAVING: {
       return $$state.merge({
         isSaving: true,
+      });
+    }
+
+    case actionTypes.SET_LOCALE: {
+      return $$state.merge({
+        locale,
       });
     }
 

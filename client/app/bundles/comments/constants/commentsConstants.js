@@ -7,3 +7,5 @@ export const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 
 export const SET_IS_FETCHING = 'SET_IS_FETCHING';
 export const SET_IS_SAVING = 'SET_IS_SAVING';
+
+export const SET_LOCALE = 'SET_LOCALE';
