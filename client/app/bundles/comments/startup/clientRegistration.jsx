@@ -6,6 +6,9 @@ import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleComment
 import routerCommentsStore from '../store/routerCommentsStore';
 import commentsStore from '../store/commentsStore';
 import NavigationBarApp from './NavigationBarApp';
+import { InitI18nLocale } from 'libs/i18n/i18nHelper';
+
+InitI18nLocale();
 
 ReactOnRails.setOptions({
   traceTurbolinks: TRACE_TURBOLINKS, // eslint-disable-line no-undef

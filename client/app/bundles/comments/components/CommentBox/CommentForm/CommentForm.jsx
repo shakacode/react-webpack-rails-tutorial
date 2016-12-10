@@ -14,13 +14,13 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
-
+import { injectIntl, intlShape } from 'react-intl';
+import { defaultMessages } from 'libs/i18n/default';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import css from './CommentForm.scss';
 
 const emptyComment = { author: '', text: '' };
-const textPlaceholder = 'Say something using markdown...';
 
 function bsStyleFor(propName, error) {
   if (error) {
@@ -31,12 +31,13 @@ function bsStyleFor(propName, error) {
   return null;
 }
 
-export default class CommentForm extends BaseComponent {
+class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props, context) {
@@ -123,18 +124,19 @@ export default class CommentForm extends BaseComponent {
   }
 
   formHorizontal() {
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
         <Form horizontal className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-              Name
+              {formatMessage(defaultMessages.inputNameLabel)}
             </Col>
             <Col sm={10}>
               <FormControl
                 type="text"
-                placeholder="Your Name"
+                placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
                 ref="horizontalAuthorNode"
                 value={this.state.comment.author}
                 onChange={this.handleChange}
@@ -145,13 +147,13 @@ export default class CommentForm extends BaseComponent {
           </FormGroup>
           <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-              Text
+              {formatMessage(defaultMessages.inputTextLabel)}
             </Col>
             <Col sm={10}>
               <FormControl
                 type="textarea"
                 label="Text"
-                placeholder={textPlaceholder}
+                placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
                 ref="horizontalTextNode"
                 value={this.state.comment.text}
                 onChange={this.handleChange}
@@ -167,7 +169,9 @@ export default class CommentForm extends BaseComponent {
                 className="btn btn-primary"
                 disabled={this.props.isSaving}
               >
-                {this.props.isSaving ? 'Saving...' : 'Post'}
+                {this.props.isSaving
+                  ? `${formatMessage(defaultMessages.inputSaving)}...`
+                  : formatMessage(defaultMessages.inputPost)}
               </Button>
             </Col>
           </FormGroup>
@@ -177,15 +181,16 @@ export default class CommentForm extends BaseComponent {
   }
 
   formStacked() {
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
         <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formBasicName">
-            <ControlLabel>Name</ControlLabel>
+            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
             <FormControl
               type="text"
-              placeholder="Your Name"
+              placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
               ref="stackedAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -196,11 +201,11 @@ export default class CommentForm extends BaseComponent {
           <FormGroup
             controlId="formBasicText"
           >
-            <ControlLabel>Text</ControlLabel>
+            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
             <FormControl
               type="textarea"
               label="Text"
-              placeholder={textPlaceholder}
+              placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               ref="stackedTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -214,7 +219,9 @@ export default class CommentForm extends BaseComponent {
               className="btn btn-primary"
               disabled={this.props.isSaving}
             >
-              {this.props.isSaving ? 'Saving...' : 'Post'}
+              {this.props.isSaving
+                ? `${formatMessage(defaultMessages.inputSaving)}...`
+                : formatMessage(defaultMessages.inputPost)}
             </Button>
           </FormGroup>
         </form>
@@ -224,17 +231,18 @@ export default class CommentForm extends BaseComponent {
 
   // Head up! We have some CSS modules going on here with the className props below.
   formInline() {
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
         <Form inline className="commentForm" onSubmit={this.handleSubmit}>
           <FormGroup controlId="formInlineName" >
             <ControlLabel>
-              Name
+              {formatMessage(defaultMessages.inputNameLabel)}
             </ControlLabel>
             <FormControl
               type="text"
-              placeholder="Your Name"
+              placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
               ref="inlineAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -245,12 +253,12 @@ export default class CommentForm extends BaseComponent {
           </FormGroup>
           <FormGroup controlId="formInlineName">
             <ControlLabel>
-              Text
+              {formatMessage(defaultMessages.inputTextLabel)}
             </ControlLabel>
             <FormControl
               type="textarea"
               label="Text"
-              placeholder={textPlaceholder}
+              placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               ref="inlineTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -264,7 +272,9 @@ export default class CommentForm extends BaseComponent {
             className="btn btn-primary"
             disabled={this.props.isSaving}
           >
-            {this.props.isSaving ? 'Saving...' : 'Post'}
+            {this.props.isSaving
+              ? `${formatMessage(defaultMessages.inputSaving)}...`
+              : formatMessage(defaultMessages.inputPost)}
           </Button>
         </Form>
       </div>
@@ -284,7 +294,7 @@ export default class CommentForm extends BaseComponent {
     }, []);
 
     return (
-      <Alert bsStyle="danger" key="commentSubmissionError">
+      <Alert bsStyle='danger' key='commentSubmissionError'>
         <strong>Your comment was not saved!</strong>
         <ul>
           {errorElements}
@@ -310,6 +320,7 @@ export default class CommentForm extends BaseComponent {
     }
 
     const { cssTransitionGroupClassNames } = this.props;
+    const { formatMessage } = this.props.intl;
 
     // For animation with ReactCSSTransitionGroup
     //   https://facebook.github.io/react/docs/animation.html
@@ -325,13 +336,15 @@ export default class CommentForm extends BaseComponent {
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
-          <NavItem eventKey={0}>Horizontal Form</NavItem>
-          <NavItem eventKey={1}>Stacked Form</NavItem>
-          <NavItem eventKey={2}>Inline Form</NavItem>
+        <Nav bsStyle='pills' activeKey={this.state.formMode} onSelect={this.handleSelect}>
+          <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>
+          <NavItem eventKey={1}>{formatMessage(defaultMessages.formStacked)}</NavItem>
+          <NavItem eventKey={2}>{formatMessage(defaultMessages.formInline)}</NavItem>
         </Nav>
         {inputForm}
       </div>
     );
   }
 }
+
+export default injectIntl(CommentForm);

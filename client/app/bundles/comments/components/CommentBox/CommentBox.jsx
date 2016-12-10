@@ -1,11 +1,13 @@
 import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
-
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import { SelectLanguage } from 'libs/i18n/i18nHelper';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 
-export default class CommentBox extends BaseComponent {
+class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
@@ -17,6 +19,7 @@ export default class CommentBox extends BaseComponent {
       submitCommentError: React.PropTypes.string,
       $$comments: React.PropTypes.arrayOf(CommentPropTypes),
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   componentDidMount() {
@@ -30,24 +33,28 @@ export default class CommentBox extends BaseComponent {
   }
 
   render() {
-    const { actions, data } = this.props;
+    const { actions, data, intl } = this.props;
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
       leave: css.elementLeave,
       leaveActive: css.elementLeaveActive,
     };
+    const locale = data.get('locale') || defaultLocale;
 
     return (
       <div className="commentBox container">
         <h2>
-          Comments {data.get('isFetching') && 'Loading...'}
+          {formatMessage(defaultMessages.comments)}
+          {data.get('isFetching') && formatMessage(defaultMessages.loading)}
         </h2>
-        <p>
-          <b>Text</b> supports Github Flavored Markdown.
-          Comments older than 24 hours are deleted.<br />
-          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-        </p>
+        { SelectLanguage(actions.setLocale, locale) }
+        <ul>
+          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
+          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
+        </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
           error={data.get('submitCommentError')}
@@ -63,3 +70,5 @@ export default class CommentBox extends BaseComponent {
     );
   }
 }
+
+export default injectIntl(CommentBox);
