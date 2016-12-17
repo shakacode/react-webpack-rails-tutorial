@@ -39,10 +39,6 @@ gem "rails-html-sanitizer"
 
 gem "react_on_rails", "~> 6.1"
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# mini_racer is probably faster than therubyracer
-gem "mini_racer"
-
 gem "autoprefixer-rails"
 
 gem "awesome_print"
