@@ -31,7 +31,6 @@ module.exports = {
       'immutable',
       'lodash',
       'marked',
-      'react-addons-pure-render-mixin',
       'react-bootstrap',
       'react-dom',
       'react-redux',
