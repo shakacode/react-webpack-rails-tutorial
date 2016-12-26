@@ -12,5 +12,12 @@ module RailsReactTutorial
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.action_cable.allowed_request_origins = [Rails.application.secrets.action_cable_url]
+
+    ################################################################################
+    # ReactOnRails will convert rails locales to javascript files for react-intl.
+    ################################################################################
+    config.after_initialize do
+      ReactOnRails::LocalesToJs.new
+    end
   end
 end
