@@ -27,6 +27,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
+gem 'rack-cors', require: 'rack/cors'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc

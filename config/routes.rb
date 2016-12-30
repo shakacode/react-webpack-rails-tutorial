@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   get "react-router(/*all)", to: "pages#index"
 
   resources :comments
+  mount ActionCable.server => '/cable'
 end
