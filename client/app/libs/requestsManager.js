@@ -1,7 +1,7 @@
 import request from 'axios';
 import ReactOnRails from 'react-on-rails';
 
-const API_URL = 'http://localhost:3000/comments.json';
+const API_URL = '/comments.json';
 
 export default {
 

@@ -64,3 +64,15 @@ export function submitComment(comment) {
     );
   };
 }
+
+export function sendComment(comment) {
+  return (dispatch) => {
+    dispatch(setIsSaving());
+    return (
+      requestsManager
+        .submitEntity({ comment })
+        .then(res => dispatch(submitCommentSuccess(res.data)))
+        .catch(error => dispatch(submitCommentFailure(error)))
+    );
+  };
+}

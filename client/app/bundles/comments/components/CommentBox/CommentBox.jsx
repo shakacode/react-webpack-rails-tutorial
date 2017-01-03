@@ -4,9 +4,10 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
-import { ActionCable } from 'actioncable-js';
+import ActionCable from 'actioncable';
 
-var App = {};
+var cable = ActionCable.createConsumer("ws://localhost:3000/cable");
+var commentChannel;
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {
@@ -22,22 +23,13 @@ export default class CommentBox extends BaseComponent {
     }).isRequired,
   };
 
-  createConsumer() {
-    App.cable = ActionCable.createConsumer("ws://localhost:3000/cable");    
-  }
-
   createSubscription() {
-    App.commentsChannel = App.cable.subscriptions.create({channel: "CommentsChannel"}, {
-      // ActionCable callbacks
+    cable.subscriptions.create("CommentsChannel", {
       connected: function() {
         console.log("connected", this.identifier)
       },
       disconnected: function() {
         console.log("disconnected", this.identifier)
-      },
-      received: function(data) {
-        console.log("received")
-        console.log(data)
       }
     });
   }
@@ -45,7 +37,6 @@ export default class CommentBox extends BaseComponent {
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    this.createConsumer();
     this.createSubscription();
     //this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
@@ -62,7 +53,6 @@ export default class CommentBox extends BaseComponent {
       leave: css.elementLeave,
       leaveActive: css.elementLeaveActive,
     };
-    const app = App;
 
     return (
       <div className="commentBox container">
@@ -79,7 +69,7 @@ export default class CommentBox extends BaseComponent {
           error={data.get('submitCommentError')}
           actions={actions}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-          app={app}
+          cable={cable}
         />
         <CommentList
           $$comments={data.get('$$comments')}
