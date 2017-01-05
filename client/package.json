@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "actioncable": "^5.0.1",
-    "actioncable-js": "^5.0.0-rc2",
     "autoprefixer": "^6.5.3",
     "axios": "^0.15.2",
     "babel": "^6.5.2",

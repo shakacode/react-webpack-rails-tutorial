@@ -102,7 +102,6 @@ export default class CommentForm extends BaseComponent {
     if (this.props.error) return;
 
     const comment = { author: this.state.comment.author, text: '' };
-
     this.setState({ comment });
 
     let ref;

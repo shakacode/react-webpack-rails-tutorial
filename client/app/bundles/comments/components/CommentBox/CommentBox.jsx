@@ -25,6 +25,12 @@ export default class CommentBox extends BaseComponent {
     const { submitCommentSuccess } = this.props.actions;
     const cable = ActionCable.createConsumer("ws://localhost:5000/cable");
     cable.subscriptions.create({channel: "CommentsChannel"}, {
+      connected: () => {
+        console.log("connected")
+      },
+      disconnected: () => {
+        console.log("disconnected")
+      },
       received: (comment) => {
         submitCommentSuccess(Immutable.fromJS(comment));
       }
