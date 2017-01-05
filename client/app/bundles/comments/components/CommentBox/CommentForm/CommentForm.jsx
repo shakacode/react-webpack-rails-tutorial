@@ -35,7 +35,6 @@ export default class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
-    cable: PropTypes.object.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
   };
@@ -93,13 +92,9 @@ export default class CommentForm extends BaseComponent {
   handleSubmit(e) {
     e.preventDefault();
     const { actions } = this.props;
-    var mid = {channel: "CommentsChannel"}
-    this.props.cable.send({command: "message",
-                           identifier: JSON.stringify(mid),
-                           data: JSON.stringify(this.state.comment)})
-    // actions
-    //   .submitComment(this.state.comment)
-    //   .then(this.resetAndFocus);
+    actions
+      .submitComment(this.state.comment)
+      .then(this.resetAndFocus);
   }
 
   resetAndFocus() {

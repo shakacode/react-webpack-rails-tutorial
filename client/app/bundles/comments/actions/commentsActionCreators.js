@@ -27,6 +27,14 @@ export function fetchCommentsFailure(error) {
   };
 }
 
+//RB-To-Do : There could be a better way to handle response in submitCommentSuccess instead of defining submitCommentStatusOk
+export function submitCommentStatusOk(comment) {
+  return {
+    type: actionTypes.SUBMIT_COMMENT_STATUS_OK,
+    comment,
+  };
+}
+
 export function submitCommentSuccess(comment) {
   return {
     type: actionTypes.SUBMIT_COMMENT_SUCCESS,
@@ -59,7 +67,7 @@ export function submitComment(comment) {
     return (
       requestsManager
         .submitEntity({ comment })
-        .then(res => dispatch(submitCommentSuccess(res.data)))
+        .then(res => dispatch(submitCommentStatusOk(res.data)))
         .catch(error => dispatch(submitCommentFailure(error)))
     );
   };

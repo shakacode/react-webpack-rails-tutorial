@@ -4,10 +4,8 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import Immutable from 'immutable';
 import ActionCable from 'actioncable';
-
-var cable = ActionCable.createConsumer("ws://localhost:3000/cable");
-var commentChannel;
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {
@@ -23,13 +21,12 @@ export default class CommentBox extends BaseComponent {
     }).isRequired,
   };
 
-  createSubscription() {
-    cable.subscriptions.create("CommentsChannel", {
-      connected: function() {
-        console.log("connected", this.identifier)
-      },
-      disconnected: function() {
-        console.log("disconnected", this.identifier)
+  subscribeChannel() {
+    const { submitCommentSuccess } = this.props.actions;
+    const cable = ActionCable.createConsumer("ws://localhost:5000/cable");
+    cable.subscriptions.create({channel: "CommentsChannel"}, {
+      received: (comment) => {
+        submitCommentSuccess(Immutable.fromJS(comment));
       }
     });
   }
@@ -37,12 +34,13 @@ export default class CommentBox extends BaseComponent {
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    this.createSubscription();
+    this.subscribeChannel();
     //this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
+    //clearInterval(this.intervalId);
   }
 
   render() {
@@ -69,7 +67,6 @@ export default class CommentBox extends BaseComponent {
           error={data.get('submitCommentError')}
           actions={actions}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-          cable={cable}
         />
         <CommentList
           $$comments={data.get('$$comments')}

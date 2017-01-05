@@ -32,6 +32,17 @@ export default function commentsReducer($$state = $$initialState, action = null)
       });
     }
 
+    //RB-To-Do : Can we remove this method it doesn't make much sense to update state here
+    case actionTypes.SUBMIT_COMMENT_STATUS_OK: {
+      return $$state.withMutations(state => (
+        state
+          .merge({
+            submitCommentError: null,
+            isSaving: false,
+          })
+      ));
+    }
+
     case actionTypes.SUBMIT_COMMENT_SUCCESS: {
       return $$state.withMutations(state => (
         state
