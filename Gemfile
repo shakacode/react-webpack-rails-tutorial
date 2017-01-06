@@ -105,3 +105,7 @@ group :test  do
   gem "rspec-retry"
   gem "selenium-webdriver", "<3.0.0"
 end
+
+group :production do
+  gem 'rails_12factor'
+end
