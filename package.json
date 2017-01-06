@@ -39,9 +39,7 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {
-    "action-cable": "0.0.9"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "cacheDirectories": [
     "node_modules",
