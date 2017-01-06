@@ -32,6 +32,18 @@ export default function commentsReducer($$state = $$initialState, action = null)
       });
     }
 
+    case actionTypes.MESSAGE_RECEIVED: {
+      return $$state.withMutations(state => (
+        state
+          .updateIn(
+            ['$$comments'],
+            $$comments => {
+              return ($$comments.findIndex(com => com.get('id') === comment.get('id')) == -1) ? $$comments.unshift(Immutable.fromJS(comment)) : $$comments
+            },
+          )
+      ));
+    }
+
     case actionTypes.SUBMIT_COMMENT_SUCCESS: {
       return $$state.withMutations(state => (
         state

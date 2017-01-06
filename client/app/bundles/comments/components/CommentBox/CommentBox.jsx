@@ -4,6 +4,8 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import Immutable from 'immutable';
+import ActionCable from 'actioncable';
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {
@@ -19,14 +21,32 @@ export default class CommentBox extends BaseComponent {
     }).isRequired,
   };
 
+  subscribeChannel() {
+    const { messageReceived } = this.props.actions;
+    const cable = ActionCable.createConsumer("ws://"+window.location.hostname+":"+window.location.port+"/cable");
+    cable.subscriptions.create({channel: "CommentsChannel"}, {
+      connected: () => {
+        console.log("connected")
+      },
+      disconnected: () => {
+        console.log("disconnected")
+      },
+      received: (comment) => {
+        messageReceived(Immutable.fromJS(comment));
+      }
+    });
+  }
+
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    this.intervalId = setInterval(fetchComments, this.props.pollInterval);
+    this.subscribeChannel();
+    //this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
+    //clearInterval(this.intervalId);
   }
 
   render() {

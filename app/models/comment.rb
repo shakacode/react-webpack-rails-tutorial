@@ -1,4 +1,7 @@
 class Comment < ActiveRecord::Base
-  validates_presence_of :author
-  validates_presence_of :text
+
+  validates :author, :text, presence: true
+
+  after_commit { CommentRelayJob.perform_later(self)  }
+
 end

@@ -27,6 +27,13 @@ export function fetchCommentsFailure(error) {
   };
 }
 
+export function messageReceived(comment) {
+  return {
+    type: actionTypes.MESSAGE_RECEIVED,
+    comment,
+  };
+}
+
 export function submitCommentSuccess(comment) {
   return {
     type: actionTypes.SUBMIT_COMMENT_SUCCESS,
