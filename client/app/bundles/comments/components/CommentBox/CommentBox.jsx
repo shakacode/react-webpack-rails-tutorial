@@ -23,7 +23,8 @@ export default class CommentBox extends BaseComponent {
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
-    const cable = ActionCable.createConsumer("ws://"+window.location.hostname+":"+window.location.port+"/cable");
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
+    const cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
     cable.subscriptions.create({channel: "CommentsChannel"}, {
       connected: () => {
         console.log("connected")
