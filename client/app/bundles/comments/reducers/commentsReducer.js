@@ -32,14 +32,15 @@ export default function commentsReducer($$state = $$initialState, action = null)
       });
     }
 
-    //RB-To-Do : Can we remove this method it doesn't make much sense to update state here
-    case actionTypes.SUBMIT_COMMENT_STATUS_OK: {
+    case actionTypes.MESSAGE_RECEIVED: {
       return $$state.withMutations(state => (
         state
-          .merge({
-            submitCommentError: null,
-            isSaving: false,
-          })
+          .updateIn(
+            ['$$comments'],
+            $$comments => {
+              return ($$comments.findIndex(com => com.get('id') === comment.get('id')) == -1) ? $$comments.unshift(Immutable.fromJS(comment)) : $$comments
+            },
+          )
       ));
     }
 

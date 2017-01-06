@@ -60,6 +60,5 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  #RB-To-Do : Remove hardcoded request_origin
-  config.action_cable.allowed_request_origins = ["http://localhost:5000"]
+  config.action_cable.allowed_request_origins = [Rails.application.secrets.action_cable_url]
 end
