@@ -37,9 +37,7 @@ export default function commentsReducer($$state = $$initialState, action = null)
         state
           .updateIn(
             ['$$comments'],
-            $$comments => {
-              return ($$comments.findIndex(com => com.get('id') === comment.get('id')) == -1) ? $$comments.unshift(Immutable.fromJS(comment)) : $$comments
-            },
+            $$comments => { return ($$comments.findIndex(com => com.get('id') === comment.get('id')) == -1) ? $$comments.unshift(Immutable.fromJS(comment)) : $$comments },
           )
       ));
     }
