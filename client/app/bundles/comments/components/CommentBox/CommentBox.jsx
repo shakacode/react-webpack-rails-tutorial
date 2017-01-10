@@ -21,6 +21,13 @@ export default class CommentBox extends BaseComponent {
     }).isRequired,
   };
 
+  constructor() {
+    super();
+    _.bindAll(this, [
+      'refreshComments',
+    ]);
+  }
+
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
@@ -48,6 +55,11 @@ export default class CommentBox extends BaseComponent {
     App.cable.subscriptions.remove({ channel: "CommentsChannel" });
   }
 
+  refreshComments() {
+    const { fetchComments } = this.props.actions;
+    fetchComments();
+  }
+
   render() {
     const { actions, data } = this.props;
     const cssTransitionGroupClassNames = {
@@ -62,6 +74,7 @@ export default class CommentBox extends BaseComponent {
         <h2>
           Comments {data.get('isFetching') && 'Loading...'}
         </h2>
+          <a href="javascript:void(0)" onClick={this.refreshComments}>Refresh</a>
         <p>
           <b>Text</b> supports Github Flavored Markdown.
           Comments older than 24 hours are deleted.<br />
