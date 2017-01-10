@@ -42,12 +42,10 @@ export default class CommentBox extends BaseComponent {
     const { fetchComments } = this.props.actions;
     fetchComments();
     this.subscribeChannel();
-    //this.intervalId = setInterval(fetchComments, this.props.pollInterval);
   }
 
   componentWillUnmount() {
     App.cable.subscriptions.remove({ channel: "CommentsChannel" });
-    //clearInterval(this.intervalId);
   }
 
   render() {
