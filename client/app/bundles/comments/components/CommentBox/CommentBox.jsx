@@ -74,12 +74,25 @@ export default class CommentBox extends BaseComponent {
         <h2>
           Comments {data.get('isFetching') && 'Loading...'}
         </h2>
-          <a href="javascript:void(0)" onClick={this.refreshComments}>Refresh</a>
-        <p>
+        <ul>
+          <li>
+        {data.get('isFetching') && <br/> ||
+          <a href="javascript:void(0)" onClick={this.refreshComments}>Force Refresh of All Comments</a>
+        }
+          </li>
+          <li>
           <b>Text</b> supports Github Flavored Markdown.
-          Comments older than 24 hours are deleted.<br />
+          </li>
+          <li>
+          Comments older than 24 hours are deleted.
+          </li>
+          <li>
           <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-        </p>
+          </li>
+          <li>
+            To see Action Cable instantly update two browsers, open two browsers and submit a comment!
+          </li>
+        </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
           error={data.get('submitCommentError')}
