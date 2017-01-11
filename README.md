@@ -19,7 +19,8 @@ Your support keeps this project going.
 
 ## NEWS
 
-* We're considering putting in a react-native client into this repo under a mobile folder. We have several open PRs on this.
+* Action Cable was recently added in [PR #355](https://github.com/shakacode/react-webpack-rails-tutorial/pull/355).
+* We made react-native client: [shakacode/reactrails-react-native-client](https://github.com/shakacode/reactrails-react-native-client/)
 * We have [some other open PRs](https://github.com/shakacode/react-webpack-rails-tutorial/pulls) of things we may soon be incorporating, including localization and action cable! Stay tuned! If you have opinions of what should or should not get merged, get in touch with [justin@shakacode.com](mailto:justin@shakacode.com).
 
 This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the `/client` directory, React on Rails supports just about anything that Webpack and JavaScript can do, such as:
@@ -63,6 +64,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 - Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
 - Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
+- Example of React/Redux with Rails Action Cable.
 - Example of Rails 5 with ReactJs/Redux/React-Router with Webpack and ES7.
 - Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.github.io/docs/webpack-dev-server.html). You can see this by starting the app and visiting http://localhost:4000
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
