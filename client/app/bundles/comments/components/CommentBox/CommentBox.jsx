@@ -4,6 +4,8 @@ import React, { PropTypes } from 'react';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
+import Immutable from 'immutable';
+import ActionCable from 'actioncable';
 
 export default class CommentBox extends BaseComponent {
   static propTypes = {
@@ -19,14 +21,43 @@ export default class CommentBox extends BaseComponent {
     }).isRequired,
   };
 
+  constructor() {
+    super();
+    _.bindAll(this, [
+      'refreshComments',
+    ]);
+  }
+
+  subscribeChannel() {
+    const { messageReceived } = this.props.actions;
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
+    const cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
+    cable.subscriptions.create({channel: "CommentsChannel"}, {
+      connected: () => {
+        console.log("connected")
+      },
+      disconnected: () => {
+        console.log("disconnected")
+      },
+      received: (comment) => {
+        messageReceived(Immutable.fromJS(comment));
+      }
+    });
+  }
+
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    this.intervalId = setInterval(fetchComments, this.props.pollInterval);
+    this.subscribeChannel();
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
+  }
+
+  refreshComments() {
+    const { fetchComments } = this.props.actions;
+    fetchComments();
   }
 
   render() {
@@ -43,6 +74,7 @@ export default class CommentBox extends BaseComponent {
         <h2>
           Comments {data.get('isFetching') && 'Loading...'}
         </h2>
+          <a href="javascript:void(0)" onClick={this.refreshComments}>Refresh</a>
         <p>
           <b>Text</b> supports Github Flavored Markdown.
           Comments older than 24 hours are deleted.<br />

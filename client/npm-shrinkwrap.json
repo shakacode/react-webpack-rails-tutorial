@@ -44,6 +44,11 @@
       "resolved": "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-3.0.1.tgz",
       "dev": true
     },
+    "actioncable": {
+      "version": "5.0.1",
+      "from": "actioncable@latest",
+      "resolved": "https://registry.npmjs.org/actioncable/-/actioncable-5.0.1.tgz"
+    },
     "ajv": {
       "version": "4.9.0",
       "from": "ajv@>=4.7.0 <5.0.0",

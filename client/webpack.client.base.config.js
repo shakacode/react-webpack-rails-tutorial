@@ -27,6 +27,7 @@ module.exports = {
       // vendor-bundle.js. Note, if we added some library here, but don't use it in the
       // app-bundle.js, then we just wasted a bunch of space.
       'axios',
+      'actioncable',
       'classnames',
       'immutable',
       'lodash',
