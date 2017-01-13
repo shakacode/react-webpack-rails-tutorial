@@ -29,13 +29,14 @@ class CommentBox extends BaseComponent {
     _.bindAll(this, [
       'refreshComments',
     ]);
+    this.cable = null;
   }
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
-    const cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
-    cable.subscriptions.create({channel: "CommentsChannel"}, {
+    this.cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
+    this.cable.subscriptions.create({channel: "CommentsChannel"}, {
       connected: () => {
         console.log("connected")
       },
@@ -55,7 +56,7 @@ class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
+    this.cable.subscriptions.remove({ channel: "CommentsChannel" });
   }
 
   refreshComments() {
