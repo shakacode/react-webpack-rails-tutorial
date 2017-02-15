@@ -10,6 +10,9 @@ Your support keeps this project going!
 
 (Want to become a contributor? [Contact us](mailto:contact@shakacode.com) for an Slack team invite! Also, see ["easy" issues](https://github.com/shakacode/react_on_rails/labels/easy) and [issues for the full tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/issues?q=is%3Aissue+is%3Aopen+label%3Aeasy).)
 
+# React on Rails Pro!
+Justin is currently working with a couple contributors on some new private examples that incorporate ShakaCode's best practices for industrial strength apps using React on Rails. If you're interested in getting access to these and/or contributing, [email justin@shakacode.com](mailto:justin@shakacode.com). Technologies will include Webpack v2, Yarn, CSS Modules, Bootstrap v4, Redux-Saga, Normalizr, Reselect, etc.
+
 # ShakaCode Community
 Please [Subscribe](https://app.mailerlite.com/webforms/landing/l1d9x5) to keep in touch with Justin Gordon and [ShakaCode](http://www.shakacode.com/). I intend to send a monthly summary including announcements of new releases of bootstrap-loader and React on Rails and of our latest [blog articles](https://blog.shakacode.com) and tutorials. Subscribers will also have access to **exclusive content**, including tips and examples.
 
@@ -38,8 +41,8 @@ For more testimonials, see [Live Projects](https://github.com/shakacode/react_on
 
 ## NEWS
 
-* Action Cable was recently added in [PR #355](https://github.com/shakacode/react-webpack-rails-tutorial/pull/355).
-* We made react-native client: [shakacode/reactrails-react-native-client](https://github.com/shakacode/reactrails-react-native-client/)
+* Action Cable was recently added in [PR #355](https://github.com/shakacode/react-webpack-rails-tutorial/pull/355). See [PR#360](https://github.com/shakacode/react-webpack-rails-tutorial/pull/360) for additional steps to make this work on Heroku. Note, you need to be running redis. We installed the free Heroku redis add-on.
+* We made a react-native client: [shakacode/reactrails-react-native-client](https://github.com/shakacode/reactrails-react-native-client/). If you want to hack on this with us, [email justin@shakacode.com](mailto:justin@shakacode.com).
 * We have [some other open PRs](https://github.com/shakacode/react-webpack-rails-tutorial/pulls) of things we may soon be incorporating, including localization and action cable! Stay tuned! If you have opinions of what should or should not get merged, get in touch with [justin@shakacode.com](mailto:justin@shakacode.com).
 
 This tutorial app demonstrates advanced functionality beyond what's provided by the React on Rails generators, mostly in the area of Webpack and React usage. Due to the architecture of placing all client side assets in the `/client` directory, React on Rails supports just about anything that Webpack and JavaScript can do, such as:
