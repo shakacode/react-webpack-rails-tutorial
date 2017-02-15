@@ -29,8 +29,9 @@ install:
   - npm install npm@latest -g
   - npm --version
   - npm install
+  - rake react_on_rails:locale
+  - cd client && npm run build:test
   - rake db:setup
-  - npm run build:client && npm run build:server
 
 # Tip: No need to run xvfb if running headless testing. However, we're going to start with
 # Poltergeist and switch to selenium if a test fails.
