@@ -35,6 +35,9 @@
     "build:server": "webpack --config webpack.server.rails.build.config.js",
     "build:test": "npm run build:client && npm run build:server",
     "build:production": "npm run build:production:client && npm run build:production:server",
+    "prebuild:production": "rake react_on_rails:locale",
+    "prebuild:client": "rake react_on_rails:locale",
+    "prebuild:server": "rake react_on_rails:locale",
     "hot-assets": "babel-node server-rails-hot.js",
     "lint": "eslint --ext .js,.jsx ."
   },
