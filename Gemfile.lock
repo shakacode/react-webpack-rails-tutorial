@@ -1,3 +1,15 @@
+GIT
+  remote: git@github.com:JasonYCHuang/react_on_rails.git
+  revision: 178cc7293b8ee9e8866ec3ed4aaf16b7c9f71285
+  branch: rake-locale
+  specs:
+    react_on_rails (6.6.0)
+      addressable
+      connection_pool
+      execjs (~> 2.5)
+      rails (>= 3.2)
+      rainbow (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -199,12 +211,6 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     rdoc (4.3.0)
-    react_on_rails (6.4.0)
-      addressable
-      connection_pool
-      execjs (~> 2.5)
-      rails (>= 3.2)
-      rainbow (~> 2.1)
     redis (3.3.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
@@ -329,7 +335,7 @@ DEPENDENCIES
   rails
   rails-html-sanitizer
   rainbow
-  react_on_rails (~> 6.4)
+  react_on_rails!
   redis
   rspec-rails (~> 3)
   rspec-retry
