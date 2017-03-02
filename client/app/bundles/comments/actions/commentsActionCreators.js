@@ -71,3 +71,10 @@ export function submitComment(comment) {
     );
   };
 }
+
+export function setLocale(locale) {
+  return {
+    type: actionTypes.SET_LOCALE,
+    locale,
+  };
+}

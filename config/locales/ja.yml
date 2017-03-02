@@ -1,0 +1,23 @@
+ja:
+  type: "日本語"
+  comments: "コメント "
+  loading: "読み込んでいます..."
+  description:
+    force_refrech: "すべてのコメントを強制的にリフレッシュします。"
+    support_markdown: "テキストは Github Flavored Markdown をサポートしています。"
+    delete_rule: "コメントは24時間後削除されます。"
+    submit_rule: "送信の間に名前は保存され、テキストがリセットされます。"
+    see_action_cable: "Action Cableが即座に2つのブラウザを更新することを確認するには、2つのブラウザを開いてコメントを送信してください！"
+  form:
+    horizontal: "水平フォーム"
+    stacked: "積み上げフォーム"
+    inline: "インラインフォーム"
+  input:
+    name:
+      label: "名前"
+      placeholder: "あなたの名前"
+    text:
+      label: "本文"
+      placeholder: "何かが Markdown を使用して言います..."
+    saving: "保存"
+    post: "サブミット"

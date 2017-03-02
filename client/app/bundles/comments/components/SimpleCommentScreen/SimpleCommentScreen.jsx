@@ -3,16 +3,52 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
-
+import { IntlProvider, injectIntl, intlShape } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
+import { SelectLanguage } from 'libs/i18n/selectLanguage';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
+import { translations } from 'libs/i18n/translations';
 
-export default class SimpleCommentScreen extends BaseComponent {
-  constructor(props, context) {
-    super(props, context);
+export default class I18nWrapper extends BaseComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      locale: defaultLocale,
+    };
+
+    _.bindAll(this, 'handleSetLocale');
+  }
+
+  handleSetLocale(locale) {
+    this.setState({ locale: locale });
+  }
+
+  render() {
+    const { locale } = this.state;
+    const messages = translations[locale];
+    const InjectedSimpleCommentScreen = injectIntl(SimpleCommentScreen);
+
+    return (
+      <IntlProvider locale={locale} key={locale} messages={messages}>
+        <InjectedSimpleCommentScreen
+          {...this.props}
+          locale={locale}
+          handleSetLocale={this.handleSetLocale}
+        />
+      </IntlProvider>
+    );
+  }
+}
+
+class SimpleCommentScreen extends BaseComponent {
+  constructor(props) {
+    super(props);
+
     this.state = {
       $$comments: Immutable.fromJS([]),
       isSaving: false,
@@ -67,6 +103,8 @@ export default class SimpleCommentScreen extends BaseComponent {
   }
 
   render() {
+    const { handleSetLocale, locale, intl } = this.props;
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
@@ -75,12 +113,16 @@ export default class SimpleCommentScreen extends BaseComponent {
     };
 
     return (
-      <div className="commentBox container">
-        <h2>Comments</h2>
-        <p>
-          Text take Github Flavored Markdown. Comments older than 24 hours are deleted.<br />
-          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-        </p>
+      <div className='commentBox container'>
+        <h2>
+          {formatMessage(defaultMessages.comments)}
+        </h2>
+        { SelectLanguage(handleSetLocale, locale) }
+        <ul>
+          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
+          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
+        </ul>
         <CommentForm
           isSaving={this.state.isSaving}
           actions={{ submitComment: this.handleCommentSubmit }}

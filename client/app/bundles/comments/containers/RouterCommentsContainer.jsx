@@ -3,9 +3,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import BaseComponent from 'libs/components/BaseComponent';
-
+import { IntlProvider } from 'react-intl';
 import CommentScreen from '../components/CommentScreen/CommentScreen';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
+import { translations } from 'libs/i18n/translations';
+import { defaultLocale } from 'libs/i18n/default';
+
+// polyfill for server-side rendering, required by react-intl
+import Intl from 'intl';
+global.Intl = Intl;
 
 function select(state) {
   // Which part of the Redux global state does our component want to receive as props?
@@ -25,9 +31,13 @@ class RouterCommentsContainer extends BaseComponent {
     const { dispatch, data } = this.props;
     const actions = bindActionCreators(commentsActionCreators, dispatch);
     const locationState = this.props.location.state;
+    const locale = data.get('locale') || defaultLocale;
+    const messages = translations[locale];
 
     return (
-      <CommentScreen {...{ actions, data, locationState }} />
+      <IntlProvider locale={locale} key={locale} messages={messages}>
+        <CommentScreen {...{ actions, data, locationState }} />
+      </IntlProvider>
     );
   }
 }

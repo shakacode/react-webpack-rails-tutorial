@@ -92,6 +92,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
 - Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
 - Example setting up Ruby and JavaScript linting in a real project, with corresponding CI rake tasks.
+- Enabling the i18n functionality with [react-intl](https://github.com/yahoo/react-intl).
 
 ### Technologies involved
 

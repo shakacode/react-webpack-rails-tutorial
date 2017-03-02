@@ -1,13 +1,15 @@
 import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
-
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
 import Immutable from 'immutable';
 import ActionCable from 'actioncable';
+import { SelectLanguage } from 'libs/i18n/selectLanguage';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 
-export default class CommentBox extends BaseComponent {
+class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
@@ -19,6 +21,7 @@ export default class CommentBox extends BaseComponent {
       submitCommentError: React.PropTypes.string,
       $$comments: React.PropTypes.arrayOf(CommentPropTypes),
     }).isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor() {
@@ -26,13 +29,14 @@ export default class CommentBox extends BaseComponent {
     _.bindAll(this, [
       'refreshComments',
     ]);
+    this.cable = null;
   }
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
-    const cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
-    cable.subscriptions.create({channel: "CommentsChannel"}, {
+    this.cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
+    this.cable.subscriptions.create({channel: "CommentsChannel"}, {
       connected: () => {
         console.log("connected")
       },
@@ -52,7 +56,7 @@ export default class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
+    this.cable.subscriptions.remove({ channel: "CommentsChannel" });
   }
 
   refreshComments() {
@@ -61,37 +65,35 @@ export default class CommentBox extends BaseComponent {
   }
 
   render() {
-    const { actions, data } = this.props;
+    const { actions, data, intl } = this.props;
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
       leave: css.elementLeave,
       leaveActive: css.elementLeaveActive,
     };
+    const locale = data.get('locale') || defaultLocale;
 
     return (
       <div className="commentBox container">
         <h2>
-          Comments {data.get('isFetching') && 'Loading...'}
+          {formatMessage(defaultMessages.comments)}
+          {data.get('isFetching') && formatMessage(defaultMessages.loading)}
         </h2>
+        { SelectLanguage(actions.setLocale, locale) }
         <ul>
           <li>
         {data.get('isFetching') && <br/> ||
-          <a href="javascript:void(0)" onClick={this.refreshComments}>Force Refresh of All Comments</a>
+          <a href="javascript:void(0)" onClick={this.refreshComments}>
+            {formatMessage(defaultMessages.descriptionForceRefrech)}
+          </a>
         }
           </li>
-          <li>
-          <b>Text</b> supports Github Flavored Markdown.
-          </li>
-          <li>
-          Comments older than 24 hours are deleted.
-          </li>
-          <li>
-          <b>Name</b> is preserved. <b>Text</b> is reset, between submits.
-          </li>
-          <li>
-            To see Action Cable instantly update two browsers, open two browsers and submit a comment!
-          </li>
+          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
+          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
+          <li>{formatMessage(defaultMessages.descriptionSeeActionCable)}</li>
         </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
@@ -108,3 +110,5 @@ export default class CommentBox extends BaseComponent {
     );
   }
 }
+
+export default injectIntl(CommentBox);

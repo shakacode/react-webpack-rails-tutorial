@@ -1,0 +1,23 @@
+de:
+  type: "Deutsch"
+  comments: "Kommentare "
+  loading: "Laden..."
+  description:
+    force_refrech: "Erzwingt die Aktualisierung aller Kommentare."
+    support_markdown: "Der Text unterstützt Github Flavored Markdown."
+    delete_rule: "Kommentare, die aelter als 24 Stunden sind, werden gelöscht."
+    submit_rule: "Der Name wird beibehalten. Der Text wird während des Postens zurücksetzt."
+    see_action_cable: "So sehen Action Cable sofort aktualisieren zwei Browser, öffnen Sie zwei Browser und senden Sie einen Kommentar!"
+  form:
+    horizontal: "Horizontale Form"
+    stacked: "Gestapelte Form"
+    inline: "Inline Form"
+  input:
+    name:
+      label: "Name"
+      placeholder: "Dein Name"
+    text:
+      label: "Text"
+      placeholder: "Sagen Sie etwas mit markdown..."
+    saving: "Speichern"
+    post: "Schicken"
