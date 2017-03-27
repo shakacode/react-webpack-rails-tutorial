@@ -21,6 +21,7 @@ module.exports = {
       'es5-shim/es5-shim',
       'es5-shim/es5-sham',
       'jquery',
+      'jquery-ujs',
       'turbolinks',
 
       // Below libraries are listed as entry points to be sure they get included in the

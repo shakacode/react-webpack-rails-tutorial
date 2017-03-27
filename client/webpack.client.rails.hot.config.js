@@ -20,7 +20,6 @@ config.entry.app.push(
 
 // These are Rails specific
 config.entry.vendor.push(
-  'jquery-ujs',
   'bootstrap-loader'
 );
 
