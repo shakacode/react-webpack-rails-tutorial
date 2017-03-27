@@ -1,49 +1,17 @@
+import React from 'react';
 import request from 'axios';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import React from 'react';
 import ReactOnRails from 'react-on-rails';
-import { IntlProvider, injectIntl, intlShape } from 'react-intl';
+import { IntlProvider, injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
+import SelectLanguage from 'libs/i18n/selectLanguage';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
+import { translations } from 'libs/i18n/translations';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './SimpleCommentScreen.scss';
-import { SelectLanguage } from 'libs/i18n/selectLanguage';
-import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-import { translations } from 'libs/i18n/translations';
-
-export default class I18nWrapper extends BaseComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      locale: defaultLocale,
-    };
-
-    _.bindAll(this, 'handleSetLocale');
-  }
-
-  handleSetLocale(locale) {
-    this.setState({ locale: locale });
-  }
-
-  render() {
-    const { locale } = this.state;
-    const messages = translations[locale];
-    const InjectedSimpleCommentScreen = injectIntl(SimpleCommentScreen);
-
-    return (
-      <IntlProvider locale={locale} key={locale} messages={messages}>
-        <InjectedSimpleCommentScreen
-          {...this.props}
-          locale={locale}
-          handleSetLocale={this.handleSetLocale}
-        />
-      </IntlProvider>
-    );
-  }
-}
 
 class SimpleCommentScreen extends BaseComponent {
   constructor(props) {
@@ -113,7 +81,7 @@ class SimpleCommentScreen extends BaseComponent {
     };
 
     return (
-      <div className='commentBox container'>
+      <div className="commentBox container">
         <h2>
           {formatMessage(defaultMessages.comments)}
         </h2>
@@ -135,6 +103,38 @@ class SimpleCommentScreen extends BaseComponent {
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
       </div>
+    );
+  }
+}
+
+export default class I18nWrapper extends BaseComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      locale: defaultLocale,
+    };
+
+    _.bindAll(this, 'handleSetLocale');
+  }
+
+  handleSetLocale(locale) {
+    this.setState({ locale });
+  }
+
+  render() {
+    const { locale } = this.state;
+    const messages = translations[locale];
+    const InjectedSimpleCommentScreen = injectIntl(SimpleCommentScreen);
+
+    return (
+      <IntlProvider locale={locale} key={locale} messages={messages}>
+        <InjectedSimpleCommentScreen
+          {...this.props}
+          locale={locale}
+          handleSetLocale={this.handleSetLocale}
+        />
+      </IntlProvider>
     );
   }
 }

@@ -1,17 +1,16 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import BaseComponent from 'libs/components/BaseComponent';
-
-import CommentScreen from '../components/CommentScreen/CommentScreen';
-import * as commentsActionCreators from '../actions/commentsActionCreators';
 import { IntlProvider } from 'react-intl';
 import { translations } from 'libs/i18n/translations';
 import { defaultLocale } from 'libs/i18n/default';
-
 // polyfill for server-side rendering, required by react-intl
 import Intl from 'intl';
+
+import CommentScreen from '../components/CommentScreen/CommentScreen';
+import * as commentsActionCreators from '../actions/commentsActionCreators';
+
 global.Intl = Intl;
 
 function select(state) {
