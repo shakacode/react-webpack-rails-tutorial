@@ -11,4 +11,4 @@
 # 3. React on Rails does not have a shared_store JS rendering:
 #    https://github.com/shakacode/react_on_rails/issues/504
 
-express: sh -c 'HOT_PORT=4000 npm start'
+express: sh -c 'HOT_PORT=4000 yarn start'
