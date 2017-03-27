@@ -8,20 +8,20 @@
     "npm": "4.0.2"
   },
   "scripts": {
-    "postinstall": "cd client && npm install",
-    "test": "rspec && npm run test:client && npm run lint",
-    "test:client": "(cd client && npm run test --silent)",
-    "lint": "(cd client && npm run lint --silent)",
+    "postinstall": "cd client && yarn install",
+    "test": "rspec && yarn run test:client && yarn run lint",
+    "test:client": "(cd client && yarn run test --silent)",
+    "lint": "(cd client && yarn run lint --silent)",
     "build:clean": "rm app/assets/webpack/*",
-    "build:production": "(cd client && npm run build:production --silent)",
-    "build:production:client": "(cd client && npm run build:production:client --silent)",
-    "build:production:server": "(cd client && npm run build:production:server --silent)",
-    "build:client": "(cd client && npm run build:client --silent)",
-    "build:server": "(cd client && npm run build:server --silent)",
-    "build:dev:client": "(cd client && npm run build:dev:client --silent)",
-    "build:dev:server": "(cd client && npm run build:dev:server --silent)",
-    "hot-assets": "(cd client && npm run hot-assets)",
-    "start": "(cd client && npm run start --silent)"
+    "build:production": "(cd client && yarn run build:production --silent)",
+    "build:production:client": "(cd client && yarn run build:production:client --silent)",
+    "build:production:server": "(cd client && yarn run build:production:server --silent)",
+    "build:client": "(cd client && yarn run build:client --silent)",
+    "build:server": "(cd client && yarn run build:server --silent)",
+    "build:dev:client": "(cd client && yarn run build:dev:client --silent)",
+    "build:dev:server": "(cd client && yarn run build:dev:server --silent)",
+    "hot-assets": "(cd client && yarn run hot-assets)",
+    "start": "(cd client && yarn run start --silent)"
   },
   "repository": {
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial.git",

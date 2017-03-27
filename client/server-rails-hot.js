@@ -10,7 +10,9 @@ const hotRailsPort = process.env.HOT_RAILS_PORT || 3500;
 const compiler = webpack(webpackConfig);
 
 const devServer = new WebpackDevServer(compiler, {
-  contentBase: `http://lvh.me:${hotRailsPort}`,
+  proxy: {
+    '*': `http://lvh.me:${hotRailsPort}`,
+  },
   publicPath: webpackConfig.output.publicPath,
   hot: true,
   inline: true,

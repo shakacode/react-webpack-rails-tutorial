@@ -3,7 +3,7 @@
 # in rails_helper.rb.
 
 # Build client assets, watching for changes.
-rails-client-assets: sh -c 'bundle exec rake react_on_rails:locale && npm run build:dev:client'
+rails-client-assets: sh -c 'bundle exec rake react_on_rails:locale && yarn run build:dev:client'
 
 # Build server assets, watching for changes. Remove if not server rendering.
-rails-server-assets: sh -c 'npm run build:dev:server'
+rails-server-assets: sh -c 'yarn run build:dev:server'
