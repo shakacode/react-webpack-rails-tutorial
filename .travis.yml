@@ -27,6 +27,7 @@ install:
   - chromedriver-update
   - nvm install stable && nvm alias default stable
   - npm install npm@latest -g
+  - npm install -g yarn
   - npm --version
   - npm install
   - rake react_on_rails:locale
