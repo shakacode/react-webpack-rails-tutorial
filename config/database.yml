@@ -28,7 +28,7 @@
 # Uncomment below for a setup with just postgres and change your Gemfile to reflect this
 default: &default
   adapter: postgresql
-  username: postgres
+  username:
   password:
 
 development:
