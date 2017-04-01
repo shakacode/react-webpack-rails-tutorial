@@ -32,11 +32,6 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
-    }),
-    new webpack.LoaderOptionsPlugin({
-      options: {
-        sassResources: ['./app/assets/styles/app-variables.scss'],
-      }
     })
   ],
   module: {
@@ -75,7 +70,6 @@ module.exports = {
             loader: 'sass-resources-loader',
             options: {
               resources: './app/assets/styles/app-variables.scss',
-              context: __dirname,
             },
           }
         ],

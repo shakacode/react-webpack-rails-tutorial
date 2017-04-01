@@ -4,7 +4,6 @@
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -77,18 +76,6 @@ module.exports = {
       minChunks: Infinity,
 
     }),
-
-    new webpack.LoaderOptionsPlugin({
-      options: {
-        // Place here all postCSS plugins here, so postcss-loader will apply them
-        postcss: [autoprefixer],
-        // Place here all SASS files with variables, mixins etc.
-        // And sass-resources-loader will load them in every CSS Module (SASS file) for you
-        // (so don't need to @import them explicitly)
-        // https://github.com/shakacode/sass-resources-loader
-        sassResources: ['./app/assets/styles/app-variables.scss']
-      }
-    })
   ],
 
   module: {
