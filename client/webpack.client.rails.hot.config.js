@@ -56,6 +56,7 @@ config.module.rules.push(
   {
     test: /\.css$/,
     use: [
+      'style-loader',
       {
         loader: 'css-loader',
         options: {
@@ -75,6 +76,7 @@ config.module.rules.push(
   {
     test: /\.scss$/,
     use: [
+      'style-loader',
       {
         loader: 'css-loader',
         options: {
