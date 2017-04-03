@@ -39,12 +39,12 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   # Next line will ensure that assets are built if webpack -w is not running
-  ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config, :feature_spec)
+  ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config, :requires_webpack_assets)
 
   # Because we're using some CSS Webpack files, we need to ensure the webpack files are generated
   # for all feature specs. https://github.com/shakacode/react_on_rails/issues/792
-  config.define_derived_metadata(file_path: %r{spec/features}) do |metadata|
-    metadata[:feature_spec] = true
+  config.define_derived_metadata(file_path: %r{spec/(features|requests)}) do |metadata|
+    metadata[:requires_webpack_assets] = true
   end
 
   # For Poltergeist
