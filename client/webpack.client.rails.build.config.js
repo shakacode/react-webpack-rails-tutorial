@@ -2,7 +2,7 @@
   {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
 
 // Run like this:
-// cd client && npm run build:client
+// cd client && yarn run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
 const path = require('path');

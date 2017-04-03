@@ -38,7 +38,7 @@ if %w(development test).include? Rails.env
 
     desc "eslint"
     task :eslint do
-      cmd = "npm run lint"
+      cmd = "yarn run lint"
       puts "Running eslint via `#{cmd}`"
       sh cmd
     end
