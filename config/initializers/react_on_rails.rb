@@ -17,11 +17,11 @@ ReactOnRails.configure do |config|
   # If you are using the ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
   # with rspec then this controls what npm command is run
   # to automatically refresh your webpack assets on every test run.
-  config.npm_build_test_command = "npm run build:test"
+  config.npm_build_test_command = "yarn run build:test"
 
   # This configures the script to run to build the production assets by webpack. Set this to nil
   # if you don't want react_on_rails building this file for you.
-  config.npm_build_production_command = "npm run build:production"
+  config.npm_build_production_command = "yarn run build:production"
 
   ################################################################################
   # CLIENT RENDERING OPTIONS
@@ -75,8 +75,6 @@ ReactOnRails.configure do |config|
   ################################################################################
   # MISCELLANEOUS OPTIONS
   ################################################################################
-  # Default is false, enable if your content security policy doesn't include `style-src: 'unsafe-inline'`
-  config.skip_display_none = false
 
   # This allows you to add additional values to the Rails Context. Implement one static method
   # called `custom_context(view_context)` and return a Hash.

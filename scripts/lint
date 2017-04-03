@@ -7,7 +7,7 @@ echo Linting with ruby-lint
 ruby-lint app config spec
 
 echo Linting with eslint
-(cd client && npm run lint)
+(cd client && yarn run lint)
 
 scss-lint client/**/*.scss app/assets/stylesheets/*.scss
 
