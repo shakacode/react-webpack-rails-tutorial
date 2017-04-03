@@ -30,10 +30,10 @@ config.output = {
   publicPath: `http://localhost:${hotRailsPort}/`,
 };
 
-config.module.loaders.push(
+config.module.rules.push(
   {
     test: /\.jsx?$/,
-    loader: 'babel',
+    loader: 'babel-loader',
     exclude: /node_modules/,
     query: {
       plugins: [
@@ -55,31 +55,67 @@ config.module.loaders.push(
   },
   {
     test: /\.css$/,
-    loaders: [
-      'style',
-      'css?modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
-      'postcss',
-    ],
+    use: [
+      'style-loader',
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 0,
+          localIdentName: '[name]__[local]__[hash:base64:5]'
+        }
+      },
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: 'autoprefixer'
+        }
+      }
+    ]
   },
   {
     test: /\.scss$/,
-    loaders: [
-      'style',
-      'css?modules&importLoaders=3&localIdentName=[name]__[local]__[hash:base64:5]',
-      'postcss',
-      'sass',
-      'sass-resources',
+    use: [
+      'style-loader',
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 3,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+        }
+      },
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: 'autoprefixer'
+        }
+      },
+      {
+        loader: 'sass-loader'
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: './app/assets/styles/app-variables.scss'
+        },
+      }
     ],
   },
   {
     test: require.resolve('jquery-ujs'),
-    loader: 'imports?jQuery=jquery',
+    use: {
+      loader: 'imports-loader',
+      options: {
+        jQuery: 'jquery',
+      }
+    }
   }
 );
 
 config.plugins.push(
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin()
+  new webpack.NoEmitOnErrorsPlugin()
 );
 
 config.devtool = 'eval-source-map';

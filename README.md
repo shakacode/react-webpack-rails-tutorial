@@ -122,7 +122,8 @@ See package.json and Gemfile for versions
 1. Check that you have Redis installed. Run `which redis-server` to check. If missing, install with Homebrew (`brew install redis`) or follow [these instructions](https://redis.io/topics/quickstart#installing-redis
   ).
 1. `bundle install`
-1. `npm install`
+1. `npm install -g yarn`
+1. `yarn`
 1. `rake db:setup`
 1. `foreman start -f Procfile.hot`
   1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING

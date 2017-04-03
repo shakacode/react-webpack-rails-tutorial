@@ -294,7 +294,7 @@ class CommentForm extends BaseComponent {
     }, []);
 
     return (
-      <Alert bsStyle='danger' key='commentSubmissionError'>
+      <Alert bsStyle="danger" key="commentSubmissionError">
         <strong>Your comment was not saved!</strong>
         <ul>
           {errorElements}
@@ -336,7 +336,7 @@ class CommentForm extends BaseComponent {
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
 
-        <Nav bsStyle='pills' activeKey={this.state.formMode} onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>
           <NavItem eventKey={1}>{formatMessage(defaultMessages.formStacked)}</NavItem>
           <NavItem eventKey={2}>{formatMessage(defaultMessages.formInline)}</NavItem>

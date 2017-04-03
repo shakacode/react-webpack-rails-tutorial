@@ -4,7 +4,6 @@
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -47,11 +46,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
     alias: {
-      libs: path.join(process.cwd(), 'app', 'libs'),
-      react: path.resolve('./node_modules/react'),
-      'react-dom': path.resolve('./node_modules/react-dom'),
+      libs: path.resolve(__dirname, 'app/libs'),
+      react: path.resolve(__dirname, 'node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
     },
   },
 
@@ -75,35 +74,68 @@ module.exports = {
       // Passing Infinity just creates the commons chunk, but moves no modules into it.
       // In other words, we only put what's in the vendor entry definition in vendor-bundle.js
       minChunks: Infinity,
+
     }),
   ],
-  module: {
-    loaders: [
-      { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
-      { test: /\.(ttf|eot)$/, loader: 'file' },
-      { test: /\.(jpe?g|png|gif|svg|ico)$/, loader: 'url?limit=10000' },
 
-      { test: require.resolve('jquery'), loader: 'expose?jQuery' },
-      { test: require.resolve('jquery'), loader: 'expose?$' },
-      { test: require.resolve('turbolinks'), loader: 'imports?this=>window' },
+  module: {
+    rules: [
+      {
+        test: /\.(ttf|eot)$/,
+        use: 'file-loader',
+      },
+      {
+        test: /\.(woff2?|jpe?g|png|gif|svg|ico)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+          },
+        },
+      },
+      {
+        test: require.resolve('jquery'),
+        use: [
+          {
+            loader: 'expose-loader',
+            query: 'jQuery'
+          },
+          {
+            loader: 'expose-loader',
+            query: '$'
+          }
+        ]
+      },
+      {
+        test: require.resolve('turbolinks'),
+        use: {
+          loader: 'imports-loader?this=>window'
+        },
+      },
 
       // Use one of these to serve jQuery for Bootstrap scripts:
 
       // Bootstrap 3
-      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
+      {
+        test: /bootstrap-sass\/assets\/javascripts\//,
+        use: {
+          loader: 'imports-loader',
+          options: {
+            jQuery: 'jquery',
+          },
+        },
+      },
 
       // Bootstrap 4
-      { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' },
+      {
+        test: /bootstrap\/dist\/js\/umd\//,
+        use: {
+          loader: 'imports-loader',
+          options: {
+            jQuery: 'jquery',
+          },
+        },
+      },
     ],
   },
-
-  // Place here all postCSS plugins here, so postcss-loader will apply them
-  postcss: [autoprefixer],
-
-  // Place here all SASS files with variables, mixins etc.
-  // And sass-resources-loader will load them in every CSS Module (SASS file) for you
-  // (so don't need to @import them explicitly)
-  // https://github.com/shakacode/sass-resources-loader
-  sassResources: ['./app/assets/styles/app-variables.scss'],
-
 };

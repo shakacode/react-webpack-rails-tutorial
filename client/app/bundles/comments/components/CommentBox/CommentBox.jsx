@@ -1,13 +1,15 @@
-import BaseComponent from 'libs/components/BaseComponent';
 import React, { PropTypes } from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import Immutable from 'immutable';
+import ActionCable from 'actioncable';
+import _ from 'lodash';
+import BaseComponent from 'libs/components/BaseComponent';
+import { injectIntl, intlShape } from 'react-intl';
+import SelectLanguage from 'libs/i18n/selectLanguage';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
+
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { CommentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.scss';
-import Immutable from 'immutable';
-import ActionCable from 'actioncable';
-import { SelectLanguage } from 'libs/i18n/selectLanguage';
-import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 
 class CommentBox extends BaseComponent {
   static propTypes = {
@@ -34,18 +36,21 @@ class CommentBox extends BaseComponent {
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
-    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://"
-    this.cable = ActionCable.createConsumer(protocol+window.location.hostname+":"+window.location.port+"/cable");
-    this.cable.subscriptions.create({channel: "CommentsChannel"}, {
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
+    this.cable = ActionCable.createConsumer(cableUrl);
+
+    /* eslint no-console: ["error", { allow: ["log"] }] */
+    this.cable.subscriptions.create({ channel: 'CommentsChannel' }, {
       connected: () => {
-        console.log("connected")
+        console.log('connected');
       },
       disconnected: () => {
-        console.log("disconnected")
+        console.log('disconnected');
       },
       received: (comment) => {
         messageReceived(Immutable.fromJS(comment));
-      }
+      },
     });
   }
 
@@ -56,7 +61,7 @@ class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    this.cable.subscriptions.remove({ channel: "CommentsChannel" });
+    this.cable.subscriptions.remove({ channel: 'CommentsChannel' });
   }
 
   refreshComments() {
@@ -75,6 +80,7 @@ class CommentBox extends BaseComponent {
     };
     const locale = data.get('locale') || defaultLocale;
 
+    /* eslint-disable no-script-url */
     return (
       <div className="commentBox container">
         <h2>
@@ -84,11 +90,11 @@ class CommentBox extends BaseComponent {
         { SelectLanguage(actions.setLocale, locale) }
         <ul>
           <li>
-        {data.get('isFetching') && <br/> ||
-          <a href="javascript:void(0)" onClick={this.refreshComments}>
-            {formatMessage(defaultMessages.descriptionForceRefrech)}
-          </a>
-        }
+            { (data.get('isFetching') && <br />) ||
+              <a href="javascript:void(0)" onClick={this.refreshComments}>
+                {formatMessage(defaultMessages.descriptionForceRefrech)}
+              </a>
+            }
           </li>
           <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
