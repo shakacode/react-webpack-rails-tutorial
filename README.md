@@ -119,8 +119,10 @@ See package.json and Gemfile for versions
 1. Check that you're using the right version of node. Run `nvm list` to check. Use 5.5 or greater.
 1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
 1. Check that you have `qmake` installed. Run `which qmake` to check. If missing, follow these instructions: [Installing Qt and compiling capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
+1. Check that you have Redis installed. Run `which redis-server` to check. If missing, install with Homebrew (`brew install redis`) or follow [these instructions](https://redis.io/topics/quickstart#installing-redis
+  ).
 1. `bundle install`
-1. `npm install -g yarn`
+1. `brew install yarn`
 1. `yarn`
 1. `rake db:setup`
 1. `foreman start -f Procfile.hot`
@@ -132,7 +134,7 @@ See package.json and Gemfile for versions
 
 ### Basic Command Line
 1. Run all linters and tests: `rake`
-1. See all npm commands: `npm run`
+1. See all npm commands: `yarn run`
 1. To start all development processes: `foreman start -f Procfile.dev`
 1. To start only all Rails development processes: `foreman start -f Procfile.hot`
 
@@ -146,7 +148,7 @@ See package.json and Gemfile for versions
 
 We include a sample setup for developing your JavaScript files without Rails. However, this is no longer recommended as it's best to create your APIs in Rails, and take advantage of the hot reloading of your react components provided by this project.
 
-1. Run the node server with file `server-express.js` with command `npm run` or `cd client && node server-express.js`.
+1. Run the node server with file `server-express.js` with command `yarn run` or `cd client && node server-express.js`.
 2. Point your browser to [http://localhost:4000](http://localhost:4000)
 
 Save a change to a JSX file and see it update immediately in the browser! Note, any browser state still exists, such as what you've typed in the comments box. That's totally different than [Live Reload](http://livereload.com/) which refreshes the browser. Note, we just got this working with your regular Rails server! See above for **Hot Loading**.

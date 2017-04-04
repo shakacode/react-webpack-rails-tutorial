@@ -2,7 +2,7 @@
 
 To use [bourbon](https://github.com/thoughtbot/bourbon) take the following steps:
 
-- Install node-bourbon `cd client && npm install --save node-bourbon`
+- Install node-bourbon `cd client && yarn install --save node-bourbon`
 - Update [bootstrap-sass.js](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/bootstrap-sass.config.js) to use the right paths:
 ```
 // Add this
