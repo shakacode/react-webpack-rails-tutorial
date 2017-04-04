@@ -30,7 +30,6 @@ install:
   - npm install -g yarn
   - npm --version
   - yarn install
-  - rake react_on_rails:locale
   - rake db:setup
 
 # Tip: No need to run xvfb if running headless testing. However, we're going to start with
@@ -41,4 +40,4 @@ before_script:
 
 script:
   - bundle exec rake db:schema:load
-  - DRIVER=selenium bundle exec rake
+  - bundle exec rake
