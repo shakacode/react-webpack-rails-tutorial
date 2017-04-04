@@ -21,9 +21,6 @@ nvm install stable && nvm alias default stable
 npm install npm@latest -g
 npm install --global yarn
 yarn install
-bundle exec rake react_on_rails:locale
-# cd client && npm run build:test
-# cd ..
 export RAILS_ENV=test
 bundle exec rake db:schema:load
 ```
@@ -32,5 +29,4 @@ bundle exec rake db:schema:load
 
 ```bash
 COVERALLS_REPO_TOKEN=YynC bundle exec rake
-bundle exec rake lint
 ```
