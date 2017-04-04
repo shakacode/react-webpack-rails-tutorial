@@ -24,7 +24,8 @@ if Rails.env.development? || Rails.env.test?
 
   namespace :ci do
     desc "Run all audits and tests"
-    task all: [:environment, :lint, :rspec_tests, :js_tests, :bundle_audit, :security_audit] do
+    # rspec_tests must be before lint and js_tests to build the locale files
+    task all: [:environment, :rspec_tests, :lint, :js_tests, :bundle_audit, :security_audit] do
       begin
         puts "All CI tasks"
         puts Rainbow("PASSED").green
