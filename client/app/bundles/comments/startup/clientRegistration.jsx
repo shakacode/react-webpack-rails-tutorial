@@ -1,4 +1,5 @@
 import ReactOnRails from 'react-on-rails';
+import Turbolinks from 'turbolinks';
 
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
@@ -12,6 +13,9 @@ import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleComment
 import routerCommentsStore from '../store/routerCommentsStore';
 import commentsStore from '../store/commentsStore';
 import NavigationBarApp from './NavigationBarApp';
+
+// From docs: https://github.com/turbolinks/turbolinks#installation-using-npm
+Turbolinks.start();
 
 // Initizalize all locales for react-intl.
 addLocaleData([...en, ...de, ...ja, ...zh]);
