@@ -10,7 +10,7 @@ Pick "I want to create my own custom commands" on the Project Settings, Test tab
 export PHANTOMJS_HOST="https://s3.amazonaws.com/codeship-packages"
 export PHANTOMJS_VERSION=2.1.1
 \curl -sSL https://raw.githubusercontent.com/codeship/scripts/master/packages/phantomjs.sh | bash -s
-rvm use 2.3.1
+rvm use 2.4.1
 gem update --system
 gem install bundler
 bundle config build.nokogiri --use-system-libraries

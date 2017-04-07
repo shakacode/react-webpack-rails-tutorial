@@ -1,1 +1,1 @@
-json.partial! 'comment', comment: @comment
+json.partial! "comment", comment: @comment

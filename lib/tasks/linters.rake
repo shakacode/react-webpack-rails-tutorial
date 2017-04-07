@@ -1,4 +1,4 @@
-if %w(development test).include? Rails.env
+if %w[development test].include? Rails.env
   namespace :lint do
     # require "rubocop/rake_task"
     # require "slim_lint/rake_task"
@@ -10,9 +10,9 @@ if %w(development test).include? Rails.env
     desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
     task :rubocop, [:fix] => [] do |_t, args|
       def to_bool(str)
-        return true if str =~ (/^(true|t|yes|y|1)$/i)
-        return false if str.blank? || str =~ (/^(false|f|no|n|0)$/i)
-        fail ArgumentError, "invalid value for Boolean: \"#{str}\""
+        return true if str =~ /^(true|t|yes|y|1)$/i
+        return false if str.blank? || str =~ /^(false|f|no|n|0)$/i
+        raise ArgumentError, "invalid value for Boolean: \"#{str}\""
       end
 
       fix = (args.fix == "fix") || to_bool(args.fix)
@@ -54,7 +54,7 @@ if %w(development test).include? Rails.env
     desc "See docs for task 'scss_lint'"
     task scss: :scss_lint
 
-    task lint: [:rubocop, :ruby, :js, :scss] do
+    task lint: %i[rubocop ruby js scss] do
       puts "Completed all linting"
     end
   end

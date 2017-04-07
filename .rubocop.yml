@@ -7,6 +7,7 @@ AllCops:
   Include:
     - '**/Rakefile'
     - '**/config.ru'
+    - '**/Gemfile'
   Exclude:
     - 'vendor/**/*'
     - 'spec/fixtures/**/*'
@@ -16,6 +17,7 @@ AllCops:
     - 'db/seeds.rb'
     - 'client/node_modules/**/*'
     - 'bin/**/*'
+    - 'Procfile.*'
     - !ruby/regexp /old_and_unused\.rb$/
 
 Metrics/LineLength:
@@ -23,6 +25,9 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 25
+
+Metrics/BlockLength:
+  Max: 105
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
