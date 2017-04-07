@@ -3,8 +3,8 @@ ruby "2.4.1"
 
 #
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails"
 gem "listen"
+gem "rails"
 
 # Note: We're using sqllite3 for development and testing
 # gem "sqlite3", group: [:development, :test]
@@ -27,7 +27,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem 'redis'
+gem "redis"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -65,38 +65,38 @@ group :development, :test do
 
   ################################################################################
   # Manage application processes
-  gem "foreman"
   gem "factory_girl_rails"
+  gem "foreman"
 
   ################################################################################
   # Linters and Security
   gem "rubocop", require: false
   gem "ruby-lint", require: false
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
-  gem "scss_lint", require: false
   gem "brakeman", require: false
   gem "bundler-audit", require: false
+  gem "scss_lint", require: false
 
   ################################################################################
   # Favorite debugging gems
   gem "pry"
+  gem "pry-byebug"
   gem "pry-doc"
   gem "pry-rails"
-  gem "pry-stack_explorer"
   gem "pry-rescue"
-  gem "pry-byebug"
+  gem "pry-stack_explorer"
 
   ################################################################################
   # Color console output
   gem "rainbow"
 end
 
-group :test  do
-  gem "coveralls", require: false
+group :test do
   gem "capybara"
   gem "capybara-screenshot"
   gem "capybara-webkit"
   gem "chromedriver-helper"
+  gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"

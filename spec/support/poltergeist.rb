@@ -3,7 +3,7 @@
 # 2. restart_poltergeist
 
 RESTART_PHANTOMJS = ENV["RESTART_PHANTOMJS"] &&
-                    %w(TRUE YES).include?(ENV["RESTART_PHANTOMJS"].upcase)
+                    %w[TRUE YES].include?(ENV["RESTART_PHANTOMJS"].upcase)
 puts "RESTART_PHANTOMJS = #{RESTART_PHANTOMJS}"
 
 CAPYBARA_TIMEOUT_RETRIES = 5
