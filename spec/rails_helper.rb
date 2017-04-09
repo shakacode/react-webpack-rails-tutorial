@@ -55,9 +55,9 @@ RSpec.configure do |config|
 
   default_driver = :poltergeist_no_animations
 
-  supported_drivers = %i( poltergeist poltergeist_errors_ok
+  supported_drivers = %i[ poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
-                          selenium_chrome selenium_firefox selenium)
+                          selenium_chrome selenium_firefox selenium]
   driver = ENV["DRIVER"].try(:to_sym) || default_driver
   Capybara.default_driver = driver
 

@@ -32,8 +32,7 @@ class PagesController < ApplicationController
     render_html
   end
 
-  def simple
-  end
+  def simple; end
 
   private
 
