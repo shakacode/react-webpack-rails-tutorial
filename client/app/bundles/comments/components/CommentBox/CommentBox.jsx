@@ -51,10 +51,6 @@ export default class CommentBox extends BaseComponent {
     this.subscribeChannel();
   }
 
-  componentWillUnmount() {
-    App.cable.subscriptions.remove({ channel: "CommentsChannel" });
-  }
-
   refreshComments() {
     const { fetchComments } = this.props.actions;
     fetchComments();
