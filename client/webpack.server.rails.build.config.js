@@ -1,13 +1,18 @@
 /* eslint comma-dangle: ["error",
-  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ],
+  global-require: 0,
+  import/no-dynamic-require: 0,
+  no-console: 0  */
 
 // Common webpack configuration for server bundle
 
 const webpack = require('webpack');
 const { resolve } = require('path');
 
-const ManifestPlugin = require('webpack-manifest-plugin');
-const { paths, publicPath, sharedManifest } = require('./webpackConfigLoader.js');
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config', 'webpack');
+const { paths } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -35,12 +40,6 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
-    }),
-    new ManifestPlugin({
-      fileName: paths.manifest,
-      publicPath,
-      writeToFileEmit: true,
-      cache: sharedManifest,
     }),
   ],
   module: {

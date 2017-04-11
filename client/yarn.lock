@@ -4642,9 +4642,9 @@ react-intl@^2.2.2:
     intl-relativeformat "^1.3.0"
     invariant "^2.1.1"
 
-react-on-rails@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-7.0.0.tgz#ff7f12fb918b14ef932f77a71532b0f9eceb7955"
+react-on-rails@8.0.0-beta.2:
+  version "8.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-8.0.0-beta.2.tgz#3b68639935ba449ccfbf4014435c0e9a0a79fae4"
 
 react-overlays@^0.6.12:
   version "0.6.12"
@@ -5738,6 +5738,12 @@ webpack-manifest-plugin@^1.1.0:
   dependencies:
     fs-extra "^0.30.0"
     lodash ">=3.5 <5"
+
+webpack-merge@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.0.tgz#6ad72223b3e0b837e531e4597c199f909361511e"
+  dependencies:
+    lodash "^4.17.4"
 
 webpack-sources@^0.1.0:
   version "0.1.5"

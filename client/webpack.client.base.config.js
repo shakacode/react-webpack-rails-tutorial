@@ -3,10 +3,15 @@
 
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
+
 const { resolve } = require('path');
 
 const ManifestPlugin = require('webpack-manifest-plugin');
-const { paths, publicPath } = require('./webpackConfigLoader.js');
+
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config', 'webpack');
+const { paths, publicPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -18,7 +23,7 @@ module.exports = {
   entry: {
 
     // See use of 'vendor' in the CommonsChunkPlugin inclusion below.
-    vendor: [
+    'vendor-bundle': [
       'babel-polyfill',
       'es5-shim/es5-shim',
       'es5-shim/es5-sham',
@@ -44,27 +49,23 @@ module.exports = {
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
-    app: [
+    'app-bundle': [
       './app/bundles/comments/startup/clientRegistration',
     ],
   },
 
   output: {
-    filename: '[name]-bundle.js',
+    filename: '[name].js',
     path: resolve('..', paths.output, paths.assets),
     pathinfo: true,
   },
 
   resolve: {
-    extensions: paths.extensions,
+    extensions: ['.js', '.jsx'],
     modules: [
-      paths.source,
-      paths.node_modules,
+      'client/app',
+      'client/node_modules',
     ],
-  },
-
-  resolveLoader: {
-    modules: [paths.node_modules],
   },
 
   plugins: [
@@ -79,7 +80,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
 
       // This name 'vendor' ties into the entry definition
-      name: 'vendor',
+      name: 'vendor-bundle',
 
       // We don't want the default vendor.js name
       filename: 'vendor-bundle.js',
