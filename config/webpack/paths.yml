@@ -7,11 +7,18 @@ default: &default
   node_modules: client/node_modules
   source: client/app
   extensions:
+    # here you can add all the needed extentions, examples are commented out
+    # - .coffee
     - .js
     - .jsx
-    - .sass
+    # - .sass
     - .scss
-    - .css
+    # - .css
+    # - .svg
+    # - .gif
+    # - .jpeg
+    # - .png
+
 
 development:
   <<: *default

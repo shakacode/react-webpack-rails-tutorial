@@ -1,5 +1,8 @@
 /* eslint comma-dangle: ["error",
-  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ],
+  global-require: 0,
+  import/no-dynamic-require: 0,
+  no-console: 0  */
 
 // Common webpack configuration for server bundle
 
@@ -7,10 +10,20 @@ const webpack = require('webpack');
 const { resolve } = require('path');
 
 const ManifestPlugin = require('webpack-manifest-plugin');
-const { paths, publicPath, sharedManifest } = require('./webpackConfigLoader.js');
+const { paths, publicPath } = require('./webpackConfigLoader.js');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
+
+const manifestPath = resolve('..', paths.output, paths.assets, paths.manifest);
+
+let sharedManifest = {};
+try {
+  sharedManifest = require(manifestPath);
+} catch (ex) {
+  console.error(ex);
+  console.log('Make sure the client manifest is created');
+}
 
 module.exports = {
 

@@ -7,9 +7,3 @@ default: &default
 development:
   <<: *default
   enabled: true
-
-test:
-  <<: *default
-
-production:
-  <<: *default
