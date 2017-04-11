@@ -40,6 +40,8 @@ gem "rails-html-sanitizer"
 
 gem "react_on_rails", "6.9.3"
 
+gem "webpacker_lite", "0.0.4"
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer
 gem "mini_racer"
