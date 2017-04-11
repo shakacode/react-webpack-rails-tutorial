@@ -4,7 +4,10 @@
 // Common webpack configuration for server bundle
 
 const webpack = require('webpack');
-const path = require('path');
+const { resolve } = require('path');
+
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { paths, publicPath, sharedManifest } = require('./webpackConfigLoader.js');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -19,12 +22,12 @@ module.exports = {
   ],
   output: {
     filename: 'server-bundle.js',
-    path: path.join(__dirname, '../app/assets/webpack'),
+    path: resolve('..', paths.output, paths.assets),
   },
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      libs: path.resolve(__dirname, 'app/libs'),
+      libs: resolve(__dirname, 'app/libs'),
     },
   },
   plugins: [
@@ -32,7 +35,13 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
-    })
+    }),
+    new ManifestPlugin({
+      fileName: paths.manifest,
+      publicPath,
+      writeToFileEmit: true,
+      cache: sharedManifest,
+    }),
   ],
   module: {
     rules: [

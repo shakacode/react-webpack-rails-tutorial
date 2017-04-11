@@ -1,0 +1,26 @@
+# Restart webpack-watcher or webpack-dev-server if you make changes here
+default: &default
+  config: client/webpack
+  output: public
+  assets: webpack
+  manifest: manifest.json
+  node_modules: client/node_modules
+  source: client/app
+  extensions:
+    - .js
+    - .jsx
+    - .sass
+    - .scss
+    - .css
+
+development:
+  <<: *default
+  assets: webpack/development
+
+test:
+  <<: *default
+  assets: webpack/test
+
+production:
+  <<: *default
+  assets: webpack/production
