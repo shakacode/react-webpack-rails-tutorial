@@ -1,0 +1,49 @@
+{
+  "name": "ReactNativeTutorial",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "flow": "node_modules/flow-bin/cli.js",
+    "lint": "node_modules/eslint/bin/eslint.js --config .eslintrc.yml app"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "lodash": "^4.17.2",
+    "normalizr": "^2.2.1",
+    "react": "15.3.2",
+    "react-native": "0.37.0",
+    "react-native-elements": "^0.6.3",
+    "react-native-router-flux": "^3.37.0",
+    "react-native-vector-icons": "^2.1.0",
+    "react-redux": "^4.4.6",
+    "redux": "^3.6.0",
+    "redux-immutable": "^3.0.8",
+    "redux-saga": "^0.13.0",
+    "reselect": "^2.5.4",
+    "whatwg-fetch": "^2.0.1"
+  },
+  "jest": {
+    "preset": "jest-react-native",
+    "setupFiles": [
+      "./.jest.js"
+    ]
+  },
+  "devDependencies": {
+    "babel-jest": "17.0.2",
+    "babel-preset-react-native": "1.9.0",
+    "eslint": "^3.10.2",
+    "eslint-config-shakacode": "^13.1.0",
+    "eslint-plugin-flowtype": "^2.25.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
+    "eslint-plugin-react-native": "^2.1.0",
+    "flow-bin": "^0.33.0",
+    "jest": "17.0.3",
+    "jest-react-native": "17.0.3",
+    "react-test-renderer": "15.3.2",
+    "redux-mock-store": "^1.2.1"
+  }
+}
