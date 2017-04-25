@@ -1,0 +1,5 @@
+{
+  "env": {
+    "NODE_MODULES_CACHE": "false",
+  }
+}
