@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
+    "postinstall": "npm rebuild node-sass",
     "test": "NODE_PATH=./app mocha --compilers js:babel-core/register --require ./app/libs/testHelper.js --require ./app/libs/testNullCompiler.js 'app/**/*.spec.@(js|jsx)'",
     "test:debug": "yarn run test -- --debug-brk",
     "start": "babel-node server-express.js",
