@@ -4,18 +4,11 @@
 // Run like this:
 // cd client && yarn run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
-
-const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = require('./webpack.client.base.config');
 
 const devBuild = process.env.NODE_ENV !== 'production';
-
-config.output = {
-  filename: '[name]-bundle.js',
-  path: path.join(__dirname, '../app/assets/webpack'),
-};
 
 // You can add entry points specific to rails here
 config.entry.vendor.unshift(

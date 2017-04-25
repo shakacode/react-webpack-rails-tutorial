@@ -3,7 +3,10 @@
 
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
-const path = require('path');
+const { resolve } = require('path');
+
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { paths, publicPath } = require('./webpackConfigLoader.js');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -11,7 +14,7 @@ const nodeEnv = devBuild ? 'development' : 'production';
 module.exports = {
 
   // the project dir
-  context: __dirname,
+  context: resolve(__dirname),
   entry: {
 
     // See use of 'vendor' in the CommonsChunkPlugin inclusion below.
@@ -45,13 +48,23 @@ module.exports = {
       './app/bundles/comments/startup/clientRegistration',
     ],
   },
+
+  output: {
+    filename: '[name]-bundle.js',
+    path: resolve('..', paths.output, paths.assets),
+    pathinfo: true,
+  },
+
   resolve: {
-    extensions: ['.js', '.jsx'],
-    alias: {
-      libs: path.resolve(__dirname, 'app/libs'),
-      react: path.resolve(__dirname, 'node_modules/react'),
-      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
-    },
+    extensions: paths.extensions,
+    modules: [
+      paths.source,
+      paths.node_modules,
+    ],
+  },
+
+  resolveLoader: {
+    modules: [paths.node_modules],
   },
 
   plugins: [
@@ -76,6 +89,11 @@ module.exports = {
       minChunks: Infinity,
 
     }),
+    new ManifestPlugin({
+      fileName: paths.manifest,
+      publicPath,
+      writeToFileEmit: true,
+    }),
   ],
 
   module: {
@@ -89,6 +107,8 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
+            publicPath,
+            name: '[name]-[hash].[ext]',
             limit: 10000,
           },
         },
