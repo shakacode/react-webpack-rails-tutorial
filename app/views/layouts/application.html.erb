@@ -3,13 +3,12 @@
 <head>
   <title>RailsReactTutorial</title>
 
-  <%= javascript_pack_tag 'vendor' %>
-  <%= javascript_pack_tag 'app' %>
+  <%= stylesheet_pack_tag(static: ['vendor', 'app'],
+                          media: 'all',
+                          'data-turbolinks-track': true) %>
 
-  <!-- These do not use turbolinks, so no data-turbolinks-track -->
-  <!-- This is to load the hot assets. -->
-
-
+  <%= javascript_pack_tag('vendor', 'data-turbolinks-track': true) %>)
+  <%= javascript_pack_tag('app', 'data-turbolinks-track': true) %>)
 
   <%= csrf_meta_tags %>
 </head>

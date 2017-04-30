@@ -6,7 +6,10 @@ const webpack = require('webpack');
 const { resolve } = require('path');
 
 const ManifestPlugin = require('webpack-manifest-plugin');
-const { paths, publicPath } = require('./webpackConfigLoader.js');
+
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+const configPath = resolve('..', 'config', 'webpack');
+const { paths, publicPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -56,7 +59,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: paths.extensions,
+    extensions: ['.js', '.jsx'],
     modules: [
       paths.source,
       paths.node_modules,

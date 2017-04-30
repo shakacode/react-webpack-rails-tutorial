@@ -9,21 +9,12 @@
 const webpack = require('webpack');
 const { resolve } = require('path');
 
-const ManifestPlugin = require('webpack-manifest-plugin');
-const { paths, publicPath } = require('./webpackConfigLoader.js');
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+const configPath = resolve('..', 'config', 'webpack');
+const { paths } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
-
-const manifestPath = resolve('..', paths.output, paths.assets, paths.manifest);
-
-let sharedManifest = {};
-try {
-  sharedManifest = require(manifestPath);
-} catch (ex) {
-  console.error(ex);
-  console.log('Make sure the client manifest is created');
-}
 
 module.exports = {
 
@@ -48,12 +39,6 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
-    }),
-    new ManifestPlugin({
-      fileName: paths.manifest,
-      publicPath,
-      writeToFileEmit: true,
-      cache: sharedManifest,
     }),
   ],
   module: {
