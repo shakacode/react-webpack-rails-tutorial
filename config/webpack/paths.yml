@@ -1,24 +1,9 @@
-# Restart webpack-watcher or webpack-dev-server if you make changes here
 default: &default
-  config: client/webpack
   output: public
   assets: webpack
   manifest: manifest.json
   node_modules: client/node_modules
   source: client/app
-  extensions:
-    # here you can add all the needed extentions, examples are commented out
-    # - .coffee
-    - .js
-    - .jsx
-    # - .sass
-    - .scss
-    # - .css
-    # - .svg
-    # - .gif
-    # - .jpeg
-    # - .png
-
 
 development:
   <<: *default
