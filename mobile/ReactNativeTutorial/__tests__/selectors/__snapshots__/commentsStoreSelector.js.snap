@@ -1,0 +1,14 @@
+exports[`commentsStoreSelector selects the comments store 1`] = `
+Object {
+  "1": Object {
+    "author": "Alexey",
+    "id": 1,
+    "text": "Random comment",
+  },
+  "2": Object {
+    "author": "Justin",
+    "id": 2,
+    "text": "Another random comment",
+  },
+}
+`;

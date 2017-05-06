@@ -1,0 +1,325 @@
+exports[`Add renders correctly 1`] = `
+<View>
+  <View
+    style={
+      Array [
+        Object {},
+        undefined,
+      ]
+    }>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "fontFamily": undefined,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          Array [
+            Object {
+              "color": "#86939e",
+              "fontSize": 13.799999999999999,
+              "fontWeight": "bold",
+              "marginBottom": 1,
+              "marginLeft": 20,
+              "marginRight": 20,
+              "marginTop": 15,
+            },
+            undefined,
+            undefined,
+          ],
+        ]
+      }>
+      AUTHOR NAME
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "borderBottomColor": "#bdc6cf",
+          "borderBottomWidth": 1,
+          "marginLeft": 20,
+          "marginRight": 20,
+        },
+        undefined,
+      ]
+    }>
+    <TextInput
+      autoCapitalize={undefined}
+      autoCorrect={undefined}
+      autoFocus={undefined}
+      blurOnSubmit={undefined}
+      clearButtonMode={undefined}
+      clearTextOnFocus={undefined}
+      dataDetectorTypes={undefined}
+      defaultValue={undefined}
+      editable={undefined}
+      enablesReturnKeyAutomatically={undefined}
+      inlineImageLeft={undefined}
+      inlineImagePadding={undefined}
+      keyboardAppearance={undefined}
+      keyboardType={undefined}
+      maxLength={undefined}
+      multiline={undefined}
+      numberOfLines={undefined}
+      onBlur={undefined}
+      onChange={undefined}
+      onChangeText={[Function]}
+      onContentSizeChange={undefined}
+      onEndEditing={undefined}
+      onFocus={undefined}
+      onKeyPress={undefined}
+      onLayout={undefined}
+      onSelectionChange={undefined}
+      onSubmitEditing={undefined}
+      placeholder={undefined}
+      placeholderTextColor={undefined}
+      returnKeyLabel={undefined}
+      returnKeyType={undefined}
+      secureTextEntry={undefined}
+      selectTextOnFocus={undefined}
+      selectionColor="#86939e"
+      selectionState={undefined}
+      style={
+        Array [
+          Object {
+            "color": "#86939e",
+            "fontSize": 16.099999999999998,
+            "height": 36,
+          },
+          undefined,
+        ]
+      }
+      underlineColorAndroid={undefined}
+      value={undefined} />
+  </View>
+  <View
+    style={
+      Array [
+        Object {},
+        undefined,
+      ]
+    }>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Array [
+          Object {
+            "fontFamily": undefined,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          Array [
+            Object {
+              "color": "#86939e",
+              "fontSize": 13.799999999999999,
+              "fontWeight": "bold",
+              "marginBottom": 1,
+              "marginLeft": 20,
+              "marginRight": 20,
+              "marginTop": 15,
+            },
+            undefined,
+            undefined,
+          ],
+        ]
+      }>
+      COMMENT
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "borderBottomColor": "#bdc6cf",
+          "borderBottomWidth": 1,
+          "marginLeft": 20,
+          "marginRight": 20,
+        },
+        undefined,
+      ]
+    }>
+    <TextInput
+      autoCapitalize={undefined}
+      autoCorrect={undefined}
+      autoFocus={undefined}
+      blurOnSubmit={undefined}
+      clearButtonMode={undefined}
+      clearTextOnFocus={undefined}
+      dataDetectorTypes={undefined}
+      defaultValue={undefined}
+      editable={undefined}
+      enablesReturnKeyAutomatically={undefined}
+      inlineImageLeft={undefined}
+      inlineImagePadding={undefined}
+      keyboardAppearance={undefined}
+      keyboardType={undefined}
+      maxLength={undefined}
+      multiline={undefined}
+      numberOfLines={undefined}
+      onBlur={undefined}
+      onChange={undefined}
+      onChangeText={[Function]}
+      onContentSizeChange={undefined}
+      onEndEditing={undefined}
+      onFocus={undefined}
+      onKeyPress={undefined}
+      onLayout={undefined}
+      onSelectionChange={undefined}
+      onSubmitEditing={undefined}
+      placeholder={undefined}
+      placeholderTextColor={undefined}
+      returnKeyLabel={undefined}
+      returnKeyType={undefined}
+      secureTextEntry={undefined}
+      selectTextOnFocus={undefined}
+      selectionColor="#86939e"
+      selectionState={undefined}
+      style={
+        Array [
+          Object {
+            "color": "#86939e",
+            "fontSize": 16.099999999999998,
+            "height": 36,
+          },
+          undefined,
+        ]
+      }
+      underlineColorAndroid={undefined}
+      value={undefined} />
+  </View>
+  <TouchableHighlight
+    Ripple={undefined}
+    SelectableBackground={undefined}
+    SelectableBackgroundBorderless={undefined}
+    activeOpacity={0.85}
+    background={undefined}
+    delayLongPress={undefined}
+    delayPressIn={undefined}
+    delayPressOut={undefined}
+    disabled={false}
+    onHideUnderlay={undefined}
+    onLayout={undefined}
+    onLongPress={undefined}
+    onPress={[Function]}
+    onPressIn={undefined}
+    onPressOut={undefined}
+    onShowUnderlay={undefined}
+    underlayColor="transparent">
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#9E9E9E",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginLeft": 15,
+            "marginRight": 15,
+            "padding": 19,
+          },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          Object {
+            "backgroundColor": "#4641B5",
+            "marginTop": 20,
+          },
+          Object {
+            "shadowColor": "rgba(0,0,0, .4)",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 1,
+            },
+            "shadowOpacity": 1,
+            "shadowRadius": 1,
+          },
+          undefined,
+          undefined,
+        ]
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        ellipsizeMode="tail"
+        style={
+          Array [
+            Object {
+              "color": "white",
+              "fontFamily": "Material Icons",
+              "fontSize": 26,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Array [
+              Object {
+                "marginRight": 10,
+              },
+              undefined,
+            ],
+          ]
+        }>
+        
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Array [
+            Object {
+              "fontFamily": undefined,
+            },
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            Array [
+              Object {
+                "color": "white",
+                "fontSize": 20.7,
+              },
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+            ],
+          ]
+        }>
+        Send
+      </Text>
+    </View>
+  </TouchableHighlight>
+</View>
+`;

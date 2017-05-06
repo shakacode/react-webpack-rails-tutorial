@@ -1,0 +1,300 @@
+exports[`Index renders correctly when loaded 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }>
+  <ScrollView
+    dataSource={
+      ListViewDataSource {
+        "items": 2,
+      }
+    }
+    enableEmptySections={true}
+    initialListSize={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={1000}
+    onKeyboardDidHide={undefined}
+    onKeyboardDidShow={undefined}
+    onKeyboardWillHide={undefined}
+    onKeyboardWillShow={undefined}
+    onLayout={[Function]}
+    onScroll={[Function]}
+    pageSize={1}
+    refreshControl={
+      <RefreshControl
+        onRefresh={[Function]}
+        refreshing={false}
+        tintColor="#4641B5" />
+    }
+    removeClippedSubviews={true}
+    renderRow={[Function]}
+    scrollEventThrottle={50}
+    scrollRenderAheadDistance={1000}
+    stickyHeaderIndices={Array []}>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F0F0F0",
+          "elevation": 5,
+          "marginHorizontal": 20,
+          "marginVertical": 10,
+          "minHeight": 80,
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "bold",
+            "marginVertical": 5,
+            "textAlign": "center",
+          }
+        }>
+        Alexey
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#555555",
+            "marginBottom": 10,
+            "marginHorizontal": 10,
+          }
+        }>
+        Just some random comment
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "backgroundColor": "#F0F0F0",
+          "elevation": 5,
+          "marginHorizontal": 20,
+          "marginVertical": 10,
+          "minHeight": 80,
+          "shadowColor": "#000000",
+          "shadowOffset": Object {
+            "height": 2,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+        }
+      }>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 17,
+            "fontWeight": "bold",
+            "marginVertical": 5,
+            "textAlign": "center",
+          }
+        }>
+        Justin
+      </Text>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#555555",
+            "marginBottom": 10,
+            "marginHorizontal": 10,
+          }
+        }>
+        Another random comment
+      </Text>
+    </View>
+  </ScrollView>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#EFEFF2",
+        "borderTopColor": "#D2D2D2",
+        "borderTopWidth": 1,
+        "height": 70,
+        "justifyContent": "center",
+      }
+    }>
+    <View
+      onPress={undefined}
+      style={
+        Array [
+          Object {
+            "margin": 7,
+          },
+          Object {
+            "borderRadius": 28,
+            "height": 52,
+            "width": 52,
+          },
+          Object {
+            "shadowColor": "rgba(0,0,0, .4)",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 1,
+            },
+            "shadowOpacity": 1,
+            "shadowRadius": 1,
+          },
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f50",
+            "justifyContent": "center",
+          },
+          undefined,
+        ]
+      }
+      underlayColor="#f50">
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        ellipsizeMode="tail"
+        style={
+          Array [
+            Object {
+              "color": "white",
+              "fontFamily": "Material Icons",
+              "fontSize": 24,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+              },
+              undefined,
+            ],
+          ]
+        }>
+        
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Index renders correctly when loading 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }>
+  <ScrollView
+    dataSource={
+      ListViewDataSource {
+        "items": 0,
+      }
+    }
+    enableEmptySections={true}
+    initialListSize={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={1000}
+    onKeyboardDidHide={undefined}
+    onKeyboardDidShow={undefined}
+    onKeyboardWillHide={undefined}
+    onKeyboardWillShow={undefined}
+    onLayout={[Function]}
+    onScroll={[Function]}
+    pageSize={1}
+    refreshControl={
+      <RefreshControl
+        onRefresh={[Function]}
+        refreshing={true}
+        tintColor="#4641B5" />
+    }
+    removeClippedSubviews={true}
+    renderRow={[Function]}
+    scrollEventThrottle={50}
+    scrollRenderAheadDistance={1000}
+    stickyHeaderIndices={Array []} />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#EFEFF2",
+        "borderTopColor": "#D2D2D2",
+        "borderTopWidth": 1,
+        "height": 70,
+        "justifyContent": "center",
+      }
+    }>
+    <View
+      onPress={undefined}
+      style={
+        Array [
+          Object {
+            "margin": 7,
+          },
+          Object {
+            "borderRadius": 28,
+            "height": 52,
+            "width": 52,
+          },
+          Object {
+            "shadowColor": "rgba(0,0,0, .4)",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 1,
+            },
+            "shadowOpacity": 1,
+            "shadowRadius": 1,
+          },
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#f50",
+            "justifyContent": "center",
+          },
+          undefined,
+        ]
+      }
+      underlayColor="#f50">
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        ellipsizeMode="tail"
+        style={
+          Array [
+            Object {
+              "color": "white",
+              "fontFamily": "Material Icons",
+              "fontSize": 24,
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+              },
+              undefined,
+            ],
+          ]
+        }>
+        
+      </Text>
+    </View>
+  </View>
+</View>
+`;

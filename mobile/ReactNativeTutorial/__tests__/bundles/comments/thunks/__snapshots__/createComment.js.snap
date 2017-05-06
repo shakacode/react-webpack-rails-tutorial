@@ -1,0 +1,47 @@
+exports[`createComment creates a comment in the store and sends request to api 1`] = `
+Array [
+  Object {
+    "entities": Object {
+      "temp:0": Object {
+        "author": "Alexey",
+        "id": "temp:0",
+        "text": "Random comment",
+      },
+    },
+    "type": "COMMENTS_STORE:CREATE",
+  },
+  Object {
+    "args": Array [],
+    "name": "bound pop",
+    "type": "CALL",
+  },
+  Object {
+    "args": Array [
+      Object {
+        "author": "Alexey",
+        "id": "temp:0",
+        "text": "Random comment",
+      },
+    ],
+    "name": "postComment",
+    "type": "CALL",
+  },
+  Object {
+    "id": "temp:0",
+    "type": "COMMENTS_STORE:REMOVE",
+  },
+  Object {
+    "entities": Object {
+      "1": Object {
+        "author": "Alexey",
+        "id": 1,
+        "text": "Random comment",
+      },
+    },
+    "type": "COMMENTS_STORE:CREATE",
+  },
+  Object {
+    "type": "COMMENT_FORM:RESET",
+  },
+]
+`;

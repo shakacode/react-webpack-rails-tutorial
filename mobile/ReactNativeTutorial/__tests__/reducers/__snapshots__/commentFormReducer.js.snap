@@ -1,0 +1,13 @@
+exports[`commentFormReducer resetCommentForm clears all values incl. meta 1`] = `
+Object {
+  "meta": Object {},
+}
+`;
+
+exports[`commentFormReducer updateCommentForm updates comment form with payload 1`] = `
+Object {
+  "author": "Alexey",
+  "meta": Object {},
+  "text": "Random text",
+}
+`;
