@@ -38,9 +38,9 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", "7.1.0.beta.2"
+gem "react_on_rails", "8.0.0.beta.1"
 
-gem "webpacker_lite", "0.0.5"
+gem "webpacker_lite", "1.0.0"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer

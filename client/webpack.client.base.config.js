@@ -66,10 +66,6 @@ module.exports = {
     ],
   },
 
-  resolveLoader: {
-    modules: [paths.node_modules],
-  },
-
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
