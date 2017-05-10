@@ -10,6 +10,7 @@ const webpack = require('webpack');
 const { resolve } = require('path');
 
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
 const configPath = resolve('..', 'config', 'webpack');
 const { paths } = webpackConfigLoader(configPath);
 

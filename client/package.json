@@ -67,9 +67,9 @@
     "immutable": "^3.8.1",
     "imports-loader": "^0.7.1",
     "intl": "^1.2.5",
-    "js-yaml": "^3.8.2",
     "jquery": "^3.2.1",
     "jquery-ujs": "^1.2.2",
+    "js-yaml": "^3.8.2",
     "loader-utils": "^1.1.0",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
@@ -94,7 +94,8 @@
     "turbolinks": "^5.0.0",
     "url-loader": "^0.5.8",
     "webpack": "^2.3.3",
-    "webpack-manifest-plugin": "^1.1.0"
+    "webpack-manifest-plugin": "^1.1.0",
+    "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",

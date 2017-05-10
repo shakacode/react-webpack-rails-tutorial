@@ -1,6 +1,7 @@
 /* eslint no-var: 0, no-console: 0, import/no-extraneous-dependencies: 0 */
 
 import webpack from 'webpack';
+
 import WebpackDevServer from 'webpack-dev-server';
 
 import webpackConfig from './webpack.client.rails.hot.config';
@@ -8,6 +9,7 @@ import webpackConfig from './webpack.client.rails.hot.config';
 const { resolve } = require('path');
 
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
 const configPath = resolve('..', 'config', 'webpack');
 const { devServer: devServerConfig, publicPath } = webpackConfigLoader(configPath);
 
