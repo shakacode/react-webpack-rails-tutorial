@@ -4,11 +4,13 @@
 // Run like this:
 // cd client && yarn run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
-const merge = require('webpack-merge');
-
-const config = require('./webpack.client.base.config');
-
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const merge = require('webpack-merge');
+const config = require('./webpack.client.base.config');
+const { resolve } = require('path');
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+const configPath = resolve('..', 'config');
+const { webpackOutputPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 
@@ -27,6 +29,12 @@ module.exports = merge(config, {
       // Configures extractStyles to be true if NODE_ENV is production
       'bootstrap-loader/extractStyles'
     ],
+  },
+
+  output: {
+    filename: '[name].js',
+    // This is based on the config being in /client
+    path: webpackOutputPath,
   },
 
   // See webpack.common.config for adding modules common to both the webpack dev server and rails

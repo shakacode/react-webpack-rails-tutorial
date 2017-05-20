@@ -10,16 +10,16 @@ const { resolve } = require('path');
 
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
-const configPath = resolve('..', 'config', 'webpack');
-const { devServer: devServerConfig, publicPath } = webpackConfigLoader(configPath);
+const configPath = resolve('..', 'config');
+const { hotReloadingUrl, hotReloadingPort, hotReloadingHostname } = webpackConfigLoader(configPath);
 
 const compiler = webpack(webpackConfig);
 
 const devServer = new WebpackDevServer(compiler, {
   proxy: {
-    '*': `http://lvh.me:${devServerConfig.port}`,
+    '*': `http://lvh.me:${hotReloadingPort}`,
   },
-  publicPath,
+  contentBase: hotReloadingUrl,
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -35,9 +35,9 @@ const devServer = new WebpackDevServer(compiler, {
   },
 });
 
-devServer.listen(devServerConfig.port, 'localhost', (err) => {
+devServer.listen(hotReloadingPort, hotReloadingHostname, (err) => {
   if (err) console.error(err);
   console.log(
-    `=> 🔥  Webpack development server is running on port ${devServerConfig.port}`,
+    `=> 🔥  Webpack development server is running on ${hotReloadingUrl}`,
   );
 });

@@ -10,8 +10,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
-const configPath = resolve('..', 'config', 'webpack');
-const { paths, publicPath } = webpackConfigLoader(configPath);
+const configPath = resolve('..', 'config');
+const { manifest } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -54,12 +54,6 @@ module.exports = {
     ],
   },
 
-  output: {
-    filename: '[name].js',
-    path: resolve('..', paths.output, paths.assets),
-    pathinfo: true,
-  },
-
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
@@ -94,9 +88,8 @@ module.exports = {
 
     }),
     new ManifestPlugin({
-      fileName: paths.manifest,
-      publicPath,
-      writeToFileEmit: true,
+      fileName: manifest,
+      writeToFileEmit: true
     }),
   ],
 
@@ -111,7 +104,6 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
-            publicPath,
             name: '[name]-[hash].[ext]',
             limit: 10000,
           },
