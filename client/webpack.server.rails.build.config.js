@@ -1,10 +1,18 @@
 /* eslint comma-dangle: ["error",
-  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ],
+  global-require: 0,
+  import/no-dynamic-require: 0,
+  no-console: 0  */
 
 // Common webpack configuration for server bundle
 
 const webpack = require('webpack');
-const path = require('path');
+const { resolve } = require('path');
+
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config');
+const { webpackOutputPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -19,12 +27,12 @@ module.exports = {
   ],
   output: {
     filename: 'server-bundle.js',
-    path: path.join(__dirname, '../app/assets/webpack'),
+    path: webpackOutputPath,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      libs: path.resolve(__dirname, 'app/libs'),
+      libs: resolve(__dirname, 'app/libs'),
     },
   },
   plugins: [
@@ -32,7 +40,7 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
-    })
+    }),
   ],
   module: {
     rules: [
