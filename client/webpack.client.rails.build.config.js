@@ -118,7 +118,7 @@ module.exports = merge(config, {
 
   plugins: [
     new ExtractTextPlugin({
-      filename: '[name]-bundle.css',
+      filename: '[name].css',
       allChunks: true
     }),
   ],

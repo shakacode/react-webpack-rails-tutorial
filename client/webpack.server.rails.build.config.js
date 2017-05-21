@@ -11,8 +11,8 @@ const { resolve } = require('path');
 
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
-const configPath = resolve('..', 'config', 'webpack');
-const { paths } = webpackConfigLoader(configPath);
+const configPath = resolve('..', 'config');
+const { webpackOutputPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -27,7 +27,7 @@ module.exports = {
   ],
   output: {
     filename: 'server-bundle.js',
-    path: resolve('..', paths.output, paths.assets),
+    path: webpackOutputPath,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
