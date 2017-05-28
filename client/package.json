@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
-    "postinstall": "npm rebuild node-sass",
+    "postinstall": "npm rebuild node-sass && yarn run install-react-on-rails",
+    "install-react-on-rails": "rm -rf node_modules/react-on-rails && npm i 'file:../../react_on_rails'",
+
     "test": "NODE_PATH=./app mocha --compilers js:babel-core/register --require ./app/libs/testHelper.js --require ./app/libs/testNullCompiler.js 'app/**/*.spec.@(js|jsx)'",
     "test:debug": "yarn run test -- --debug-brk",
     "start": "babel-node server-express.js",
@@ -79,7 +81,7 @@
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.1",
     "react-intl": "^2.2.2",
-    "react-on-rails": "^7.0.0",
+    "react-on-rails": "^8.0.0-beta.3",
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
