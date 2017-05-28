@@ -56,7 +56,7 @@ module.exports = {
 
   output: {
     filename: '[name].js',
-    path: resolve('..', paths.output, paths.assets),
+    path: resolve('..', paths.output),
     pathinfo: true,
   },
 
@@ -86,7 +86,7 @@ module.exports = {
       name: 'vendor-bundle',
 
       // We don't want the default vendor.js name
-      filename: 'vendor-bundle.js',
+      filename: 'vendor-bundle-[hash].js',
 
       // Passing Infinity just creates the commons chunk, but moves no modules into it.
       // In other words, we only put what's in the vendor entry definition in vendor-bundle.js

@@ -27,7 +27,7 @@ module.exports = {
   ],
   output: {
     filename: 'server-bundle.js',
-    path: resolve('..', paths.output, paths.assets),
+    path: resolve('..', paths.output),
   },
   resolve: {
     extensions: ['.js', '.jsx'],

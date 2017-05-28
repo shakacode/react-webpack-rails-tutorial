@@ -1,3 +1,11 @@
+PATH
+  remote: ../webpacker_lite
+  specs:
+    webpacker_lite (2.0.2)
+      activesupport (>= 4.2)
+      multi_json (~> 1.2)
+      railties (>= 4.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -288,10 +296,6 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webpacker_lite (1.0.0)
-      activesupport (>= 4.2)
-      multi_json (~> 1.2)
-      railties (>= 4.2)
     websocket (1.2.4)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
@@ -348,7 +352,7 @@ DEPENDENCIES
   spring-commands-rspec
   uglifier
   web-console
-  webpacker_lite (= 1.0.0)
+  webpacker_lite!
 
 RUBY VERSION
    ruby 2.4.1p111

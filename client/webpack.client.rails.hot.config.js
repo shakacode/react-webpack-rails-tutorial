@@ -37,7 +37,7 @@ module.exports = merge(config, {
 
   output: {
     filename: '[name].js',
-    path: resolve('..', paths.output, paths.assets),
+    path: resolve('..', paths.output),
     publicPath,
   },
 
