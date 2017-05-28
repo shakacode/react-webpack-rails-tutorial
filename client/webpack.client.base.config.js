@@ -3,7 +3,15 @@
 
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
-const path = require('path');
+
+const { resolve } = require('path');
+
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config', 'webpack');
+const { paths, publicPath } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -11,11 +19,11 @@ const nodeEnv = devBuild ? 'development' : 'production';
 module.exports = {
 
   // the project dir
-  context: __dirname,
+  context: resolve(__dirname),
   entry: {
 
     // See use of 'vendor' in the CommonsChunkPlugin inclusion below.
-    vendor: [
+    'vendor-bundle': [
       'babel-polyfill',
       'es5-shim/es5-shim',
       'es5-shim/es5-sham',
@@ -41,17 +49,26 @@ module.exports = {
     ],
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
-    app: [
+    'app-bundle': [
       './app/bundles/comments/startup/clientRegistration',
     ],
   },
+
+  output: {
+    filename: '[name].js',
+    path: resolve('..', paths.output),
+    pathinfo: true,
+  },
+
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      libs: path.resolve(__dirname, 'app/libs'),
-      react: path.resolve(__dirname, 'node_modules/react'),
-      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      libs: resolve(__dirname, 'app/libs'),
     },
+    modules: [
+      'client/app',
+      'client/node_modules',
+    ],
   },
 
   plugins: [
@@ -66,15 +83,20 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
 
       // This name 'vendor' ties into the entry definition
-      name: 'vendor',
+      name: 'vendor-bundle',
 
       // We don't want the default vendor.js name
-      filename: 'vendor-bundle.js',
+      filename: 'vendor-bundle-[hash].js',
 
       // Passing Infinity just creates the commons chunk, but moves no modules into it.
       // In other words, we only put what's in the vendor entry definition in vendor-bundle.js
       minChunks: Infinity,
 
+    }),
+    new ManifestPlugin({
+      fileName: paths.manifest,
+      publicPath,
+      writeToFileEmit: true,
     }),
   ],
 
@@ -89,6 +111,8 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
+            publicPath,
+            name: '[name]-[hash].[ext]',
             limit: 10000,
           },
         },

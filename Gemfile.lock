@@ -1,3 +1,11 @@
+PATH
+  remote: ../webpacker_lite
+  specs:
+    webpacker_lite (2.0.2)
+      activesupport (>= 4.2)
+      multi_json (~> 1.2)
+      railties (>= 4.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -200,7 +208,7 @@ GEM
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
     rdoc (4.3.0)
-    react_on_rails (7.0.0)
+    react_on_rails (8.0.0.beta.2)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -330,7 +338,7 @@ DEPENDENCIES
   rails
   rails-html-sanitizer
   rainbow
-  react_on_rails (= 7.0.0)
+  react_on_rails (= 8.0.0.beta.2)
   redis
   rspec-rails (~> 3)
   rspec-retry
@@ -344,6 +352,7 @@ DEPENDENCIES
   spring-commands-rspec
   uglifier
   web-console
+  webpacker_lite!
 
 RUBY VERSION
    ruby 2.4.1p111

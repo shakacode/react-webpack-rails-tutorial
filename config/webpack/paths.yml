@@ -1,0 +1,15 @@
+default: &default
+  output: public
+  manifest: manifest.json
+
+development:
+  <<: *default
+  assets: webpack/development
+
+test:
+  <<: *default
+  assets: webpack/test
+
+production:
+  <<: *default
+  assets: webpack/production

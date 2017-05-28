@@ -1,19 +1,25 @@
 /* eslint no-var: 0, no-console: 0, import/no-extraneous-dependencies: 0 */
 
 import webpack from 'webpack';
+
 import WebpackDevServer from 'webpack-dev-server';
 
 import webpackConfig from './webpack.client.rails.hot.config';
 
-const hotRailsPort = process.env.HOT_RAILS_PORT || 3500;
+const { resolve } = require('path');
+
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config', 'webpack');
+const { devServer: devServerConfig, publicPath } = webpackConfigLoader(configPath);
 
 const compiler = webpack(webpackConfig);
 
 const devServer = new WebpackDevServer(compiler, {
   proxy: {
-    '*': `http://lvh.me:${hotRailsPort}`,
+    '*': `http://lvh.me:${devServerConfig.port}`,
   },
-  publicPath: webpackConfig.output.publicPath,
+  publicPath,
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -29,9 +35,9 @@ const devServer = new WebpackDevServer(compiler, {
   },
 });
 
-devServer.listen(hotRailsPort, 'localhost', (err) => {
+devServer.listen(devServerConfig.port, 'localhost', (err) => {
   if (err) console.error(err);
   console.log(
-    `=> 🔥  Webpack development server is running on port ${hotRailsPort}`,
+    `=> 🔥  Webpack development server is running on port ${devServerConfig.port}`,
   );
 });

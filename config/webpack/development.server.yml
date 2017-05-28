@@ -1,0 +1,9 @@
+# Restart webpack-dev-server if you make changes here
+default: &default
+  enabled: false
+  host: localhost
+  port: 3500
+
+development:
+  <<: *default
+  enabled: false
