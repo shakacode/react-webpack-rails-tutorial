@@ -17,7 +17,7 @@ import NavigationBarApp from './NavigationBarApp';
 addLocaleData([...en, ...de, ...ja, ...zh]);
 
 ReactOnRails.setOptions({
-  traceTurbolinks: TRACE_TURBOLINKS, // eslint-disable-line no-undef
+  traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
 });
 
 ReactOnRails.register({

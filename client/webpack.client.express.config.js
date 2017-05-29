@@ -25,7 +25,7 @@ config.entry.app.push(
 config.output = {
 
   // this file is served directly by webpack
-  filename: '[name]-bundle.js',
+  filename: '[name].js',
   path: __dirname,
 };
 config.plugins.unshift(
