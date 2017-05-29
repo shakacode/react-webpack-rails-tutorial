@@ -5,7 +5,7 @@
   no-console: 0  */
 
 // Common webpack configuration for server bundle
-const { resolve, join } = require('path');
+const { resolve } = require('path');
 const webpack = require('webpack');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
@@ -13,7 +13,6 @@ const configPath = resolve('..', 'config');
 const { webpackOutputPath, webpackPublicOutputDir } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
-const nodeEnv = devBuild ? 'development' : 'production';
 
 module.exports = {
 
@@ -31,7 +30,7 @@ module.exports = {
     filename: 'server-bundle.js',
 
     // Leading and trailing slashes ARE necessary.
-    publicPath: '/' + webpackPublicOutputDir + '/',
+    publicPath: `/${webpackPublicOutputDir}/`,
     path: webpackOutputPath,
   },
   resolve: {

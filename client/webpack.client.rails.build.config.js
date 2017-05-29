@@ -10,6 +10,7 @@ const merge = require('webpack-merge');
 const config = require('./webpack.client.base.config');
 const { resolve } = require('path');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
 const configPath = resolve('..', 'config');
 const { webpackOutputPath, webpackPublicOutputDir } = webpackConfigLoader(configPath);
 
@@ -36,11 +37,11 @@ module.exports = merge(config, {
     filename: '[name]-[hash].js',
 
     // Leading and trailing slashes ARE necessary.
-    publicPath: '/' + webpackPublicOutputDir + '/',
+    publicPath: `/${webpackPublicOutputDir}/`,
     path: webpackOutputPath,
   },
 
-  // See webpack.client.base.config for adding modules common to both the webpack dev server and rails
+  // See webpack.client.base.config for adding modules common to both webpack dev server and rails
 
   module: {
     rules: [
