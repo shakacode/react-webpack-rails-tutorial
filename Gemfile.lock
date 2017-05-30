@@ -200,7 +200,7 @@ GEM
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
     rdoc (4.3.0)
-    react_on_rails (8.0.0)
+    react_on_rails (8.0.1)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -334,7 +334,7 @@ DEPENDENCIES
   rails (= 5.0.3)
   rails-html-sanitizer
   rainbow
-  react_on_rails (= 8.0.0)
+  react_on_rails (= 8.0.1)
   redis
   rspec-rails (~> 3)
   rspec-retry
