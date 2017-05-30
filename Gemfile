@@ -38,7 +38,7 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-gem "react_on_rails", "8.0.0.beta.3"
+gem "react_on_rails", "8.0.0"
 
 gem "webpacker_lite", "2.0.4"
 
