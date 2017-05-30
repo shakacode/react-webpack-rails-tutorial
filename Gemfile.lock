@@ -288,7 +288,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webpacker_lite (2.0.2)
+    webpacker_lite (2.0.3)
       activesupport (>= 4.2)
       multi_json (~> 1.2)
       railties (>= 4.2)
@@ -348,7 +348,7 @@ DEPENDENCIES
   spring-commands-rspec
   uglifier
   web-console
-  webpacker_lite (= 2.0.2)
+  webpacker_lite (= 2.0.3)
 
 RUBY VERSION
    ruby 2.4.1p111

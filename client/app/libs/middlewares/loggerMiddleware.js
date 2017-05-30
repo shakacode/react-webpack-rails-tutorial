@@ -2,6 +2,12 @@
 
 export default function logger({ getState }) {
   return (next) => (action) => {
+    // TODO: Replace this file with redux-logger and move this conditional to helper
+    // TODO: where we're setting up the included middleware.
+    if (process.env.NODE_ENV !== 'development') {
+      return next(action);
+    }
+
     console.log('will dispatch', action);
 
     // Call the next dispatch method in the middleware chain.
