@@ -1,13 +1,18 @@
 /* eslint comma-dangle: ["error",
-  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ],
+  global-require: 0,
+  import/no-dynamic-require: 0,
+  no-console: 0  */
 
 // Common webpack configuration for server bundle
-
+const { resolve } = require('path');
 const webpack = require('webpack');
-const path = require('path');
+const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
+
+const configPath = resolve('..', 'config');
+const { webpackOutputPath, webpackPublicOutputDir } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
-const nodeEnv = devBuild ? 'development' : 'production';
 
 module.exports = {
 
@@ -18,21 +23,28 @@ module.exports = {
     './app/bundles/comments/startup/serverRegistration',
   ],
   output: {
+    // Important to NOT use a hash if the server webpack config runs separately from the client one.
+    // Otherwise, both would be writing to the same manifest.json file.
+    // Additionally, there's no particular need to have a fingerprint (hash) on the server bundle,
+    // since it's not cached by the browsers.
     filename: 'server-bundle.js',
-    path: path.join(__dirname, '../app/assets/webpack'),
+
+    // Leading and trailing slashes ARE necessary.
+    publicPath: `/${webpackPublicOutputDir}/`,
+    path: webpackOutputPath,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      libs: path.resolve(__dirname, 'app/libs'),
+      libs: resolve(__dirname, 'app', 'libs'),
     },
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(nodeEnv),
-      },
-    })
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+      DEBUG: false,
+      TRACE_TURBOLINKS: devBuild,
+    }),
   ],
   module: {
     rules: [
