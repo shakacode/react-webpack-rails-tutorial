@@ -54,7 +54,8 @@ RSpec.configure do |config|
 
       puts "\n"
       puts "=" * 80
-      puts "Exception caught! #{example_ex.ai}"
+      puts "Exception caught! #{example_ex}"
+      puts example_ex.message
       puts "when running example:\n  #{example.full_description}"
       puts "  at #{example.location} with driver #{Capybara.current_driver}."
 
