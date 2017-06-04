@@ -103,7 +103,7 @@ group :test do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails", "~> 3"
+  gem "rspec-rails", "~> 3.6"
   gem "rspec-retry"
   gem "selenium-webdriver", "<3.0.0"
 end
