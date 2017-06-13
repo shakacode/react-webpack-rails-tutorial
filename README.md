@@ -162,7 +162,7 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
       ```
       heroku buildpacks:set heroku/ruby --app your-app
       heroku buildpacks:add --index 1 heroku/nodejs --app your-app
-      heroku buildpacks:set --index 3 https://github.com/tempoautomation/heroku-buildpack-sourceversion.git --app your-app
+      heroku buildpacks:set --index 3 https://github.com/sreid/heroku-buildpack-sourceversion.git --app your-app
       ```
 + **Development Mode**: Two flavors: Hot reloading assets (JavaScript & CSS) and Static loading.
    + **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) use precompiled files. See `Procfile.hot`. `Procfile.dev` also starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
