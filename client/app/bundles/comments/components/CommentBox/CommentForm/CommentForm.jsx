@@ -1,7 +1,8 @@
 // NOTE: https://github.com/react-bootstrap/react-bootstrap/issues/1850 seesm to require string
 // refs and not the callback kind.
 /* eslint-disable react/no-find-dom-node, react/no-string-refs */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import Col from 'react-bootstrap/lib/Col';
 import FormControl from 'react-bootstrap/lib/FormControl';

@@ -3,7 +3,8 @@
 
 import classNames from 'classnames';
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import CommentsCount from './CommentsCount';
 import * as paths from '../../constants/paths';

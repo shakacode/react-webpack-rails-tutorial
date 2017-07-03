@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const href = 'https://github.com/shakacode/react_on_rails/blob/master/README.md#multiple-react-' +
   'components-on-a-page-with-one-store';

@@ -1,10 +1,11 @@
-import React, { PropTypes } from 'react';
-import { IndexLink, Link } from 'react-router';
-import BaseComponent from 'libs/components/BaseComponent';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { NavLink as Link } from 'react-router-dom';
 
 import './Layout.scss';
 
-export default class Layout extends BaseComponent {
+/* eslint-disable react/prefer-stateless-function */
+export default class Layout extends Component {
 
   static propTypes = {
     children: PropTypes.object.isRequired,
@@ -17,9 +18,9 @@ export default class Layout extends BaseComponent {
         <header>
           <ul>
             <li>
-              <IndexLink to="/" activeClassName="active">
+              <Link to="/" activeClassName="active">
                 Comments (Root URL)
-              </IndexLink>
+              </Link>
             </li>
             <li>
               <Link to="/react-router" activeClassName="active">

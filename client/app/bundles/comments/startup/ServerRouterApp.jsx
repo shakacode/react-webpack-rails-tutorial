@@ -1,9 +1,8 @@
 // Compare to ../ClientRouterApp.jsx
 import React from 'react';
 import { Provider } from 'react-redux';
-import { match, RouterContext } from 'react-router';
+import { StaticRouter } from 'react-router';
 import ReactOnRails from 'react-on-rails';
-
 import routes from '../routes/routes';
 
 export default (_props, railsContext) => {
@@ -11,15 +10,7 @@ export default (_props, railsContext) => {
 
   let error;
   let redirectLocation;
-  let routeProps;
   const { location } = railsContext;
-
-  // See https://github.com/reactjs/react-router/blob/master/docs/guides/ServerRendering.md
-  match({ routes, location }, (_error, _redirectLocation, _routeProps) => {
-    error = _error;
-    redirectLocation = _redirectLocation;
-    routeProps = _routeProps;
-  });
 
   // This tell react_on_rails to skip server rendering any HTML. Note, client rendering
   // will handle the redirect. What's key is that we don't try to render.
@@ -28,10 +19,19 @@ export default (_props, railsContext) => {
     return { error, redirectLocation };
   }
 
+  // Allows components to add properties to the object to store
+  // information about the render.
+  const context = {};
+
   // Important that you don't do this if you are redirecting or have an error.
   return (
     <Provider store={store}>
-      <RouterContext {...routeProps} />
+      <StaticRouter
+        location={location}
+        context={context}
+      >
+        {routes}
+      </StaticRouter>
     </Provider>
   );
 };

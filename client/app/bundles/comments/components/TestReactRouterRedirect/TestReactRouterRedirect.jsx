@@ -1,20 +1,29 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import BaseComponent from 'libs/components/BaseComponent';
 
 export default class TestReactRouterRedirect extends BaseComponent {
-  static checkAuth(nextState, replace) {
+
+  static checkAuth() {
     // Hard code this to demonstrate the effect
     const notAuthorized = true;
-    if (notAuthorized) {
-      replace({ pathname: '/', state: { redirectFrom: nextState.location.pathname } });
-    }
+    return notAuthorized;
   }
 
   render() {
-    return (
-      <div>Nope.</div>
-    );
-  }
+    if (TestReactRouterRedirect.checkAuth()) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/',
+            state: { redirectFrom: this.props.location.pathname },
+          }}
+        />
+      );
+    }
 
+    return <div>Nope.</div>;
+  }
 }
