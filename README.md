@@ -148,10 +148,10 @@ See package.json and Gemfile for versions
 1. `yarn`
 1. `rake db:setup`
 1. `foreman start -f Procfile.hot`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING
+  1. Open a browser tab to http://localhost:5000 for the Rails app example with HOT RELOADING
   2. Try Hot Reloading steps below!
 1. `foreman start -f Procfile.static`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example.
+  1. Open a browser tab to http://localhost:5000 for the Rails app example.
   2. When you make changes, you have to refresh the browser page.
 
 ### Basic Command Line
