@@ -5,7 +5,7 @@ app: echo "Use Procfile.static or uncomment this file and help us get Hot Reload
 
 # Development rails requires both rails and rails-assets
 # (and rails-server-assets if server rendering)
-# rails: REACT_ON_RAILS_ENV=HOT rails s -b 0.0.0.0
+# rails: HOT_RELOADING=TRUE rails s -b 0.0.0.0
 
 # Run the hot reload server for client development
 # hot-assets: sh -c 'rm -rf public/webpack/development || true && bundle exec rake react_on_rails:locale && HOT_RAILS_PORT=3500 yarn run hot-assets'
