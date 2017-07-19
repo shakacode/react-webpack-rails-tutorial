@@ -4642,9 +4642,9 @@ react-intl@^2.2.2:
     intl-relativeformat "^1.3.0"
     invariant "^2.1.1"
 
-react-on-rails@8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-8.0.1.tgz#92ca0e71542501c3bdd7f3ef2a315e83ba99433c"
+react-on-rails@^8.0.6-rc.1:
+  version "8.0.6-rc.1"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-8.0.6-rc.1.tgz#6326e2b431351f9a9976bbf6a59b5e5b2fabd91d"
 
 react-overlays@^0.6.12:
   version "0.6.12"
