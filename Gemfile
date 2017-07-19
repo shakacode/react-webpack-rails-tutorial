@@ -1,7 +1,9 @@
 source "https://rubygems.org"
 ruby "2.4.1"
 
-#
+gem "react_on_rails", "8.0.6.rc.1"
+gem "webpacker_lite", "2.1.0"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
 gem "rails", "5.0.3"
@@ -37,10 +39,6 @@ gem "sdoc", group: :doc
 
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
-
-gem "react_on_rails", "8.0.1"
-
-gem "webpacker_lite", "2.0.4"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer
