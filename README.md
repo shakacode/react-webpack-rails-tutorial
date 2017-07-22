@@ -192,9 +192,9 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
 
       + Note, the following view helpers do the magic to make this work:
    ```erb
-  <%= env_stylesheet_link_tag(static: 'application_static', hot: 'application_non_webpack', options: { media: 'all', 'data-turbolinks-track' => true })  %>
+  <%= env_stylesheet_link_tag(hot: 'application_non_webpack', options: { media: 'all', 'data-turbolinks-track' => true })  %>
   <%= env_javascript_include_tag(hot: ['http://localhost:3500/vendor-bundle.js', 'http://localhost:3500/app-bundle.js']) %>
-  <%= env_javascript_include_tag(static: 'application_static', hot: 'application_non_webpack', options: { 'data-turbolinks-track' => true }) %>
+  <%= env_javascript_include_tag(hot: 'application_non_webpack', options: { 'data-turbolinks-track' => true }) %>
   ```
 
 ## Testing
