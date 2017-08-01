@@ -69,12 +69,7 @@ config.module.rules.push(
           localIdentName: '[name]__[local]__[hash:base64:5]'
         }
       },
-      {
-        loader: 'postcss-loader',
-        options: {
-          plugins: 'autoprefixer'
-        }
-      }
+      'postcss-loader',
     ]
   },
   {
@@ -88,12 +83,7 @@ config.module.rules.push(
           localIdentName: '[name]__[local]__[hash:base64:5]',
         }
       },
-      {
-        loader: 'postcss-loader',
-        options: {
-          plugins: 'autoprefixer'
-        }
-      },
+      'postcss-loader',
       {
         loader: 'sass-loader'
       },

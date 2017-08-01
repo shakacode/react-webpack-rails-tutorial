@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 
-const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
-const win = doc.defaultView;
+const { document } = (new JSDOM('<!doctype html><html><body></body></html>')).window;
+const win = document.defaultView;
 
-global.document = doc;
+global.document = document;
 global.window = win;
 
 // from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
