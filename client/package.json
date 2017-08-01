@@ -41,7 +41,7 @@
     "lint": "eslint --ext .js,.jsx ."
   },
   "dependencies": {
-    "actioncable": "^5.1.2",
+    "actioncable": "^5.0.2",
     "autoprefixer": "^7.1.2",
     "axios": "^0.16.2",
     "babel": "^6.23.0",
