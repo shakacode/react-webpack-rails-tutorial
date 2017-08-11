@@ -1,7 +1,8 @@
 import Alert from 'react-bootstrap/lib/Alert';
 import BaseComponent from 'libs/components/BaseComponent';
 import Immutable from 'immutable';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 
