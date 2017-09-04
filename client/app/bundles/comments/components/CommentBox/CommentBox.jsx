@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import ActionCable from 'actioncable';
 import _ from 'lodash';
@@ -15,13 +16,13 @@ class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
-      fetchComments: React.PropTypes.function,
+      fetchComments: PropTypes.function,
     }),
     data: PropTypes.shape({
-      isFetching: React.PropTypes.boolean,
-      isSaving: React.PropTypes.boolean,
-      submitCommentError: React.PropTypes.string,
-      $$comments: React.PropTypes.arrayOf(CommentPropTypes),
+      isFetching: PropTypes.boolean,
+      isSaving: PropTypes.boolean,
+      submitCommentError: PropTypes.string,
+      $$comments: PropTypes.arrayOf(CommentPropTypes),
     }).isRequired,
     intl: intlShape.isRequired,
   };
