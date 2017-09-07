@@ -1,12 +1,12 @@
 source "https://rubygems.org"
 ruby "2.4.1"
 
-gem "react_on_rails", "8.0.6.rc.1"
-gem "webpacker_lite", "2.1.0"
+gem "react_on_rails", "9.0.0.rc.0"
+gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "5.0.3"
+gem "rails", "~> 5"
 
 # Note: We're using sqllite3 for development and testing
 # gem "sqlite3", group: [:development, :test]
