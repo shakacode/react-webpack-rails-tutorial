@@ -8,7 +8,7 @@ const { resolve } = require('path');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
-const { manifest } = webpackConfigLoader(configPath);
+const { output } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 
@@ -68,7 +68,7 @@ module.exports = {
       },
     }),
     new ManifestPlugin({
-      fileName: manifest,
+      publicPath: output.publicPath,
       writeToFileEmit: true
     }),
   ],

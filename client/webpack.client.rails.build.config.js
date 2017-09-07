@@ -12,7 +12,7 @@ const { resolve } = require('path');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
-const { webpackOutputPath, webpackPublicOutputDir } = webpackConfigLoader(configPath);
+const { output } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 
@@ -34,11 +34,10 @@ module.exports = merge(config, {
   },
 
   output: {
-    filename: '[name]-[hash].js',
-
-    // Leading and trailing slashes ARE necessary.
-    publicPath: `/${webpackPublicOutputDir}/`,
-    path: webpackOutputPath,
+    filename: '[name]-[chunkhash].js',
+    chunkFilename: '[name]-[chunkhash].chunk.js',
+    publicPath: output.publicPath,
+    path: output.path,
   },
 
   // See webpack.client.base.config for adding modules common to both webpack dev server and rails

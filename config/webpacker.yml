@@ -1,0 +1,34 @@
+default: &default
+  public_output_path: webpack
+  cache_path: tmp/cache/webpacker
+
+  # Additional paths webpack should lookup modules
+  # ['app/assets', 'engine/foo/app/assets']
+  resolved_paths: []
+
+  # Reload manifest.json on all requests so we reload latest compiled packs
+  cache_manifest: false
+
+  # Important to set this to false if not using the webpacker webpack setup
+  compile: false
+
+development:
+  <<: *default
+
+  dev_server:
+    host: localhost
+    port: 3035
+    hmr: true
+    https: false
+
+test:
+  <<: *default
+
+  # Compile test packs to a separate directory
+  public_output_path: webpack-test
+
+production:
+  <<: *default
+
+  # Cache manifest.json for performance
+  cache_manifest: true

@@ -10,7 +10,7 @@ const webpack = require('webpack');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
-const { webpackOutputPath, webpackPublicOutputDir } = webpackConfigLoader(configPath);
+const { output } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
 
@@ -29,9 +29,8 @@ module.exports = {
     // since it's not cached by the browsers.
     filename: 'server-bundle.js',
 
-    // Leading and trailing slashes ARE necessary.
-    publicPath: `/${webpackPublicOutputDir}/`,
-    path: webpackOutputPath,
+    publicPath: output.publicPath,
+    path: output.path,
   },
   resolve: {
     extensions: ['.js', '.jsx'],

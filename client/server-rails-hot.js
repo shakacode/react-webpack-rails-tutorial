@@ -11,7 +11,11 @@ const { resolve } = require('path');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
-const { hotReloadingUrl, hotReloadingPort, hotReloadingHostname } = webpackConfigLoader(configPath);
+const { output, settings } = webpackConfigLoader(configPath);
+
+const hotReloadingUrl = output.publicPathWithHost;
+const hotReloadingPort = settings.dev_server.port;
+const hotReloadingHostname = settings.dev_server.host;
 
 const compiler = webpack(webpackConfig);
 

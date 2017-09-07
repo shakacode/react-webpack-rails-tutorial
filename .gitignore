@@ -28,6 +28,7 @@ vendor/ruby
 
 # Generated js bundles
 /public/webpack/
+/public/webpack-test/
 
 # Rubymine/IntelliJ
 .idea
