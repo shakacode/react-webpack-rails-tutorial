@@ -13,7 +13,8 @@ const config = require('./webpack.client.base.config');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
-const { hotReloadingUrl, webpackOutputPath } = webpackConfigLoader(configPath);
+const { output } = webpackConfigLoader(configPath);
+const hotReloadingUrl = output.publicPathWithHost;
 
 module.exports = merge(config, {
   devtool: 'eval-source-map',
@@ -32,8 +33,10 @@ module.exports = merge(config, {
   },
 
   output: {
-    filename: '[name].js',
-    path: webpackOutputPath,
+    filename: '[name]-[hash].js',
+    chunkFilename: '[name]-[chunkhash].chunk.js',
+    publicPath: output.publicPath,
+    path: output.path,
   },
 
   module: {
