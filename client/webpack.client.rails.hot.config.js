@@ -75,12 +75,7 @@ module.exports = merge(config, {
               localIdentName: '[name]__[local]__[hash:base64:5]'
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: 'autoprefixer'
-            }
-          }
+          'postcss-loader',
         ]
       },
       {
@@ -95,12 +90,7 @@ module.exports = merge(config, {
               localIdentName: '[name]__[local]__[hash:base64:5]',
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: 'autoprefixer'
-            }
-          },
+          'postcss-loader',
           {
             loader: 'sass-loader'
           },
