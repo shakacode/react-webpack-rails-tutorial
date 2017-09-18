@@ -4,9 +4,9 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server-express.js",
   "engines": {
-    "node": "7.8.0",
-    "npm": "4.4.4",
-    "yarn": "0.22.0"
+    "node": "7.x",
+    "npm": "4.x",
+    "yarn": "0.x || 1.x"
   },
   "repository": {
     "type": "git",
