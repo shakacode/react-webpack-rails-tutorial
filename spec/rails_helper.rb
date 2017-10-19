@@ -49,7 +49,7 @@ RSpec.configure do |config|
   # Using errors_ok as there is a timing issue causing crashes without this setting
   # https://github.com/teampoltergeist/poltergeist/issues/830
 
-  default_driver = :poltergeist_no_animations
+  default_driver = :selenium_chrome
 
   supported_drivers = %i[ poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit

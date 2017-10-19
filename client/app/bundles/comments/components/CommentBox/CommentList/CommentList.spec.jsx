@@ -47,7 +47,8 @@ describe('CommentList', () => {
   it('renders an alert if errors', () => {
     const component = renderIntoDocument(
       <CommentList
-        $$comments={comments} error="zomg"
+        $$comments={comments}
+        error="zomg"
         cssTransitionGroupClassNames={cssTransitionGroupClassNames}
       />,
     );

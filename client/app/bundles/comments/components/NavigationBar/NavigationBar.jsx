@@ -14,7 +14,7 @@ const NavigationBar = (props) => {
 
   /* eslint-disable new-cap */
   return (
-    <nav className="navbar navbar-default" role="navigation">
+    <nav className="navbar navbar-default">
       <div className="container">
         <div className="navbar-header">
           <button
@@ -49,7 +49,7 @@ const NavigationBar = (props) => {
                 href={
                   'https://github.com/' +
                   'shakacode/react-webpack-rails-tutorial'
-               }
+                }
               >
                 Source
               </a>
@@ -58,7 +58,7 @@ const NavigationBar = (props) => {
               <a
                 href={
                   'https://forum.shakacode.com/c/reactjs'
-               }
+                }
               >Forum</a>
             </li>
             {_.isNumber(commentsCount) && CommentsCount({ commentsCount })}

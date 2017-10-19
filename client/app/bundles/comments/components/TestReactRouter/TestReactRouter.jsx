@@ -13,5 +13,4 @@ export default class TestReactRouter extends BaseComponent {
       </div>
     );
   }
-
 }

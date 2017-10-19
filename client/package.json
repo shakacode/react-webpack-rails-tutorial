@@ -3,6 +3,11 @@
   "version": "1.1.0",
   "description": "Code from the React Webpack tutorial.",
   "main": "server-express.js",
+  "engines": {
+    "node": "^7.8.0 || ^8.0.0",
+    "npm": "^4.4.4 || ^5.0.0",
+    "yarn": "^1.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial.git"
@@ -111,7 +116,6 @@
     "jsdom": "^11.3.0",
     "mocha": "^4.0.1",
     "pug": "^2.0.0-beta11",
-    "react-addons-test-utils": "^15.5.1",
     "react-transform-hmr": "^1.0.4",
     "sleep": "^5.1.1",
     "webpack-dev-server": "^2.9.2"

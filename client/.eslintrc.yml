@@ -20,6 +20,7 @@ rules:
 
   # Good idea, but let's go to flow before fixing all these
   react/forbid-prop-types: 0
+  jsx-a11y/href-no-hash: 0 
 
 #  arrow-parens:
 #    - 0
