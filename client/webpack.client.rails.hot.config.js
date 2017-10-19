@@ -45,23 +45,6 @@ module.exports = merge(config, {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          plugins: [
-            [
-              'react-transform',
-              {
-                superClasses: ['React.Component', 'BaseComponent', 'Component'],
-                transforms: [
-                  {
-                    transform: 'react-transform-hmr',
-                    imports: ['react'],
-                    locals: ['module'],
-                  },
-                ],
-              },
-            ],
-          ],
-        },
       },
       {
         test: /\.css$/,
@@ -75,12 +58,7 @@ module.exports = merge(config, {
               localIdentName: '[name]__[local]__[hash:base64:5]'
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: 'autoprefixer'
-            }
-          }
+          'postcss-loader',
         ]
       },
       {
@@ -95,12 +73,7 @@ module.exports = merge(config, {
               localIdentName: '[name]__[local]__[hash:base64:5]',
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: 'autoprefixer'
-            }
-          },
+          'postcss-loader',
           {
             loader: 'sass-loader'
           },
