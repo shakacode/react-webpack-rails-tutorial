@@ -6,7 +6,6 @@ import './Layout.scss';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class Layout extends Component {
-
   static propTypes = {
     children: PropTypes.object.isRequired,
   };

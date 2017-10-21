@@ -7,7 +7,6 @@ import CommentBox from '../CommentBox/CommentBox';
 import css from './CommentScreen.scss';
 
 export default class CommentScreen extends BaseComponent {
-
   static propTypes = {
     actions: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,

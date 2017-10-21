@@ -1,10 +1,9 @@
 /* eslint no-var: 0, no-console: 0, import/no-extraneous-dependencies: 0 */
 
-import webpack from 'webpack';
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
 
-import WebpackDevServer from 'webpack-dev-server';
-
-import webpackConfig from './webpack.client.rails.hot.config';
+const webpackConfig = require('./webpack.client.rails.hot.config');
 
 const { resolve } = require('path');
 
@@ -20,10 +19,12 @@ const hotReloadingHostname = settings.dev_server.host;
 const compiler = webpack(webpackConfig);
 
 const devServer = new WebpackDevServer(compiler, {
-  proxy: {
-    '*': `http://lvh.me:${hotReloadingPort}`,
+  proxy: { '*': `http://${hotReloadingHostname}:${hotReloadingPort}` },
+  publicPath: output.publicPathWithHost,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
   },
-  contentBase: hotReloadingUrl,
+  disableHostCheck: true,
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -39,9 +40,13 @@ const devServer = new WebpackDevServer(compiler, {
   },
 });
 
-devServer.listen(hotReloadingPort, hotReloadingHostname, (err) => {
+devServer.listen(hotReloadingPort, hotReloadingHostname, err => {
   if (err) console.error(err);
   console.log(
-    `=> 🔥  Webpack development server is running on ${hotReloadingUrl}`,
+    `=> 🔥  Webpack development server is running on port ${hotReloadingUrl}`,
   );
+});
+
+compiler.plugin('done', () => {
+  process.stdout.write('Webpack: Done!');
 });

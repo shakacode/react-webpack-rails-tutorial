@@ -40,23 +40,6 @@ config.module.rules.push(
     test: /\.jsx?$/,
     loader: 'babel-loader',
     exclude: /node_modules/,
-    query: {
-      plugins: [
-        [
-          'react-transform',
-          {
-            superClasses: ['React.Component', 'BaseComponent', 'Component'],
-            transforms: [
-              {
-                transform: 'react-transform-hmr',
-                imports: ['react'],
-                locals: ['module'],
-              },
-            ],
-          },
-        ],
-      ],
-    },
   },
   {
     test: /\.css$/,
@@ -69,12 +52,7 @@ config.module.rules.push(
           localIdentName: '[name]__[local]__[hash:base64:5]'
         }
       },
-      {
-        loader: 'postcss-loader',
-        options: {
-          plugins: 'autoprefixer'
-        }
-      }
+      'postcss-loader',
     ]
   },
   {
@@ -88,12 +66,7 @@ config.module.rules.push(
           localIdentName: '[name]__[local]__[hash:base64:5]',
         }
       },
-      {
-        loader: 'postcss-loader',
-        options: {
-          plugins: 'autoprefixer'
-        }
-      },
+      'postcss-loader',
       {
         loader: 'sass-loader'
       },

@@ -17,7 +17,6 @@ export default function commentsReducer($$state = $$initialState, action = null)
   const { type, comment, comments, error, locale } = action;
 
   switch (type) {
-
     case actionTypes.FETCH_COMMENTS_SUCCESS: {
       return $$state.merge({
         $$comments: comments,

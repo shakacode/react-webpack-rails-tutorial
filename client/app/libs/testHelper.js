@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import jsdom from 'jsdom';
+import TestUtils from 'react-dom/test-utils';
+import jsdom from 'jsdom/lib/old-api';
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 
