@@ -29,7 +29,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem "redis"
+gem "redis", "3.3.3"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -65,7 +65,7 @@ group :development, :test do
 
   ################################################################################
   # Manage application processes
-  gem "factory_girl_rails"
+  gem "factory_bot_rails"
   gem "foreman"
 
   ################################################################################
@@ -101,7 +101,8 @@ group :test do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails", "~> 3.6"
+  gem "rails_best_practices"
+  gem "rspec-rails", "~>3.6"
   gem "rspec-retry"
-  gem "selenium-webdriver", "<3.0.0"
+  gem "selenium-webdriver"
 end
