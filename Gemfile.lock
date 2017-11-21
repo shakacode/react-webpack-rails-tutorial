@@ -56,9 +56,9 @@ GEM
       bundler (~> 1.2)
       thor (~> 0.18)
     byebug (9.1.0)
-    capybara (2.16.0)
+    capybara (2.13.0)
       addressable
-      mini_mime (>= 0.1.3)
+      mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
@@ -67,7 +67,7 @@ GEM
       capybara (>= 1.0, < 3)
       launchy
     capybara-webkit (1.14.0)
-      capybara (~> 2.0, >= 2.0.2)
+      capybara (>= 2.3.0, < 2.14.0)
       json
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
@@ -135,6 +135,9 @@ GEM
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     method_source (0.9.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     mini_racer (0.1.14)
@@ -171,11 +174,11 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (3.0.1)
-    puma (3.10.0)
+    puma (3.11.0)
     rack (2.0.3)
     rack-proxy (0.6.2)
       rack
-    rack-test (0.7.0)
+    rack-test (0.8.0)
       rack (>= 1.0, < 3)
     rails (5.1.4)
       actioncable (= 5.1.4)
@@ -328,9 +331,9 @@ DEPENDENCIES
   awesome_print
   brakeman
   bundler-audit
-  capybara
+  capybara (= 2.13.0)
   capybara-screenshot
-  capybara-webkit
+  capybara-webkit (= 1.14.0)
   chromedriver-helper
   coffee-rails
   coveralls
@@ -357,7 +360,7 @@ DEPENDENCIES
   rainbow
   react_on_rails (= 10.0.0)
   redis (= 3.3.3)
-  rspec-rails (~> 3.6)
+  rspec-rails (= 3.6.1)
   rspec-retry
   rubocop
   ruby-lint

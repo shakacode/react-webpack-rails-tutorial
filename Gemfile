@@ -92,9 +92,9 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara"
+  gem "capybara", "2.13.0"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem "capybara-webkit", "1.14.0"
   gem "chromedriver-helper"
   gem "coveralls", require: false
   gem "database_cleaner"
@@ -102,7 +102,7 @@ group :test do
   gem "launchy"
   gem "poltergeist"
   gem "rails_best_practices"
-  gem "rspec-rails", "~>3.6"
+  gem "rspec-rails", "3.6.1"
   gem "rspec-retry"
   gem "selenium-webdriver"
 end
