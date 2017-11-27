@@ -15,3 +15,15 @@
     transition: opacity 0.5s ease-in;
   }
 }
+
+.anchorButton {
+  background-color: transparent;
+  border: 0;
+  color: #337AB7;
+  cursor: pointer;
+  padding: 0;
+}
+
+.anchorButton:hover {
+  text-decoration: underline;
+}
