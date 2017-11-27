@@ -14,7 +14,9 @@ export const $$initialState = Immutable.fromJS({
 });
 
 export default function commentsReducer($$state = $$initialState, action = null) {
-  const { type, comment, comments, error, locale } = action;
+  const {
+    type, comment, comments, error, locale,
+  } = action;
 
   switch (type) {
     case actionTypes.FETCH_COMMENTS_SUCCESS: {

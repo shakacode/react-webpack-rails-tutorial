@@ -45,8 +45,7 @@ export default class CommentList extends BaseComponent {
         key={$$comment.get('id') || index}
         author={$$comment.get('author')}
         text={$$comment.get('text')}
-      />),
-    );
+      />));
 
     // For animation with ReactCSSTransitionGroup
     //   https://facebook.github.io/react/docs/animation.html

@@ -283,7 +283,7 @@ class CommentForm extends BaseComponent {
   }
 
   errorWarning() {
-    const error = this.props.error;
+    const { error } = this.props;
 
     // If there is no error, there is nothing to add to the DOM
     if (!error) return null;

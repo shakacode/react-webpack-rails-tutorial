@@ -35,7 +35,7 @@ server.app.get('/comments.json', (_req, res) => {
 });
 
 server.app.post('/comments.json', (req, res) => {
-  const comment = req.body.comment;
+  const { comment } = req.body;
   comment.id = uuid.v4();
 
   console.log('Processing comment: %j', comment);

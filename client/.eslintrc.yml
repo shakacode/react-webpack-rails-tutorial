@@ -17,10 +17,13 @@ env:
 
 rules:
   import/extensions: [2, { js: "never", jsx: "never" }]
+  function-paren-newline: ["error", "consistent"]
 
   # Good idea, but let's go to flow before fixing all these
   react/forbid-prop-types: 0
-  jsx-a11y/href-no-hash: 0 
+  jsx-a11y/href-no-hash: 0
+
+  jsx-a11y/anchor-is-valid: off
 
 #  arrow-parens:
 #    - 0

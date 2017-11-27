@@ -55,11 +55,7 @@ const NavigationBar = (props) => {
               </a>
             </li>
             <li>
-              <a
-                href={
-                  'https://forum.shakacode.com/c/reactjs'
-                }
-              >Forum</a>
+              <a href="https://forum.shakacode.com/c/reactjs">Forum</a>
             </li>
             {_.isNumber(commentsCount) && CommentsCount({ commentsCount })}
           </ul>

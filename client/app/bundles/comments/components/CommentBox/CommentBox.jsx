@@ -92,9 +92,9 @@ class CommentBox extends BaseComponent {
         <ul>
           <li>
             { (data.get('isFetching') && <br />) ||
-              <a href="javascript:void(0)" onClick={this.refreshComments}>
+              <button className={css.anchorButton} onClick={this.refreshComments} >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
-              </a>
+              </button>
             }
           </li>
           <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
