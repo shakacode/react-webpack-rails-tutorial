@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 ruby "2.4.1"
 
-gem "react_on_rails", "10.0.0"
+gem "react_on_rails", "10.0.2"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -29,7 +29,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem "redis"
+gem "redis", "3.3.3"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -65,7 +65,7 @@ group :development, :test do
 
   ################################################################################
   # Manage application processes
-  gem "factory_girl_rails"
+  gem "factory_bot_rails"
   gem "foreman"
 
   ################################################################################
@@ -92,16 +92,17 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara"
+  gem "capybara", "2.13.0"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem "capybara-webkit", "1.14.0"
   gem "chromedriver-helper"
   gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
-  gem "rspec-rails", "~> 3.6"
+  gem "rails_best_practices"
+  gem "rspec-rails", "3.6.1"
   gem "rspec-retry"
-  gem "selenium-webdriver", "<3.0.0"
+  gem "selenium-webdriver"
 end

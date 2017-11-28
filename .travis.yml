@@ -26,7 +26,7 @@ install:
   - bundle install
   - chromedriver-update
   - nvm install stable && nvm alias default stable
-  - npm install npm@latest -g
+  - npm install -g npm@5.3.x
   - npm install -g yarn
   - npm --version
   - yarn install

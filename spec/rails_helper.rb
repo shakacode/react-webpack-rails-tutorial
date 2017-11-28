@@ -32,7 +32,7 @@ ActiveRecord::Migration.maintain_test_schema!
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # Next line will ensure that assets are built if webpack -w is not running
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config, :requires_webpack_assets)
