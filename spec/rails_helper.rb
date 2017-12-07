@@ -33,6 +33,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include APIMatchers::RSpecMatchers
 
   # Next line will ensure that assets are built if webpack -w is not running
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config, :requires_webpack_assets)

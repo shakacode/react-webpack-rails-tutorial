@@ -92,6 +92,8 @@ group :development, :test do
 end
 
 group :test do
+  gem "airborne"
+  gem "api_matchers"
   gem "capybara", "2.13.0"
   gem "capybara-screenshot"
   gem "capybara-webkit", "1.14.0"
@@ -101,6 +103,7 @@ group :test do
   gem "generator_spec"
   gem "launchy"
   gem "poltergeist"
+  gem "rails-controller-testing"
   gem "rails_best_practices"
   gem "rspec-rails", "3.6.1"
   gem "rspec-retry"

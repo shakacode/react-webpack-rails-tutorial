@@ -28,9 +28,14 @@ Metrics/MethodLength:
 
 Metrics/BlockLength:
   Max: 105
+  ExcludedMethods: [describe]
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false
+
+Style/BracesAroundHashParameters:
+  Exclude:
+    - spec/controllers/**/*
