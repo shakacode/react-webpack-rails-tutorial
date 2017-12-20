@@ -6,7 +6,7 @@ gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 5"
+gem "rails", "5.1.4"
 
 # Note: We're using sqllite3 for development and testing
 # gem "sqlite3", group: [:development, :test]

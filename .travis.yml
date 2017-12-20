@@ -25,9 +25,9 @@ before_install:
 install:
   - bundle install
   - chromedriver-update
-  - nvm install stable && nvm alias default stable
-  - npm install -g npm@5.3.x
-  - npm install -g yarn
+  - nvm install 8.9.3 && nvm alias default 8.9.3
+  - npm install -g npm@5.5.1
+  - npm install -g yarn@0.22.0
   - npm --version
   - yarn install
   - rake db:setup
