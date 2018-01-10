@@ -27,7 +27,7 @@
   "scripts": {
     "postinstall": "npm rebuild node-sass",
     "test": "NODE_PATH=./app mocha --require babel-core/register --require ./app/libs/testHelper.js --require ./app/libs/testNullCompiler.js 'app/**/*.spec.@(js|jsx)'",
-    "test:debug": "yarn run test -- --debug-brk",
+    "test:debug": "yarn run test -- debug",
     "start": "babel-node server-express.js",
     "build:production:client": "NODE_ENV=production webpack -p --config webpack.client.rails.build.config.js",
     "build:production:server": "NODE_ENV=production webpack -p --config webpack.server.rails.build.config.js",
