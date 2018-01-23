@@ -10,7 +10,7 @@
   },
   "scripts": {
     "postinstall": "cd client && yarn install",
-    "test": "rspec && yarn run test:client && yarn run lint",
+    "test": "(cd client && yarn run build:test) && rspec && yarn run test:client && yarn run lint",
     "test:client": "(cd client && yarn run --silent test)",
     "lint": "(cd client && yarn run --silent lint)",
     "build:clean": "rm app/assets/webpack/*",
