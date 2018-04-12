@@ -2,6 +2,10 @@ module DriverRegistration
   def self.register_selenium_chrome
     return if @selenium_chrome_registered
     Capybara.register_driver :selenium_chrome do |app|
+      Capybara::Selenium::Driver.new(app,
+                                     browser: :chrome)
+    end
+    Capybara.register_driver :selenium_chrome_headless do |app|
       capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
         chromeOptions: { args: %w[headless disable-gpu] }
       )
