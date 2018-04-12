@@ -49,11 +49,11 @@ RSpec.configure do |config|
   # Using errors_ok as there is a timing issue causing crashes without this setting
   # https://github.com/teampoltergeist/poltergeist/issues/830
 
-  default_driver = :selenium_chrome
+  default_driver = :selenium_chrome_headless
 
   supported_drivers = %i[ poltergeist poltergeist_errors_ok
                           poltergeist_no_animations webkit
-                          selenium_chrome selenium_firefox selenium]
+                          selenium_chrome selenium_chrome_headless selenium_firefox selenium]
   driver = ENV["DRIVER"].try(:to_sym) || default_driver
   Capybara.default_driver = driver
 
@@ -95,7 +95,7 @@ RSpec.configure do |config|
       js_driver.render(path, full: true)
     end
 
-  when :selenium_chrome
+  when :selenium_chrome, :selenium_chrome_headless
     DriverRegistration.register_selenium_chrome
   when :selenium_firefox, :selenium
     DriverRegistration.register_selenium_firefox
@@ -185,7 +185,7 @@ RSpec.configure do |config|
   end
 
   def js_selenium_driver
-    driver = Capybara.javascript_driver == :selenium_firefox ? :selenium_firefox : :selenium_chrome
+    driver = Capybara.javascript_driver == :selenium_firefox ? :selenium_firefox : :selenium_chrome_headless
     if driver == :selenium_firefox
       DriverRegistration.register_selenium_firefox
     else
