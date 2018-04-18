@@ -58,7 +58,8 @@ RSpec.configure do |config|
   Capybara.default_driver = driver
 
   unless supported_drivers.include?(driver)
-    raise "Unsupported driver: #{driver} (supported = #{supported_drivers})"
+    raise "Unsupported driver: #{driver} |
+      (supported = #{supported_drivers})"
   end
 
   case driver
