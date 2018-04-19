@@ -35,4 +35,4 @@ before_script:
 
 script:
   - bundle exec rake db:schema:load
-  - bundle exec rake
+  - rspec spec/features/edit_comment_spec.rb
