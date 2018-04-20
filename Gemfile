@@ -100,7 +100,6 @@ group :test do
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
-  gem "poltergeist"
   gem "rails_best_practices"
   gem "rspec-rails", "3.6.1"
   gem "rspec-retry"
