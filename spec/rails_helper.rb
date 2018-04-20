@@ -1,13 +1,10 @@
 # This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
-require "coveralls"
-Coveralls.wear!("rails") # must occur before any of your application code is required
 require "spec_helper"
 require File.expand_path("../../config/environment", __FILE__)
 
 require "rspec/rails"
 require "capybara/rspec"
-require "capybara/poltergeist"
 require "capybara-screenshot/rspec"
 require "database_cleaner"
 
@@ -51,9 +48,7 @@ RSpec.configure do |config|
 
   default_driver = :selenium_chrome
 
-  supported_drivers = %i[ poltergeist poltergeist_errors_ok
-                          poltergeist_no_animations webkit
-                          selenium_chrome selenium_firefox selenium]
+  supported_drivers = %i[selenium_chrome selenium_firefox selenium]
   driver = ENV["DRIVER"].try(:to_sym) || default_driver
   Capybara.default_driver = driver
 
@@ -62,39 +57,6 @@ RSpec.configure do |config|
   end
 
   case driver
-  when :poltergeist, :poltergeist_errors_ok, :poltergeist_no_animations
-    basic_opts = {
-      window_size: [1300, 1800],
-      screen_size: [1400, 1900],
-      phantomjs_options: ["--load-images=no", "--ignore-ssl-errors=true"],
-      timeout: 180
-    }
-
-    Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, basic_opts)
-    end
-
-    no_animation_opts = basic_opts.merge( # Leaving animations off, as a sleep was still needed.
-      extensions: ["#{Rails.root}/spec/support/phantomjs-disable-animations.js"]
-    )
-
-    Capybara.register_driver :poltergeist_no_animations do |app|
-      Capybara::Poltergeist::Driver.new(app, no_animation_opts)
-    end
-
-    Capybara.register_driver :poltergeist_errors_ok do |app|
-      Capybara::Poltergeist::Driver.new(app, no_animation_opts.merge(js_errors: false))
-    end
-    Capybara::Screenshot.register_driver(:poltergeist) do |js_driver, path|
-      js_driver.browser.save_screenshot(path)
-    end
-    Capybara::Screenshot.register_driver(:poltergeist_no_animations) do |js_driver, path|
-      js_driver.render(path, full: true)
-    end
-    Capybara::Screenshot.register_driver(:poltergeist_errors_ok) do |js_driver, path|
-      js_driver.render(path, full: true)
-    end
-
   when :selenium_chrome
     DriverRegistration.register_selenium_chrome
   when :selenium_firefox, :selenium
@@ -124,7 +86,6 @@ RSpec.configure do |config|
           Delete line `config.use_transactional_fixtures = true` from rails_helper.rb
           (or set it to false) to prevent uncommitted transactions being used in
           JavaScript-dependent specs.
-
           During testing, the app-under-test that the browser driver connects to
           uses a different database connection to the database connection used by
           the spec. The app's database connection would not be able to access
