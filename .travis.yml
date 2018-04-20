@@ -2,7 +2,7 @@ language:
   - ruby
 rvm:
   - 2.4.1
-sudo: false
+sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
 addons:
@@ -20,8 +20,12 @@ env:
 install:
   - bundle install
   - chromedriver-update
+  - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - sudo apt-get update
+  - sudo apt-get install google-chrome-stable
   - nvm install stable && nvm alias default stable
-  - npm install -g npm@5.3.x
+  - npm install -g npm@5.6.x
   - npm install -g yarn
   - node --version
   - npm --version
@@ -38,4 +42,4 @@ before_script:
 
 script:
   - bundle exec rake db:schema:load
-  - rspec spec/features/edit_comment_spec.rb
+  - bundle exec rake
