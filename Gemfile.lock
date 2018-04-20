@@ -74,7 +74,6 @@ GEM
     chromedriver-helper (1.1.0)
       archive-zip (~> 0.7.0)
       nokogiri (~> 1.6)
-    cliver (0.3.2)
     code_analyzer (0.4.8)
       sexp_processor
     coderay (1.1.2)
@@ -151,10 +150,6 @@ GEM
     parser (2.4.0.2)
       ast (~> 2.3)
     pg (0.21.0)
-    poltergeist (1.16.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -346,7 +341,6 @@ DEPENDENCIES
   listen
   mini_racer
   pg
-  poltergeist
   pry
   pry-byebug
   pry-doc
