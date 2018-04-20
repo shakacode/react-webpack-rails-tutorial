@@ -1,7 +1,7 @@
 language:
   - ruby
 rvm:
-  - 2.4.1
+  - 2.4.3
 sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
