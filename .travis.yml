@@ -23,7 +23,10 @@ install:
   - nvm install stable && nvm alias default stable
   - npm install -g npm@5.3.x
   - npm install -g yarn
+  - node --version
   - npm --version
+  - google-chrome --version
+  - chromedriver --version
   - yarn install
   - rake db:setup
 
