@@ -82,9 +82,6 @@ ReactOnRails.configure do |config|
   # called `custom_context(view_context)` and return a Hash.
   config.rendering_extension = nil
 
-  # The server render method - either ExecJS or NodeJS
-  config.server_render_method = "ExecJS"
-
   # Client js uses assets not digested by rails.
   # For any asset matching this regex, non-digested symlink will be created
   # To disable symlinks set this parameter to nil.

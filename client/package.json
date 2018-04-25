@@ -4,7 +4,7 @@
   "description": "Code from the React Webpack tutorial.",
   "main": "server-express.js",
   "engines": {
-    "node": "^7.8.0 || ^8.0.0 || ^9.2.0",
+    "node": "^7.8.0 || ^8.0.0 || ^9.2.0 || ^10.0.0",
     "npm": "^4.4.4 || ^5.0.0",
     "yarn": "^1.0.0"
   },
@@ -82,7 +82,7 @@
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.1.1",
     "react-intl": "^2.4.0",
-    "react-on-rails": "^10.0.2",
+    "react-on-rails": "11.0.3",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
