@@ -5294,9 +5294,9 @@ react-intl@^2.4.0:
     intl-relativeformat "^2.0.0"
     invariant "^2.1.1"
 
-react-on-rails@11.0.3:
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-11.0.3.tgz#0aa15eea0a3b4db1e85e75473afee06cb8a75981"
+react-on-rails@11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-11.0.5.tgz#578a149ed860b8a0bbf71353466fc3a02dd31243"
 
 react-overlays@^0.7.4:
   version "0.7.4"

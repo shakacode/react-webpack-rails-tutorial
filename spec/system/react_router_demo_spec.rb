@@ -1,7 +1,7 @@
 require "rails_helper"
-require "features/shared/contexts"
+require "system/shared/contexts"
 
-feature "React Router Routes", js: true do
+feature "React Router Routes", js: true, type: :system do
   context "Root URL", page: :main do
     it "shows comments section" do
       click_link "Comments (Root URL)"

@@ -1,6 +1,6 @@
 require "rails_helper"
-require "features/shared/examples"
-require "features/shared/contexts"
+require "system/shared/examples"
+require "system/shared/contexts"
 
 feature "Edit a comment", existing_comment: true do
   let(:comment) { Comment.first }

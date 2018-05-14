@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 ruby "2.4.1"
 
-gem "react_on_rails", "11.0.3"
+gem "react_on_rails", "11.0.5"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -92,9 +92,9 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara", "2.13.0"
+  gem "capybara", "2.18.0"
   gem "capybara-screenshot"
-  gem "capybara-webkit", "1.14.0"
+  gem "capybara-webkit"
   gem "chromedriver-helper"
   gem "coveralls", require: false
   gem "database_cleaner"
@@ -102,7 +102,7 @@ group :test do
   gem "launchy"
   gem "poltergeist"
   gem "rails_best_practices"
-  gem "rspec-rails", "3.6.1"
+  gem "rspec-rails", "3.7.2"
   gem "rspec-retry"
   gem "selenium-webdriver"
 end
