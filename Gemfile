@@ -103,6 +103,5 @@ group :test do
   gem "poltergeist"
   gem "rails_best_practices"
   gem "rspec-rails", "3.7.2"
-  gem "rspec-retry"
   gem "selenium-webdriver"
 end
