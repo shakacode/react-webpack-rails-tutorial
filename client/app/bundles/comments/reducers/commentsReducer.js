@@ -49,7 +49,12 @@ export default function commentsReducer($$state = $$initialState, action = null)
         state
           .updateIn(
             ['$$comments'],
-            $$comments => $$comments.unshift(Immutable.fromJS(comment)),
+            $$comments => {
+              const index = $$comments.findIndex(com => com.get('id') === comment.id);
+              return index === -1 ?
+                $$comments.unshift(Immutable.fromJS(comment)) :
+                $$comments.set({ index, value: Immutable.fromJS(comment) });
+            },
           )
           .merge({
             submitCommentError: null,
