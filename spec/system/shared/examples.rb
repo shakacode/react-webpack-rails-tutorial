@@ -1,5 +1,5 @@
 require "rails_helper"
-require "features/shared/contexts"
+require "system/shared/contexts"
 
 shared_examples "New Comment Submission" do |expect_comment_count|
   context "when the new comment is submitted" do

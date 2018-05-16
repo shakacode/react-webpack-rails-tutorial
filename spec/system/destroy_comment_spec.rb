@@ -1,5 +1,5 @@
 require "rails_helper"
-require "features/shared/contexts"
+require "system/shared/contexts"
 
 feature "Destroy a comment", existing_comment: true do
   context "from classic page", page: :classic do
