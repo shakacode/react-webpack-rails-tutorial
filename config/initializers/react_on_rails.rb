@@ -2,10 +2,6 @@
 ReactOnRails.configure do |config|
   config.node_modules_location = "client"
 
-  # Directory where your generated assets go. All generated assets must go to the same directory.
-  # Configure this in your webpack config files. This relative to your Rails root directory.
-  config.generated_assets_dir = File.join(%w[public webpack], Rails.env)
-
   # Define the files for we need to check for webpack compilation when running tests
   config.webpack_generated_files = %w[ app-bundle.js vendor-bundle.js app-bundle.css
                                        vendor-bundle.css server-bundle.js ]
@@ -81,9 +77,6 @@ ReactOnRails.configure do |config|
   # This allows you to add additional values to the Rails Context. Implement one static method
   # called `custom_context(view_context)` and return a Hash.
   config.rendering_extension = nil
-
-  # The server render method - either ExecJS or NodeJS
-  config.server_render_method = "ExecJS"
 
   # Client js uses assets not digested by rails.
   # For any asset matching this regex, non-digested symlink will be created
