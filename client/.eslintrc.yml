@@ -5,6 +5,7 @@ extends: eslint-config-shakacode
 
 plugins:
   - react
+  - jest
 
 globals:
   __DEBUG_SERVER_ERRORS__: true
@@ -14,6 +15,7 @@ env:
   browser: true
   node: true
   mocha: true
+  jest/globals: true
 
 rules:
   import/extensions: [2, { js: "never", jsx: "never" }]
