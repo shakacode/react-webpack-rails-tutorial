@@ -1,4 +1,4 @@
-import { React, expect, TestUtils } from 'libs/testHelper';
+import { React, TestUtils } from 'libs/testHelper';
 
 import Comment from './Comment';
 
@@ -14,13 +14,12 @@ describe('Comment', () => {
       <Comment author="Frank" text="Hi!" />,
     );
 
-    // TODO: Setup testing of CSS Modules classNames
-    // const comment = findRenderedDOMComponentWithTag(component, 'div');
-    // expect(comment.className).to.equal('comment');
-    // const author = findRenderedDOMComponentWithTag(component, 'h2');
-    // expect(author.className).to.equal('comment-author');
+    const comment = findRenderedDOMComponentWithTag(component, 'div');
+    expect(comment.className).toEqual('comment');
+    const author = findRenderedDOMComponentWithTag(component, 'h2');
+    expect(author.className).toEqual('commentAuthor js-comment-author');
     const text = findRenderedDOMComponentWithTag(component, 'span');
-    expect(text.className).to.equal('js-comment-text');
+    expect(text.className).toEqual('js-comment-text');
   });
 
   it('shows the author', () => {
@@ -29,7 +28,7 @@ describe('Comment', () => {
     );
 
     const author = findRenderedDOMComponentWithClass(component, 'js-comment-author');
-    expect(author.textContent).to.equal('Frank');
+    expect(author.textContent).toEqual('Frank');
   });
 
   it('shows the comment text in markdown', () => {
@@ -38,6 +37,6 @@ describe('Comment', () => {
     );
 
     const comment = findRenderedDOMComponentWithClass(component, 'js-comment-text');
-    expect(comment.textContent).to.equal('Hi!\n');
+    expect(comment.textContent).toEqual('Hi!\n');
   });
 });

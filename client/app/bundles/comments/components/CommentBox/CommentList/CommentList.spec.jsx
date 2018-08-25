@@ -1,4 +1,4 @@
-import { React, expect, TestUtils } from 'libs/testHelper';
+import { React, TestUtils } from 'libs/testHelper';
 import { List, Map } from 'immutable';
 
 import CommentList from './CommentList';
@@ -39,9 +39,9 @@ describe('CommentList', () => {
       />,
     );
     const list = scryRenderedComponentsWithType(component, Comment);
-    expect(list.length).to.equal(2);
-    expect(list[0].props.author).to.equal('Frank');
-    expect(list[1].props.author).to.equal('Furter');
+    expect(list.length).toEqual(2);
+    expect(list[0].props.author).toEqual('Frank');
+    expect(list[1].props.author).toEqual('Furter');
   });
 
   it('renders an alert if errors', () => {
@@ -54,6 +54,6 @@ describe('CommentList', () => {
     );
 
     const alert = findRenderedDOMComponentWithTag(component, 'strong');
-    expect(alert.textContent).to.equal('Comments could not be retrieved. ');
+    expect(alert.textContent).toEqual('Comments could not be retrieved. ');
   });
 });
