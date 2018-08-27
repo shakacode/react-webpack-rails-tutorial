@@ -40,7 +40,9 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {},
+  "dependencies": {
+    "yarn": "^1.9.4"
+  },
   "devDependencies": {},
   "cacheDirectories": [
     "node_modules",

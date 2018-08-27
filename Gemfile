@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.4.1"
+ruby "2.5.1"
 
 gem "react_on_rails", "11.0.7"
 gem "webpacker"
