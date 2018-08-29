@@ -1,6 +1,6 @@
 # Running Tests and CI
 
-*Default rake task runs feature specs, mocha tests and linting*
+*Default rake task runs feature specs, jest tests and linting*
 
 We have:
 
@@ -19,12 +19,10 @@ Run the React unit tests (all .js and .jsx files) from the `client` dir with;
       cd client
       yarn run test --silent
 
-In lieu of having `mocha --watch` working properly (pull request welcome!), you can have your js tests continually running with `watch`
+Run the js tests continually with;
 
-      yarn install -g watch
       cd client
-      watch 'yarn run test --silent' test/ app/
-
+      yarn run test --watch
 
 ## CI configuration
 Add those lines to your CI scripts after `bundle install`
