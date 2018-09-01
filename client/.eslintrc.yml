@@ -4,6 +4,7 @@ parser: babel-eslint
 extends: eslint-config-shakacode
 
 plugins:
+  - jest
   - react
 
 globals:
@@ -12,8 +13,8 @@ globals:
 
 env:
   browser: true
+  jest/globals: true
   node: true
-  mocha: true
 
 rules:
   import/extensions: [2, { js: "never", jsx: "never" }]
