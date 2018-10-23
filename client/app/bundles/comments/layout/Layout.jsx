@@ -17,7 +17,7 @@ export default class Layout extends Component {
         <header>
           <ul>
             <li>
-              <Link to="/" activeClassName="active">
+              <Link exact to="/" activeClassName="active">
                 Comments (Root URL)
               </Link>
             </li>
