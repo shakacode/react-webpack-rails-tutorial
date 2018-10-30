@@ -2,6 +2,10 @@ language:
   - ruby
 rvm:
   - 2.4.4
+language: node_js
+node_js:
+  - "iojs"
+  - "8.12.0"
 sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
