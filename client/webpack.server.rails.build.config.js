@@ -13,6 +13,7 @@ const configPath = resolve('..', 'config');
 const { output } = webpackConfigLoader(configPath);
 
 const devBuild = process.env.NODE_ENV !== 'production';
+
 module.exports = {
 
   // the project dir
@@ -48,7 +49,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {

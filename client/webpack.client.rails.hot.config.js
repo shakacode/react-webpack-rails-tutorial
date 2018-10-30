@@ -21,8 +21,8 @@ module.exports = merge(config, {
 
   entry: {
     'app-bundle': [
-      // 'react-hot-loader/patch',
-      // 'webpack/hot/only-dev-server'
+      `webpack-dev-server/client?${hotReloadingUrl}`,
+      'webpack/hot/only-dev-server'
     ],
 
     // These are Rails specific
@@ -45,9 +45,6 @@ module.exports = merge(config, {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        options: {
-          cacheDirectory: false
-        }
       },
       {
         test: /\.css$/,
@@ -102,6 +99,7 @@ module.exports = merge(config, {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 });
 

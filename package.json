@@ -21,7 +21,6 @@
     "build:server": "(cd client && yarn run --silent build:server)",
     "build:dev:client": "(cd client && yarn run --silent build:dev:client)",
     "build:dev:server": "(cd client && yarn run --silent build:dev:server)",
-    "hot-client": "(cd client && yarn run hot-client)",
     "hot-assets": "(cd client && yarn run hot-assets)",
     "start": "(cd client && yarn run --silent start)"
   },
