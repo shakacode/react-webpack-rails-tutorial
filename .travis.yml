@@ -5,7 +5,7 @@ rvm:
 language: node_js
 node_js:
   - "iojs"
-  - "8.12.0"
+  - "7"
 sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
