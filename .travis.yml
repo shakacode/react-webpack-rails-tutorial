@@ -19,6 +19,8 @@ addons:
 services:
   - postgresql
 env:
+- MY_VAR=EverythignIsAwesome
+- NODE_ENV=TEST
   global:
     - RAILS_ENV=test
     - CXX=g++-4.9
