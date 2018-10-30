@@ -2,3 +2,6 @@
 # yarn lockfile v1
 
 
+actioncable@5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/actioncable/-/actioncable-5.2.1.tgz#615428a8a302cec55117d9049f0fd7952011c962"

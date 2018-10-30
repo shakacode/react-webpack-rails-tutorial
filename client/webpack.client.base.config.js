@@ -31,6 +31,9 @@ module.exports = {
 
     // This will contain the app entry points defined by webpack.hot.config and webpack.rails.config
     'app-bundle': [
+      'webpack-dev-server/client?http://localhost:3035',
+      'react-hot-loader/patch',
+      'webpack/hot/only-dev-server',
       './app/bundles/comments/startup/clientRegistration',
     ],
   },
@@ -53,25 +56,13 @@ module.exports = {
       TRACE_TURBOLINKS: devBuild,
     }),
 
-    // https://webpack.github.io/docs/list-of-plugins.html#2-explicit-vendor-chunk
-    new webpack.optimize.CommonsChunkPlugin({
 
-      // This name 'vendor-bundle' ties into the entry definition
-      name: 'vendor-bundle',
-
-      // We don't want the default vendor.js name
-      filename: 'vendor-bundle-[hash].js',
-
-      minChunks(module) {
-        // this assumes your vendor imports exist in the node_modules directory
-        return module.context && module.context.indexOf('node_modules') !== -1;
-      },
-    }),
     new ManifestPlugin({
       publicPath: output.publicPath,
       writeToFileEmit: true
     }),
   ],
+  mode: 'development',
 
   module: {
     rules: [

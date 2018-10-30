@@ -17,7 +17,6 @@ const hotReloadingPort = settings.dev_server.port;
 const hotReloadingHostname = settings.dev_server.host;
 
 const compiler = webpack(webpackConfig);
-
 const devServer = new WebpackDevServer(compiler, {
   proxy: { '*': `http://${hotReloadingHostname}:${hotReloadingPort}` },
   publicPath: output.publicPathWithHost,

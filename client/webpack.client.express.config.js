@@ -29,8 +29,7 @@ config.output = {
   path: __dirname,
 };
 config.plugins.unshift(
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin()
+  new webpack.HotModuleReplacementPlugin()
 );
 config.devtool = 'eval-source-map';
 
