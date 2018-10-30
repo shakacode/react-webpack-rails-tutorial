@@ -40,6 +40,7 @@
     "hot-assets": "NODE_ENV=development babel-node server-rails-hot.js",
     "lint": "eslint --ext .js,.jsx .",
     "hot-client": "./node_modules/.bin/webpack-dev-server --config webpack.server.rails.build.config.js --inline --disableHostCheck --progress"
+    
   },
   "dependencies": {
     "actioncable": "5.2.1",
