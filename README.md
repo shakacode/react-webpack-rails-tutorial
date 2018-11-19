@@ -2,33 +2,32 @@
 
 *If this projects helps you, please give us a star!*
 
-# [The ShakaCode team has availability to help your project as of 2018-03-27](http://www.shakacode.com/services).
+## React on Rails Pro and ShakaCode Pro Support
 
-If your team might need my help, please [email me](mailto:justin@shakacode.com) for a free half-hour project consultation, on anything from React on Rails to any aspect of web or mobile application development for both consumer and enterprise products.
+React on Rails Pro provides Node server rendering and other performance enhancements for React on Rails. 
 
-## Thank you from Justin Gordon and [ShakaCode](http://www.shakacode.com)
+[![2018-09-11_10-31-11](https://user-images.githubusercontent.com/1118459/45467845-5bcc7400-b6bd-11e8-91e1-e0cf806d4ea4.png)](https://blog.shakacode.com/hvmns-90-reduction-in-server-response-time-from-react-on-rails-pro-eb08226687db)
 
-Thank you for considering using [React on Rails](https://github.com/shakacode/react_on_rails).
+* [HVMN Testimonial, Written by Paul Benigeri, October 12, 2018](./docs/testimonials/hvmn.md)
+* [HVMN’s 90% Reduction in Server Response Time from React on Rails Pro](https://blog.shakacode.com/hvmns-90-reduction-in-server-response-time-from-react-on-rails-pro-eb08226687db)
+* [Egghead React on Rails Pro Deployment Highlights](https://github.com/shakacode/react_on_rails/wiki/Egghead-React-on-Rails-Pro-Deployment-Highlights)
 
-* **Video:** [Front-End Sadness to Happiness: The React on Rails Story](https://www.youtube.com/watch?v=SGkTvKRPYrk): History, motivations, philosophy, and overview.
-* *[Click here for talk slides](http://www.shakacode.com/talks).*
+For more information, see the [React on Rails Pro Docs](https://github.com/shakacode/react_on_rails/wiki).
 
-We at [ShakaCode](http://www.shakacode.com) are a small, boutique, remote-first application development company. We fund this project by:
+The [ShakaCode Pro Support Plan](http://www.shakacode.com/work/shakacode-pro-support.pdf) can help you with:
 
-* Providing priority support and training for anything related to React + Webpack + Rails in our [Coaching Program](http://www.shakacode.com/work/shakacode-coaching-plan.pdf).
-* Building custom web and mobile (React Native) applications. We typically work with a technical founder or CTO and instantly provide a full development team including designers.
-* Migrating **Angular** + Rails to React + Rails. You can see an example of React on Rails and our work converting Angular to React on Rails at [egghead.io](https://egghead.io/browse/frameworks).
-* Augmenting your team to get your product completed more efficiently and quickly.
+* Optimizing your webpack setup to Webpack v4 for React on Rails including code splitting with react-router v4, webpack v4, and react-loadable.
+* Upgrading your app to use the current Webpack setup that skips the Sprockets asset pipeline.
+* Better performance client and server side.
+* Efficiently migrating from [Angular to React](https://www.shakacode.com/services/angular-to-react/).
+* Best practices based on over four years of React on Rails experience.
+* Using [Reason](https://reasonml.github.io/) with (or without) React on Rails.
 
-My article "[Why Hire ShakaCode?](https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9)" provides additional details about our projects.
+ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. Because we own [HawaiiChee.com](https://www.hawaiichee.com), we can leverage that code for your app! 
 
-If any of this resonates with you, please email me, [justin@shakacode.com](mailto:justin@shakacode.com). I offer a free half-hour project consultation, on anything from React on Rails to any aspect of web or mobile application development for both consumer and enterprise products.
+The article [Why Hire ShakaCode?](https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9) provides additional details about our projects.
 
-We are **[currently looking to hire](http://www.shakacode.com/about/#work-with-us)** like-minded developers that wish to work on our projects, including [Hawaii Chee](https://www.hawaiichee.com).
-
-I appreciate your attention and sharing of these offerings with anybody that we can help. Your support allows me to bring you and your team [front-end happiness in the Rails world](https://www.youtube.com/watch?v=SGkTvKRPYrk).
-
-Aloha and best wishes from the ShakaCode team!
+Please [email me (Justin Gordon), the creator of React on Rails](mailto:justin@shakacode.com), to see if I can help you or if you want an invite to our private Slack room for ShakaCode.
 
 ------
 
@@ -52,9 +51,6 @@ From Joel Hooks, Co-Founder, Chief Nerd at [egghead.io](https://egghead.io/), Ja
 For more testimonials, see [Live Projects](https://github.com/shakacode/react_on_rails/blob/master/PROJECTS.md) and [Kudos](https://github.com/shakacode/react_on_rails/blob/master/KUDOS.md).
 
 -------
-
-# React on Rails Pro!
-Justin is currently working with a couple contributors on some new private examples that incorporate ShakaCode's best practices for industrial strength apps using React on Rails. If you're interested in getting access to these and/or contributing, [email justin@shakacode.com](mailto:justin@shakacode.com). Technologies will include Webpack v2, Yarn, CSS Modules, Bootstrap v4, Redux-Saga, Normalizr, Reselect, etc.
 
 # Videos
 
