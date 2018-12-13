@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.4.1"
+ruby "2.5.2"
 
 gem "react_on_rails", "11.0.7"
 gem "webpacker"
@@ -94,13 +94,13 @@ end
 group :test do
   gem "capybara", "2.18.0"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  # gem "capybara-webkit"
   gem "chromedriver-helper"
   gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
-  gem "poltergeist"
+  # gem "poltergeist"
   gem "rails_best_practices"
   gem "rspec-rails", "3.7.2"
   gem "selenium-webdriver"

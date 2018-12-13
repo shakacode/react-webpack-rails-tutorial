@@ -70,15 +70,11 @@ GEM
     capybara-screenshot (1.0.21)
       capybara (>= 1.0, < 4)
       launchy
-    capybara-webkit (1.15.0)
-      capybara (>= 2.3, < 4.0)
-      json
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (1.2.0)
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
-    cliver (0.3.2)
     code_analyzer (0.4.8)
       sexp_processor
     coderay (1.1.2)
@@ -155,10 +151,6 @@ GEM
     parser (2.5.1.0)
       ast (~> 2.4.0)
     pg (1.0.0)
-    poltergeist (1.18.0)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -334,7 +326,6 @@ DEPENDENCIES
   bundler-audit
   capybara (= 2.18.0)
   capybara-screenshot
-  capybara-webkit
   chromedriver-helper
   coffee-rails
   coveralls
@@ -347,7 +338,6 @@ DEPENDENCIES
   listen
   mini_racer
   pg
-  poltergeist
   pry
   pry-byebug
   pry-doc
@@ -375,7 +365,7 @@ DEPENDENCIES
   webpacker
 
 RUBY VERSION
-   ruby 2.4.1p111
+   ruby 2.5.2p104
 
 BUNDLED WITH
-   1.16.0
+   1.17.1
