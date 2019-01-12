@@ -9,6 +9,7 @@ import zh from 'react-intl/locale-data/zh';
 import App from './App';
 import RouterApp from './ClientRouterApp';
 import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
+import SimpleHooksCommentScreen from '../components/SimpleHooksCommentScreen/SimpleHooksCommentScreen';
 import routerCommentsStore from '../store/routerCommentsStore';
 import commentsStore from '../store/commentsStore';
 import NavigationBarApp from './NavigationBarApp';
@@ -25,6 +26,7 @@ ReactOnRails.register({
   RouterApp,
   NavigationBarApp,
   SimpleCommentScreen,
+  SimpleHooksCommentScreen,
 });
 
 ReactOnRails.registerStore({

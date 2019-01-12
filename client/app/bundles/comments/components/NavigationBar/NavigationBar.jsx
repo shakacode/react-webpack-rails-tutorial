@@ -33,12 +33,15 @@ const NavigationBar = (props) => {
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul className="nav navbar-nav">
             <li className={classNames(
-            { active: (pathname === paths.ROUTER_PATH || pathname === paths.REACT_ROUTER_PATH) },
-          )}>
+              { active: (pathname === paths.ROUTER_PATH || pathname === paths.REACT_ROUTER_PATH) },
+            )}>
               <a href={paths.ROUTER_PATH}>React Router Demo</a>
             </li>
             <li className={classNames({ active: (pathname === paths.NO_ROUTER_PATH) })}>
               <a href={paths.NO_ROUTER_PATH}>React Demo</a>
+            </li>
+            <li className={classNames({ active: (pathname === paths.SIMPLE_HOOKS_REACT_PATH) })}>
+              <a href={paths.SIMPLE_HOOKS_REACT_PATH}>Simple Hooks React</a>
             </li>
             <li className={classNames({ active: (pathname === paths.SIMPLE_REACT_PATH) })}>
               <a href={paths.SIMPLE_REACT_PATH}>Simple React</a>

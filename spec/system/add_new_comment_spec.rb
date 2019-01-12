@@ -48,6 +48,21 @@ feature "Add new comment" do
     end
   end
 
+  context "simple hooks page", page: :simple_hooks, js: true, type: :system do
+    context "via Horizontal Form", form: :horizontal do
+      include_examples "New Comment Submission", false
+      include_examples "Validation errors displaying"
+    end
+    context "via Inline Form", form: :inline do
+      include_examples "New Comment Submission", false
+      include_examples "Validation errors displaying"
+    end
+    context "via the Stacked Form", form: :stacked do
+      include_examples "New Comment Submission", false
+      include_examples "Validation errors displaying"
+    end
+  end
+
   context "from classic page", page: :classic do
     background { click_link "New Comment" }
     include_examples "New Comment Submission", false

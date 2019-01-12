@@ -1,0 +1,13 @@
+<h2>Using React (with Hooks) + Rails Backend (with
+  <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
+<p>This example is much simpler than the one using React + Redux and is appropriate when:</p>
+<ul>
+  <li>No or minimal MVC</li>
+  <li>No async necessary</li>
+  <li>No server rendering</li>
+  <li>No pre-population of props</li>
+</ul>
+<hr/>
+
+<!-- This component is super simple! So no redux, no prerendering. -->
+<%= react_component('SimpleHooksCommentScreen', props: {}, prerender: false) %>

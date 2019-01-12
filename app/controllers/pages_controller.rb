@@ -33,6 +33,7 @@ class PagesController < ApplicationController
   end
 
   def simple; end
+  def simple_hooks; end
 
   private
 
