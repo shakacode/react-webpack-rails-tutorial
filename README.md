@@ -4,7 +4,7 @@
 
 ## React on Rails Pro and ShakaCode Pro Support
 
-React on Rails Pro provides Node server rendering and other performance enhancements for React on Rails. 
+React on Rails Pro provides Node server rendering and other performance enhancements for React on Rails.
 
 [![2018-09-11_10-31-11](https://user-images.githubusercontent.com/1118459/45467845-5bcc7400-b6bd-11e8-91e1-e0cf806d4ea4.png)](https://blog.shakacode.com/hvmns-90-reduction-in-server-response-time-from-react-on-rails-pro-eb08226687db)
 
@@ -23,7 +23,7 @@ The [ShakaCode Pro Support Plan](http://www.shakacode.com/work/shakacode-pro-sup
 * Best practices based on over four years of React on Rails experience.
 * Using [Reason](https://reasonml.github.io/) with (or without) React on Rails.
 
-ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. Because we own [HawaiiChee.com](https://www.hawaiichee.com), we can leverage that code for your app! 
+ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. Because we own [HawaiiChee.com](https://www.hawaiichee.com), we can leverage that code for your app!
 
 The article [Why Hire ShakaCode?](https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9) provides additional details about our projects.
 
@@ -152,6 +152,24 @@ See package.json and Gemfile for versions
 1. `foreman start -f Procfile.static`
   1. Open a browser tab to http://localhost:3000 for the Rails app example.
   2. When you make changes, you have to refresh the browser page.
+
+### Docker Workaround for `postgresql` and `redis-server` through containers
+1. `docker container run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres`
+  1. Open file: config/database.yml
+  2. The final result should be like this:
+  ```
+    default: &default
+      adapter: postgresql
+      host: localhost
+      port: 5432
+      username: postgres
+      password: 'mysecretpassword'
+  ```
+  3. `rake db:setup`
+2. `docker container run --name some-redis -p 6379:6379 -d redis`
+3. After finishing working the project remember to stop the containers
+4. `docker container stop some-postgres`
+4. `docker container stop some-redis`
 
 ### Basic Command Line
 1. Run all linters and tests: `rake`
