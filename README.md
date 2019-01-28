@@ -86,6 +86,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 + [Demoed Functionality](#demoed-functionality)
   + [Technologies Involved](#technologies-involved)
 + [Basic Demo Setup](#basic-demo-setup)
+  + [Docker Workaround for postgresql and redis server](#docker-workaround-for-postgresql-and-redis-server-through-containers)
   + [Basic Command Line](#basic-command-line)
   + [Experimenting with Hot Reloading](#experimenting-with-hot-reloading-applies-to-both-procfilehot-and-procfileexpress)
 + [Javascript Development without Rails](#javascript-development-without-rails-using-the-webpack-dev-server)
