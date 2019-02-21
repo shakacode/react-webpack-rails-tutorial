@@ -1,0 +1,24 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: bash -c "foreman start -f Procfile.static"
+    volumes:
+      - .:/app
+      - /app/client/node_modules
+    ports:
+      - "8000:5000"
+      - "8001:4000"
+      - "8002:3000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/1
+  db:
+    image: postgres:alpine
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine

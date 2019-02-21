@@ -88,6 +88,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 + [Basic Demo Setup](#basic-demo-setup)
   + [Basic Command Line](#basic-command-line)
   + [Experimenting with Hot Reloading](#experimenting-with-hot-reloading-applies-to-both-procfilehot-and-procfileexpress)
+  + [Dockerized version](#dockerized-version)
 + [Javascript Development without Rails](#javascript-development-without-rails-using-the-webpack-dev-server)
 + [Rails Integration](#rails-integration)
 + [Webpack](#webpack)
@@ -163,6 +164,40 @@ See package.json and Gemfile for versions
 1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
 1. Be sure to take a look at the different Procfiles in this directory, as described below.
 
+### Dockerized version
+1. Set up your [Docker](https://docs.docker.com/) environment.
+1. Make sure that you have `docker` & `docker-compose` installed: `docker --version && docker-compose --version`
+1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
+1. `cd react-webpack-rails-tutorial`
+1. `docker-compose up`
+1. After finish, setup your database in a separate terminal: `docker-compose run web rake db:setup`
+1. Open a browser tab to http://localhost:8000
+
+By default it uses `Procfile.static`. To run it in a different mode:
+
+```bash
+$ docker-compose run web foreman start -f Procfile.hot
+```
+
+**Note**:
+The Docker daemon binds to a Unix socket instead of a TCP port. By default that Unix socket is owned by the user `root` and other users can only access it using `sudo`. The Docker daemon always runs as the `root` user.
+If you don’t want to preface the `docker` command with `sudo`, create a Unix group called `docker` and add users to it. When the Docker daemon starts, it creates a Unix socket accessible by members of the `docker` group.
+
+```bash
+$ sudo groupadd docker
+$ sudo gpasswd -a $USER docker
+```
+
+**Warn**:
+Anyone added to the `docker` group is `root` equivalent. More information [here](https://github.com/moby/moby/issues/9976) and [here](https://docs.docker.com/engine/security/security/).
+
+**Note**:
+As mentioned above, the Docker daemon always runs as the `root` user. Because of that you can experience `Permission denied` issues on your host machine. You can grant it back to your user with the following command:
+
+```bash
+$ cd react-webpack-rails-tutorial
+$ sudo chown -R $USER:$USER .
+```
 
 ## Javascript development without Rails: using the Webpack Dev Server
 
