@@ -19,7 +19,6 @@ Support is included for the following drivers:
 1. Poltergeist (`DRIVER=poltergeist rspec`)
 1. Poltergeist no animations (`DRIVER=poltergeist_no_animations rspec`)
 1. Poltergeist errors ok (`DRIVER=poltergeist_errors_ok rspec`)
-1. Webkit (`DRIVER=webkit rspec`). Note, webkit has more errors than the other drivers.
 
 You may want to experiment with using the different drivers.
 

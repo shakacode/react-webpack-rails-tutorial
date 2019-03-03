@@ -70,9 +70,6 @@ GEM
     capybara-screenshot (1.0.21)
       capybara (>= 1.0, < 4)
       launchy
-    capybara-webkit (1.15.0)
-      capybara (>= 2.3, < 4.0)
-      json
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (1.2.0)
@@ -334,7 +331,6 @@ DEPENDENCIES
   bundler-audit
   capybara (= 2.18.0)
   capybara-screenshot
-  capybara-webkit
   chromedriver-helper
   coffee-rails
   coveralls

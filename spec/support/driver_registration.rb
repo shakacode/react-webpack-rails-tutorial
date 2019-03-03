@@ -32,4 +32,16 @@ module DriverRegistration
     end
     @selenium_headless_registered = true
   end
+
+  def self.register_selenium_chrome_headless_docker_friendly
+    return if @selenium_docker_registered
+    Capybara.register_driver :selenium_chrome_headless_docker_friendly do |app|
+      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(chromeOptions: { args: %w[no-sandbox headless disable-gpu] })
+      Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+    end
+    Capybara::Screenshot.register_driver(:selenium_chrome_headless_docker_friendly) do |js_driver, path|
+      js_driver.browser.save_screenshot(path)
+    end
+    @selenium_docker_registered = true
+  end
 end

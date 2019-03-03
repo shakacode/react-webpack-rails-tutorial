@@ -16,6 +16,7 @@ services:
     environment:
       - DB_HOST=db
       - REDIS_URL=redis://redis:6379/1
+      - DRIVER=selenium_chrome_headless_docker_friendly
   db:
     image: postgres:alpine
     volumes:
