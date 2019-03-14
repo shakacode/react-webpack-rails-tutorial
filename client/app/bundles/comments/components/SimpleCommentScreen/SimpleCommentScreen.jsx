@@ -85,7 +85,7 @@ class SimpleCommentScreen extends BaseComponent {
         <h2>
           {formatMessage(defaultMessages.comments)}
         </h2>
-        { SelectLanguage(handleSetLocale, locale) }
+        {SelectLanguage(handleSetLocale, locale)}
         <ul>
           <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>

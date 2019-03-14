@@ -2,22 +2,32 @@ import { React, useState, useEffect } from "react";
 import request from "axios";
 import Immutable from "immutable";
 import _ from "lodash";
+// import ReactOnRails from "react-on-rails";
+// import { IntlProvider, injectIntl } from "react-intl";
+// import BaseComponent from 'libs/components/BaseComponent';
+// import SelectLanguage from "libs/i18n/selectLanguage";
+// import { defaultMessages, defaultLocale } from "libs/i18n/default";
+// import { translations } from "libs/i18n/translations";
+
+// import CommentForm from "../CommentBox/CommentForm/CommentForm";
+// import CommentList from "../CommentBox/CommentList/CommentList";
+
 import ReactOnRails from "react-on-rails";
-import { IntlProvider, injectIntl } from "react-intl";
 import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from "libs/i18n/selectLanguage";
 import { defaultMessages, defaultLocale } from "libs/i18n/default";
 import { translations } from "libs/i18n/translations";
 
-import CommentForm from "../CommentBox/CommentForm/CommentForm";
 import CommentList from "../CommentBox/CommentList/CommentList";
 import css from "../SimpleCommentScreen/SimpleCommentScreen.scss";
+
+import ErrorBoundary from "./ErrorBoundary"
 
 function SimpleHooksCommentScreen() {
   const [comments, setComments] = useState(Immutable.fromJS([]));
   const [isSaving, setIsSaving] = useState(false);
   const [fetchCommentsError, setFetchCommentsError] = useState(null);
-  const [submitCommentError, setSubmitCommentError] = usestate(null);
+  const [submitCommentError, setSubmitCommentError] = useState(null);
 
   useEffect(() => {
     this.fetchComments();
@@ -88,7 +98,9 @@ function SimpleHooksCommentScreen() {
   );
 }
 
-export default class I18nWrapper extends BaseComponent {
+export default SimpleHooksCommentScreen;
+
+class I18nWrapper extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -104,24 +116,39 @@ export default class I18nWrapper extends BaseComponent {
   }
 
   componentDidCatch(error, info) {
+    debugger;
     console.log("xxxxxxxxxxxx")
     console.log(error, info);
     console.log("xxxxxxxxxxxx")
   }
 
   render() {
+    console.log("xxxxxxxxxxxx Render()")
+    console.log(this.state, this.props);
+    console.log("xxxxxxxxxxxx")
+
     const { locale } = this.state;
     const messages = translations[locale];
-    const InjectedSimpleHooksCommentScreen = injectIntl(SimpleHooksCommentScreen);
+    // const InjectedSimpleHooksCommentScreen = injectIntl(SimpleHooksCommentScreen);
+
+    // return (
+    //   <IntlProvider locale={locale} key={locale} messages={messages}>
+    //     <InjectedSimpleHooksCommentScreen
+    //       {...this.props}
+    //       locale={locale}
+    //       handleSetLocale={this.handleSetLocale}
+    //     />
+    //   </IntlProvider>
+    // );
 
     return (
-      <IntlProvider locale={locale} key={locale} messages={messages}>
-        <InjectedSimpleHooksCommentScreen
+      <ErrorBoundary>
+        <SimpleHooksCommentScreen
           {...this.props}
           locale={locale}
           handleSetLocale={this.handleSetLocale}
         />
-      </IntlProvider>
+      </ErrorBoundary>
     );
   }
 }
