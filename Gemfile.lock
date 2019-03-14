@@ -124,7 +124,7 @@ GEM
     json (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (6.3.292.48.1)
+    libv8 (6.7.288.46.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -140,8 +140,8 @@ GEM
     mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    mini_racer (0.1.15)
-      libv8 (~> 6.3)
+    mini_racer (0.2.4)
+      libv8 (>= 6.3)
     minitest (5.11.3)
     multi_json (1.13.1)
     nio4r (2.3.1)
@@ -365,7 +365,7 @@ DEPENDENCIES
   webpacker
 
 RUBY VERSION
-   ruby 2.5.2p104
+   ruby 2.6.1p33
 
 BUNDLED WITH
-   1.17.1
+   1.17.3

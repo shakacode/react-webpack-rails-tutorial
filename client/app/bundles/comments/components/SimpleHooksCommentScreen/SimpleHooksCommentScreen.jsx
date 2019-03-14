@@ -103,6 +103,12 @@ export default class I18nWrapper extends BaseComponent {
     this.setState({ locale });
   }
 
+  componentDidCatch(error, info) {
+    console.log("xxxxxxxxxxxx")
+    console.log(error, info);
+    console.log("xxxxxxxxxxxx")
+  }
+
   render() {
     const { locale } = this.state;
     const messages = translations[locale];
