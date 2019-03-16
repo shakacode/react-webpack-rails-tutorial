@@ -50,11 +50,16 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
-        vendor: {
-          name: 'vendor',
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-        }
+          chunks: 'all',
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
       }
     }
   },

@@ -5,7 +5,8 @@
 // cd client && yarn run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
 const config = require('./webpack.client.base.config');
 const { resolve } = require('path');
@@ -50,47 +51,46 @@ module.exports = merge(config, {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                modules: true,
-                importLoaders: 1,
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-            },
-            'postcss-loader',
-          ],
-        }),
+        test: /\.(scss|css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'resolve-url-loader?keepQuery',
+          'svg-fill-loader/encodeSharp',
+          'sass-loader',
+        ],
       },
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                modules: true,
-                importLoaders: 3,
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-            },
-            'postcss-loader',
-            'sass-loader',
-            {
-              loader: 'sass-resources-loader',
-              options: {
-                resources: './app/assets/styles/app-variables.scss'
-              },
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
+          },
+          {
+            loader: 'svg-fill-loader?selector=svg',
+          },
+        ],
+      },
+      {
+        test: /bootstrap-sass\/assets\/javascripts\//,
+        loader: 'imports-loader?jQuery=jquery',
+      },
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          'style-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: true,
+              sourceMap: true
             }
-          ],
-        }),
+          },
+          {
+            loader: 'sass-loader'
+          }
+        ]
       },
       {
         test: require.resolve('react'),
@@ -115,9 +115,9 @@ module.exports = merge(config, {
   },
 
   plugins: [
-    new ExtractTextPlugin({
-      filename: '[name]-[hash].css',
-      allChunks: true
-    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    })
   ],
 });
