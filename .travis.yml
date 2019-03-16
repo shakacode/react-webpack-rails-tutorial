@@ -1,7 +1,7 @@
 language:
   - ruby
 rvm:
-  - 2.4.1
+  - 2.5.3
 sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
@@ -34,8 +34,7 @@ install:
   - yarn install
   - rake db:setup
 
-# Tip: No need to run xvfb if running headless testing. However, we're going to start with
-# Poltergeist and switch to selenium if a test fails.
+# Tip: No need to run xvfb if running headless testing.
 before_script:
    - export DISPLAY=:99.0
    - sh -e /etc/init.d/xvfb start
