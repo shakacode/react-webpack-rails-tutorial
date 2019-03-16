@@ -12,23 +12,41 @@ addons:
     packages:
       - g++-4.9
 services:
-  - postgresql
+  - docker
+
+cache:
+  bundler: true
+  directories:
+    - node_modules # NPM packages
+  yarn: true
+
+gemfile:
+  - Gemfile
+
 env:
   global:
     - RAILS_ENV=test
-    - CXX=g++-4.9
-install:
-  - bundle install
-  - chromedriver-update
-  - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - DRIVER=selenium_chrome
+    - CHROME_BIN=/usr/bin/google-chrome
+    - USE_COVERALLS=TRUE
+
+before_install:
   - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
-  - nvm install stable && nvm alias default stable
-  - npm install -g npm@5.6.x
-  - npm install -g yarn
+  - sudo apt-get install -y xvfb libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen scn 1600x1200x16"
+
+install:
+  - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
+  - travis_retry nvm install 8.11.3
+  - node -v
+  - travis_retry npm i -g yarn
+  - travis_retry bundle install
+  - travis_retry yarn
+  - bundle
+  - yarn
   - node --version
-  - npm --version
   - google-chrome --version
   - chromedriver --version
   - yarn install
