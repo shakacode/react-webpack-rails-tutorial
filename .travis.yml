@@ -1,44 +1,62 @@
-language:
-  - ruby
+language: ruby
+
 rvm:
-  - 2.4.1
-sudo: true
+  - 2.5.3
+
+services:
+  - docker
+
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
-services:
-  - postgresql
+
+cache:
+  bundler: true
+  directories:
+    - node_modules # NPM packages
+  yarn: true
+
+gemfile: Gemfile
+
+#addons:
+#  apt:
+#    sources:
+#      - ubuntu-toolchain-r-test
+#    packages:
+#      - g++-4.9
+#  chrome: beta
+
 env:
   global:
     - RAILS_ENV=test
-    - CXX=g++-4.9
-install:
-  - bundle install
-  - chromedriver-update
-  - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - DRIVER=selenium_chrome
+    - CHROME_BIN=/usr/bin/google-chrome
+    - USE_COVERALLS=TRUE
+
+before_install:
   - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
-  - nvm install stable && nvm alias default stable
-  - npm install -g npm@5.6.x
-  - npm install -g yarn
-  - node --version
-  - npm --version
+  - sudo apt-get install -y xvfb libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen scn 1600x1200x16"
+
+install:
+  - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
+  - travis_retry nvm install 11.7.0
+  - node -v
+  - travis_retry npm i -g yarn
+  - travis_retry bundle install
+  - travis_retry yarn
+  - bundle
+  - yarn
   - google-chrome --version
-  - chromedriver --version
-  - yarn install
+
+  # Temp set chromediver to version matching chrome 73
+  #- chromedriver-update 73.0.3683.68
+  #- chromedriver --version
   - rake db:setup
 
-# Tip: No need to run xvfb if running headless testing. However, we're going to start with
-# Poltergeist and switch to selenium if a test fails.
 before_script:
-   - export DISPLAY=:99.0
-   - sh -e /etc/init.d/xvfb start
+  - "export DISPLAY=:99"
 
 script:
   - bundle exec rake db:schema:load
