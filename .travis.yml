@@ -1,25 +1,29 @@
-language:
-  - ruby
+language: ruby
+
 rvm:
   - 2.5.3
-sudo: true
-notifications:
-  slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
-  chrome: beta
+
 services:
   - docker
+
+notifications:
+  slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
 
 cache:
   bundler: true
   directories:
     - node_modules # NPM packages
   yarn: true
+
+gemfile: Gemfile
+
+#addons:
+#  apt:
+#    sources:
+#      - ubuntu-toolchain-r-test
+#    packages:
+#      - g++-4.9
+#  chrome: beta
 
 env:
   global:
@@ -31,8 +35,9 @@ env:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y xvfb libappindicator1 fonts-liberation
-  #- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
-  #- sudo dpkg -i google-chrome*.deb
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen scn 1600x1200x16"
 
 install:
   - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
@@ -43,13 +48,15 @@ install:
   - travis_retry yarn
   - bundle
   - yarn
-  - node --version
   - google-chrome --version
+
   # Temp set chromediver to version matching chrome 73
-  - chromedriver-update 73.0.3683.68
-  - chromedriver --version
-  - yarn install
+  #- chromedriver-update 73.0.3683.68
+  #- chromedriver --version
   - rake db:setup
+
+before_script:
+  - "export DISPLAY=:99"
 
 script:
   - bundle exec rake db:schema:load
