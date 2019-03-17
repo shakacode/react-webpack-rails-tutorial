@@ -98,6 +98,7 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     driven_by driver
+    driven_by :selenium, using: :chrome, options: { args: ["headless", "disable-gpu", "no-sandbox", "disable-dev-shm-usage"] }
   end
 
   # Capybara.default_max_wait_time = 15

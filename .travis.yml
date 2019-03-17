@@ -1,7 +1,7 @@
 language:
   - ruby
 rvm:
-  - 2.4.1
+  - 2.5.3
 sudo: true
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
@@ -11,34 +11,45 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
+  chrome: beta
 services:
-  - postgresql
+  - docker
+
+cache:
+  bundler: true
+  directories:
+    - node_modules # NPM packages
+  yarn: true
+
 env:
   global:
     - RAILS_ENV=test
-    - CXX=g++-4.9
-install:
-  - bundle install
-  - chromedriver-update
-  - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - DRIVER=selenium_chrome
+    - CHROME_BIN=/usr/bin/google-chrome
+    - USE_COVERALLS=TRUE
+
+before_install:
   - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
-  - nvm install stable && nvm alias default stable
-  - npm install -g npm@5.6.x
-  - npm install -g yarn
+  - sudo apt-get install -y xvfb libappindicator1 fonts-liberation
+  #- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+  #- sudo dpkg -i google-chrome*.deb
+
+install:
+  - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
+  - travis_retry nvm install 11.7.0
+  - node -v
+  - travis_retry npm i -g yarn
+  - travis_retry bundle install
+  - travis_retry yarn
+  - bundle
+  - yarn
   - node --version
-  - npm --version
   - google-chrome --version
+  # Temp set chromediver to version matching chrome 73
+  - chromedriver-update 73.0.3683.68
   - chromedriver --version
   - yarn install
   - rake db:setup
-
-# Tip: No need to run xvfb if running headless testing. However, we're going to start with
-# Poltergeist and switch to selenium if a test fails.
-before_script:
-   - export DISPLAY=:99.0
-   - sh -e /etc/init.d/xvfb start
 
 script:
   - bundle exec rake db:schema:load
