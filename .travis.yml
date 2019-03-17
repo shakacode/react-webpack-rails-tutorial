@@ -48,7 +48,7 @@ install:
   - yarn
   - node --version
   - google-chrome --version
-  - chromedriver --version
+  #  - chromedriver --version
   - yarn install
   - rake db:setup
 
