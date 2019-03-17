@@ -5,7 +5,6 @@
 // cd client && yarn run build:client
 // Note that Foreman (Procfile.dev) has also been configured to take care of this.
 
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
 const config = require('./webpack.client.base.config');
@@ -14,7 +13,10 @@ const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 
 const configPath = resolve('..', 'config');
 const { output } = webpackConfigLoader(configPath);
-
+const sassResources = [
+  './app/assets/styles/app-variables.scss',
+  './app/assets/styles/bootstrap-pre-customizations.scss'
+];
 const devBuild = process.env.NODE_ENV !== 'production';
 
 if (devBuild) {
@@ -33,7 +35,7 @@ module.exports = merge(config, {
       'bootstrap-loader/extractStyles'
     ],
   },
-
+  mode: process.env.NODE_ENV,
   output: {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
@@ -51,46 +53,58 @@ module.exports = merge(config, {
         exclude: /node_modules/,
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'resolve-url-loader?keepQuery',
-          'svg-fill-loader/encodeSharp',
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
-          },
-          {
-            loader: 'svg-fill-loader?selector=svg',
-          },
-        ],
-      },
-      {
-        test: /bootstrap-sass\/assets\/javascripts\//,
-        loader: 'imports-loader?jQuery=jquery',
-      },
-      {
-        test: /\.(scss|css)$/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
+          'style-loader', // For client bundle no MiniCssExtractPlugin
           {
             loader: 'css-loader',
             options: {
-              minimize: true,
-              sourceMap: true
-            }
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+            },
           },
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /^((?!\.global).)*\.scss$/,
+        use: [
+          'style-loader',
           {
-            loader: 'sass-loader'
-          }
-        ]
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+            },
+          },
+          'postcss-loader',
+          'sass-loader',
+          {
+            loader: 'sass-resources-loader',
+            options: { resources: sassResources },
+          },
+        ],
+      },
+      {
+        test: /\.global\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: false,
+              importLoaders: 2,
+            },
+          },
+          'postcss-loader',
+          'sass-loader',
+          {
+            loader: 'sass-resources-loader',
+            options: { resources: sassResources },
+          },
+        ],
       },
       {
         test: require.resolve('react'),
@@ -110,7 +124,7 @@ module.exports = merge(config, {
             jQuery: 'jquery',
           }
         }
-      }
+      },
     ],
   },
 

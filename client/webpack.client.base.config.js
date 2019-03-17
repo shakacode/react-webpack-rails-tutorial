@@ -3,6 +3,8 @@
 
 // Common client-side webpack configuration used by webpack.hot.config and webpack.rails.config.
 const webpack = require('webpack');
+
+const urlFileSizeCutover = 10 * 1024;
 const ManifestPlugin = require('webpack-manifest-plugin');
 const { resolve } = require('path');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
@@ -16,7 +18,6 @@ module.exports = {
 
   // the project dir
   context: resolve(__dirname),
-  mode: process.env.NODE_ENV,
   entry: {
     // This will contain the app entry points defined by
     // webpack.client.rails.hot.config and webpack.client.rails.build.config
@@ -51,6 +52,7 @@ module.exports = {
       chunks: 'all',
       cacheGroups: {
         vendors: {
+          name: 'vendor-bundle',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
           chunks: 'all',
@@ -69,7 +71,6 @@ module.exports = {
       DEBUG: false,
       TRACE_TURBOLINKS: devBuild,
     }),
-    // https://webpack.github.io/docs/list-of-plugins.html#2-explicit-vendor-chunk
     new ManifestPlugin({
       publicPath: output.publicPath,
       writeToFileEmit: true
@@ -79,18 +80,41 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+        options: {
+          limit: urlFileSizeCutover,
+          // Remove quotes around the encoded URL –
+          // they’re rarely useful
+          noquotes: true,
+          name: '[name].[hash].[ext]',
+          publicPath: output.publicPath,
+        },
+      },
+      {
         test: /\.(ttf|eot)$/,
         use: 'file-loader',
       },
       {
-        test: /\.(woff2?|jpe?g|png|gif|svg|ico)$/,
+        test: /\.(woff2|woff|jpe?g|png|gif|ico)?$/,
         use: {
-          loader: 'url-loader',
+          loader: 'resource-url-loader',
           options: {
-            name: '[name]-[hash].[ext]',
-            limit: 10000,
+            name: '[name].[hash].[ext]',
+            limit: urlFileSizeCutover,
+            publicPath: output.publicPath,
           },
         },
+      },
+      {
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
+        },
+        exclude: /node_modules/,
       },
       {
         test: require.resolve('jquery'),
@@ -138,3 +162,4 @@ module.exports = {
     ],
   },
 };
+
