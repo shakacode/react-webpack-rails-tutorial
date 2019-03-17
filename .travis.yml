@@ -11,6 +11,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
+  chrome: beta
 services:
   - docker
 
@@ -27,15 +28,14 @@ env:
   global:
     - RAILS_ENV=test
     - DRIVER=selenium_chrome
-    - CHROME_BIN=/usr/bin/google-chrome
+    #- CHROME_BIN=/usr/bin/google-chrome
     - USE_COVERALLS=TRUE
 
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y xvfb libappindicator1 fonts-liberation
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - sudo dpkg -i google-chrome*.deb
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen scn 1600x1200x16"
 
 install:
   - travis_retry gem install bundler -v '<2' # Ruby 2.2 and Rails 3.2 & 4.2 depend on bundler 1.x.
@@ -52,7 +52,6 @@ install:
   - yarn install
   - rake db:setup
 
-# Tip: No need to run xvfb if running headless testing.
 before_script:
    - export DISPLAY=:99.0
    - sh -e /etc/init.d/xvfb start
