@@ -12,6 +12,9 @@ default: &default
   # Important to set this to false if not using the webpacker webpack setup
   compile: false
 
+  # default to building the extracted CSS file
+  extract_css: true
+
 development:
   <<: *default
 
@@ -20,6 +23,8 @@ development:
     port: 3035
     hmr: true
     https: false
+    # Hot reloading doesn't want an extracted CSS file
+    extract_css: false
 
 test:
   <<: *default

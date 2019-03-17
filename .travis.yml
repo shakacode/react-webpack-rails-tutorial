@@ -17,14 +17,6 @@ cache:
 
 gemfile: Gemfile
 
-#addons:
-#  apt:
-#    sources:
-#      - ubuntu-toolchain-r-test
-#    packages:
-#      - g++-4.9
-#  chrome: beta
-
 env:
   global:
     - RAILS_ENV=test
@@ -49,10 +41,6 @@ install:
   - bundle
   - yarn
   - google-chrome --version
-
-  # Temp set chromediver to version matching chrome 73
-  #- chromedriver-update 73.0.3683.68
-  #- chromedriver --version
   - rake db:setup
 
 before_script:
