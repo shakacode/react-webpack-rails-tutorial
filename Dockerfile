@@ -1,4 +1,4 @@
-FROM ruby:2.4.1
+FROM ruby:2.5.3
 
 LABEL com.shakacode.vendor="https://www.shakacode.com"
 LABEL com.shakacode.description="ShakaCode's example of React on Rails plus React Native"
