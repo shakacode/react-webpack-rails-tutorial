@@ -125,7 +125,7 @@ GEM
     json (2.2.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (6.7.288.46.1)
+    libv8 (3.16.14.19)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -141,8 +141,6 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
-    mini_racer (0.2.4)
-      libv8 (>= 6.3)
     minitest (5.11.3)
     multi_json (1.13.1)
     nio4r (2.3.1)
@@ -223,6 +221,7 @@ GEM
       rails (>= 3.2)
       rainbow (~> 3.0)
     redis (3.3.3)
+    ref (2.0.0)
     require_all (2.0.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
@@ -295,6 +294,9 @@ GEM
       sprockets (>= 3.0.0)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -340,7 +342,6 @@ DEPENDENCIES
   jbuilder
   launchy
   listen
-  mini_racer
   pg
   pry
   pry-byebug
@@ -364,6 +365,7 @@ DEPENDENCIES
   selenium-webdriver
   spring
   spring-commands-rspec
+  therubyracer
   uglifier
   web-console
   webpacker
@@ -372,4 +374,4 @@ RUBY VERSION
    ruby 2.5.3p105
 
 BUNDLED WITH
-   1.16.6
+   1.17.3
