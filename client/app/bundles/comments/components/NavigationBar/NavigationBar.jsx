@@ -37,6 +37,9 @@ const NavigationBar = (props) => {
           )}>
               <a href={paths.ROUTER_PATH}>React Router Demo</a>
             </li>
+            <li>
+              <a href='https://reasonml.github.io/'>Reason ML</a>
+            </li>
             <li className={classNames({ active: (pathname === paths.NO_ROUTER_PATH) })}>
               <a href={paths.NO_ROUTER_PATH}>React Demo</a>
             </li>
