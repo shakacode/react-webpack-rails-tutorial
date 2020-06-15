@@ -1,10 +1,11 @@
 language: ruby
 
 rvm:
-  - 2.5.3
+  - 2.7.0
 
 services:
   - docker
+  - postgresql
 
 notifications:
   slack: shakacode:YvfXbuFMcFAHt6ZjABIs0KET
