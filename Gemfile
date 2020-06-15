@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 ruby "2.5.3"
 
-gem "react_on_rails", "11.2.2"
+gem "react_on_rails", ">= 12.0.0-beta.1"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
