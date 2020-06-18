@@ -37,6 +37,4 @@ spec/examples.txt
 
 # Ignore i18n-js
 client/app/libs/i18n/translations.js
-client/app/libs/i18n/translations.json
 client/app/libs/i18n/default.js
-client/app/libs/i18n/default.json

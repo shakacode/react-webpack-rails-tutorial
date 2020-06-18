@@ -77,4 +77,5 @@ ReactOnRails.configure do |config|
   # This allows you to add additional values to the Rails Context. Implement one static method
   # called `custom_context(view_context)` and return a Hash.
   config.rendering_extension = nil
+  config.i18n_output_format = 'js'
 end

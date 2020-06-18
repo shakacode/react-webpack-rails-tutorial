@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "2.7.0"
+ruby "2.7.1"
 
 gem "react_on_rails", "12.0.0-beta.1"
 gem "webpacker"
