@@ -77,9 +77,5 @@ ReactOnRails.configure do |config|
   # This allows you to add additional values to the Rails Context. Implement one static method
   # called `custom_context(view_context)` and return a Hash.
   config.rendering_extension = nil
-
-  # Client js uses assets not digested by rails.
-  # For any asset matching this regex, non-digested symlink will be created
-  # To disable symlinks set this parameter to nil.
-  config.symlink_non_digested_assets_regex = nil
+  config.i18n_output_format = 'js'
 end
