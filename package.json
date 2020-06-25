@@ -19,7 +19,7 @@
     "build:client": "(cd client && yarn run --silent build:client)",
     "build:server": "(cd client && yarn run --silent build:server)",
     "build:dev:client": "(cd client && yarn run --silent build:dev:client)",
-    "build:dev:server": "(cd client && yarn run --silent build:dev:server)",
+    "build:dev:server": "rm -rf public/webpack/develoment && RAILS_ENV=development NODE_ENV=development bin/webpack --watch",
     "hot-assets": "(cd client && yarn run hot-assets)",
     "start": "(cd client && yarn run --silent start)"
   },
@@ -39,8 +39,14 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "@rails/webpacker": "5.1.1",
+    "core-js": "^3.6.5",
+    "regenerator-runtime": "^0.13.5"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.11.0"
+  },
   "cacheDirectories": [
     "node_modules",
     "client/node_modules"

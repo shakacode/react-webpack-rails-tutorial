@@ -1,123 +1,37 @@
-/* eslint comma-dangle: ["error",
-  {"functions": "never", "arrays": "only-multiline", "objects": "only-multiline"} ] */
+const environment = require('./environment');
+const devBuild = process.env.NODE_ENV === 'development';
+const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-// Run like this:
-// cd client && yarn run build:client
-// Note that Foreman (Procfile.dev) has also been configured to take care of this.
-
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const merge = require('webpack-merge');
-const config = require('./webpack.client.base.config');
-const { resolve } = require('path');
-const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
-
-const configPath = resolve('..', 'config');
-const { output } = webpackConfigLoader(configPath);
-
-const devBuild = process.env.NODE_ENV !== 'production';
-
-if (devBuild) {
-  console.log('Webpack dev build for Rails'); // eslint-disable-line no-console
-  config.devtool = 'eval-source-map';
-} else {
-  console.log('Webpack production build for Rails'); // eslint-disable-line no-console
+if (devBuild && !isHMR) {
+  environment.loaders
+    .get('sass')
+    .use.find((item) => item.loader === 'sass-loader').options.sourceMapContents = false;
 }
 
-module.exports = merge(config, {
-  // You can add entry points specific to rails here
-  entry: {
-    'vendor-bundle': [
-      'jquery-ujs',
-      // Configures extractStyles to be true if NODE_ENV is production
-      'bootstrap-loader/extractStyles'
-    ],
-  },
+//adding exposeLoader
+const exposeLoader = {
+  test: require.resolve('jquery'),
+  use: [{ loader: 'expose-loader', options: 'jQuery' }],
+};
+environment.loaders.insert('expose', exposeLoader, { after: 'file' });
 
-  output: {
-    filename: '[name]-[chunkhash].js',
-    chunkFilename: '[name]-[chunkhash].chunk.js',
-    publicPath: output.publicPath,
-    path: output.path,
-  },
+//adding es5Loader
+const es5Loader = {
+  test: require.resolve('react'),
+  use: [{ loader: 'imports-loader', options: { shim: 'es5-shim/es5-shim', sham: 'es5-shim/es5-sham' } }],
+};
+environment.loaders.insert('react', es5Loader, { after: 'sass' });
 
-  // See webpack.client.base.config for adding modules common to both webpack dev server and rails
+//adding jqueryUjsLoader
+const jqueryUjsLoader = {
+  test: require.resolve('jquery-ujs'),
+  use: [{ loader: 'imports-loader', options: { jQuery: 'jquery' } }],
+};
+environment.loaders.insert('jquery-ujs', jqueryUjsLoader, { after: 'react' });
 
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                modules: true,
-                importLoaders: 1,
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-            },
-            'postcss-loader',
-          ],
-        }),
-      },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                modules: true,
-                importLoaders: 3,
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-            },
-            'postcss-loader',
-            'sass-loader',
-            {
-              loader: 'sass-resources-loader',
-              options: {
-                resources: './app/assets/styles/app-variables.scss'
-              },
-            }
-          ],
-        }),
-      },
-      {
-        test: require.resolve('react'),
-        use: {
-          loader: 'imports-loader',
-          options: {
-            shim: 'es5-shim/es5-shim',
-            sham: 'es5-shim/es5-sham',
-          }
-        }
-      },
-      {
-        test: require.resolve('jquery-ujs'),
-        use: {
-          loader: 'imports-loader',
-          options: {
-            jQuery: 'jquery',
-          }
-        }
-      }
-    ],
-  },
+if (devBuild && isHMR) {
+  environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());
+}
 
-  plugins: [
-    new ExtractTextPlugin({
-      filename: '[name]-[hash].css',
-      allChunks: true
-    }),
-  ],
-});
+module.exports = environment;
