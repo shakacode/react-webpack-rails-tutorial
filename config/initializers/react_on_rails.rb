@@ -10,11 +10,6 @@ ReactOnRails.configure do |config|
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
 
-  # If you are using the ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
-  # with rspec then this controls what npm command is run
-  # to automatically refresh your webpack assets on every test run.
-  config.build_test_command = "yarn run build:test"
-
   ################################################################################
   # CLIENT RENDERING OPTIONS
   # Below options can be overriden by passing options to the react_on_rails
