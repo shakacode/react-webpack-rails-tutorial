@@ -1,3 +1,8 @@
 #!/bin/bash
-cd client && yarn run build:production
-cd client && yarn run build:test
+if [[ $RAILS_ENV = "production" ]] ; then
+  cd ../client && yarn run build:production
+fi
+
+if [[ $RAILS_ENV = "test" ]] ; then
+  cd ../client && yarn run build:test
+fi
