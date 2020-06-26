@@ -1,0 +1,3 @@
+#!/bin/bash
+cd client && yarn run build:production
+cd client && yarn run build:test
