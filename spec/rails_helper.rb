@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
+ENV["NODE_ENV"] ||= "test"
 require "coveralls"
 Coveralls.wear!("rails") # must occur before any of your application code is required
 require "spec_helper"
@@ -8,6 +9,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rspec"
 require "capybara-screenshot/rspec"
+require "webdrivers"
 
 ## Add additional requires below this line. Rails is not loaded until this point!
 
@@ -35,12 +37,6 @@ ActiveRecord::Migration.maintain_test_schema!
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  # Ensure that if we are running js tests, we are using latest webpack assets
-  ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config, :requires_webpack_assets)
-  config.define_derived_metadata(file_path: %r{spec/(system|requests)}) do |metadata|
-    metadata[:requires_webpack_assets] = true
-  end
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

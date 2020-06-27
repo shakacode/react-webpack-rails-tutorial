@@ -1,7 +1,5 @@
 # Shown below are the defaults for configuration
 ReactOnRails.configure do |config|
-  config.node_modules_location = "client"
-
   # Define the files for we need to check for webpack compilation when running tests
   config.webpack_generated_files = %w[ app-bundle.js vendor-bundle.js app-bundle.css
                                        vendor-bundle.css server-bundle.js ]
@@ -11,15 +9,6 @@ ReactOnRails.configure do |config|
   # If you are using the same file for client and server rendering, having this set probably does
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
-
-  # If you are using the ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
-  # with rspec then this controls what npm command is run
-  # to automatically refresh your webpack assets on every test run.
-  config.build_test_command = "yarn run build:test"
-
-  # This configures the script to run to build the production assets by webpack. Set this to nil
-  # if you don't want react_on_rails building this file for you.
-  config.build_production_command = "yarn run build:production"
 
   ################################################################################
   # CLIENT RENDERING OPTIONS

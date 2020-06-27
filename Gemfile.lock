@@ -1,3 +1,16 @@
+GIT
+  remote: https://github.com/shakacode/react_on_rails.git
+  revision: 38403e66bba1c3fde7edd4fb46c7f7daaaa111a6
+  branch: justin808/remove-precompile-rake
+  specs:
+    react_on_rails (12.0.0.pre.beta.2)
+      addressable
+      connection_pool
+      execjs (~> 2.5)
+      rails (>= 3.2)
+      rainbow (~> 3.0)
+      webpacker (>= 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -44,8 +57,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    archive-zip (0.12.0)
-      io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.1)
     autoprefixer-rails (9.7.6)
@@ -71,9 +82,6 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     childprocess (3.0.0)
-    chromedriver-helper (2.1.1)
-      archive-zip (~> 0.10)
-      nokogiri (~> 1.8)
     code_analyzer (0.5.1)
       sexp_processor
     coderay (1.1.3)
@@ -115,7 +123,6 @@ GEM
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     interception (0.5)
-    io-like (0.3.1)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     json (2.3.0)
@@ -209,12 +216,6 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoc (6.2.1)
-    react_on_rails (12.0.0.pre.beta.1)
-      addressable
-      connection_pool
-      execjs (~> 2.5)
-      rails (>= 3.2)
-      rainbow (~> 3.0)
     redis (3.3.3)
     regexp_parser (1.7.1)
     require_all (3.0.0)
@@ -310,6 +311,10 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
+    webdrivers (4.4.1)
+      nokogiri (~> 1.6)
+      rubyzip (>= 1.3.0)
+      selenium-webdriver (>= 3.0, < 4.0)
     webpacker (5.1.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
@@ -332,7 +337,6 @@ DEPENDENCIES
   bundler-audit
   capybara (= 2.18.0)
   capybara-screenshot
-  chromedriver-helper
   coffee-rails
   coveralls
   database_cleaner
@@ -355,7 +359,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 12.0.0.pre.beta.1)
+  react_on_rails!
   redis (= 3.3.3)
   rspec-rails (= 3.7.2)
   rubocop
@@ -368,6 +372,7 @@ DEPENDENCIES
   spring-commands-rspec
   uglifier
   web-console
+  webdrivers (~> 4.0)
   webpacker
 
 RUBY VERSION
