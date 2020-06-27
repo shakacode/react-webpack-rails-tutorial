@@ -43,7 +43,7 @@
   "dependencies": {
     "actioncable": "5.0.x",
     "autoprefixer": "^7.1.5",
-    "axios": "^0.17.1",
+    "axios": "^0.18.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
