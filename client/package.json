@@ -118,7 +118,7 @@
     "react-transform-hmr": "^1.0.4",
     "regenerator-runtime": "^0.12.1",
     "sleep": "^6.2.0",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^3.1.11"
   },
   "jest": {
     "moduleNameMapper": {
