@@ -96,7 +96,6 @@ end
 group :test do
   gem "capybara", "2.18.0"
   gem "capybara-screenshot"
-  gem "webdrivers", "~> 4.0"
   gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
@@ -104,4 +103,5 @@ group :test do
   gem "rails_best_practices"
   gem "rspec-rails", "3.7.2"
   gem "selenium-webdriver"
+  gem "webdrivers", "~> 4.0"
 end
