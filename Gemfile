@@ -96,7 +96,7 @@ end
 group :test do
   gem "capybara", "2.18.0"
   gem "capybara-screenshot"
-  gem "chromedriver-helper"
+  gem "webdrivers", "~> 4.0"
   gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
