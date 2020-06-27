@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
+ENV["NODE_ENV"] ||= "test"
 require "coveralls"
 Coveralls.wear!("rails") # must occur before any of your application code is required
 require "spec_helper"
