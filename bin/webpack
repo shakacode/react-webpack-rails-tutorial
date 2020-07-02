@@ -13,5 +13,6 @@ require "webpacker/webpack_runner"
 
 APP_ROOT = File.expand_path("..", __dir__)
 
-puts "bin/webpack is running #{APP_ROOT}/bin/webpack.sh"
-exec "#{APP_ROOT}/bin/webpack.sh"
+Dir.chdir(APP_ROOT) do
+  Webpacker::WebpackRunner.run(ARGV)
+end

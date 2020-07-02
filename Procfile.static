@@ -2,7 +2,6 @@
 rails: rails s -b 0.0.0.0
 
 # Build client assets, watching for changes.
-rails-client-assets: rm -rf public/webpack/development || true && bundle exec rake react_on_rails:locale && yarn run build:dev:client
-
+webpack: sh -c 'rm -rf public/webpack/development/*' || true && bin/webpack --watch
 # Build server assets, watching for changes. Remove if not server rendering.
-rails-server-assets: yarn run build:dev:server
+# rails-server-assets: SERVER_BUNDLE_ONLY=yes bin/webpack --watch
