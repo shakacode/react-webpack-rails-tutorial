@@ -100,7 +100,6 @@
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.3.3",
     "babel-eslint": "^8.0.2",
     "babel-jest": "^23.4.2",
     "body-parser": "^1.18.2",

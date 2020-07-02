@@ -39,8 +39,13 @@
     "url": "https://github.com/shakacode/react-webpack-rails-tutorial/issues"
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "@rails/webpacker": "5.1.1"
+  },
+  "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.3.3",
+    "webpack-dev-server": "^3.11.0"
+  },
   "cacheDirectories": [
     "node_modules",
     "client/node_modules"
