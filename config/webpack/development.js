@@ -20,15 +20,18 @@ const optimization = {
   },
 };
 
-clientEnvironment.splitChunks((config) => Object.assign({}, config, { optimization: optimization }));
+clientEnvironment.splitChunks((config) => Object.assign({}, config));
 
 const clientConfig = clientEnvironment.toWebpackConfig();
+console.log(clientConfig);
 
-// For HMR, we need to separate the the client and server webpack configurations
-if (process.env.WEBPACK_DEV_SERVER) {
-  module.exports = clientConfig;
-} else if (process.env.SERVER_BUNDLE_ONLY) {
-  module.exports = serverConfig;
-} else {
-  module.exports = [clientConfig, serverConfig];
-}
+module.exports = clientConfig;
+
+// // For HMR, we need to separate the the client and server webpack configurations
+// if (process.env.WEBPACK_DEV_SERVER) {
+//   module.exports = clientConfig;
+// } else if (process.env.SERVER_BUNDLE_ONLY) {
+//   module.exports = serverConfig;
+// } else {
+//   module.exports = [clientConfig, serverConfig];
+// }
