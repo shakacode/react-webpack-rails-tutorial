@@ -6,12 +6,12 @@ import de from 'react-intl/locale-data/de';
 import ja from 'react-intl/locale-data/ja';
 import zh from 'react-intl/locale-data/zh';
 
-import App from './App';
-import RouterApp from './ClientRouterApp';
-import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
-import routerCommentsStore from '../store/routerCommentsStore';
-import commentsStore from '../store/commentsStore';
-import NavigationBarApp from './NavigationBarApp';
+import App from '../bundles/comments/startup/App';
+import RouterApp from '../bundles/comments/startup/ClientRouterApp';
+import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen';
+import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
+import commentsStore from '../bundles/comments/store/commentsStore';
+import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 
 // Initizalize all locales for react-intl.
 addLocaleData([...en, ...de, ...ja, ...zh]);

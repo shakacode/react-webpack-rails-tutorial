@@ -21,7 +21,6 @@
     "test": "yarn run build:test && yarn run lint && rspec",
     "build:test": "rm -rf public/webpack/test && RAILS_ENV=test NODE_ENV=test bin/webpack",
     "build:dev": "rm -rf public/webpack/develoment && RAILS_ENV=development NODE_ENV=development bin/webpack --watch",
-    "build:dev:server": "rm -rf public/webpack/develoment && RAILS_ENV=development NODE_ENV=development bin/webpack --watch",
     "build:dev:watch": "RAILS_ENV=development NODE_ENV=development bin/webpack --watch",
     "build:clean": "rm -rf public/webpack || true"
   },

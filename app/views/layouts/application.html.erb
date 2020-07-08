@@ -3,13 +3,11 @@
 <head>
   <title>RailsReactTutorial</title>
 
-  <%= stylesheet_packs_with_chunks_tag('vendor-bundle',
-                          'app-bundle',
-                          media: 'all',
-                          'data-turbolinks-track': true) %>
+  <%= stylesheet_packs_with_chunks_tag('clientRegistration',
+                                        media: 'all',
+                                        'data-turbolinks-track': true) %>
 
   <%= javascript_packs_with_chunks_tag('clientRegistration',
-                                       'vendor-bundle',
                                        'data-turbolinks-track': true,
                                        defer: true) %>
 

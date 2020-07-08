@@ -2,6 +2,7 @@ default: &default
   public_output_path: webpack
   public_root_path: public
   source_path: client/app
+  source_entry_path: packs
 
   cache_path: tmp/cache/webpacker
   check_yarn_integrity: false
@@ -15,7 +16,7 @@ default: &default
   cache_manifest: false
 
   # Extract and emit a css file
-  extract_css: false
+  extract_css: true
 
   static_assets_extensions:
     - .jpg
@@ -58,14 +59,13 @@ development:
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
-    extract_css: false
     https: false
     host: localhost
     port: 3035
     public: localhost:3035
-    hmr: true
+    hmr: false
     # Inline should be set to true if using HMR
-    inline: true
+    inline: false
     overlay: true
     compress: true
     disable_host_check: true
