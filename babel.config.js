@@ -4,6 +4,7 @@ module.exports = function(api) {
   var isDevelopmentEnv = api.env('development')
   var isProductionEnv = api.env('production')
   var isTestEnv = api.env('test')
+  const isHMR = process.env.WEBPACK_DEV_SERVER
 
   if (!validEnv.includes(currentEnv)) {
     throw new Error(
@@ -34,13 +35,15 @@ module.exports = function(api) {
           modules: false,
           exclude: ['transform-typeof-symbol']
         }
-      ]
+      ],
+      "@babel/preset-react",
     ].filter(Boolean),
     plugins: [
       'babel-plugin-macros',
       '@babel/plugin-syntax-dynamic-import',
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
+      isDevelopmentEnv && isHMR && 'react-refresh/babel',
       [
         '@babel/plugin-proposal-class-properties',
         {
