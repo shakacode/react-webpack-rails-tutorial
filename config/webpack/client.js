@@ -30,6 +30,15 @@ environment.loaders.insert('expose', exposeLoader, { after: 'file' });
 // };
 // environment.loaders.insert('jquery-ujs', jqueryUjsLoader, { after: 'react' });
 
+// environment.loaders.insert('bootstrap-jquery', importsLo
+// {
+//   test: /bootstrap-sass\/assets\/javascripts\//,
+//   use: {
+//     loader: 'imports-loader',
+//     options: { jQuery: 'jquery' },
+//   },
+// },
+
 if (devBuild && isHMR) {
   environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());
 }

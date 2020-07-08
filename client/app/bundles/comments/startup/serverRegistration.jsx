@@ -1,5 +1,6 @@
 // Example of React + Redux
 import ReactOnRails from 'react-on-rails';
+// import 'bootstrap-loader/extractStyles';
 
 import App from './App';
 import RouterApp from './ServerRouterApp';

@@ -1,4 +1,5 @@
 import ReactOnRails from 'react-on-rails';
+// import 'bootstrap-loader/extractStyles';
 
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';

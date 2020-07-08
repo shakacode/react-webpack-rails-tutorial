@@ -32,7 +32,7 @@ extractStyles: false
 # For example, _variables.scss contains:
 # $input-color: $gray !default;
 # This means you can define $input-color before we load _variables.scss
-preBootstrapCustomizations: ./app/assets/styles/bootstrap-pre-customizations.scss
+preBootstrapCustomizations: ./client/app/assets/styles/bootstrap-pre-customizations.scss
 
 # This gets loaded after bootstrap/variables is loaded and before bootstrap is loaded.
 # A good example of this is when you want to override a bootstrap variable to be based

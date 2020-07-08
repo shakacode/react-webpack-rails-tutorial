@@ -29,7 +29,7 @@
     "actioncable": "5.0.x",
     "autoprefixer": "^7.1.5",
     "axios": "^0.17.1",
-    "bootstrap-loader": "^2.2.0",
+    "bootstrap-loader": "^3.0.4",
     "bootstrap-sass": "^3.3.7",
     "classnames": "^2.2.5",
     "es5-shim": "^4.5.9",
