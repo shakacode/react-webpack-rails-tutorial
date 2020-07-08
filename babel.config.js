@@ -29,10 +29,17 @@ module.exports = function(api) {
       (isProductionEnv || isDevelopmentEnv) && [
         '@babel/preset-env',
         {
+          // ???
           forceAllTransforms: true,
+
+
           useBuiltIns: 'entry',
           corejs: 3,
           modules: false,
+
+          bugfixes: true,
+          loose: true,
+
           exclude: ['transform-typeof-symbol']
         }
       ],
@@ -40,22 +47,29 @@ module.exports = function(api) {
     ].filter(Boolean),
     plugins: [
       'babel-plugin-macros',
+
+      // VVVV ?
       '@babel/plugin-syntax-dynamic-import',
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
       isDevelopmentEnv && isHMR && 'react-refresh/babel',
+      // ^^^^ ?
+
       [
         '@babel/plugin-proposal-class-properties',
         {
           loose: true
         }
       ],
+
+      // VVVVV ?
       [
         '@babel/plugin-proposal-object-rest-spread',
         {
           useBuiltIns: true
         }
       ],
+      // ^^^^ ?
       [
         '@babel/plugin-transform-runtime',
         {
@@ -64,12 +78,16 @@ module.exports = function(api) {
           corejs: false
         }
       ],
+
+       // VVVVV ?
       [
         '@babel/plugin-transform-regenerator',
         {
           async: false
         }
       ]
+      // ^^^^ ?
+
     ].filter(Boolean)
   }
 }
