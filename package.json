@@ -85,7 +85,6 @@
     "preload-webpack-plugin": "^3.0.0-alpha.1",
     "prettier": "^1.14.3",
     "prettier-eslint-cli": "^4.7.1",
-    "pug": "^2.0.0-rc.4",
     "react-transform-hmr": "^1.0.4",
     "regenerator-runtime": "^0.12.1",
     "sleep": "^6.2.0",
