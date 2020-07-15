@@ -20,7 +20,7 @@ sassLoader.use.push({
 
 //adding urlLoader
 const urlLoader = {
-  test: /\.(jpe?g|png|gif|ico|woff)$/,
+  test: /\.(jpe?g|png|gif|ico|woff|woff2)$/,
   use: {
     loader: 'url-loader',
     options: {

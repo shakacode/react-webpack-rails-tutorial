@@ -1,6 +1,6 @@
 import ReactOnRails from 'react-on-rails';
-// import 'bootstrap-loader/extractStyles';
-
+import 'bootstrap-loader';
+import 'jquery-ujs';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import de from 'react-intl/locale-data/de';
@@ -18,7 +18,9 @@ import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 addLocaleData([...en, ...de, ...ja, ...zh]);
 
 ReactOnRails.setOptions({
-  traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
+  // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
+  // process.env.TRACE_TURBOLINKS -> error: development is not defined
+  traceTurbolinks: true,
 });
 
 ReactOnRails.register({
