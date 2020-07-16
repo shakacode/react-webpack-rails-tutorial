@@ -71,7 +71,7 @@
     "jquery-ujs": "^1.2.2",
     "js-yaml": "^3.10.0",
     "loader-utils": "^1.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "marked": "^0.3.6",
     "node-sass": "^4.7.2",
     "node-uuid": "^1.4.8",
