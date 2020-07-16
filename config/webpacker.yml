@@ -63,9 +63,9 @@ development:
     host: localhost
     port: 3035
     public: localhost:3035
-    hmr: false
+    hmr: true
     # Inline should be set to true if using HMR
-    inline: false
+    inline: true
     overlay: true
     compress: true
     disable_host_check: true
