@@ -42,7 +42,7 @@
     "jquery": "^3.2.1",
     "jquery-ujs": "^1.2.2",
     "loader-utils": "^1.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "marked": "^0.3.6",
     "node-uuid": "^1.4.8",
     "postcss-loader": "^2.0.8",
