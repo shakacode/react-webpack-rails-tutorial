@@ -1,0 +1,4 @@
+node_modules
+
+client/app/libs/i18n/translations.js
+client/app/libs/i18n/default.js

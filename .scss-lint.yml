@@ -1,7 +1,6 @@
 # See http://sass-guidelin.es/#zeros
 
 scss_files:
-  - 'app/assets/stylesheets/**/*.scss'
   - 'client/app/**/*.scss'
 
 exclude: 'client/node_modules/**'

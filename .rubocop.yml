@@ -15,7 +15,6 @@ AllCops:
     - 'db/**/*'
     - 'db/schema.rb'
     - 'db/seeds.rb'
-    - 'client/node_modules/**/*'
     - 'bin/**/*'
     - 'Procfile.*'
     - !ruby/regexp /old_and_unused\.rb$/

@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 ruby "2.7.1"
 
-gem "react_on_rails", github: "shakacode/react_on_rails", branch: "justin808/remove-precompile-rake"
+gem "react_on_rails", "12.0.1"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"

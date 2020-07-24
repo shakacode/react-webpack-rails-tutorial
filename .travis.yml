@@ -44,6 +44,7 @@ install:
   - yarn
   - google-chrome --version
   - rake db:setup
+  - bundle exec rake react_on_rails:locale
 
 before_script:
   - "export DISPLAY=:99"

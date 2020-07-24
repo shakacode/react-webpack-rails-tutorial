@@ -33,7 +33,7 @@ if %w[development test].include? Rails.env
     # end
 
     SCSSLint::RakeTask.new do |t|
-      t.files = ["app/assets/stylesheets/", "client/"]
+      t.files = ["client/"]
     end
 
     desc "eslint"

@@ -204,13 +204,9 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
 ## Webpack
-### Configuration Files
 
-- `webpack.client.base.config.js`: Common **client** configuration file to minimize code duplication for `webpack.client.rails.build.config`, `webpack.client.rails.hot.config`, `webpack.client.express.config`
-- `webpack.client.express.config.js`: Webpack configuration for Express server [client/server-express.js](client/server-express.js)
-- `webpack.client.rails.build.config.js`: Client side js bundle for deployment and tests.
-- `webpack.client.rails.hot.config.js`: Webpack Dev Server bundler for serving rails assets on port 3500, used by [client/server-rails-hot.js](client/server-rails-hot.js), for hot reloading JS and CSS within Rails.
-- `webpack.server.rails.build.config.js`: Server side js bundle, used by server rendering.
+_Converted to use @rails/webpacker webpack configuration_.
+
 
 ### Additional Resources
 - [Webpack Docs](https://webpack.js.org/)

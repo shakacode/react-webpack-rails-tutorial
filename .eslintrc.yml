@@ -26,11 +26,7 @@ rules:
 
   jsx-a11y/anchor-is-valid: off
 
-#  arrow-parens:
-#    - 0
-#    - "as-needed"
-
 settings:
   import/resolver:
     webpack:
-      config: 'webpack.client.base.config.js'
+      config: 'config/webpack/development.js'
