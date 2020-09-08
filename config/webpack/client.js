@@ -1,25 +1,30 @@
 const environment = require('./environment');
-const devBuild = process.env.NODE_ENV === 'development';
-const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const merge = require('webpack-merge');
 const webpack = require('webpack');
 
-if (devBuild && !isHMR) {
-  environment.loaders
-    .get('sass')
-    .use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
-}
+const configureClient = () => {
+  environment.plugins.append('Provide', new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    jquery: 'jquery',
+    'window.jQuery': 'jquery',
+    Popper: ['popper.js', 'default']
+  }))
 
-environment.plugins.append('Provide', new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery',
-  jquery: 'jquery',
-  'window.jQuery': 'jquery',
-  Popper: ['popper.js', 'default']
-}))
+  const clientConfigObject = environment.toWebpackConfig();
+  // Copy the object using merge b/c the clientConfigObject is non-stop mutable
+  // After calling toWebpackConfig, and then modifying the resulting object,
+  // another call to `toWebpackConfig` on this same environment will overwrite
+  // the next line.
+  const clientConfig = merge({}, clientConfigObject);
 
-if (devBuild && isHMR) {
-  environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());
-}
+  // server-bundle is special and should ONLY be built by the serverConfig
+  // In case this entry is not deleted, a very strange "window" not found
+  // error shows referring to window["webpackJsonp"]. That is because the
+  // client config is going to try to load chunks.
+  delete clientConfig.entry['server-bundle'];
 
-module.exports = environment;
+  return clientConfig;
+};
+
+module.exports = configureClient;
