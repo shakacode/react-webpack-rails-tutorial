@@ -10,7 +10,7 @@ import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { commentPropTypes } from './CommentList/CommentList';
-import css from './CommentBox.scss';
+import css from './CommentBox.module.scss';
 
 class CommentBox extends BaseComponent {
   static propTypes = {

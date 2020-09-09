@@ -27,8 +27,8 @@ vendor/ruby
 .ruby-gemset
 
 # Generated js bundles
-/public/webpack/
-/public/webpack-test/
+/public/packs
+/public/packs-test/
 
 # Rubymine/IntelliJ
 .idea

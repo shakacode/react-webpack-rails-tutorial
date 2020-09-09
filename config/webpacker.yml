@@ -1,11 +1,11 @@
 default: &default
-  public_output_path: webpack
-  public_root_path: public
   source_path: client/app
   source_entry_path: packs
 
+  public_output_path: packs
+  public_root_path: public
+
   cache_path: tmp/cache/webpacker
-  check_yarn_integrity: false
   webpack_compile_output: false
 
   # Additional paths webpack should lookup modules
@@ -50,12 +50,8 @@ default: &default
 
 development:
   <<: *default
-  compile: false
-
-  public_output_path: webpack/development
-
-  # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
-  check_yarn_integrity: false
+  compile: true
+#  extract_css: true
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
@@ -71,6 +67,7 @@ development:
     disable_host_check: true
     use_local_ip: false
     quiet: false
+    pretty: false
     headers:
       'Access-Control-Allow-Origin': '*'
     watch_options:
@@ -82,19 +79,10 @@ test:
   compile: true
 
   # Compile test packs to a separate directory
-  public_output_path: webpack/test
-
-  dev_server:
-    hmr: true
-    # Inline should be set to true if using HMR
-    inline: true
-
-
+  public_output_path: packs-test
 
 production:
   <<: *default
-
-  public_output_path: webpack/production
 
   # Production depends on precompilation of packs prior to booting for performance.
   compile: false

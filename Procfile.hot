@@ -1,8 +1,0 @@
-# Basic procfile for rails-related part of dev processes
-# using a webpack development server to load JavaScript and CSS
-
-# Development rails requires both rails and rails-assets
-# (and rails-server-assets if server rendering)
-rails: bundle exec rails s -p 3000
-wp-client: bin/webpack-dev-server
-wp-server: SERVER_BUNDLE_ONLY=yes bin/webpack --watch

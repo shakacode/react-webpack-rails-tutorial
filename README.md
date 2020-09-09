@@ -160,7 +160,7 @@ See package.json and Gemfile for versions
 
 ### Experimenting with Hot Reloading: applies to both `Procfile.hot` and `Procfile.express`
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the screen update without refreshing the window. This applies to port 3000 and port 4000.
-1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss). You can see port 3000 or 4000 update automatically.
+1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.module.scss). You can see port 3000 or 4000 update automatically.
 1. Be sure to take a look at the different Procfiles in this directory, as described below.
 
 
@@ -219,7 +219,7 @@ We're using Webpack to handle Sass assets so that we can use CSS modules. The be
 For example in [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx), see how we use standard JavaScript import syntax to refer to class names that come from CSS modules:
 
 ```javascript
-import css from './CommentBox.scss';
+import css from './CommentBox.module.scss';
 
 export default class CommentBox extends React.Component {
   render() {

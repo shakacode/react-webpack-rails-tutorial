@@ -24,13 +24,15 @@ export default (_props, railsContext) => {
     store = ReactOnRails.getStore('commentsStore', false);
   } else {
     return (
-      <NavigationBar {...{ pathname }} />
+      () => <NavigationBar {...{ pathname }} />
     );
   }
 
   return (
-    <Provider store={store}>
-      <NavigationBarContainer />
-    </Provider>
+    () => (
+      <Provider store={store}>
+        <NavigationBarContainer />
+      </Provider>
+    )
   );
 };

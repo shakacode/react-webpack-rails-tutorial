@@ -2,6 +2,7 @@
 
   .commentAuthor {
     color: $comment-author-color;   // <--- Loaded via sass-resources-loader
+    font-weight: bold;
   }
 
   p {
