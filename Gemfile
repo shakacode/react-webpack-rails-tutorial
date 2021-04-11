@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "2.7.1"
+ruby "2.7.2"
 
-gem "react_on_rails", "12.0.1"
+gem "react_on_rails", "12.2.0"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
