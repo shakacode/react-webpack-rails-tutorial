@@ -103,5 +103,5 @@ group :test do
   gem "rails_best_practices"
   gem "rspec-rails"
   gem "selenium-webdriver"
-  gem "webdrivers", "~> 4.0"
+  gem "webdrivers", "3.9.4"
 end
