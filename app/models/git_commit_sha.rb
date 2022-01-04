@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Retrieves the current git commit SHA of the project
 class GitCommitSha
   def self.current_sha

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PagesController < ApplicationController
   include ReactOnRails::Controller
   before_action :set_comments

@@ -10,7 +10,7 @@ gem "webpacker"
 gem "listen"
 gem "rails", "~> 5"
 
-# Note: We're using sqllite3 for development and testing
+# NOTE: We're using sqllite3 for development and testing
 # gem "sqlite3", group: [:development, :test]
 
 gem "pg"
@@ -72,8 +72,8 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", require: false
-  gem "ruby-lint", require: false
+  gem "rubocop", "1.24.1", require: false
+  gem "rubocop-rspec", "~> 2.7"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "brakeman", require: false
   gem "bundler-audit", require: false
@@ -105,3 +105,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers", "~> 4.0"
 end
+
+gem "rubocop-performance", "~> 1.13"

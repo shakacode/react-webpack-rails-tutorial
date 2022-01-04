@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if Rails.env.development? || Rails.env.test?
   # See tasks/linters.rake
 
@@ -26,16 +28,14 @@ if Rails.env.development? || Rails.env.test?
     desc "Run all audits and tests"
     # rspec_tests must be before lint and js_tests to build the locale files
     task all: %i[environment rspec_tests lint js_tests bundle_audit security_audit] do
-      begin
-        puts "All CI tasks"
-        puts Rainbow("PASSED").green
-        puts ""
-      rescue StandardError => e
-        puts e.to_s
-        puts Rainbow("FAILED").red
-        puts ""
-        raise(e)
-      end
+      puts "All CI tasks"
+      puts Rainbow("PASSED").green
+      puts ""
+    rescue StandardError => e
+      puts e.to_s
+      puts Rainbow("FAILED").red
+      puts ""
+      raise(e)
     end
   end
 

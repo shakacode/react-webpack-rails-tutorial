@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task daily: :environment do
   t = 1.day.ago
   older_comments = Comment.where("created_at < ?", t)

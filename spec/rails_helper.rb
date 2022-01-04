@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
 ENV["NODE_ENV"] ||= "test"
 require "coveralls"
 Coveralls.wear!("rails") # must occur before any of your application code is required
 require "spec_helper"
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../config/environment", __dir__)
 
 require "rspec/rails"
 require "capybara/rspec"
@@ -34,7 +36,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -65,7 +67,7 @@ RSpec.configure do |config|
   # selenium_firefox webdriver only works for Travis-CI builds.
   default_driver = :selenium_chrome_headless
 
-  supported_drivers = %i[ selenium_chrome_headless selenium_chrome selenium_firefox selenium]
+  supported_drivers = %i[selenium_chrome_headless selenium_chrome selenium_firefox selenium]
   driver = ENV["DRIVER"].try(:to_sym) || default_driver
   Capybara.default_driver = driver
 
@@ -94,7 +96,8 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     driven_by driver
-    driven_by :selenium, using: :chrome, options: { args: ["headless", "disable-gpu", "no-sandbox", "disable-dev-shm-usage"] }
+    driven_by :selenium, using: :chrome,
+                         options: { args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage] }
   end
 
   # Capybara.default_max_wait_time = 15
@@ -105,7 +108,7 @@ RSpec.configure do |config|
   Capybara.save_path = Rails.root.join("tmp", "capybara")
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
-  config.append_after(:each) do
+  config.append_after do
     Capybara.reset_sessions!
   end
 

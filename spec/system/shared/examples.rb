@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "system/shared/contexts"
 
-shared_examples "New Comment Submission" do |expect_comment_count|
+shared_examples "when New Comment Submission" do |expect_comment_count|
   context "when the new comment is submitted" do
     let(:name) { "John Smith" }
     let(:text) { "Hello there!" }
+
     include_context "Form Submitted", name: :name, text: :text
 
-    scenario "comment is added" do
+    scenario "when comment is added" do
       expect(page).to have_css(".js-comment-author", text: name)
       expect(page).to have_css(".js-comment-text", text: text)
       expect(page).to have_no_content("Your comment was not saved!")
@@ -31,7 +34,8 @@ shared_examples "New Comment Submission" do |expect_comment_count|
   end
 
   context "with iframe text" do
-    let(:iframe_text) { "<iframe src=\"http://www.w3schools.com\"></iframe>" }
+    let(:iframe_text) { '<iframe src="http://www.w3schools.com"></iframe>' }
+
     include_context "Form Submitted", text: :iframe_text
 
     scenario "doesn't add an iframe" do
