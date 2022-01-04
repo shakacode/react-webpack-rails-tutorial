@@ -2,12 +2,10 @@
 
 # Retrieves the current git commit SHA of the project
 class GitCommitSha
+  attr_writer :current_sha
+
   def self.current_sha
     @current_sha ||= retrieve_sha_from_file.presence || retrieve_sha_from_git
-  end
-
-  def self.current_sha=(sha)
-    @sha = sha
   end
 
   def self.reset_current_sha
