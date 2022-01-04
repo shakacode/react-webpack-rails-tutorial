@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "2.7.1"
+ruby "2.7.3"
 
 gem "react_on_rails", "12.0.1"
 gem "webpacker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 5"
+gem "rails", "~> 6.1.4"
 
 # Note: We're using sqllite3 for development and testing
 # gem "sqlite3", group: [:development, :test]
@@ -94,14 +94,14 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara", "2.18.0"
+  gem "capybara"
   gem "capybara-screenshot"
   gem "coveralls", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
   gem "rails_best_practices"
-  gem "rspec-rails", "3.7.2"
+  gem "rspec-rails"
   gem "selenium-webdriver"
   gem "webdrivers", "~> 4.0"
 end

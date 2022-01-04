@@ -1,4 +1,4 @@
-require File.expand_path("../boot", __FILE__)
+require_relative "boot"
 
 require "rails/all"
 
@@ -8,9 +8,15 @@ Bundler.require(*Rails.groups)
 
 module RailsReactTutorial
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
-    config.action_cable.allowed_request_origins = [Rails.application.secrets.action_cable_url]
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.0
+
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
   end
 end
