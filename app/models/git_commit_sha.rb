@@ -3,7 +3,7 @@
 # Retrieves the current git commit SHA of the project
 class GitCommitSha
   def self.current_sha
-    @sha ||= retrieve_sha_from_file.presence || retrieve_sha_from_git
+    @current_sha ||= retrieve_sha_from_file.presence || retrieve_sha_from_git
   end
 
   def self.current_sha=(sha)
