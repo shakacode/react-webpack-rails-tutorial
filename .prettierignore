@@ -1,0 +1,6 @@
+node_modules/
+package.json
+tmp/
+public/
+coverage/
+spec/support/

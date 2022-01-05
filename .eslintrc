@@ -1,0 +1,36 @@
+parser: "@babel/eslint-parser"
+
+extends:
+  - eslint-config-shakacode
+  - prettier
+
+plugins:
+  - prettier
+
+globals:
+  __DEBUG_SERVER_ERRORS__: true
+  __SERVER_ERRORS__: true
+
+env:
+  browser: true
+  node: true
+  jest: true
+
+rules:
+  no-shadow: 0
+  no-console: 0
+  function-paren-newline: 0
+  object-curly-newline: 0
+  no-restricted-syntax: ["error", "SequenceExpression"]
+  # https://stackoverflow.com/a/59268871/5241481
+  import/extensions: ['error', 'ignorePackages', {"js": 'never'}]
+
+  # https://github.com/benmosher/eslint-plugin-import/issues/340
+  import/no-extraneous-dependencies: 0
+
+settings:
+  import/core-modules:
+    - react-redux
+  import/resolver:
+    node:
+      extensions: [".js"]

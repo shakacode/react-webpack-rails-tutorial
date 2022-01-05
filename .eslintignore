@@ -1,4 +1,6 @@
-node_modules
-
+node_modules/
+tmp/
+public/
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
+postcss.config.js
