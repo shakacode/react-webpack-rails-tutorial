@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import BaseComponent from 'libs/components/BaseComponent';
+import BaseComponent from '../../../libs/components/BaseComponent.jsx';
 
-import NavigationBar from '../components/NavigationBar/NavigationBar';
+import NavigationBar from '../components/NavigationBar/NavigationBar.jsx';
 
 function stateToProps(state) {
   // Which part of the Redux global state does our component want to receive as props?

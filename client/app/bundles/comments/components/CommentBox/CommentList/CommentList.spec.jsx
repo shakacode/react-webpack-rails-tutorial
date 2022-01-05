@@ -1,8 +1,8 @@
-import { React, TestUtils } from 'libs/testHelper';
 import { List, Map } from 'immutable';
+import { React, TestUtils } from '../../../../../libs/testHelper';
 
-import CommentList from './CommentList';
-import Comment from './Comment/Comment';
+import CommentList from './CommentList.jsx';
+import Comment from './Comment/Comment.jsx';
 
 const {
   renderIntoDocument,

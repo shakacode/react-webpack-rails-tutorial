@@ -1,16 +1,17 @@
+// eslint-disable-next-line max-classes-per-file
 import React from 'react';
 import request from 'axios';
 import Immutable from 'immutable';
 import _ from 'lodash';
 import ReactOnRails from 'react-on-rails';
 import { IntlProvider, injectIntl } from 'react-intl';
-import BaseComponent from 'libs/components/BaseComponent';
-import SelectLanguage from 'libs/i18n/selectLanguage';
-import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-import { translations } from 'libs/i18n/translations';
+import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
+import SelectLanguage from '../../../../libs/i18n/selectLanguage.jsx';
+import { defaultMessages, defaultLocale } from '../../../../libs/i18n/default';
+import { translations } from '../../../../libs/i18n/translations';
 
-import CommentForm from '../CommentBox/CommentForm/CommentForm';
-import CommentList from '../CommentBox/CommentList/CommentList';
+import CommentForm from '../CommentBox/CommentForm/CommentForm.jsx';
+import CommentList from '../CommentBox/CommentList/CommentList.jsx';
 import css from './SimpleCommentScreen.scss';
 
 class SimpleCommentScreen extends BaseComponent {
@@ -130,6 +131,7 @@ export default class I18nWrapper extends BaseComponent {
     return (
       <IntlProvider locale={locale} key={locale} messages={messages}>
         <InjectedSimpleCommentScreen
+          /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...this.props}
           locale={locale}
           handleSetLocale={this.handleSetLocale}

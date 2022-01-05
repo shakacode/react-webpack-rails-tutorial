@@ -16,8 +16,8 @@ import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
-import { defaultMessages } from 'libs/i18n/default';
-import BaseComponent from 'libs/components/BaseComponent';
+import { defaultMessages } from '../../../../../libs/i18n/default';
+import BaseComponent from '../../../../../libs/components/BaseComponent.jsx';
 
 import css from './CommentForm.scss';
 
@@ -35,9 +35,9 @@ function bsStyleFor(propName, error) {
 class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
-    error: PropTypes.any,
-    cssTransitionGroupClassNames: PropTypes.object.isRequired,
+    actions: PropTypes.objectOf.isRequired,
+    error: PropTypes.string,
+    cssTransitionGroupClassNames: PropTypes.objectOf.isRequired,
     intl: intlShape.isRequired,
   };
 

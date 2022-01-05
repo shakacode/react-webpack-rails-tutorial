@@ -6,10 +6,10 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CommentsCount from './CommentsCount';
+import CommentsCount from './CommentsCount.jsx';
 import * as paths from '../../constants/paths';
 
-const NavigationBar = (props) => {
+function NavigationBar(props) {
   const { commentsCount, pathname } = props;
 
   /* eslint-disable new-cap */
@@ -65,7 +65,7 @@ const NavigationBar = (props) => {
       </div>
     </nav>
   );
-};
+}
 
 NavigationBar.propTypes = {
   commentsCount: PropTypes.number,

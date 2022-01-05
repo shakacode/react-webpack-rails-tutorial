@@ -1,7 +1,9 @@
-const environment = require('./environment');
 const merge = require('webpack-merge');
+
 const devBuild = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const webpack = require('webpack');
+
+const environment = require('./environment');
 
 // React Server Side Rendering webpacker config
 // Builds a Node compatible file that React on Rails can load, never served to the client.

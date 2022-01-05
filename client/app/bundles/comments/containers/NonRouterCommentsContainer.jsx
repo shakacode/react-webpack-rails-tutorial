@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import BaseComponent from 'libs/components/BaseComponent';
-import { IntlProvider } from 'react-intl';
-import { translations } from 'libs/i18n/translations';
-import { defaultLocale } from 'libs/i18n/default';
 // polyfill for server-side rendering, required by react-intl
 import Intl from 'intl';
+import { IntlProvider } from 'react-intl';
+import BaseComponent from '../../../libs/components/BaseComponent.jsx';
+import { translations } from '../../../libs/i18n/translations';
+import { defaultLocale } from '../../../libs/i18n/default';
 
-import CommentScreen from '../components/CommentScreen/CommentScreen';
+import CommentScreen from '../components/CommentScreen/CommentScreen.jsx';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 
 global.Intl = Intl;
@@ -22,7 +22,7 @@ function select(state) {
 class NonRouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
+    data: PropTypes.objectOf.isRequired,
   };
 
   render() {

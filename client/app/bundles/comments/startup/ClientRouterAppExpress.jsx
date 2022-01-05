@@ -5,13 +5,13 @@ import ReactOnRails from 'react-on-rails';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import routes from '../routes/routes';
+import routes from '../routes/routes.jsx';
 
 // Because of https://github.com/shakacode/react_on_rails/issues/504
 // we need to skip using a shared store for the express server startup.
 import createStore from '../store/routerCommentsStore';
 
-const RouterAppExpress = (_props, _railsContext) => {
+function RouterAppExpress(_props, _railsContext) {
   // See comment above
   const store = createStore(_props);
 
@@ -28,7 +28,7 @@ const RouterAppExpress = (_props, _railsContext) => {
       </Router>
     </Provider>
   );
-};
+}
 
 ReactOnRails.register({
   RouterAppExpress,

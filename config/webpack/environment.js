@@ -1,7 +1,8 @@
 const { environment } = require('@rails/webpacker');
 
 const sassResources = ['./client/app/assets/styles/app-variables.scss'];
-const aliasConfig = require('./alias.js');
+const aliasConfig = require('./alias');
+
 const rules = environment.loaders;
 const fileLoader = rules.get('file');
 const cssLoader = rules.get('css');
@@ -18,7 +19,7 @@ sassLoader.use.push({
   },
 });
 
-//adding urlLoader
+// adding urlLoader
 const urlLoader = {
   test: /\.(jpe?g|png|gif|ico|woff|woff2)$/,
   use: {
@@ -42,7 +43,7 @@ environment.config.merge(aliasConfig);
 cssLoader.use[1].options.modules = true;
 sassLoader.use[1].options.modules = true;
 
-//changing fileLoader to use proper values
+// changing fileLoader to use proper values
 fileLoader.test = /\.(ttf|eot|svg)$/;
 fileLoader.use[0].options = { name: 'images/[name]-[hash].[ext]' };
 

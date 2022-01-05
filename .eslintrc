@@ -1,8 +1,10 @@
-parser: "@babel/eslint-parser"
-
 extends:
   - eslint-config-shakacode
   - prettier
+
+parserOptions:
+  ecmaFeatures:
+    jsx: true
 
 plugins:
   - prettier

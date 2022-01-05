@@ -4,7 +4,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 // (for SSR of React components). This is easy enough as we can export arrays of webpack configs.
 const clientEnvironment = require('./client');
 const serverConfig = require('./server');
-const merge = require('webpack-merge');
 
 const optimization = {
   splitChunks: {
@@ -20,7 +19,7 @@ const optimization = {
   },
 };
 
-clientEnvironment.splitChunks((config) => Object.assign({}, config, { optimization: optimization }));
+clientEnvironment.splitChunks((config) => ({ ...config, optimization}));
 
 const clientConfig = clientEnvironment.toWebpackConfig();
 

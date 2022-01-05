@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import ActionCable from 'actioncable';
 import _ from 'lodash';
-import BaseComponent from 'libs/components/BaseComponent';
 import { injectIntl, intlShape } from 'react-intl';
-import SelectLanguage from 'libs/i18n/selectLanguage';
-import { defaultMessages, defaultLocale } from 'libs/i18n/default';
+import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
+import SelectLanguage from '../../../../libs/i18n/selectLanguage.jsx';
+import { defaultMessages, defaultLocale } from '../../../../libs/i18n/default';
 
-import CommentForm from './CommentForm/CommentForm';
-import CommentList, { commentPropTypes } from './CommentList/CommentList';
+import CommentForm from './CommentForm/CommentForm.jsx';
+import CommentList, { commentPropTypes } from './CommentList/CommentList.jsx';
 import css from './CommentBox.scss';
 
 class CommentBox extends BaseComponent {
@@ -92,7 +92,7 @@ class CommentBox extends BaseComponent {
         <ul>
           <li>
             { (data.get('isFetching') && <br />) ||
-              <button className={css.anchorButton} onClick={this.refreshComments} >
+              <button type="button" className={css.anchorButton} onClick={this.refreshComments} >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
             }

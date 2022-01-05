@@ -1,8 +1,8 @@
-import BaseComponent from 'libs/components/BaseComponent';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import marked from 'marked';
+import BaseComponent from '../../../../../../libs/components/BaseComponent.jsx';
 import css from './Comment.scss';
 
 export default class Comment extends BaseComponent {

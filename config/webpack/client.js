@@ -1,8 +1,8 @@
-const environment = require('./environment');
 const devBuild = process.env.NODE_ENV === 'development';
 const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const webpack = require('webpack');
+const environment = require('./environment');
 
 if (devBuild && !isHMR) {
   environment.loaders

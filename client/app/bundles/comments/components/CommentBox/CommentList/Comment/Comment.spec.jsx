@@ -1,6 +1,6 @@
-import { React, TestUtils } from 'libs/testHelper';
+import { React, TestUtils } from '../../../../../../libs/testHelper';
 
-import Comment from './Comment';
+import Comment from './Comment.jsx';
 
 const {
   renderIntoDocument,

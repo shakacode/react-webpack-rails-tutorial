@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BaseComponent from 'libs/components/BaseComponent';
+import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
 
-import CommentBox from '../CommentBox/CommentBox';
+import CommentBox from '../CommentBox/CommentBox.jsx';
 import css from './CommentScreen.scss';
 
 export default class CommentScreen extends BaseComponent {
   static propTypes = {
-    actions: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
-    locationState: PropTypes.object,
+    actions: PropTypes.objectOf.isRequired,
+    data: PropTypes.objectOf.isRequired,
+    locationState: PropTypes.objectOf,
   };
 
   renderNotification() {

@@ -1,17 +1,17 @@
 import Alert from 'react-bootstrap/lib/Alert';
-import BaseComponent from 'libs/components/BaseComponent';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
+import BaseComponent from '../../../../../libs/components/BaseComponent.jsx';
 
-import Comment from './Comment/Comment';
+import Comment from './Comment/Comment.jsx';
 
 export const commentPropTypes = {
   $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
-  error: PropTypes.any,
-  cssTransitionGroupClassNames: PropTypes.object.isRequired,
+  error: PropTypes.string,
+  cssTransitionGroupClassNames: PropTypes.objectOf.isRequired,
 };
 
 export default class CommentList extends BaseComponent {

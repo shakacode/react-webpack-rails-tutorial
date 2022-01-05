@@ -6,12 +6,9 @@ import './Layout.scss';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class Layout extends Component {
-  static propTypes = {
-    children: PropTypes.object.isRequired,
-  };
-
   /* eslint-disable react/no-unescaped-entities */
   render() {
+    const { children } = this.props
     return (
       <section>
         <header>
@@ -34,8 +31,14 @@ export default class Layout extends Component {
             </li>
           </ul>
         </header>
-        {this.props.children}
+        {children}
       </section>
     );
   }
 }
+
+Layout.propTypes = {
+  children: PropTypes.objectOf(
+    PropTypes.object
+  ).isRequired,
+};
