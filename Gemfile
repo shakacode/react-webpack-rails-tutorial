@@ -3,8 +3,8 @@
 source "https://rubygems.org"
 ruby "2.7.3"
 
-gem "react_on_rails", "12.0.1"
-gem "webpacker"
+gem "react_on_rails", "12.5.2"
+gem "webpacker", "6.0.0.rc.6"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
@@ -105,3 +105,4 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers", "3.9.4"
 end
+gem 'mini_racer', platforms: :ruby

@@ -182,14 +182,12 @@ GEM
     pry-stack_explorer (0.6.1)
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
-    psych (4.0.3)
-      stringio
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
-    rack-proxy (0.7.0)
+    rack-proxy (0.7.2)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -232,15 +230,14 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdoc (6.4.0)
-      psych (>= 4.0.0)
-    react_on_rails (12.0.1)
+    rdoc (6.3.3)
+    react_on_rails (12.5.2)
       addressable
       connection_pool
       execjs (~> 2.5)
-      rails (>= 3.2)
+      rails (>= 5.2)
       rainbow (~> 3.0)
-      webpacker (>= 4.0)
+      webpacker (>= 4.2)
     redis (3.3.3)
     regexp_parser (2.2.0)
     require_all (3.0.0)
@@ -295,8 +292,8 @@ GEM
       tilt
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
-    sdoc (2.2.0)
-      rdoc (>= 5.0)
+    sdoc (2.3.0)
+      rdoc (>= 5.0, < 6.4.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -318,11 +315,10 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    stringio (3.0.1)
     sync (0.5.0)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
-    thor (1.1.0)
+    thor (1.2.1)
     tilt (2.0.10)
     tins (1.30.0)
       sync
@@ -340,7 +336,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
-    webpacker (5.4.3)
+    webpacker (6.0.0.rc.6)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -387,7 +383,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 12.0.1)
+  react_on_rails (= 12.5.2)
   redis (= 3.3.3)
   rspec-rails
   rubocop
@@ -401,7 +397,7 @@ DEPENDENCIES
   uglifier
   web-console
   webdrivers (= 3.9.4)
-  webpacker
+  webpacker (= 6.0.0.rc.6)
 
 RUBY VERSION
    ruby 2.7.3p183

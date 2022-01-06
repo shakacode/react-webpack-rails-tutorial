@@ -38,3 +38,9 @@ spec/examples.txt
 # Ignore i18n-js
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
+
+/public/packs
+/public/packs-test
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

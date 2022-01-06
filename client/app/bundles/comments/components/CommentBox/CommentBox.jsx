@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import ActionCable from 'actioncable';
+import ActionCable from '@rails/actioncable';
 import _ from 'lodash';
 import BaseComponent from 'libs/components/BaseComponent';
 import { injectIntl, intlShape } from 'react-intl';

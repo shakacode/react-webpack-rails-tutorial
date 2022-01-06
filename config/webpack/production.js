@@ -1,27 +1,12 @@
+// The source code including full typescript support is available at: 
+// https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/production.js
+
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
-// We need to compile both our development JS (for serving to the client) and our server JS
-// (for SSR of React components). This is easy enough as we can export arrays of webpack configs.
-const clientEnvironment = require('./client');
-const serverConfig = require('./server');
-const merge = require('webpack-merge');
+const webpackConfig = require('./webpackConfig');
 
-const optimization = {
-  splitChunks: {
-    chunks: 'async',
-    cacheGroups: {
-      vendor: {
-        chunks: 'async',
-        name: 'vendor',
-        test: 'vendor',
-        enforce: true,
-      },
-    },
-  },
+const productionEnvOnly = (_clientWebpackConfig, _serverWebpackConfig) => {
+  // place any code here that is for production only
 };
 
-clientEnvironment.splitChunks((config) => Object.assign({}, config, { optimization: optimization }));
-
-const clientConfig = clientEnvironment.toWebpackConfig();
-
-module.exports = [clientConfig, serverConfig];
+module.exports = webpackConfig(productionEnvOnly);

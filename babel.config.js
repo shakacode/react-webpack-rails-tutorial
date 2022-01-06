@@ -1,51 +1,16 @@
-module.exports = function(api) {
-  var validEnv = ['development', 'test', 'production']
-  var currentEnv = api.env()
-  var isDevelopmentEnv = api.env('development')
-  var isProductionEnv = api.env('production')
-  var isTestEnv = api.env('test')
-  const isHMR = process.env.WEBPACK_DEV_SERVER
+// The source code including full typescript support is available at: 
+// https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/babel.config.js
 
-  if (!validEnv.includes(currentEnv)) {
-    throw new Error(
-      'Please specify a valid `NODE_ENV` or ' +
-        '`BABEL_ENV` environment variables. Valid values are "development", ' +
-        '"test", and "production". Instead, received: ' +
-        JSON.stringify(currentEnv) +
-        '.'
-    )
-  }
+const defaultConfigFunc = require('@rails/webpacker/package/babel/preset.js');
 
-  return {
-    presets: [
-      isTestEnv && [
-        '@babel/preset-env',
-        {
-          targets: {
-            node: 'current'
-          }
-        }
-      ],
-      (isProductionEnv || isDevelopmentEnv) && '@babel/preset-env',
-      "@babel/preset-react",
-    ].filter(Boolean),
-    plugins: [
-      'babel-plugin-macros',
-      isDevelopmentEnv && isHMR && 'react-refresh/babel',
-      [
-        '@babel/plugin-proposal-class-properties',
-        {
-          loose: true
-        }
-      ],
-      [
-        '@babel/plugin-transform-runtime',
-        {
-          helpers: false,
-          regenerator: true,
-          corejs: false
-        }
-      ]
-    ].filter(Boolean)
-  }
-}
+module.exports = function (api) {
+  const resultConfig = defaultConfigFunc(api);
+
+  const changesOnDefault = {
+    plugins: [process.env.WEBPACK_SERVE && 'react-refresh/babel'].filter(Boolean),
+  };
+
+  resultConfig.plugins = [...resultConfig.plugins, ...changesOnDefault.plugins];
+
+  return resultConfig;
+};
