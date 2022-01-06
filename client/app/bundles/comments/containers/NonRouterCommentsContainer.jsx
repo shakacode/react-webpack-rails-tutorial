@@ -22,7 +22,7 @@ function select(state) {
 class NonRouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    data: PropTypes.objectOf.isRequired,
+    data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   };
 
   render() {

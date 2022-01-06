@@ -37,5 +37,5 @@ export default class Layout extends Component {
 }
 
 Layout.propTypes = {
-  children: PropTypes.objectOf(PropTypes.object).isRequired,
+  children: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };

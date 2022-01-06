@@ -21,9 +21,9 @@ function select(state) {
 class RouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    data: PropTypes.objectOf.isRequired,
+    data: PropTypes.oneOfType([PropTypes.object]).isRequired,
     location: PropTypes.shape({
-      state: PropTypes.objectOf,
+      state: PropTypes.oneOfType([PropTypes.object]),
     }).isRequired,
   };
 

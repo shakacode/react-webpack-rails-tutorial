@@ -8,9 +8,9 @@ import css from './CommentScreen.scss';
 
 export default class CommentScreen extends BaseComponent {
   static propTypes = {
-    actions: PropTypes.objectOf.isRequired,
-    data: PropTypes.objectOf.isRequired,
-    locationState: PropTypes.objectOf,
+    actions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+    data: PropTypes.oneOfType([PropTypes.object]).isRequired,
+    locationState: PropTypes.oneOfType([PropTypes.object]),
   };
 
   renderNotification() {

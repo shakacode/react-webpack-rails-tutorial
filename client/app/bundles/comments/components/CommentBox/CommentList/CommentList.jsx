@@ -10,8 +10,9 @@ import Comment from './Comment/Comment.jsx';
 
 export const commentPropTypes = {
   $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
+  // TODO: Update error propType
   error: PropTypes.string,
-  cssTransitionGroupClassNames: PropTypes.objectOf.isRequired,
+  cssTransitionGroupClassNames: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default class CommentList extends BaseComponent {
