@@ -23,9 +23,7 @@ function NavigationBarApp(_props, railsContext) {
   } else if (pathname === paths.NO_ROUTER_PATH) {
     store = ReactOnRails.getStore('commentsStore', false);
   } else {
-    return (
-      <NavigationBar {...{ pathname }} />
-    );
+    return <NavigationBar {...{ pathname }} />;
   }
 
   return (

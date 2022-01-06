@@ -8,7 +8,7 @@ import './Layout.scss';
 export default class Layout extends Component {
   /* eslint-disable react/no-unescaped-entities */
   render() {
-    const { children } = this.props
+    const { children } = this.props;
     return (
       <section>
         <header>
@@ -25,8 +25,7 @@ export default class Layout extends Component {
             </li>
             <li>
               <Link to="/react-router/redirect" activeClassName="active">
-                Test Redirect
-                (url to '/react-router/redirect' which goes to root '/')
+                Test Redirect (url to '/react-router/redirect' which goes to root '/')
               </Link>
             </li>
           </ul>
@@ -38,7 +37,5 @@ export default class Layout extends Component {
 }
 
 Layout.propTypes = {
-  children: PropTypes.objectOf(
-    PropTypes.object
-  ).isRequired,
+  children: PropTypes.objectOf(PropTypes.object).isRequired,
 };

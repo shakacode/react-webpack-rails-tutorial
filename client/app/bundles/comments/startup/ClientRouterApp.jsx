@@ -10,9 +10,7 @@ function ClientRouterApp(_props, _railsContext) {
 
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        {routes}
-      </BrowserRouter>
+      <BrowserRouter>{routes}</BrowserRouter>
     </Provider>
   );
 }

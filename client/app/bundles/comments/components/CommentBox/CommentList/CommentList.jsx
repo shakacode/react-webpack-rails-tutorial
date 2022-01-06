@@ -28,24 +28,24 @@ export default class CommentList extends BaseComponent {
     if (!this.props.error) return null;
     return (
       <Alert bsStyle="danger" key="commentFetchError">
-        <strong>Comments could not be retrieved. </strong>
-        A server error prevented loading comments. Please try again.
+        <strong>Comments could not be retrieved. </strong>A server error prevented loading comments. Please
+        try again.
       </Alert>
     );
   }
 
   render() {
     const { $$comments, cssTransitionGroupClassNames } = this.props;
-    const commentNodes = $$comments.map(($$comment, index) =>
-
+    const commentNodes = $$comments.map(($$comment, index) => (
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-      (<Comment
+      <Comment
         key={$$comment.get('id') || index}
         author={$$comment.get('author')}
         text={$$comment.get('text')}
-      />));
+      />
+    ));
 
     // For animation with ReactCSSTransitionGroup
     //   https://facebook.github.io/react/docs/animation.html

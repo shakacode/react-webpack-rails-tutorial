@@ -8,20 +8,9 @@ import RouterCommentsContainer from '../containers/RouterCommentsContainer.jsx';
 export default (
   <Layout>
     <Switch>
-      <Route
-        path="/"
-        component={RouterCommentsContainer}
-        exact
-      />
-      <Route
-        path="/react-router"
-        component={TestReactRouter}
-        exact
-      />
-      <Route
-        path="/react-router/redirect"
-        component={TestReactRouterRedirect}
-      />
+      <Route path="/" component={RouterCommentsContainer} exact />
+      <Route path="/react-router" component={TestReactRouter} exact />
+      <Route path="/react-router/redirect" component={TestReactRouterRedirect} />
     </Switch>
   </Layout>
 );

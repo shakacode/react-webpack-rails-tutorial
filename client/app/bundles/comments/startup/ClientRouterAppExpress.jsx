@@ -16,16 +16,11 @@ function RouterAppExpress(_props, _railsContext) {
   const store = createStore(_props);
 
   // Create an enhanced history that syncs navigation events with the store
-  const history = syncHistoryWithStore(
-    browserHistory,
-    store,
-  );
+  const history = syncHistoryWithStore(browserHistory, store);
 
   return (
     <Provider store={store}>
-      <Router history={history}>
-        {routes}
-      </Router>
+      <Router history={history}>{routes}</Router>
     </Provider>
   );
 }

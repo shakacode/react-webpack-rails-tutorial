@@ -26,7 +26,7 @@ const emptyComment = { author: '', text: '' };
 function bsStyleFor(propName, error) {
   if (error) {
     const errorData = (error && error.response && error.response.data) || {};
-    return (propName in errorData) ? 'error' : 'success';
+    return propName in errorData ? 'error' : 'success';
   }
 
   return null;
@@ -48,12 +48,7 @@ class CommentForm extends BaseComponent {
       comment: emptyComment,
     };
 
-    _.bindAll(this, [
-      'handleSelect',
-      'handleChange',
-      'handleSubmit',
-      'resetAndFocus',
-    ]);
+    _.bindAll(this, ['handleSelect', 'handleChange', 'handleSubmit', 'resetAndFocus']);
   }
 
   handleSelect(selectedKey) {
@@ -94,9 +89,7 @@ class CommentForm extends BaseComponent {
   handleSubmit(e) {
     e.preventDefault();
     const { actions } = this.props;
-    actions
-      .submitComment(this.state.comment)
-      .then(this.resetAndFocus);
+    actions.submitComment(this.state.comment).then(this.resetAndFocus);
   }
 
   resetAndFocus() {
@@ -165,11 +158,7 @@ class CommentForm extends BaseComponent {
           </FormGroup>
           <FormGroup controlId="formHorizontalSubmit">
             <Col smOffset={2} sm={10}>
-              <Button
-                type="submit"
-                className="btn btn-primary"
-                disabled={this.props.isSaving}
-              >
+              <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
                 {this.props.isSaving
                   ? `${formatMessage(defaultMessages.inputSaving)}...`
                   : formatMessage(defaultMessages.inputPost)}
@@ -199,9 +188,7 @@ class CommentForm extends BaseComponent {
               bsStyle={bsStyleFor('author', this.props.error)}
             />
           </FormGroup>
-          <FormGroup
-            controlId="formBasicText"
-          >
+          <FormGroup controlId="formBasicText">
             <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
             <FormControl
               type="textarea"
@@ -215,11 +202,7 @@ class CommentForm extends BaseComponent {
             />
           </FormGroup>
           <FormGroup controlId="formBasicSubmit">
-            <Button
-              type="submit"
-              className="btn btn-primary"
-              disabled={this.props.isSaving}
-            >
+            <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
@@ -237,10 +220,8 @@ class CommentForm extends BaseComponent {
       <div>
         <hr />
         <Form inline className="commentForm" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formInlineName" >
-            <ControlLabel>
-              {formatMessage(defaultMessages.inputNameLabel)}
-            </ControlLabel>
+          <FormGroup controlId="formInlineName">
+            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
             <FormControl
               type="text"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
@@ -253,9 +234,7 @@ class CommentForm extends BaseComponent {
             />
           </FormGroup>
           <FormGroup controlId="formInlineName">
-            <ControlLabel>
-              {formatMessage(defaultMessages.inputTextLabel)}
-            </ControlLabel>
+            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
             <FormControl
               type="textarea"
               label="Text"
@@ -268,11 +247,7 @@ class CommentForm extends BaseComponent {
               className={css.textFormControl}
             />
           </FormGroup>
-          <Button
-            type="submit"
-            className="btn btn-primary"
-            disabled={this.props.isSaving}
-          >
+          <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
             {this.props.isSaving
               ? `${formatMessage(defaultMessages.inputSaving)}...`
               : formatMessage(defaultMessages.inputPost)}
@@ -290,16 +265,22 @@ class CommentForm extends BaseComponent {
 
     const errorData = error.response && error.response.data;
 
-    const errorElements = _.transform(errorData, (result, errorText, errorFor) => {
-      result.push(<li key={errorFor}><b>{_.upperFirst(errorFor)}:</b> {errorText}</li>);
-    }, []);
+    const errorElements = _.transform(
+      errorData,
+      (result, errorText, errorFor) => {
+        result.push(
+          <li key={errorFor}>
+            <b>{_.upperFirst(errorFor)}:</b> {errorText}
+          </li>,
+        );
+      },
+      [],
+    );
 
     return (
       <Alert bsStyle="danger" key="commentSubmissionError">
         <strong>Your comment was not saved!</strong>
-        <ul>
-          {errorElements}
-        </ul>
+        <ul>{errorElements}</ul>
       </Alert>
     );
   }

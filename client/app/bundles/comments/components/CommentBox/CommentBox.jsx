@@ -29,9 +29,7 @@ class CommentBox extends BaseComponent {
 
   constructor() {
     super();
-    _.bindAll(this, [
-      'refreshComments',
-    ]);
+    _.bindAll(this, ['refreshComments']);
     this.cable = null;
   }
 
@@ -42,17 +40,20 @@ class CommentBox extends BaseComponent {
     this.cable = ActionCable.createConsumer(cableUrl);
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
-    this.cable.subscriptions.create({ channel: 'CommentsChannel' }, {
-      connected: () => {
-        console.log('connected');
+    this.cable.subscriptions.create(
+      { channel: 'CommentsChannel' },
+      {
+        connected: () => {
+          console.log('connected');
+        },
+        disconnected: () => {
+          console.log('disconnected');
+        },
+        received: (comment) => {
+          messageReceived(Immutable.fromJS(comment));
+        },
       },
-      disconnected: () => {
-        console.log('disconnected');
-      },
-      received: (comment) => {
-        messageReceived(Immutable.fromJS(comment));
-      },
-    });
+    );
   }
 
   componentDidMount() {
@@ -88,14 +89,14 @@ class CommentBox extends BaseComponent {
           {formatMessage(defaultMessages.comments)}
           {data.get('isFetching') && formatMessage(defaultMessages.loading)}
         </h2>
-        { SelectLanguage(actions.setLocale, locale) }
+        {SelectLanguage(actions.setLocale, locale)}
         <ul>
           <li>
-            { (data.get('isFetching') && <br />) ||
-              <button type="button" className={css.anchorButton} onClick={this.refreshComments} >
+            {(data.get('isFetching') && <br />) || (
+              <button type="button" className={css.anchorButton} onClick={this.refreshComments}>
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
-            }
+            )}
           </li>
           <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>

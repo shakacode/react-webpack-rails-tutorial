@@ -14,7 +14,7 @@ function stateToProps(state) {
       pathname: state.railsContext.pathname,
     };
   }
-  return { };
+  return {};
 }
 
 class NavigationBarContainer extends BaseComponent {
@@ -26,9 +26,7 @@ class NavigationBarContainer extends BaseComponent {
   render() {
     const { commentsCount, pathname } = this.props;
 
-    return (
-      <NavigationBar {...{ commentsCount, pathname }} />
-    );
+    return <NavigationBar {...{ commentsCount, pathname }} />;
   }
 }
 

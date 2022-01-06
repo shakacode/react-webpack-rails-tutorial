@@ -33,12 +33,10 @@ class SimpleCommentScreen extends BaseComponent {
   }
 
   fetchComments() {
-    return (
-      request
-        .get('comments.json', { responseType: 'json' })
-        .then(res => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
-        .catch(error => this.setState({ fetchCommentsError: error }))
-    );
+    return request
+      .get('comments.json', { responseType: 'json' })
+      .then((res) => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
+      .catch((error) => this.setState({ fetchCommentsError: error }));
   }
 
   handleCommentSubmit(comment) {
@@ -49,26 +47,24 @@ class SimpleCommentScreen extends BaseComponent {
       headers: ReactOnRails.authenticityHeaders(),
     };
 
-    return (
-      request
-        .post('comments.json', { comment }, requestConfig)
-        .then(() => {
-          const { $$comments } = this.state;
-          const $$comment = Immutable.fromJS(comment);
+    return request
+      .post('comments.json', { comment }, requestConfig)
+      .then(() => {
+        const { $$comments } = this.state;
+        const $$comment = Immutable.fromJS(comment);
 
-          this.setState({
-            $$comments: $$comments.unshift($$comment),
-            submitCommentError: null,
-            isSaving: false,
-          });
-        })
-        .catch(error => {
-          this.setState({
-            submitCommentError: error,
-            isSaving: false,
-          });
-        })
-    );
+        this.setState({
+          $$comments: $$comments.unshift($$comment),
+          submitCommentError: null,
+          isSaving: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          submitCommentError: error,
+          isSaving: false,
+        });
+      });
   }
 
   render() {
@@ -83,10 +79,8 @@ class SimpleCommentScreen extends BaseComponent {
 
     return (
       <div className="commentBox container">
-        <h2>
-          {formatMessage(defaultMessages.comments)}
-        </h2>
-        { SelectLanguage(handleSetLocale, locale) }
+        <h2>{formatMessage(defaultMessages.comments)}</h2>
+        {SelectLanguage(handleSetLocale, locale)}
         <ul>
           <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>

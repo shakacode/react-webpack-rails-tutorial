@@ -21,9 +21,7 @@ export default class CommentScreen extends BaseComponent {
     return (
       <div className={`bg-success ${css.notification}`}>
         You have been redirected from
-        <strong>
-          {locationState.redirectFrom}
-        </strong>
+        <strong>{locationState.redirectFrom}</strong>
       </div>
     );
   }
