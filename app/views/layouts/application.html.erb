@@ -3,11 +3,11 @@
 <head>
   <title>RailsReactTutorial</title>
 
-  <%= stylesheet_packs_with_chunks_tag('clientRegistration',
+  <%= stylesheet_pack_tag('client-bundle',
                                         media: 'all',
                                         'data-turbolinks-track': true) %>
 
-  <%= javascript_packs_with_chunks_tag('clientRegistration',
+  <%= javascript_pack_tag('client-bundle',
                                        'data-turbolinks-track': true,
                                        defer: true) %>
 
@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<%= react_component "NavigationBarApp" %>
+<%= react_component "NavigationBarApp", prerender: false %>
 <div class="container">
   <%= yield %>
 </div>

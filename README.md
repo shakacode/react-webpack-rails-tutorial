@@ -219,7 +219,7 @@ We're using Webpack to handle Sass assets so that we can use CSS modules. The be
 For example in [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx), see how we use standard JavaScript import syntax to refer to class names that come from CSS modules:
 
 ```javascript
-import css from './CommentBox.scss';
+import css from './CommentBox.module.scss';
 
 export default class CommentBox extends React.Component {
   render() {
