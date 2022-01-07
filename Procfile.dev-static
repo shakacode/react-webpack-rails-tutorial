@@ -1,9 +1,10 @@
 # You can run these commands in separate shells
 web: rails s -p 3000
+redis: redis-server
 
 # Next line runs a watch process with webpack to compile the changed files.
 # When making frequent changes to client side assets, you will prefer building webpack assets
 # upon saving rather than when you refresh your browser page.
 # Note, if using React on Rails localization you will need to run
 # `bundle exec rake react_on_rails:locale` before you run bin/webpack
-webpack: sh -c 'rm -rf public/packs/* || true && bin/webpack -w'
+webpack: sh -c 'bundle exec rake react_on_rails:locale && rm -rf public/packs/* || true && bin/webpack -w'
