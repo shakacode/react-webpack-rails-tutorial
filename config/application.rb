@@ -12,7 +12,10 @@ module RailsReactTutorial
     config.load_defaults 5.0
 
     # Configuration for the application, engines, and railties goes here.
-    #
+
+    config.action_cable.allowed_request_origins = [Rails.application.secrets.action_cable_url]
+
+
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
