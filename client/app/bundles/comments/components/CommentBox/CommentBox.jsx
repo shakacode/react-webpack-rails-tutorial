@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import ActionCable from '@rails/actioncable';
+import * as ActionCable from '@rails/actioncable';
 import _ from 'lodash';
 import BaseComponent from 'libs/components/BaseComponent';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-
 import CommentForm from './CommentForm/CommentForm';
 import CommentList, { commentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.module.scss';
@@ -24,7 +23,7 @@ class CommentBox extends BaseComponent {
       submitCommentError: PropTypes.string,
       $$comments: PropTypes.arrayOf(commentPropTypes),
     }).isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.objectOf(PropTypes.object).isRequired,
   };
 
   constructor() {
@@ -80,7 +79,6 @@ class CommentBox extends BaseComponent {
       leaveActive: css.elementLeaveActive,
     };
     const locale = data.get('locale') || defaultLocale;
-
     /* eslint-disable no-script-url */
     return (
       <div className="commentBox container">
