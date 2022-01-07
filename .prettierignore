@@ -4,3 +4,5 @@ tmp/
 public/
 coverage/
 spec/support/
+client/app/libs/i18n/translations.js
+client/app/libs/i18n/default.js

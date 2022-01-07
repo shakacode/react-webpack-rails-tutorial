@@ -2,7 +2,4 @@
 import React from 'react';
 import TestUtils from 'react-dom/test-utils';
 
-export {
-  React,
-  TestUtils,
-};
+export { React, TestUtils };

@@ -23,9 +23,7 @@ export default (props, railsContext) => {
   });
 
   // Sync dispatched route actions to the history
-  const finalCreateStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware),
-  )(createStore);
+  const finalCreateStore = compose(applyMiddleware(thunkMiddleware, loggerMiddleware))(createStore);
 
   return finalCreateStore(reducer, initialState);
 };

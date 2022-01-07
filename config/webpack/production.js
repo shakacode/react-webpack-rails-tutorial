@@ -19,7 +19,7 @@ const optimization = {
   },
 };
 
-clientEnvironment.splitChunks((config) => ({ ...config, optimization}));
+clientEnvironment.splitChunks((config) => ({ ...config, optimization }));
 
 const clientConfig = clientEnvironment.toWebpackConfig();
 

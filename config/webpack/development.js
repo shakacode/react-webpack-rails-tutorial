@@ -20,20 +20,18 @@ const optimization = {
   },
 };
 
-clientEnvironment.splitChunks((config) => ({ ...config, optimization}))
+clientEnvironment.splitChunks((config) => ({ ...config, optimization }));
 
 const clientConfig = merge(clientEnvironment.toWebpackConfig(), {
-    mode: 'development',
-    entry: {
-        'vendor-bundle': [
-            'jquery-ujs',
-        ],
-    },
-    output: {
-        filename: '[name].js',
-        chunkFilename: '[name].bundle.js',
-        path: clientEnvironment.config.output.path
-    }
-})
+  mode: 'development',
+  entry: {
+    'vendor-bundle': ['jquery-ujs'],
+  },
+  output: {
+    filename: '[name].js',
+    chunkFilename: '[name].bundle.js',
+    path: clientEnvironment.config.output.path,
+  },
+});
 
 module.exports = [clientConfig, serverConfig];

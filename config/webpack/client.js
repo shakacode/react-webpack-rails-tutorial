@@ -5,18 +5,19 @@ const webpack = require('webpack');
 const environment = require('./environment');
 
 if (devBuild && !isHMR) {
-  environment.loaders
-    .get('sass')
-    .use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
+  environment.loaders.get('sass').use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
 }
 
-environment.plugins.append('Provide', new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery',
-  jquery: 'jquery',
-  'window.jQuery': 'jquery',
-  Popper: ['popper.js', 'default']
-}))
+environment.plugins.append(
+  'Provide',
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    jquery: 'jquery',
+    'window.jQuery': 'jquery',
+    Popper: ['popper.js', 'default'],
+  }),
+);
 
 if (devBuild && isHMR) {
   environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());

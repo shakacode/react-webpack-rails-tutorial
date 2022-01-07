@@ -1,12 +1,14 @@
 extends:
   - eslint-config-shakacode
+  - plugin:react/recommended
+  - plugin:prettier/recommended
+  - plugin:jsx-a11y/recommended
   - prettier
 
-parserOptions:
-  ecmaFeatures:
-    jsx: true
-
 plugins:
+  - react
+  - jsx-a11y
+  - jest
   - prettier
 
 globals:
@@ -29,6 +31,11 @@ rules:
 
   # https://github.com/benmosher/eslint-plugin-import/issues/340
   import/no-extraneous-dependencies: 0
+
+  prettier/prettier: "error"
+
+  # currently deprecated https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/no-onchange.md
+  jsx-a11y/no-onchange: 0
 
 settings:
   import/core-modules:
