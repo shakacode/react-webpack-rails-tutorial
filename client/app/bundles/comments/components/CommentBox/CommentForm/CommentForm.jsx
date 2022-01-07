@@ -38,7 +38,7 @@ class CommentForm extends BaseComponent {
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
-    intl: PropTypes.objectOf(PropTypes.object).isRequired,
+    intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   constructor(props, context) {

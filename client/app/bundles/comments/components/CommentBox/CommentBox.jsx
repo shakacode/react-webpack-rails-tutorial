@@ -15,15 +15,15 @@ class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
-      fetchComments: PropTypes.function,
+      fetchComments: PropTypes.func,
     }),
     data: PropTypes.shape({
-      isFetching: PropTypes.boolean,
-      isSaving: PropTypes.boolean,
+      isFetching: PropTypes.func,
+      isSaving: PropTypes.bool,
       submitCommentError: PropTypes.string,
       $$comments: PropTypes.arrayOf(commentPropTypes),
     }).isRequired,
-    intl: PropTypes.objectOf(PropTypes.object).isRequired,
+    intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   constructor() {
