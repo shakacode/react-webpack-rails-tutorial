@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
 ruby "2.7.3"
 
 gem "react_on_rails", "12.5.2"
@@ -9,9 +11,6 @@ gem "webpacker", "6.0.0.rc.6"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
 gem "rails", "~> 6.1.4"
-
-# Note: We're using sqllite3 for development and testing
-# gem "sqlite3", group: [:development, :test]
 
 gem "pg"
 
@@ -44,7 +43,7 @@ gem "rails-html-sanitizer"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer
-gem "mini_racer"
+gem "mini_racer", platforms: :ruby
 
 gem "autoprefixer-rails"
 
@@ -105,4 +104,3 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers", "3.9.4"
 end
-gem 'mini_racer', platforms: :ruby
