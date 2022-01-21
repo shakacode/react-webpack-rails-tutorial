@@ -1,0 +1,14 @@
+// scss-lint:disable ImportantRule
+// Due to bootstrap overriding values in css-modules because of the specificity of the rule.
+.nameFormControl {
+  margin-left: 10px;
+  margin-right: 20px;
+  // Must set width to !important b/c CSS modules value will be overriden by the bootstrap value
+  width: 150px !important;
+}
+
+.textFormControl {
+  margin-left: 10px;
+  margin-right: 20px;
+  width: 250px !important;
+}

@@ -9,7 +9,7 @@ import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import { translations } from 'libs/i18n/translations';
 
-import CommentForm from '../CommentBox/CommentForm/CommentForm';
+import StimulusCommentForm from '../CommentBox/StimulusCommentForm/StimulusCommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
 import css from './StimulusCommentScreen.module.scss';
 
@@ -91,7 +91,7 @@ class StimulusCommentScreen extends BaseComponent {
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
           <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
         </ul>
-        <CommentForm
+        <StimulusCommentForm
           isSaving={this.state.isSaving}
           actions={{ submitComment: this.handleCommentSubmit }}
           error={this.state.submitCommentError}
