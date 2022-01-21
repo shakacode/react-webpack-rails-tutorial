@@ -1,10 +1,11 @@
 // Example of React + Redux
 import ReactOnRails from 'react-on-rails';
 
-import App from './App.jsx';
-import RouterApp from './ServerRouterApp.jsx';
-import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen.jsx';
-import NavigationBarApp from './NavigationBarApp.jsx';
+import App from './App';
+import RouterApp from './ServerRouterApp';
+import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleCommentScreen';
+import StimulusCommentScreen from '../components/StimulusCommentScreen/StimulusCommentScreen';
+import NavigationBarApp from './NavigationBarApp';
 import routerCommentsStore from '../store/routerCommentsStore';
 import commentsStore from '../store/commentsStore';
 import Footer from '../components/Footer/Footer';
@@ -15,6 +16,7 @@ ReactOnRails.register({
   NavigationBarApp,
   SimpleCommentScreen,
   Footer,
+  StimulusCommentScreen,
 });
 
 ReactOnRails.registerStore({

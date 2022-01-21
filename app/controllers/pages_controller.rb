@@ -36,6 +36,8 @@ class PagesController < ApplicationController
 
   def simple; end
 
+  def stimulus; end
+
   private
 
   def set_comments

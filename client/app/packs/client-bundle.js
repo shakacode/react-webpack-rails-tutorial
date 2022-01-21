@@ -4,13 +4,14 @@ import 'bootstrap-loader';
 import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
 
-import App from '../bundles/comments/startup/App.jsx';
-import RouterApp from '../bundles/comments/startup/ClientRouterApp.jsx';
-import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen.jsx';
+import App from '../bundles/comments/startup/App';
+import RouterApp from '../bundles/comments/startup/ClientRouterApp';
+import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen';
+import StimulusCommentScreen from '../bundles/comments/components/StimulusCommentScreen/StimulusCommentScreen';
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
-import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp.jsx';
-import Footer from '../bundles/comments/components/Footer/Footer.jsx';
+import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
+import Footer from '../bundles/comments/components/Footer/Footer';
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
@@ -24,6 +25,7 @@ ReactOnRails.register({
   NavigationBarApp,
   SimpleCommentScreen,
   Footer,
+  StimulusCommentScreen,
 });
 
 ReactOnRails.registerStore({
