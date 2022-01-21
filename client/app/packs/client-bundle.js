@@ -5,6 +5,7 @@ import 'jquery-ujs';
 import App from '../bundles/comments/startup/App';
 import RouterApp from '../bundles/comments/startup/ClientRouterApp';
 import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen';
+import StimulusCommentScreen from '../bundles/comments/components/StimulusCommentScreen/StimulusCommentScreen';
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
@@ -20,6 +21,7 @@ ReactOnRails.register({
   RouterApp,
   NavigationBarApp,
   SimpleCommentScreen,
+  StimulusCommentScreen,
 });
 
 ReactOnRails.registerStore({
