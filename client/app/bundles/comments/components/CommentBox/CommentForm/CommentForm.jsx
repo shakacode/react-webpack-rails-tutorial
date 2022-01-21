@@ -15,11 +15,11 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { defaultMessages } from 'libs/i18n/default';
 import BaseComponent from 'libs/components/BaseComponent';
 
-import css from './CommentForm.scss';
+import css from './CommentForm.module.scss';
 
 const emptyComment = { author: '', text: '' };
 
@@ -38,7 +38,7 @@ class CommentForm extends BaseComponent {
     actions: PropTypes.object.isRequired,
     error: PropTypes.any,
     cssTransitionGroupClassNames: PropTypes.object.isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   constructor(props, context) {
@@ -326,7 +326,7 @@ class CommentForm extends BaseComponent {
     // For animation with ReactCSSTransitionGroup
     //   https://facebook.github.io/react/docs/animation.html
     // The 500 must correspond to the 0.5s in:
-    //   client/app/bundles/comments/components/CommentBox/CommentBox.scss:6
+    //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:6
     return (
       <div>
         <ReactCSSTransitionGroup

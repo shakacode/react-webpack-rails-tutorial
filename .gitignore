@@ -27,8 +27,8 @@ vendor/ruby
 .ruby-gemset
 
 # Generated js bundles
-/public/webpack/
-/public/webpack-test/
+/public/packs
+/public/packs-test
 
 # Rubymine/IntelliJ
 .idea
@@ -38,3 +38,7 @@ spec/examples.txt
 # Ignore i18n-js
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
+
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

@@ -33,15 +33,15 @@ default: &default
 
 development:
   <<: *default
-  database: react_webpack_dev
+  database: react-webpack-rails-tutorial
 
- # Warning: The database defined as "test" will be erased and
- # re-generated from your development database when you run "rake".
- # Do not set this db to the same as development or production.
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: react_webpack_test
+  database: react-webpack-rails-tutorial
 
 production:
   <<: *default
-  database: react_webpack_dev
+  database: react-webpack-rails-tutorial

@@ -14,7 +14,7 @@ feature "Edit a comment", existing_comment: true do
 
       scenario "comment is updated" do
         expect(page).to have_css(".comment", text: :edited_name)
-        expect(page).to have_success_message
+        expect(page).to have_css("#notice", text: "Comment was successfully updated.")
       end
     end
 
@@ -31,7 +31,7 @@ end
 private
 
 def have_success_message
-  have_css("#notice", "Comment was successfully created.")
+  have_css("#notice", text: "Comment was successfully created.")
 end
 
 def have_failure_message

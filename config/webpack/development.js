@@ -1,39 +1,28 @@
+// The source code including full typescript support is available at: 
+// https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/development.js
+
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// We need to compile both our development JS (for serving to the client) and our server JS
-// (for SSR of React components). This is easy enough as we can export arrays of webpack configs.
-const clientEnvironment = require('./client');
-const serverConfig = require('./server');
-const merge = require('webpack-merge');
+const { devServer, inliningCss } = require('@rails/webpacker');
 
-const optimization = {
-  splitChunks: {
-    chunks: 'async',
-    cacheGroups: {
-      vendor: {
-        chunks: 'async',
-        name: 'vendor',
-        test: 'vendor',
-        enforce: true,
-      },
-    },
-  },
+const webpackConfig = require('./webpackConfig');
+
+const developmentEnvOnly = (clientWebpackConfig, _serverWebpackConfig) => {
+  // plugins
+  if (inliningCss) {
+    // Note, when this is run, we're building the server and client bundles in separate processes.
+    // Thus, this plugin is not applied to the server bundle.
+
+    // eslint-disable-next-line global-require
+    const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+    clientWebpackConfig.plugins.push(
+      new ReactRefreshWebpackPlugin({
+        overlay: {
+          sockPort: devServer.port,
+        },
+      }),
+    );
+  }
 };
 
-clientEnvironment.splitChunks((config) => Object.assign({}, config, { optimization: optimization }))
-
-const clientConfig = merge(clientEnvironment.toWebpackConfig(), {
-    mode: 'development',
-    entry: {
-        'vendor-bundle': [
-            'jquery-ujs',
-        ],
-    },
-    output: {
-        filename: '[name].js',
-        chunkFilename: '[name].bundle.js',
-        path: clientEnvironment.config.output.path
-    }
-})
-
-module.exports = [clientConfig, serverConfig];
+module.exports = webpackConfig(developmentEnvOnly);
