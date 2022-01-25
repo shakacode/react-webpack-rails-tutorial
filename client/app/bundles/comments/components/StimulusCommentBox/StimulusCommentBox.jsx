@@ -6,11 +6,11 @@ import BaseComponent from 'libs/components/BaseComponent';
 import { injectIntl } from 'react-intl';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-import CommentForm from './CommentForm/CommentForm';
-import CommentList, { commentPropTypes } from './CommentList/CommentList';
-import css from './CommentBox.module.scss';
+import CommentForm from '../CommentBox/CommentForm/CommentForm';
+import CommentList, { commentPropTypes } from '../CommentBox/CommentList/CommentList';
+import css from './StimulusCommentBox.module.scss';
 
-class CommentBox extends BaseComponent {
+class StimulusCommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
@@ -22,49 +22,19 @@ class CommentBox extends BaseComponent {
       submitCommentError: PropTypes.string,
       $$comments: PropTypes.arrayOf(commentPropTypes),
     }).isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
     intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   constructor() {
     super();
-    _.bindAll(this, ['refreshComments']);
-    this.cable = null;
-  }
-
-  subscribeChannel() {
-    const { messageReceived } = this.props.actions;
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
-    // ActionCable is a global added through webpack.providePlugin
-    // eslint-disable-next-line no-undef
-    this.cable = ActionCable.createConsumer(cableUrl);
-
-    /* eslint no-console: ["error", { allow: ["log"] }] */
-    this.cable.subscriptions.create(
-      { channel: 'CommentsChannel' },
-      {
-        connected: () => {
-          console.log('connected');
-        },
-        disconnected: () => {
-          console.log('disconnected');
-        },
-        received: (comment) => {
-          messageReceived(Immutable.fromJS(comment));
-        },
-      },
-    );
+    _.bindAll(this, [
+      'refreshComments',
+    ]);
   }
 
   componentDidMount() {
     const { fetchComments } = this.props.actions;
     fetchComments();
-    this.subscribeChannel();
-  }
-
-  componentWillUnmount() {
-    this.cable.subscriptions.remove({ channel: 'CommentsChannel' });
   }
 
   refreshComments() {
@@ -84,7 +54,7 @@ class CommentBox extends BaseComponent {
     const locale = data.get('locale') || defaultLocale;
     /* eslint-disable no-script-url */
     return (
-      <div className="commentBox container">
+      <div className="CommentBox container" data-controller="comments">
         <h2>
           {formatMessage(defaultMessages.comments)}
           {data.get('isFetching') && formatMessage(defaultMessages.loading)}
@@ -119,4 +89,4 @@ class CommentBox extends BaseComponent {
   }
 }
 
-export default injectIntl(CommentBox);
+export default injectIntl(StimulusCommentBox);
