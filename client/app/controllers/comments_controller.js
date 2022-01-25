@@ -1,8 +1,10 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
+  static targets = ['refresh'];
+
   connect() {
-    console.log("comments_controller.js: connect()")
+    console.log('connected to Stimulus comments_controller');
 
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
@@ -11,14 +13,16 @@ export default class extends Controller {
 
     this.cable.subscriptions.create('CommentsChannel', {
       connected: () => {
-        console.log('connected using Stimulus');
+        console.log('connected to comments channel using Stimulus controller');
       },
       disconnected: () => {
-        console.log('disconnected using Stimulus');
+        console.log('disconnected from comments channel via Stimulus');
       },
       received: (comment) => {
-        console.log('Comment received via Stimulus', comment);
+        console.log('comment received via Stimulus', comment);
+
+        this.refreshTarget.click();
       },
     });
-  };
-};
+  }
+}
