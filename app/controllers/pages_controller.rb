@@ -34,7 +34,10 @@ class PagesController < ApplicationController
 
   def simple; end
 
-  def stimulus; end
+  def stimulus
+    redux_store("commentsStore", props: comments_json_string)
+    render_html
+  end
 
   private
 

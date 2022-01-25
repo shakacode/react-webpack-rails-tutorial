@@ -1,140 +1,60 @@
 import React from 'react';
-import request from 'axios';
-import Immutable from 'immutable';
-import _ from 'lodash';
-import ReactOnRails from 'react-on-rails';
-import { IntlProvider, injectIntl } from 'react-intl';
-import BaseComponent from 'libs/components/BaseComponent';
-import SelectLanguage from 'libs/i18n/selectLanguage';
-import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-import { translations } from 'libs/i18n/translations';
+import PropTypes from 'prop-types';
 
-import StimulusCommentForm from '../CommentBox/StimulusCommentForm/StimulusCommentForm';
-import CommentList from '../CommentBox/CommentList/CommentList';
+import BaseComponent from 'libs/components/BaseComponent';
+
+import StimulusCommentBox from '../StimulusCommentBox/StimulusCommentBox';
 import css from './StimulusCommentScreen.module.scss';
 
-class StimulusCommentScreen extends BaseComponent {
-  constructor(props) {
-    super(props);
+export default class StimulusCommentScreen extends BaseComponent {
+  static propTypes = {
+    actions: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
+    locationState: PropTypes.object,
+  };
 
-    this.state = {
-      $$comments: Immutable.fromJS([]),
-      isSaving: false,
-      fetchCommentsError: null,
-      submitCommentError: null,
-    };
+  renderNotification() {
+    const { locationState } = this.props;
 
-    _.bindAll(this, 'fetchComments', 'handleCommentSubmit');
-  }
-
-  componentDidMount() {
-    this.fetchComments();
-  }
-
-  fetchComments() {
-    return (
-      request
-        .get('comments.json', { responseType: 'json' })
-        .then(res => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
-        .catch(error => this.setState({ fetchCommentsError: error }))
-    );
-  }
-
-  handleCommentSubmit(comment) {
-    this.setState({ isSaving: true });
-
-    const requestConfig = {
-      responseType: 'json',
-      headers: ReactOnRails.authenticityHeaders(),
-    };
+    if (!locationState || !locationState.redirectFrom) return null;
 
     return (
-      request
-        .post('comments.json', { comment }, requestConfig)
-        .then(() => {
-          const { $$comments } = this.state;
-          const $$comment = Immutable.fromJS(comment);
-
-          this.setState({
-            $$comments: $$comments.unshift($$comment),
-            submitCommentError: null,
-            isSaving: false,
-          });
-        })
-        .catch(error => {
-          this.setState({
-            submitCommentError: error,
-            isSaving: false,
-          });
-        })
-    );
-  }
-
-  render() {
-    const { handleSetLocale, locale, intl } = this.props;
-    const { formatMessage } = intl;
-    const cssTransitionGroupClassNames = {
-      enter: css.elementEnter,
-      enterActive: css.elementEnterActive,
-      leave: css.elementLeave,
-      leaveActive: css.elementLeaveActive,
-    };
-
-    return (
-      <div className="commentBox container">
-        <h2>
-          {formatMessage(defaultMessages.comments)}
-        </h2>
-        {SelectLanguage(handleSetLocale, locale)}
-        <ul>
-          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
-          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
-          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
-        </ul>
-        <StimulusCommentForm
-          isSaving={this.state.isSaving}
-          actions={{ submitComment: this.handleCommentSubmit }}
-          error={this.state.submitCommentError}
-          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-        />
-        <CommentList
-          $$comments={this.state.$$comments}
-          error={this.state.fetchCommentsError}
-          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-        />
+      <div className={`bg-success ${css.notification}`}>
+        You have been redirected from
+        <strong>
+          {locationState.redirectFrom}
+        </strong>
       </div>
     );
   }
-}
-
-export default class I18nWrapper extends BaseComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      locale: defaultLocale,
-    };
-
-    _.bindAll(this, 'handleSetLocale');
-  }
-
-  handleSetLocale(locale) {
-    this.setState({ locale });
-  }
 
   render() {
-    const { locale } = this.state;
-    const messages = translations[locale];
-    const InjectedStimulusCommentScreen = injectIntl(StimulusCommentScreen);
+    const { data, actions } = this.props;
 
     return (
-      <IntlProvider locale={locale} key={locale} messages={messages}>
-        <InjectedStimulusCommentScreen
-          {...this.props}
-          locale={locale}
-          handleSetLocale={this.handleSetLocale}
-        />
-      </IntlProvider>
+      <div>
+        {this.renderNotification()}
+        <div>
+          <StimulusCommentBox
+            pollInterval={60000}
+            data={data}
+            actions={actions}
+            ajaxCounter={data.get('ajaxCounter')}
+          />
+          <div className="container">
+            <a href="http://www.shakacode.com">
+              <h3>
+                <div className={css.logo} />
+                Example of styling using image-url and Open Sans Light custom font
+              </h3>
+            </a>
+            <a href="https://twitter.com/railsonmaui">
+              <div className={css.twitterImage} />
+              Rails On Maui on Twitter
+            </a>
+          </div>
+        </div>
+      </div>
     );
   }
 }
