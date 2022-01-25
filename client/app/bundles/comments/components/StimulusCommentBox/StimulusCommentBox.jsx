@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 import _ from 'lodash';
 import BaseComponent from 'libs/components/BaseComponent';
 import { injectIntl } from 'react-intl';
@@ -63,7 +62,7 @@ class StimulusCommentBox extends BaseComponent {
         <ul>
           <li>
             {(data.get('isFetching') && <br />) ||
-              <button className={css.anchorButton} onClick={this.refreshComments} >
+              <button className={css.anchorButton} data-comments-target='refresh' onClick={this.refreshComments} >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
             }
