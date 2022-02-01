@@ -85,10 +85,10 @@ class CommentBox extends BaseComponent {
           {formatMessage(defaultMessages.comments)}
           {data.get('isFetching') && formatMessage(defaultMessages.loading)}
         </h2>
-        {SelectLanguage(actions.setLocale, locale)}
+        { SelectLanguage(actions.setLocale, locale) }
         <ul>
           <li>
-            {(data.get('isFetching') && <br />) ||
+            { (data.get('isFetching') && <br />) ||
               <button className={css.anchorButton} onClick={this.refreshComments} >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
