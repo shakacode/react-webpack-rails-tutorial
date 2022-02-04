@@ -12,7 +12,9 @@
     <li>To see Action Cable instantly update two browsers, open two browsers and submit a comment!</li>
   </ul>
   <!-- TODO: Form -->
-  <%= render "horizontal_form" %>
+  <div data-controller="comments">
+  <%= render "comments/turbo/horizontal_form" %>
+  </div>
   <!-- TODO: List -->
   <div id="comment_list">
     <% @comments.each do |comment| %>
