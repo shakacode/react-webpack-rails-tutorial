@@ -1,11 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
+import marked from 'marked';
 
 export default class extends Controller {
+  static targets = ['commentList', 'commentText']
 
   resetText() {
-    let commentField = document.getElementById('comment_text');
-    console.log(commentField)
-    commentField.value = '';
+    this.commentTextTarget.value = '';
   }
 
   connect() {
@@ -24,9 +24,9 @@ export default class extends Controller {
         console.log('disconnected from comments channel via Stimulus');
       },
       received: (comment) => {
-        const commentList = document.getElementById('comment_list');
-        const htmlComment = `<div><h2>${comment.author}</h2><span>${comment.text}</span></div>`;
-        commentList.insertAdjacentHTML('afterbegin', htmlComment);
+        const htmlText = marked.parse(comment.text);
+        const htmlComment = `<div><h2>${comment.author}</h2><span>${htmlText}</span></div>`;
+        this.commentListTarget.insertAdjacentHTML('afterbegin', htmlComment);
       },
     });
   }

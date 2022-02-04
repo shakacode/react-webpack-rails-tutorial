@@ -269,6 +269,7 @@ GEM
       execjs (~> 2.5)
       rails (>= 5.2)
       rainbow (~> 3.0)
+    redcarpet (3.5.1)
     redis (3.3.3)
     regexp_parser (2.8.1)
     reline (0.3.6)
@@ -428,6 +429,7 @@ DEPENDENCIES
   rails_best_practices
   rainbow
   react_on_rails (= 13.2.0)
+  redcarpet
   redis (= 3.3.3)
   rspec-rails (~> 6.0.0)
   rubocop (= 1.24.1)

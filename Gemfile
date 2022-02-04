@@ -54,6 +54,8 @@ gem "net-smtp", require: false
 
 gem "hotwire-rails"
 
+gem "redcarpet"
+
 # jquery as the JavaScript library has been moved under /client and managed by npm.
 # It is critical to not include any of the jquery gems when following this pattern or
 # else you might have multiple jQuery versions.

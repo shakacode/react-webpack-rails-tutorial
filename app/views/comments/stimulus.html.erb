@@ -13,17 +13,17 @@
   </ul>
   <!-- TODO: Form -->
   <div data-controller="comments">
-  <%= render "comments/turbo/horizontal_form" %>
-  </div>
-  <!-- TODO: List -->
-  <div id="comment_list">
-    <% @comments.each do |comment| %>
-      <!-- TODO: can this be done with partial -->  
-      <div>
-        <h2><%= comment.author %></h2>
-        <span><%= comment.text %></span>
-      </div>
-    <% end %>
-  </div>
+    <%= render "comments/turbo/horizontal_form" %>
+    <!-- TODO: List -->
+    <div data-comments-target="commentList">
+      <% @comments.each do |comment| %>
+        <!-- TODO: can this be done with partial -->  
+        <div>
+          <h2><%= comment.author %></h2>
+          <span><%= markdown(comment.text) %></span>
+        </div>
+      <% end %>
+    </div>
     <hr />
+  </div>
 </div>
