@@ -27,7 +27,6 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         if turbo_frame_request?
-          format.turbo_stream
           format.html
         else
           format.html { redirect_to @comment, notice: "Comment was successfully created." }
@@ -68,19 +67,19 @@ class CommentsController < ApplicationController
 
   def horizontal_form    
     respond_to do |format|
-      format.html { render partial: "horizontal_form" }
+      format.html { render partial: "comments/turbo/horizontal_form" }
     end
   end
 
   def stacked_form
     respond_to do |format|
-      format.html { render partial: "stacked_form" }
+      format.html { render partial: "comments/turbo/stacked_form" }
     end
   end
 
   def inline_form
     respond_to do |format|
-      format.html { render partial: "inline_form" }
+      format.html { render partial: "comments/turbo/inline_form" }
     end
   end
 

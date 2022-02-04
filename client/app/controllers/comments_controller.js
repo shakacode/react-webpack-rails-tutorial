@@ -1,7 +1,12 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ['refresh'];
+
+  resetText() {
+    let commentField = document.getElementById('comment_text');
+    console.log(commentField)
+    commentField.value = '';
+  }
 
   connect() {
     console.log('connected to Stimulus comments_controller');
@@ -19,9 +24,9 @@ export default class extends Controller {
         console.log('disconnected from comments channel via Stimulus');
       },
       received: (comment) => {
-        console.log('comment received via Stimulus', comment);
-
-        this.refreshTarget.click();
+        const commentList = document.getElementById('comment_list');
+        const htmlComment = `<div><h2>${comment.author}</h2><span>${comment.text}</span></div>`;
+        commentList.insertAdjacentHTML('afterbegin', htmlComment);
       },
     });
   }
