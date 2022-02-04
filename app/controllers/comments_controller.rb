@@ -1,20 +1,18 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit update destroy]
+  before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
+  before_action :set_comments, only: %i[index stimulus]
 
   # GET /comments
   # GET /comments.json
-  def index
-    @comments = Comment.all.order("id DESC")
-  end
+  def index; end
 
   # GET /comments/1
   # GET /comments/1.json
   def show; end
 
   # GET /comments/new
-  def new
-    @comment = Comment.new
-  end
+  def new; end
 
   # GET /comments/1/edit
   def edit; end
@@ -26,8 +24,13 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: "Comment was successfully created." }
-        format.json { render :show, status: :created, location: @comment }
+        if turbo_frame_request?
+          format.turbo_stream
+          format.html          
+        else
+          format.html { redirect_to @comment, notice: "Comment was successfully created." }
+          format.json { render :show, status: :created, location: @comment }
+        end
       else
         format.html { render :new }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
@@ -59,11 +62,39 @@ class CommentsController < ApplicationController
     end
   end
 
+  def stimulus; end
+
+  def horizontal_form    
+    respond_to do |format|
+      format.html { render partial: "horizontal_form" }
+    end
+  end
+
+  def stacked_form
+    respond_to do |format|
+      format.html { render partial: "stacked_form" }
+    end
+  end
+
+  def inline_form
+    respond_to do |format|
+      format.html { render partial: "inline_form" }
+    end
+  end
+
   private
+
+  def set_comments
+    @comments = Comment.all.order("id DESC")
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment
     @comment = Comment.find(params[:id])
+  end
+
+  def new_comment
+    @comment = Comment.new
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

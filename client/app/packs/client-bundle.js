@@ -2,6 +2,8 @@ import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
 import 'jquery-ujs';
 import controllers from '../controllers';
+import { Turbo } from "@hotwired/turbo-rails";
+Turbo.session.drive = false;
 
 import App from '../bundles/comments/startup/App';
 import RouterApp from '../bundles/comments/startup/ClientRouterApp';

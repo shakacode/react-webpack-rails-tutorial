@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
+    "@hotwired/stimulus": "^3.0.1",
+    "@hotwired/turbo-rails": "^7.1.1",
     "@rails/actioncable": "6.1.4-4",
     "@rails/webpacker": "^6.0.0-rc.6",
     "autoprefixer": "^7.1.5",
