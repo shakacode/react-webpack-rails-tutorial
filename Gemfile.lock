@@ -242,6 +242,7 @@ GEM
       rails (>= 5.2)
       rainbow (~> 3.0)
       webpacker (>= 4.2)
+    redcarpet (3.5.1)
     redis (3.3.3)
     regexp_parser (2.2.0)
     require_all (3.0.0)
@@ -394,6 +395,7 @@ DEPENDENCIES
   rails_best_practices
   rainbow
   react_on_rails (= 12.5.2)
+  redcarpet
   redis (= 3.3.3)
   rspec-rails
   rubocop
