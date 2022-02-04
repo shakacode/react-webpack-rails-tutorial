@@ -1,0 +1,27 @@
+<h2>Stimulus + Rails Backend (with <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
+  <%= render "pages/header" %>
+
+<div class="container">
+  <h2>Comments</h2>
+  <!-- TODO: Language select dropdown -->
+  <ul>
+    <li><button class="link-primary">Force Refresh of All Comments.</button></li>
+    <li>Text supports Github Flavored Markdown.</li>
+    <li>Comments older than 24 hours are deleted.</li>
+    <li>Name is preserved. Text is reset, between submits</li>
+    <li>To see Action Cable instantly update two browsers, open two browsers and submit a comment!</li>
+  </ul>
+  <!-- TODO: Form -->
+  <%= render "horizontal_form" %>
+  <!-- TODO: List -->
+  <div id="comment_list">
+    <% @comments.each do |comment| %>
+      <!-- TODO: can this be done with partial -->  
+      <div>
+        <h2><%= comment.author %></h2>
+        <span><%= comment.text %></span>
+      </div>
+    <% end %>
+  </div>
+    <hr />
+</div>

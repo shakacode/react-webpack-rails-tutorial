@@ -1143,6 +1143,19 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
+"@hotwired/turbo-rails@^7.1.1":
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.1.1.tgz#35c03b92b5c86f0137ed08bef843d955ec9bbe83"
+  integrity sha512-ZXpxUjCfkdbuXfoGrsFK80qsVzACs8xCfie9rt2jMTSN6o1olXVA0Nrk8u02yNEwSiVJm/4QSOa8cUcMj6VQjg==
+  dependencies:
+    "@hotwired/turbo" "^7.1.0"
+    "@rails/actioncable" "^7.0"
+
+"@hotwired/turbo@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.1.0.tgz#27e44e0e3dc5bd1d4bda0766d579cf5a14091cd7"
+  integrity sha512-Q8kGjqwPqER+CtpQudbH+3Zgs2X4zb6pBAlr6NsKTXadg45pAOvxI9i4QpuHbwSzR2+x87HUm+rot9F/Pe8rxA==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
@@ -1484,6 +1497,34 @@
   version "7.0.4-1"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4-1.tgz#b3b9869ff5510860098db42decf8be034e0c29e0"
   integrity sha512-uY02jap6xLuU/wS5FN1Fyvs2PT22Che7cvKUtQnYdR4WpteqbGrhOFBax3OfySoxIG5zOngMdSikZ2n2lACPLw==
+
+"@rails/actioncable@^7.0":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.1.tgz#8f383b672e142d009f89b725d49b0832d99da74a"
+  integrity sha512-lbGc1z2RXdiWZJE/8o2GSe2gek82EoKd2YvjRrqV//0J3/JImONUYwZ2XPmS1R9R2oth1XlIG0YidqdeTty0TA==
+
+"@rails/webpacker@^6.0.0-rc.6":
+  version "6.0.0-rc.6"
+  resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-6.0.0-rc.6.tgz#04af15dc33697e09aa492da54d2093cdd15573ff"
+  integrity sha512-nbDxn3KsSoLeJgVpU3J81wiXLg4vErEahWdi08BJx5EO9aS6+mXWhOXHKyQogCxLkBMvLZqOafUnJMcK9O+9sA==
+  dependencies:
+    "@babel/core" "^7.15.5"
+    "@babel/plugin-proposal-class-properties" "^7.14.5"
+    "@babel/plugin-transform-runtime" "^7.15.0"
+    "@babel/preset-env" "^7.15.6"
+    "@babel/runtime" "^7.15.4"
+    babel-loader "^8.2.2"
+    compression-webpack-plugin "^9.0.0"
+    glob "^7.2.0"
+    js-yaml "^4.1.0"
+    path-complete-extname "^1.0.0"
+    pnp-webpack-plugin "^1.7.0"
+    terser-webpack-plugin "^5.2.4"
+    webpack "^5.53.0"
+    webpack-assets-manifest "^5.0.6"
+    webpack-cli "^4.8.0"
+    webpack-merge "^5.8.0"
+    webpack-sources "^3.2.1"
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.6"
