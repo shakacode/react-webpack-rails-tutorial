@@ -1,29 +1,27 @@
 <h2>Stimulus + Rails Backend (with <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
   <%= render "pages/header" %>
 
-<div class="container">
+<div class="container" data-controller="comments">
   <h2>Comments</h2>
-  <!-- TODO: Language select dropdown -->
   <ul>
-    <li><button class="link-primary">Force Refresh of All Comments.</button></li>
+    <li><a class="link-primary" data-action="click->comments#refreshCommentList">Force Refresh of All Comments.</a></li>
     <li>Text supports Github Flavored Markdown.</li>
     <li>Comments older than 24 hours are deleted.</li>
     <li>Name is preserved. Text is reset, between submits</li>
     <li>To see Action Cable instantly update two browsers, open two browsers and submit a comment!</li>
   </ul>
-  <!-- TODO: Form -->
-  <div data-controller="comments">
+  <div>
     <%= render "comments/turbo/horizontal_form" %>
-    <!-- TODO: List -->
-    <div data-comments-target="commentList">
-      <% @comments.each do |comment| %>
-        <!-- TODO: can this be done with partial -->  
-        <div>
-          <h2><%= comment.author %></h2>
-          <span><%= markdown(comment.text) %></span>
-        </div>
-      <% end %>
-    </div>
-    <hr />
+    <%= render "comments/turbo/comment_list" %> 
+    <div class="link-container">
+      <a href="https://www.shakacode.com">
+        <div class="logo"></div>
+        <h3>Example of styling using image-url and Open Sans Light custom font</h3>
+      </a>
+      <a href="https://twitter.com/railsonmaui">
+        <div class="twitterImage"></div>
+        Rails On Maui on Twitter
+      </a>
+    </div>  
   </div>
 </div>

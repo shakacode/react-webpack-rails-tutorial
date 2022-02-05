@@ -2,10 +2,16 @@ import { Controller } from '@hotwired/stimulus';
 import marked from 'marked';
 
 export default class extends Controller {
-  static targets = ['commentList', 'commentText']
+  static targets = ['commentList', 'commentText', 'commentRefresh']
 
   resetText() {
     this.commentTextTarget.value = '';
+  }
+
+  refreshCommentList() {
+    console.log('click')
+    const refreshBtn = this.commentRefreshTarget;
+    refreshBtn.click();
   }
 
   connect() {
