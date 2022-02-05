@@ -8,3 +8,52 @@ $fonts-url-path: '../fonts';
   font-family: 'OpenSans-Light';
   src: url('#{$fonts-url-path}/OpenSans-Light.ttf') format('truetype');
 }
+
+#comment_list {
+  h2 {
+    color: blue;
+  }
+  span {
+    color: purple;
+    
+    h1, h2, h3, h4, h5, h6 {
+      color: #333333;
+    }
+  }
+}
+
+.link-container {
+  margin-top: 30px;
+
+  h3 {
+    display: inherit;
+  } 
+
+  .logo {
+    background: url('./images/railsonmaui.png') no-repeat left bottom;
+    display: inline-block;
+    height: 40px;
+    margin-right: 10px;
+    width: 146px;
+  }
+  
+  .twitterImage {
+    background: url('./images/twitter_64.png') no-repeat;
+    height: 64px;
+    width: 64px;
+  }
+}
+
+// helper classes
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.w-50 {
+  width: 27vw!important;
+}

@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit update destroy]
   before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
-  before_action :set_comments, only: %i[index stimulus]
+  before_action :set_comments, only: %i[index stimulus comment_list]
 
   # GET /comments
   # GET /comments.json
@@ -28,10 +28,14 @@ class CommentsController < ApplicationController
           format.html          
         else
           format.html { redirect_to @comment, notice: "Comment was successfully created." }
-          format.json { render :show, status: :created, location: @comment }
         end
+        format.json { render :show, status: :created, location: @comment }
       else
-        format.html { render :new }
+        if turbo_frame_request?
+          format.html           
+        else
+          format.html { render :new }
+        end
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
@@ -62,6 +66,12 @@ class CommentsController < ApplicationController
   end
 
   def stimulus; end
+
+  def comment_list
+    respond_to do |format|
+      format.html { render partial: "comments/turbo/comment_list" }
+    end
+  end
 
   def horizontal_form    
     respond_to do |format|

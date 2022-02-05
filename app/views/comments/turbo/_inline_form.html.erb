@@ -3,12 +3,12 @@
   <hr />
   <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "form-inline") do |f| %>
     <div class="form-group">
-      <%= f.label "Name", class: "form-label" %>
+      <%= f.label "Name", class: "form-label mr-15" %>
       <%= f.text_field :author, class: "form-control", placeholder: "Your Name" %>
     </div>
-    <div class="form-group">
-      <%= f.label :text, class: "form-label" %>
-      <%= f.text_field :text, data: { target: "comments.commentText" }, class: "form-control", placeholder: "Say something using markdown..." %>        
+    <div class="form-group ml-15 mr-15">
+      <%= f.label :text, class: "form-label mr-15" %>
+      <%= f.text_field :text, data: { target: "comments.commentText" }, class: "form-control w-50", placeholder: "Say something using markdown..." %>        
     </div>
     <div class="form-group">
       <%= f.submit "Post", class: "btn btn-primary" %>
