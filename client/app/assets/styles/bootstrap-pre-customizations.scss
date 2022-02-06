@@ -9,6 +9,10 @@ $fonts-url-path: '../../client/app/assets/fonts';
   src: url('#{$fonts-url-path}/OpenSans-Light.ttf') format('truetype');
 }
 
+.refresh-btn {
+  cursor: pointer;
+}
+
 #comment_list {
   h2 {
     color: blue;

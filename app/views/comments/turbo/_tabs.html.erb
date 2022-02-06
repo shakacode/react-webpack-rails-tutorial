@@ -1,16 +1,13 @@
-<div id="commentz">
+<div>
   <ul class="nav nav-pills">
     <li class="nav-item" role="presentation">
-      <%= link_to "Horizontal Form", horizontal_form_path, :class => "bg-primary" %>
-      <!-- <a class="nav-link active" role="button" aria-current="page" href="#">Horizontal Form</a> -->
+      <%= link_to "Horizontal Form", horizontal_form_path, :class => @formType == "horizontal" ? "bg-primary" : "" %>
     </li>
     <li class="nav-item" role="presentation">
-      <%= link_to "Stacked Form", stacked_form_path %>
-      <!-- <a class="nav-link" role="button" href="#">Stacked Form</a> -->
+      <%= link_to "Stacked Form", stacked_form_path, :class => @formType == "stacked" ? "bg-primary" : "" %>
     </li>
     <li class="nav-item" role="presentation">
-      <%= link_to "Inline Form", inline_form_path %>
-      <!-- <a class="nav-link" role="button" href="#">Inline Form</a> -->
+      <%= link_to "Inline Form", inline_form_path, :class => @formType == "inline" ? "bg-primary" : "" %>  
     </li>
   </ul>
 </div>

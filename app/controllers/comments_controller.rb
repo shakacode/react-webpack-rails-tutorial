@@ -67,7 +67,9 @@ class CommentsController < ApplicationController
     end
   end
 
-  def stimulus; end
+  def stimulus
+    @formType = "horizontal"
+  end
 
   def comment_list
     respond_to do |format|
@@ -75,19 +77,22 @@ class CommentsController < ApplicationController
     end
   end
 
-  def horizontal_form    
+  def horizontal_form 
+    @formType = "horizontal"
     respond_to do |format|
       format.html { render partial: "comments/turbo/horizontal_form" }
     end
   end
 
   def stacked_form
+    @formType = "stacked"
     respond_to do |format|
       format.html { render partial: "comments/turbo/stacked_form" }
     end
   end
 
   def inline_form
+    @formType = "inline"
     respond_to do |format|
       format.html { render partial: "comments/turbo/inline_form" }
     end
