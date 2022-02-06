@@ -34,7 +34,7 @@ class CommentsController < ApplicationController
         format.json { render :show, status: :created, location: @comment }
       else
         if turbo_frame_request?
-          format.html           
+          format.html
         else
           format.html { render :new }
         end
