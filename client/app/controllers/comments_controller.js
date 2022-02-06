@@ -2,14 +2,40 @@ import { Controller } from '@hotwired/stimulus';
 import marked from 'marked';
 
 export default class extends Controller {
-  static targets = ['commentList', 'commentText', 'commentRefresh']
+  static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
   resetText() {
-    this.commentTextTarget.value = '';
+    console.log('hello')
+    const inputAuthor = this.commentAuthorTarget;
+    const inputText = this.commentTextTarget;
+    const alertDiv = this.alertDivTarget;
+    const errorList = this.errorListTarget;
+
+    const errors = [];
+
+    if (!inputAuthor.value || !inputText.value) {
+      errorList.innerHTML = '';
+      if (!inputAuthor.value) {
+        errors.push('Author');
+      } else if (!inputText.value) {
+        errors.push('Text');
+      } else {
+        errors.push('Author');
+        errors.push('Text');
+      }
+      errors.forEach(error => {
+        const errorString = `<li>${error}: can't be blank</li>`;
+        errorList.insertAdjacentHTML('afterbegin', errorString);
+      });
+      alertDiv.classList.remove('hidden');
+    } else {
+      alertDiv.classList.add('hidden');
+      errorList.innerHTML = '';
+      inputText.value = '';
+    }
   }
 
   refreshCommentList() {
-    console.log('click')
     const refreshBtn = this.commentRefreshTarget;
     refreshBtn.click();
   }

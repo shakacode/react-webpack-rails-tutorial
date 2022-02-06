@@ -1,10 +1,11 @@
 <%= turbo_frame_tag "form_tabs", data: { turbo: true } do %>
+  <%= render "comments/turbo/error_notice" %>
   <%= render "comments/turbo/tabs" %>
   <hr />
   <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "form-inline") do |f| %>
     <div class="form-group">
       <%= f.label "Name", class: "form-label mr-15" %>
-      <%= f.text_field :author, class: "form-control", placeholder: "Your Name" %>
+      <%= f.text_field :author, data: { target: "comments.commentAuthor" }, class: "form-control", placeholder: "Your Name" %>
     </div>
     <div class="form-group ml-15 mr-15">
       <%= f.label :text, class: "form-label mr-15" %>

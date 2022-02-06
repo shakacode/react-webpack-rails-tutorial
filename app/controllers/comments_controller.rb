@@ -25,14 +25,14 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         if turbo_frame_request?
-          format.html          
-        else
+          format.html
+        else  
           format.html { redirect_to @comment, notice: "Comment was successfully created." }
         end
         format.json { render :show, status: :created, location: @comment }
       else
         if turbo_frame_request?
-          format.html           
+          format.html
         else
           format.html { render :new }
         end
