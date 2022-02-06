@@ -40,6 +40,17 @@ export default class extends Controller {
     refreshBtn.click();
   }
 
+  tabChange(e) {
+    const horizontalFormBtn = this.horizontalFormBtnTarget;
+    const stackedformBtn = this.stackedFormBtnTarget;
+    horizontalFormBtn.classList.add('bg-primary')
+   
+    if (e.target === horizontalFormBtn) {
+    }
+  
+  }
+
+
   connect() {
     console.log('connected to Stimulus comments_controller');
 

@@ -1,10 +1,9 @@
 <h2>Stimulus + Rails Backend (with <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
   <%= render "pages/header" %>
-
 <div class="container" data-controller="comments">
   <h2>Comments</h2>
   <ul>
-    <li><a class="link-primary" data-action="click->comments#refreshCommentList">Force Refresh of All Comments.</a></li>
+    <li><a class="refresh-btn link-primary" data-action="click->comments#refreshCommentList">Force Refresh of All Comments.</a></li>
     <li>Text supports Github Flavored Markdown.</li>
     <li>Comments older than 24 hours are deleted.</li>
     <li>Name is preserved. Text is reset, between submits</li>
