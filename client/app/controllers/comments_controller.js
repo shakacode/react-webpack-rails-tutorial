@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
   resetText() {
-    console.log('hello')
     const inputAuthor = this.commentAuthorTarget;
     const inputText = this.commentTextTarget;
     const alertDiv = this.alertDivTarget;
@@ -39,17 +38,6 @@ export default class extends Controller {
     const refreshBtn = this.commentRefreshTarget;
     refreshBtn.click();
   }
-
-  tabChange(e) {
-    const horizontalFormBtn = this.horizontalFormBtnTarget;
-    const stackedformBtn = this.stackedFormBtnTarget;
-    horizontalFormBtn.classList.add('bg-primary')
-   
-    if (e.target === horizontalFormBtn) {
-    }
-  
-  }
-
 
   connect() {
     console.log('connected to Stimulus comments_controller');
