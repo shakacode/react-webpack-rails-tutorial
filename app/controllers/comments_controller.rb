@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
+  layout 'stimulus_layout'
   before_action :set_comment, only: %i[show edit update destroy]
   before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
   before_action :set_comments, only: %i[index stimulus comment_list]
@@ -77,7 +78,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  def horizontal_form 
+  def horizontal_form
     @formType = "horizontal"
     respond_to do |format|
       format.html { render partial: "comments/turbo/horizontal_form" }

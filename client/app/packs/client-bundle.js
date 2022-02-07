@@ -3,7 +3,7 @@ import 'bootstrap-loader';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
-import controllers from '../controllers';
+
 import { Turbo } from "@hotwired/turbo-rails";
 Turbo.session.drive = false;
 

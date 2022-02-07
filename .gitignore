@@ -37,6 +37,9 @@ vendor/ruby
 
 spec/examples.txt
 
+# Redis generated file
+dump.rdb
+
 # Ignore i18n-js
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
