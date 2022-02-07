@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "2.7.3"
 
 gem "react_on_rails", "12.5.2"
 gem "webpacker", "6.0.0.rc.6"
