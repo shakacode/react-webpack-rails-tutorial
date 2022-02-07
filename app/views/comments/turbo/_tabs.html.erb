@@ -1,13 +1,13 @@
 <div>
   <ul class="nav nav-pills">
-    <li class="nav-item" role="presentation">
-      <%= link_to "Horizontal Form", horizontal_form_path, :class => @formType == "horizontal" ? "bg-primary" : "" %>
+    <li class="nav-item <%= @formType == "horizontal" ? "active" : "" %>" role="presentation">
+      <%= link_to "Horizontal Form", horizontal_form_path %>
     </li>
-    <li class="nav-item" role="presentation">
-      <%= link_to "Stacked Form", stacked_form_path, :class => @formType == "stacked" ? "bg-primary" : "" %>
+    <li class="nav-item <%= @formType == "stacked" ? "active" : "" %>" role="presentation">
+      <%= link_to "Stacked Form", stacked_form_path %> 
     </li>
-    <li class="nav-item" role="presentation">
-      <%= link_to "Inline Form", inline_form_path, :class => @formType == "inline" ? "bg-primary" : "" %>  
+    <li class="nav-item <%= @formType == "inline" ? "active" : ""%>" role="presentation">
+      <%= link_to "Inline Form", inline_form_path %>  
     </li>
   </ul>
 </div>
