@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  layout 'stimulus_layout'
   before_action :set_comment, only: %i[show edit update destroy]
   before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
   before_action :set_comments, only: %i[index stimulus comment_list]
@@ -26,7 +27,7 @@ class CommentsController < ApplicationController
       if @comment.save
         if turbo_frame_request?
           format.html
-        else  
+        else
           format.html { redirect_to @comment, notice: "Comment was successfully created." }
         end
         format.json { render :show, status: :created, location: @comment }
@@ -75,7 +76,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  def horizontal_form 
+  def horizontal_form
     @formType = "horizontal"
     respond_to do |format|
       format.html { render partial: "comments/turbo/horizontal_form" }
