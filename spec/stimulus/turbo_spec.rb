@@ -5,7 +5,7 @@ describe 'tabs change on click' do
     visit '/stimulus'
   end
 
-  it 'shows horizontal tab on visit' do    
+  it 'shows horizontal tab on visit' do
     page.has_css?('form-horizontal')
   end
 
@@ -29,13 +29,13 @@ describe 'form submission functions' do
   before :each do
     visit '/stimulus'
     @comment = Comment.create(author: 'Author', text: 'This is a comment')
-    @author_field = 'comment_author' 
+    @author_field = 'comment_author'
     @author_error = "Author: can't be blank"
     @text_field = 'comment_text'
     @text_error = "Text: can't be blank"
   end
 
-  it 'adds a new comment to the page' do    
+  it 'adds a new comment to the page' do
     fill_in @author_field, with: @comment.author
     fill_in @text_field, with: @comment.text
     click_button('Post')
