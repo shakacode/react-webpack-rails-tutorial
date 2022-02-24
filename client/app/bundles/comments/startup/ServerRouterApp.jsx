@@ -24,13 +24,15 @@ function ServerRouterApp(_props, railsContext) {
   const context = {};
 
   // Important that you don't do this if you are redirecting or have an error.
-  return () => (
-    <Provider store={store}>
-      <StaticRouter location={location} context={context}>
-        {routes}
-      </StaticRouter>
-    </Provider>
-  );
+  return function () {
+    return (
+      <Provider store={store}>
+        <StaticRouter location={location} context={context}>
+          {routes}
+        </StaticRouter>
+      </Provider>
+    );
+  };
 }
 
 export default ServerRouterApp;

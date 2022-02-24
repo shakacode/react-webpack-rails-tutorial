@@ -8,11 +8,13 @@ import routes from '../routes/routes.jsx';
 function ClientRouterApp(_props, _railsContext) {
   const store = ReactOnRails.getStore('routerCommentsStore');
 
-  return () => (
-    <Provider store={store}>
-      <BrowserRouter>{routes}</BrowserRouter>
-    </Provider>
-  );
+  return function () {
+    return (
+      <Provider store={store}>
+        <BrowserRouter>{routes}</BrowserRouter>
+      </Provider>
+    );
+  };
 }
 
 export default ClientRouterApp;

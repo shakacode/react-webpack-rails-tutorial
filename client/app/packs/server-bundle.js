@@ -8,14 +8,12 @@ import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 
-ReactOnRails.register(
-  {
-    App,
-    RouterApp,
-    NavigationBarApp,
-    SimpleCommentScreen,
-  },
-);
+ReactOnRails.register({
+  App,
+  RouterApp,
+  NavigationBarApp,
+  SimpleCommentScreen,
+});
 
 ReactOnRails.registerStore({
   routerCommentsStore,
