@@ -4,6 +4,7 @@
 require:
   - rubocop-performance
   - rubocop-rspec
+  - rubocop-rails
 
 AllCops:
   NewCops: enable
