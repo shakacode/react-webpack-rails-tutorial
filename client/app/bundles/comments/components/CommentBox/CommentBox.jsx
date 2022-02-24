@@ -35,6 +35,8 @@ class CommentBox extends BaseComponent {
     const { messageReceived } = this.props.actions;
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
+    // ActionCable is a global added through webpack.providePlugin
+    // eslint-disable-next-line no-undef
     this.cable = ActionCable.createConsumer(cableUrl);
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
