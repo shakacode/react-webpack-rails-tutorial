@@ -1,8 +1,5 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
-const clientEnvironment = require('./client');
-const serverConfig = require('./server');
+const environment = require('./environment')
 
-const clientConfig = clientEnvironment.toWebpackConfig();
-
-module.exports = [clientConfig, serverConfig];
+module.exports = environment.toWebpackConfig()

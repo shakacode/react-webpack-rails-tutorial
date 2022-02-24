@@ -14,7 +14,7 @@ import * as paths from '../constants/paths';
  *  This is used for the client rendering hook after the page html is rendered.
  *  React will see that the state is the same and not do anything.
  */
-function NavigationBarApp(_props, railsContext) {
+const NavigationBarApp = (_props, railsContext) => {
   // This is where we get the existing store.
   const { pathname } = railsContext;
   let store;
@@ -26,7 +26,7 @@ function NavigationBarApp(_props, railsContext) {
     return <NavigationBar {...{ pathname }} />;
   }
 
-  return (
+  return () => (
     <Provider store={store}>
       <NavigationBarContainer />
     </Provider>

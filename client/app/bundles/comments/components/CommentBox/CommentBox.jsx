@@ -1,30 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import ActionCable from 'actioncable';
 import _ from 'lodash';
-import { injectIntl, intlShape } from 'react-intl';
-import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
-import SelectLanguage from '../../../../libs/i18n/selectLanguage.jsx';
-import { defaultMessages, defaultLocale } from '../../../../libs/i18n/default';
-
-import CommentForm from './CommentForm/CommentForm.jsx';
-import CommentList, { commentPropTypes } from './CommentList/CommentList.jsx';
-import css from './CommentBox.scss';
+import BaseComponent from 'libs/components/BaseComponent';
+import { injectIntl } from 'react-intl';
+import SelectLanguage from 'libs/i18n/selectLanguage';
+import { defaultMessages, defaultLocale } from 'libs/i18n/default';
+import CommentForm from './CommentForm/CommentForm';
+import CommentList, { commentPropTypes } from './CommentList/CommentList';
+import css from './CommentBox.module.scss';
 
 class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
     actions: PropTypes.shape({
-      fetchComments: PropTypes.function,
+      fetchComments: PropTypes.func,
     }),
     data: PropTypes.shape({
-      isFetching: PropTypes.boolean,
-      isSaving: PropTypes.boolean,
+      isFetching: PropTypes.func,
+      isSaving: PropTypes.bool,
       submitCommentError: PropTypes.string,
       $$comments: PropTypes.arrayOf(commentPropTypes),
     }).isRequired,
-    intl: intlShape.isRequired,
+    intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   constructor() {
@@ -81,7 +79,6 @@ class CommentBox extends BaseComponent {
       leaveActive: css.elementLeaveActive,
     };
     const locale = data.get('locale') || defaultLocale;
-
     /* eslint-disable no-script-url */
     return (
       <div className="commentBox container">

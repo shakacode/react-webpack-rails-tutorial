@@ -8,7 +8,7 @@ import routes from '../routes/routes.jsx';
 function ClientRouterApp(_props, _railsContext) {
   const store = ReactOnRails.getStore('routerCommentsStore');
 
-  return (
+  return () => (
     <Provider store={store}>
       <BrowserRouter>{routes}</BrowserRouter>
     </Provider>

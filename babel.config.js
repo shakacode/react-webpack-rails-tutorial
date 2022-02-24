@@ -1,49 +1,30 @@
 module.exports = function (api) {
-  const validEnv = ['development', 'test', 'production'];
-  const currentEnv = api.env();
-  const isDevelopmentEnv = api.env('development');
-  const isProductionEnv = api.env('production');
-  const isTestEnv = api.env('test');
-  const isHMR = process.env.WEBPACK_DEV_SERVER;
+  const defaultConfigFunc = require('shakapacker/package/babel/preset.js')
+  const resultConfig = defaultConfigFunc(api)
+  const isProductionEnv = api.env('production')
 
-  if (!validEnv.includes(currentEnv)) {
-    throw new Error(
-      `Please specify a valid \`NODE_ENV\` or ` +
-        `\`BABEL_ENV\` environment variables. Valid values are "development", ` +
-        `"test", and "production". Instead, received: ${JSON.stringify(currentEnv)}.`,
-    );
-  }
-
-  return {
+  const changesOnDefault = {
     presets: [
-      isTestEnv && [
-        '@babel/preset-env',
+      [
+        '@babel/preset-react',
         {
-          targets: {
-            node: 'current',
-          },
-        },
-      ],
-      (isProductionEnv || isDevelopmentEnv) && '@babel/preset-env',
-      '@babel/preset-react',
+          development: !isProductionEnv,
+          useBuiltIns: true
+        }
+      ]
     ].filter(Boolean),
     plugins: [
-      'babel-plugin-macros',
-      isDevelopmentEnv && isHMR && 'react-refresh/babel',
-      [
-        '@babel/plugin-proposal-class-properties',
+      process.env.WEBPACK_SERVE && 'react-refresh/babel',
+      isProductionEnv && ['babel-plugin-transform-react-remove-prop-types',
         {
-          loose: true,
-        },
-      ],
-      [
-        '@babel/plugin-transform-runtime',
-        {
-          helpers: false,
-          regenerator: true,
-          corejs: false,
-        },
-      ],
+          removeImport: true
+        }
+      ]
     ].filter(Boolean),
-  };
-};
+  }
+
+  resultConfig.presets = [...resultConfig.presets, ...changesOnDefault.presets]
+  resultConfig.plugins = [...resultConfig.plugins, ...changesOnDefault.plugins ]
+
+  return resultConfig
+}

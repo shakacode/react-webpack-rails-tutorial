@@ -1,11 +1,6 @@
 import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
 import 'jquery-ujs';
-import { addLocaleData } from 'react-intl';
-import en from 'react-intl/locale-data/en';
-import de from 'react-intl/locale-data/de';
-import ja from 'react-intl/locale-data/ja';
-import zh from 'react-intl/locale-data/zh';
 
 import App from '../bundles/comments/startup/App.jsx';
 import RouterApp from '../bundles/comments/startup/ClientRouterApp.jsx';
@@ -13,9 +8,6 @@ import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScr
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp.jsx';
-
-// Initizalize all locales for react-intl.
-addLocaleData([...en, ...de, ...ja, ...zh]);
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
