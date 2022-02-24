@@ -26,7 +26,8 @@ function NavigationBarApp(_props, railsContext) {
     return <NavigationBar {...{ pathname }} />;
   }
 
-  // eslint-disable-next-line react/display-name
+  // eslint interprets the return as a new component definition, which is not the case
+  // eslint-disable-next-line react/display-name, react/no-unstable-nested-components
   return function () {
     return (
       <Provider store={store}>
