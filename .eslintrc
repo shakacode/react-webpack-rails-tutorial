@@ -43,3 +43,5 @@ settings:
   import/resolver:
     node:
       extensions: [".js"]
+    webpack:
+      config: 'config/webpack/development.js'
