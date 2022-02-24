@@ -24,6 +24,7 @@ function ServerRouterApp(_props, railsContext) {
   const context = {};
 
   // Important that you don't do this if you are redirecting or have an error.
+  // eslint-disable-next-line react/display-name
   return function () {
     return (
       <Provider store={store}>

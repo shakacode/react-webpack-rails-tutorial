@@ -8,6 +8,7 @@ import routes from '../routes/routes.jsx';
 function ClientRouterApp(_props, _railsContext) {
   const store = ReactOnRails.getStore('routerCommentsStore');
 
+  // eslint-disable-next-line react/display-name
   return function () {
     return (
       <Provider store={store}>

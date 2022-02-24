@@ -26,6 +26,7 @@ function NavigationBarApp(_props, railsContext) {
     return <NavigationBar {...{ pathname }} />;
   }
 
+  // eslint-disable-next-line react/display-name
   return function () {
     return (
       <Provider store={store}>
