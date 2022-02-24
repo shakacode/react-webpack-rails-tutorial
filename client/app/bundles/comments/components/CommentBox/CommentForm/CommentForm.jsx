@@ -35,9 +35,9 @@ function bsStyleFor(propName, error) {
 class CommentForm extends BaseComponent {
   static propTypes = {
     isSaving: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
-    error: PropTypes.any,
-    cssTransitionGroupClassNames: PropTypes.object.isRequired,
+    actions: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.any])).isRequired,
+    error: PropTypes.oneOfType([PropTypes.any]),
+    cssTransitionGroupClassNames: PropTypes.oneOfType([PropTypes.func, PropTypes.any]).isRequired,
     intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
