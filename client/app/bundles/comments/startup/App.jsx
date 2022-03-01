@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import ReactOnRails from 'react-on-rails';
 
-import NonRouterCommentsContainer from '../containers/NonRouterCommentsContainer';
+import NonRouterCommentsContainer from '../containers/NonRouterCommentsContainer.jsx';
 
-export default (_props, _railsContext) => {
+function App(_props, _railsContext) {
   const store = ReactOnRails.getStore('commentsStore');
 
   return (
@@ -12,4 +12,6 @@ export default (_props, _railsContext) => {
       <NonRouterCommentsContainer />
     </Provider>
   );
-};
+}
+
+export default App;

@@ -1,14 +1,10 @@
-import { React, TestUtils } from 'libs/testHelper';
 import { List, Map } from 'immutable';
+import { React, TestUtils } from '../../../../../libs/testHelper';
 
-import CommentList from './CommentList';
-import Comment from './Comment/Comment';
+import CommentList from './CommentList.jsx';
+import Comment from './Comment/Comment.jsx';
 
-const {
-  renderIntoDocument,
-  findRenderedDOMComponentWithTag,
-  scryRenderedComponentsWithType,
-} = TestUtils;
+const { renderIntoDocument, findRenderedDOMComponentWithTag, scryRenderedComponentsWithType } = TestUtils;
 
 const cssTransitionGroupClassNames = {
   enter: 'elementEnter',
@@ -33,10 +29,7 @@ describe('CommentList', () => {
 
   it('renders a list of Comments in normal order', () => {
     const component = renderIntoDocument(
-      <CommentList
-        $$comments={comments}
-        cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-      />,
+      <CommentList $$comments={comments} cssTransitionGroupClassNames={cssTransitionGroupClassNames} />,
     );
     const list = scryRenderedComponentsWithType(component, Comment);
     expect(list.length).toEqual(2);

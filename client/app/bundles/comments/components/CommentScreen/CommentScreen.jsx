@@ -8,9 +8,9 @@ import css from './CommentScreen.module.scss';
 
 export default class CommentScreen extends BaseComponent {
   static propTypes = {
-    actions: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
-    locationState: PropTypes.object,
+    actions: PropTypes.oneOfType([PropTypes.object]).isRequired,
+    data: PropTypes.oneOfType([PropTypes.object]).isRequired,
+    locationState: PropTypes.oneOfType([PropTypes.object]),
   };
 
   renderNotification() {
@@ -21,9 +21,7 @@ export default class CommentScreen extends BaseComponent {
     return (
       <div className={`bg-success ${css.notification}`}>
         You have been redirected from
-        <strong>
-          {locationState.redirectFrom}
-        </strong>
+        <strong>{locationState.redirectFrom}</strong>
       </div>
     );
   }

@@ -1,17 +1,18 @@
 import Alert from 'react-bootstrap/lib/Alert';
-import BaseComponent from 'libs/components/BaseComponent';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
+import BaseComponent from '../../../../../libs/components/BaseComponent.jsx';
 
-import Comment from './Comment/Comment';
+import Comment from './Comment/Comment.jsx';
 
 export const commentPropTypes = {
   $$comments: PropTypes.instanceOf(Immutable.List).isRequired,
-  error: PropTypes.any,
-  cssTransitionGroupClassNames: PropTypes.object.isRequired,
+  // TODO: Update error propType
+  error: PropTypes.string,
+  cssTransitionGroupClassNames: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default class CommentList extends BaseComponent {
@@ -28,24 +29,24 @@ export default class CommentList extends BaseComponent {
     if (!this.props.error) return null;
     return (
       <Alert bsStyle="danger" key="commentFetchError">
-        <strong>Comments could not be retrieved. </strong>
-        A server error prevented loading comments. Please try again.
+        <strong>Comments could not be retrieved. </strong>A server error prevented loading comments. Please
+        try again.
       </Alert>
     );
   }
 
   render() {
     const { $$comments, cssTransitionGroupClassNames } = this.props;
-    const commentNodes = $$comments.map(($$comment, index) =>
-
+    const commentNodes = $$comments.map(($$comment, index) => (
       // `key` is a React-specific concept and is not mandatory for the
       // purpose of this tutorial. if you're curious, see more here:
       // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-      (<Comment
+      <Comment
         key={$$comment.get('id') || index}
         author={$$comment.get('author')}
         text={$$comment.get('text')}
-      />));
+      />
+    ));
 
     // For animation with ReactCSSTransitionGroup
     //   https://facebook.github.io/react/docs/animation.html

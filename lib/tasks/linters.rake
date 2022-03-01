@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if %w[development test].include? Rails.env
   namespace :lint do
     # require "rubocop/rake_task"
@@ -10,8 +12,9 @@ if %w[development test].include? Rails.env
     desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
     task :rubocop, [:fix] => [] do |_t, args|
       def to_bool(str)
-        return true if str =~ /^(true|t|yes|y|1)$/i
+        return true if /^(true|t|yes|y|1)$/i.match?(str)
         return false if str.blank? || str =~ /^(false|f|no|n|0)$/i
+
         raise ArgumentError, "invalid value for Boolean: \"#{str}\""
       end
 

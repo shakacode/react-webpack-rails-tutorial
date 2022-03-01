@@ -2,12 +2,12 @@ import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
 import 'jquery-ujs';
 
-import App from '../bundles/comments/startup/App';
-import RouterApp from '../bundles/comments/startup/ClientRouterApp';
-import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen';
+import App from '../bundles/comments/startup/App.jsx';
+import RouterApp from '../bundles/comments/startup/ClientRouterApp.jsx';
+import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScreen/SimpleCommentScreen.jsx';
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
-import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
+import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp.jsx';
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef

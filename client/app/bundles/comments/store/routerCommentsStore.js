@@ -2,7 +2,7 @@ import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 
-import loggerMiddleware from 'libs/middlewares/loggerMiddleware';
+import loggerMiddleware from '../../../libs/middlewares/loggerMiddleware';
 
 import reducers, { initialStates } from '../reducers';
 
@@ -23,9 +23,7 @@ export default (props, railsContext) => {
   });
 
   // Sync dispatched route actions to the history
-  const finalCreateStore = compose(
-    applyMiddleware(thunkMiddleware, loggerMiddleware),
-  )(createStore);
+  const finalCreateStore = compose(applyMiddleware(thunkMiddleware, loggerMiddleware))(createStore);
 
   return finalCreateStore(reducer, initialState);
 };

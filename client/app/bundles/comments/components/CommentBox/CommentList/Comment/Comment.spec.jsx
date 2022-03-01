@@ -1,18 +1,12 @@
-import { React, TestUtils } from 'libs/testHelper';
+import { React, TestUtils } from '../../../../../../libs/testHelper';
 
-import Comment from './Comment';
+import Comment from './Comment.jsx';
 
-const {
-  renderIntoDocument,
-  findRenderedDOMComponentWithClass,
-  findRenderedDOMComponentWithTag,
-} = TestUtils;
+const { renderIntoDocument, findRenderedDOMComponentWithClass, findRenderedDOMComponentWithTag } = TestUtils;
 
 describe('Comment', () => {
   it('renders an author and comment with proper css classes', () => {
-    const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />,
-    );
+    const component = renderIntoDocument(<Comment author="Frank" text="Hi!" />);
 
     const comment = findRenderedDOMComponentWithTag(component, 'div');
     expect(comment.className).toEqual('comment');
@@ -23,18 +17,14 @@ describe('Comment', () => {
   });
 
   it('shows the author', () => {
-    const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />,
-    );
+    const component = renderIntoDocument(<Comment author="Frank" text="Hi!" />);
 
     const author = findRenderedDOMComponentWithClass(component, 'js-comment-author');
     expect(author.textContent).toEqual('Frank');
   });
 
   it('shows the comment text in markdown', () => {
-    const component = renderIntoDocument(
-      <Comment author="Frank" text="Hi!" />,
-    );
+    const component = renderIntoDocument(<Comment author="Frank" text="Hi!" />);
 
     const comment = findRenderedDOMComponentWithClass(component, 'js-comment-text');
     expect(comment.textContent).toEqual('Hi!\n');

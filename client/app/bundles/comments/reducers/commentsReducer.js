@@ -14,9 +14,7 @@ export const $$initialState = Immutable.fromJS({
 });
 
 export default function commentsReducer($$state = $$initialState, action = null) {
-  const {
-    type, comment, comments, error, locale,
-  } = action;
+  const { type, comment, comments, error, locale } = action;
 
   switch (type) {
     case actionTypes.FETCH_COMMENTS_SUCCESS: {
@@ -35,32 +33,29 @@ export default function commentsReducer($$state = $$initialState, action = null)
     }
 
     case actionTypes.MESSAGE_RECEIVED: {
-      return $$state.withMutations(state => (
-        state
-          .updateIn(
-            ['$$comments'],
-            $$comments => ($$comments.findIndex(com => com.get('id') === comment.get('id')) === -1 ? $$comments.unshift(Immutable.fromJS(comment)) : $$comments),
-          )
-      ));
+      return $$state.withMutations((state) =>
+        state.updateIn(['$$comments'], ($$comments) =>
+          $$comments.findIndex((com) => com.get('id') === comment.get('id')) === -1
+            ? $$comments.unshift(Immutable.fromJS(comment))
+            : $$comments,
+        ),
+      );
     }
 
     case actionTypes.SUBMIT_COMMENT_SUCCESS: {
-      return $$state.withMutations(state => (
+      return $$state.withMutations((state) =>
         state
-          .updateIn(
-            ['$$comments'],
-            $$comments => {
-              const index = $$comments.findIndex(com => com.get('id') === comment.id);
-              return index === -1 ?
-                $$comments.unshift(Immutable.fromJS(comment)) :
-                $$comments.set({ index, value: Immutable.fromJS(comment) });
-            },
-          )
+          .updateIn(['$$comments'], ($$comments) => {
+            const index = $$comments.findIndex((com) => com.get('id') === comment.id);
+            return index === -1
+              ? $$comments.unshift(Immutable.fromJS(comment))
+              : $$comments.set({ index, value: Immutable.fromJS(comment) });
+          })
           .merge({
             submitCommentError: null,
             isSaving: false,
-          })
-      ));
+          }),
+      );
     }
 
     case actionTypes.SUBMIT_COMMENT_FAILURE: {

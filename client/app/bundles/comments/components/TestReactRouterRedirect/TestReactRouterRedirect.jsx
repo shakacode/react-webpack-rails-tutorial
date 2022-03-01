@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import BaseComponent from 'libs/components/BaseComponent';
+import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
 
 export default class TestReactRouterRedirect extends BaseComponent {
   static checkAuth() {

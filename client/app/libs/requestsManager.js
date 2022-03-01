@@ -4,7 +4,6 @@ import ReactOnRails from 'react-on-rails';
 const API_URL = 'comments.json';
 
 export default {
-
   /**
    * Retrieve list of entities from server using AJAX call.
    *
@@ -33,5 +32,4 @@ export default {
       data: entity,
     });
   },
-
 };

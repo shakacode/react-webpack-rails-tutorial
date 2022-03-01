@@ -18,9 +18,7 @@ export default function logger({ getState }) {
     const readableState = {};
 
     Object.keys(state).forEach((storeItem) => {
-      readableState[storeItem] = (
-        state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem]
-      );
+      readableState[storeItem] = state[storeItem].toJS ? state[storeItem].toJS() : state[storeItem];
     });
 
     console.log('state after dispatch', readableState);

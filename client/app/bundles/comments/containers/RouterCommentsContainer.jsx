@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { IntlProvider } from 'react-intl';
 import Intl from 'intl';
-import { defaultLocale } from 'libs/i18n/default';
-import { translations } from 'libs/i18n/translations';
-import BaseComponent from 'libs/components/BaseComponent';
+import { defaultLocale } from '../../../libs/i18n/default';
+import { translations } from '../../../libs/i18n/translations';
+import BaseComponent from '../../../libs/components/BaseComponent.jsx';
 
-import CommentScreen from '../components/CommentScreen/CommentScreen';
+import CommentScreen from '../components/CommentScreen/CommentScreen.jsx';
 import * as commentsActionCreators from '../actions/commentsActionCreators';
 
 global.Intl = Intl;
@@ -21,9 +21,9 @@ function select(state) {
 class RouterCommentsContainer extends BaseComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
+    data: PropTypes.oneOfType([PropTypes.object]).isRequired,
     location: PropTypes.shape({
-      state: PropTypes.object,
+      state: PropTypes.oneOfType([PropTypes.object]),
     }).isRequired,
   };
 

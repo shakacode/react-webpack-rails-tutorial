@@ -71,8 +71,10 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", require: false
-  gem "ruby-lint", require: false
+  gem "rubocop", "1.24.1", require: false
+  gem "rubocop-rspec", "~> 2.7"
+  gem 'rubocop-rails'
+  gem "rubocop-performance", "~> 1.13"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "brakeman", require: false
   gem "bundler-audit", require: false

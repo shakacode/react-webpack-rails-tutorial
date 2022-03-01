@@ -5,8 +5,8 @@ import React from 'react';
 import ReactOnRails from 'react-on-rails';
 import { Provider } from 'react-redux';
 
-import NavigationBar from '../components/NavigationBar/NavigationBar';
-import NavigationBarContainer from '../containers/NavigationBarContainer';
+import NavigationBar from '../components/NavigationBar/NavigationBar.jsx';
+import NavigationBarContainer from '../containers/NavigationBarContainer.jsx';
 import * as paths from '../constants/paths';
 
 /*
@@ -14,7 +14,7 @@ import * as paths from '../constants/paths';
  *  This is used for the client rendering hook after the page html is rendered.
  *  React will see that the state is the same and not do anything.
  */
-const NavigationBarApp = (_props, railsContext) => {
+function NavigationBarApp(_props, railsContext) {
   // This is where we get the existing store.
   const { pathname } = railsContext;
   let store;
@@ -23,17 +23,18 @@ const NavigationBarApp = (_props, railsContext) => {
   } else if (pathname === paths.NO_ROUTER_PATH) {
     store = ReactOnRails.getStore('commentsStore', false);
   } else {
-    return (
-      <NavigationBar {...{ pathname }} />
-    );
+    return <NavigationBar {...{ pathname }} />;
   }
 
-  return () => (
-    <Provider store={store}>
-      <NavigationBarContainer />
-    </Provider>
-  );
-};
+  // eslint interprets the return as a new component definition, which is not the case
+  // eslint-disable-next-line react/display-name, react/no-unstable-nested-components
+  return function () {
+    return (
+      <Provider store={store}>
+        <NavigationBarContainer />
+      </Provider>
+    );
+  };
+}
 
 export default NavigationBarApp;
-
