@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.5"
+ruby ">= 2.7.4" # 2.7.4 is installed by default in Ubuntu 21.10
 
 gem "react_on_rails", "12.5.2"
 gem "shakapacker", "6.0.2"
@@ -17,7 +17,7 @@ gem "pg"
 gem "puma"
 
 # Use SCSS for stylesheets
-gem "sass-rails"
+gem "sassc"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 # Use CoffeeScript for .js.coffee assets and views
@@ -30,6 +30,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
+
 gem "redis", "3.3.3"
 
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -41,13 +42,18 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
+# node will be de default tool to execute Javascript
+# When speed is needed better use mini_racer
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# mini_racer is probably faster than therubyracer
-gem "mini_racer", platforms: :ruby
 
 gem "autoprefixer-rails"
 
 gem "awesome_print"
+
+# To keep your database user and password in .env
+gem 'dotenv-rails'
+
+gem "net-smtp"
 
 # jquery as the JavaScript library has been moved under /client and managed by npm.
 # It is critical to not include any of the jquery gems when following this pattern or

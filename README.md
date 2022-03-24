@@ -133,35 +133,109 @@ See package.json and Gemfile for versions
 1. [Heroku for Rails 5 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails5)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
-## Basic Demo Setup
-1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v6.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
+## Complete Demo Setup
+1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v16.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.3.0 or greater
-1. Check that you're using the right version of node. Run `nvm list` to check. Use 5.5 or greater.
+1. Check that you have Ruby 2.7.4 or greater.
+1. Check that you're using the right version of node. Run `nvm list` to check. Use 16.0 or greater.
 1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
-1. Check that you have Redis installed. Run `which redis-server` to check. If missing and on MacOS, install with Homebrew (`brew install redis`)
+1. Install redis
+   <details>
+   <summary>On MacOS</summary>
+
+   ```sh
+   brew install redis
+   ```
+
+   </details>
+   <details>
+   <summary>On OpenBSD/adJ</summary>
+
+   ```sh
+   doas pkg_add redis
+   ```
+
+   </details>
+   <details>
+   <summary>On Ubuntu</summary>
+
+   ```sh
+   sudo apt install redis-server
+   ```
+
+   </details>
+   And ensure that it runs during boot or run it with `redis-server`
 1. `bundle install`
-1. `brew install yarn`
+1. Install yarn
+   <details>
+   <summary>On MacOS</summary>
+
+   ```sh
+   brew install yarn
+   ```
+
+   </details>
+   <details>
+   <summary>On OpenBSD/adJ</summary>
+
+   ```sh
+   doas pkg_add bash
+   curl -o- -L https://yarnpkg.com/install.sh | bash
+   ```
+
+   </details>
+   <details>
+   <summary>On Ubuntu</summary>
+   <p>
+   Once nvm is installed, and using a version of node, let's say 16.14.0:
+
+   ```sh
+   sudo ~/.nvm/versions/node/v16.14.0/bin/npm install --global yarn
+   ```
+
+   </p>
+   </details>
 1. `yarn`
-1. `rake db:setup`
-1. `foreman start -f Procfile.hot`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING
-  2. Try Hot Reloading steps below!
-1. `foreman start -f Procfile.static`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example.
-  2. When you make changes, you have to refresh the browser page.
+1. Prepare `bootsrap-loader`
+   ```sh
+   cd node_modules/bootstrap-loader
+   yarn install  # Ignore the errors in the regression test
+   yarn build
+   cd ../..
+   ```
+1. Copy the template file with environment variables
+   ```sh
+   cp .env.template .env`
+   $EDITOR .env
+   ```
+   and edit `.env` to set your PostgreSQL user in `DB_USER`, its password
+   in `DB_PASSWORD`, and if needed PostgreSQL host/path in `DB_HOST`
+1. `bin/rails db:setup`
+   <details>
+   <summary>To prepare database on OpenBSD/adJ</summary>
+
+   ```sh
+   createdb -h /var/www/var/run/postgresql -U pguser react-webpack-rails-tutorial
+   bin/rails db:drop db:create db:setup db:seed
+   ```
+
+   </details>
+1. `bundle exec foreman start -f Procfile.dev`
+   1. Open a browser tab to http://localhost:3000 for the Rails app example.
+   2. If your platform supports hot reloading (i.e. MacOS and Linux) you
+      can try it, see the section "Experimenting with Hot Reloading"
+
 
 ### Basic Command Line
 1. Run all linters and tests: `rake`
 1. See all npm commands: `yarn run`
-1. To start all development processes: `foreman start -f Procfile.dev`
-1. To start only all Rails development processes: `foreman start -f Procfile.hot`
+1. To start all development processes: `bundle exec foreman start -f Procfile.dev`
 
-### Experimenting with Hot Reloading: applies to both `Procfile.hot` and `Procfile.express`
+### Experimenting with Hot Reloading
+
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the screen update without refreshing the window. This applies to port 3000 and port 4000.
-1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.module.scss). You can see port 3000 or 4000 update automatically.
-1. Be sure to take a look at the different Procfiles in this directory, as described below.
+1. Try changing a `.scss` file, such as a color in [client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.module.scss](client/app/bundles/comments/components/CommentBox/CommentList/Comment/Comment.module.scss). You can see port 3000 or 4000 update automatically.
 
 
 ## Javascript development without Rails: using the Webpack Dev Server
@@ -184,9 +258,9 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
       heroku buildpacks:set --index 3 https://github.com/sreid/heroku-buildpack-sourceversion.git --app your-app
       ```
 + **Development Mode**: Two flavors: Hot reloading assets (JavaScript & CSS) and Static loading.
-   + **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) use precompiled files. See `Procfile.hot`. `Procfile.dev` also starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
+   + **Hot Loading**: We modify the URL in [application.html.erb](app/views/layouts/application.html.erb) based on whether or not we're in production mode using the helpers `env_stylesheet_link_tag` and `env_javascript_include_tag`. *Development mode* uses the Webpack Dev server running on port 3500. Other modes (production/test) use precompiled files. See `Procfile.dev` that starts this mode. Note, *you don't have to refresh a Rails web page to view changes to JavaScript or CSS*.
 
-   + **Static Loading**: This uses webpack to create physical files of the assets, both JavaScript and CSS. This is essentially what we had before we enabled *Hot Loading*. You have to *refresh* the page to see changes to JavaScript or CSS. See `Procfile.static`. It is important to note that tests will use the same statically generated files.
+   + **Static Loading**: This uses webpack to create physical files of the assets, both JavaScript and CSS. This is essentially what we had before we enabled *Hot Loading*. You have to *refresh* the page to see changes to JavaScript or CSS. See `Procfile.dev-static`. It is important to note that tests will use the same statically generated files.
 
       + Note, the following view helpers do the magic to make this work:
    ```erb
@@ -200,7 +274,7 @@ Save a change to a JSX file and see it update immediately in the browser! Note, 
 
 + Be sure to see [Integration Test Notes](./docs/integration-test-notes.md) for advice on running your integration tests.
 
-+ **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
++ **Testing Mode**: When running tests, it is useful to run `bundle exec foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
 ## Webpack
@@ -242,29 +316,10 @@ The tutorial makes use of a custom font OpenSans-Light. We're doing this to show
 bundle exec foreman start -f <Procfile>
 ```
 
-1. [`Procfile.dev`](Procfile.dev): Starts the Webpack Dev Server and Rails with Hot Reloading.
-2. [`Procfile.hot`](Procfile.hot): Starts the Rails server and the webpack server to provide hot reloading of assets, JavaScript and CSS.
-3. [`Procfile.static`](Procfile.static): Starts the Rails server and generates static assets that are used for tests.
-5. [`Procfile.spec`](Procfile.spec): Starts webpack to create the static files for tests. **Good to know:** If you want to start `rails s` separately to debug in `pry`, then run `Procfile.spec` to generate the assets and run `rails s` in a separate console.
-6. [`Procfile.static.trace`](Procfile.static.trace): Same as `Procfile.static` but prints tracing information useful for debugging server rendering.
-4. [`Procfile.express`](Procfile.express): Starts only the Webpack Dev Server for rendering your components with only an Express server.
+1. [`Procfile.dev`](Procfile.dev): Starts Redis, Rails and Webpack Dev Server with Hot Reloading.
+2. [`Procfile.static`](Procfile.dev-static): Starts Redis, creates localization data and starts webpakcer in watch mode (i.e recompiles every time a source file is changed).
 
 In general, you want to avoid running more webpack watch processes than you need.
-
-## Rendering with Express Server
-UPDATE: 2016-07-31
-
-We no longer recommend using an express server with Rails. It's simply not necessary because:
-
-1. Rails can hot reload
-2. There's extra maintenance in keeping this synchronized.
-3. React on Rails does not have a shared_store JS rendering, per [issue #504](https://github.com/shakacode/react_on_rails/issues/504)
-
-### Setup
-
-1. `foreman start -f Procfile.express`
-2. Open a browser tab to http://localhost:4000 for the Hot Module Replacement Example just using an express server (no Rails involved). This is good for fast prototyping of React components. However, this setup is not as useful now that we have hot reloading working for Rails!
-3. Try Hot Reloading steps below!
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)

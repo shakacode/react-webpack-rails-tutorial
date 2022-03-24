@@ -3,8 +3,8 @@
   "version": "1.1.0",
   "description": "Code from the React Webpack tutorial.",
   "engines": {
-    "node": "16.13.2",
-    "yarn": "1.22.17"
+    "node": "^16.13.2",
+    "yarn": "^1.22.10"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "@rails/actioncable": "6.1.4-4",
     "autoprefixer": "^7.1.5",
     "axios": "^0.17.1",
-    "babel-loader": "8",
+    "babel-loader": "^8.2.3",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap-loader": "judahmeek/bootstrap-loader#judahmeek/webpack-5",
