@@ -8,3 +8,25 @@ $fonts-url-path: '../../client/app/assets/fonts';
   font-family: 'OpenSans-Light';
   src: url('#{$fonts-url-path}/OpenSans-Light.ttf') format('truetype');
 }
+
+
+.navbar-default {
+  background-color: $navbar-default-bg;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.navbar .container-fluid {
+  margin-left: 40px;
+  margin-right: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.navbar-default .navbar-nav>.active>a,.navbar-default
+.navbar-nav>.active>a:focus,.navbar-default .navbar-nav>.active>a:hover {
+  color: #555;
+  background-color: #ffffbf
+}
+
+
