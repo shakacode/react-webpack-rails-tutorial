@@ -7,8 +7,8 @@ const href =
 function CommentsCount(props) {
   const { commentsCount } = props;
   return (
-    <li>
-      <a id="js-comment-count" href={href}>
+    <li className='comment-count'>
+      <a className='nav-link' id="js-comment-count" href={href}>
         Comments: {commentsCount}
       </a>
     </li>
