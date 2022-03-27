@@ -2,8 +2,15 @@
 @import "bootstrap-pre-customizations";
 @import "bootstrap/scss/bootstrap";
 
-
-a {
+.container a {
   color: #337ab7;
   text-decoration: none;
 }
+
+.commentBox .active {
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
