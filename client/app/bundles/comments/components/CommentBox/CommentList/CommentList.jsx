@@ -1,4 +1,4 @@
-import Alert from 'react-bootstrap/lib/Alert';
+import Alert from 'react-bootstrap/Alert';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';

@@ -4,15 +4,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import Col from 'react-bootstrap/lib/Col';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import Form from 'react-bootstrap/lib/Form';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Alert from 'react-bootstrap/lib/Alert';
+import Col from 'react-bootstrap/Col';
+import FormControl from 'react-bootstrap/FormControl';
+import FormLabel from 'react-bootstrap/FormLabel';
+import Form from 'react-bootstrap/Form';
+import FormGroup from 'react-bootstrap/FormGroup';
+import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
+import NavItem from 'react-bootstrap/NavItem';
+import Alert from 'react-bootstrap/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
@@ -58,7 +58,7 @@ class CommentForm extends BaseComponent {
   handleChange() {
     let comment;
 
-    switch (this.state.formMode) {
+    switch (+this.state.formMode) {
       case 0:
         comment = {
           author: ReactDOM.findDOMNode(this.refs.horizontalAuthorNode).value,
@@ -100,7 +100,7 @@ class CommentForm extends BaseComponent {
     this.setState({ comment });
 
     let ref;
-    switch (this.state.formMode) {
+    switch (+this.state.formMode) {
       case 0:
         ref = ReactDOM.findDOMNode(this.refs.horizontalTextNode);
         break;
@@ -123,8 +123,8 @@ class CommentForm extends BaseComponent {
       <div>
         <hr />
         <Form horizontal className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formHorizontalName">
-            <Col componentClass={ControlLabel} sm={2}>
+          <FormGroup controlId="formHorizontalName" className={`row ${css.rowHoriz} ${css.formGroup}`}>
+            <Col componentClass={Form.Label} sm={2} className={css.labelHoriz}>
               {formatMessage(defaultMessages.inputNameLabel)}
             </Col>
             <Col sm={10}>
@@ -139,8 +139,8 @@ class CommentForm extends BaseComponent {
               />
             </Col>
           </FormGroup>
-          <FormGroup controlId="formHorizontalName">
-            <Col componentClass={ControlLabel} sm={2}>
+          <FormGroup controlId="formHorizontalName" className={`row ${css.rowHoriz} ${css.formGroup}`}>
+            <Col componentClass={FormLabel} sm={2} className={css.labelHoriz}>
               {formatMessage(defaultMessages.inputTextLabel)}
             </Col>
             <Col sm={10}>
@@ -156,8 +156,8 @@ class CommentForm extends BaseComponent {
               />
             </Col>
           </FormGroup>
-          <FormGroup controlId="formHorizontalSubmit">
-            <Col smOffset={2} sm={10}>
+          <FormGroup controlId="formHorizontalSubmit" className={`row ${css.rowHoriz} ${css.formGroup}`}>
+            <Col sm={{ span: 10, offset: 2 }}>
               <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
                 {this.props.isSaving
                   ? `${formatMessage(defaultMessages.inputSaving)}...`
@@ -176,8 +176,8 @@ class CommentForm extends BaseComponent {
       <div>
         <hr />
         <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formBasicName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
+          <FormGroup controlId="formBasicName" className={css.formGroup}>
+            <FormLabel>{formatMessage(defaultMessages.inputNameLabel)}</FormLabel>
             <FormControl
               type="text"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
@@ -188,8 +188,8 @@ class CommentForm extends BaseComponent {
               bsStyle={bsStyleFor('author', this.props.error)}
             />
           </FormGroup>
-          <FormGroup controlId="formBasicText">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
+          <FormGroup controlId="formBasicText" className={css.formGroup}>
+            <FormLabel>{formatMessage(defaultMessages.inputTextLabel)}</FormLabel>
             <FormControl
               type="textarea"
               label="Text"
@@ -201,7 +201,7 @@ class CommentForm extends BaseComponent {
               bsStyle={bsStyleFor('text', this.props.error)}
             />
           </FormGroup>
-          <FormGroup controlId="formBasicSubmit">
+          <FormGroup controlId="formBasicSubmit" className={css.formGroup}>
             <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
@@ -219,9 +219,9 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form inline className="commentForm" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
+        <Form className="commentForm d-flex" onSubmit={this.handleSubmit}>
+          <FormGroup controlId="formInlineName" className="d-flex">
+            <FormLabel>{formatMessage(defaultMessages.inputNameLabel)}</FormLabel>
             <FormControl
               type="text"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
@@ -233,8 +233,8 @@ class CommentForm extends BaseComponent {
               className={css.nameFormControl}
             />
           </FormGroup>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
+          <FormGroup controlId="formInlineName" className="d-flex">
+            <FormLabel>{formatMessage(defaultMessages.inputTextLabel)}</FormLabel>
             <FormControl
               type="textarea"
               label="Text"
@@ -287,7 +287,7 @@ class CommentForm extends BaseComponent {
 
   render() {
     let inputForm;
-    switch (this.state.formMode) {
+    switch (+this.state.formMode) {
       case 0:
         inputForm = this.formHorizontal();
         break;
@@ -309,7 +309,7 @@ class CommentForm extends BaseComponent {
     // The 500 must correspond to the 0.5s in:
     //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:6
     return (
-      <div>
+      <div className={css.tabsForm}>
         <ReactCSSTransitionGroup
           transitionName={cssTransitionGroupClassNames}
           transitionEnterTimeout={500}
@@ -318,10 +318,16 @@ class CommentForm extends BaseComponent {
           {this.errorWarning()}
         </ReactCSSTransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
-          <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>
-          <NavItem eventKey={1}>{formatMessage(defaultMessages.formStacked)}</NavItem>
-          <NavItem eventKey={2}>{formatMessage(defaultMessages.formInline)}</NavItem>
+        <Nav bsStyle="tabs" activeKey={+this.state.formMode} onSelect={this.handleSelect}>
+          <Nav.Item as="li">
+            <Nav.Link eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</Nav.Link>
+          </Nav.Item>
+          <Nav.Item as="li">
+            <Nav.Link eventKey={1}>{formatMessage(defaultMessages.formStacked)}</Nav.Link>
+          </Nav.Item>
+          <Nav.Item as="li">
+            <Nav.Link eventKey={2}>{formatMessage(defaultMessages.formInline)}</Nav.Link>
+          </Nav.Item>
         </Nav>
         {inputForm}
       </div>
