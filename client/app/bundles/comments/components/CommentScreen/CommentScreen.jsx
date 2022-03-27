@@ -39,17 +39,22 @@ export default class CommentScreen extends BaseComponent {
             actions={actions}
             ajaxCounter={data.get('ajaxCounter')}
           />
-          <div className="container">
-            <a href="http://www.shakacode.com">
-              <h3>
+          <hr/>
+          <div className="container footer row">
+            <div className="col-sm-6">
+              <a href="http://www.shakacode.com">
                 <div className={css.logo} />
-                Example of styling using image-url and Open Sans Light custom font
-              </h3>
-            </a>
-            <a href="https://twitter.com/railsonmaui">
-              <div className={css.twitterImage} />
-              Rails On Maui on Twitter
-            </a>
+                <div>
+                  Example of styling using image-url and Open Sans Light custom font
+                </div>
+              </a>
+            </div>
+            <div className="col-sm-6">
+              <a href="https://twitter.com/railsonmaui">
+                <div className={css.twitterImage} />
+                Rails On Maui on Twitter
+              </a>
+            </div>
           </div>
         </div>
       </div>
