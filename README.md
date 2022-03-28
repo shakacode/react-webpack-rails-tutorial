@@ -169,7 +169,14 @@ See package.json and Gemfile for versions
 
    Changing `pguser` for the user your configured in `.env`
    </details>
-1. `bundle exec foreman start -f Procfile.dev`
+1. Start either with 
+   ```
+   bundle exec foreman start -f Procfile.dev
+   ```
+   or if you configured `.env` with
+   ```
+   bundle exec foreman start -f Procfile.devenv
+   ```
    1. Open a browser tab to http://localhost:3000 for the Rails app example.
    2. If your platform supports hot reloading (i.e. MacOS and Linux) you
       can try it, see the section "Experimenting with Hot Reloading"
