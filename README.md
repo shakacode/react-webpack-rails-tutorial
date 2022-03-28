@@ -272,6 +272,7 @@ bundle exec foreman start -f <Procfile>
 ```
 
 1. [`Procfile.dev`](Procfile.dev): Starts Rails and Webpack Dev Server with Hot Reloading.
+1. [`Procfile.devenv`](Procfile.devenv): Starts Rails and Webpack Dev Server with Hot Reloading using definitions of `.env`.
 2. [`Procfile.static`](Procfile.dev-static): Creates localization data and starts webpakcer in watch mode (i.e recompiles every time a source file is changed).
 
 In general, you want to avoid running more webpack watch processes than you need.
