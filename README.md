@@ -138,64 +138,11 @@ See package.json and Gemfile for versions
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
 1. Check that you have Ruby 2.7.4 or greater.
-1. Check that you're using the right version of node. Run `nvm list` to check. Use 16.0 or greater.
-1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
-1. Install redis
-   <details>
-   <summary>On MacOS</summary>
-
-   ```sh
-   brew install redis
-   ```
-
-   </details>
-   <details>
-   <summary>On OpenBSD/adJ</summary>
-
-   ```sh
-   doas pkg_add redis
-   ```
-
-   </details>
-   <details>
-   <summary>On Ubuntu</summary>
-
-   ```sh
-   sudo apt install redis-server
-   ```
-
-   </details>
-   And ensure that it runs during boot or run it with `redis-server`
-1. `bundle install`
+1. Check that you're using the right version of node. Use 16.0 or greater.
+1. Check that you have Postgres installed. Use 9.4 or greater.
+1. Install redis. And ensure that it runs during boot or run it with `redis-server`
 1. Install yarn
-   <details>
-   <summary>On MacOS</summary>
-
-   ```sh
-   brew install yarn
-   ```
-
-   </details>
-   <details>
-   <summary>On OpenBSD/adJ</summary>
-
-   ```sh
-   doas pkg_add bash
-   curl -o- -L https://yarnpkg.com/install.sh | bash
-   ```
-
-   </details>
-   <details>
-   <summary>On Ubuntu</summary>
-   <p>
-   Once nvm is installed, and using a version of node, let's say 16.14.0:
-
-   ```sh
-   sudo ~/.nvm/versions/node/v16.14.0/bin/npm install --global yarn
-   ```
-
-   </p>
-   </details>
+1. `bundle install`
 1. `yarn`
 1. Prepare `bootsrap-loader`
    ```sh

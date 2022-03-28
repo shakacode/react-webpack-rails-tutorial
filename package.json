@@ -4,7 +4,7 @@
   "description": "Code from the React Webpack tutorial.",
   "engines": {
     "node": "^16.13.2",
-    "yarn": "^1.22.10"
+    "yarn": "^1.22.17"
   },
   "repository": {
     "type": "git",
