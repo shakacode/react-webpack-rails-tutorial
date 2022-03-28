@@ -204,7 +204,7 @@ See package.json and Gemfile for versions
    yarn build
    cd ../..
    ```
-1. Copy the template file with environment variables
+1. If you have special PostgreSQL user copy the template file with environment variables
    ```sh
    cp .env.template .env`
    $EDITOR .env
@@ -220,6 +220,7 @@ See package.json and Gemfile for versions
    bin/rails db:drop db:create db:setup db:seed
    ```
 
+   Changing `pguser` for the user your configured in `.env`
    </details>
 1. `bundle exec foreman start -f Procfile.dev`
    1. Open a browser tab to http://localhost:3000 for the Rails app example.
@@ -316,8 +317,8 @@ The tutorial makes use of a custom font OpenSans-Light. We're doing this to show
 bundle exec foreman start -f <Procfile>
 ```
 
-1. [`Procfile.dev`](Procfile.dev): Starts Redis, Rails and Webpack Dev Server with Hot Reloading.
-2. [`Procfile.static`](Procfile.dev-static): Starts Redis, creates localization data and starts webpakcer in watch mode (i.e recompiles every time a source file is changed).
+1. [`Procfile.dev`](Procfile.dev): Starts Rails and Webpack Dev Server with Hot Reloading.
+2. [`Procfile.static`](Procfile.dev-static): Creates localization data and starts webpakcer in watch mode (i.e recompiles every time a source file is changed).
 
 In general, you want to avoid running more webpack watch processes than you need.
 

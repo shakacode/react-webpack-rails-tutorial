@@ -50,9 +50,6 @@ gem "autoprefixer-rails"
 
 gem "awesome_print"
 
-# To keep your database user and password in .env
-gem 'dotenv-rails'
-
 gem "net-smtp"
 
 # jquery as the JavaScript library has been moved under /client and managed by npm.
