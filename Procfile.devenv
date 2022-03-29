@@ -1,0 +1,6 @@
+# Procfile for development using HMR
+# You can run these commands in separate shells
+# redis should be running
+rails: (. .env && bundle exec rails s -p $DEVPORT -b $DEVIP)
+wp-client: (. .env && HMR=true RAILS_ENV=development NODE_ENV=development bin/webpacker-dev-server)
+wp-server: (. .env && bundle exec rake react_on_rails:locale && HMR=true SERVER_BUNDLE_ONLY=yes bin/webpacker --watch)
