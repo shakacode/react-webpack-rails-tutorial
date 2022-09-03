@@ -2495,10 +2495,10 @@ boolify@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolify/-/boolify-1.0.1.tgz#b5c09e17cacd113d11b7bb3ed384cc012994d86b"
   integrity sha1-tcCeF8rNET0Rt7s+04TMASmU2Gs=
 
-bootstrap-loader@^4.0.0-rc.0:
-  version "4.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/bootstrap-loader/-/bootstrap-loader-4.0.0-rc.0.tgz#4d4a6b62a7f06899107baf710b57ed2b486ffc62"
-  integrity sha512-kFzghPn+9yxUUTNZ1NJTffvitiR6HUvN13SCpmuC1e5w+BfdTneMUe7gT5VFBAGTs6H4BsWNU5uXBn8rzTpkVQ==
+bootstrap-loader@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-loader/-/bootstrap-loader-4.0.0.tgz#ca8f9534f35ecb15a824ca60a6abc9cd5b70150d"
+  integrity sha512-LzeZySPqDcfRmNZcddwfLc83D1Szv0EI0U3z2oiupoBCmCKXPJ4sMqhMZwSV6IRLuX6eZjG38uuiWgCLlFZPXg==
   dependencies:
     chalk "2.4.2"
     escape-regexp "0.0.1"
