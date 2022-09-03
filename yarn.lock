@@ -86,15 +86,6 @@
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/generator@^7.16.7":
-  version "7.16.7"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.16.7.tgz#b42bf46a3079fa65e1544135f32e7958f048adbb"
-  integrity sha512-/ST3Sg8MLGY5HVYmrjOgL60ENux/HfO/CsUh7y4MalThufhE/Ff/6EibFDHi4jiDCaWfJKoqbE6oTh21c5hrRg==
-  dependencies:
-    "@babel/types" "^7.16.7"
-    jsesc "^2.5.1"
-    source-map "^0.5.0"
-
 "@babel/generator@^7.16.8":
   version "7.16.8"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.16.8.tgz#359d44d966b8cd059d543250ce79596f792f2ebe"
@@ -2504,9 +2495,10 @@ boolify@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolify/-/boolify-1.0.1.tgz#b5c09e17cacd113d11b7bb3ed384cc012994d86b"
   integrity sha1-tcCeF8rNET0Rt7s+04TMASmU2Gs=
 
-bootstrap-loader@judahmeek/bootstrap-loader#judahmeek/webpack-5:
-  version "3.0.4"
-  resolved "https://codeload.github.com/judahmeek/bootstrap-loader/tar.gz/f9addb04f657b0a5ff2bed701ab66ac28f9a9a62"
+bootstrap-loader@^4.0.0-rc.0:
+  version "4.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-loader/-/bootstrap-loader-4.0.0-rc.0.tgz#4d4a6b62a7f06899107baf710b57ed2b486ffc62"
+  integrity sha512-kFzghPn+9yxUUTNZ1NJTffvitiR6HUvN13SCpmuC1e5w+BfdTneMUe7gT5VFBAGTs6H4BsWNU5uXBn8rzTpkVQ==
   dependencies:
     chalk "2.4.2"
     escape-regexp "0.0.1"
@@ -8348,10 +8340,10 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-on-rails@12.5.2:
-  version "12.5.2"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-12.5.2.tgz#d007e56fc431dbce96c0ffb7b755fad3d8ee98c6"
-  integrity sha512-uhI3z05A5qxjuWC2BkJup4/V34qfqOdXE8R9F0+TzmMKEGhTvsKLYtXbGSvESCuEOIFwiyw7nbf4iUlbyIFtVw==
+react-on-rails@13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-13.1.0.tgz#997dee0d6cd27762f01a5baa58ed51c222a152f0"
+  integrity sha512-OOSzFkQoZc/q8c2E9zc4eOOCUKvmm1KCFE/Le570Sxwov3lnUVrpCjPbk+LblYvZLmKTjXMY8p4ocx7mYn7E7Q==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.5"
     concurrently "^5.1.0"

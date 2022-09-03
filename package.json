@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Code from the React Webpack tutorial.",
   "engines": {
-    "node": "16.13.2",
+    "node": "16.14.0",
     "yarn": "1.22.17"
   },
   "repository": {
@@ -38,7 +38,7 @@
     "babel-loader": "8",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "bootstrap-loader": "judahmeek/bootstrap-loader#judahmeek/webpack-5",
+    "bootstrap-loader": "^4.0.0-rc.0",
     "bootstrap-sass": "^3.3.7",
     "classnames": "^2.2.5",
     "compression-webpack-plugin": "9",
@@ -64,7 +64,7 @@
     "react-bootstrap": "^0.31.5",
     "react-dom": "^17.0.2",
     "react-intl": "^5.24.1",
-    "react-on-rails": "12.5.2",
+    "react-on-rails": "13.1.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
