@@ -140,7 +140,6 @@ GEM
     json (2.6.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8-node (16.10.0.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -154,8 +153,6 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
-    mini_racer (0.6.0)
-      libv8-node (~> 16.10.0.0)
     minitest (5.15.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
@@ -374,7 +371,6 @@ DEPENDENCIES
   jbuilder
   launchy
   listen
-  mini_racer
   pg
   pry
   pry-byebug
