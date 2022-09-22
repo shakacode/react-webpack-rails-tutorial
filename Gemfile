@@ -41,10 +41,6 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# mini_racer is probably faster than therubyracer
-gem "mini_racer", platforms: :ruby
-
 gem "autoprefixer-rails"
 
 gem "awesome_print"
