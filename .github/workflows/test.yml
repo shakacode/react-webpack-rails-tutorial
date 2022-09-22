@@ -1,0 +1,68 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      NODE_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      DRIVER: selenium_chrome
+      CHROME_BIN: /usr/bin/google-chrome
+      USE_COVERALLS: true
+    steps:
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+      - name: Check Chrome version
+        run: chrome --version
+      - name: Check Chrome version
+        run: google-chrome --version
+      - name: Set Display environment variable
+        run: "export DISPLAY=:99"
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Add or replace dependency steps here
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
+        with:
+          ruby: 3.x
+          bundler-cache: true
+      # Add or replace database setup steps here
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Build
+        run: |
+          npm install
+          npx webpack
+      # Add or replace test runners here
+      - name: Run tests with xvfb
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: bundle exec rake react_on_rails:locale
+          working-directory: ./ #optional
+          options: ":99 -ac -screen scn 1600x1200x16"
