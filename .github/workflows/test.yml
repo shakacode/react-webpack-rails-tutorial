@@ -57,8 +57,8 @@ jobs:
           node-version: 16.x
       - name: Build
         run: |
-          npm install
-          npx webpack
+          npm install --legacy-peer-deps
+          bundle exec bin/webpacker
       # Add or replace test runners here
       - name: Run tests with xvfb
         uses: GabrielBB/xvfb-action@v1
