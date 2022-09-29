@@ -93,7 +93,7 @@ end
 group :test do
   gem "capybara"
   gem "capybara-screenshot"
-  gem "coveralls", require: false
+  gem 'coveralls_reborn', '~> 0.25.0', require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
