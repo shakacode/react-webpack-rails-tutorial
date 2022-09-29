@@ -64,8 +64,6 @@ shared_examples "Validation errors displaying" do
   end
 end
 
-
-
 # Forms
 shared_examples "with Inline Form" do
   click_link "Inline Form"
@@ -90,4 +88,10 @@ end
 
 shared_examples "when Form Submitted with Blank Fields", blank_form_submitted: true do
   include_context "Form Submitted", name: "", text: ""
+end
+
+shared_examples "when from classic page" do
+  click_link "New Comment"
+
+  include_examples "New Comment Submission", false
 end

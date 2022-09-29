@@ -64,10 +64,4 @@ describe "Add new comment" do
       include_examples "Validation errors displaying"
     end
   end
-
-  context "when from classic page", page: :classic do
-    click_link "New Comment"
-
-    include_examples "New Comment Submission", false
-  end
 end

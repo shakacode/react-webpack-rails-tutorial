@@ -7,8 +7,9 @@ require "system/shared/contexts"
 describe "Edit a comment", existing_comment: true do
   let(:comment) { Comment.first }
 
-  context "when from classic page", page: :classic do
+  context "when from classic page" do
     it "comment is updated when edit is submitted" do
+      include_examples "when from classic page"
       click_link "Edit", match: :first
       let(:edited_name) { "Abraham Lincoln" }
 
@@ -18,6 +19,7 @@ describe "Edit a comment", existing_comment: true do
     end
 
     it "comment is not updated when edit is submitted with blank fields", blank_form_submitted: true do
+      include_examples "when from classic page"
       click_link "Edit", match: :first
       expect(page).not_to have_success_message
       expect(page).to have_failure_message
