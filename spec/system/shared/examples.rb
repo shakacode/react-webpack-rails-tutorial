@@ -63,3 +63,31 @@ shared_examples "Validation errors displaying" do
     end
   end
 end
+
+
+
+# Forms
+shared_examples "with Inline Form" do
+  click_link "Inline Form"
+  expect(page).to have_css("form.commentForm.form-inline")
+end
+shared_examples "with Stacked Form" do
+  click_link "Stacked Form"
+  expect(page).to have_css("form.commentForm.form-stacked")
+end
+shared_examples "with Horizontal Form" do
+  include_examples "with Inline Form"
+  click_link "Horizontal Form"
+  expect(page).to have_css("form.commentForm.form-horizontal")
+end
+
+# Form Submission
+shared_examples "when Form Submitted", form_submitted: true do |name: "Spicoli", text: "dude!"|
+  fill_in "Your Name", with: name
+  fill_in "Say something using markdown...", with: text
+  click_button "Post"
+end
+
+shared_examples "when Form Submitted with Blank Fields", blank_form_submitted: true do
+  include_context "Form Submitted", name: "", text: ""
+end
