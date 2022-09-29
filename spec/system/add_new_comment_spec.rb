@@ -57,7 +57,7 @@ describe "Add new comment" do
   end
 
   context "when from classic page", page: :classic do
-    before { click_link "New Comment" }
+    click_link "New Comment"
 
     include_examples "New Comment Submission", false
   end

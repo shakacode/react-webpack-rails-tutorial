@@ -13,7 +13,7 @@ describe "Edit a comment", existing_comment: true do
     context "when edit is submitted" do
       let(:edited_name) { "Abraham Lincoln" }
 
-      include_context "Form Submitted", name: :edited_name
+      include_context "when Form Submitted", name: :edited_name
 
       it "comment is updated" do
         expect(page).to have_css(".comment", text: :edited_name)
