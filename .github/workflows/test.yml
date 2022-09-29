@@ -34,35 +34,44 @@ jobs:
     steps:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@latest
+
       - name: Check Chrome version
         run: chrome --version
+
       - name: Check Chrome version
         run: google-chrome --version
+
       - name: Set Display environment variable
         run: "export DISPLAY=:99"
+
       - name: Checkout code
         uses: actions/checkout@v3
-      # Add or replace dependency steps here
+
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
         with:
           ruby: 3.x
           bundler-cache: true
-      # Add or replace database setup steps here
-      - name: Set up database schema
-        run: bin/rails db:schema:load
+
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      - name: Build
-        run: |
-          npm install --legacy-peer-deps
-          bundle exec bin/webpacker
-      # Add or replace test runners here
+      - name: Install Node Packages
+        run: npm install --legacy-peer-deps
+
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+
+      - name: Build i18n libraries
+        run: bundle exec rake react_on_rails:locale
+
+      - name: Build webpacker chunks
+        run: NODE_ENV=development bundle exec bin/webpacker
+
       - name: Run tests with xvfb
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bundle exec rake react_on_rails:locale
+          run: bundle exec rake
           working-directory: ./ #optional
           options: ":99 -ac -screen scn 1600x1200x16"
