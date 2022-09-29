@@ -35,13 +35,8 @@ end
 
 # Form Submission
 shared_context "when Form Submitted", form_submitted: true do |name: "Spicoli", text: "dude!"|
-  let(:hint_name) { "Your Name" }
-  let(:hint_text) { "Say something using markdown..." }
-  let(:name) { name }
-  let(:text) { text }
-
-  fill_in hint_name, with: name
-  fill_in hint_text, with: text
+  fill_in "Your Name", with: name
+  fill_in "Say something using markdown...", with: text
   click_button "Post"
 end
 
