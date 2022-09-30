@@ -22,25 +22,25 @@ shared_context "when Existing Comment", existing_comment: true do
 end
 
 shared_examples "check if comment is added" do |expect_comment_count|
-  expect(page).to have_css(".js-comment-author", text: name)
-  expect(page).to have_css(".js-comment-text", text: text)
-  expect(page).to have_no_content("Your comment was not saved!")
+  is_expected.to have_css(".js-comment-author", text: name)
+  is_expected.to have_css(".js-comment-text", text: text)
+  is_expected.to have_no_content("Your comment was not saved!")
   if expect_comment_count
-    expect(page).to have_css("#js-comment-count",
+    is_expected.to have_css("#js-comment-count",
                              text: "Comments: #{Comment.count}")
   end
 end
 
 shared_examples "expect failed validation" do
-  expect(page).to have_content("Your comment was not saved!")
-  expect(page).to have_content("Author: can't be blank")
-  expect(page).to have_content("Text: can't be blank")
+  is_expected.to have_content("Your comment was not saved!")
+  is_expected.to have_content("Author: can't be blank")
+  is_expected.to have_content("Text: can't be blank")
 end
 
 shared_examples "expect successful validation" do
-  expect(page).to have_no_content("Your comment was not saved!")
-  expect(page).to have_no_content("Author: can't be blank")
-  expect(page).to have_no_content("Text: can't be blank")
+  is_expected.to have_no_content("Your comment was not saved!")
+  is_expected.to have_no_content("Author: can't be blank")
+  is_expected.to have_no_content("Text: can't be blank")
 end
 
 # Form Submission
