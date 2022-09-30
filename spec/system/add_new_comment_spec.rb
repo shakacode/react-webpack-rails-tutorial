@@ -5,6 +5,7 @@ require "system/shared/contexts"
 
 describe "Add new comment" do
   context "when React Router", page: :main, js: true, type: :system do
+    before { visit root_path }
     describe "with Horizontal Form" do
       subject { page }
       before {
@@ -13,8 +14,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -30,8 +31,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -47,8 +48,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -67,8 +68,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -84,8 +85,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -101,8 +102,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_css("#js-comment-count", text: "Comments: #{Comment.count}")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -121,8 +122,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Author: can't be blank")
@@ -137,8 +138,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Author: can't be blank")
@@ -153,8 +154,8 @@ describe "Add new comment" do
         submit_form
       }
       it "this sucks" do
-        is_expected.to have_css(".js-comment-author", text: name)
-        is_expected.to have_css(".js-comment-text", text: text)
+        is_expected.to have_css(".js-comment-author", text: "Spicoli")
+        is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Your comment was not saved!")
         is_expected.to have_no_content("Author: can't be blank")

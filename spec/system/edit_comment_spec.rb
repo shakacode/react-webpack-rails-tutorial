@@ -7,6 +7,7 @@ describe "Edit a comment", existing_comment: true do
   let(:comment) { Comment.first }
 
   context "when from classic page" do
+    before { visit comments_path }
     it "comment is updated when edit is submitted" do
       click_link "New Comment"
       submit_form

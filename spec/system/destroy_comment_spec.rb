@@ -5,6 +5,7 @@ require "system/shared/contexts"
 
 describe "Destroy a comment", existing_comment: true do
   context "when from classic page" do
+    before { visit comments_path }
     let(:comment) { Comment.first }
 
     it "clicking destroy link destroys comment" do
