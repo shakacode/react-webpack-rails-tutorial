@@ -20,3 +20,32 @@ end
 shared_context "when Existing Comment", existing_comment: true do
   before { Comment.create(author: "John Doe", text: "Hello there!") }
 end
+
+shared_examples "check if comment is added" do |expect_comment_count|
+  expect(page).to have_css(".js-comment-author", text: name)
+  expect(page).to have_css(".js-comment-text", text: text)
+  expect(page).to have_no_content("Your comment was not saved!")
+  if expect_comment_count
+    expect(page).to have_css("#js-comment-count",
+                             text: "Comments: #{Comment.count}")
+  end
+end
+
+shared_examples "expect failed validation" do
+  expect(page).to have_content("Your comment was not saved!")
+  expect(page).to have_content("Author: can't be blank")
+  expect(page).to have_content("Text: can't be blank")
+end
+
+shared_examples "expect successful validation" do
+  expect(page).to have_no_content("Your comment was not saved!")
+  expect(page).to have_no_content("Author: can't be blank")
+  expect(page).to have_no_content("Text: can't be blank")
+end
+
+# Form Submission
+def submit_form(name: "Spicoli", text: "dude!")
+  fill_in "Your Name", with: name
+  fill_in "Say something using markdown...", with: text
+  click_button "Post"
+end
