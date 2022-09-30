@@ -5,74 +5,110 @@ require "system/shared/contexts"
 
 describe "Add new comment" do
   context "when React Router", page: :main, js: true, type: :system do
-    it "with Horizontal Form" do
-      click_link "Inline Form"
-      click_link "Horizontal Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Horizontal Form" do
+      before {
+        click_link "Inline Form"
+        click_link "Horizontal Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with Inline Form" do
-      click_link "Inline Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Inline Form" do
+      before {
+        click_link "Inline Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with Stacked Form" do
-      click_link "Stacked Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Stacked Form" do
+      before {
+        click_link "Stacked Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
   end
 
   context "when React/Redux", page: :react_demo, js: true, type: :system do
-    it "with Horizontal Form" do
-      click_link "Inline Form"
-      click_link "Horizontal Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Horizontal Form" do
+      before {
+        click_link "Inline Form"
+        click_link "Horizontal Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with Inline Form" do
-      click_link "Inline Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Inline Form" do
+      before {
+        click_link "Inline Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with Stacked Form" do
-      click_link "Stacked Form"
-      submit_form
-      include_examples "check if comment is added", true
-      include_examples "expect successful validation"
+    describe "with Stacked Form" do
+      before {
+        click_link "Stacked Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
   end
 
   context "when simple page", page: :simple, js: true, type: :system do
-    it "with Horizontal Form" do
-      click_link "Inline Form"
-      click_link "Horizontal Form"
-      submit_form
-      include_examples "check if comment is added", false
-      include_examples "expect successful validation"
+    describe "with Horizontal Form" do
+      before {
+        click_link "Inline Form"
+        click_link "Horizontal Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with Inline Form" do
-      click_link "Inline Form"
-      submit_form
-      include_examples "check if comment is added", false
-      include_examples "expect successful validation"
+    describe "with Inline Form" do
+      before {
+        click_link "Inline Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
 
-    it "with the Stacked Form" do
-      click_link "Stacked Form"
-      submit_form
-      include_examples "check if comment is added", false
-      include_examples "expect successful validation"
+    describe "with the Stacked Form" do
+      before {
+        click_link "Stacked Form"
+        submit_form
+      }
+      context "same examples" do
+        include_examples "check if comment is added", true
+        include_examples "expect successful validation"
+      end
     end
   end
 end
