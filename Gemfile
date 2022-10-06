@@ -43,7 +43,7 @@ gem "rails-html-sanitizer"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # mini_racer is probably faster than therubyracer
-gem "mini_racer", platforms: :ruby
+# gem "mini_racer", platforms: :ruby
 
 gem "autoprefixer-rails"
 
