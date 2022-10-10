@@ -5,10 +5,10 @@ require "system/shared/contexts"
 
 describe "Add new comment" do
   context "when React Router", page: :main, js: true, type: :system do
-    before { visit root_path }
     describe "with Horizontal Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         click_link "Horizontal Form"
         submit_form
@@ -27,6 +27,7 @@ describe "Add new comment" do
     describe "with Inline Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         submit_form
       }
@@ -44,6 +45,7 @@ describe "Add new comment" do
     describe "with Stacked Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Stacked Form"
         submit_form
       }
@@ -63,6 +65,7 @@ describe "Add new comment" do
     describe "with Horizontal Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         click_link "Horizontal Form"
         submit_form
@@ -81,9 +84,11 @@ describe "Add new comment" do
     describe "with Inline Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         submit_form
       }
+
       it "this sucks" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
@@ -98,6 +103,7 @@ describe "Add new comment" do
     describe "with Stacked Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Stacked Form"
         submit_form
       }
@@ -117,6 +123,7 @@ describe "Add new comment" do
     describe "with Horizontal Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         click_link "Horizontal Form"
         submit_form
@@ -134,6 +141,7 @@ describe "Add new comment" do
     describe "with Inline Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Inline Form"
         submit_form
       }
@@ -150,6 +158,7 @@ describe "Add new comment" do
     describe "with the Stacked Form" do
       subject { page }
       before {
+        visit root_path
         click_link "Stacked Form"
         submit_form
       }
