@@ -5,16 +5,16 @@ require "system/shared/contexts"
 
 describe "Destroy a comment", existing_comment: true do
   context "when from classic page" do
-    before { visit comments_path }
-    let(:comment) { Comment.first }
+    let(:comment) { FactoryBot.build(:comment) }
 
-    it "clicking destroy link destroys comment" do
+    xit "clicking destroy link destroys comment" do
+      visit comments_path
+
       click_link "New Comment"
       submit_form(name: comment.author, text: comment.text)
 
-      accept_confirm do
-        click_link "Destroy", href: comment_path(comment)
-      end
+      click_link "Back"
+      click_link "Destroy"
 
       expect(page).not_to have_css(".comment", text: comment.author)
       expect(page).not_to have_css(".comment", text: comment.text)

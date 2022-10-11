@@ -4,11 +4,11 @@ require "rails_helper"
 require "system/shared/contexts"
 
 describe "Edit a comment", existing_comment: true do
-  let(:comment) { Comment.first }
+  let(:comment) { FactoryBot.build(:comment) }
 
   context "when from classic page" do
-    before { visit comments_path }
     it "comment is updated when edit is submitted" do
+      visit comments_path
       click_link "New Comment"
       submit_form
 
@@ -21,6 +21,7 @@ describe "Edit a comment", existing_comment: true do
     end
 
     it "comment is not updated when edit is submitted with blank fields", blank_form_submitted: true do
+      visit comments_path
       click_link "New Comment"
       submit_form
 
