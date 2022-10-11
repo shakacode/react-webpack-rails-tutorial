@@ -25,15 +25,13 @@ function ServerRouterApp(_props, railsContext) {
 
   // Important that you don't do this if you are redirecting or have an error.
   // eslint-disable-next-line react/display-name
-  return function () {
-    return (
-      <Provider store={store}>
-        <StaticRouter location={location} context={context}>
-          {routes}
-        </StaticRouter>
-      </Provider>
-    );
-  };
+  return () => (
+    <Provider store={store}>
+      <StaticRouter location={location} context={context}>
+        {routes}
+      </StaticRouter>
+    </Provider>
+  );
 }
 
 export default ServerRouterApp;

@@ -5,6 +5,7 @@ require "system/shared/contexts"
 
 describe "Edit a comment", existing_comment: true do
   let(:comment) { FactoryBot.build(:comment) }
+  let(:edited_name) { "Abraham Lincoln" }
 
   context "when from classic page" do
     it "comment is updated when edit is submitted" do
@@ -13,9 +14,8 @@ describe "Edit a comment", existing_comment: true do
       submit_form
 
       click_link "Edit", match: :first
-      let(:edited_name) { "Abraham Lincoln" }
 
-      subit_form(name: :edited_name)
+      submit_form(name: :edited_name)
       expect(page).to have_css(".comment", text: :edited_name)
       expect(page).to have_css("#notice", text: "Comment was successfully updated.")
     end

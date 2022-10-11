@@ -7,14 +7,16 @@ describe "Destroy a comment", existing_comment: true do
   context "when from classic page" do
     let(:comment) { FactoryBot.build(:comment) }
 
-    xit "clicking destroy link destroys comment" do
+    it "clicking destroy link destroys comment" do
       visit comments_path
 
       click_link "New Comment"
       submit_form(name: comment.author, text: comment.text)
-
       click_link "Back"
-      click_link "Destroy"
+
+      accept_confirm do
+        click_link "Destroy"
+      end
 
       expect(page).not_to have_css(".comment", text: comment.author)
       expect(page).not_to have_css(".comment", text: comment.text)

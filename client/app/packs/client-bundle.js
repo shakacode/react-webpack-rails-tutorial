@@ -1,5 +1,6 @@
 import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
+import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
 
 import App from '../bundles/comments/startup/App.jsx';

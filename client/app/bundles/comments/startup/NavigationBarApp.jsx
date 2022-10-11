@@ -23,18 +23,16 @@ function NavigationBarApp(_props, railsContext) {
   } else if (pathname === paths.NO_ROUTER_PATH) {
     store = ReactOnRails.getStore('commentsStore', false);
   } else {
-    return <NavigationBar {...{ pathname }} />;
+    return () => <NavigationBar {...{ pathname }} />;
   }
 
   // eslint interprets the return as a new component definition, which is not the case
   // eslint-disable-next-line react/display-name, react/no-unstable-nested-components
-  return function () {
-    return (
-      <Provider store={store}>
-        <NavigationBarContainer />
-      </Provider>
-    );
-  };
+  return () => (
+    <Provider store={store}>
+      <NavigationBarContainer />
+    </Provider>
+  );
 }
 
 export default NavigationBarApp;
