@@ -13,7 +13,7 @@ describe "Add new comment" do
         click_link "Horizontal Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -31,7 +31,7 @@ describe "Add new comment" do
         click_link "Inline Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -49,7 +49,7 @@ describe "Add new comment" do
         click_link "Stacked Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -70,7 +70,7 @@ describe "Add new comment" do
         click_link "Horizontal Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -89,7 +89,7 @@ describe "Add new comment" do
         submit_form
       }
 
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -107,7 +107,7 @@ describe "Add new comment" do
         click_link "Stacked Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -128,7 +128,7 @@ describe "Add new comment" do
         click_link "Horizontal Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -145,7 +145,7 @@ describe "Add new comment" do
         click_link "Inline Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
@@ -162,7 +162,7 @@ describe "Add new comment" do
         click_link "Stacked Form"
         submit_form
       }
-      it "this sucks" do
+      it "should have the submitted comment" do
         is_expected.to have_css(".js-comment-author", text: "Spicoli")
         is_expected.to have_css(".js-comment-text", text: "dude!")
         is_expected.to have_no_content("Your comment was not saved!")
