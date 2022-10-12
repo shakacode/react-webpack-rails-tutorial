@@ -25,5 +25,4 @@ EXPOSE 3000
 
 # CMD ./startup.sh
 
-CMD rails s
-
+CMD ['rails', 's']
