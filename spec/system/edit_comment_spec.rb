@@ -1,32 +1,36 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "system/shared/examples"
 require "system/shared/contexts"
 
 describe "Edit a comment", existing_comment: true do
-  let(:comment) { Comment.first }
+  let(:comment) { FactoryBot.build(:comment) }
+  let(:edited_name) { "Abraham Lincoln" }
 
-  context "when from classic page", page: :classic do
-    before { click_link "Edit", match: :first }
+  context "when from classic page" do
+    it "comment is updated when edit is submitted" do
+      visit comments_path
+      click_link "New Comment"
+      submit_form
 
-    context "when edit is submitted" do
-      let(:edited_name) { "Abraham Lincoln" }
+      click_link "Edit", match: :first
 
-      include_context "Form Submitted", name: :edited_name
-
-      it "comment is updated" do
-        expect(page).to have_css(".comment", text: :edited_name)
-        expect(page).to have_css("#notice", text: "Comment was successfully updated.")
-      end
+      submit_form(name: :edited_name)
+      expect(page).to have_css(".comment", text: :edited_name)
+      expect(page).to have_css("#notice", text: "Comment was successfully updated.")
     end
 
-    context "when edit is submitted with blank fields", blank_form_submitted: true do
-      it "comment is not updated" do
-        expect(page).not_to have_success_message
-        expect(page).to have_failure_message
-        expect(page).not_to have_css(".comment", text: "")
-      end
+    it "comment is not updated when edit is submitted with blank fields", blank_form_submitted: true do
+      visit comments_path
+      click_link "New Comment"
+      submit_form
+
+      click_link "Edit", match: :first
+      submit_form(name: "", text: "")
+
+      expect(page).not_to have_success_message
+      expect(page).to have_failure_message
+      expect(page).not_to have_css(".comment", text: "")
     end
   end
 end

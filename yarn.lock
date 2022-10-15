@@ -86,15 +86,6 @@
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/generator@^7.16.7":
-  version "7.16.7"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.16.7.tgz#b42bf46a3079fa65e1544135f32e7958f048adbb"
-  integrity sha512-/ST3Sg8MLGY5HVYmrjOgL60ENux/HfO/CsUh7y4MalThufhE/Ff/6EibFDHi4jiDCaWfJKoqbE6oTh21c5hrRg==
-  dependencies:
-    "@babel/types" "^7.16.7"
-    jsesc "^2.5.1"
-    source-map "^0.5.0"
-
 "@babel/generator@^7.16.8":
   version "7.16.8"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.16.8.tgz#359d44d966b8cd059d543250ce79596f792f2ebe"
@@ -2247,13 +2238,13 @@ babel-jest@^23.4.2, babel-jest@^23.6.0:
     babel-plugin-istanbul "^4.1.6"
     babel-preset-jest "^23.2.0"
 
-babel-loader@8:
-  version "8.2.3"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.3.tgz#8986b40f1a64cacfcb4b8429320085ef68b1342d"
-  integrity sha512-n4Zeta8NC3QAsuyiizu0GkmRcQ6clkV9WFUnUf1iXP//IeSKbWjofW3UHyZVwlOB4y039YQKefawyTn64Zwbuw==
+babel-loader@^8.2.3:
+  version "8.2.5"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.5.tgz#d45f585e654d5a5d90f5350a779d7647c5ed512e"
+  integrity sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==
   dependencies:
     find-cache-dir "^3.3.1"
-    loader-utils "^1.4.0"
+    loader-utils "^2.0.0"
     make-dir "^3.1.0"
     schema-utils "^2.6.5"
 
@@ -2504,9 +2495,10 @@ boolify@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolify/-/boolify-1.0.1.tgz#b5c09e17cacd113d11b7bb3ed384cc012994d86b"
   integrity sha1-tcCeF8rNET0Rt7s+04TMASmU2Gs=
 
-bootstrap-loader@judahmeek/bootstrap-loader#judahmeek/webpack-5:
-  version "3.0.4"
-  resolved "https://codeload.github.com/judahmeek/bootstrap-loader/tar.gz/f9addb04f657b0a5ff2bed701ab66ac28f9a9a62"
+bootstrap-loader@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-loader/-/bootstrap-loader-4.0.0.tgz#ca8f9534f35ecb15a824ca60a6abc9cd5b70150d"
+  integrity sha512-LzeZySPqDcfRmNZcddwfLc83D1Szv0EI0U3z2oiupoBCmCKXPJ4sMqhMZwSV6IRLuX6eZjG38uuiWgCLlFZPXg==
   dependencies:
     chalk "2.4.2"
     escape-regexp "0.0.1"
@@ -4357,13 +4349,10 @@ exports-loader@0.7.0:
     loader-utils "^1.1.0"
     source-map "0.5.0"
 
-expose-loader@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-1.0.3.tgz#5686d3b78cac8831c4af11c3dc361563deb8a9c0"
-  integrity sha512-gP6hs3vYeWIqyoVfsApGQcgCEpbcI1xe+celwI31zeDhXz2q03ycBC1+75IlQUGaYvj6rAloFIe/NIBnEElLsQ==
-  dependencies:
-    loader-utils "^2.0.0"
-    schema-utils "^3.0.0"
+expose-loader@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-4.0.0.tgz#aa6f06f57cbc904175de4fe4eaff6211337e0231"
+  integrity sha512-kUEvHyf6MPR2ubZCL9aziP9Br5wxMvq1cghTpYhM6MW52NPq+7hXixw2EqQuI1SvGb1fDjc2ehJOg6645wR6ww==
 
 express@^4.16.2, express@^4.17.1:
   version "4.17.2"
@@ -6487,7 +6476,7 @@ loader-utils@1.2.3:
     emojis-list "^2.0.0"
     json5 "^1.0.1"
 
-loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.4.0:
+loader-utils@^1.0.2, loader-utils@^1.1.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.4.0.tgz#c579b5e34cb34b1a74edc6c1fb36bfa371d5a613"
   integrity sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==

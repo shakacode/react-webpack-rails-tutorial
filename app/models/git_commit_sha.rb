@@ -9,7 +9,7 @@ class GitCommitSha
   end
 
   def self.reset_current_sha
-    self.current_sha = nil
+    @current_sha = nil
   end
 
   # Assumes the git CLI is available. This is not the case in production on Heroku.
