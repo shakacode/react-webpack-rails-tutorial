@@ -5,7 +5,7 @@ require "system/shared/contexts"
 
 describe "Destroy a comment", existing_comment: true do
   context "when from classic page" do
-    let(:comment) { FactoryBot.build(:comment) }
+    let(:comment) { build(:comment) }
 
     it "clicking destroy link destroys comment" do
       visit comments_path

@@ -2,7 +2,7 @@
 
 namespace :brakeman do
   desc "Run Brakeman"
-  task :run, :output_files do |_t, args|
+  task :run, [:output_files] => [:environment] do |_t, args|
     require "brakeman"
 
     files = args[:output_files].split if args[:output_files]
@@ -10,7 +10,7 @@ namespace :brakeman do
   end
 
   desc "Check your code with Brakeman"
-  task :check do
+  task check: :environment do
     require "brakeman"
     result = Brakeman.run app_path: ".", print_report: true
     exit Brakeman::Warnings_Found_Exit_Code unless result.filtered_warnings.empty?

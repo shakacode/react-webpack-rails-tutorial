@@ -3,23 +3,23 @@
 if Rails.env.development? || Rails.env.test?
   # See tasks/linters.rake
 
-  task :bundle_audit do
+  task bundle_audit: :environment do
     puts Rainbow("Running security audit on gems (bundle_audit)").green
     Rake::Task["bundle_audit"].invoke
   end
 
-  task :security_audit do
+  task security_audit: :environment do
     puts Rainbow("Running security audit on code (brakeman)").green
 
     sh "brakeman --exit-on-warn --quiet -A -z"
   end
 
-  task :js_tests do
+  task js_tests: :environment do
     puts Rainbow("Running JavaScript tests").green
     sh "yarn run test:client"
   end
 
-  task :rspec_tests do
+  task rspec_tests: :environment do
     puts Rainbow("Running RSpec tests").green
     sh "rspec"
   end

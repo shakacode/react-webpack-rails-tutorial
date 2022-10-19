@@ -21,10 +21,10 @@ describe "React Router Routes", js: true, type: :system do
   end
 
   context "when /react-router/redirect URL", page: :main do
-    before {
+    before do
       visit root_path
       click_link "Test Redirect (url to '/react-router/redirect' which goes to root '/')"
-    }
+    end
 
     it "shows comments section" do
       expect(page).to have_selector("h2", text: "Comments")

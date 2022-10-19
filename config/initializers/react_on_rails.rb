@@ -3,7 +3,7 @@
 # Shown below are the defaults for configuration
 ReactOnRails.configure do |config|
   # Define the files for we need to check for webpack compilation when running tests
-  config.webpack_generated_files = %w[ client-bundle.js server-bundle.js ]
+  config.webpack_generated_files = %w[client-bundle.js server-bundle.js]
 
   config.build_test_command = "RAILS_ENV=test bin/webpacker"
 
@@ -60,7 +60,7 @@ ReactOnRails.configure do |config|
   # I18N OPTIONS
   ################################################################################
   # Replace the following line to the location where you keep translation.js & default.js.
-  config.i18n_dir = Rails.root.join("client", "app", "libs", "i18n")
+  config.i18n_dir = Rails.root.join("client/app/libs/i18n")
 
   ################################################################################
   # MISCELLANEOUS OPTIONS
