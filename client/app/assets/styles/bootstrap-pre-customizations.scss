@@ -1,8 +1,8 @@
 // These variables get loaded BEFORE Bootstrap thus overriding them in Bootstrap.
 @import './app-variables';
 
-// This path is relative to node_modules/bootstrap-loader
-$fonts-url-path: '../../client/app/assets/fonts';
+// This path is relative to this file
+$fonts-url-path: '../fonts';
 
 @font-face {
   font-family: 'OpenSans-Light';
@@ -28,5 +28,3 @@ $fonts-url-path: '../../client/app/assets/fonts';
   color: #555;
   background-color: #ffffbf
 }
-
-
