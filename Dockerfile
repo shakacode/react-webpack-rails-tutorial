@@ -7,7 +7,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g yarn
 
 WORKDIR /app
-COPY Gemfile* .
+COPY Gemfile* ./
 
 RUN bundle install
 
