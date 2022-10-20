@@ -21,8 +21,6 @@ RUN rake react_on_rails:locale && RAILS_ENV=production rake assets:precompile
 RAILS_ENV=production 
 NODE_ENV=production
 
-EXPOSE 3000
-
 # CMD ./startup.sh
 
 CMD ['rails', 's']
