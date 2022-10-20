@@ -10,7 +10,7 @@ if %w[development test].include? Rails.env
     # RuboCop::RakeTask.new
 
     desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
-    task :rubocop, [:fix] => [] do |_t, args|
+    task :rubocop, [:fix] => [:environment] do |_t, args|
       def to_bool(str)
         return true if /^(true|t|yes|y|1)$/i.match?(str)
         return false if str.blank? || str =~ /^(false|f|no|n|0)$/i
@@ -24,13 +24,6 @@ if %w[development test].include? Rails.env
       sh cmd
     end
 
-    desc "Run ruby-lint as shell"
-    task :ruby do
-      cmd = "ruby-lint app config spec lib"
-      puts "Running ruby-lint Linters via `#{cmd}`"
-      sh cmd
-    end
-
     # SlimLint::RakeTask.new do |t|
     #   t.files = ["app/views"]
     # end
@@ -40,7 +33,7 @@ if %w[development test].include? Rails.env
     end
 
     desc "eslint"
-    task :eslint do
+    task eslint: :environment do
       cmd = "yarn run lint"
       puts "Running eslint via `#{cmd}`"
       sh cmd
@@ -57,7 +50,7 @@ if %w[development test].include? Rails.env
     desc "See docs for task 'scss_lint'"
     task scss: :scss_lint
 
-    task lint: %i[rubocop ruby js scss] do
+    task lint: %i[rubocop js scss] do
       puts "Completed all linting"
     end
   end

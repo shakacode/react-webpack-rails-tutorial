@@ -4,7 +4,7 @@ require "rails_helper"
 require "system/shared/contexts"
 
 describe "Edit a comment", existing_comment: true do
-  let(:comment) { FactoryBot.build(:comment) }
+  let(:comment) { build(:comment) }
   let(:edited_name) { "Abraham Lincoln" }
 
   context "when from classic page" do
