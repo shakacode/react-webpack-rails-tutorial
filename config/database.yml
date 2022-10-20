@@ -43,5 +43,3 @@ test:
 production:
   <<: *default
   database: react-webpack-rails-tutorial
-  host: localhost
-  port: 5432
