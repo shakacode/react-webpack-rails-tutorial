@@ -28,8 +28,6 @@
 # Uncomment below for a setup with just postgres and change your Gemfile to reflect this
 default: &default
   adapter: postgresql
-  username: postgres
-  password: My:s3Cr3t/
 
 development:
   <<: *default
