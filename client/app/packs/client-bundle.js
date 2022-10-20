@@ -1,8 +1,10 @@
 import ReactOnRails from 'react-on-rails';
-import 'bootstrap-loader';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
+
+import '../assets/styles/application.scss'
+import * as bootstrap from 'bootstrap'
 
 import App from '../bundles/comments/startup/App.jsx';
 import RouterApp from '../bundles/comments/startup/ClientRouterApp.jsx';
