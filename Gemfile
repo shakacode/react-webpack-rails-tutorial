@@ -72,8 +72,6 @@ group :development, :test do
   gem "rubocop-rails"
   gem "rubocop-rspec", "~> 2.7"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
-  gem "brakeman", require: false
-  gem "bundler-audit", require: false
   gem "scss_lint", require: false
 
   ################################################################################
