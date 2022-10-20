@@ -36,9 +36,10 @@ ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
   # Ensure that if we are running js tests, we are using latest webpack assets
   # This will use the defaults of :js and :server_rendering meta tags
   ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
@@ -109,7 +110,7 @@ RSpec.configure do |config|
   puts "Capybara using driver: #{Capybara.javascript_driver}"
   puts "=" * 80
 
-  Capybara.save_path = Rails.root.join("tmp", "capybara")
+  Capybara.save_path = Rails.root.join("tmp/capybara")
   Capybara::Screenshot.prune_strategy = { keep: 10 }
 
   config.append_after do

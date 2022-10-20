@@ -1,5 +1,7 @@
 import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
 
 import App from '../bundles/comments/startup/App.jsx';

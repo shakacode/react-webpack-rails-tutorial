@@ -41,11 +41,6 @@ gem "sdoc", group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem "rails-html-sanitizer"
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# mini_racer is probably faster than therubyracer
-# Removing since no longer necessary
-# gem "mini_racer", platforms: :ruby
-
 gem "autoprefixer-rails"
 
 gem "awesome_print"
@@ -73,12 +68,10 @@ group :development, :test do
   ################################################################################
   # Linters and Security
   gem "rubocop", "1.24.1", require: false
-  gem "rubocop-rspec", "~> 2.7"
-  gem 'rubocop-rails'
   gem "rubocop-performance", "~> 1.13"
+  gem "rubocop-rails"
+  gem "rubocop-rspec", "~> 2.7"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
-  gem "brakeman", require: false
-  gem "bundler-audit", require: false
   gem "scss_lint", require: false
 
   ################################################################################
@@ -98,7 +91,7 @@ end
 group :test do
   gem "capybara"
   gem "capybara-screenshot"
-  gem "coveralls", require: false
+  gem "coveralls_reborn", "~> 0.25.0", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"

@@ -5,17 +5,15 @@ import ReactOnRails from 'react-on-rails';
 import { BrowserRouter } from 'react-router-dom';
 import routes from '../routes/routes.jsx';
 
-function ClientRouterApp(_props, _railsContext) {
+function ClientRouterApp(_props) {
   const store = ReactOnRails.getStore('routerCommentsStore');
 
   // eslint-disable-next-line react/display-name
-  return function () {
-    return (
-      <Provider store={store}>
-        <BrowserRouter>{routes}</BrowserRouter>
-      </Provider>
-    );
-  };
+  return (
+    <Provider store={store}>
+      <BrowserRouter>{routes}</BrowserRouter>
+    </Provider>
+  );
 }
 
 export default ClientRouterApp;

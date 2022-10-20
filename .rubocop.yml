@@ -70,7 +70,7 @@ Metrics/BlockLength:
     - 'lib/tasks/linters.rake'
     - 'spec/rails_helper.rb'
     - 'spec/system/add_new_comment_spec.rb'
-    - 'spec/system/shared/examples.rb'
+    - 'spec/system/react_router_demo_spec.rb'
 
 Metrics/ParameterLists:
   Max: 5
@@ -105,4 +105,3 @@ RSpec/MultipleExpectations:
 
 RSpec/MultipleMemoizedHelpers:
   Max: 12
-
