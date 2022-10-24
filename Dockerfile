@@ -21,4 +21,4 @@ RUN rake react_on_rails:locale && RAILS_ENV=production rake assets:precompile
 ENV RAILS_ENV=production 
 ENV NODE_ENV=production
 
-CMD ['rails', 's']
+CMD ["rails", "s"]
