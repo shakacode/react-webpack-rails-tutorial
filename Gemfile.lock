@@ -149,6 +149,10 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.15.0)
+    net-protocol (0.1.3)
+      timeout
+    net-smtp (0.3.2)
+      net-protocol
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -322,6 +326,7 @@ GEM
       tins (~> 1.0)
     thor (1.2.1)
     tilt (2.0.10)
+    timeout (0.3.0)
     tins (1.31.1)
       sync
     tzinfo (2.0.4)
@@ -365,6 +370,7 @@ DEPENDENCIES
   jbuilder
   launchy
   listen
+  net-smtp
   pg
   pry
   pry-byebug
