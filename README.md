@@ -134,29 +134,28 @@ See package.json and Gemfile for versions
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
 ## Basic Demo Setup
-1. Be sure that you have Node installed! We suggest [nvm](https://github.com/creationix/nvm), with node version `v6.0` or above. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
+
+### Prerequisites
+- Node `v16.14.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
+- Ruby 3.1.2 or above
+- Postgres v9.2 or above
+- Redis. Check that you have Redis installed by running `which redis-server`. If missing and on MacOS, install with Homebrew (`brew install redis`)
+- [Yarn](https://yarnpkg.com/).
+
+### Setup
 1. `git clone git@github.com:shakacode/react-webpack-rails-tutorial.git`
 1. `cd react-webpack-rails-tutorial`
-1. Check that you have Ruby 2.3.0 or greater
-1. Check that you're using the right version of node. Run `nvm list` to check. Use 5.5 or greater.
-1. Check that you have Postgres installed. Run `which postgres` to check. Use 9.4 or greater.
-1. Check that you have Redis installed. Run `which redis-server` to check. If missing and on MacOS, install with Homebrew (`brew install redis`)
 1. `bundle install`
-1. `brew install yarn`
 1. `yarn`
 1. `rake db:setup`
-1. `foreman start -f Procfile.hot`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example with HOT RELOADING
-  2. Try Hot Reloading steps below!
-1. `foreman start -f Procfile.static`
-  1. Open a browser tab to http://localhost:3000 for the Rails app example.
-  2. When you make changes, you have to refresh the browser page.
+1. `rails start`
+    - Open a browser tab to http://localhost:3000 for the Rails app example
 
 ### Basic Command Line
-1. Run all linters and tests: `rake`
-1. See all npm commands: `yarn run`
-1. To start all development processes: `foreman start -f Procfile.dev`
-1. To start only all Rails development processes: `foreman start -f Procfile.hot`
+- Run all linters and tests: `rake`
+- See all npm commands: `yarn run`
+- To start all development processes: `foreman start -f Procfile.dev`
+- To start only all Rails development processes: `foreman start -f Procfile.hot`
 
 ### Experimenting with Hot Reloading: applies to both `Procfile.hot` and `Procfile.express`
 1. With the browser open to any JSX file, such as [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx) and you can change the JSX code, hit save, and you will see the screen update without refreshing the window. This applies to port 3000 and port 4000.

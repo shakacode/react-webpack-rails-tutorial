@@ -149,6 +149,10 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.15.0)
+    net-protocol (0.1.3)
+      timeout
+    net-smtp (0.3.2)
+      net-protocol
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -223,13 +227,12 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoc (6.3.3)
-    react_on_rails (12.5.2)
+    react_on_rails (13.1.0)
       addressable
       connection_pool
       execjs (~> 2.5)
       rails (>= 5.2)
       rainbow (~> 3.0)
-      webpacker (>= 4.2)
     redis (3.3.3)
     regexp_parser (2.2.0)
     require_all (3.0.0)
@@ -323,6 +326,7 @@ GEM
       tins (~> 1.0)
     thor (1.2.1)
     tilt (2.0.10)
+    timeout (0.3.0)
     tins (1.31.1)
       sync
     tzinfo (2.0.4)
@@ -339,11 +343,6 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
-    webpacker (6.0.0.rc.6)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     webrick (1.7.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
@@ -371,6 +370,7 @@ DEPENDENCIES
   jbuilder
   launchy
   listen
+  net-smtp
   pg
   pry
   pry-byebug
@@ -383,7 +383,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 12.5.2)
+  react_on_rails (= 13.1.0)
   redis (= 3.3.3)
   rspec-rails
   rubocop (= 1.24.1)
@@ -402,7 +402,7 @@ DEPENDENCIES
   webdrivers (= 3.9.4)
 
 RUBY VERSION
-   ruby 2.7.5p203
+   ruby 3.1.2p20
 
 BUNDLED WITH
-   2.1.4
+   2.3.5

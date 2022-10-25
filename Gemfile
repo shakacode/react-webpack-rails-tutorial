@@ -3,9 +3,9 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.5"
+ruby "3.1.2"
 
-gem "react_on_rails", "12.5.2"
+gem "react_on_rails", "13.1.0"
 gem "shakapacker", "6.0.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
@@ -44,6 +44,8 @@ gem "rails-html-sanitizer"
 gem "autoprefixer-rails"
 
 gem "awesome_print"
+
+gem "net-smtp", require: false
 
 # jquery as the JavaScript library has been moved under /client and managed by npm.
 # It is critical to not include any of the jquery gems when following this pattern or

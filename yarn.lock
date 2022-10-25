@@ -2495,7 +2495,7 @@ boolify@^1.0.0:
   resolved "https://registry.yarnpkg.com/boolify/-/boolify-1.0.1.tgz#b5c09e17cacd113d11b7bb3ed384cc012994d86b"
   integrity sha1-tcCeF8rNET0Rt7s+04TMASmU2Gs=
 
-bootstrap-loader@4.0.0:
+bootstrap-loader@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/bootstrap-loader/-/bootstrap-loader-4.0.0.tgz#ca8f9534f35ecb15a824ca60a6abc9cd5b70150d"
   integrity sha512-LzeZySPqDcfRmNZcddwfLc83D1Szv0EI0U3z2oiupoBCmCKXPJ4sMqhMZwSV6IRLuX6eZjG38uuiWgCLlFZPXg==
@@ -8337,10 +8337,10 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-on-rails@12.5.2:
-  version "12.5.2"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-12.5.2.tgz#d007e56fc431dbce96c0ffb7b755fad3d8ee98c6"
-  integrity sha512-uhI3z05A5qxjuWC2BkJup4/V34qfqOdXE8R9F0+TzmMKEGhTvsKLYtXbGSvESCuEOIFwiyw7nbf4iUlbyIFtVw==
+react-on-rails@13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-13.1.0.tgz#997dee0d6cd27762f01a5baa58ed51c222a152f0"
+  integrity sha512-OOSzFkQoZc/q8c2E9zc4eOOCUKvmm1KCFE/Le570Sxwov3lnUVrpCjPbk+LblYvZLmKTjXMY8p4ocx7mYn7E7Q==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.5"
     concurrently "^5.1.0"
