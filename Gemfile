@@ -45,7 +45,11 @@ gem "autoprefixer-rails"
 
 gem "awesome_print"
 
+# FIXME: quick fix for rails6, not needed since rails 7.0.1
+# https://github.com/rails/rails/pull/44083
 gem "net-smtp", require: false
+gem "net-imap", require: false
+gem "net-pop", require: false
 
 # jquery as the JavaScript library has been moved under /client and managed by npm.
 # It is critical to not include any of the jquery gems when following this pattern or
