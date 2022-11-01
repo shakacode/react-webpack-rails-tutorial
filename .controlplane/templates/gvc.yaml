@@ -1,0 +1,6 @@
+kind: gvc
+name: APP_GVC
+spec:
+  staticPlacement:
+    locationLinks:
+      - /org/APP_ORG/location/APP_LOCATION

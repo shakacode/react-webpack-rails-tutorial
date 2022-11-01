@@ -1,0 +1,23 @@
+#!/bin/sh
+
+SCRIPT_PATH=$(dirname $(realpath $0))
+export $(cat $SCRIPT_PATH/env_defaults | grep "^[^#]" | xargs)
+
+# VERSION=$(date +%s)
+VERSION=latest
+IMAGE=$CPLN_GVC:${VERSION}
+
+cpln image build \
+  --name ${IMAGE} \
+  --dockerfile "$SCRIPT_PATH/Dockerfile" \
+  --dir .. \
+  --push
+
+# NOTE: atm, updating only app container with default workload name
+cpln workload update ${CPLN_APP_WORKLOAD} \
+  --set spec.containers.${CPLN_APP_WORKLOAD}.image=/org/${CPLN_ORG}/image/${IMAGE} \
+  --gvc ${CPLN_GVC}
+
+if [ "$VERSION" == "latest" ]; then
+  cpln workload force-redeployment ${CPLN_APP_WORKLOAD} --gvc ${CPLN_GVC}
+fi

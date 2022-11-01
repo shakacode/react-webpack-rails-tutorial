@@ -1,0 +1,12 @@
+#!/bin/sh
+
+CPLN_ORG=shakacode-staging
+
+# default location
+CPLN_LOCATION=aws-us-east-2
+
+# default gvc (default app name)
+CPLN_GVC=ror-tutorial
+
+# main workload name
+CPLN_APP_WORKLOAD=rails

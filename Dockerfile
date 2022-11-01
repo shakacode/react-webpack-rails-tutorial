@@ -11,12 +11,12 @@ COPY Gemfile* ./
 
 RUN bundle install
 
-COPY package.json .
+COPY package.json yarn.lock .
 RUN yarn install
 
 COPY . .
 
-RUN rake react_on_rails:locale && RAILS_ENV=production rake assets:precompile
+RUN rails react_on_rails:locale && RAILS_ENV=production rails assets:precompile
 
 ENV RAILS_ENV=production 
 ENV NODE_ENV=production

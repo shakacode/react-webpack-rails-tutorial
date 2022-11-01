@@ -13,7 +13,7 @@ RUN bundle config set without 'development test' && \
     bundle config set with 'staging production' && \
     bundle install --jobs=3 --retry=3
 
-COPY package.json .
+COPY package.json yarn.lock .
 RUN yarn install
 
 COPY Gemfile* config.ru Rakefile babel.config.js ./
@@ -29,7 +29,7 @@ ENV RAILS_ENV=production
 ENV NODE_ENV=production
 ENV SECRET_KEY_BASE=123
 
-RUN rake react_on_rails:locale && rake assets:precompile
+RUN rails react_on_rails:locale && rails assets:precompile
 
 COPY .controlplane/entrypoint.sh ./
 

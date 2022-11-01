@@ -1,0 +1,41 @@
+#!/bin/sh
+
+SCRIPT_PATH=$(dirname $(realpath $0))
+export $(cat $SCRIPT_PATH/env_defaults | grep "^[^#]" | xargs)
+
+ONEOFF_NAME=$CPLN_APP_WORKLOAD$(date +%s)
+
+function finish {
+  # TODO: check if workload exists before deleting
+  echo "- Deleting workload"
+  cpln workload delete $ONEOFF_NAME --gvc $CPLN_GVC 2> /dev/null
+}
+trap finish EXIT
+trap finish ERR
+
+echo "- Cloning workload"
+cpln workload clone $CPLN_APP_WORKLOAD --name $ONEOFF_NAME --gvc $CPLN_GVC > /dev/null
+
+echo "- Wait for replica to be running"
+until cpln workload get-replicas $ONEOFF_NAME --location $CPLN_LOCATION --gvc $CPLN_GVC 2> /dev/null | grep -q $ONEOFF_NAME; do
+  echo "waiting..."
+  sleep 1
+done
+
+if [ -z "$1" ]; then
+  echo "- Interactive replica ready, connecting"
+
+  cpln workload connect $ONEOFF_NAME --gvc $CPLN_GVC --location $CPLN_LOCATION
+else
+  echo "- Non-interactive replica ready, executing command"
+
+expect <<EOF
+set timeout 600
+spawn -noecho cpln workload connect $ONEOFF_NAME --gvc $CPLN_GVC --location $CPLN_LOCATION
+expect "root@$ONEOFF_NAME-"
+send "$@\n"
+expect "root@$ONEOFF_NAME-"
+EOF
+
+  echo
+fi
