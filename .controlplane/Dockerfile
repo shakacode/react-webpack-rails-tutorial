@@ -3,7 +3,7 @@ FROM ruby:3.1.2
 RUN apt-get update
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash
-RUN apt-get install -y nodejs 
+RUN apt-get install -y nodejs netcat
 RUN npm install -g yarn
 
 WORKDIR /app
@@ -31,7 +31,7 @@ ENV SECRET_KEY_BASE=123
 
 RUN rails react_on_rails:locale && rails assets:precompile
 
-COPY .controlplane/entrypoint.sh ./
+COPY .controlplane/entrypoint.sh .controlplane/runner.sh ./
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 

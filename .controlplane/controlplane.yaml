@@ -1,0 +1,11 @@
+one_off:
+  org: shakacode-staging
+  location: aws-us-east-2
+  workload: rails
+review_apps:
+  prefix: ror-tutorial
+  org: shakacode-staging
+  location: aws-us-east-2
+  workloads:
+    - rails
+    # - sidekiq
