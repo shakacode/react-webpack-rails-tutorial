@@ -1,0 +1,18 @@
+aliases:
+  common: &common
+    org: shakacode-staging
+    location: aws-us-east-2
+    one_off_workload: rails
+    app_workloads:
+      - rails
+    additional_workloads:
+      - redis
+      - postgres
+
+apps:
+  ror-tutorial:
+    <<: *common
+    image_tagging: latest
+  ror-tutorial-review:
+    <<: *common
+    prefix: true
