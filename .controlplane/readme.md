@@ -10,27 +10,26 @@
 
 4. Install Heroku to Controlplane kit from https://github.com/shakacode/heroku-to-control-plane
 
-## Initial steps
+## Setup and run
 
-1. fill in and review `.controlplane/controlplane.yaml`
+Check if organization and location are correct in `.controlplane/controlplane.yml`
 
-2. provision app infrastructure from templates at `.controlplane/templates` with
 ```sh
-# can be done individually
-cpl setup gvc -a ror-tutorial
-cpl setup postgres -a ror-tutorial
-...
-
-# or as one command
+# Provision all infrastructure on CPLN. It will use templates from .controlplane/templates folder
 cpl setup gvc postgres redis rails -a ror-tutorial
-```
 
-3. build and push docker image
-```sh
+# Build and push docker image to CPLN repository
 cpl build -a ror-tutorial
-```
 
-4. go to CPLN and check app working
+# Promote image to app
+cpl promote -a ror-tutorial
+
+# See how app is starting up
+cpl logs -a ror-tutorial
+
+# Open app in browser (once it has started up)
+cpl open -a ror-tutorial
+```
 
 ## Other notes
 

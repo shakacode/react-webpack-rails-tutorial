@@ -12,7 +12,6 @@ aliases:
 apps:
   ror-tutorial:
     <<: *common
-    image_tagging: latest
   ror-tutorial-review:
     <<: *common
     prefix: true
