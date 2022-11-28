@@ -1,6 +1,15 @@
 kind: gvc
 name: APP_GVC
 spec:
+  env:
+    - name: DATABASE_URL
+      value: 'postgres://postgres:password123@postgres.APP_GVC.cpln.local:5432/APP_GVC'
+    - name: RAILS_ENV
+      value: production
+    - name: RAILS_SERVE_STATIC_FILES
+      value: 'true'
+    - name: REDIS_URL
+      value: 'redis://redis.APP_GVC.cpln.local:6379'
   staticPlacement:
     locationLinks:
       - /org/APP_ORG/location/APP_LOCATION
