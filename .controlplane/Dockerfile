@@ -32,9 +32,10 @@ COPY public ./public
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
-ENV SECRET_KEY_BASE=123
 
-# compile assets
+ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
+
+# compiling assets requires any value for ENV of SECRET_KEY_BASE
 RUN rails react_on_rails:locale && rails assets:precompile
 
 # add entrypoint
