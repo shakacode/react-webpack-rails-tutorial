@@ -1,3 +1,4 @@
+# Template setup of Postgres workload, roughly corresponding to a Heroku add-on for a database
 kind: workload
 name: postgres
 spec:
@@ -7,6 +8,7 @@ spec:
       env:
         - name: PGUSER
           value: postgres
+        # Hardcoded password. See firewall comment below.
         - name: POSTGRES_PASSWORD
           value: password123
         - name: POSTGRES_USER
@@ -19,10 +21,13 @@ spec:
         - path: /var/lib/postgresql/data
           recoveryPolicy: retain
           uri: 'scratch://postgres-vol'
+  # Important that postgres does not scaling because disk storage is local to one server!
   defaultOptions:
     autoscaling:
       maxScale: 1
     capacityAI: false
+  # This firewall configuration corresponds to using a simple, hard-coded password for postgres
+  # in the gvc.yml template.
   firewallConfig:
     internal:
       inboundAllowType: same-gvc

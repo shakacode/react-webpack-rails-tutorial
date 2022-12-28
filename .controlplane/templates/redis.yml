@@ -12,6 +12,7 @@ spec:
     autoscaling:
       maxScale: 1
     capacityAI: false
+  # This firewall configuration corresponds to using no password for Redis in the gvc.yml template.
   firewallConfig:
     internal:
       inboundAllowType: same-gvc

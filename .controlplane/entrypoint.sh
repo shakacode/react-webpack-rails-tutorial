@@ -1,4 +1,5 @@
 #!/bin/sh
+# Runs before the main command
 
 wait_for_service()
 {
