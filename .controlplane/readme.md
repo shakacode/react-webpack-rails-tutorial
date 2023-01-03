@@ -33,6 +33,24 @@ cpl logs -a ror-tutorial
 cpl open -a ror-tutorial
 ```
 
+## Promoting code upgrades
+
+```sh
+# Build and push new image with sequential image tagging, e.g. 'ror-tutorial_123'
+cpl build -a ror-tutorial
+
+# OR
+# Build and push with sequential image tagging and commit SHA, e.g. 'ror-tutorial_123_ABCD'
+cpl build -a ror-tutorial --commit ABCD
+
+# Run database migrations (or other release tasks) with latest image,
+# while app is still running on previous image
+cpl runner rails db:migrate -a ror-tutorial --image latest
+
+# Pomote latest image to app
+promote -a ror-tutorial
+```
+
 ## Other notes
 
 ### `entrypoint.sh`
