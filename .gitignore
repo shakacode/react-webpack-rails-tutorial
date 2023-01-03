@@ -19,6 +19,8 @@
 node_modules
 npm-debug.log*
 /coverage
+dump.rdb
+.DS_Store
 
 # Ignore bundle dependencies
 vendor/ruby
