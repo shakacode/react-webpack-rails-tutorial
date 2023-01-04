@@ -6,7 +6,7 @@ ReactOnRails.configure do |config|
   config.webpack_generated_files = %w[client-bundle.js server-bundle.js]
 
   config.build_test_command = "RAILS_ENV=test bin/webpacker"
-  config.build_production_command = "RAILS_ENV=production NODE_ENV=production bin/webpacker"
+  config.build_production_command = "echo running-production-command && RAILS_ENV=production NODE_ENV=production bin/webpacker"
 
   # This is the file used for server rendering of React when using `(prerender: true)`
   # If you are never using server rendering, you may set this to "".
