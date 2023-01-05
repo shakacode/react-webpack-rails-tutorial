@@ -5,14 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.2"
 
-<<<<<<< HEAD
 gem "react_on_rails", "13.2.0"
 gem "shakapacker", "6.5.5"
-=======
-# gem "react_on_rails", "13.2.0"
-gem "react_on_rails", github: 'shakacode/react_on_rails', branch: 'debuggin-assets-precompile'
-gem "shakapacker", "6.0.2"
->>>>>>> d673f4d (using forked gem for debugging)
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
