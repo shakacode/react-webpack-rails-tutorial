@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/shakacode/react_on_rails.git
-  revision: d71b0df4500510c1950f1da30a19218e5f0717ef
+  revision: 498b83c4625a1fe888c5223db397cdfbaf590cd4
   branch: debuggin-assets-precompile
   specs:
     react_on_rails (13.2.0)
