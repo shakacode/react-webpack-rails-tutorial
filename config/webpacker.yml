@@ -14,6 +14,9 @@ default: &default
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
+  
+  # Use the config.build_production_command in config/initializers/react_on_rails.rb
+  webpacker_precompile: false
 
 development:
   <<: *default
