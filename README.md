@@ -62,7 +62,7 @@ For more testimonials, see [Live Projects](https://github.com/shakacode/react_on
 
 ## NEWS
 
-* 2022-01-11: Added example on deployment [to the ControlPlane](.controlplane/readme.md).
+* 2022-01-11: Added example of deployment [to the ControlPlane](.controlplane/readme.md).
 * 2016-09-07: Project migrated to [React on Rails v9 with rails/webpacker](https://github.com/shakacode/react-webpack-rails-tutorial/pull/416).
 * Action Cable was recently added in [PR #355](https://github.com/shakacode/react-webpack-rails-tutorial/pull/355). See [PR#360](https://github.com/shakacode/react-webpack-rails-tutorial/pull/360) for additional steps to make this work on Heroku. Note, you need to be running redis. We installed the free Heroku redis add-on.
 * We made a react-native client: [shakacode/reactrails-react-native-client](https://github.com/shakacode/reactrails-react-native-client/). If you want to hack on this with us, [email justin@shakacode.com](mailto:justin@shakacode.com).
