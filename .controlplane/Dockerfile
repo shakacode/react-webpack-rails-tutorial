@@ -33,10 +33,10 @@ COPY public ./public
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
 
+# compiling assets requires any value for ENV of SECRET_KEY_BASE
 ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
 
-# compiling assets requires any value for ENV of SECRET_KEY_BASE
-RUN rails react_on_rails:locale && rails assets:precompile
+RUN rails assets:precompile
 
 # add entrypoint
 COPY .controlplane/entrypoint.sh ./

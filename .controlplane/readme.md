@@ -10,6 +10,8 @@
 
 4. Install Heroku to Control Plane playbook from https://github.com/shakacode/heroku-to-control-plane.
 
+5. This project has a `Dockerfile` for Control Plane in this directory. You can use it as an example for your project.
+
 ## Setup and run
 
 Check if the organization and location are correct in `.controlplane/controlplane.yml`.
@@ -21,6 +23,7 @@ Check if the organization and location are correct in `.controlplane/controlplan
 cpl setup gvc postgres redis rails -a ror-tutorial
 
 # Build and push docker image to Control Plane repository
+# Note, may take many minutes. Be patient.
 cpl build -a ror-tutorial
 
 # Promote image to app after running `cpl build command`
@@ -44,7 +47,8 @@ cpl build -a ror-tutorial
 cpl build -a ror-tutorial --commit ABCD
 
 # Run database migrations (or other release tasks) with latest image,
-# while app is still running on previous image
+# while app is still running on previous image.
+# This is analogous to the release phase.
 cpl runner rails db:migrate -a ror-tutorial --image latest
 
 # Pomote latest image to app
