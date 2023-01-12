@@ -60,7 +60,7 @@ cpl build-image -a ror-tutorial-staging --commit ABCD
 # while app is still running on previous image.
 # This is analogous to the release phase.
 # TODO - renamed runner to run:detached
-cpl run:detached rails db:migrate -a ror-tutorial-staging --image latest
+cpl run-detached rails db:migrate -a ror-tutorial-staging --image latest
 
 
 # Alternatively, can run command interactively. Network disconnect or Ctrl-c stop the task.
