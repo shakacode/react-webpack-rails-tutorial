@@ -21,3 +21,6 @@ en:
       placeholder: "Say something using markdown..."
     saving: "Saving"
     post: "Post"
+  comment_was_successfully_created: "Comment was successfully created."
+  comment_was_successfully_updated: "Comment was successfully updated."
+  comment_was_successfully_destroyed: "Comment was successfully destroyed."
