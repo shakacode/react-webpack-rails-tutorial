@@ -50,7 +50,6 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
         with:
-          ruby: 3.x
           bundler-cache: true
 
       - name: Use Node.js 16.x
