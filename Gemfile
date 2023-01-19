@@ -103,6 +103,6 @@ group :test do
   gem "launchy"
   gem "rails_best_practices"
   gem "rspec-rails"
-  gem "selenium-webdriver"
-  gem "webdrivers", "3.9.4"
+  gem "selenium-webdriver", "~> 4"
+  gem "webdrivers", "~> 5.2"
 end
