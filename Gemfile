@@ -10,7 +10,7 @@ gem "shakapacker", "6.5.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 6.1.4"
+gem "rails", "~> 6.1.7.1"
 
 gem "pg"
 

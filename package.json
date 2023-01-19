@@ -32,7 +32,7 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.10",
     "@babel/preset-react": "^7.12.10",
-    "@rails/actioncable": "6.1.4-4",
+    "@rails/actioncable": "6.1.7-1",
     "autoprefixer": "^7.1.5",
     "axios": "^0.17.1",
     "babel-loader": "^8.2.3",

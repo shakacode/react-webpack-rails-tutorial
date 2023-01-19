@@ -1292,10 +1292,10 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@rails/actioncable@6.1.4-4":
-  version "6.1.4-4"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.4-4.tgz#5978ea03f2ec31ac46d9f63e8c1cb5a05f5002ac"
-  integrity sha512-EGRSboNF4M20LWUpabMfa/YswG+kw6a0xPZmd+ls4eIQS6pEeh1eoSYDyuyiLiTARXiA9PBFYk8+k4PiKHbN6w==
+"@rails/actioncable@6.1.7-1":
+  version "6.1.7-1"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.7-1.tgz#ec0bfab2690eebc3887ad15ee4a9bc3811efdd62"
+  integrity sha512-pRyLNeVrH19FH0VOE9ZQ3+UrN11FFcboZoY43RzqrNhktdvXvTXegdPDip0/neK4RkBkaEpKomtQ/iTcQCR0Qg==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
