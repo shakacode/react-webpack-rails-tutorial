@@ -416,7 +416,7 @@ DEPENDENCIES
   rainbow
   react_on_rails (= 13.2.0)
   redis (= 3.3.3)
-  rspec-rails
+  rspec-rails (~> 6.0.0)
   rubocop (= 1.24.1)
   rubocop-performance (~> 1.13)
   rubocop-rails
