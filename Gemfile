@@ -82,6 +82,8 @@ group :development, :test do
 
   ################################################################################
   # Favorite debugging gems
+  gem "debug", ">= 1.0.0"
+
   gem "pry"
   gem "pry-byebug"
   gem "pry-doc"

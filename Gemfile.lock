@@ -114,6 +114,9 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.3)
+    debug (1.7.1)
+      irb (>= 1.5.0)
+      reline (>= 0.3.1)
     debug_inspector (1.1.0)
     diff-lcs (1.5.0)
     docile (1.4.0)
@@ -135,6 +138,9 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     interception (0.5)
+    io-console (0.6.0)
+    irb (1.6.2)
+      reline (>= 0.3.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -252,6 +258,8 @@ GEM
       rainbow (~> 3.0)
     redis (3.3.3)
     regexp_parser (2.6.1)
+    reline (0.3.2)
+      io-console (~> 0.5)
     require_all (3.0.0)
     rexml (3.2.5)
     rspec-core (3.12.0)
@@ -384,6 +392,7 @@ DEPENDENCIES
   coffee-rails
   coveralls_reborn (~> 0.25.0)
   database_cleaner
+  debug (>= 1.0.0)
   factory_bot_rails
   foreman
   generator_spec
