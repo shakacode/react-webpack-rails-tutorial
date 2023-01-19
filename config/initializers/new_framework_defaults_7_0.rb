@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Be sure to restart your server when you modify this file.
 #
 # This file eases your Rails 7.0 framework defaults upgrade.
@@ -97,7 +98,6 @@
 #   "Referrer-Policy" => "strict-origin-when-cross-origin"
 # }
 
-
 # ** Please read carefully, this must be configured in config/application.rb **
 # Change the format of the cache entry.
 # Changing this default means that all new cache entries added to the cache
@@ -107,9 +107,8 @@
 # When you're ready to change format, add this to `config/application.rb` (NOT this file):
 #  config.active_support.cache_format_version = 7.0
 
-
 # Cookie serializer: 2 options
-# 
+#
 # If you're upgrading and haven't set `cookies_serializer` previously, your cookie serializer
 # is `:marshal`. The default for new apps is `:json`.
 #
@@ -117,10 +116,10 @@
 #
 #
 # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
-# 
+#
 # Rails transparently deserializes existing (Marshal-serialized) cookies on read and
 # re-writes them in the JSON format.
-# 
+#
 # It is fine to use `:hybrid` long term; you should do that until you're confident *all* your cookies
 # have been converted to JSON. To keep using `:hybrid` long term, move this config to its own
 # initializer or to `config/application.rb`.
@@ -131,5 +130,5 @@
 # If your cookies can't yet be serialized to JSON, keep using `:marshal` for backward-compatibility.
 #
 # If you have configured the serializer elsewhere, you can remove this section of the file.
-# 
+#
 # See https://guides.rubyonrails.org/action_controller_overview.html#cookies for more information.
