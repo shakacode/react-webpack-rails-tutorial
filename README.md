@@ -110,7 +110,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
 - Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
 - Example of React/Redux with Rails Action Cable.
-- Example of Rails 5 with ReactJs/Redux/React-Router with Webpack and ES7.
+- Example of Rails 7 with ReactJs/Redux/React-Router with Webpack and ES7.
 - Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/). You can see this by starting the app and visiting http://localhost:4000
 - Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
 - Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
@@ -130,15 +130,15 @@ See package.json and Gemfile for versions
 1. [react-router-redux](https://github.com/reactjs/react-router-redux)
 1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
-1. [Ruby on Rails 5](http://rubyonrails.org/) for backend app and comparison with plain HTML
-1. [Heroku for Rails 5 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails5)
+1. [Ruby on Rails 7](http://rubyonrails.org/) for backend app and comparison with plain HTML
+1. [Heroku for Rails 7 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails7)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 
 ## Basic Demo Setup
 
 ### Prerequisites
-- Node `v16.14.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
+- Node `v18.13.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 - Ruby 3.1.2 or above
 - Postgres v9.2 or above
 - Redis. Check that you have Redis installed by running `which redis-server`. If missing and on MacOS, install with Homebrew (`brew install redis`)
