@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Code from the React Webpack tutorial.",
   "engines": {
-    "node": "16",
+    "node": "18",
     "yarn": "1.22"
   },
   "repository": {
@@ -32,7 +32,7 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.10",
     "@babel/preset-react": "^7.12.10",
-    "@rails/actioncable": "6.1.4-4",
+    "@rails/actioncable": "7.0.4-1",
     "autoprefixer": "^7.1.5",
     "axios": "^0.17.1",
     "babel-loader": "^8.2.3",

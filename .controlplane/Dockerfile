@@ -3,7 +3,7 @@ FROM ruby:3.1.2
 RUN apt-get update
 
 # install node and yarn
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
 RUN apt-get install -y nodejs
 RUN npm install -g yarn
 

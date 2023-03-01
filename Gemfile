@@ -10,7 +10,7 @@ gem "shakapacker", "6.5.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 6.1.4"
+gem "rails", "~> 7.0"
 
 gem "pg"
 
@@ -82,6 +82,8 @@ group :development, :test do
 
   ################################################################################
   # Favorite debugging gems
+  gem "debug", ">= 1.0.0"
+
   gem "pry"
   gem "pry-byebug"
   gem "pry-doc"
@@ -102,7 +104,7 @@ group :test do
   gem "generator_spec"
   gem "launchy"
   gem "rails_best_practices"
-  gem "rspec-rails"
-  gem "selenium-webdriver"
-  gem "webdrivers", "3.9.4"
+  gem "rspec-rails", "~> 6.0.0"
+  gem "selenium-webdriver", "~> 4"
+  gem "webdrivers", "~> 5.2"
 end

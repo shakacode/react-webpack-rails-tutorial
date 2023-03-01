@@ -5,7 +5,7 @@ FROM ruby:3.1.2
 
 RUN apt-get update
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
 RUN apt-get install -y nodejs
 RUN npm install -g yarn
 
@@ -14,14 +14,14 @@ COPY Gemfile* ./
 
 RUN bundle install
 
-COPY package.json yarn.lock .
+COPY package.json yarn.lock ./
 RUN yarn install
 
-COPY . .
-
-RUN rails react_on_rails:locale && RAILS_ENV=production rails assets:precompile
+COPY . ./
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
+
+RUN rails react_on_rails:locale && rails assets:precompile
 
 CMD ["rails", "s"]

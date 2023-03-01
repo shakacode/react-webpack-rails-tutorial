@@ -43,8 +43,8 @@ class PagesController < ApplicationController
   end
 
   def comments_json_string
-    render_to_string(template: "/comments/index.json.jbuilder",
-                     locals: { comments: Comment.all }, format: :json)
+    render_to_string(template: "/comments/index",
+                     locals: { comments: Comment.all }, formats: :json)
   end
 
   def render_html
