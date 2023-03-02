@@ -48,7 +48,7 @@
     "estraverse": "^4.2.0",
     "expose-loader": "^4.0.0",
     "immutable": "^3.8.2",
-    "imports-loader": "^1.1.0",
+    "imports-loader": "^4.0.0",
     "intl": "^1.2.5",
     "jquery": "^3.2.1",
     "jquery-ujs": "^1.2.2",
@@ -82,7 +82,7 @@
     "url-loader": "^0.6.2",
     "webpack": "5",
     "webpack-assets-manifest": "5",
-    "webpack-cli": "4",
+    "webpack-cli": "5",
     "webpack-merge": "5"
   },
   "devDependencies": {
