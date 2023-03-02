@@ -54,7 +54,7 @@
     "jquery-ujs": "^1.2.2",
     "loader-utils": "^1.1.0",
     "lodash": "^4.17.4",
-    "marked": "^0.3.19",
+    "marked": "^4.0.0",
     "node-uuid": "^1.4.8",
     "postcss": "^8.4.5",
     "postcss-loader": "6.2.1",
