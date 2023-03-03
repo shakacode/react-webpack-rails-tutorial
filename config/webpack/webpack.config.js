@@ -1,4 +1,4 @@
-const { env, webpackConfig } = require('shakapacker');
+const { env, webpackConfig, merge } = require('shakapacker');
 const { existsSync } = require('fs');
 const { resolve } = require('path');
 
@@ -12,4 +12,6 @@ const envSpecificConfig = () => {
   }
 };
 
-module.exports = envSpecificConfig();
+module.exports = merge(envSpecificConfig(), {
+  ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
+});
