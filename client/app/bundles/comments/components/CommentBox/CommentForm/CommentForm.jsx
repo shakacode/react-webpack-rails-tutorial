@@ -38,6 +38,7 @@ class CommentForm extends BaseComponent {
     actions: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.any])).isRequired,
     error: PropTypes.oneOfType([PropTypes.any]),
     cssTransitionGroupClassNames: PropTypes.oneOfType([PropTypes.func, PropTypes.any]).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 

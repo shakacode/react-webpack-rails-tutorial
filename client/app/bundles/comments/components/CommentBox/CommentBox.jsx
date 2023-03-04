@@ -22,6 +22,7 @@ class CommentBox extends BaseComponent {
       submitCommentError: PropTypes.string,
       $$comments: PropTypes.arrayOf(commentPropTypes),
     }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     intl: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
