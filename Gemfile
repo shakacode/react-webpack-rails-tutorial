@@ -8,6 +8,8 @@ ruby "3.1.2"
 gem "react_on_rails", "13.2.0"
 gem "shakapacker", "6.5.5"
 
+gem "cpl"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
 gem "rails", "~> 7.0"

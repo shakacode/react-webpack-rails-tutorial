@@ -3,10 +3,10 @@ aliases:
   common: &common
     # Change this to your org name for staging. Production apps will use a different org
     # for security.
-    org: shakacode-staging
+    cpln_org: shakacode-demo
     # Change `shakacode-staging` to your-org-name-for-staging
     # Example apps use only location. CPLN offers the ability to use multiple locations.
-    location: aws-us-east-2
+    default_location: aws-us-east-2
     # Configure the workload name used as a template for one-off scripts, like a Heroku one-off dyno.
     one_off_workload: rails
     # Like the entries in the Heroku Procfile that get deployed when the application code changes
@@ -19,10 +19,13 @@ aliases:
       - postgres
 
 apps:
-  ror-tutorial:
-    <<: *common
   react-webpack-rails-tutorial:
     <<: *common
-  ror-tutorial-review:
+  tutorial-app:
+    <<: *common
+  # QA Apps are like Heroku review apps, but the use `prefix` so you can run a commmand like
+  # this to create a QA app for the tutorial app.
+  # `cpl setup gvc postgres redis rails -a qa-tutorial-app-pr-1234`
+  qa-tutorial-app:
     <<: *common
     prefix: true
