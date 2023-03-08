@@ -18,6 +18,10 @@ const sassLoaderConfig = {
   },
 };
 
+const ignoreWarningsConfig = {
+  ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
+};
+
 const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) =>
   '.scss'.match(config.test),
 );
@@ -25,6 +29,6 @@ const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) 
 baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
-const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions);
+const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
 module.exports = commonWebpackConfig;
