@@ -2,7 +2,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import _ from 'lodash';
 import BaseComponent from '../../../../../libs/components/BaseComponent.jsx';
 

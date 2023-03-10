@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
 import { defaultMessages } from 'libs/i18n/default';
