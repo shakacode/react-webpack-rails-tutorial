@@ -94,7 +94,6 @@
     "@babel/eslint-parser": "^7.16.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@webpack-cli/serve": "^1.6.0",
-    "babel-eslint": "^8.0.2",
     "babel-jest": "^27.2.1",
     "body-parser": "^1.20.2",
     "eslint": "^8.35.0",
