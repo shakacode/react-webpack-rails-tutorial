@@ -8,7 +8,6 @@ ruby "3.1.2"
 gem "react_on_rails", "13.2.0"
 gem "shakapacker", "6.5.5"
 
-gem "cpl"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
@@ -110,3 +109,5 @@ group :test do
   gem "selenium-webdriver", "~> 4"
   gem "webdrivers", "~> 5.2"
 end
+
+gem "cpl", "~> 0.2.0"
