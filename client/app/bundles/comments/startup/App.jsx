@@ -7,11 +7,13 @@ import NonRouterCommentsContainer from '../containers/NonRouterCommentsContainer
 function App(_props, _railsContext) {
   const store = ReactOnRails.getStore('commentsStore');
 
-  return (
-    <Provider store={store}>
-      <NonRouterCommentsContainer />
-    </Provider>
-  );
+  return function AppComponent() {
+    return (
+      <Provider store={store}>
+        <NonRouterCommentsContainer />
+      </Provider>
+    );
+  };
 }
 
 export default App;
