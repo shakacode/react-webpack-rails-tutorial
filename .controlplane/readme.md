@@ -47,7 +47,7 @@ cpl setup gvc postgres redis rails -a tutorial-app
 cpl build-image -a tutorial-app
 
 # Promote image to app after running `cpl build-image command`
-cpl promote-image -a tutorial-app
+cpl deploy-image -a tutorial-app
 
 # See how app is starting up
 cpl logs -a tutorial-app
@@ -72,7 +72,7 @@ cpl build-image -a tutorial-app --commit ABCD
 cpl runner rails db:migrate -a tutorial-app --image latest
 
 # Pomote latest image to app
-cpl promote-image -a tutorial-app
+cpl deploy-image -a tutorial-app
 ```
 
 ## Other notes
