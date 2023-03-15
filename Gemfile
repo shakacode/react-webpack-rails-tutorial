@@ -5,9 +5,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.2"
 
+gem "cpl", "~> 0.3.3"
 gem "react_on_rails", "13.2.0"
 gem "shakapacker", "6.5.5"
-gem "cpl", "~> 0.3.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
