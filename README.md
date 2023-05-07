@@ -173,7 +173,7 @@ line in the `rails_helper.rb` file. If you are using this project as an example 
 
 ## Webpack
 
-_Converted to use @rails/webpacker webpack configuration_.
+_Converted to use Shakapacker webpack configuration_.
 
 
 ### Additional Resources
