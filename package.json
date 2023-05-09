@@ -22,8 +22,8 @@
     "lint": " yarn lint:eslint --fix && yarn lint:prettier --w",
     "test": "yarn build:test && yarn lint",
     "test:client": "cd client && yarn test",
-    "build:test": "rm -rf public/webpack/test && RAILS_ENV=test NODE_ENV=test bin/webpacker",
-    "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/webpacker",
+    "build:test": "rm -rf public/webpack/test && RAILS_ENV=test NODE_ENV=test bin/shakapacker",
+    "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/shakapacker",
     "build:clean": "rm -rf public/webpack || true"
   },
   "dependencies": {
@@ -80,7 +80,7 @@
     "sass": "^1.58.3",
     "sass-loader": "^12.6.0",
     "sass-resources-loader": "^2.2.5",
-    "shakapacker": "6.5.5",
+    "shakapacker": "7.0.0-rc.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "5",
     "turbolinks": "^5.2.0",

@@ -8861,10 +8861,10 @@ sha.js@^2.4.0, sha.js@^2.4.8:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-shakapacker@6.5.5:
-  version "6.5.5"
-  resolved "https://registry.yarnpkg.com/shakapacker/-/shakapacker-6.5.5.tgz#34c027b3d3b34b8241a946d4af256df81c0c04f7"
-  integrity sha512-KsDhjihjmkJVpdnuDvHj70RzRjreXcnMQtePp+TkHzi4sXO8gwt0btoTNrwuLrgxOfac7UQadDFYFGzJwoPz5w==
+shakapacker@7.0.0-rc.0:
+  version "7.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/shakapacker/-/shakapacker-7.0.0-rc.0.tgz#20cdb3c0cb6b21a9b29462d7fe414e210fa8e842"
+  integrity sha512-qnKIQEBVy6rF9j4PVnujdXy3uQpFjjR+ywVYgNdVsWpvX5TnKspZXZWdAzSh3+gVRs2Ex8y7EYIMfKBTNdfD2Q==
   dependencies:
     glob "^7.2.0"
     js-yaml "^4.1.0"
