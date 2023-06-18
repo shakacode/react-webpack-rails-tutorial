@@ -28,7 +28,7 @@ function NavigationBar(props) {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul className="navbar-nav me-auto">
@@ -37,22 +37,34 @@ function NavigationBar(props) {
                 active: pathname === paths.ROUTER_PATH || pathname === paths.REACT_ROUTER_PATH,
               })}
             >
-              <a className='nav-link' href={paths.ROUTER_PATH}>React Router Demo</a>
+              <a className="nav-link" href={paths.ROUTER_PATH}>
+                React Router Demo
+              </a>
             </li>
             <li className={classNames({ active: pathname === paths.NO_ROUTER_PATH })}>
-              <a className='nav-link' href={paths.NO_ROUTER_PATH}>React Demo</a>
+              <a className="nav-link" href={paths.NO_ROUTER_PATH}>
+                React Demo
+              </a>
             </li>
             <li className={classNames({ active: pathname === paths.SIMPLE_REACT_PATH })}>
-              <a className='nav-link' href={paths.SIMPLE_REACT_PATH}>Simple React</a>
+              <a className="nav-link" href={paths.SIMPLE_REACT_PATH}>
+                Simple React
+              </a>
             </li>
             <li className={classNames({ active: pathname === paths.RAILS_PATH })}>
-              <a className='nav-link' href={paths.RAILS_PATH}>Classic Rails</a>
+              <a className="nav-link" href={paths.RAILS_PATH}>
+                Classic Rails
+              </a>
             </li>
             <li>
-              <a className='nav-link' href="https://github.com/shakacode/react-webpack-rails-tutorial">Source</a>
+              <a className="nav-link" href="https://github.com/shakacode/react-webpack-rails-tutorial">
+                Source
+              </a>
             </li>
             <li>
-              <a className='nav-link' href="https://forum.shakacode.com/c/reactjs">Forum</a>
+              <a className="nav-link" href="https://forum.shakacode.com/c/reactjs">
+                Forum
+              </a>
             </li>
             {_.isNumber(commentsCount) && CommentsCount({ commentsCount })}
           </ul>

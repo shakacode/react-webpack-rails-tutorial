@@ -2,9 +2,8 @@
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/serverWebpackConfig.js
 
 const { config } = require('shakapacker');
-const commonWebpackConfig = require('./commonWebpackConfig');
-
 const webpack = require('webpack');
+const commonWebpackConfig = require('./commonWebpackConfig');
 
 const configureServer = () => {
   // We need to use "merge" because the clientConfigObject, EVEN after running
@@ -68,7 +67,7 @@ const configureServer = () => {
   // Remove the mini-css-extract-plugin from the style loaders because
   // the client build will handle exporting CSS.
   // replace file-loader with null-loader
-  const rules = serverWebpackConfig.module.rules;
+  const { rules } = serverWebpackConfig.module;
   rules.forEach((rule) => {
     if (Array.isArray(rule.use)) {
       // remove the mini-css-extract-plugin and style-loader

@@ -9,11 +9,17 @@ $fonts-url-path: '../fonts';
   src: url('#{$fonts-url-path}/OpenSans-Light.ttf') format('truetype');
 }
 
-
 .navbar-default {
   background-color: $navbar-default-bg;
-  margin-top: 20px;
   margin-bottom: 20px;
+  margin-top: 20px;
+
+  &.navbar-nav>.active>a,
+  &.navbar-nav>.active>a:focus,
+  &.navbar-nav>.active>a:hover {
+    background-color: #FFFFBF;
+    color: #555555;
+  }
 }
 
 .navbar .container-fluid {
@@ -21,10 +27,4 @@ $fonts-url-path: '../fonts';
   margin-right: 40px;
   padding-left: 15px;
   padding-right: 15px;
-}
-
-.navbar-default .navbar-nav>.active>a,.navbar-default
-.navbar-nav>.active>a:focus,.navbar-default .navbar-nav>.active>a:hover {
-  color: #555;
-  background-color: #ffffbf
 }

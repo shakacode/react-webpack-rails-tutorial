@@ -7,9 +7,8 @@ const envSpecificConfig = () => {
   if (existsSync(path)) {
     console.log(`Loading ENV specific webpack configuration file ${path}`);
     return require(path);
-  } else {
-    return webpackConfig;
   }
+  return webpackConfig;
 };
 
 module.exports = envSpecificConfig();

@@ -11,7 +11,6 @@ import Form from 'react-bootstrap/Form';
 import FormGroup from 'react-bootstrap/FormGroup';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
 import Alert from 'react-bootstrap/Alert';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';

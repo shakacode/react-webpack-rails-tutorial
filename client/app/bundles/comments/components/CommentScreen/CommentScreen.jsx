@@ -39,14 +39,12 @@ export default class CommentScreen extends BaseComponent {
             actions={actions}
             ajaxCounter={data.get('ajaxCounter')}
           />
-          <hr/>
+          <hr />
           <div className="container footer row">
             <div className="col-sm-6">
               <a href="http://www.shakacode.com">
                 <div className={css.logo} />
-                <div>
-                  Example of styling using image-url and Open Sans Light custom font
-                </div>
+                <div>Example of styling using image-url and Open Sans Light custom font</div>
               </a>
             </div>
             <div className="col-sm-6">
