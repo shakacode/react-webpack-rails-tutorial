@@ -1,3 +1,5 @@
+import React from 'react';
+import Immutable from 'immutable';
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
@@ -9,9 +11,13 @@ import reducers, { initialStates } from '../reducers';
 export default (props, railsContext) => {
   const initialComments = props.comments;
   const { $$commentsState } = initialStates;
+
+  initialComments.forEach((comment) => {
+    comment.nodeRef = React.createRef(null);
+  });
   const initialState = {
     $$commentsStore: $$commentsState.merge({
-      $$comments: initialComments,
+      $$comments: Immutable.fromJS(initialComments),
     }),
     railsContext,
   };

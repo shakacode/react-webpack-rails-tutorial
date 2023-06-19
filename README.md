@@ -1,13 +1,13 @@
    [![Code Climate](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial/badges/gpa.svg)](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial) [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
- 
+
 # React, Redux, React-Bootstrap, ES7, Webpack, Ruby on Rails Demo
 
 * Server-Side Rendering of React via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
-* Live at [www.reactrails.com](http://www.reactrails.com/) 
- 
+* Live at [www.reactrails.com](http://www.reactrails.com/)
+
 ## Control Plane Deployment Example
 
-[Control Plane](https://controlplane.com) offers a viable, cost-saving alternative to Heroku, especially when using the [cpl gem](https://rubygems.org/gems/cpl) to deploy to Control Plane. 
+[Control Plane](https://controlplane.com) offers a viable, cost-saving alternative to Heroku, especially when using the [cpl gem](https://rubygems.org/gems/cpl) to deploy to Control Plane.
 
 ShakaCode recently migrated [HiChee.com](https://hichee.com) to Control Plane, resulting in a two-thirds reduction in server hosting costs!
 
@@ -20,7 +20,7 @@ in https://github.com/shakacode/heroku-to-control-plane.
 
 ## React on Rails Pro and ShakaCode Pro Support
 
-React on Rails Pro provides Node server rendering and other performance enhancements for React on Rails. 
+React on Rails Pro provides Node server rendering and other performance enhancements for React on Rails.
 
 [![2018-09-11_10-31-11](https://user-images.githubusercontent.com/1118459/45467845-5bcc7400-b6bd-11e8-91e1-e0cf806d4ea4.png)](https://blog.shakacode.com/hvmns-90-reduction-in-server-response-time-from-react-on-rails-pro-eb08226687db)
 
@@ -34,7 +34,7 @@ For more information, see the [React on Rails Pro Docs](https://www.shakacode.co
 * Upgrading your app to use the current Webpack setup that skips the Sprockets asset pipeline.
 * Better performance client and server side.
 
-ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. We can even leverage our code for [HiChee.com](https://hichee.com) for your app! 
+ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. We can even leverage our code for [HiChee.com](https://hichee.com) for your app!
 
 See the [ShakaCode Client Engagement Model](https://www.shakacode.com/blog/client-engagement-model/) article to learn how we can work together.
 
@@ -195,8 +195,8 @@ export default class CommentBox extends React.Component {
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
-      leave: css.elementLeave,
-      leaveActive: css.elementLeaveActive,
+      exit: css.elementLeave,
+      exitActive: css.elementLeaveActive,
     };
   }
 }

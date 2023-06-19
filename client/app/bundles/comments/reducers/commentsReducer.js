@@ -1,5 +1,6 @@
 /* eslint new-cap: 0 */
 
+import React from 'react';
 import Immutable from 'immutable';
 
 import * as actionTypes from '../constants/commentsConstants';
@@ -18,8 +19,12 @@ export default function commentsReducer($$state = $$initialState, action = null)
 
   switch (type) {
     case actionTypes.FETCH_COMMENTS_SUCCESS: {
+      comments.forEach((comment) => {
+        comment.nodeRef = React.createRef(null);
+      });
+
       return $$state.merge({
-        $$comments: comments,
+        $$comments: Immutable.fromJS(comments),
         fetchCommentError: null,
         isFetching: false,
       });
@@ -33,6 +38,7 @@ export default function commentsReducer($$state = $$initialState, action = null)
     }
 
     case actionTypes.MESSAGE_RECEIVED: {
+      comment.nodeRef = React.createRef(null);
       return $$state.withMutations((state) =>
         state.updateIn(['$$comments'], ($$comments) =>
           $$comments.findIndex((com) => com.get('id') === comment.get('id')) === -1
@@ -43,6 +49,7 @@ export default function commentsReducer($$state = $$initialState, action = null)
     }
 
     case actionTypes.SUBMIT_COMMENT_SUCCESS: {
+      comment.nodeRef = React.createRef(null);
       return $$state.withMutations((state) =>
         state
           .updateIn(['$$comments'], ($$comments) => {
