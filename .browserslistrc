@@ -1,1 +1,5 @@
-defaults
+>1%
+last 5 versions
+safari >= 7
+Firefox ESR
+not ie < 9

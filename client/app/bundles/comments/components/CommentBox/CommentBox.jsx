@@ -78,8 +78,8 @@ class CommentBox extends BaseComponent {
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
-      leave: css.elementLeave,
-      leaveActive: css.elementLeaveActive,
+      exit: css.elementLeave,
+      exitActive: css.elementLeaveActive,
     };
     const locale = data.get('locale') || defaultLocale;
     /* eslint-disable no-script-url */
@@ -105,7 +105,7 @@ class CommentBox extends BaseComponent {
         </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
-          error={data.get('submitCommentError')}
+          error={{ error: data.get('submitCommentError'), nodeRef: React.createRef(null) }}
           actions={actions}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />

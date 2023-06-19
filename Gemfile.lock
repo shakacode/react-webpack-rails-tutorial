@@ -168,9 +168,8 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.4)
-    minitest (5.18.1)
-    net-imap (0.3.6)
+    minitest (5.19.0)
+    net-imap (0.3.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -180,8 +179,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.3)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.15.3-arm64-darwin)
       racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.3)
@@ -376,7 +374,7 @@ GEM
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
     websocket (1.2.9)
-    websocket-driver (0.7.5)
+    websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
@@ -385,7 +383,7 @@ GEM
     zeitwerk (2.6.9)
 
 PLATFORMS
-  ruby
+  arm64-darwin-22
 
 DEPENDENCIES
   autoprefixer-rails
@@ -439,4 +437,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.4.7
+   2.4.17

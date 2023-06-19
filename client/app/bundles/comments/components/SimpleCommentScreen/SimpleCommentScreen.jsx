@@ -35,7 +35,13 @@ class SimpleCommentScreen extends BaseComponent {
   fetchComments() {
     return request
       .get('comments.json', { responseType: 'json' })
-      .then((res) => this.setState({ $$comments: Immutable.fromJS(res.data.comments) }))
+      .then((res) => {
+        let comments = res.data.comments;
+        comments.forEach((comment) => {
+          comment.nodeRef = React.createRef(null);
+        });
+        this.setState({ $$comments: Immutable.fromJS(comments) });
+      })
       .catch((error) => this.setState({ fetchCommentsError: error }));
   }
 
@@ -51,6 +57,7 @@ class SimpleCommentScreen extends BaseComponent {
       .post('comments.json', { comment }, requestConfig)
       .then(() => {
         const { $$comments } = this.state;
+        comment.nodeRef = React.createRef(null);
         const $$comment = Immutable.fromJS(comment);
 
         this.setState({
@@ -73,8 +80,8 @@ class SimpleCommentScreen extends BaseComponent {
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
-      leave: css.elementLeave,
-      leaveActive: css.elementLeaveActive,
+      exit: css.elementLeave,
+      exitActive: css.elementLeaveActive,
     };
 
     return (
@@ -89,7 +96,7 @@ class SimpleCommentScreen extends BaseComponent {
         <CommentForm
           isSaving={this.state.isSaving}
           actions={{ submitComment: this.handleCommentSubmit }}
-          error={this.state.submitCommentError}
+          error={{ error: this.state.submitCommentError, nodeRef: React.createRef(null) }}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
         <CommentList
