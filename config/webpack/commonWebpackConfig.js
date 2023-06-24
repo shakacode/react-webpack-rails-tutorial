@@ -2,8 +2,9 @@
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/commonWebpackConfig.js
 
 // Common configuration applying to client and server configuration
-const { webpackConfig: baseClientWebpackConfig, merge } = require('shakapacker');
+const { generateWebpackConfig, merge } = require('shakapacker');
 
+const baseClientWebpackConfig = generateWebpackConfig();
 const commonOptions = {
   resolve: {
     extensions: ['.css', '.ts', '.tsx'],
