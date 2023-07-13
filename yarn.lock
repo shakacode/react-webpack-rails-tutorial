@@ -1503,29 +1503,6 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.1.tgz#8f383b672e142d009f89b725d49b0832d99da74a"
   integrity sha512-lbGc1z2RXdiWZJE/8o2GSe2gek82EoKd2YvjRrqV//0J3/JImONUYwZ2XPmS1R9R2oth1XlIG0YidqdeTty0TA==
 
-"@rails/webpacker@^6.0.0-rc.6":
-  version "6.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-6.0.0-rc.6.tgz#04af15dc33697e09aa492da54d2093cdd15573ff"
-  integrity sha512-nbDxn3KsSoLeJgVpU3J81wiXLg4vErEahWdi08BJx5EO9aS6+mXWhOXHKyQogCxLkBMvLZqOafUnJMcK9O+9sA==
-  dependencies:
-    "@babel/core" "^7.15.5"
-    "@babel/plugin-proposal-class-properties" "^7.14.5"
-    "@babel/plugin-transform-runtime" "^7.15.0"
-    "@babel/preset-env" "^7.15.6"
-    "@babel/runtime" "^7.15.4"
-    babel-loader "^8.2.2"
-    compression-webpack-plugin "^9.0.0"
-    glob "^7.2.0"
-    js-yaml "^4.1.0"
-    path-complete-extname "^1.0.0"
-    pnp-webpack-plugin "^1.7.0"
-    terser-webpack-plugin "^5.2.4"
-    webpack "^5.53.0"
-    webpack-assets-manifest "^5.0.6"
-    webpack-cli "^4.8.0"
-    webpack-merge "^5.8.0"
-    webpack-sources "^3.2.1"
-
 "@sinonjs/commons@^1.7.0":
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.6.tgz#80c516a4dc264c2a69115e7578d62581ff455ed9"
