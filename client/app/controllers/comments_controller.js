@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import marked from 'marked';
+import * as marked from 'marked';
 
 export default class extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
