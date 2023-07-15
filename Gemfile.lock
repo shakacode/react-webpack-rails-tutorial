@@ -269,7 +269,7 @@ GEM
       execjs (~> 2.5)
       rails (>= 5.2)
       rainbow (~> 3.0)
-    redcarpet (3.5.1)
+    redcarpet (3.6.0)
     redis (3.3.3)
     regexp_parser (2.8.1)
     reline (0.3.6)
