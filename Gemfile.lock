@@ -361,7 +361,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    stimulus-rails (1.0.2)
+    stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     stringio (3.0.7)
     sync (0.5.0)
@@ -372,8 +372,9 @@ GEM
     timeout (0.4.0)
     tins (1.32.1)
       sync
-    turbo-rails (1.0.1)
+    turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
     uglifier (4.2.0)
@@ -409,7 +410,6 @@ DEPENDENCIES
   factory_bot_rails
   foreman
   generator_spec
-  hotwire-rails
   jbuilder
   launchy
   listen
@@ -443,6 +443,8 @@ DEPENDENCIES
   shakapacker (= 7.0.0)
   spring
   spring-commands-rspec
+  stimulus-rails (~> 1.2)
+  turbo-rails (~> 1.4)
   uglifier
   web-console
 

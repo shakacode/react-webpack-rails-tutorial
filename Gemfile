@@ -52,7 +52,6 @@ gem "net-imap", require: false
 gem "net-pop", require: false
 gem "net-smtp", require: false
 
-gem "hotwire-rails"
 
 gem "redcarpet"
 
@@ -112,3 +111,6 @@ group :test do
   gem "rspec-rails", "~> 6.0.0"
   gem "selenium-webdriver", "~> 4"
 end
+
+gem "turbo-rails", "~> 1.4"
+gem "stimulus-rails", "~> 1.2"
