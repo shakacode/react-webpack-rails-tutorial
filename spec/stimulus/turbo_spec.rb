@@ -26,41 +26,42 @@ describe "tabs change on click" do
 end
 
 describe "form submission functions" do
+  let(:comment) { Comment.create(author: "Author", text: "This is a comment") }
+  let(:author_field) { "comment_author" }
+  let(:author_error) { "Author: can't be blank" }
+  let(:text_field) { "comment_text" }
+  let(:text_error) { "Text: can't be blank" }
+
   before do
     visit "/stimulus"
-    @comment = Comment.create(author: "Author", text: "This is a comment")
-    @author_field = "comment_author"
-    @author_error = "Author: can't be blank"
-    @text_field = "comment_text"
-    @text_error = "Text: can't be blank"
   end
 
   it "adds a new comment to the page" do
-    fill_in @author_field, with: @comment.author
-    fill_in @text_field, with: @comment.text
+    fill_in author_field, with: comment.author
+    fill_in text_field, with: comment.text
     click_button("Post")
-    expect(page).to have_selector "h2", text: @comment.author
+    expect(page).to have_selector "h2", text: comment.author
   end
 
   it "comment count increases with successful form submission" do
     initital_comment_count = Comment.all.count
     new_comment_count = initital_comment_count + 1
-    fill_in @author_field, with: @comment.author
-    fill_in @text_field, with: @comment.text
+    fill_in author_field, with: comment.author
+    fill_in text_field, with: comment.text
     click_button("Post")
     expect(new_comment_count).to equal(Comment.all.count)
   end
 
   it "comment count remains the same when author field is empty" do
     initial_comment_count = Comment.all.count
-    fill_in @text_field, with: @comment.text
+    fill_in text_field, with: comment.text
     click_button("Post")
     expect(Comment.all.count).to equal(initial_comment_count)
   end
 
   it "comment count remains the same when text field is empty" do
     initial_comment_count = Comment.all.count
-    fill_in @author_field, with: @comment.author
+    fill_in author_field, with: comment.author
     click_button("Post")
     expect(Comment.all.count).to equal(initial_comment_count)
   end
