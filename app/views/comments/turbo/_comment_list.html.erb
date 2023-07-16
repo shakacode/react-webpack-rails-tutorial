@@ -5,7 +5,7 @@
     <% @comments.each do |comment| %>
       <div>
         <h2><%= comment.author %></h2>
-        <span><%= markdown_to_html(comment.text) %></span>
+        <span><%= markdown(comment.text) %></span>
       </div>
     <% end %>
   </div>
