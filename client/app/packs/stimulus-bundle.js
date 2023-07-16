@@ -1,8 +1,7 @@
 import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
 import 'jquery-ujs';
-import { Turbo } from "@hotwired/turbo-rails";
-import controllers from '../controllers';
+import { Turbo } from '@hotwired/turbo-rails';
 
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 
