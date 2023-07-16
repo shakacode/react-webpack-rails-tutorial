@@ -1,7 +1,9 @@
 module CommentsHelper
-  def markdown(content)
+  MarkdownParser = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+
+  def markdown_to_html(content)
     return '' unless content.present?
-    @markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
-    @markdown.render(content).html_safe
+
+    MarkdownParser.render(content).html_safe
   end
 end
