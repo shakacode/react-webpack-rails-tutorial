@@ -1,12 +1,12 @@
 <div>
   <ul class="nav nav-pills">
-    <li class="nav-item <%= @formType == "horizontal" ? "active" : "" %>" role="presentation">
+    <li class="nav-item <%= @form_type == "horizontal" ? "active" : "" %>" role="presentation">
       <%= link_to "Horizontal Form", horizontal_form_path %>
     </li>
-    <li class="nav-item <%= @formType == "stacked" ? "active" : "" %>" role="presentation">
+    <li class="nav-item <%= @form_type == "stacked" ? "active" : "" %>" role="presentation">
       <%= link_to "Stacked Form", stacked_form_path %>
     </li>
-    <li class="nav-item <%= @formType == "inline" ? "active" : ""%>" role="presentation">
+    <li class="nav-item <%= @form_type == "inline" ? "active" : ""%>" role="presentation">
       <%= link_to "Inline Form", inline_form_path %>
     </li>
   </ul>

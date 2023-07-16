@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  layout 'stimulus_layout'
+  layout "stimulus_layout"
   before_action :set_comment, only: %i[show edit update destroy]
   before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
   before_action :set_comments, only: %i[index stimulus comment_list]
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
         if turbo_frame_request?
           format.html
         else
-          format.html { redirect_to @comment, notice: "Comment was successfully created." }
+          format.html { redirect_to @comment, notice: I18n.t("Comment was successfully created.") }
         end
         format.json { render :show, status: :created, location: @comment }
       else
@@ -69,7 +69,7 @@ class CommentsController < ApplicationController
   end
 
   def stimulus
-    @formType = "horizontal"
+    @form_type = "horizontal"
   end
 
   def comment_list
@@ -79,21 +79,21 @@ class CommentsController < ApplicationController
   end
 
   def horizontal_form
-    @formType = "horizontal"
+    @form_type = "horizontal"
     respond_to do |format|
       format.html { render partial: "comments/turbo/horizontal_form" }
     end
   end
 
   def stacked_form
-    @formType = "stacked"
+    @form_type = "stacked"
     respond_to do |format|
       format.html { render partial: "comments/turbo/stacked_form" }
     end
   end
 
   def inline_form
-    @formType = "inline"
+    @form_type = "inline"
     respond_to do |format|
       format.html { render partial: "comments/turbo/inline_form" }
     end
