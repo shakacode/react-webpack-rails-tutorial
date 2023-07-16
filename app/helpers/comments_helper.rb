@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module CommentsHelper
-  def markdown(content)
+  MarkdownToHtmlParser = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+
+  def markdown_to_html(content)
     return "" if content.blank?
 
-    @markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML)
-    @markdown.render(content).html_safe
+    sanitize(MarkdownToHtmlParser.render(content))
   end
 end
