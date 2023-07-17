@@ -29,7 +29,7 @@ describe "with Turbo and Stimulus" do
   end
 
   describe "form submission functions" do
-    let(:comment) { Comment.create(author: "Author", text: "This is a comment") }
+    let(:comment) { Comment.new(author: "Author", text: "This is a comment") }
     let(:author_field) { "comment_author" }
     let(:author_error) { "Author: can't be blank" }
     let(:text_field) { "comment_text" }
@@ -52,7 +52,7 @@ describe "with Turbo and Stimulus" do
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
       click_button("Post")
-      expect(new_comment_count).to equal(Comment.all.count)
+      expect(Comment.all.count).to equal(new_comment_count)
     end
 
     it "comment count remains the same when author field is empty" do
