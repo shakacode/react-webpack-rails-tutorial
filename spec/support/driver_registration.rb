@@ -29,11 +29,10 @@ module DriverRegistration
     return if @selenium_headless_registered
 
     Capybara.register_driver :selenium_chrome_headless do |app|
-      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(chromeOptions: {
-                                                                        args: %w[headless disable-gpu no-sandbox
-                                                                                 disable-dev-shm-usage]
-                                                                      })
-      Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+      capabilities = Selenium::WebDriver::Chrome::Options.new(
+        "goog:chromeOptions" => { args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage] }
+      )
+      Capybara::Selenium::Driver.new app, browser: :chrome, options: capabilities
     end
     Capybara::Screenshot.register_driver(:selenium_chrome_headless) do |js_driver, path|
       js_driver.browser.save_screenshot(path)
