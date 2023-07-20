@@ -10,6 +10,7 @@ import SimpleCommentScreen from '../bundles/comments/components/SimpleCommentScr
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp.jsx';
+import Footer from '../bundles/comments/components/Footer/Footer.jsx';
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
@@ -22,6 +23,7 @@ ReactOnRails.register({
   RouterApp,
   NavigationBarApp,
   SimpleCommentScreen,
+  Footer,
 });
 
 ReactOnRails.registerStore({

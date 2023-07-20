@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentBox from '../CommentBox/CommentBox';
+import Footer from '../Footer/Footer';
 import css from './CommentScreen.module.scss';
 
 export default class CommentScreen extends BaseComponent {
@@ -52,6 +53,7 @@ export default class CommentScreen extends BaseComponent {
             </a>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
