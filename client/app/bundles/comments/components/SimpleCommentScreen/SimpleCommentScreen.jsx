@@ -12,7 +12,6 @@ import { translations } from 'libs/i18n/translations';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
-import Footer from '../Footer/Footer';
 import css from './SimpleCommentScreen.module.scss';
 
 class SimpleCommentScreen extends BaseComponent {
@@ -98,7 +97,6 @@ class SimpleCommentScreen extends BaseComponent {
           error={this.state.fetchCommentsError}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />
-        <Footer />
       </div>
     );
   }
