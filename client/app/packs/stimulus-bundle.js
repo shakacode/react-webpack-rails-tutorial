@@ -1,7 +1,9 @@
 import ReactOnRails from 'react-on-rails';
 import 'bootstrap-loader';
 import 'jquery-ujs';
-import { Turbo } from "@hotwired/turbo-rails";
+import { Turbo } from '@hotwired/turbo-rails';
+
+// eslint-disable-next-line no-unused-vars
 import controllers from '../controllers';
 
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
