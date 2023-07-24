@@ -1,4 +1,4 @@
-const { env, generateWebpackConfig } = require('shakapacker');
+const { env, webpackConfig } = require('shakapacker');
 const { existsSync } = require('fs');
 const { resolve } = require('path');
 
@@ -7,9 +7,9 @@ const envSpecificConfig = () => {
   if (existsSync(path)) {
     console.log(`Loading ENV specific webpack configuration file ${path}`);
     return require(path);
+  } else {
+    return webpackConfig;
   }
-
-  return generateWebpackConfig();
 };
 
 module.exports = envSpecificConfig();

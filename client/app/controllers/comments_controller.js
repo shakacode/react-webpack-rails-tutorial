@@ -22,7 +22,7 @@ export default class extends Controller {
         errors.push('Author');
         errors.push('Text');
       }
-      errors.forEach((error) => {
+      errors.forEach(error => {
         const errorString = `<li>${error}: can't be blank</li>`;
         errorList.insertAdjacentHTML('afterbegin', errorString);
       });
