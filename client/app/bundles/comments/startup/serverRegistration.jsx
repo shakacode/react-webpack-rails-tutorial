@@ -7,12 +7,14 @@ import SimpleCommentScreen from '../components/SimpleCommentScreen/SimpleComment
 import NavigationBarApp from './NavigationBarApp.jsx';
 import routerCommentsStore from '../store/routerCommentsStore';
 import commentsStore from '../store/commentsStore';
+import Footer from '../components/Footer/Footer';
 
 ReactOnRails.register({
   App,
   RouterApp,
   NavigationBarApp,
   SimpleCommentScreen,
+  Footer,
 });
 
 ReactOnRails.registerStore({
