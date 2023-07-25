@@ -1,16 +1,23 @@
-
 .refresh-btn {
   cursor: pointer;
 }
 
-#comment_list {
+.comment_list {
+  display: block;
+
   h2 {
     color: blue;
   }
+
   span {
     color: purple;
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: #333333;
     }
   }
@@ -48,6 +55,7 @@
   margin-right: 15px;
 }
 
+// scss-lint:disable ImportantRule
 .w-50 {
-  width: 27vw!important;
+  width: 27vw !important;
 }
