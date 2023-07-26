@@ -7,6 +7,7 @@ import { Turbo } from '@hotwired/turbo-rails';
 import controllers from '../controllers';
 
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
+import Footer from '../bundles/comments/components/Footer/Footer';
 
 Turbo.session.drive = false;
 
@@ -18,4 +19,5 @@ ReactOnRails.setOptions({
 
 ReactOnRails.register({
   NavigationBarApp,
+  Footer,
 });
