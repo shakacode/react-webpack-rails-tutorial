@@ -26,11 +26,7 @@ Soon to be in gulpfile....but gulp-eslint depends on eslint depends on
 
 So don't use `yarn run gulp lint` yet.
 
-For now:
-
-    bin/lint
-
-Or (from either top level or within `client` directory)
+From either top level or within `client` directory
 
     yarn run lint
 
