@@ -1,8 +1,8 @@
 # Linting and Code Inspection
 ## Running Lint and CI tasks
 * Default rake task runs tests and linting (yes, repeating this!) (see `ci.rake`)
-* See file [README.md](client/README.md) for how to run ESLint
-* See scripts `scripts/lint` and `client/bin/lint`.
+* See file [README.md](../client/README.md) for how to run ESLint
+* See script `scripts/lint`.
 * We're using the [AirBnb JavaScript style guidelines](https://github.com/airbnb/javascript).
 
 ### RubyMine/Webstorm Linting Configuration
