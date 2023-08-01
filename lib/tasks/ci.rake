@@ -13,35 +13,35 @@ if Rails.env.development? || Rails.env.test?
     sh "rspec"
   end
 
-  desc "Run CI rspec tests"
-  task ci_rspec_tests: %i[environment rspec_tests] do
-    puts "CI rspec tests"
-    puts Rainbow("PASSED").green
-    puts ""
-  rescue StandardError => e
-    puts e.to_s
-    puts Rainbow("FAILED").red
-    puts ""
-    raise(e)
-  end
-
-  desc "Run CI js_tests"
-  task ci_js_tests: %i[environment js_tests] do
-    puts "CI js_tests"
-    puts Rainbow("PASSED").green
-    puts ""
-  rescue StandardError => e
-    puts e.to_s
-    puts Rainbow("FAILED").red
-    puts ""
-    raise(e)
-  end
-
   namespace :ci do
     desc "Run all audits and tests"
     # rspec_tests must be before lint and js_tests to build the locale files
     task all: %i[environment rspec_tests lint js_tests] do
       puts "All CI tasks"
+      puts Rainbow("PASSED").green
+      puts ""
+    rescue StandardError => e
+      puts e.to_s
+      puts Rainbow("FAILED").red
+      puts ""
+      raise(e)
+    end
+
+    desc "Run CI rspec tests"
+    task rspec: %i[environment rspec_tests] do
+      puts "CI rspec tests"
+      puts Rainbow("PASSED").green
+      puts ""
+    rescue StandardError => e
+      puts e.to_s
+      puts Rainbow("FAILED").red
+      puts ""
+      raise(e)
+    end
+
+    desc "Run CI js_tests"
+    task js: %i[environment js_tests] do
+      puts "CI js_tests"
       puts Rainbow("PASSED").green
       puts ""
     rescue StandardError => e
