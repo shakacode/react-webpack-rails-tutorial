@@ -19,9 +19,13 @@ export default function commentsReducer($$state = $$initialState, action = null)
 
   switch (type) {
     case actionTypes.FETCH_COMMENTS_SUCCESS: {
-      comments.forEach((comment) => {
+      for (const comment of comments) {
         comment.nodeRef = React.createRef(null);
-      });
+      }
+
+      // comments.forEach((comment) => {
+      //   comment.nodeRef = React.createRef(null);
+      // });
 
       return $$state.merge({
         $$comments: Immutable.fromJS(comments),

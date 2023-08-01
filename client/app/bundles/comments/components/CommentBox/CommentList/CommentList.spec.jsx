@@ -31,10 +31,7 @@ describe('CommentList', () => {
 
   it('renders a list of Comments in normal order', () => {
     const component = renderIntoDocument(
-      <CommentList
-        $$comments={comments}
-        cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-      />,
+      <CommentList $$comments={comments} cssTransitionGroupClassNames={cssTransitionGroupClassNames} />,
     );
     const list = scryRenderedComponentsWithType(component, Comment);
     expect(list.length).toEqual(2);
