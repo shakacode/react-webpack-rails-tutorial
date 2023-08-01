@@ -12,9 +12,13 @@ export default (props, railsContext) => {
   const initialComments = props.comments;
   const { $$commentsState } = initialStates;
 
-  initialComments.forEach((comment) => {
+  for (const comment of initialComments) {
     comment.nodeRef = React.createRef(null);
-  });
+  }
+
+  // initialComments.forEach((comment) => {
+  //   comment.nodeRef = React.createRef(null);
+  // });
   const initialState = {
     $$commentsStore: $$commentsState.merge({
       $$comments: Immutable.fromJS(initialComments),
