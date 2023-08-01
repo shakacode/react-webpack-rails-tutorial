@@ -71,6 +71,6 @@ jobs:
       - name: Run tests with xvfb
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bundle exec rake
+          run: bundle exec rake ci:rspec
           working-directory: ./ #optional
           options: ":99 -ac -screen scn 1600x1200x16"
