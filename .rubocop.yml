@@ -72,6 +72,7 @@ Metrics/BlockLength:
     - 'spec/rails_helper.rb'
     - 'spec/system/add_new_comment_spec.rb'
     - 'spec/system/react_router_demo_spec.rb'
+    - 'lib/tasks/ci.rake'
 
 Metrics/ParameterLists:
   Max: 5

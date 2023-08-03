@@ -26,6 +26,30 @@ if Rails.env.development? || Rails.env.test?
       puts ""
       raise(e)
     end
+
+    desc "Run CI rspec tests"
+    task rspec: %i[environment rspec_tests] do
+      puts "CI rspec tests"
+      puts Rainbow("PASSED").green
+      puts ""
+    rescue StandardError => e
+      puts e.to_s
+      puts Rainbow("FAILED").red
+      puts ""
+      raise(e)
+    end
+
+    desc "Run CI js_tests"
+    task js: %i[environment js_tests] do
+      puts "CI js_tests"
+      puts Rainbow("PASSED").green
+      puts ""
+    rescue StandardError => e
+      puts e.to_s
+      puts Rainbow("FAILED").red
+      puts ""
+      raise(e)
+    end
   end
 
   task ci: "ci:all"
