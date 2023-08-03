@@ -7,7 +7,7 @@ import css from './Comment.module.scss';
 
 const Comment = React.forwardRef((props, ref) => {
   const { author, text } = props;
-  const rawMarkup = marked(text, { gfm: true, sanitize: true });
+  const rawMarkup = marked(text, { gfm: true });
   const sanitizedRawMarkup = sanitizeHtml(rawMarkup);
 
   /* eslint-disable react/no-danger */
