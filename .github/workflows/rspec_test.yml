@@ -69,7 +69,7 @@ jobs:
         run: NODE_ENV=development bundle exec bin/shakapacker
 
       - name: Run tests with xvfb
-        uses: GabrielBB/xvfb-action@v1
+        uses: coactions/setup-xvfb@v1
         with:
           run: bundle exec rake ci:rspec
           working-directory: ./ #optional

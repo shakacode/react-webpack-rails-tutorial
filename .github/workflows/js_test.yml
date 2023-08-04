@@ -69,8 +69,4 @@ jobs:
         run: NODE_ENV=development bundle exec bin/shakapacker
 
       - name: Run js tests with xvfb
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: bundle exec rake ci:js
-          working-directory: ./ #optional
-          options: ":99 -ac -screen scn 1600x1200x16"
+        run: bundle exec rake ci:js
