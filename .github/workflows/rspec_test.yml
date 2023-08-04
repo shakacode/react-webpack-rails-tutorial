@@ -1,20 +1,21 @@
-# This workflow uses actions that are not certified by GitHub.  They are
-# provided by a third-party and are governed by separate terms of service,
-# privacy policy, and support documentation.
-#
-# This workflow will install a prebuilt Ruby version, install dependencies, and
-# run tests and linters.
-name: "Ruby on Rails CI"
+name: "Rspec CI"
+
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
+      matrix:
+        node: [18.x]
+        ruby: [3.1.2]
+
     services:
       postgres:
         image: postgres:11-alpine
@@ -24,6 +25,7 @@ jobs:
           POSTGRES_DB: rails_test
           POSTGRES_USER: rails
           POSTGRES_PASSWORD: password
+
     env:
       RAILS_ENV: test
       NODE_ENV: test
@@ -31,6 +33,7 @@ jobs:
       DRIVER: selenium_chrome
       CHROME_BIN: /usr/bin/google-chrome
       USE_COVERALLS: true
+
     steps:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@latest
@@ -47,17 +50,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Ruby and gems
+      - name: Use Ruby ${{ matrix.node }}
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-      - name: Install Node Packages
-        run: npm install --legacy-peer-deps
+          node-version: ${{ matrix.node }}
+          cache: yarn
+
+      - name: Install dependencies
+        run: |
+          bundle install
+          yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Set up database schema
         run: bin/rails db:schema:load
@@ -68,7 +76,7 @@ jobs:
       - name: Build shakapacker chunks
         run: NODE_ENV=development bundle exec bin/shakapacker
 
-      - name: Run tests with xvfb
+      - name: Run rspec with xvfb
         uses: coactions/setup-xvfb@v1
         with:
           run: bundle exec rake ci:rspec
