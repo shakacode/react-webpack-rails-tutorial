@@ -21,6 +21,12 @@ export default class CommentList extends BaseComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {};
+
+    const { $$comments } = this.props;
+    for (const comment of $$comments) {
+      comment.nodeRef = React.createRef(null);
+    }
+
     _.bindAll(this, 'errorWarning');
   }
 
