@@ -28,22 +28,8 @@ jobs:
       RAILS_ENV: test
       NODE_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
-      DRIVER: selenium_chrome
-      CHROME_BIN: /usr/bin/google-chrome
       USE_COVERALLS: true
     steps:
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-
-      - name: Check Chrome version
-        run: chrome --version
-
-      - name: Check Chrome version
-        run: google-chrome --version
-
-      - name: Set Display environment variable
-        run: "export DISPLAY=:99"
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -56,17 +42,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-      - name: Install Node Packages
-        run: npm install --legacy-peer-deps
 
-      - name: Set up database schema
-        run: bin/rails db:schema:load
+      - name: Install Node Packages
+        run: yarn install
 
       - name: Build i18n libraries
         run: bundle exec rake react_on_rails:locale
-
-      - name: Build shakapacker chunks
-        run: NODE_ENV=development bundle exec bin/shakapacker
 
       - name: Run js tests with xvfb
         run: bundle exec rake ci:js
