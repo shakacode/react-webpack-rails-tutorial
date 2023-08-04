@@ -37,12 +37,6 @@ class SimpleCommentScreen extends BaseComponent {
       .get('comments.json', { responseType: 'json' })
       .then((res) => {
         const comments = [...res.data.comments];
-        for (const comment of comments) {
-          comment.nodeRef = React.createRef(null);
-        }
-        // comments.forEach((comment) => {
-        //   comment.nodeRef = React.createRef(null);
-        // });
         this.setState({ $$comments: Immutable.fromJS(comments) });
       })
       .catch((error) => this.setState({ fetchCommentsError: error }));
