@@ -6390,12 +6390,17 @@ map-obj@^4.0.0, map-obj@^4.1.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.3.0.tgz#9304f906e93faae70880da102a9f1df0ea8bb05a"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
 
-marked-gfm-heading-id@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/marked-gfm-heading-id/-/marked-gfm-heading-id-3.0.4.tgz#cc54976b6c1e507f2abf7067208e5d135ef5c792"
-  integrity sha512-k22f+k8B449kRVXbi3OYxahI6t8HywKIF0wn0L0atzYhFHYRcJynLDekh+lcxcZkNnkEGRZOHuRfTcpjMjLqDw==
+marked-gfm-heading-id@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/marked-gfm-heading-id/-/marked-gfm-heading-id-3.0.5.tgz#ce3fa9deee3522b76f9e6e78dbed94c274f86db3"
+  integrity sha512-zpJVh1URZEen4T/+yXiply286lTxRPN+qbqabZkrPa3PnuLKr7z6RzsT3rahv7a6gsw7+u3vtFti3wo6iPfELQ==
   dependencies:
     github-slugger "^2.0.0"
+
+marked-mangle@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/marked-mangle/-/marked-mangle-1.1.0.tgz#f9f0adfbb841079d7342368bc5c7592ba93e3527"
+  integrity sha512-ed2W2gMB2HIBaYasBZveMFJfDRTL2OFycr0GgUSPcBSNl5dX+1r6lHG6u1eFXw7kej2hBTWa1m6YZqcfn4Coxw==
 
 marked@^5.1.0:
   version "5.1.2"
