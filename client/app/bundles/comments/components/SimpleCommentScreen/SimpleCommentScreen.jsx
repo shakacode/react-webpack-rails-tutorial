@@ -54,9 +54,7 @@ class SimpleCommentScreen extends BaseComponent {
       .post('comments.json', { comment }, requestConfig)
       .then(() => {
         const { $$comments } = this.state;
-        // comment.nodeRef = React.createRef(null);
-        const commentWithNodeRef = { ...comment, nodeRef: React.createRef(null) };
-        const $$comment = Immutable.fromJS(commentWithNodeRef);
+        const $$comment = Immutable.fromJS(comment);
 
         this.setState({
           $$comments: $$comments.unshift($$comment),
