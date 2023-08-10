@@ -47,6 +47,9 @@ function NavigationBar(props) {
             <li className={classNames({ active: pathname === paths.SIMPLE_REACT_PATH })}>
               <a href={paths.SIMPLE_REACT_PATH}>Simple React</a>
             </li>
+            <li className={classNames({ active: pathname === paths.STIMULUS_PATH })}>
+              <a href={paths.STIMULUS_PATH}>Stimulus Demo</a>
+            </li>
             <li className={classNames({ active: pathname === paths.RAILS_PATH })}>
               <a href={paths.RAILS_PATH}>Classic Rails</a>
             </li>

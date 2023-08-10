@@ -33,6 +33,9 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/runtime": "^7.17.9",
+    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@hotwired/turbo-rails": "^7.3.0",
     "@rails/actioncable": "7.0.4-1",
     "autoprefixer": "^7.1.5",
     "axios": "^0.21.1",
@@ -82,6 +85,7 @@
     "sass-loader": "^12.6.0",
     "sass-resources-loader": "^2.2.5",
     "shakapacker": "7.0.0",
+    "stimulus": "^3.0.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "5",
     "turbolinks": "^5.2.0",
@@ -124,6 +128,10 @@
   "browser": {
     "fs": false
   },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
   "jest": {
     "moduleNameMapper": {
       "\\.scss$": "identity-obj-proxy"

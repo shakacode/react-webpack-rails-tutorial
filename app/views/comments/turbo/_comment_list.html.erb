@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "comment_list", class: "comment_list", data: { turbo: true } do %>
+  <a href="<%= comment_list_path %>" data-comments-target="commentRefresh" style="display:none">
+    Hidden Refresh Button</a>
+  <div data-comments-target="commentList">
+    <% @comments.each do |comment| %>
+      <div>
+        <h2><%= comment.author %></h2>
+        <span><%= markdown_to_html(comment.text) %></span>
+      </div>
+    <% end %>
+  </div>
+<% end %>

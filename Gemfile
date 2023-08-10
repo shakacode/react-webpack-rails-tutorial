@@ -52,6 +52,8 @@ gem "net-imap", require: false
 gem "net-pop", require: false
 gem "net-smtp", require: false
 
+gem "redcarpet"
+
 # jquery as the JavaScript library has been moved under /client and managed by npm.
 # It is critical to not include any of the jquery gems when following this pattern or
 # else you might have multiple jQuery versions.
@@ -108,3 +110,6 @@ group :test do
   gem "rspec-rails", "~> 6.0.0"
   gem "selenium-webdriver", "~> 4"
 end
+
+gem "stimulus-rails", "~> 1.2"
+gem "turbo-rails", "~> 1.4"

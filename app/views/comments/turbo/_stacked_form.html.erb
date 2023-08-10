@@ -1,0 +1,18 @@
+<%= turbo_frame_tag "form_tabs", data: { turbo: true } do %>
+  <%= render "comments/turbo/error_notice" %>
+  <%= render "comments/turbo/tabs" %>
+  <hr />
+  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }) do |f| %>
+    <div class="form-group">
+        <%= f.label "Name", class: "form-label" %>
+        <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "form-control", placeholder: "Your Name" %>
+    </div>
+    <div class="form-group">
+        <%= f.label :text, class: "form-label" %>
+        <%= f.text_field :text, data: { comments_target: "commentText" }, class: "form-control", placeholder: "Say something using markdown..." %>
+    </div>
+    <div class="form-group">
+        <%= f.submit "Post", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>

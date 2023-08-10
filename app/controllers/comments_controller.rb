@@ -1,22 +1,21 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
+  layout "stimulus_layout"
   before_action :set_comment, only: %i[show edit update destroy]
+  before_action :new_comment, only: %i[new stimulus horizontal_form stacked_form inline_form]
+  before_action :set_comments, only: %i[index stimulus comment_list]
 
   # GET /comments
   # GET /comments.json
-  def index
-    @comments = Comment.all.order("id DESC")
-  end
+  def index; end
 
   # GET /comments/1
   # GET /comments/1.json
   def show; end
 
   # GET /comments/new
-  def new
-    @comment = Comment.new
-  end
+  def new; end
 
   # GET /comments/1/edit
   def edit; end
@@ -28,10 +27,18 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: I18n.t("comment_was_successfully_created") }
+        if turbo_frame_request?
+          format.html
+        else
+          format.html { redirect_to @comment, notice: I18n.t("Comment was successfully created.") }
+        end
         format.json { render :show, status: :created, location: @comment }
       else
-        format.html { render :new }
+        if turbo_frame_request?
+          format.html
+        else
+          format.html { render :new }
+        end
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
@@ -61,11 +68,50 @@ class CommentsController < ApplicationController
     end
   end
 
+  def stimulus
+    @form_type = "horizontal"
+  end
+
+  def comment_list
+    respond_to do |format|
+      format.html { render partial: "comments/turbo/comment_list" }
+    end
+  end
+
+  def horizontal_form
+    @form_type = "horizontal"
+    respond_to do |format|
+      format.html { render partial: "comments/turbo/horizontal_form" }
+    end
+  end
+
+  def stacked_form
+    @form_type = "stacked"
+    respond_to do |format|
+      format.html { render partial: "comments/turbo/stacked_form" }
+    end
+  end
+
+  def inline_form
+    @form_type = "inline"
+    respond_to do |format|
+      format.html { render partial: "comments/turbo/inline_form" }
+    end
+  end
+
   private
+
+  def set_comments
+    @comments = Comment.all.order("id DESC")
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment
     @comment = Comment.find(params[:id])
+  end
+
+  def new_comment
+    @comment = Comment.new
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

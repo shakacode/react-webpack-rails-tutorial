@@ -15,7 +15,7 @@ describe "Destroy a comment", existing_comment: true do
       click_link "Back"
 
       accept_confirm do
-        click_link "Destroy"
+        click_button "Destroy"
       end
 
       expect(page).not_to have_css(".comment", text: comment.author)
