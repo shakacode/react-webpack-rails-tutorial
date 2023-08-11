@@ -1,51 +1,47 @@
-# This workflow uses actions that are not certified by GitHub.  They are
-# provided by a third-party and are governed by separate terms of service,
-# privacy policy, and support documentation.
-#
-# This workflow will install a prebuilt Ruby version, install dependencies, and
-# run rspec tests.
 name: "Lint CI"
+
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
+      matrix:
+        node: [18.x]
+        ruby: [3.1.2]
+
     env:
       RAILS_ENV: test
       NODE_ENV: test
-    steps:
-      - name: Set Display environment variable
-        run: "export DISPLAY=:99"
 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Ruby and gems
-        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
+      - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-      - name: Install Node Packages
-        run: npm install --legacy-peer-deps
+          node-version: ${{ matrix.node }}
+          cache: yarn
+
+      - name: Install dependencies
+        run: |
+          bundle install
+          yarn install --frozen-lockfile --non-interactive --prefer-offline
 
       - name: Build i18n libraries
         run: bundle exec rake react_on_rails:locale
 
-      - name: Build shakapacker chunks
-        run: NODE_ENV=development bundle exec bin/shakapacker
-
-      - name: Run lint tests with xvfb
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: bundle exec rake lint
-          working-directory: ./ #optional
-          options: ":99 -ac -screen scn 1600x1200x16"
+      - name: Run lint
+        run: bundle exec rake lint

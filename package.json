@@ -22,9 +22,9 @@
     "lint": " yarn lint:eslint --fix && yarn lint:prettier --w",
     "test": "yarn build:test && yarn lint",
     "test:client": "cd client && yarn test",
-    "build:test": "rm -rf public/webpack/test && RAILS_ENV=test NODE_ENV=test bin/shakapacker",
-    "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/shakapacker",
-    "build:clean": "rm -rf public/webpack || true"
+    "build:test": "rm -rf public/packs-test && RAILS_ENV=test NODE_ENV=test bin/shakapacker",
+    "build:dev": "rm -rf public/packs && RAILS_ENV=development NODE_ENV=development bin/shakapacker",
+    "build:clean": "rm -rf public/packs || true"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
