@@ -1,3 +1,5 @@
+// The 0.5s must correspond to the 500s in:
+//   client/app/bundles/comments/components/CommentBox/CommentList.jsx:58
 .elementEnter {
   opacity: 0.01;
 

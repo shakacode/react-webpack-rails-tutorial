@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
 import { defaultMessages } from 'libs/i18n/default';
@@ -259,20 +259,27 @@ class CommentForm extends BaseComponent {
   }
 
   errorWarning() {
-    const { error } = this.props;
+    const { error, cssTransitionGroupClassNames } = this.props;
 
     // If there is no error, there is nothing to add to the DOM
-    if (!error) return null;
+    if (!error.error) return null;
 
-    const errorData = error.response && error.response.data;
+    const errorData = error.error.response && error.error.response.data;
 
     const errorElements = _.transform(
       errorData,
       (result, errorText, errorFor) => {
         result.push(
-          <li key={errorFor}>
-            <b>{_.upperFirst(errorFor)}:</b> {errorText}
-          </li>,
+          <CSSTransition
+            key={errorFor}
+            nodeRef={error.nodeRef}
+            timeout={500}
+            classNames={cssTransitionGroupClassNames}
+          >
+            <li ref={error.nodeRef}>
+              <b>{_.upperFirst(errorFor)}:</b> {errorText}
+            </li>
+          </CSSTransition>,
         );
       },
       [],
@@ -302,22 +309,15 @@ class CommentForm extends BaseComponent {
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
     }
 
-    const { cssTransitionGroupClassNames } = this.props;
     const { formatMessage } = this.props.intl;
 
-    // For animation with ReactCSSTransitionGroup
-    //   https://facebook.github.io/react/docs/animation.html
+    // For animation with TransitionGroup
+    //   https://reactcommunity.org/react-transition-group/transition-group
     // The 500 must correspond to the 0.5s in:
     //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:6
     return (
       <div>
-        <ReactCSSTransitionGroup
-          transitionName={cssTransitionGroupClassNames}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-        >
-          {this.errorWarning()}
-        </ReactCSSTransitionGroup>
+        <TransitionGroup component={null}>{this.errorWarning()}</TransitionGroup>
 
         <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
           <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>

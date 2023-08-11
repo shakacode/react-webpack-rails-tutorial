@@ -1,28 +1,20 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-import BaseComponent from '../../../../libs/components/BaseComponent.jsx';
+function TestReactRouterRedirect() {
+  const location = useLocation();
 
-export default class TestReactRouterRedirect extends BaseComponent {
-  static checkAuth() {
+  function checkAuth() {
     // Hard code this to demonstrate the effect
     const notAuthorized = true;
     return notAuthorized;
   }
 
-  render() {
-    if (TestReactRouterRedirect.checkAuth()) {
-      return (
-        <Redirect
-          push
-          to={{
-            pathname: '/',
-            state: { redirectFrom: this.props.location.pathname },
-          }}
-        />
-      );
-    }
-
-    return <div>Nope.</div>;
+  if (checkAuth()) {
+    return <Navigate to="/" state={{ redirectFrom: location.pathname }} />;
   }
+
+  return <div>Nope.</div>;
 }
+
+export default React.memo(TestReactRouterRedirect);

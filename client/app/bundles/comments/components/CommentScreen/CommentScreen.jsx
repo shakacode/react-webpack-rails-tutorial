@@ -18,6 +18,8 @@ export default class CommentScreen extends BaseComponent {
 
     if (!locationState || !locationState.redirectFrom) return null;
 
+    window.history.replaceState({}, document.title);
+
     return (
       <div className={`bg-success ${css.notification}`}>
         You have been redirected from

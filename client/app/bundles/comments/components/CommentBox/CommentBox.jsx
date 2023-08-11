@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import BaseComponent from 'libs/components/BaseComponent';
 import { injectIntl } from 'react-intl';
+import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import CommentForm from './CommentForm/CommentForm';
@@ -78,8 +78,8 @@ class CommentBox extends BaseComponent {
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,
-      leave: css.elementLeave,
-      leaveActive: css.elementLeaveActive,
+      exit: css.elementLeave,
+      exitActive: css.elementLeaveActive,
     };
     const locale = data.get('locale') || defaultLocale;
     /* eslint-disable no-script-url */
@@ -105,7 +105,7 @@ class CommentBox extends BaseComponent {
         </ul>
         <CommentForm
           isSaving={data.get('isSaving')}
-          error={data.get('submitCommentError')}
+          error={{ error: data.get('submitCommentError'), nodeRef: React.createRef(null) }}
           actions={actions}
           cssTransitionGroupClassNames={cssTransitionGroupClassNames}
         />

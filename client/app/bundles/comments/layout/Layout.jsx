@@ -14,17 +14,17 @@ export default class Layout extends Component {
         <header>
           <ul>
             <li>
-              <Link exact to="/" activeClassName="active">
+              <Link end to="/" className={({ isActive }) => (isActive ? ' activated' : '')}>
                 Comments (Root URL)
               </Link>
             </li>
             <li>
-              <Link to="/react-router" activeClassName="active">
+              <Link to="/react-router" className={({ isActive }) => (isActive ? ' activated' : '')}>
                 Test React Router ('/react-router')
               </Link>
             </li>
             <li>
-              <Link to="/react-router/redirect" activeClassName="active">
+              <Link to="/react-router/redirect" className={({ isActive }) => (isActive ? ' activated' : '')}>
                 Test Redirect (url to '/react-router/redirect' which goes to root '/')
               </Link>
             </li>

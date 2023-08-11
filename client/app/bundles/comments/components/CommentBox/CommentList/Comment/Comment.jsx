@@ -1,28 +1,34 @@
-import BaseComponent from 'libs/components/BaseComponent';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { marked } from 'marked';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+import { mangle } from 'marked-mangle';
 import sanitizeHtml from 'sanitize-html';
 import css from './Comment.module.scss';
 
-export default class Comment extends BaseComponent {
-  static propTypes = {
-    author: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-  };
+marked.use(gfmHeadingId());
+marked.use(mangle());
 
-  render() {
-    const { author, text } = this.props;
-    const rawMarkup = marked(text, { gfm: true });
-    const sanitizedRawMarkup = sanitizeHtml(rawMarkup);
+const Comment = React.forwardRef((props, ref) => {
+  const { author, text } = props;
+  const rawMarkup = marked(text, { gfm: true });
+  const sanitizedRawMarkup = sanitizeHtml(rawMarkup);
 
-    /* eslint-disable react/no-danger */
-    return (
-      <div className={css.comment}>
-        <h2 className={`${css.commentAuthor} js-comment-author`}>{author}</h2>
-        <span dangerouslySetInnerHTML={{ __html: sanitizedRawMarkup }} className="js-comment-text" />
-      </div>
-    );
-  }
-}
+  /* eslint-disable react/no-danger */
+  return (
+    <div ref={ref} className={css.comment}>
+      <h2 className={`${css.commentAuthor} js-comment-author`}>{author}</h2>
+      <span dangerouslySetInnerHTML={{ __html: sanitizedRawMarkup }} className="js-comment-text" />
+    </div>
+  );
+});
+
+Comment.displayName = 'Comment';
+
+Comment.propTypes = {
+  author: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+};
+
+export default React.memo(Comment);

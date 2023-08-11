@@ -9,8 +9,8 @@ const { renderIntoDocument, findRenderedDOMComponentWithTag, scryRenderedCompone
 const cssTransitionGroupClassNames = {
   enter: 'elementEnter',
   enterActive: 'elementEnterActive',
-  leave: 'elementLeave',
-  leaveActive: 'elementLeaveActive',
+  exit: 'elementLeave',
+  exitActive: 'elementLeaveActive',
 };
 
 describe('CommentList', () => {
@@ -19,11 +19,13 @@ describe('CommentList', () => {
       id: 1,
       author: 'Frank',
       text: 'hi',
+      nodeRef: React.createRef(null),
     }),
     new Map({
       id: 2,
       author: 'Furter',
       text: 'ho',
+      nodeRef: React.createRef(null),
     }),
   );
 
