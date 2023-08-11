@@ -133,7 +133,10 @@
     "fs": false
   },
   "browserslist": [
-    "defaults",
+    ">1%",
+    "last 5 versions",
+    "safari >= 7",
+    "Firefox ESR",
     "not IE 11"
   ],
   "jest": {

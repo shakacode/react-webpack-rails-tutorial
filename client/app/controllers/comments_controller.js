@@ -1,6 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
 import * as ActionCable from '@rails/actioncable';
 import * as marked from 'marked';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+import { mangle } from 'marked-mangle';
+
+marked.use(gfmHeadingId());
+marked.use(mangle());
 
 export default class extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];

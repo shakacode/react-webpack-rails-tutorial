@@ -52,9 +52,6 @@ export default class CommentList extends BaseComponent {
     const commentNodes = $$comments.map(($$comment, index) => {
       const nodeRef = React.createRef(null);
       return (
-        // `key` is a React-specific concept and is not mandatory for the
-        // purpose of this tutorial. if you're curious, see more here:
-        // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
         <CSSTransition
           key={$$comment.get('id') || index}
           nodeRef={nodeRef}
@@ -74,7 +71,7 @@ export default class CommentList extends BaseComponent {
     // For animation with TransitionGroup
     //   https://reactcommunity.org/react-transition-group/transition-group
     // The 500 must correspond to the 0.5s in:
-    //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:6
+    //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:8
     return (
       <div>
         {this.errorWarning()}
