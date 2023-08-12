@@ -4,7 +4,7 @@ spec:
   type: standard
   containers:
     - name: redis
-      image: 'redis:6.2.6'
+      image: 'redis:6.2-alpine'
       ports:
         - number: 6379
           protocol: tcp
