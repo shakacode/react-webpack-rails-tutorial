@@ -3,7 +3,7 @@ aliases:
   common: &common
     # Change this to your org name for staging. Production apps will use a different org
     # for security.
-    cpln_org: shakacode-demo
+    cpln_org: shakacode-open-source-examples
     # Change `shakacode-staging` to your-org-name-for-staging
     # Example apps use only location. CPLN offers the ability to use multiple locations.
     default_location: aws-us-east-2
