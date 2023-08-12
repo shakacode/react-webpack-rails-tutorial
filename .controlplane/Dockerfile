@@ -17,7 +17,7 @@ RUN bundle config set without 'development test' && \
     bundle install --jobs=3 --retry=3
 
 # install node packages
-COPY package.json yarn.lock .
+COPY package.json yarn.lock ./
 RUN yarn install
 
 # pick necessary app files
