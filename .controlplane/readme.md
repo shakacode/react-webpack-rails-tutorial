@@ -40,7 +40,7 @@ Check if the Control Plane organization and location are correct in `.controlpla
 
 # Provision all infrastructure on Control Plane.
 # app tutorial-app will be created per definition in .controlplane/controlplane.yml
-cpl setup gvc postgres redis rails -a tutorial-app
+cpl apply-template gvc postgres redis rails -a tutorial-app
 
 # Build and push docker image to Control Plane repository
 # Note, may take many minutes. Be patient.
