@@ -56,6 +56,22 @@ cpl logs -a tutorial-app
 cpl open -a tutorial-app
 ```
 
+Notice that in the first attempt to build the image, you may get it interrupted with a message like this:
+
+```
+89c3244a87b2: Waiting
+80231db1194c: Waiting
+f1c1f2298584: Waiting
+ccba29d69370: Waiting
+unsupported:
+***  You are trying to push/pull to your org's private registry in Control Plane.  ***
+***  First, grant docker access the registry using the 'cpln' command:             ***
+
+       cpln image docker-login --org tutorial-app
+```
+
+Run the given command as instructed and repeat the `build-image` command.
+
 ## Promoting code upgrades
 
 ```sh
