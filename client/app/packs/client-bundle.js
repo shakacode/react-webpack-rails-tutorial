@@ -11,6 +11,7 @@ import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
+import { make as RescriptPage } from '../bundles/comments/src/RescriptPage.bs.mjs';
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
@@ -24,6 +25,7 @@ ReactOnRails.register({
   NavigationBarApp,
   SimpleCommentScreen,
   Footer,
+  RescriptPage,
 });
 
 ReactOnRails.registerStore({

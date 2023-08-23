@@ -1,0 +1,10 @@
+// Defining application SASS variables in stand-alone file,
+// so we can use them in bootstrap-loader and CSS Modules via sass-resources-loader
+$body-bg: #EFF8FB;                          // background w/ character
+$navbar-default-bg: #FFFFE0;                // fancy yellow navbar
+$font-size-base: 15px;                      // make it bigger!
+$font-family-sans-serif: 'OpenSans-Light';  // apply custom font
+
+// It will be used in SASS components imported as CSS Modules
+$comment-author-color: blue;
+$comment-text-color: purple;

@@ -41,6 +41,9 @@ function NavigationBar(props) {
             >
               <a href={paths.ROUTER_PATH}>React Router Demo</a>
             </li>
+            <li className={classNames({ active: pathname === paths.RESCRIPT_PATH })}>
+              <a href={paths.RESCRIPT_PATH}>Rescript Demo</a>
+            </li>
             <li className={classNames({ active: pathname === paths.NO_ROUTER_PATH })}>
               <a href={paths.NO_ROUTER_PATH}>React Demo</a>
             </li>

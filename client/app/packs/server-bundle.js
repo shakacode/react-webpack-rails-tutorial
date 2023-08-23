@@ -8,6 +8,7 @@ import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import Footer from '../bundles/comments/components/Footer/Footer';
+import { make as RescriptPage } from '../bundles/comments/src/RescriptPage.bs.mjs';
 
 ReactOnRails.register({
   App,
@@ -15,6 +16,7 @@ ReactOnRails.register({
   NavigationBarApp,
   SimpleCommentScreen,
   Footer,
+  RescriptPage,
 });
 
 ReactOnRails.registerStore({

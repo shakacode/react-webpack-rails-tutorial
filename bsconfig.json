@@ -1,0 +1,30 @@
+{
+  "name": "react-webpack-rails-tutorial",
+  "sources": [
+    {
+      "dir": "client/app/bundles/comments/src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-open JsonCombinators"
+  ],
+  "suffix": ".bs.mjs",
+  "bs-dependencies": [
+    "@rescript/react",
+    "@rescript/core",
+    "@glennsl/rescript-fetch",
+    "@glennsl/rescript-json-combinators"
+  ],
+  "jsx": {
+  "version": 4,
+    "mode": "automatic"
+  }
+}
