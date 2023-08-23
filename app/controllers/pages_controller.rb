@@ -36,6 +36,8 @@ class PagesController < ApplicationController
 
   def simple; end
 
+  def rescript; end
+
   private
 
   def set_comments

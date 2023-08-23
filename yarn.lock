@@ -1407,6 +1407,16 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
+"@glennsl/rescript-fetch@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/rescript-fetch/-/rescript-fetch-0.2.0.tgz#b72085d8bb19d8b9266aaf18d59c440ddceaf8dd"
+  integrity sha512-0tsEqJ/6/WBm02prM4RYG+qpnNTaB8QKKIeQHXdDaE4C5YfA/nzjxMNW3CjsGIaEgyrAmmIXFS0kx24UjvOI6A==
+
+"@glennsl/rescript-json-combinators@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@glennsl/rescript-json-combinators/-/rescript-json-combinators-1.2.1.tgz#3f641e4548ac1a664ce9acb140d5bba9ee1d5c9e"
+  integrity sha512-2Tw7NtrPerxN+9Y0u9bl9rUgqUqFcZkkRYELjHu9mIT/PDG3n8lO/osrwMIfoo6ze2FAur0Fw8hfDRJV8n3W3A==
+
 "@hotwired/stimulus-webpack-helpers@^1.0.0", "@hotwired/stimulus-webpack-helpers@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.1.tgz#4cd74487adeca576c9865ac2b9fe5cb20cef16dd"
@@ -1852,6 +1862,16 @@
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.2.tgz#cba1cf0a04bc04cb66027c51fa600e9cbc388bc8"
   integrity sha512-7Lcn7IqGMV+vizMPoEl5F0XDshcdDYtMI6uJLQdQz5CfZAwy3vvGKYSUk789qndt5dEC4HfSjviSYlSoHGL2+A==
+
+"@rescript/core@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@rescript/core/-/core-0.5.0.tgz#3e83e75aaa60f42f4279e0d184358f2db5d40955"
+  integrity sha512-Keqnpi+8VqyhCk/3aMwar8hJbNy2IsINAAfIFeQC65IIegCR0QXFDBpQxfVcmbbtoHq6HnW4B3RLm/9GCUJQhQ==
+
+"@rescript/react@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@rescript/react/-/react-0.11.0.tgz#d2545546d823bdb8e6b59daa1790098d1666f79e"
+  integrity sha512-RzoAO+3cJwXE2D7yodMo4tBO2EkeDYCN/I/Sj/yRweI3S1CY1ZBOF/GMcVtjeIurJJt7KMveqQXTaRrqoGZBBg==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
@@ -8217,6 +8237,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
+
+rescript@^10.1.4:
+  version "10.1.4"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-10.1.4.tgz#0f37710d371f32a704f17b4e804f66ce3c79a305"
+  integrity sha512-FFKlS9AG/XrLepWsyw7B+A9DtQBPWEPDPDKghV831Y2KGbie+eeFBOS0xtRHp0xbt7S0N2Dm6hhX+kTZQ/3Ybg==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
