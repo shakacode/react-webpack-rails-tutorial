@@ -8,9 +8,9 @@ let make = () => {
     setIsSaving(_ => true)
     let _ = (async() => {
       try {
-        let _ = Actions.Api.storeComment(author, text)
-        setIsSaving(_ => false)
+        let _ = await Actions.Api.storeComment(author, text)
         let comments = await Actions.Api.fetchComments()
+        setIsSaving(_ => false)
         setComments(_ => comments)
       } catch {
         | _ => setError(_ => true) 
