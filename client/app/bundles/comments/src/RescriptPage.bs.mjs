@@ -27,11 +27,11 @@ function RescriptPage(props) {
           }));
     ((async function (param) {
             try {
-              Actions.Api.storeComment(author, text);
+              await Actions.Api.storeComment(author, text);
+              var comments = await Actions.Api.fetchComments(undefined);
               Curry._1(setIsSaving, (function (param) {
                       return false;
                     }));
-              var comments = await Actions.Api.fetchComments(undefined);
               return Curry._1(setComments, (function (param) {
                             return comments;
                           }));
