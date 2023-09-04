@@ -1,38 +1,38 @@
-// ReactOnRails binding
-type rorDefault = {
-  authenticityHeaders: unit => {.} 
-}
-type rorModule = {
-  default: rorDefault
-}
-@module("react-on-rails") external ror: rorModule = "default";
+module Create = {
+  type t = {
+    author: string,
+    text: string
+  }
 
-type storeCommentData = {
-  author: string,
-  text: string
+  let storeComment = async (comment: t) => {
+    let _ = await Axios.post(
+      "comments.json",
+      {
+        author: comment.author,
+        text: comment.text
+      },
+      {
+        responseType: "json",
+        headers: ReactOnRails.ror.default.authenticityHeaders()
+      }
+    )
+  }
 }
 
-// axios binding
-type reqOptions = {
-  responseType: string,
-  headers: {.}
-}
-@module("axios") external post: (string, storeCommentData, reqOptions) => promise<unit> = "post";
-
-module Api = {
-  type comment = {
+module Fetch = {
+  type t = {
     author: string,
     text: string,
     id: int
-  };
-  
-  type comments = array<comment>
+  }
 
-  type commentsRes = {
+  type comments = array<t>
+
+  type commentsResT = {
     comments: comments
   }
 
-  let fetchComments = async (): comments => {
+  let fetchComments = async (): result<comments, Types.errorT> => {
     open Json.Decode;
 
     let response = await Fetch.get("comments.json")
@@ -49,43 +49,8 @@ module Api = {
     })
 
     switch jsonRes->Json.decode(jsonComments) {
-      | Ok(decodedRes) => decodedRes.comments
-      | Error(err) => Js.Exn.raiseError(err)
+      | Ok(decodedRes) => Ok(decodedRes.comments)
+      | Error(_) => Error(FailedToFetchComments)
     }
-  }
-
-  let storeComment = async (author: string, text: string) => {
-    let _ = await post(
-      "comments.json",
-      {
-        author: author,
-        text: text
-      },
-      {
-        responseType: "json",
-        headers:ror.default.authenticityHeaders()
-      }
-    )
-    
-    
-    // setIsSaving(_ => true)
-    // try {
-    //   let _ = await post(
-    //     "comments.json",
-    //     {
-    //       author: author,
-    //       text: text
-    //     },
-    //     {
-    //       responseType: "json",
-    //       headers:ror.default.authenticityHeaders()
-    //     }
-    //   )
-      // setIsSaving(_ => false)
-      // let comments = await fetchComments()
-      // setComments(_ => comments)
-    // } catch {
-    //   | _ => setError(_ => true)
-    // }
   }
 }

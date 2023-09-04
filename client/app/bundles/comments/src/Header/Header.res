@@ -20,30 +20,32 @@ let make = () => {
         {"Documentation for React on Rails"->React.string}
         </a>
         <a href="https://www.shakacode.com/blog/the-react-on-rails-doctrine">
-          {React.string("The React on Rails Doctrine.")}
+          {"The React on Rails Doctrine."->React.string}
         </a>
       </li>
       <li>
-        {React.string("See our React Native Client: ")}
+        {"See our React Native Client: "->React.string}
         <a href="https://github.com/shakacode/react-native-tutorial">
-          {React.string("shakacode/react-native-tutorial")}
+          {"shakacode/react-native-tutorial"->React.string}
         </a>
-        {React.string(".")}
+        {"."->React.string}
       </li>
       <li>
-        {React.string("Watch the ")}
+        {"Watch the "->React.string}
         <a href="https://www.youtube.com/playlist?list=PL5VAKH-U1M6dj84BApfUtvBjvF-0-JfEU">
-          {React.string("React On Rails Tutorial Series")}
+          {"React On Rails Tutorial Series"->React.string}
         </a>
-        {React.string(".")}
+        {"."->React.string}
       </li>
       <li>
         <a href="http://www.shakacode.com">{"ShakaCode"->React.string}</a>
-        {React.string(" is doing support for React on Rails, including a private Slack channel, source code reviews, and pair programming sessions. ")}
+        {" is doing support for React on Rails, \
+          including a private Slack channel, \
+          source code reviews, and pair programming sessions. "->React.string}
         <b>
           <a href="http://www.shakacode.com/work/index.html">{"Click here"->React.string}</a>
         </b>
-        {React.string(" for more information.")}
+        {" for more information."->React.string}
       </li>
     </ul>
     <hr/>

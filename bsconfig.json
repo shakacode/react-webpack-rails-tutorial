@@ -13,8 +13,8 @@
     }
   ],
   "bsc-flags": [
-    "-bs-super-errors",
-    "-open JsonCombinators"
+    "-open JsonCombinators",
+    "-open Belt"
   ],
   "suffix": ".bs.mjs",
   "bs-dependencies": [

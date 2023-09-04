@@ -2,10 +2,23 @@
 
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Axios from "axios";
-import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import ReactOnRails from "react-on-rails";
 import * as Json$JsonCombinators from "@glennsl/rescript-json-combinators/src/Json.bs.mjs";
 import * as Json_Decode$JsonCombinators from "@glennsl/rescript-json-combinators/src/Json_Decode.bs.mjs";
+
+async function storeComment(comment) {
+  await Axios.post("comments.json", {
+        author: comment.author,
+        text: comment.text
+      }, {
+        responseType: "json",
+        headers: Curry._1(ReactOnRails.default.authenticityHeaders, undefined)
+      });
+}
+
+var Create = {
+  storeComment: storeComment
+};
 
 async function fetchComments(param) {
   var response = await fetch("comments.json");
@@ -24,28 +37,24 @@ async function fetchComments(param) {
       });
   var decodedRes = Json$JsonCombinators.decode(jsonRes, jsonComments);
   if (decodedRes.TAG === /* Ok */0) {
-    return decodedRes._0.comments;
+    return {
+            TAG: /* Ok */0,
+            _0: decodedRes._0.comments
+          };
   } else {
-    return Js_exn.raiseError(decodedRes._0);
+    return {
+            TAG: /* Error */1,
+            _0: /* FailedToFetchComments */2
+          };
   }
 }
 
-async function storeComment(author, text) {
-  await Axios.post("comments.json", {
-        author: author,
-        text: text
-      }, {
-        responseType: "json",
-        headers: Curry._1(ReactOnRails.default.authenticityHeaders, undefined)
-      });
-}
-
-var Api = {
-  fetchComments: fetchComments,
-  storeComment: storeComment
+var Fetch = {
+  fetchComments: fetchComments
 };
 
 export {
-  Api ,
+  Create ,
+  Fetch ,
 }
 /* axios Not a pure module */
