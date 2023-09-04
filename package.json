@@ -90,6 +90,7 @@
     "stimulus": "^3.0.1",
     "shakapacker": "7.0.3",
     "style-loader": "^3.3.1",
+    "tailwindcss": "^3.3.3",
     "terser-webpack-plugin": "5",
     "turbolinks": "^5.2.0",
     "url-loader": "^4.1.1",

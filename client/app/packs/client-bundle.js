@@ -12,6 +12,8 @@ import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
 
+import '../assets/styles/application';
+
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef
   // process.env.TRACE_TURBOLINKS -> error: development is not defined
