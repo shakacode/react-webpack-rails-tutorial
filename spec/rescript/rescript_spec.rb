@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe "with Rescript" do
-  describe "tabs change on click", :tabs_check do
+  describe "tabs change on click" do
     before do
       visit "/rescript"
     end
