@@ -7,20 +7,20 @@ module TransitionGroup = {
   ) => React.element = "TransitionGroup"
 }
 
-type cssTransitionGroupClassNamesT = {
-  enter: string,
-  enterActive: string,
-  exit: string,
-  exitActive: string
-}
-
 module CSSTransition = {
+  type t = {
+    enter: string,
+    enterActive: string,
+    exit: string,
+    exitActive: string
+  }
+
   @react.component @module("react-transition-group")
   external make: (
     ~children: React.element, 
     ~key: string, 
     ~timeout: int, 
     ~nodeRef: React.ref<Js.Nullable.t<'a>>, 
-    ~classNames: cssTransitionGroupClassNamesT
+    ~classNames: t
   ) => React.element = "CSSTransition"
 }

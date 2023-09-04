@@ -1,117 +1,98 @@
 @module("./CommentForm.module.scss") external css: {..} = "default"
-type storeCommentAction = (string, string) => unit;
+
+let reducer = (
+  state: Types.commentFormStateT, 
+  action: Types.commentFormActionT
+): Types.commentFormStateT => {
+  switch (action) {
+  | SetAuthor(author) => {...state, author}
+  | SetText(text) => {...state, text}
+  | SetFormType(form) => {...state, form: form}
+  };
+}
+
 
 @react.component
-let make = (~storeComment: storeCommentAction, ~isSaving: bool) => {
-  let (author, setAuthor) = React.useState(_ => "")
-  let (text, setText) = React.useState(_ => "")
-  let (currformType, setCurrFormType) = React.useState(_ => "Horizontal Form")
-
-  let handleAuthorChange = (e) => {
-    setAuthor(ReactEvent.Form.currentTarget(e)["value"])
-    ()
-  }
-
-  let handleTextChange = (e) => {
-    setText(ReactEvent.Form.currentTarget(e)["value"])
-    ()
-  }
-
-  let handleSubmit = (e) => {
-    ReactEvent.Form.preventDefault(e)
-    storeComment(author, text)
-  }
-
-  let horizontalForm = (
-    <form className="form-horizontal"  onSubmit=handleSubmit disabled={isSaving}>
-      <div className="form-group">
-        <div className="col-sm-2">
-          <label className="form-label pull-right">{React.string("Name")}</label>
-        </div>
-        <div className="col-sm-10">
-          <input type_="text" className="form-control" placeholder="Your Name" onChange=handleAuthorChange value={author} />
-        </div>
-      </div>
-      <div className="form-group">
-        <div className="col-sm-2">
-          <label className="form-label pull-right">{React.string("Text")}</label>
-        </div>
-        <div className="col-sm-10">
-          <input type_="text" className="form-control" placeholder="Say something using markdown..." onChange=handleTextChange value={text} />
-        </div>
-      </div>
-      <div className="form-group">
-        <div className="col-sm-10 col-sm-offset-2">
-          <input type_="submit" className="btn btn-primary" />
-        </div>
-      </div>
-    </form>
+let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT) => {
+  let (state, dispatch) = React.useReducer(
+    reducer, {
+      author: "",
+      text: "",
+      form: HorizontalForm
+    }
   )
 
-  let inlineForm = (
-    <form className="form-inline" onChange=handleAuthorChange >
-      <div className="form-group">
-        <label className="form-label mr-15"> {React.string("Name")} </label>
-        <input type_="text" className="form-control" placeholder="Your Name" value={author} />
-      </div>
-      <div className="form-group ml-15 mr-15">
-        <label className="form-label mr-15"> {React.string("Text")} </label>
-        <input type_="text" className="form-control w-50" placeholder="Say something using markdown..." onChange=handleTextChange value={text} />
-      </div>
-      <div className="form-group">
-        <input type_="submit" className="btn btn-primary" onSubmit=handleSubmit/>
-      </div>
-    </form>
-  )
+  let handleAuthorChange = (event) => {
+    let value = ReactEvent.Form.currentTarget(event)["value"]
+    SetAuthor(value)->dispatch
+  }
 
-  let stackedForm = (
-    <form onChange=handleAuthorChange >
-      <div className="form-group">
-          <label className="form-label" > {React.string("Name")} </label>
-          <input type_="text" className="form-control" placeholder="Your Name" onChange=handleAuthorChange value={author} />
-      </div>
-      <div className="form-group">
-          <label className="form-label" > {React.string("Name")} </label>
-          <input type_="text" className="form-control" placeholder="Say something using markdown..." onChange=handleTextChange value={text} />
-      </div>
-      <div className="form-group">
-          <input type_="submit" className="btn btn-primary" onSubmit=handleSubmit />
-      </div>
-    </form>
-  )
+  let handleTextChange = (event) => {
+    let value = ReactEvent.Form.currentTarget(event)["value"]
+    SetText(value)->dispatch
+  }
 
-  let formTypes: array<string> = [
-    "Horizontal Form",
-    "Stacked Form",
-    "Inline Form"
+  let handleSubmit = (event) => {
+    ReactEvent.Form.preventDefault(event)
+    storeComment(state.author, state.text)
+  }
+
+  let forms: array<Types.formDataT> = 
+  [
+    {formName: "Horizontal Form", formType: HorizontalForm},
+    {formName: "Inline Form", formType: InlineForm},
+    {formName: "Stacked Form", formType: StackedFrom}
   ]
-
-  let handleClick = (formType: string): unit => {
-    setCurrFormType(_ => formType)
-    ();
-  }
-
-  let formsNavbarComponent = (
-    Belt.Array.map(formTypes, formType => 
-      <li key={"form_" ++ formType} className={"nav-item " ++ (currformType == formType ? "active" : "")} onClick=(_=>handleClick(formType)) role="presentation">
-         <a className={css["anchorButton"]} >{React.string(formType)}</a>
-      </li>
-    )
-  )
-
-  let form = switch currformType {
-  | "Horizontal Form" => horizontalForm
-  | "Stacked Form" => stackedForm
-  | "Inline Form" => inlineForm
-  | _ => horizontalForm
-  }
 
   <div>
     <ul className="nav nav-pills">
-      { React.array(formsNavbarComponent) }
+      {
+        forms
+        ->Belt.Array.map(form
+          => (
+            <li 
+              key={"form_" ++ form.formName} 
+              className={"nav-item " ++ (state.form == form.formType ? "active" : "")} 
+              onClick={event => SetFormType(form.formType)->dispatch}
+              role="presentation"
+            >
+              <a className={css["anchorButton"]} >{form.formName->React.string}</a>
+            </li> 
+          )
+        )->React.array
+      }
     </ul>
     <hr />
-    form
+    {
+      switch state.form {
+      | HorizontalForm
+        => <HorizontalForm
+              author={state.author}
+              handleAuthorChange
+              text={state.text}
+              handleTextChange
+              handleSubmit
+              isSaving 
+            />
+      | StackedFrom 
+        => <StackedFrom
+              author={state.author}
+              handleAuthorChange
+              text={state.text}
+              handleTextChange
+              handleSubmit
+              isSaving 
+            />
+      | InlineForm
+        => <InlineForm
+              author={state.author}
+              handleAuthorChange
+              text={state.text}
+              handleTextChange
+              handleSubmit
+              isSaving 
+            />
+      }
+    }
   </div>
-
 }

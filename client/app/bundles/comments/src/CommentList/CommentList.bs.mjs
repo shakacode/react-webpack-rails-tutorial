@@ -20,20 +20,19 @@ function CommentList(props) {
     exit: cssTransitionGroupClassNames_exit,
     exitActive: cssTransitionGroupClassNames_exitActive
   };
-  var errorMsg = props.error ? JsxRuntime.jsx(AlertError.make, {
-          cssTransitionGroupClassNames: cssTransitionGroupClassNames
-        }) : JsxRuntime.jsx(JsxRuntime.Fragment, {});
-  var commentsElements = Belt_Array.map(props.comments, (function (comment) {
-          return JsxRuntime.jsx($$Comment.make, {
-                      comment: comment,
-                      cssTransitionGroupClassNames: cssTransitionGroupClassNames
-                    }, "comment_" + String(comment.id));
-        }));
   return JsxRuntime.jsxs("div", {
               children: [
-                errorMsg,
+                JsxRuntime.jsx(AlertError.make, {
+                      cssTransitionGroupClassNames: cssTransitionGroupClassNames,
+                      error: props.error
+                    }),
                 JsxRuntime.jsx(ReactTransitionGroup.TransitionGroup, {
-                      children: commentsElements,
+                      children: Belt_Array.map(props.comments, (function (comment) {
+                              return JsxRuntime.jsx($$Comment.make, {
+                                          comment: comment,
+                                          cssTransitionGroupClassNames: cssTransitionGroupClassNames
+                                        }, "comment_" + String(comment.id));
+                            })),
                       className: "commentList",
                       component: "div"
                     })
