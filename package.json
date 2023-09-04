@@ -90,6 +90,7 @@
     "redux": "^4.2.1",
     "redux-thunk": "^2.2.0",
     "rescript": "^10.1.4",
+    "rescript-react-on-rails": "^1.0.0",
     "resolve-url-loader": "^2.2.0",
     "sanitize-html": "^2.11.0",
     "sass": "^1.58.3",
