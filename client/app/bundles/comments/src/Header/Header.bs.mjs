@@ -65,7 +65,9 @@ function Header(props) {
                                       children: "ShakaCode",
                                       href: "http://www.shakacode.com"
                                     }),
-                                " is doing support for React on Rails, including a private Slack channel, source code reviews, and pair programming sessions. ",
+                                " is doing support for React on Rails, \
+          including a private Slack channel, \
+          source code reviews, and pair programming sessions. ",
                                 JsxRuntime.jsx("b", {
                                       children: JsxRuntime.jsx("a", {
                                             children: "Click here",

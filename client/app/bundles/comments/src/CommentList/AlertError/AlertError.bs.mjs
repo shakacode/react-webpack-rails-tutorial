@@ -5,6 +5,7 @@ import * as JsxRuntime from 'react/jsx-runtime';
 import * as ReactTransitionGroup from 'react-transition-group';
 
 function AlertError(props) {
+  var cssTransitionGroupClassNames = props.cssTransitionGroupClassNames;
   var nodeRef = React.useRef(null);
   return JsxRuntime.jsx(
     ReactTransitionGroup.CSSTransition,

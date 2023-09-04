@@ -1,30 +1,66 @@
+type rescriptPageStateT = {
+  comments: Actions.Fetch.comments,
+  error: Types.errorT,
+  isSaving: Types.isSavingT
+}
+
+type rescriptPageActionT =
+  | SetComments(Actions.Fetch.comments)
+  | SetError(Types.errorT)
+  | SetIsSaving(Types.isSavingT)
+
+
+let reducer = (
+  state: rescriptPageStateT, 
+  action: rescriptPageActionT
+): rescriptPageStateT => {
+  switch (action) {
+  | SetComments(comments) => {...state, comments}
+  | SetError(error) => {...state, error}
+  | SetIsSaving(isSaving) => {...state, isSaving}
+  };
+}
+
 @react.component
 let make = () => {
-  let (comments, setComments) = React.useState(_ => ([] : Actions.Api.comments));
-  let (error, setError) = React.useState(_ => false)
-  let (isSaving, setIsSaving) = React.useState(_ => false)
+  let (state, dispatch) = React.useReducer(
+    reducer, {
+      comments: ([]: Actions.Fetch.comments),
+      error: NoError,
+      isSaving: Free
+    }
+  )
 
   let storeComment = (author, text) => {
-    setIsSaving(_ => true)
-    let _ = (async() => {
+    SetError(NoError)->dispatch 
+    SetIsSaving(BusySaving)->dispatch
+    let saveAndFetchComments = async () => {
       try {
-        let _ = await Actions.Api.storeComment(author, text)
-        let comments = await Actions.Api.fetchComments()
-        setIsSaving(_ => false)
-        setComments(_ => comments)
+        let _ = await Actions.Create.storeComment({author, text})
+        SetIsSaving(Free)->dispatch
+
+        let comments = await Actions.Fetch.fetchComments()     
+        switch comments {
+        | Ok(comments) => SetComments(comments)->dispatch
+        | Error(e) => SetError(e)->dispatch
+        }
       } catch {
-        | _ => setError(_ => true) 
+        | _ => SetError(FailedToSaveComment)->dispatch 
       }
-    })()
+    }
+    saveAndFetchComments()->ignore
   }
 
   React.useEffect1((_) => {
     let fetchData = async () => {
-      let comments = await Actions.Api.fetchComments();
-      setComments(_ => comments);
+      let comments = await Actions.Fetch.fetchComments();
+      switch comments {
+      | Ok(comments) => SetComments(comments)->dispatch
+      | Error(e) => SetError(e)->dispatch
+      }
     };
 
-    let _ = fetchData();
+    fetchData()->ignore
     None
   }, [])
  
@@ -39,8 +75,10 @@ let make = () => {
         <li>{"Name is preserved. Text is reset, between submits"->React.string}</li>
         <li>{"To see Action Cable instantly update two browsers, open two browsers and submit a comment!"->React.string}</li>
       </ul>
-      <CommentForm storeComment=storeComment isSaving={isSaving} />
-      <CommentList comments={comments} error={error} />
+      <CommentForm storeComment=storeComment isSaving={state.isSaving} />
+      <CommentList comments={state.comments} error={state.error} />
     </div>
   </>
 }
+
+let default = make

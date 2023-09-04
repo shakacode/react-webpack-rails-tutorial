@@ -3,233 +3,140 @@
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
+import * as InlineForm from "./forms/InlineForm.bs.mjs";
+import * as StackedFrom from "./forms/StackedFrom.bs.mjs";
+import * as HorizontalForm from "./forms/HorizontalForm.bs.mjs";
 import * as JsxRuntime from "react/jsx-runtime";
 import CommentFormModuleScss from "./CommentForm.module.scss";
 
 var css = CommentFormModuleScss;
 
+function reducer(state, action) {
+  switch (action.TAG | 0) {
+    case /* SetAuthor */0 :
+        return {
+                author: action._0,
+                text: state.text,
+                form: state.form
+              };
+    case /* SetText */1 :
+        return {
+                author: state.author,
+                text: action._0,
+                form: state.form
+              };
+    case /* SetFormType */2 :
+        return {
+                author: state.author,
+                text: state.text,
+                form: action._0
+              };
+    
+  }
+}
+
 function CommentForm(props) {
+  var isSaving = props.isSaving;
   var storeComment = props.storeComment;
-  var match = React.useState(function () {
-        return "";
+  var match = React.useReducer(reducer, {
+        author: "",
+        text: "",
+        form: /* HorizontalForm */0
       });
-  var setAuthor = match[1];
-  var author = match[0];
-  var match$1 = React.useState(function () {
-        return "";
-      });
-  var setText = match$1[1];
-  var text = match$1[0];
-  var match$2 = React.useState(function () {
-        return "Horizontal Form";
-      });
-  var setCurrFormType = match$2[1];
-  var currformType = match$2[0];
-  var handleAuthorChange = function (e) {
-    Curry._1(setAuthor, e.currentTarget.value);
+  var dispatch = match[1];
+  var state = match[0];
+  var handleAuthorChange = function ($$event) {
+    var value = $$event.currentTarget.value;
+    Curry._1(dispatch, {
+          TAG: /* SetAuthor */0,
+          _0: value
+        });
   };
-  var handleTextChange = function (e) {
-    Curry._1(setText, e.currentTarget.value);
+  var handleTextChange = function ($$event) {
+    var value = $$event.currentTarget.value;
+    Curry._1(dispatch, {
+          TAG: /* SetText */1,
+          _0: value
+        });
   };
-  var handleSubmit = function (e) {
-    e.preventDefault();
-    Curry._2(storeComment, author, text);
+  var handleSubmit = function ($$event) {
+    $$event.preventDefault();
+    Curry._2(storeComment, state.author, state.text);
   };
-  var horizontalForm = JsxRuntime.jsxs("form", {
-        children: [
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("div", {
-                        children: JsxRuntime.jsx("label", {
-                              children: "Name",
-                              className: "form-label pull-right"
-                            }),
-                        className: "col-sm-2"
-                      }),
-                  JsxRuntime.jsx("div", {
-                        children: JsxRuntime.jsx("input", {
-                              className: "form-control",
-                              placeholder: "Your Name",
-                              type: "text",
-                              value: author,
-                              onChange: handleAuthorChange
-                            }),
-                        className: "col-sm-10"
-                      })
-                ],
-                className: "form-group"
-              }),
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("div", {
-                        children: JsxRuntime.jsx("label", {
-                              children: "Text",
-                              className: "form-label pull-right"
-                            }),
-                        className: "col-sm-2"
-                      }),
-                  JsxRuntime.jsx("div", {
-                        children: JsxRuntime.jsx("input", {
-                              className: "form-control",
-                              placeholder: "Say something using markdown...",
-                              type: "text",
-                              value: text,
-                              onChange: handleTextChange
-                            }),
-                        className: "col-sm-10"
-                      })
-                ],
-                className: "form-group"
-              }),
-          JsxRuntime.jsx("div", {
-                children: JsxRuntime.jsx("div", {
-                      children: JsxRuntime.jsx("input", {
-                            className: "btn btn-primary",
-                            type: "submit"
-                          }),
-                      className: "col-sm-10 col-sm-offset-2"
-                    }),
-                className: "form-group"
-              })
-        ],
-        className: "form-horizontal",
-        disabled: props.isSaving,
-        onSubmit: handleSubmit
-      });
-  var inlineForm = JsxRuntime.jsxs("form", {
-        children: [
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("label", {
-                        children: "Name",
-                        className: "form-label mr-15"
-                      }),
-                  JsxRuntime.jsx("input", {
-                        className: "form-control",
-                        placeholder: "Your Name",
-                        type: "text",
-                        value: author
-                      })
-                ],
-                className: "form-group"
-              }),
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("label", {
-                        children: "Text",
-                        className: "form-label mr-15"
-                      }),
-                  JsxRuntime.jsx("input", {
-                        className: "form-control w-50",
-                        placeholder: "Say something using markdown...",
-                        type: "text",
-                        value: text,
-                        onChange: handleTextChange
-                      })
-                ],
-                className: "form-group ml-15 mr-15"
-              }),
-          JsxRuntime.jsx("div", {
-                children: JsxRuntime.jsx("input", {
-                      className: "btn btn-primary",
-                      type: "submit",
-                      onSubmit: handleSubmit
-                    }),
-                className: "form-group"
-              })
-        ],
-        className: "form-inline",
-        onChange: handleAuthorChange
-      });
-  var stackedForm = JsxRuntime.jsxs("form", {
-        children: [
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("label", {
-                        children: "Name",
-                        className: "form-label"
-                      }),
-                  JsxRuntime.jsx("input", {
-                        className: "form-control",
-                        placeholder: "Your Name",
-                        type: "text",
-                        value: author,
-                        onChange: handleAuthorChange
-                      })
-                ],
-                className: "form-group"
-              }),
-          JsxRuntime.jsxs("div", {
-                children: [
-                  JsxRuntime.jsx("label", {
-                        children: "Name",
-                        className: "form-label"
-                      }),
-                  JsxRuntime.jsx("input", {
-                        className: "form-control",
-                        placeholder: "Say something using markdown...",
-                        type: "text",
-                        value: text,
-                        onChange: handleTextChange
-                      })
-                ],
-                className: "form-group"
-              }),
-          JsxRuntime.jsx("div", {
-                children: JsxRuntime.jsx("input", {
-                      className: "btn btn-primary",
-                      type: "submit",
-                      onSubmit: handleSubmit
-                    }),
-                className: "form-group"
-              })
-        ],
-        onChange: handleAuthorChange
-      });
-  var formTypes = [
-    "Horizontal Form",
-    "Stacked Form",
-    "Inline Form"
+  var forms = [
+    {
+      formName: "Horizontal Form",
+      formType: /* HorizontalForm */0
+    },
+    {
+      formName: "Inline Form",
+      formType: /* InlineForm */1
+    },
+    {
+      formName: "Stacked Form",
+      formType: /* StackedFrom */2
+    }
   ];
-  var formsNavbarComponent = Belt_Array.map(formTypes, (function (formType) {
-          return JsxRuntime.jsx("li", {
-                      children: JsxRuntime.jsx("a", {
-                            children: formType,
-                            className: css.anchorButton
-                          }),
-                      className: "nav-item " + (
-                        currformType === formType ? "active" : ""
-                      ),
-                      role: "presentation",
-                      onClick: (function (param) {
-                          Curry._1(setCurrFormType, (function (param) {
-                                  return formType;
-                                }));
-                        })
-                    }, "form_" + formType);
-        }));
-  var form;
-  switch (currformType) {
-    case "Horizontal Form" :
-        form = horizontalForm;
+  var match$1 = state.form;
+  var tmp;
+  switch (match$1) {
+    case /* HorizontalForm */0 :
+        tmp = JsxRuntime.jsx(HorizontalForm.make, {
+              author: state.author,
+              handleAuthorChange: handleAuthorChange,
+              text: state.text,
+              handleTextChange: handleTextChange,
+              handleSubmit: handleSubmit,
+              isSaving: isSaving
+            });
         break;
-    case "Inline Form" :
-        form = inlineForm;
+    case /* InlineForm */1 :
+        tmp = JsxRuntime.jsx(InlineForm.make, {
+              author: state.author,
+              handleAuthorChange: handleAuthorChange,
+              text: state.text,
+              handleTextChange: handleTextChange,
+              handleSubmit: handleSubmit,
+              isSaving: isSaving
+            });
         break;
-    case "Stacked Form" :
-        form = stackedForm;
+    case /* StackedFrom */2 :
+        tmp = JsxRuntime.jsx(StackedFrom.make, {
+              author: state.author,
+              handleAuthorChange: handleAuthorChange,
+              text: state.text,
+              handleTextChange: handleTextChange,
+              handleSubmit: handleSubmit,
+              isSaving: isSaving
+            });
         break;
-    default:
-      form = horizontalForm;
+    
   }
   return JsxRuntime.jsxs("div", {
               children: [
                 JsxRuntime.jsx("ul", {
-                      children: formsNavbarComponent,
+                      children: Belt_Array.map(forms, (function (form) {
+                              return JsxRuntime.jsx("li", {
+                                          children: JsxRuntime.jsx("a", {
+                                                children: form.formName,
+                                                className: css.anchorButton
+                                              }),
+                                          className: "nav-item " + (
+                                            state.form === form.formType ? "active" : ""
+                                          ),
+                                          role: "presentation",
+                                          onClick: (function ($$event) {
+                                              Curry._1(dispatch, {
+                                                    TAG: /* SetFormType */2,
+                                                    _0: form.formType
+                                                  });
+                                            })
+                                        }, "form_" + form.formName);
+                            })),
                       className: "nav nav-pills"
                     }),
                 JsxRuntime.jsx("hr", {}),
-                form
+                tmp
               ]
             });
 }
@@ -238,6 +145,7 @@ var make = CommentForm;
 
 export {
   css ,
+  reducer ,
   make ,
 }
 /* css Not a pure module */

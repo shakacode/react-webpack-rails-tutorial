@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe "with Rescript" do
-  describe "tabs change on click" do
+  describe "tabs change on click", :tabs_check do
     before do
       visit "/rescript"
     end
@@ -13,17 +13,17 @@ describe "with Rescript" do
     end
 
     it "stops showing horizontal tab when other tab is clicked" do
-      click_link("Inline Form")
+      find("a", text: "Inline Form", wait: 10)
       page.has_no_css?("form-horizontal")
     end
 
     it "shows inline form when Inline Form link is clicked" do
-      click_link("Inline Form")
+      find("a", text: "Inline Form", wait: 10)
       page.has_css?("form-inline")
     end
 
     it "shows stacked form when Stacked Form link is clicked" do
-      click_link("Stacked Form")
+      find("a", text: "Stacked Form", wait: 10)
       page.has_no_css?("form-inline") and page.has_no_css?("form-horizontal")
     end
   end
@@ -31,9 +31,7 @@ describe "with Rescript" do
   describe "form submission functions" do
     let(:comment) { Comment.new(author: "Author", text: "This is a comment") }
     let(:author_field) { "comment_author" }
-    let(:author_error) { "Author: can't be blank" }
     let(:text_field) { "comment_text" }
-    let(:text_error) { "Text: can't be blank" }
 
     before do
       visit "/rescript"
