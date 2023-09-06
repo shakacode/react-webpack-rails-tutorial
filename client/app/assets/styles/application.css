@@ -1,3 +1,20 @@
+@font-face {
+  font-family: 'OpenSans-Light';
+  src: url('../../assets/fonts/OpenSans-Light.ttf') format('truetype');
+}
+
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+h2 {
+  @apply text-3xl font-medium mt-5 mb-2.5;
+}
+
+h3 {
+  @apply text-xl font-medium mt-5 mb-2.5
+}
+
+a {
+  @apply text-sky-700
+}
