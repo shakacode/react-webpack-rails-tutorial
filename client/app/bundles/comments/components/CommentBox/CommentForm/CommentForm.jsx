@@ -10,8 +10,6 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Button from 'react-bootstrap/lib/Button';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import _ from 'lodash';
@@ -319,11 +317,36 @@ class CommentForm extends BaseComponent {
       <div>
         <TransitionGroup component={null}>{this.errorWarning()}</TransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
-          <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>
-          <NavItem eventKey={1}>{formatMessage(defaultMessages.formStacked)}</NavItem>
-          <NavItem eventKey={2}>{formatMessage(defaultMessages.formInline)}</NavItem>
-        </Nav>
+        <div className="flex gap-1 no-prose">
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 0 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(0)}
+          >
+            {formatMessage(defaultMessages.formHorizontal)}
+          </button>
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 1 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(1)}
+          >
+            {formatMessage(defaultMessages.formStacked)}
+          </button>
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 2 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(2)}
+          >
+            {formatMessage(defaultMessages.formInline)}
+          </button>
+          {}
+        </div>
         {inputForm}
       </div>
     );
