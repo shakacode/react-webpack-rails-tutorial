@@ -1,8 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
-  content: ['./app/**/*.{html,html.erb,js}', './client/**/*.{html,js,jsx}'],
+  content: ['./app/**/*.{html.erb}', './client/**/*.{html,js,jsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['OpenSans-Light', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    // eslint-disable-next-line global-require
+    require('@tailwindcss/typography'),
+  ],
 };
