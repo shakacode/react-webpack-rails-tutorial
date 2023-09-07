@@ -41,7 +41,7 @@ function CommentForm(props) {
   var match = React.useReducer(reducer, {
         author: "",
         text: "",
-        form: /* HorizontalForm */0
+        form: /* Horizontal */0
       });
   var dispatch = match[1];
   var state = match[0];
@@ -66,21 +66,21 @@ function CommentForm(props) {
   var forms = [
     {
       formName: "Horizontal Form",
-      formType: /* HorizontalForm */0
+      formType: /* Horizontal */0
     },
     {
       formName: "Inline Form",
-      formType: /* InlineForm */1
+      formType: /* Inline */1
     },
     {
       formName: "Stacked Form",
-      formType: /* StackedFrom */2
+      formType: /* Stacked */2
     }
   ];
   var match$1 = state.form;
   var tmp;
   switch (match$1) {
-    case /* HorizontalForm */0 :
+    case /* Horizontal */0 :
         tmp = JsxRuntime.jsx(HorizontalForm.make, {
               author: state.author,
               handleAuthorChange: handleAuthorChange,
@@ -90,7 +90,7 @@ function CommentForm(props) {
               isSaving: isSaving
             });
         break;
-    case /* InlineForm */1 :
+    case /* Inline */1 :
         tmp = JsxRuntime.jsx(InlineForm.make, {
               author: state.author,
               handleAuthorChange: handleAuthorChange,
@@ -100,7 +100,7 @@ function CommentForm(props) {
               isSaving: isSaving
             });
         break;
-    case /* StackedFrom */2 :
+    case /* Stacked */2 :
         tmp = JsxRuntime.jsx(StackedFrom.make, {
               author: state.author,
               handleAuthorChange: handleAuthorChange,

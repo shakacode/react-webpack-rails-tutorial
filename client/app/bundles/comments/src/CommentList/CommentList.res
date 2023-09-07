@@ -1,7 +1,7 @@
-@module("../RescriptPage.module.scss") external css: {..} = "default"
+@module("../RescriptShow.module.scss") external css: {..} = "default"
 
 @react.component
-let make = (~comments: Actions.Fetch.comments, ~error: Types.errorT) => {
+let make = (~comments: Actions.Fetch.comments, ~error: Types.error) => {
   let cssTransitionGroupClassNames: CSSAnimation.CSSTransition.t = {
     enter: css["elementEnter"],
     enterActive: css["elementEnterActive"],
