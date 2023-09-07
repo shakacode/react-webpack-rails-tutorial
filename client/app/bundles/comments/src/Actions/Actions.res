@@ -32,8 +32,8 @@ module Fetch = {
     comments: comments
   }
 
-  let fetchComments = async (): result<comments, Types.errorT> => {
-    open Json.Decode;
+  let fetchComments = async (): result<comments, Types.error> => {
+    open Json.Decode
 
     let response = await Fetch.get("comments.json")
     let jsonRes = await response->Fetch.Response.json

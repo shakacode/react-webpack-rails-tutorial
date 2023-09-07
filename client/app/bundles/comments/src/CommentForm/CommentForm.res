@@ -1,24 +1,24 @@
 @module("./CommentForm.module.scss") external css: {..} = "default"
 
 let reducer = (
-  state: Types.commentFormStateT, 
-  action: Types.commentFormActionT
-): Types.commentFormStateT => {
+  state: Types.commentFormState, 
+  action: Types.commentFormAction
+): Types.commentFormState => {
   switch (action) {
   | SetAuthor(author) => {...state, author}
   | SetText(text) => {...state, text}
   | SetFormType(form) => {...state, form: form}
-  };
+  }
 }
 
 
 @react.component
-let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT) => {
+let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) => {
   let (state, dispatch) = React.useReducer(
     reducer, {
       author: "",
       text: "",
-      form: HorizontalForm
+      form: Horizontal
     }
   )
 
@@ -37,11 +37,11 @@ let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT
     storeComment(state.author, state.text)
   }
 
-  let forms: array<Types.formDataT> = 
+  let forms: array<Types.formData> = 
   [
-    {formName: "Horizontal Form", formType: HorizontalForm},
-    {formName: "Inline Form", formType: InlineForm},
-    {formName: "Stacked Form", formType: StackedFrom}
+    {formName: "Horizontal Form", formType: Horizontal},
+    {formName: "Inline Form", formType: Inline},
+    {formName: "Stacked Form", formType: Stacked}
   ]
 
   <div>
@@ -65,7 +65,7 @@ let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT
     <hr />
     {
       switch state.form {
-      | HorizontalForm
+      | Horizontal
         => <HorizontalForm
               author={state.author}
               handleAuthorChange
@@ -74,7 +74,7 @@ let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT
               handleSubmit
               isSaving 
             />
-      | StackedFrom 
+      | Stacked
         => <StackedFrom
               author={state.author}
               handleAuthorChange
@@ -83,7 +83,7 @@ let make = (~storeComment: Types.storeCommentActionT, ~isSaving: Types.isSavingT
               handleSubmit
               isSaving 
             />
-      | InlineForm
+      | Inline
         => <InlineForm
               author={state.author}
               handleAuthorChange

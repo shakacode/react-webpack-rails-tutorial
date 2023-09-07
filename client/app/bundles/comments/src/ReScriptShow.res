@@ -1,28 +1,28 @@
-type rescriptPageStateT = {
+type state = {
   comments: Actions.Fetch.comments,
-  error: Types.errorT,
-  isSaving: Types.isSavingT
+  error: Types.error,
+  isSaving: Types.isSaving
 }
 
-type rescriptPageActionT =
+type action =
   | SetComments(Actions.Fetch.comments)
-  | SetError(Types.errorT)
-  | SetIsSaving(Types.isSavingT)
+  | SetError(Types.error)
+  | SetIsSaving(Types.isSaving)
 
 
 let reducer = (
-  state: rescriptPageStateT, 
-  action: rescriptPageActionT
-): rescriptPageStateT => {
+  state: state, 
+  action: action
+): state => {
   switch (action) {
   | SetComments(comments) => {...state, comments}
   | SetError(error) => {...state, error}
   | SetIsSaving(isSaving) => {...state, isSaving}
-  };
+  }
 }
 
 @react.component
-let make = () => {
+let default = () => {
   let (state, dispatch) = React.useReducer(
     reducer, {
       comments: ([]: Actions.Fetch.comments),
@@ -53,12 +53,12 @@ let make = () => {
 
   React.useEffect1((_) => {
     let fetchData = async () => {
-      let comments = await Actions.Fetch.fetchComments();
+      let comments = await Actions.Fetch.fetchComments()
       switch comments {
       | Ok(comments) => SetComments(comments)->dispatch
       | Error(e) => SetError(e)->dispatch
       }
-    };
+    }
 
     fetchData()->ignore
     None
@@ -80,5 +80,3 @@ let make = () => {
     </div>
   </>
 }
-
-let default = make

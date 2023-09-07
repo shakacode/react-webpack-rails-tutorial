@@ -5,7 +5,7 @@ let make = (
   ~text,
   ~handleTextChange,
   ~handleSubmit,
-  ~isSaving: Types.isSavingT
+  ~isSaving: Types.isSaving
   ) => {
   <form className="form-inline" onSubmit=handleSubmit disabled={isSaving == BusySaving} >
     <div className="form-group">

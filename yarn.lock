@@ -8220,9 +8220,9 @@ requires-port@^1.0.0:
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
 
 rescript-react-on-rails@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/rescript-react-on-rails/-/rescript-react-on-rails-1.0.0.tgz#700ae22fa5b749e15d058f7b9732db0c4864cc04"
-  integrity sha512-67NJeenJsMNvDTPQL1w9Tw2sGyt/4Ycfj9rqXmEhpye84R4iISJLAlgxyWKZp2boOqbpFo3X1Yf+wBHjDnO2BA==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rescript-react-on-rails/-/rescript-react-on-rails-1.0.1.tgz#541dffdae64ec5053a50a3792b9db8783c959d1b"
+  integrity sha512-sbkDNCoiEWM9rqIiu+4joAj6W92yhM64KtLZQYfvYYm578jMcG02d98xpDeBT7MxZoPZZggFIed0m6Dj8bbDYA==
 
 rescript@^10.1.4:
   version "10.1.4"
