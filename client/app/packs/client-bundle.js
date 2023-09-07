@@ -10,7 +10,7 @@ import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
-import RescriptPage from '../bundles/comments/src/RescriptPage.bs.mjs';
+import RescriptShow from '../bundles/comments/src/ReScriptShow.bs.mjs';
 
 import '../assets/styles/application';
 
@@ -26,7 +26,7 @@ ReactOnRails.register({
   NavigationBarApp,
   SimpleCommentScreen,
   Footer,
-  RescriptPage,
+  RescriptShow,
 });
 
 ReactOnRails.registerStore({

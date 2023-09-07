@@ -1,4 +1,4 @@
 type markedOptions = {
   gfm: bool
 }
-@module("marked") external marked: (string, markedOptions) => string = "marked";
+@module("marked") external marked: (string, markedOptions) => string = "marked"

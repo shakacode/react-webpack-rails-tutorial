@@ -1,28 +1,28 @@
-type formDisplayT = HorizontalForm | InlineForm | StackedFrom;
+type formDisplay = Horizontal | Inline | Stacked
 
-type commentFormStateT = {
+type commentFormState = {
   author: string,
   text: string,
-  form: formDisplayT
+  form: formDisplay
 }
 
-type commentFormActionT =
+type commentFormAction =
     | SetAuthor(string)
     | SetText(string)
-    | SetFormType(formDisplayT);
+    | SetFormType(formDisplay)
 
-type formDataT = {
+type formData = {
   formName: string,
-  formType: formDisplayT
-};
+  formType: formDisplay
+}
 
-type storeCommentActionT = (string, string) => unit;
+type storeCommentAction = (string, string) => unit
 
-type storeCommentDataT = {
+type storeCommentData = {
   author: string,
   text: string
 }
 
-type errorT = NoError | FailedToSaveComment | FailedToFetchComments;
+type error = NoError | FailedToSaveComment | FailedToFetchComments
 
-type isSavingT = Free | BusySaving;
+type isSaving = Free | BusySaving

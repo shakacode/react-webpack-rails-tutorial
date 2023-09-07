@@ -4,4 +4,4 @@ type rorDefault = {
 type rorModule = {
   default: rorDefault
 }
-@module("react-on-rails") external ror: rorModule = "default";
+@module("react-on-rails") external ror: rorModule = "default"

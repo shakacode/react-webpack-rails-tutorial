@@ -49,3 +49,5 @@ yarn-debug.log*
 .yarn-integrity
 
 lib/bs
+
+client/app/bundles/comments/src/**/*.bs.mjs

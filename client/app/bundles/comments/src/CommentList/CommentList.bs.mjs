@@ -5,9 +5,9 @@ import * as AlertError from "./AlertError/AlertError.bs.mjs";
 import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as ReactTransitionGroup from "react-transition-group";
-import RescriptPageModuleScss from "../RescriptPage.module.scss";
+import RescriptShowModuleScss from "../RescriptShow.module.scss";
 
-var css = RescriptPageModuleScss;
+var css = RescriptShowModuleScss;
 
 function CommentList(props) {
   var cssTransitionGroupClassNames_enter = css.elementEnter;

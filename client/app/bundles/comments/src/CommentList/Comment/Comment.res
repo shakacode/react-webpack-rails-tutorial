@@ -7,7 +7,7 @@ let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
   let nodeRef = React.useRef(Js.Nullable.null)
   
   // The 500 must correspond to the 0.5s in:
-  //   ../../RescriptPage.module.scss:9
+  //   ../../RescriptShow.module.scss:9
   <CSSAnimation.CSSTransition
     key={"component_" ++ Belt.Int.toString(comment.id) }
     timeout={500}

@@ -1,11 +1,11 @@
 @react.component
-let make = (~cssTransitionGroupClassNames: CSSAnimation.CSSTransition.t, ~error: Types.errorT) => {
+let make = (~cssTransitionGroupClassNames: CSSAnimation.CSSTransition.t, ~error: Types.error) => {
   let nodeRef = React.useRef(Js.Nullable.null)
 
   switch error {
   | FailedToSaveComment => 
     // The 500 must correspond to the 0.5s in:
-    //   ../../RescriptPage.module.scss:9
+    //   ../../RescriptShow.module.scss:9
     <CSSAnimation.CSSTransition
       key="commentFetchError"
       nodeRef={nodeRef}
@@ -18,7 +18,7 @@ let make = (~cssTransitionGroupClassNames: CSSAnimation.CSSTransition.t, ~error:
     </CSSAnimation.CSSTransition>
   | FailedToFetchComments =>
     // The 500 must correspond to the 0.5s in:
-    //   ../../RescriptPage.module.scss:9
+    //   ../../RescriptShow.module.scss:9
     <CSSAnimation.CSSTransition
       key="commentFetchError"
       nodeRef={nodeRef}
