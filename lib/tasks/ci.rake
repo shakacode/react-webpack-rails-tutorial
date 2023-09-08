@@ -13,10 +13,15 @@ if Rails.env.development? || Rails.env.test?
     sh "rspec"
   end
 
+  task build_rescript: :environment do
+    puts Rainbow("Building ReScript files").green
+    sh "yarn res:build"
+  end
+
   namespace :ci do
     desc "Run all audits and tests"
     # rspec_tests must be before lint and js_tests to build the locale files
-    task all: %i[environment rspec_tests lint js_tests] do
+    task all: %i[environment build_rescript rspec_tests lint js_tests] do
       puts "All CI tasks"
       puts Rainbow("PASSED").green
       puts ""
@@ -28,7 +33,7 @@ if Rails.env.development? || Rails.env.test?
     end
 
     desc "Run CI rspec tests"
-    task rspec: %i[environment rspec_tests] do
+    task rspec: %i[environment build_rescript rspec_tests] do
       puts "CI rspec tests"
       puts Rainbow("PASSED").green
       puts ""
@@ -40,7 +45,7 @@ if Rails.env.development? || Rails.env.test?
     end
 
     desc "Run CI js_tests"
-    task js: %i[environment js_tests] do
+    task js: %i[environment build_rescript js_tests] do
       puts "CI js_tests"
       puts Rainbow("PASSED").green
       puts ""

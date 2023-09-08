@@ -44,8 +44,5 @@ jobs:
       - name: Build i18n libraries
         run: bundle exec rake react_on_rails:locale
 
-      - name: Compile Rescript files
-        run: yarn res:build
-
       - name: Run js tests
         run: bundle exec rake ci:js
