@@ -176,39 +176,50 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formBasicName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
-            <FormControl
+        <form className="flex flex-col gap-4" onSubmit={this.handleSubmit}>
+          <div className="flex flex-col gap-0">
+            <label htmlFor="stackedAuthorNode" className="w-full">
+              {formatMessage(defaultMessages.inputNameLabel)}
+            </label>
+            <input
               type="text"
+              id="stackedAuthorNode"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
               ref="stackedAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('author', this.props.error)}
             />
-          </FormGroup>
-          <FormGroup controlId="formBasicText">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
-            <FormControl
-              type="textarea"
-              label="Text"
+          </div>
+
+          <div className="flex flex-col gap-0">
+            <label htmlFor="stackedTextNode" className="w-full">
+              {formatMessage(defaultMessages.inputTextLabel)}
+            </label>
+            <input
+              type="text"
+              id="stackedTextNode"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
               ref="stackedTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('text', this.props.error)}
             />
-          </FormGroup>
-          <FormGroup controlId="formBasicSubmit">
-            <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
+          </div>
+
+          <div className="flex flex-col gap-0">
+            <button
+              type="submit"
+              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
+              disabled={this.props.isSaving}
+            >
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
-            </Button>
-          </FormGroup>
+            </button>
+          </div>
         </form>
       </div>
     );
