@@ -231,40 +231,47 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form inline className="commentForm" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
-            <FormControl
+        <form className="form-inline flex flex-col lg:flex-row flex-wrap gap-4" onSubmit={this.handleSubmit}>
+          <div className="flex gap-2 items-center">
+            <label htmlFor="inlineAuthorNode">{formatMessage(defaultMessages.inputNameLabel)}</label>
+            <input
               type="text"
+              id="inlineAuthorNode"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded"
               ref="inlineAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('author', this.props.error)}
-              className={css.nameFormControl}
             />
-          </FormGroup>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
-            <FormControl
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <label htmlFor="inlineTextNode">{formatMessage(defaultMessages.inputTextLabel)}</label>
+            <input
               type="textarea"
-              label="Text"
+              id="inlineTextNode"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded"
               ref="inlineTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('text', this.props.error)}
-              className={css.textFormControl}
             />
-          </FormGroup>
-          <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
-            {this.props.isSaving
-              ? `${formatMessage(defaultMessages.inputSaving)}...`
-              : formatMessage(defaultMessages.inputPost)}
-          </Button>
-        </Form>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
+              disabled={this.props.isSaving}
+            >
+              {this.props.isSaving
+                ? `${formatMessage(defaultMessages.inputSaving)}...`
+                : formatMessage(defaultMessages.inputPost)}
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
