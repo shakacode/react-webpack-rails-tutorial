@@ -10,7 +10,7 @@ export default class Layout extends Component {
   render() {
     const { children } = this.props;
     return (
-      <section className="prose prose-a:text-sky-700 prose-li:my-0">
+      <section className="prose max-w-none prose-a:text-sky-700 prose-li:my-0">
         <header>
           <ul>
             <li>
