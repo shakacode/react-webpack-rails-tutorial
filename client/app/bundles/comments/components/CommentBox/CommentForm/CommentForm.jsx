@@ -1,34 +1,14 @@
-// NOTE: https://github.com/react-bootstrap/react-bootstrap/issues/1850 seesm to require string
-// refs and not the callback kind.
 /* eslint-disable react/no-find-dom-node, react/no-string-refs */
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import Col from 'react-bootstrap/lib/Col';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import Form from 'react-bootstrap/lib/Form';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Alert from 'react-bootstrap/lib/Alert';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
 import { defaultMessages } from 'libs/i18n/default';
 import BaseComponent from 'libs/components/BaseComponent';
 
-import css from './CommentForm.module.scss';
-
 const emptyComment = { author: '', text: '' };
-
-function bsStyleFor(propName, error) {
-  if (error) {
-    const errorData = (error && error.response && error.response.data) || {};
-    return propName in errorData ? 'error' : 'success';
-  }
-
-  return null;
-}
 
 class CommentForm extends BaseComponent {
   static propTypes = {
