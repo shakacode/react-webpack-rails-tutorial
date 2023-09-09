@@ -1,28 +1,23 @@
 <%= turbo_frame_tag "form_tabs", data: { turbo: true } do %>
   <%= render "comments/turbo/error_notice" %>
   <%= render "comments/turbo/tabs" %>
+
   <hr />
-  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "form-horizontal") do |f| %>
-    <div class="form-group">
-      <div class="col-sm-2">
-        <%= f.label "Name", class: "form-label pull-right" %>
-      </div>
-      <div class="col-sm-10">
-        <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "form-control", placeholder: "Your Name" %>
-      </div>
+
+  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "form-horizontal flex flex-col gap-4") do |f| %>
+    <div class="form-group flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
+        <%= f.label "Name", class: "w-full lg:w-2/12 lg:text-end shrink-0" %>
+        <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "px-3 py-1 leading-4 border border-gray-300 rounded w-full", placeholder: "Your Name" %>
     </div>
-    <div class="form-group">
-      <div class="col-sm-2">
-        <%= f.label :text, class: "form-label pull-right" %>
-      </div>
-      <div class="col-sm-10">
-        <%= f.text_field :text, data: { comments_target: "commentText" }, class: "form-control", placeholder: "Say something using markdown..." %>
-      </div>
+
+    <div class="form-group flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
+        <%= f.label :text, class: "w-full lg:w-2/12 lg:text-end shrink-0" %>
+        <%= f.text_field :text, data: { comments_target: "commentText" }, class: "px-3 py-1 leading-4 border border-gray-300 rounded w-full", placeholder: "Say something using markdown..." %>
     </div>
-    <div class="form-group">
-      <div class="col-sm-10 col-sm-offset-2">
-        <%= f.submit "Post", class: "btn btn-primary" %>
-      </div>
+
+    <div class="form-group flex flex-col gap-0 lg:gap-4 lg:flex-row">
+      <div class="hidden lg:block lg:w-2/12 grow-0"></div>
+      <%= f.submit "Post", class: "self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800" %>
     </div>
   <% end %>
 <% end %>

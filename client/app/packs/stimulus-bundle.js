@@ -8,6 +8,8 @@ import controllers from '../controllers';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
 
+import '../assets/styles/application';
+
 Turbo.session.drive = false;
 
 ReactOnRails.setOptions({
