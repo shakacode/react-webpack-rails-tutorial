@@ -320,7 +320,7 @@ class CommentForm extends BaseComponent {
       <div>
         <TransitionGroup component={null}>{this.errorWarning()}</TransitionGroup>
 
-        <div className="flex gap-1 no-prose">
+        <div className="flex gap-1 not-prose">
           <button
             type="button"
             className={`px-6 py-2 font-semibold border-0 rounded ${
