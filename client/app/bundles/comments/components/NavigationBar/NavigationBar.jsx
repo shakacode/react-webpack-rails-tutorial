@@ -90,7 +90,9 @@ function NavigationBar(props) {
               </a>
             </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.RAILS_PATH })}>
-              <a className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700" href={paths.RAILS_PATH}>Classic Rails</a>
+              <a className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700" href={paths.RAILS_PATH}>
+                Classic Rails
+              </a>
             </li>
             <li>
               <a

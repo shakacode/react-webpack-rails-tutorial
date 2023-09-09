@@ -1,7 +1,7 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { IntlProvider } from 'react-intl';
 import Intl from 'intl';
