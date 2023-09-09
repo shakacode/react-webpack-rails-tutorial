@@ -5,7 +5,7 @@ import css from './Footer.module.scss';
 export default class Footer extends BaseComponent {
   render() {
     return (
-      <div className="container">
+      <div className="container mx-auto">
         <a href="http://www.shakacode.com">
           <h3>
             <div className={css.logo} />
