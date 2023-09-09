@@ -84,7 +84,7 @@ class CommentBox extends BaseComponent {
     const locale = data.get('locale') || defaultLocale;
     /* eslint-disable no-script-url */
     return (
-      <div className="commentBox container">
+      <div className="commentBox prose max-w-none prose-a:text-sky-700 prose-li:my-0">
         <h2>
           {formatMessage(defaultMessages.comments)}
           {data.get('isFetching') && formatMessage(defaultMessages.loading)}
@@ -93,7 +93,11 @@ class CommentBox extends BaseComponent {
         <ul>
           <li>
             {(data.get('isFetching') && <br />) || (
-              <button className={css.anchorButton} onClick={this.refreshComments} type="button">
+              <button
+                className="m-0 text-sky-700 hover:underline"
+                onClick={this.refreshComments}
+                type="button"
+              >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
             )}
