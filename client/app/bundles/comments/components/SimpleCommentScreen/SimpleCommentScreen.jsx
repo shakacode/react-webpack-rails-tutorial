@@ -81,7 +81,7 @@ class SimpleCommentScreen extends BaseComponent {
     };
 
     return (
-      <div className="commentBox container">
+      <div className="commentBox prose max-w-none prose-a:text-sky-700 prose-li:my-0">
         <h2>{formatMessage(defaultMessages.comments)}</h2>
         {SelectLanguage(handleSetLocale, locale)}
         <ul>
@@ -89,6 +89,7 @@ class SimpleCommentScreen extends BaseComponent {
           <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
           <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
         </ul>
+
         <CommentForm
           isSaving={this.state.isSaving}
           actions={{ submitComment: this.handleCommentSubmit }}
