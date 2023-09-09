@@ -1,6 +1,6 @@
-<%= form_for(comment) do |f| %>
+<%= form_for(comment, html: { class: "flex flex-col gap-4" }) do |f| %>
   <% if comment.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation" class="prose bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1">
       <h2><%= pluralize(comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
 
       <ul>
@@ -13,13 +13,13 @@
 
   <div class="field">
     <%= f.label :author, 'Your Name' %><br>
-    <%= f.text_field :author %>
+    <%= f.text_field :author, class: "px-3 py-1 leading-4 border border-gray-300 rounded" %>
   </div>
   <div class="field">
     <%= f.label :text, 'Say something using markdown...' %><br>
-    <%= f.text_area :text %>
+    <%= f.text_area :text, class: "px-3 py-1 leading-4 border border-gray-300 rounded" %>
   </div>
   <div class="actions">
-    <%= f.submit 'Post' %>
+    <%= f.submit 'Post', class: "self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800 cursor-pointer" %>
   </div>
 <% end %>
