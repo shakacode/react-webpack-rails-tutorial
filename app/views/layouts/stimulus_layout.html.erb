@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RailsReactTutorial</title>
 
   <%= stylesheet_pack_tag('client-bundle',
@@ -13,10 +15,10 @@
 
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="bg-sky-50 text-gray-700">
   <%= react_component "NavigationBarApp" %>
 
-  <div class="container">
+  <div class="container mx-auto px-4">
     <%= yield %>
   </div>
 
