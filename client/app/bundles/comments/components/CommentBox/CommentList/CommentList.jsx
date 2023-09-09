@@ -1,4 +1,3 @@
-import Alert from 'react-bootstrap/lib/Alert';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -39,10 +38,13 @@ export default class CommentList extends BaseComponent {
         timeout={500}
         classNames={cssTransitionGroupClassNames}
       >
-        <Alert ref={nodeRef} bsStyle="danger">
-          <strong>Comments could not be retrieved. </strong>A server error prevented loading comments. Please
+        <div
+          ref={nodeRef}
+          className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1"
+        >
+          <strong>Comments could not be retrieved.</strong> A server error prevented loading comments. Please
           try again.
-        </Alert>
+        </div>
       </CSSTransition>
     );
   }
