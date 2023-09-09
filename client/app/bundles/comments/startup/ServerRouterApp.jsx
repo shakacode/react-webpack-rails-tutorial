@@ -1,6 +1,6 @@
 // Compare to ../ClientRouterApp.jsx
-import React from 'react';
 import { Provider } from 'react-redux';
+import React from 'react';
 import { StaticRouter } from 'react-router-dom/server';
 import ReactOnRails from 'react-on-rails';
 import routes from '../routes/routes.jsx';

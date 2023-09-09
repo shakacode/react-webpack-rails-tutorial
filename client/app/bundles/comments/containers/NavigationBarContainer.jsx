@@ -1,6 +1,6 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import BaseComponent from '../../../libs/components/BaseComponent.jsx';
 
