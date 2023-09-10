@@ -21,7 +21,7 @@ function NavigationBar(props) {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row justify-between">
           <div className="flex justify-between items-center align-middle">
-            <a className="p-4" href="http://www.shakacode.com">
+            <a className="p-4 text-2xl" href="http://www.shakacode.com">
               ShakaCode
             </a>
 
