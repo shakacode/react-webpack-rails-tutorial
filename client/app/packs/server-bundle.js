@@ -9,8 +9,6 @@ import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import Footer from '../bundles/comments/components/Footer/Footer';
 
-// import '../assets/styles/application';
-
 ReactOnRails.register({
   App,
   RouterApp,
