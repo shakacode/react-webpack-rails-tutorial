@@ -5,7 +5,6 @@ import { marked } from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { mangle } from 'marked-mangle';
 import sanitizeHtml from 'sanitize-html';
-import css from './Comment.module.scss';
 
 marked.use(gfmHeadingId());
 marked.use(mangle());
@@ -17,8 +16,8 @@ const Comment = React.forwardRef((props, ref) => {
 
   /* eslint-disable react/no-danger */
   return (
-    <div ref={ref} className={css.comment}>
-      <h2 className={`${css.commentAuthor} js-comment-author`}>{author}</h2>
+    <div ref={ref}>
+      <h2 className="js-comment-author text-blue-800">{author}</h2>
       <span dangerouslySetInnerHTML={{ __html: sanitizedRawMarkup }} className="js-comment-text" />
     </div>
   );
