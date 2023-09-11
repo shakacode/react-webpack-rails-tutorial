@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import BaseComponent from 'libs/components/BaseComponent';
 
 import CommentBox from '../CommentBox/CommentBox';
-import css from './CommentScreen.module.scss';
 
 export default class CommentScreen extends BaseComponent {
   static propTypes = {
@@ -21,7 +20,7 @@ export default class CommentScreen extends BaseComponent {
     window.history.replaceState({}, document.title);
 
     return (
-      <div className={`bg-success ${css.notification}`}>
+      <div className="bg-success bg-green-100 px-6 py-4">
         You have been redirected from
         <strong>{locationState.redirectFrom}</strong>
       </div>
