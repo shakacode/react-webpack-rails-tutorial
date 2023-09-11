@@ -21,7 +21,7 @@ function NavigationBar(props) {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row justify-between">
           <div className="flex justify-between items-center align-middle">
-            <a className="p-4 text-2xl" href="http://www.shakacode.com">
+            <a className="p-3 text-2xl" href="http://www.shakacode.com">
               ShakaCode
             </a>
 
@@ -59,7 +59,7 @@ function NavigationBar(props) {
               })}
             >
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href={paths.ROUTER_PATH}
               >
                 React Router Demo
@@ -67,7 +67,7 @@ function NavigationBar(props) {
             </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.NO_ROUTER_PATH })}>
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href={paths.NO_ROUTER_PATH}
               >
                 React Demo
@@ -75,7 +75,7 @@ function NavigationBar(props) {
             </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.SIMPLE_REACT_PATH })}>
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href={paths.SIMPLE_REACT_PATH}
               >
                 Simple React
@@ -83,20 +83,23 @@ function NavigationBar(props) {
             </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.STIMULUS_PATH })}>
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href={paths.STIMULUS_PATH}
               >
                 Stimulus Demo
               </a>
             </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.RAILS_PATH })}>
-              <a className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700" href={paths.RAILS_PATH}>
+              <a
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                href={paths.RAILS_PATH}
+              >
                 Classic Rails
               </a>
             </li>
             <li>
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href="https://github.com/shakacode/react-webpack-rails-tutorial"
               >
                 Source
@@ -104,7 +107,7 @@ function NavigationBar(props) {
             </li>
             <li>
               <a
-                className="px-2 py-4 inline-block text-gray-500 hover:text-gray-700"
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
                 href="https://forum.shakacode.com/c/reactjs"
               >
                 Forum
