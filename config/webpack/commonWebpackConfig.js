@@ -11,9 +11,23 @@ const commonOptions = {
   },
 };
 
+// add sass resource loader
+const sassLoaderConfig = {
+  loader: 'sass-resources-loader',
+  options: {
+    resources: './client/app/assets/styles/app-variables.scss',
+  },
+};
+
 const ignoreWarningsConfig = {
   ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
 };
+
+const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) =>
+  '.scss'.match(config.test),
+);
+
+baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
 const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
