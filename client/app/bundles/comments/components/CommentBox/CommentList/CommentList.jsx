@@ -72,7 +72,7 @@ export default class CommentList extends BaseComponent {
 
     // For animation with TransitionGroup
     //   https://reactcommunity.org/react-transition-group/transition-group
-    // The 500 must correspond to $animationDuration in:
+    // The 500 must correspond to $animation_duration in:
     //   client/app/assets/styles/app-variables.scss
     return (
       <div>
