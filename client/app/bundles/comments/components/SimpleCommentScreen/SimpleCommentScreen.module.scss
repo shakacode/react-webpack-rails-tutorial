@@ -3,7 +3,7 @@
 
   &.elementEnterActive {
     opacity: 1;
-    transition: opacity $animationDuration ease-in;
+    transition: opacity $animation_duration ease-in;
   }
 }
 
@@ -12,6 +12,6 @@
 
   &.elementLeaveActive {
     opacity: 0.01;
-    transition: opacity $animationDuration ease-in;
+    transition: opacity $animation_duration ease-in;
   }
 }
