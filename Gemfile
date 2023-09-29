@@ -7,7 +7,7 @@ ruby "3.1.2"
 
 gem "cpl", "~> 0.3.3"
 gem "react_on_rails", "13.2.0"
-gem "shakapacker", "7.0.2"
+gem "shakapacker", "7.0.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
