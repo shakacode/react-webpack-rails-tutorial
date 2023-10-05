@@ -1,4 +1,4 @@
-@module("../RescriptShow.module.scss") external css: {..} = "default"
+@module("../ReScriptShow.module.scss") external css: {..} = "default"
 
 @react.component
 let make = (~comments: Actions.Fetch.comments, ~error: Types.error) => {
