@@ -21,7 +21,7 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 # pick necessary app files
-COPY Gemfile* config.ru Rakefile babel.config.js ./
+COPY Gemfile* config.ru Rakefile babel.config.js postcss.config.js ./
 COPY app ./app
 COPY bin ./bin
 COPY client ./client
