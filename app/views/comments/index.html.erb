@@ -26,7 +26,7 @@
           <td class="flex flex-col lg:flex-row gap-2">
             <%= link_to 'Show', comment %>
             <%= link_to 'Edit', edit_comment_path(comment) %>
-            <%= button_to 'Destroy', comment, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "text-red-500" %>
+            <%= button_to 'Destroy', comment, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "text-red-500 cursor-pointer" %>
           </td>
         </tr>
       <% end %>
