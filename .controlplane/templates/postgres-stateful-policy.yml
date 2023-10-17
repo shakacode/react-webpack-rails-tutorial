@@ -4,8 +4,6 @@ description: postgres-stateful-access
 bindings:
   - permissions:
       - reveal
-      - use
-      - view
     principalLinks:
       - //gvc/react-webpack-rails-tutorial/identity/postgres-stateful-identity  #Replace YOUR_GVC_HERE with the name of your gvc
 targetKind: secret
