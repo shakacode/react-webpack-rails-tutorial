@@ -16,7 +16,7 @@ aliases:
     # Like Heroku add-ons
     additional_workloads:
       - redis
-      - postgres
+      - postgres-stateful
 
 apps:
   react-webpack-rails-tutorial:
