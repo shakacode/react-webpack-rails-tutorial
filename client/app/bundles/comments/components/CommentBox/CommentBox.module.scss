@@ -1,11 +1,11 @@
-// The 0.5s must correspond to the 500s in:
-//   client/app/bundles/comments/components/CommentBox/CommentList.jsx:58
+// $animation-duration is set in client/app/assets/styles/app-variables.scss
+
 .elementEnter {
   opacity: 0.01;
 
   &.elementEnterActive {
     opacity: 1;
-    transition: opacity 0.5s ease-in;
+    transition: opacity $animation-duration ease-in;
   }
 }
 
@@ -14,7 +14,7 @@
 
   &.elementLeaveActive {
     opacity: 0.01;
-    transition: opacity 0.5s ease-in;
+    transition: opacity $animation-duration ease-in;
   }
 }
 

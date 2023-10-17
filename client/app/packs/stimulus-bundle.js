@@ -1,5 +1,4 @@
 import ReactOnRails from 'react-on-rails';
-import 'bootstrap-loader';
 import 'jquery-ujs';
 import { Turbo } from '@hotwired/turbo-rails';
 
@@ -8,6 +7,8 @@ import controllers from '../controllers';
 
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
+
+import '../assets/styles/application';
 
 Turbo.session.drive = false;
 

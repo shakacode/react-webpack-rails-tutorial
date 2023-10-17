@@ -1,5 +1,4 @@
 import ReactOnRails from 'react-on-rails';
-import 'bootstrap-loader';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import 'expose-loader?exposes=$,jQuery!jquery';
 import 'jquery-ujs';
@@ -11,6 +10,8 @@ import routerCommentsStore from '../bundles/comments/store/routerCommentsStore';
 import commentsStore from '../bundles/comments/store/commentsStore';
 import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
 import Footer from '../bundles/comments/components/Footer/Footer';
+
+import '../assets/styles/application';
 
 ReactOnRails.setOptions({
   // traceTurbolinks: process.env.TRACE_TURBOLINKS, // eslint-disable-line no-undef

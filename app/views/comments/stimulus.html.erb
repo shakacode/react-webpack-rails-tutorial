@@ -1,7 +1,10 @@
 <h2>Stimulus + Rails Backend (with <a href="https://github.com/shakacode/react_on_rails">react_on_rails gem</a>)</h2>
-  <%= render "pages/header" %>
-<div class="container" data-controller="comments">
+
+<%= render "pages/header" %>
+
+<div class="prose max-w-none prose-a:text-sky-700 prose-li:my-0" data-controller="comments">
   <h2>Comments</h2>
+
   <ul>
     <li><a class="refresh-btn link-primary" data-action="click->comments#refreshCommentList">Force Refresh of All Comments.</a></li>
     <li>Text supports Github Flavored Markdown.</li>
@@ -9,6 +12,7 @@
     <li>Name is preserved. Text is reset, between submits</li>
     <li>To see Action Cable instantly update two browsers, open two browsers and submit a comment!</li>
   </ul>
+
   <div>
     <%= render "comments/turbo/horizontal_form" %>
     <%= render "comments/turbo/comment_list" %>

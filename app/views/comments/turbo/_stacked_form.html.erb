@@ -1,18 +1,22 @@
 <%= turbo_frame_tag "form_tabs", data: { turbo: true } do %>
   <%= render "comments/turbo/error_notice" %>
   <%= render "comments/turbo/tabs" %>
+
   <hr />
-  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }) do |f| %>
-    <div class="form-group">
-        <%= f.label "Name", class: "form-label" %>
-        <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "form-control", placeholder: "Your Name" %>
+
+  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "flex flex-col gap-4") do |f| %>
+    <div class="flex flex-col gap-0">
+      <%= f.label "Name", class: "w-full" %>
+      <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "px-3 py-1 leading-4 border border-gray-300 rounded w-full", placeholder: "Your Name" %>
     </div>
-    <div class="form-group">
-        <%= f.label :text, class: "form-label" %>
-        <%= f.text_field :text, data: { comments_target: "commentText" }, class: "form-control", placeholder: "Say something using markdown..." %>
+
+    <div class="flex flex-col gap-0">
+      <%= f.label :text, class: "w-full" %>
+      <%= f.text_field :text, data: { comments_target: "commentText" }, class: "px-3 py-1 leading-4 border border-gray-300 rounded w-full", placeholder: "Say something using markdown..." %>
     </div>
-    <div class="form-group">
-        <%= f.submit "Post", class: "btn btn-primary" %>
+
+    <div class="form-group flex flex-col gap-0 lg:gap-4 lg:flex-row">
+      <%= f.submit "Post", class: "self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800" %>
     </div>
   <% end %>
 <% end %>

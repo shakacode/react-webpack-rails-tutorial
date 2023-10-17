@@ -4,7 +4,7 @@
   <div data-comments-target="commentList">
     <% @comments.each do |comment| %>
       <div>
-        <h2><%= comment.author %></h2>
+        <h2 class="text-blue-800"><%= comment.author %></h2>
         <span><%= markdown_to_html(comment.text) %></span>
       </div>
     <% end %>

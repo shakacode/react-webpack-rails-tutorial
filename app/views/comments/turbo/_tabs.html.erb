@@ -1,13 +1,5 @@
-<div>
-  <ul class="nav nav-pills">
-    <li class="nav-item <%= @form_type == "horizontal" ? "active" : "" %>" role="presentation">
-      <%= link_to "Horizontal Form", horizontal_form_path %>
-    </li>
-    <li class="nav-item <%= @form_type == "stacked" ? "active" : "" %>" role="presentation">
-      <%= link_to "Stacked Form", stacked_form_path %>
-    </li>
-    <li class="nav-item <%= @form_type == "inline" ? "active" : ""%>" role="presentation">
-      <%= link_to "Inline Form", inline_form_path %>
-    </li>
-  </ul>
+<div class="flex gap-1 not-prose">
+  <%= link_to "Horizontal Form", horizontal_form_path, class: "px-6 py-2 font-semibold border-0 rounded #{@form_type == "horizontal" ? "text-sky-50 bg-sky-600" : "text-sky-600 hover:bg-gray-100"}" %>
+  <%= link_to "Stacked Form", stacked_form_path, class: "px-6 py-2 font-semibold border-0 rounded #{@form_type == "stacked" ? "text-sky-50 bg-sky-600" : "text-sky-600 hover:bg-gray-100" }" %>
+  <%= link_to "Inline Form", inline_form_path, class: "px-6 py-2 font-semibold border-0 rounded #{@form_type == "inline" ? "text-sky-50 bg-sky-600" : "text-sky-600 hover:bg-gray-100"}" %>
 </div>

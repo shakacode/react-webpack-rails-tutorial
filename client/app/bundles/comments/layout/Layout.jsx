@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink as Link } from 'react-router-dom';
 
-import './Layout.scss';
-
 /* eslint-disable react/prefer-stateless-function */
 export default class Layout extends Component {
   /* eslint-disable react/no-unescaped-entities */
   render() {
     const { children } = this.props;
     return (
-      <section>
+      <section className="prose max-w-none prose-a:text-sky-700 prose-li:my-0">
         <header>
           <ul>
             <li>

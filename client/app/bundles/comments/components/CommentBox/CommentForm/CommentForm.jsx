@@ -1,36 +1,14 @@
-// NOTE: https://github.com/react-bootstrap/react-bootstrap/issues/1850 seesm to require string
-// refs and not the callback kind.
 /* eslint-disable react/no-find-dom-node, react/no-string-refs */
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import Col from 'react-bootstrap/lib/Col';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import Form from 'react-bootstrap/lib/Form';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import Button from 'react-bootstrap/lib/Button';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Alert from 'react-bootstrap/lib/Alert';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
 import { defaultMessages } from 'libs/i18n/default';
 import BaseComponent from 'libs/components/BaseComponent';
 
-import css from './CommentForm.module.scss';
-
 const emptyComment = { author: '', text: '' };
-
-function bsStyleFor(propName, error) {
-  if (error) {
-    const errorData = (error && error.response && error.response.data) || {};
-    return propName in errorData ? 'error' : 'success';
-  }
-
-  return null;
-}
 
 class CommentForm extends BaseComponent {
   static propTypes = {
@@ -123,50 +101,52 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form horizontal className="commentForm form-horizontal" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formHorizontalName">
-            <Col componentClass={ControlLabel} sm={2}>
+        <form className="form-horizontal flex flex-col gap-4" onSubmit={this.handleSubmit}>
+          <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
+            <label htmlFor="horizontalAuthorNode" className="w-full lg:w-2/12 lg:text-end shrink-0">
               {formatMessage(defaultMessages.inputNameLabel)}
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
-                ref="horizontalAuthorNode"
-                value={this.state.comment.author}
-                onChange={this.handleChange}
-                disabled={this.props.isSaving}
-                bsStyle={bsStyleFor('author', this.props.error)}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="formHorizontalName">
-            <Col componentClass={ControlLabel} sm={2}>
+            </label>
+            <input
+              type="text"
+              id="horizontalAuthorNode"
+              placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              ref="horizontalAuthorNode"
+              value={this.state.comment.author}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+            />
+          </div>
+
+          <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
+            <label htmlFor="horizontalTextNode" className="w-full lg:w-2/12 lg:text-end shrink-0">
               {formatMessage(defaultMessages.inputTextLabel)}
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="textarea"
-                label="Text"
-                placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
-                ref="horizontalTextNode"
-                value={this.state.comment.text}
-                onChange={this.handleChange}
-                disabled={this.props.isSaving}
-                bsStyle={bsStyleFor('text', this.props.error)}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="formHorizontalSubmit">
-            <Col smOffset={2} sm={10}>
-              <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
-                {this.props.isSaving
-                  ? `${formatMessage(defaultMessages.inputSaving)}...`
-                  : formatMessage(defaultMessages.inputPost)}
-              </Button>
-            </Col>
-          </FormGroup>
-        </Form>
+            </label>
+            <input
+              type="textarea"
+              id="horizontalTextNode"
+              placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              ref="horizontalTextNode"
+              value={this.state.comment.text}
+              onChange={this.handleChange}
+              disabled={this.props.isSaving}
+            />
+          </div>
+
+          <div className="flex flex-col gap-0 lg:gap-4 lg:flex-row">
+            <div className="hidden lg:block lg:w-2/12 grow-0" />
+            <button
+              type="submit"
+              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
+              disabled={this.props.isSaving}
+            >
+              {this.props.isSaving
+                ? `${formatMessage(defaultMessages.inputSaving)}...`
+                : formatMessage(defaultMessages.inputPost)}
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -176,39 +156,50 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <form className="commentForm form form-stacked" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formBasicName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
-            <FormControl
+        <form className="flex flex-col gap-4" onSubmit={this.handleSubmit}>
+          <div className="flex flex-col gap-0">
+            <label htmlFor="stackedAuthorNode" className="w-full">
+              {formatMessage(defaultMessages.inputNameLabel)}
+            </label>
+            <input
               type="text"
+              id="stackedAuthorNode"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
               ref="stackedAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('author', this.props.error)}
             />
-          </FormGroup>
-          <FormGroup controlId="formBasicText">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
-            <FormControl
-              type="textarea"
-              label="Text"
+          </div>
+
+          <div className="flex flex-col gap-0">
+            <label htmlFor="stackedTextNode" className="w-full">
+              {formatMessage(defaultMessages.inputTextLabel)}
+            </label>
+            <input
+              type="text"
+              id="stackedTextNode"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
               ref="stackedTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('text', this.props.error)}
             />
-          </FormGroup>
-          <FormGroup controlId="formBasicSubmit">
-            <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
+          </div>
+
+          <div className="flex flex-col gap-0">
+            <button
+              type="submit"
+              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
+              disabled={this.props.isSaving}
+            >
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
-            </Button>
-          </FormGroup>
+            </button>
+          </div>
         </form>
       </div>
     );
@@ -220,40 +211,47 @@ class CommentForm extends BaseComponent {
     return (
       <div>
         <hr />
-        <Form inline className="commentForm" onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputNameLabel)}</ControlLabel>
-            <FormControl
+        <form className="form-inline flex flex-col lg:flex-row flex-wrap gap-4" onSubmit={this.handleSubmit}>
+          <div className="flex gap-2 items-center">
+            <label htmlFor="inlineAuthorNode">{formatMessage(defaultMessages.inputNameLabel)}</label>
+            <input
               type="text"
+              id="inlineAuthorNode"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded"
               ref="inlineAuthorNode"
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('author', this.props.error)}
-              className={css.nameFormControl}
             />
-          </FormGroup>
-          <FormGroup controlId="formInlineName">
-            <ControlLabel>{formatMessage(defaultMessages.inputTextLabel)}</ControlLabel>
-            <FormControl
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <label htmlFor="inlineTextNode">{formatMessage(defaultMessages.inputTextLabel)}</label>
+            <input
               type="textarea"
-              label="Text"
+              id="inlineTextNode"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
+              className="px-3 py-1 leading-4 border border-gray-300 rounded"
               ref="inlineTextNode"
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
-              bsStyle={bsStyleFor('text', this.props.error)}
-              className={css.textFormControl}
             />
-          </FormGroup>
-          <Button type="submit" className="btn btn-primary" disabled={this.props.isSaving}>
-            {this.props.isSaving
-              ? `${formatMessage(defaultMessages.inputSaving)}...`
-              : formatMessage(defaultMessages.inputPost)}
-          </Button>
-        </Form>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
+              disabled={this.props.isSaving}
+            >
+              {this.props.isSaving
+                ? `${formatMessage(defaultMessages.inputSaving)}...`
+                : formatMessage(defaultMessages.inputPost)}
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -286,10 +284,13 @@ class CommentForm extends BaseComponent {
     );
 
     return (
-      <Alert bsStyle="danger" key="commentSubmissionError">
+      <div
+        className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1"
+        key="commentSubmissionError"
+      >
         <strong>Your comment was not saved!</strong>
         <ul>{errorElements}</ul>
-      </Alert>
+      </div>
     );
   }
 
@@ -319,11 +320,36 @@ class CommentForm extends BaseComponent {
       <div>
         <TransitionGroup component={null}>{this.errorWarning()}</TransitionGroup>
 
-        <Nav bsStyle="pills" activeKey={this.state.formMode} onSelect={this.handleSelect}>
-          <NavItem eventKey={0}>{formatMessage(defaultMessages.formHorizontal)}</NavItem>
-          <NavItem eventKey={1}>{formatMessage(defaultMessages.formStacked)}</NavItem>
-          <NavItem eventKey={2}>{formatMessage(defaultMessages.formInline)}</NavItem>
-        </Nav>
+        <div className="flex gap-1 not-prose">
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 0 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(0)}
+          >
+            {formatMessage(defaultMessages.formHorizontal)}
+          </button>
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 1 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(1)}
+          >
+            {formatMessage(defaultMessages.formStacked)}
+          </button>
+          <button
+            type="button"
+            className={`px-6 py-2 font-semibold border-0 rounded ${
+              this.state.formMode === 2 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
+            }`}
+            onClick={() => this.handleSelect(2)}
+          >
+            {formatMessage(defaultMessages.formInline)}
+          </button>
+          {}
+        </div>
         {inputForm}
       </div>
     );

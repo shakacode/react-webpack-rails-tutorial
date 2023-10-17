@@ -1,4 +1,3 @@
-import Alert from 'react-bootstrap/lib/Alert';
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -39,10 +38,13 @@ export default class CommentList extends BaseComponent {
         timeout={500}
         classNames={cssTransitionGroupClassNames}
       >
-        <Alert ref={nodeRef} bsStyle="danger">
-          <strong>Comments could not be retrieved. </strong>A server error prevented loading comments. Please
+        <div
+          ref={nodeRef}
+          className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1"
+        >
+          <strong>Comments could not be retrieved.</strong> A server error prevented loading comments. Please
           try again.
-        </Alert>
+        </div>
       </CSSTransition>
     );
   }
@@ -70,8 +72,8 @@ export default class CommentList extends BaseComponent {
 
     // For animation with TransitionGroup
     //   https://reactcommunity.org/react-transition-group/transition-group
-    // The 500 must correspond to the 0.5s in:
-    //   client/app/bundles/comments/components/CommentBox/CommentBox.module.scss:8
+    // The 500 must correspond to $animation-duration in:
+    //   client/app/assets/styles/app-variables.scss
     return (
       <div>
         {this.errorWarning()}

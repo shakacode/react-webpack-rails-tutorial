@@ -1,6 +1,6 @@
 // Compare to ../ServerRouterApp.jsx
-import React from 'react';
 import { Provider } from 'react-redux';
+import React from 'react';
 import ReactOnRails from 'react-on-rails';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';

@@ -1,6 +1,6 @@
    [![Code Climate](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial/badges/gpa.svg)](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial) [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
 
-# React, Redux, React-Bootstrap, ES7, Webpack, Ruby on Rails Demo
+# React, Redux, Tailwind CSS, ES7, Webpack, Ruby on Rails Demo
 
 * Server-Side Rendering of React via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
 * Live at [www.reactrails.com](http://www.reactrails.com/)
@@ -87,7 +87,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 + [Webpack](#webpack)
   + [Configuration Files](#configuration-files)
   + [Additional Resources](#additional-resources)
-+ [Sass, CSS Modules, and Twitter Bootstrap integration](#sass-css-modules-and-twitter-bootstrap-integration)
++ [Sass, CSS Modules, and Tailwind CSS integration](#sass-css-modules-and-tailwind-css-integration)
   + [Fonts with SASS](#fonts-with-sass)
 + [Process Management during Development](#process-management-during-development)
 + [Rendering with Express Server](#rendering-with-express-server)
@@ -116,8 +116,6 @@ See package.json and Gemfile for versions
 
 1. [react_on_rails gem](https://github.com/shakacode/react_on_rails/)
 1. [React](http://facebook.github.io/react/)
-1. [react-bootstrap](https://react-bootstrap.github.io/)
-1. [bootstrap-loader](https://www.npmjs.com/package/bootstrap-loader/)
 1. [Redux](https://github.com/reactjs/redux)
 1. [react-router](https://github.com/reactjs/react-router)
 1. [react-router-redux](https://github.com/reactjs/react-router-redux)
@@ -127,6 +125,7 @@ See package.json and Gemfile for versions
 1. [Heroku for Rails 7 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails7)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
+1. [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
 
 ## Basic Demo Setup
 
@@ -181,7 +180,10 @@ _Converted to use Shakapacker webpack configuration_.
 - [Webpack Cookbook](https://christianalfoni.github.io/react-webpack-cookbook/)
 - Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
 
-## Sass, CSS Modules, and Twitter Bootstrap Integration
+## Sass, CSS Modules, and Tailwind CSS Integration
+This example project uses mainly Tailwind CSS for styling.
+Besides this, it also demonstrates Sass and CSS modules, particularly for some CSS transitions.
+
 We're using Webpack to handle Sass assets so that we can use CSS modules. The best way to understand how we're handling assets is to close follow this example. We'll be working on more docs soon. If you'd like to give us a hand, that's a great way to learn about this!
 
 For example in [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx), see how we use standard JavaScript import syntax to refer to class names that come from CSS modules:

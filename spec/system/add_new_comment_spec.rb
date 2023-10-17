@@ -8,8 +8,8 @@ describe "Add new comment" do
     describe "with Horizontal Form" do
       before do
         visit root_path
-        click_link "Inline Form"
-        click_link "Horizontal Form"
+        click_button "Inline Form"
+        click_button "Horizontal Form"
         submit_form
       end
 
@@ -27,7 +27,7 @@ describe "Add new comment" do
     describe "with Inline Form" do
       before do
         visit root_path
-        click_link "Inline Form"
+        click_button "Inline Form"
         submit_form
       end
 
@@ -45,7 +45,7 @@ describe "Add new comment" do
     describe "with Stacked Form" do
       before do
         visit root_path
-        click_link "Stacked Form"
+        click_button "Stacked Form"
         submit_form
       end
 
@@ -65,8 +65,8 @@ describe "Add new comment" do
     describe "with Horizontal Form" do
       before do
         visit root_path
-        click_link "Inline Form"
-        click_link "Horizontal Form"
+        click_button "Inline Form"
+        click_button "Horizontal Form"
         submit_form
       end
 
@@ -84,7 +84,7 @@ describe "Add new comment" do
     describe "with Inline Form" do
       before do
         visit root_path
-        click_link "Inline Form"
+        click_button "Inline Form"
         submit_form
       end
 
@@ -102,7 +102,7 @@ describe "Add new comment" do
     describe "with Stacked Form" do
       before do
         visit root_path
-        click_link "Stacked Form"
+        click_button "Stacked Form"
         submit_form
       end
 
@@ -122,8 +122,8 @@ describe "Add new comment" do
     describe "with Horizontal Form" do
       before do
         visit root_path
-        click_link "Inline Form"
-        click_link "Horizontal Form"
+        click_button "Inline Form"
+        click_button "Horizontal Form"
         submit_form
       end
 
@@ -140,7 +140,7 @@ describe "Add new comment" do
     describe "with Inline Form" do
       before do
         visit root_path
-        click_link "Inline Form"
+        click_button "Inline Form"
         submit_form
       end
 
@@ -157,7 +157,7 @@ describe "Add new comment" do
     describe "with the Stacked Form" do
       before do
         visit root_path
-        click_link "Stacked Form"
+        click_button "Stacked Form"
         submit_form
       end
 

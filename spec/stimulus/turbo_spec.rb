@@ -52,6 +52,7 @@ describe "with Turbo and Stimulus" do
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
       click_button("Post")
+      sleep(1)
       expect(Comment.all.count).to equal(new_comment_count)
     end
 
