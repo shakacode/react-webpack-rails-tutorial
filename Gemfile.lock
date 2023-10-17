@@ -180,6 +180,7 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.4)
     minitest (5.19.0)
     mutex_m (0.1.2)
     net-imap (0.3.7)
@@ -192,6 +193,9 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
@@ -414,6 +418,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  ruby
   x86_64-linux
 
 DEPENDENCIES
