@@ -28,6 +28,7 @@ ENV NODE_ENV=production
 # compiling assets requires any value for ENV of SECRET_KEY_BASE
 ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
 
+RUN rails react_on_rails:locale
 RUN rails assets:precompile
 
 # add entrypoint
