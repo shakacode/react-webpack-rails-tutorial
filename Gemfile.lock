@@ -116,7 +116,7 @@ GEM
       term-ansicolor (~> 1.6)
       thor (>= 0.20.3, < 2.0)
       tins (~> 1.16)
-    cpl (1.1.1)
+    cpl (1.1.2.rc.0)
       debug (~> 1.7.1)
       dotenv (~> 2.8.1)
       psych (~> 5.1.0)
@@ -429,7 +429,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   coveralls_reborn (~> 0.25.0)
-  cpl
+  cpl (= 1.1.2.rc.0)
   database_cleaner
   debug (>= 1.0.0)
   factory_bot_rails
