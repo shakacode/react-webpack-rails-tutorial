@@ -20,16 +20,6 @@ RUN bundle config set without 'development test' && \
 COPY package.json yarn.lock ./
 RUN yarn install
 
-# pick necessary app files
-# COPY Gemfile* config.ru Rakefile babel.config.js postcss.config.js ./
-# COPY app ./app
-# COPY bin ./bin
-# COPY client ./client
-# COPY config ./config
-# COPY db ./db
-# COPY lib ./lib
-# COPY public ./public
-
 COPY . ./
 
 ENV RAILS_ENV=production
