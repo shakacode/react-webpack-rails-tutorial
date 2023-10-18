@@ -12,20 +12,16 @@
       "in-source": true
     }
   ],
-  "bsc-flags": [
-    "-open JsonCombinators",
-    "-open Belt"
-  ],
+  "bsc-flags": ["-open JsonCombinators", "-open Belt"],
   "suffix": ".bs.mjs",
   "bs-dependencies": [
     "@rescript/react",
     "@rescript/core",
     "@glennsl/rescript-fetch",
-    "@glennsl/rescript-json-combinators",
-    "rescript-react-on-rails"
+    "@glennsl/rescript-json-combinators"
   ],
   "jsx": {
-  "version": 4,
+    "version": 4,
     "mode": "automatic"
   }
 }

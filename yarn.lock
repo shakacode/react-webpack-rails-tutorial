@@ -8238,11 +8238,6 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
 
-rescript-react-on-rails@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/rescript-react-on-rails/-/rescript-react-on-rails-1.0.1.tgz#541dffdae64ec5053a50a3792b9db8783c959d1b"
-  integrity sha512-sbkDNCoiEWM9rqIiu+4joAj6W92yhM64KtLZQYfvYYm578jMcG02d98xpDeBT7MxZoPZZggFIed0m6Dj8bbDYA==
-
 rescript@^10.1.4:
   version "10.1.4"
   resolved "https://registry.yarnpkg.com/rescript/-/rescript-10.1.4.tgz#0f37710d371f32a704f17b4e804f66ce3c79a305"
