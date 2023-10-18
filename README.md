@@ -68,11 +68,6 @@ For more testimonials, see [Live Projects](https://github.com/shakacode/react_on
 ## NEWS
 
 * 2022-01-11: Added example of deployment [to the ControlPlane](.controlplane/readme.md).
-* We made a react-native client: [shakacode/reactrails-react-native-client](https://github.com/shakacode/reactrails-react-native-client/). If you want to hack on this with us, [email justin@shakacode.com](mailto:justin@shakacode.com).
-
-
-##### Check out our [react-native client for this project!](https://github.com/shakacode/react-native-tutorial)
-This is a simple example application that illustrates the use of ReactJs to implement a commenting system. Front-end code leverages both ReactJs and Rails asset pipeline while the backend is 100% Rails. It shows off a little bit of the interactivity of a ReactJs application, allowing the commmenter to choose the form layout. `react-bootstrap` is used for the React components. A pure Rails UI generated from scaffolding is shown for comparison.
 
 You can see this tutorial live here: [http://reactrails.com/](http://reactrails.com/)
 
