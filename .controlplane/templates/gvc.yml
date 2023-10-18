@@ -9,7 +9,7 @@ spec:
       # Password does not matter because host postgres.APP_GVC.cpln.local can only be accessed
       # locally within CPLN GVC, and postgres running on a CPLN workload is something only for a
       # test app that lacks persistence.
-      value: 'postgres://the_user:the_password@postgres-stateful.APP_GVC.cpln.local:5432/APP_GVC'
+      value: 'postgres://the_user:the_password@postgres.APP_GVC.cpln.local:5432/APP_GVC'
     - name: RAILS_ENV
       value: production
     - name: NODE_ENV
