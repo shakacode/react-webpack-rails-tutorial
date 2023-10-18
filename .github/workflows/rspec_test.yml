@@ -50,7 +50,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Ruby ${{ matrix.ruby }}
+      - name: Use Ruby ${{ matrix.node }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
