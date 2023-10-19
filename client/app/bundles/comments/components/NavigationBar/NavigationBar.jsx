@@ -97,6 +97,14 @@ function NavigationBar(props) {
                 Classic Rails
               </a>
             </li>
+            <li className={classNames({ 'bg-yellow-100': pathname === paths.RESCRIPT_PATH })}>
+              <a
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                href={paths.RESCRIPT_PATH}
+              >
+                Rescript
+              </a>
+            </li>
             <li>
               <a
                 className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
