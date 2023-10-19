@@ -1,6 +1,6 @@
 @react.component
 let make = () => {
-  <>
+  <div className="prose max-w-full prose-a:text-sky-700 prose-li:my-0 prose-code:text-rose-600 prose-code:bg-yellow-100 prose-headings:text-gray-700">
     <ul>
       <li>
         <a href="https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9">
@@ -48,6 +48,6 @@ let make = () => {
         {" for more information."->React.string}
       </li>
     </ul>
-    <hr/>
-  </>
+    <hr className="border-t my-8"/>
+  </div>
 }

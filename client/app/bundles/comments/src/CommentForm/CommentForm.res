@@ -1,5 +1,3 @@
-@module("./CommentForm.module.scss") external css: {..} = "default"
-
 let reducer = (
   state: Types.commentFormState, 
   action: Types.commentFormAction
@@ -45,23 +43,22 @@ let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) 
   ]
 
   <div>
-    <ul className="nav nav-pills">
+    <div className="flex gap-1 not-prose">
       {
         forms
         ->Belt.Array.map(form
           => (
-            <li 
-              key={"form_" ++ form.formName} 
-              className={"nav-item " ++ (state.form == form.formType ? "active" : "")} 
+            <button
+              key={`form_${form.formName}`}
+              className={`px-6 py-2 font-semibold border-0 rounded ${state.form == form.formType ? "text-sky-50 bg-sky-600" : "text-sky-600 hover:bg-gray-100"}`} 
               onClick={event => SetFormType(form.formType)->dispatch}
-              role="presentation"
             >
-              <a className={css["anchorButton"]} >{form.formName->React.string}</a>
-            </li> 
+              {form.formName->React.string}
+            </button> 
           )
         )->React.array
       }
-    </ul>
+    </div>
     <hr />
     {
       switch state.form {

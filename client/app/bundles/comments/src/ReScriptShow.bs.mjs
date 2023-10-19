@@ -98,7 +98,7 @@ function ReScriptShow$default(props) {
           };
           fetchData(undefined);
         }), []);
-  return JsxRuntime.jsxs(JsxRuntime.Fragment, {
+  return JsxRuntime.jsxs("div", {
               children: [
                 JsxRuntime.jsxs("h2", {
                       children: [
@@ -141,7 +141,7 @@ function ReScriptShow$default(props) {
                               error: state.error
                             })
                       ],
-                      className: "container"
+                      className: "prose max-w-none prose-a:text-sky-700 prose-li:my-0"
                     })
               ]
             });
