@@ -1,5 +1,3 @@
-@module("./Comment.module.scss") external css: {..} = "default"
-
 @react.component
 let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
   let rawMarkup = Marked.marked(comment.text, {gfm: true})
@@ -14,9 +12,9 @@ let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
     nodeRef={nodeRef}
     classNames=cssTransitionGroupClassNames
   >
-    <div className=css["comment"] ref={ReactDOM.Ref.domRef(nodeRef)}>
-      <h2 className=css["commentAuthor"] > {comment.author->React.string} </h2>
-      <span dangerouslySetInnerHTML=innerHTML />
+    <div ref={ReactDOM.Ref.domRef(nodeRef)}>
+      <h2 className="js-comment-author text-blue-800" > {comment.author->React.string} </h2>
+      <span dangerouslySetInnerHTML=innerHTML className="js-comment-text" />
     </div>
   </CSSAnimation.CSSTransition>
   
