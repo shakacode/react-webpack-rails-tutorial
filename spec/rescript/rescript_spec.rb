@@ -13,17 +13,17 @@ describe "with Rescript" do
     end
 
     it "stops showing horizontal tab when other tab is clicked" do
-      find("a", text: "Inline Form", wait: 10)
+      find("button", text: "Inline Form")
       page.has_no_css?("form-horizontal")
     end
 
     it "shows inline form when Inline Form link is clicked" do
-      find("a", text: "Inline Form", wait: 10)
+      find("button", text: "Inline Form", wait: 10)
       page.has_css?("form-inline")
     end
 
     it "shows stacked form when Stacked Form link is clicked" do
-      find("a", text: "Stacked Form", wait: 10)
+      find("button", text: "Stacked Form")
       page.has_no_css?("form-inline") and page.has_no_css?("form-horizontal")
     end
   end
