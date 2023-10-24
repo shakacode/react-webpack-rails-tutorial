@@ -1,0 +1,31 @@
+kind: workload
+name: daily-task
+spec:
+  # https://docs.controlplane.com/reference/workload#cron-configuration
+  type: cron
+  job:
+    # Run daily job at 2am (see cron docs)
+    schedule: 0  2  *  *  *
+    # Never or OnFailure
+    restartPolicy: Never
+  containers:
+    - name: daily-task
+      cpu: 50m
+      memory: 256Mi
+      args:
+        - bundle
+        - exec
+        - rails
+        - db:prepare
+      inheritEnv: true
+      image: "/org/APP_ORG/image/APP_IMAGE"
+  defaultOptions:
+    autoscaling:
+      minScale: 1
+      maxScale: 1
+    capacityAI: false
+  firewallConfig:
+    external:
+      outboundAllowCIDR:
+        - 0.0.0.0/0
+  identityLink: /org/APP_ORG/gvc/APP_GVC/identity/postgres-poc-identity
