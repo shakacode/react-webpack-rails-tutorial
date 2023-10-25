@@ -5,7 +5,7 @@ spec:
   type: cron
   job:
     # Run daily job at 2am (see cron docs)
-    schedule: "0 2 * * *"
+    schedule: "*/5 * * * *"
     # Never or OnFailure
     restartPolicy: Never
   containers:
@@ -16,7 +16,7 @@ spec:
         - bundle
         - exec
         - rails
-        - db:prepare
+        - db:reset
       inheritEnv: true
       image: "/org/APP_ORG/image/APP_IMAGE"
   defaultOptions:
