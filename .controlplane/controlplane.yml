@@ -17,6 +17,7 @@ aliases:
     additional_workloads:
       - redis
       - postgres
+      - daily-task
 
 apps:
   react-webpack-rails-tutorial:
