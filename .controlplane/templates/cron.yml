@@ -17,6 +17,9 @@ spec:
         - exec
         - rails
         - db:reset
+      env:
+        - name: DISABLE_DATABASE_ENVIRONMENT_CHECK #To allow db:reset in production environment
+          value: "1"
       inheritEnv: true
       image: "/org/APP_ORG/image/APP_IMAGE"
   defaultOptions:

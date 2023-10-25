@@ -133,8 +133,6 @@ spec:
           value: cpln://secret/postgres-poc-credentials.password
         - name: POSTGRES_USER #The name of the default user
           value: cpln://secret/postgres-poc-credentials.username
-        - name: DISABLE_DATABASE_ENVIRONMENT_CHECK #To allow db:reset in production environment
-          value: "1"
       name: stateful
       image: postgres:15
       command: /bin/bash
