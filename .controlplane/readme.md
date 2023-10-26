@@ -50,6 +50,7 @@ These YAML files are the same as used by the `cpln apply` command.
 ## Setup and run
 
 Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`.
+Alternatively, you can use `CPLN_ORG` environment variable to set the organization name.
 You should be able to see this information in the Control Plane UI.
 
 **Note:** The below commands use `cpl` which is the Heroku to Control Plane playbook gem,
