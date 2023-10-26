@@ -1,10 +1,12 @@
 # Configuration for "Heroku to CPLN playbook" custom scripts
 aliases:
   common: &common
-    # Change this to your org name for staging. Production apps will use a different org
-    # for security.
-    cpln_org: shakacode-open-source-examples
-    # Change `shakacode-staging` to your-org-name-for-staging
+    # Org for staging and QA apps is typically set as an alias
+    # Production apps will use a different org than staging for security.
+    # Change this value to your org name
+    # or set ENV value to CPLN_ORG as that will override whatever is used here for all cpl commands
+    # cpln_org: shakacode-open-source-examples
+
     # Example apps use only location. CPLN offers the ability to use multiple locations.
     default_location: aws-us-east-2
     # Configure the workload name used as a template for one-off scripts, like a Heroku one-off dyno.

@@ -429,7 +429,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   coveralls_reborn (~> 0.25.0)
-  cpl (= 1.1.2)
+  cpl (~> 1.1.2)
   database_cleaner
   debug (>= 1.0.0)
   factory_bot_rails
