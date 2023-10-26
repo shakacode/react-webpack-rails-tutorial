@@ -15,6 +15,7 @@ aliases:
     # and the application image updates.
     app_workloads:
       - rails
+      - daily-task
     # Like Heroku add-ons
     additional_workloads:
       - redis
