@@ -1,0 +1,51 @@
+# From .gitignore
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+/public/assets
+.env
+node_modules
+npm-debug.log*
+/coverage
+dump.rdb
+.DS_Store
+
+# Ignore bundle dependencies
+vendor/ruby
+
+# RVM gemset
+.ruby-gemset
+
+# Generated js bundles
+/public/packs
+/public/packs-test
+
+# Rubymine/IntelliJ
+.idea
+
+# Redis generated file
+dump.rdb
+
+# Ignore i18n-js
+client/app/libs/i18n/translations.js
+client/app/libs/i18n/default.js
+
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+###################################################
+# Specific to .dockerignore
+.git/
+.github/
+spec/
+scripts/
+

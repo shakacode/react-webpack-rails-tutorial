@@ -1,0 +1,33 @@
+kind: workload
+name: daily-task
+spec:
+  # https://docs.controlplane.com/reference/workload#cron-configuration
+  type: cron
+  job:
+    activeDeadlineSeconds: 3600
+    concurrencyPolicy: Forbid
+    historyLimit: 5
+    restartPolicy: Never
+    # daily. See cron docs
+    schedule: 0 0 * * *
+  containers:
+    - name: daily-task
+      cpu: 50m
+      memory: 256Mi
+      args:
+        - bundle
+        - exec
+        - rake
+        - daily
+      inheritEnv: true
+      image: "/org/APP_ORG/image/APP_IMAGE"
+  defaultOptions:
+    autoscaling:
+      minScale: 1
+      maxScale: 1
+    capacityAI: false
+  firewallConfig:
+    external:
+      outboundAllowCIDR:
+        - 0.0.0.0/0
+  identityLink: /org/APP_ORG/gvc/APP_GVC/identity/postgres-poc-identity

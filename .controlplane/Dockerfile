@@ -17,18 +17,10 @@ RUN bundle config set without 'development test' && \
     bundle install --jobs=3 --retry=3
 
 # install node packages
-COPY package.json yarn.lock .
+COPY package.json yarn.lock ./
 RUN yarn install
 
-# pick necessary app files
-COPY Gemfile* config.ru Rakefile babel.config.js ./
-COPY app ./app
-COPY bin ./bin
-COPY client ./client
-COPY config ./config
-COPY db ./db
-COPY lib ./lib
-COPY public ./public
+COPY . ./
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
@@ -36,6 +28,7 @@ ENV NODE_ENV=production
 # compiling assets requires any value for ENV of SECRET_KEY_BASE
 ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
 
+RUN rails react_on_rails:locale
 RUN rails assets:precompile
 
 # add entrypoint

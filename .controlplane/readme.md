@@ -11,42 +11,63 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 ## Prerequisites
 
 1. Ensure your [Control Plane](https://controlplane.com) account is set up.
+You should have an `organization` `<your-org>` for testing in that account.
+You will modify value for `aliases.common.cpln_org` in `.controlplane/controlplane.yml`.
+If you need an organization, please [contact Shakacode](mailto:controlplane@shakacode.com).
 
-2. Set up an `organization` for testing in that account and modify `aliases.common.cpln_org` in `.controlplane/controlplane.yml` .
+2. Run `cpln image docker-login --org <your-org>` to ensure that you have access to the Control Plane Docker registry.
 
-3. Install Control Plane CLI (and configure access) [docs here](https://docs.controlplane.com/quickstart/quick-start-3-cli#getting-started-with-the-cli). You can update the `cpln` command line with the same command as installation, `npm install -g @controlplane/cli`. Then run `cpln login` to ensure access.
+3. Install Control Plane CLI (and configure access) using `npm install -g @controlplane/cli`.
+You can update the `cpln` command line with `npm update -g @controlplane/cli`.
+Then run `cpln login` to ensure access.
+For more informatation check out the
+[docs here](https://docs.controlplane.com/quickstart/quick-start-3-cli#getting-started-with-the-cli).
 
-4. Install [Heroku to Control Plane](https://github.com/shakacode/heroku-to-control-plane) playbook CLI [`cpl` gem](https://rubygems.org/gems/cpl) on your project's Gemfile or globally.
+4. Install the latest version of
+[`cpl` gem](https://rubygems.org/gems/cpl)
+on your project's Gemfile or globally.
+For more information check out
+[Heroku to Control Plane](https://github.com/shakacode/heroku-to-control-plane).
 
-5. This project has a `Dockerfile` for Control Plane in this directory. You can use it as an example for your project. Ensure that you have Docker running.
+5. This project has a `Dockerfile` for Control Plane in `.controlplane` directory.
+You can use it as an example for your project.
+Ensure that you have Docker running.
 
-## Tips
-Do not confuse the `cpl` CLI with the `cpln` CLI. The `cpl` CLI is the Heroku to Control Plane playbook CLI. The `cpln` CLI is the Control Plane CLI.
+### Tips
+Do not confuse the `cpl` CLI with the `cpln` CLI.
+The `cpl` CLI is the Heroku to Control Plane playbook CLI.
+The `cpln` CLI is the Control Plane CLI.
 
 ## Project Configuration
 See the filese in the `./controlplane` directory.
 
 1. `/templates`: defines the objects created with the `cpl setup` command.
-2. `/controlplane.yml`: defines the organization, location, and app name.
+These YAML files are the same as used by the `cpln apply` command.
+2. `/controlplane.yml`: defines your application, including the organization, location, and app name.
 3. `Dockerfile`: defines the Docker image used to run the app on Control Plane.
 4. `entrypoint.sh`: defines the entrypoint script used to run the app on Control Plane.
 
 ## Setup and run
 
-Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`. You should be able to see this information in the Control Plane UI.
+Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`.
+You should be able to see this information in the Control Plane UI.
+
+**Note:** The below commands use `cpl` which is the Heroku to Control Plane playbook gem,
+and not `cpln` which is the Control Plane CLI.
 
 ```sh
-# Note, below commands use `cpl` which is the Heroku to Control Plane playbook script.
-
 # Provision all infrastructure on Control Plane.
 # app tutorial-app will be created per definition in .controlplane/controlplane.yml
-cpl setup gvc postgres redis rails -a tutorial-app
+cpl apply-template gvc postgres redis rails -a tutorial-app
 
 # Build and push docker image to Control Plane repository
 # Note, may take many minutes. Be patient.
+# Check for error messages, such as forgetting to run `cpln image docker-login --org <your-org>`
 cpl build-image -a tutorial-app
 
 # Promote image to app after running `cpl build-image command`
+# Note, the UX of images may not show the image for up to 5 minutes.
+# However, it's ready.
 cpl deploy-image -a tutorial-app
 
 # See how app is starting up
@@ -56,23 +77,28 @@ cpl logs -a tutorial-app
 cpl open -a tutorial-app
 ```
 
-## Promoting code upgrades
+### Promoting code updates
+
+After committing code, you will update your deployment of `tutorial-app` with the following commands:
 
 ```sh
-# Build and push new image with sequential image tagging, e.g. 'ror-tutorial_123'
+# Build and push new image with sequential image tagging, e.g. 'tutorial-app:1', then 'tutorial-app:2', etc.
 cpl build-image -a tutorial-app
-
-# OR
-# Build and push with sequential image tagging and commit SHA, e.g. 'ror-tutorial_123_ABCD'
-cpl build-image -a tutorial-app --commit ABCD
 
 # Run database migrations (or other release tasks) with latest image,
 # while app is still running on previous image.
 # This is analogous to the release phase.
 cpl runner rails db:migrate -a tutorial-app --image latest
 
-# Pomote latest image to app
+# Pomote latest image to app after migrations run
 cpl deploy-image -a tutorial-app
+```
+
+If you needed to push a new image with a specific commit SHA, you can run the following command:
+
+```sh
+# Build and push with sequential image tagging and commit SHA, e.g. 'tutorial-app:123_ABCD'
+cpl build-image -a tutorial-app --commit ABCD
 ```
 
 ## Other notes

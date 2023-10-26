@@ -1,33 +1,176 @@
-# Template setup of Postgres workload, roughly corresponding to a Heroku add-on for a database
+# Comes from example at
+# https://github.com/controlplane-com/examples/blob/main/examples/postgres/manifest.yaml
+
+kind: volumeset
+name: postgres-poc-vs
+description: postgres-poc-vs
+spec:
+  autoscaling:
+    maxCapacity: 1000
+    minFreePercentage: 1
+    scalingFactor: 1.1
+  fileSystemType: ext4
+  initialCapacity: 10
+  performanceClass: general-purpose-ssd
+  snapshots:
+    createFinalSnapshot: true
+    retentionDuration: 7d
+
+---
+kind: secret
+name: postgres-poc-credentials
+description: ''
+type: dictionary
+data:
+  password: the_password #Replace this with a real password
+  username: the_user #Replace this with a real username
+
+---
+kind: secret
+name: postgres-poc-entrypoint-script
+type: opaque
+data:
+  encoding: base64
+  payload: >-
+    IyEvdXNyL2Jpbi9lbnYgYmFzaAoKc291cmNlIC91c3IvbG9jYWwvYmluL2RvY2tlci1lbnRyeXBvaW50LnNoCgppbnN0YWxsX2RlcHMoKSB7CiAgYXB0LWdldCB1cGRhdGUgLXkgPiAvZGV2L251bGwKICBhcHQtZ2V0IGluc3RhbGwgY3VybCAteSA+IC9kZXYvbnVsbAogIGFwdC1nZXQgaW5zdGFsbCB1bnppcCAteSA+IC9kZXYvbnVsbAogIGN1cmwgImh0dHBzOi8vYXdzY2xpLmFtYXpvbmF3cy5jb20vYXdzY2xpLWV4ZS1saW51eC14ODZfNjQuemlwIiAtbyAiYXdzY2xpdjIuemlwIiA+IC9kZXYvbnVsbAogIHVuemlwIGF3c2NsaXYyLnppcCA+IC9kZXYvbnVsbAogIC4vYXdzL2luc3RhbGwgPiAvZGV2L251bGwKfQoKZGJfaGFzX2JlZW5fcmVzdG9yZWQoKSB7CiAgaWYgWyAhIC1mICIkUEdEQVRBL0NQTE5fUkVTVE9SRUQiIF07IHRoZW4KICAgIHJldHVybiAxCiAgZmkKCiAgaWYgISBncmVwIC1xICJcLT4gJDEkIiAiJFBHREFUQS9DUExOX1JFU1RPUkVEIjsgdGhlbgogICAgcmV0dXJuIDEKICBlbHNlCiAgICByZXR1cm4gMAogIGZpCn0KCnJlc3RvcmVfZGIoKSB7Cgl3aGlsZSBbICEgLVMgL3Zhci9ydW4vcG9zdGdyZXNxbC8ucy5QR1NRTC41NDMyIF0KCWRvCiAgICBlY2hvICJXYWl0aW5nIDVzIGZvciBkYiBzb2NrZXQgdG8gYmUgYXZhaWxhYmxlIgogICAgc2xlZXAgNXMKICBkb25lCgoKCWlmICEgZGJfaGFzX2JlZW5fcmVzdG9yZWQgIiQxIjsgdGhlbgoJICBlY2hvICJJdCBhcHBlYXJzIGRiICckMScgaGFzIG5vdCB5ZXQgYmVlbiByZXN0b3JlZCBmcm9tIFMzLiBBdHRlbXB0aW5nIHRvIHJlc3RvcmUgJDEgZnJvbSAkMiIKCSAgaW5zdGFsbF9kZXBzCgkgIGRvY2tlcl9zZXR1cF9kYiAjRW5zdXJlcyAkUE9TVEdSRVNfREIgZXhpc3RzIChkZWZpbmVkIGluIHRoZSBlbnRyeXBvaW50IHNjcmlwdCBmcm9tIHRoZSBwb3N0Z3JlcyBkb2NrZXIgaW1hZ2UpCgkgIGF3cyBzMyBjcCAiJDIiIC0gfCBwZ19yZXN0b3JlIC0tY2xlYW4gLS1uby1hY2wgLS1uby1vd25lciAtZCAiJDEiIC1VICIkUE9TVEdSRVNfVVNFUiIKCSAgZWNobyAiJChkYXRlKTogJDIgLT4gJDEiIHwgY2F0ID4+ICIkUEdEQVRBL0NQTE5fUkVTVE9SRUQiCgllbHNlCgkgIGVjaG8gIkRiICckMScgYWxyZWFkeSBleGlzdHMuIFJlYWR5ISIKICBmaQp9CgpfbWFpbiAiJEAiICYKYmFja2dyb3VuZFByb2Nlc3M9JCEKCmlmIFsgLW4gIiRQT1NUR1JFU19BUkNISVZFX1VSSSIgXTsgdGhlbgogIHJlc3RvcmVfZGIgIiRQT1NUR1JFU19EQiIgIiRQT1NUR1JFU19BUkNISVZFX1VSSSIKZWxzZQogIGVjaG8gIkRlY2xpbmluZyB0byByZXN0b3JlIHRoZSBkYiBiZWNhdXNlIG5vIGFyY2hpdmUgdXJpIHdhcyBwcm92aWRlZCIKZmkKCndhaXQgJGJhY2tncm91bmRQcm9jZXNzCgoK
+
+#Here is the ASCII-encoded version of the script in the secret above
+#!/usr/bin/env bash
+#
+#source /usr/local/bin/docker-entrypoint.sh
+#
+#install_deps() {
+#  apt-get update -y > /dev/null
+#  apt-get install curl -y > /dev/null
+#  apt-get install unzip -y > /dev/null
+#  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" > /dev/null
+#  unzip awscliv2.zip > /dev/null
+#  ./aws/install > /dev/null
+#}
+#
+#db_has_been_restored() {
+#  if [ ! -f "$PGDATA/CPLN_RESTORED" ]; then
+#    return 1
+#  fi
+#
+#  if ! grep -q "\-> $1$" "$PGDATA/CPLN_RESTORED"; then
+#    return 1
+#  else
+#    return 0
+#  fi
+#}
+#
+#restore_db() {
+#  while [ ! -S /var/run/postgresql/.s.PGSQL.5432 ]
+#  do
+#    echo "Waiting 5s for db socket to be available"
+#    sleep 5s
+#  done
+#
+#
+#  if ! db_has_been_restored "$1"; then
+#    echo "It appears db '$1' has not yet been restored from S3. Attempting to restore $1 from $2"
+#    install_deps
+#    docker_setup_db #Ensures $POSTGRES_DB exists (defined in the entrypoint script from the postgres docker image)
+#    aws s3 cp "$2" - | pg_restore --clean --no-acl --no-owner -d "$1" -U "$POSTGRES_USER"
+#    echo "$(date): $2 -> $1" | cat >> "$PGDATA/CPLN_RESTORED"
+#  else
+#    echo "Db '$1' already exists. Ready!"
+#  fi
+#}
+#
+#_main "$@" &
+#backgroundProcess=$!
+#
+#if [ -n "$POSTGRES_ARCHIVE_URI" ]; then
+#  restore_db "$POSTGRES_DB" "$POSTGRES_ARCHIVE_URI"
+#else
+#  echo "Declining to restore the db because no archive uri was provided"
+#fi
+#
+#wait $backgroundProcess
+
+---
+kind: identity
+name: postgres-poc-identity
+description: postgres-poc-identity
+
+---
+kind: policy
+name: postgres-poc-access
+description: postgres-poc-access
+bindings:
+  - permissions:
+      - reveal
+# Uncomment these two
+#      - use
+#      - view
+    principalLinks:
+      - //gvc/APP_GVC/identity/postgres-poc-identity
+targetKind: secret
+targetLinks:
+  - //secret/postgres-poc-credentials
+  - //secret/postgres-poc-entrypoint-script
+
+---
 kind: workload
 name: postgres
+description: postgres
 spec:
-  type: standard
+  type: stateful
   containers:
-    - name: postgres
+    - cpu: 1000m
+      memory: 512Mi
       env:
-        - name: PGUSER
-          value: postgres
-        # Hardcoded password. See firewall comment below.
-        - name: POSTGRES_PASSWORD
-          value: password123
-        - name: POSTGRES_USER
-          value: postgres
-      image: 'postgres:13.8-alpine'
+        # Uncomment next two envs will cause the db to be restored from the archive uri
+        #        - name: POSTGRES_ARCHIVE_URI  #Use this var to control the automatic restore behavior. If you leave it out, the db will start empty.
+        #          value: s3://YOUR_BUCKET/PATH_TO_ARCHIVE_FILE
+        # - name: POSTGRES_DB #The name of the initial db in case of doing a restore
+        #  value: test
+        - name: PGDATA #The location postgres stores the db. This can be anything other than /var/lib/postgresql/data, but it must be inside the mount point for the volume set
+          value: "/var/lib/postgresql/data/pg_data"
+        - name: POSTGRES_PASSWORD #The password for the default user
+          value: cpln://secret/postgres-poc-credentials.password
+        - name: POSTGRES_USER #The name of the default user
+          value: cpln://secret/postgres-poc-credentials.username
+      name: stateful
+      image: postgres:15
+      command: /bin/bash
+      args:
+        - "-c"
+        - "cat /usr/local/bin/cpln-entrypoint.sh >> ./cpln-entrypoint.sh && chmod u+x ./cpln-entrypoint.sh && ./cpln-entrypoint.sh postgres"
+      #command:  "cpln-entrypoint.sh"
+      #args:
+      #  - "postgres"
       ports:
         - number: 5432
           protocol: tcp
       volumes:
-        - path: /var/lib/postgresql/data
-          recoveryPolicy: retain
-          uri: 'scratch://postgres-vol'
-  # Important that postgres does not scaling because disk storage is local to one server!
+        - uri: cpln://volumeset/postgres-poc-vs
+          path: "/var/lib/postgresql/data"
+        # Make the ENV value for the entry script a file
+        - uri: cpln://secret/postgres-poc-entrypoint-script
+          path: "/usr/local/bin/cpln-entrypoint.sh"
+      inheritEnv: false
+      livenessProbe:
+        tcpSocket:
+          port: 5432
+        failureThreshold: 1
+      readinessProbe:
+        tcpSocket:
+          port: 5432
+        failureThreshold: 1
+  identityLink: //identity/postgres-poc-identity
   defaultOptions:
-    autoscaling:
-      maxScale: 1
     capacityAI: false
-  # This firewall configuration corresponds to using a simple, hard-coded password for postgres
-  # in the gvc.yml template.
+    autoscaling:
+      metric: cpu
+      target: 95
+      maxScale: 1
   firewallConfig:
+    external:
+      inboundAllowCIDR: []
+      outboundAllowCIDR:
+        - 0.0.0.0/0
     internal:
       inboundAllowType: same-gvc
