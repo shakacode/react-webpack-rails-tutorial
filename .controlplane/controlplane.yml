@@ -16,11 +16,11 @@ aliases:
     app_workloads:
       - rails
       - daily-task
-    # Like Heroku add-ons
+    # Additional workloads that are not affected by deploy-image and promote-app-from-upstream
+    # These workloads apply to the ps commands
     additional_workloads:
       - redis
       - postgres
-      - daily-task
 
 apps:
   react-webpack-rails-tutorial:
