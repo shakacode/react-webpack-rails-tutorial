@@ -1,27 +1,78 @@
-# TODO: Document where used
-# Maybe outdated.
-# Control Plane setup is in the .controlplane directory
-FROM ruby:3.1.2
+# syntax = docker/dockerfile:1
 
-RUN apt-get update
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=3.1.2
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
-RUN apt-get install -y nodejs
-RUN npm install -g yarn
+# Rails app lives here
+WORKDIR /rails
 
-WORKDIR /app
-COPY Gemfile* ./
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
 
-RUN bundle install
 
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
+# Install packages needed to build gems and node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential curl git libpq-dev libvips node-gyp pkg-config python-is-python3
+
+# Install JavaScript dependencies
+# Make sure NODE_VERSION matches the node version in .nvmrc
+ARG NODE_VERSION=18.13.0
+ARG YARN_VERSION=1.22.19
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g yarn@$YARN_VERSION && \
+    rm -rf /tmp/node-build-master
+
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
+
+# Install node modules
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
-COPY . ./
+# Copy application code
+COPY . .
 
-ENV RAILS_ENV=production
-ENV NODE_ENV=production
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile app/ lib/
 
-RUN rails react_on_rails:locale && rails assets:precompile
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-CMD ["rails", "s"]
+RUN rails react_on_rails:locale
+RUN rails assets:precompile
+
+# Final stage for app image
+FROM base
+
+# Install packages needed for deployment
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy built artifacts: gems, application
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /rails /rails
+
+# Run and own only the runtime files as a non-root user for security
+RUN useradd rails --create-home --shell /bin/bash && \
+    chown -R rails:rails db log storage tmp
+USER rails:rails
+
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD ["./bin/rails", "server"]
