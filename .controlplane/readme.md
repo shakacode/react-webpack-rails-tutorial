@@ -50,31 +50,35 @@ These YAML files are the same as used by the `cpln apply` command.
 ## Setup and run
 
 Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`.
+Alternatively, you can use `CPLN_ORG` environment variable to set the organization name.
 You should be able to see this information in the Control Plane UI.
 
 **Note:** The below commands use `cpl` which is the Heroku to Control Plane playbook gem,
 and not `cpln` which is the Control Plane CLI.
 
 ```sh
+# Use environment variable to prevent repetition
+export APP_NAME=tutorial-app
+
 # Provision all infrastructure on Control Plane.
 # app tutorial-app will be created per definition in .controlplane/controlplane.yml
-cpl apply-template gvc postgres redis rails -a tutorial-app
+cpl apply-template gvc postgres redis rails daily-task -a $APP_NAME
 
 # Build and push docker image to Control Plane repository
 # Note, may take many minutes. Be patient.
 # Check for error messages, such as forgetting to run `cpln image docker-login --org <your-org>`
-cpl build-image -a tutorial-app
+cpl build-image -a $APP_NAME
 
 # Promote image to app after running `cpl build-image command`
 # Note, the UX of images may not show the image for up to 5 minutes.
 # However, it's ready.
-cpl deploy-image -a tutorial-app
+cpl deploy-image -a $APP_NAME
 
 # See how app is starting up
-cpl logs -a tutorial-app
+cpl logs -a $APP_NAME
 
 # Open app in browser (once it has started up)
-cpl open -a tutorial-app
+cpl open -a $APP_NAME
 ```
 
 ### Promoting code updates
@@ -82,23 +86,24 @@ cpl open -a tutorial-app
 After committing code, you will update your deployment of `tutorial-app` with the following commands:
 
 ```sh
+# Assuming you have already set APP_NAME env variable to tutorial-app
 # Build and push new image with sequential image tagging, e.g. 'tutorial-app:1', then 'tutorial-app:2', etc.
-cpl build-image -a tutorial-app
+cpl build-image -a $APP_NAME
 
 # Run database migrations (or other release tasks) with latest image,
 # while app is still running on previous image.
 # This is analogous to the release phase.
-cpl runner rails db:migrate -a tutorial-app --image latest
+cpl runner rails db:migrate -a $APP_NAME --image latest
 
 # Pomote latest image to app after migrations run
-cpl deploy-image -a tutorial-app
+cpl deploy-image -a $APP_NAME
 ```
 
 If you needed to push a new image with a specific commit SHA, you can run the following command:
 
 ```sh
 # Build and push with sequential image tagging and commit SHA, e.g. 'tutorial-app:123_ABCD'
-cpl build-image -a tutorial-app --commit ABCD
+cpl build-image -a $APP_NAME --commit ABCD
 ```
 
 ## Other notes
