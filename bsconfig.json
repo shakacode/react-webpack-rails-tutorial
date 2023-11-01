@@ -2,7 +2,7 @@
   "name": "react-webpack-rails-tutorial",
   "sources": [
     {
-      "dir": "client/app/bundles/comments/src",
+      "dir": "client/app/bundles/comments/rescript",
       "subdirs": true
     }
   ],
@@ -13,7 +13,7 @@
     }
   ],
   "bsc-flags": ["-open JsonCombinators", "-open Belt"],
-  "suffix": ".bs.mjs",
+  "suffix": ".bs.js",
   "bs-dependencies": [
     "@rescript/react",
     "@rescript/core",

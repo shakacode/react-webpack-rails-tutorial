@@ -24,5 +24,3 @@ type storeCommentData = {
 }
 
 type error = NoError | FailedToSaveComment | FailedToFetchComments
-
-type isSaving = Free | BusySaving

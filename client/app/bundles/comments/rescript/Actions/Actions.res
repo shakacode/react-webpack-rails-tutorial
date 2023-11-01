@@ -28,11 +28,11 @@ module Fetch = {
 
   type comments = array<t>
 
-  type commentsResT = {
+  type commentsRes = {
     comments: comments
   }
 
-  let fetchComments = async (): result<comments, Types.error> => {
+  let fetchComments = async (): result<comments, string> => {
     open Json.Decode
 
     let response = await Fetch.get("comments.json")
@@ -50,7 +50,7 @@ module Fetch = {
 
     switch jsonRes->Json.decode(jsonComments) {
       | Ok(decodedRes) => Ok(decodedRes.comments)
-      | Error(_) => Error(FailedToFetchComments)
+      | Error(e) => Error(e)
     }
   }
 }

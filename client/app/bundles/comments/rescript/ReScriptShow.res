@@ -1,13 +1,21 @@
+type savingStatus = Free | BusySaving
+
+type status = {
+  commentsFetchError: bool,
+  commentStoreError: bool,
+  saving: savingStatus
+}
+
 type state = {
   comments: Actions.Fetch.comments,
-  error: Types.error,
-  isSaving: Types.isSaving
+  status: status
 }
 
 type action =
   | SetComments(Actions.Fetch.comments)
-  | SetError(Types.error)
-  | SetIsSaving(Types.isSaving)
+  | SetFetchError(bool)
+  | SetStoreError(bool)
+  | SetSavingStatus(savingStatus)
 
 
 let reducer = (
@@ -15,9 +23,10 @@ let reducer = (
   action: action
 ): state => {
   switch (action) {
-  | SetComments(comments) => {...state, comments}
-  | SetError(error) => {...state, error}
-  | SetIsSaving(isSaving) => {...state, isSaving}
+  | SetComments(comments) => {comments, status: {...state.status, commentsFetchError: true}}
+  | SetFetchError(error) => {...state, status: {...state.status, commentsFetchError: error}}
+  | SetStoreError(error) => {...state, status: {...state.status, commentStoreError: error}}
+  | SetSavingStatus(saving) => {...state, status: {...state.status, saving: saving}}
   }
 }
 
@@ -26,26 +35,29 @@ let default = () => {
   let (state, dispatch) = React.useReducer(
     reducer, {
       comments: ([]: Actions.Fetch.comments),
-      error: NoError,
-      isSaving: Free
+      status: {
+        commentsFetchError: false,
+        commentStoreError: false,
+        saving: Free
+      }
     }
   )
 
   let storeComment = (author, text) => {
-    SetError(NoError)->dispatch 
-    SetIsSaving(BusySaving)->dispatch
+    SetStoreError(false)->dispatch 
+    SetSavingStatus(BusySaving)->dispatch
     let saveAndFetchComments = async () => {
       try {
         let _ = await Actions.Create.storeComment({author, text})
-        SetIsSaving(Free)->dispatch
+        SetSavingStatus(Free)->dispatch
 
         let comments = await Actions.Fetch.fetchComments()     
         switch comments {
         | Ok(comments) => SetComments(comments)->dispatch
-        | Error(e) => SetError(e)->dispatch
+        | Error(_) => SetFetchError(true)->dispatch
         }
       } catch {
-        | _ => SetError(FailedToSaveComment)->dispatch 
+        | _ => SetStoreError(true)->dispatch 
       }
     }
     saveAndFetchComments()->ignore
@@ -56,7 +68,7 @@ let default = () => {
       let comments = await Actions.Fetch.fetchComments()
       switch comments {
       | Ok(comments) => SetComments(comments)->dispatch
-      | Error(e) => SetError(e)->dispatch
+      | Error(_) => SetFetchError(true)->dispatch
       }
     }
 
@@ -75,8 +87,9 @@ let default = () => {
         <li>{"Name is preserved. Text is reset, between submits"->React.string}</li>
         <li>{"To see Action Cable instantly update two browsers, open two browsers and submit a comment!"->React.string}</li>
       </ul>
-      <CommentForm storeComment=storeComment isSaving={state.isSaving} />
-      <CommentList comments={state.comments} error={state.error} />
+      <CommentForm 
+        storeComment=storeComment disabled={switch state.status.saving { | BusySaving => true; | Free => false}} storeCommentError={state.status.commentStoreError} />
+      <CommentList comments={state.comments} fetchCommentsError={state.status.commentsFetchError} />
     </div>
   </div>
 }

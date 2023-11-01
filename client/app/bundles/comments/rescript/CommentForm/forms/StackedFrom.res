@@ -5,31 +5,30 @@ let make = (
   ~text,
   ~handleTextChange,
   ~handleSubmit,
-  ~isSaving: Types.isSaving
+  ~disabled
   ) => {
   <form 
-    className="form-inline flex flex-col lg:flex-row flex-wrap gap-4"
-    onSubmit=handleSubmit
-    disabled={isSaving == BusySaving}
+    onSubmit=handleSubmit 
+    disabled
+    className="flex flex-col gap-4"
   >
-    <div className="flex gap-2 items-center">
-      <label> {"Name"->React.string} </label>
-      <input
+    <div className="flex flex-col gap-0">
+      <label className="w-full" > {"Name"->React.string} </label>
+      <input 
         type_="text"
-        className="px-3 py-1 leading-4 border border-gray-300 rounded"
+        className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
         placeholder="Your Name"
         name="comment_author"
         id="comment_author"
-        value={author}
-        onChange=handleAuthorChange
+        onChange=handleAuthorChange value={author}
       />
     </div>
 
-    <div className="flex gap-2 items-center">
-      <label> {"Text"->React.string} </label>
+    <div className="flex flex-col gap-0">
+      <label className="w-full" > {"Name"->React.string} </label>
       <input
         type_="text"
-        className="px-3 py-1 leading-4 border border-gray-300 rounded"
+        className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
         placeholder="Say something using markdown..."
         name="comment_text"
         id="comment_text"
@@ -38,7 +37,7 @@ let make = (
       />
     </div>
 
-    <div className="flex gap-2">
+    <div className="flex flex-col gap-0">
       <input
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
