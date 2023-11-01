@@ -11,7 +11,7 @@ let reducer = (
 
 
 @react.component
-let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) => {
+let make = (~storeComment: Types.storeCommentAction, ~disabled: bool, ~storeCommentError: bool) => {
   let (state, dispatch) = React.useReducer(
     reducer, {
       author: "",
@@ -46,7 +46,7 @@ let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) 
     <div className="flex gap-1 not-prose">
       {
         forms
-        ->Belt.Array.map(form
+        ->Array.map(form
           => (
             <button
               key={`form_${form.formName}`}
@@ -69,7 +69,7 @@ let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) 
               text={state.text}
               handleTextChange
               handleSubmit
-              isSaving 
+              disabled
             />
       | Stacked
         => <StackedFrom
@@ -78,7 +78,7 @@ let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) 
               text={state.text}
               handleTextChange
               handleSubmit
-              isSaving 
+              disabled
             />
       | Inline
         => <InlineForm
@@ -87,9 +87,13 @@ let make = (~storeComment: Types.storeCommentAction, ~isSaving: Types.isSaving) 
               text={state.text}
               handleTextChange
               handleSubmit
-              isSaving 
+              disabled
             />
       }
+    }
+
+    {
+      storeCommentError ? <AlertError errorMsg="Can't fetch the comments!" /> : React.null
     }
   </div>
 }

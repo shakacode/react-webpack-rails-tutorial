@@ -6,8 +6,8 @@ let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
   
   // The 500 must correspond to the 0.5s in:
   //   ../../RescriptShow.module.scss:9
-  <CSSAnimation.CSSTransition
-    key={"component_" ++ Belt.Int.toString(comment.id) }
+  <ReactTransitionGroup.CSSTransition
+    key={"component_" ++ Int.toString(comment.id) }
     timeout={500}
     nodeRef={nodeRef}
     classNames=cssTransitionGroupClassNames
@@ -16,6 +16,6 @@ let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
       <h2 className="js-comment-author text-blue-800" > {comment.author->React.string} </h2>
       <span dangerouslySetInnerHTML=innerHTML className="js-comment-text" />
     </div>
-  </CSSAnimation.CSSTransition>
+  </ReactTransitionGroup.CSSTransition>
   
 }

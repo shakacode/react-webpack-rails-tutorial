@@ -49,5 +49,6 @@ yarn-debug.log*
 .yarn-integrity
 
 lib/bs
+/lib/ocaml
 
-client/app/bundles/comments/src/**/*.bs.mjs
+client/app/bundles/comments/rescript/**/*.bs.js
