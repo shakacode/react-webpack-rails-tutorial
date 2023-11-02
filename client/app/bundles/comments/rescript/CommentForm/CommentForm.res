@@ -93,7 +93,7 @@ let make = (~storeComment: Types.storeCommentAction, ~disabled: bool, ~storeComm
     }
 
     {
-      storeCommentError ? <AlertError errorMsg="Can't fetch the comments!" /> : React.null
+      storeCommentError ? <AlertError errorMsg="Can't store the comment!" /> : React.null
     }
   </div>
 }

@@ -13,7 +13,10 @@ module Create = {
       },
       {
         responseType: "json",
-        headers: ReactOnRails.ror.default.authenticityHeaders()
+        headers: {
+          "X-CSRF-Token": ReactOnRails.authenticityToken(),
+          "X-Requested-With": "XMLHttpRequest",
+        }
       }
     )
   }
