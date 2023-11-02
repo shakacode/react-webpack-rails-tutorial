@@ -18,7 +18,8 @@
     "@rescript/react",
     "@rescript/core",
     "@glennsl/rescript-fetch",
-    "@glennsl/rescript-json-combinators"
+    "@glennsl/rescript-json-combinators",
+    "rescript-react-on-rails"
   ],
   "jsx": {
     "version": 4,

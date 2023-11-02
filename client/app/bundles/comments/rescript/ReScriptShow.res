@@ -23,7 +23,7 @@ let reducer = (
   action: action
 ): state => {
   switch (action) {
-  | SetComments(comments) => {comments, status: {...state.status, commentsFetchError: true}}
+  | SetComments(comments) => {comments, status: {...state.status, commentsFetchError: false}}
   | SetFetchError(error) => {...state, status: {...state.status, commentsFetchError: error}}
   | SetStoreError(error) => {...state, status: {...state.status, commentStoreError: error}}
   | SetSavingStatus(saving) => {...state, status: {...state.status, saving: saving}}
@@ -51,7 +51,7 @@ let default = () => {
         let _ = await Actions.Create.storeComment({author, text})
         SetSavingStatus(Free)->dispatch
 
-        let comments = await Actions.Fetch.fetchComments()     
+        let comments = await Actions.Fetch.fetchComments()
         switch comments {
         | Ok(comments) => SetComments(comments)->dispatch
         | Error(_) => SetFetchError(true)->dispatch
