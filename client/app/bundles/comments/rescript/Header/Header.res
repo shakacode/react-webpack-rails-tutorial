@@ -1,6 +1,7 @@
 @react.component
 let make = () => {
-  <div className="prose max-w-full prose-a:text-sky-700 prose-li:my-0 prose-code:text-rose-600 prose-code:bg-yellow-100 prose-headings:text-gray-700">
+  <div
+    className="prose max-w-full prose-a:text-sky-700 prose-li:my-0 prose-code:text-rose-600 prose-code:bg-yellow-100 prose-headings:text-gray-700">
     <ul>
       <li>
         <a href="https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9">
@@ -16,8 +17,9 @@ let make = () => {
         {"for details of how this example site was built."->React.string}
       </li>
       <li>
-        {"Read "->React.string} <a href="https://shakacode.gitbooks.io/react-on-rails/content/"> 
-        {"Documentation for React on Rails"->React.string}
+        {"Read "->React.string}
+        <a href="https://shakacode.gitbooks.io/react-on-rails/content/">
+          {"Documentation for React on Rails"->React.string}
         </a>
         <a href="https://www.shakacode.com/blog/the-react-on-rails-doctrine">
           {"The React on Rails Doctrine."->React.string}
@@ -38,16 +40,16 @@ let make = () => {
         {"."->React.string}
       </li>
       <li>
-        <a href="http://www.shakacode.com">{"ShakaCode"->React.string}</a>
+        <a href="http://www.shakacode.com"> {"ShakaCode"->React.string} </a>
         {" is doing support for React on Rails, \
           including a private Slack channel, \
           source code reviews, and pair programming sessions. "->React.string}
         <b>
-          <a href="http://www.shakacode.com/work/index.html">{"Click here"->React.string}</a>
+          <a href="http://www.shakacode.com/work/index.html"> {"Click here"->React.string} </a>
         </b>
         {" for more information."->React.string}
       </li>
     </ul>
-    <hr className="border-t my-8"/>
+    <hr className="border-t my-8" />
   </div>
 }

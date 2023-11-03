@@ -18,6 +18,7 @@
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
     "res:clean": "rescript clean",
+    "res:format": "rescript format -all",
     "res:dev": "yarn res:clean && rescript build -w",
     "res:build": "yarn res:clean && rescript build",
     "lint:eslint": "yarn eslint client --ext \".js,.jsx,.ts\"",

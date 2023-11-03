@@ -3,12 +3,12 @@ type savingStatus = Free | BusySaving
 type status = {
   commentsFetchError: bool,
   commentStoreError: bool,
-  saving: savingStatus
+  saving: savingStatus,
 }
 
 type state = {
   comments: Actions.Fetch.comments,
-  status: status
+  status: status,
 }
 
 type action =
@@ -17,4 +17,4 @@ type action =
   | SetStoreError(bool)
   | SetSavingStatus(savingStatus)
 
-type storeComment = (Actions.Create.t) => unit
+type storeComment = Actions.Create.t => unit
