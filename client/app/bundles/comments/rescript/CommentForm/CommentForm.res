@@ -1,7 +1,7 @@
 let reducer = (
-  state: Types.commentFormState, 
-  action: Types.commentFormAction
-): Types.commentFormState => {
+  state: CommentFormTypes.state, 
+  action: CommentFormTypes.action
+): CommentFormTypes.state => {
   switch (action) {
   | SetAuthor(author) => {...state, author}
   | SetText(text) => {...state, text}
@@ -11,7 +11,7 @@ let reducer = (
 
 
 @react.component
-let make = (~storeComment: Types.storeCommentAction, ~disabled: bool, ~storeCommentError: bool) => {
+let make = (~storeComment: ReScriptShowTypes.storeComment, ~disabled: bool, ~storeCommentError: bool) => {
   let (state, dispatch) = React.useReducer(
     reducer, {
       author: "",
@@ -32,10 +32,10 @@ let make = (~storeComment: Types.storeCommentAction, ~disabled: bool, ~storeComm
 
   let handleSubmit = (event) => {
     ReactEvent.Form.preventDefault(event)
-    storeComment(state.author, state.text)
+    storeComment({author: state.author, text: state.text})
   }
 
-  let forms: array<Types.formData> = 
+  let forms: array<CommentFormTypes.formData> = 
   [
     {formName: "Horizontal Form", formType: Horizontal},
     {formName: "Inline Form", formType: Inline},

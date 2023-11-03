@@ -5,4 +5,10 @@ type reqOptions = {
     "X-Requested-With": string
   } 
 }
-@module("axios") external post: (string, Types.storeCommentData, reqOptions) => promise<unit> = "post"
+
+type commentData = {
+  author: string,
+  text: string
+}
+
+@module("axios") external post: (string, commentData, reqOptions) => promise<unit> = "post"

@@ -1,27 +1,7 @@
-type savingStatus = Free | BusySaving
-
-type status = {
-  commentsFetchError: bool,
-  commentStoreError: bool,
-  saving: savingStatus
-}
-
-type state = {
-  comments: Actions.Fetch.comments,
-  status: status
-}
-
-type action =
-  | SetComments(Actions.Fetch.comments)
-  | SetFetchError(bool)
-  | SetStoreError(bool)
-  | SetSavingStatus(savingStatus)
-
-
 let reducer = (
-  state: state, 
-  action: action
-): state => {
+  state: ReScriptShowTypes.state, 
+  action: ReScriptShowTypes.action
+): ReScriptShowTypes.state => {
   switch (action) {
   | SetComments(comments) => {comments, status: {...state.status, commentsFetchError: false}}
   | SetFetchError(error) => {...state, status: {...state.status, commentsFetchError: error}}
@@ -43,12 +23,12 @@ let default = () => {
     }
   )
 
-  let storeComment = (author, text) => {
+  let storeComment: ReScriptShowTypes.storeComment = (newComment: Actions.Create.t) => {
     SetStoreError(false)->dispatch 
     SetSavingStatus(BusySaving)->dispatch
     let saveAndFetchComments = async () => {
       try {
-        let _ = await Actions.Create.storeComment({author, text})
+        let _ = await Actions.Create.storeComment(newComment)
         SetSavingStatus(Free)->dispatch
 
         let comments = await Actions.Fetch.fetchComments()
