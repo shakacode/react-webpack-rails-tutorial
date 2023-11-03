@@ -8,7 +8,7 @@ let make = (~errorMsg: string) => {
     enter: css["elementEnter"],
     enterActive: css["elementEnterActive"],
     exit: css["elementLeave"],
-    exitActive: css["elementLeaveActive"]
+    exitActive: css["elementLeaveActive"],
   }
 
   // The 500 must correspond to the 0.5s in:
@@ -17,10 +17,10 @@ let make = (~errorMsg: string) => {
     key="commentFetchError"
     nodeRef={nodeRef}
     timeout={500}
-    classNames={cssTransitionGroupClassNames}
-  >
-    <div className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1">
-      <strong>{errorMsg->React.string}</strong>
+    classNames={cssTransitionGroupClassNames}>
+    <div
+      className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1">
+      <strong> {errorMsg->React.string} </strong>
     </div>
   </ReactTransitionGroup.CSSTransition>
 }

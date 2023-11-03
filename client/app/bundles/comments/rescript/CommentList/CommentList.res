@@ -6,26 +6,19 @@ let make = (~comments: Actions.Fetch.comments, ~fetchCommentsError: bool) => {
     enter: css["elementEnter"],
     enterActive: css["elementEnterActive"],
     exit: css["elementLeave"],
-    exitActive: css["elementLeaveActive"]
+    exitActive: css["elementLeaveActive"],
   }
 
   <div>
-    {
-      fetchCommentsError ? <AlertError errorMsg="Can't fetch the comments!" /> : React.null
-    }
+    {fetchCommentsError ? <AlertError errorMsg="Can't fetch the comments!" /> : React.null}
     <ReactTransitionGroup.TransitionGroup className="commentList" component="div">
-      {
-        comments->Array.map(
-          comment => 
-            <Comment
-              comment=comment 
-              cssTransitionGroupClassNames 
-              key={
-                "comment_" ++ comment.id->Int.toString
-              }
-            />
-        )->React.array
-      }
+      {comments
+      ->Array.map(comment =>
+        <Comment
+          comment cssTransitionGroupClassNames key={"comment_" ++ comment.id->Int.toString}
+        />
+      )
+      ->React.array}
     </ReactTransitionGroup.TransitionGroup>
   </div>
 }

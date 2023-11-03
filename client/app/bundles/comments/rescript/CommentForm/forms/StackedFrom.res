@@ -1,31 +1,20 @@
 @react.component
-let make = (
-  ~author,
-  ~handleAuthorChange,
-  ~text,
-  ~handleTextChange,
-  ~handleSubmit,
-  ~disabled
-  ) => {
-  <form 
-    onSubmit=handleSubmit 
-    disabled
-    className="flex flex-col gap-4"
-  >
+let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
+  <form onSubmit=handleSubmit disabled className="flex flex-col gap-4">
     <div className="flex flex-col gap-0">
-      <label className="w-full" > {"Name"->React.string} </label>
-      <input 
+      <label className="w-full"> {"Name"->React.string} </label>
+      <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
         placeholder="Your Name"
         name="comment_author"
         id="comment_author"
-        onChange=handleAuthorChange value={author}
+        onChange=handleAuthorChange
+        value={author}
       />
     </div>
-
     <div className="flex flex-col gap-0">
-      <label className="w-full" > {"Name"->React.string} </label>
+      <label className="w-full"> {"Name"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
@@ -36,7 +25,6 @@ let make = (
         value={text}
       />
     </div>
-
     <div className="flex flex-col gap-0">
       <input
         type_="submit"

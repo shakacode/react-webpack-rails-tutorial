@@ -1,17 +1,9 @@
 @react.component
-let make = (
-  ~author,
-  ~handleAuthorChange,
-  ~text,
-  ~handleTextChange,
-  ~handleSubmit,
-  ~disabled
-  ) => {
-  <form 
+let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
+  <form
     className="form-inline flex flex-col lg:flex-row flex-wrap gap-4"
     onSubmit=handleSubmit
-    disabled
-  >
+    disabled>
     <div className="flex gap-2 items-center">
       <label> {"Name"->React.string} </label>
       <input
@@ -24,7 +16,6 @@ let make = (
         onChange=handleAuthorChange
       />
     </div>
-
     <div className="flex gap-2 items-center">
       <label> {"Text"->React.string} </label>
       <input
@@ -37,7 +28,6 @@ let make = (
         value={text}
       />
     </div>
-
     <div className="flex gap-2">
       <input
         type_="submit"
