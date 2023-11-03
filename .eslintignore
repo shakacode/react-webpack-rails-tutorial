@@ -4,4 +4,4 @@ public/
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
 postcss.config.js
-client/app/bundles/comments/src/
+client/app/bundles/comments/rescript/
