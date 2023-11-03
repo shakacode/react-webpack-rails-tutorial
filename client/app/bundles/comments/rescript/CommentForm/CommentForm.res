@@ -1,7 +1,24 @@
-let reducer = (
-  state: CommentFormTypes.state,
-  action: CommentFormTypes.action,
-): CommentFormTypes.state => {
+type storeComment = Actions.Create.t => unit
+
+type formDisplay = Horizontal | Inline | Stacked
+
+type formData = {
+  formName: string,
+  formType: formDisplay,
+}
+
+type state = {
+  author: string,
+  text: string,
+  form: formDisplay,
+}
+
+type action =
+  | SetAuthor(string)
+  | SetText(string)
+  | SetFormType(formDisplay)
+
+let reducer = (state: state, action: action): state => {
   switch action {
   | SetAuthor(author) => {...state, author}
   | SetText(text) => {...state, text}
@@ -10,11 +27,7 @@ let reducer = (
 }
 
 @react.component
-let make = (
-  ~storeComment: ReScriptShowTypes.storeComment,
-  ~disabled: bool,
-  ~storeCommentError: bool,
-) => {
+let make = (~storeComment: storeComment, ~disabled: bool, ~storeCommentError: bool) => {
   let (state, dispatch) = React.useReducer(
     reducer,
     {
@@ -39,7 +52,7 @@ let make = (
     storeComment({author: state.author, text: state.text})
   }
 
-  let forms: array<CommentFormTypes.formData> = [
+  let forms: array<formData> = [
     {formName: "Horizontal Form", formType: Horizontal},
     {formName: "Inline Form", formType: Inline},
     {formName: "Stacked Form", formType: Stacked},
