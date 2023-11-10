@@ -1,3 +1,4 @@
+// TODO : use only one way to make http requests either Axios or Fetch
 module Create = {
   type t = {
     author: string,
@@ -8,12 +9,12 @@ module Create = {
     let _ = await Axios.post(
       "comments.json",
       {
-        author: comment.author,
-        text: comment.text,
+        "author": comment.author,
+        "text": comment.text,
       },
       {
-        responseType: "json",
-        headers: {
+        "responseType": "json",
+        "headers": {
           // see https://github.com/shakacode/react_on_rails/blob/249c69812474e0f532df432581bf5e618df0e1ec/node_package/src/Authenticity.ts#L13C1-L18C1
           "X-CSRF-Token": ReactOnRails.authenticityToken(),
           "X-Requested-With": "XMLHttpRequest",

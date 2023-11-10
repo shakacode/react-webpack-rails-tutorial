@@ -1,28 +1,28 @@
-type savingStatus = Free | BusySaving
+type commentsStoreStatus = NotStarted | BusyLoading | StoreError
 
-type status = {
-  commentsFetchError: bool,
-  commentStoreError: bool,
-  saving: savingStatus,
-}
+type commentsFetchStatus =
+  | FetchError
+  | CommentsFetched(Actions.Fetch.comments)
 
 type state = {
-  comments: Actions.Fetch.comments,
-  status: status,
+  commentsFetchStatus: commentsFetchStatus,
+  commentsStoreStatus: commentsStoreStatus,
 }
 
 type action =
   | SetComments(Actions.Fetch.comments)
-  | SetFetchError(bool)
-  | SetStoreError(bool)
-  | SetSavingStatus(savingStatus)
+  | SetFetchError
+  | SetStoreError
+  | ClearStoreError
+  | SetStoreStatusLoading
 
 let reducer = (state: state, action: action): state => {
   switch action {
-  | SetComments(comments) => {comments, status: {...state.status, commentsFetchError: false}}
-  | SetFetchError(error) => {...state, status: {...state.status, commentsFetchError: error}}
-  | SetStoreError(error) => {...state, status: {...state.status, commentStoreError: error}}
-  | SetSavingStatus(saving) => {...state, status: {...state.status, saving}}
+  | SetComments(comments) => {...state, commentsFetchStatus: CommentsFetched(comments)}
+  | SetFetchError => {...state, commentsFetchStatus: FetchError}
+  | SetStoreError => {...state, commentsStoreStatus: StoreError}
+  | ClearStoreError => {...state, commentsStoreStatus: NotStarted}
+  | SetStoreStatusLoading => {...state, commentsStoreStatus: BusyLoading}
   }
 }
 
@@ -31,30 +31,25 @@ let default = () => {
   let (state, dispatch) = React.useReducer(
     reducer,
     {
-      comments: ([]: Actions.Fetch.comments),
-      status: {
-        commentsFetchError: false,
-        commentStoreError: false,
-        saving: Free,
-      },
+      commentsFetchStatus: CommentsFetched(([]: Actions.Fetch.comments)),
+      commentsStoreStatus: NotStarted,
     },
   )
 
   let storeComment: CommentForm.storeComment = (newComment: Actions.Create.t) => {
-    SetStoreError(false)->dispatch
-    SetSavingStatus(BusySaving)->dispatch
+    SetStoreStatusLoading->dispatch
     let saveAndFetchComments = async () => {
       try {
         let _ = await Actions.Create.storeComment(newComment)
-        SetSavingStatus(Free)->dispatch
+        ClearStoreError->dispatch
 
         let comments = await Actions.Fetch.fetchComments()
         switch comments {
         | Ok(comments) => SetComments(comments)->dispatch
-        | Error(_) => SetFetchError(true)->dispatch
+        | Error(_) => SetFetchError->dispatch
         }
       } catch {
-      | _ => SetStoreError(true)->dispatch
+      | _ => SetStoreError->dispatch
       }
     }
     saveAndFetchComments()->ignore
@@ -65,7 +60,7 @@ let default = () => {
       let comments = await Actions.Fetch.fetchComments()
       switch comments {
       | Ok(comments) => SetComments(comments)->dispatch
-      | Error(_) => SetFetchError(true)->dispatch
+      | Error(_) => SetFetchError->dispatch
       }
     }
 
@@ -94,13 +89,27 @@ let default = () => {
       </ul>
       <CommentForm
         storeComment
-        disabled={switch state.status.saving {
-        | BusySaving => true
-        | Free => false
+        disabled={switch state.commentsStoreStatus {
+        | BusyLoading => true
+        | _ => false
         }}
-        storeCommentError={state.status.commentStoreError}
+        storeCommentError={switch state.commentsStoreStatus {
+        | StoreError => true
+        | _ => false
+        }}
       />
-      <CommentList comments={state.comments} fetchCommentsError={state.status.commentsFetchError} />
+      <CommentList
+        // TODO: pass the comments fetch status to the CommentList
+        // to either render an error messege or the comment list not both
+        comments={switch state.commentsFetchStatus {
+        | CommentsFetched(comments) => comments
+        | _ => []
+        }}
+        fetchCommentsError={switch state.commentsFetchStatus {
+        | FetchError => true
+        | _ => false
+        }}
+      />
     </div>
   </div>
 }
