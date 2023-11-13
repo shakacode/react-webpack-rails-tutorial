@@ -1,4 +1,4 @@
-type commentsStoreStatus = NotStarted | BusyLoading | StoreError
+type commentsStoreStatus = Idle | BusyLoading | StoreError
 
 type commentsFetchStatus =
   | FetchError
@@ -21,7 +21,7 @@ let reducer = (state: state, action: action): state => {
   | SetComments(comments) => {...state, commentsFetchStatus: CommentsFetched(comments)}
   | SetFetchError => {...state, commentsFetchStatus: FetchError}
   | SetStoreError => {...state, commentsStoreStatus: StoreError}
-  | ClearStoreError => {...state, commentsStoreStatus: NotStarted}
+  | ClearStoreError => {...state, commentsStoreStatus: Idle}
   | SetStoreStatusLoading => {...state, commentsStoreStatus: BusyLoading}
   }
 }
@@ -32,7 +32,7 @@ let default = () => {
     reducer,
     {
       commentsFetchStatus: CommentsFetched(([]: Actions.Fetch.comments)),
-      commentsStoreStatus: NotStarted,
+      commentsStoreStatus: Idle,
     },
   )
 
@@ -91,11 +91,13 @@ let default = () => {
         storeComment
         disabled={switch state.commentsStoreStatus {
         | BusyLoading => true
-        | _ => false
+        | Idle
+        | StoreError => false
         }}
         storeCommentError={switch state.commentsStoreStatus {
         | StoreError => true
-        | _ => false
+        | Idle
+        | BusyLoading => false
         }}
       />
       <CommentList
@@ -103,11 +105,11 @@ let default = () => {
         // to either render an error messege or the comment list not both
         comments={switch state.commentsFetchStatus {
         | CommentsFetched(comments) => comments
-        | _ => []
+        | FetchError => []
         }}
         fetchCommentsError={switch state.commentsFetchStatus {
         | FetchError => true
-        | _ => false
+        | CommentsFetched(_) => false
         }}
       />
     </div>
