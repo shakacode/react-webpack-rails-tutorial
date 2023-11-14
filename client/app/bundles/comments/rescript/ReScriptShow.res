@@ -2,9 +2,7 @@ type commentsFetchStatus =
   | FetchError
   | CommentsFetched(Actions.Fetch.comments)
 
-type state = {
-  commentsFetchStatus: commentsFetchStatus,
-}
+type state = {commentsFetchStatus: commentsFetchStatus}
 
 type action =
   | SetComments(Actions.Fetch.comments)

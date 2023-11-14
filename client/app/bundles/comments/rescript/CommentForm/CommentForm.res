@@ -34,7 +34,7 @@ let reducer = (state: state, action: action): state => {
 }
 
 @react.component
-let make = ( ~fetchData ) => {
+let make = (~fetchData) => {
   let (state, dispatch) = React.useReducer(
     reducer,
     {
@@ -45,11 +45,13 @@ let make = ( ~fetchData ) => {
     },
   )
 
-  let disabled = React.useMemo1(() => {switch state.commentsStoreStatus {
-                                      | BusyLoading => true
-                                      | Idle
-                                      | StoreError => false
-                                      }}, [state.commentsStoreStatus])
+  let disabled = React.useMemo1(() => {
+    switch state.commentsStoreStatus {
+    | BusyLoading => true
+    | Idle
+    | StoreError => false
+    }
+  }, [state.commentsStoreStatus])
 
   let storeComment = (newComment: Actions.Create.t) => {
     SetStoreStatusLoading->dispatch
@@ -58,7 +60,7 @@ let make = ( ~fetchData ) => {
         let _ = await Actions.Create.storeComment(newComment)
         ClearStoreError->dispatch
 
-        await fetchData();
+        await fetchData()
       } catch {
       | _ => SetStoreError->dispatch
       }
