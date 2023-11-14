@@ -1,28 +1,19 @@
-type commentsStoreStatus = Idle | BusyLoading | StoreError
-
 type commentsFetchStatus =
   | FetchError
   | CommentsFetched(Actions.Fetch.comments)
 
 type state = {
   commentsFetchStatus: commentsFetchStatus,
-  commentsStoreStatus: commentsStoreStatus,
 }
 
 type action =
   | SetComments(Actions.Fetch.comments)
   | SetFetchError
-  | SetStoreError
-  | ClearStoreError
-  | SetStoreStatusLoading
 
-let reducer = (state: state, action: action): state => {
+let reducer = (_, action: action): state => {
   switch action {
-  | SetComments(comments) => {...state, commentsFetchStatus: CommentsFetched(comments)}
-  | SetFetchError => {...state, commentsFetchStatus: FetchError}
-  | SetStoreError => {...state, commentsStoreStatus: StoreError}
-  | ClearStoreError => {...state, commentsStoreStatus: Idle}
-  | SetStoreStatusLoading => {...state, commentsStoreStatus: BusyLoading}
+  | SetComments(comments) => {commentsFetchStatus: CommentsFetched(comments)}
+  | SetFetchError => {commentsFetchStatus: FetchError}
   }
 }
 
@@ -32,38 +23,18 @@ let default = () => {
     reducer,
     {
       commentsFetchStatus: CommentsFetched(([]: Actions.Fetch.comments)),
-      commentsStoreStatus: Idle,
     },
   )
 
-  let storeComment: CommentForm.storeComment = (newComment: Actions.Create.t) => {
-    SetStoreStatusLoading->dispatch
-    let saveAndFetchComments = async () => {
-      try {
-        let _ = await Actions.Create.storeComment(newComment)
-        ClearStoreError->dispatch
-
-        let comments = await Actions.Fetch.fetchComments()
-        switch comments {
-        | Ok(comments) => SetComments(comments)->dispatch
-        | Error(_) => SetFetchError->dispatch
-        }
-      } catch {
-      | _ => SetStoreError->dispatch
-      }
+  let fetchData = async () => {
+    let comments = await Actions.Fetch.fetchComments()
+    switch comments {
+    | Ok(comments) => SetComments(comments)->dispatch
+    | Error(_) => SetFetchError->dispatch
     }
-    saveAndFetchComments()->ignore
   }
 
   React.useEffect1(_ => {
-    let fetchData = async () => {
-      let comments = await Actions.Fetch.fetchComments()
-      switch comments {
-      | Ok(comments) => SetComments(comments)->dispatch
-      | Error(_) => SetFetchError->dispatch
-      }
-    }
-
     fetchData()->ignore
     None
   }, [])
@@ -87,31 +58,11 @@ let default = () => {
           {"To see Action Cable instantly update two browsers, open two browsers and submit a comment!"->React.string}
         </li>
       </ul>
-      <CommentForm
-        storeComment
-        disabled={switch state.commentsStoreStatus {
-        | BusyLoading => true
-        | Idle
-        | StoreError => false
-        }}
-        storeCommentError={switch state.commentsStoreStatus {
-        | StoreError => true
-        | Idle
-        | BusyLoading => false
-        }}
-      />
-      <CommentList
-        // TODO: pass the comments fetch status to the CommentList
-        // to either render an error messege or the comment list not both
-        comments={switch state.commentsFetchStatus {
-        | CommentsFetched(comments) => comments
-        | FetchError => []
-        }}
-        fetchCommentsError={switch state.commentsFetchStatus {
-        | FetchError => true
-        | CommentsFetched(_) => false
-        }}
-      />
+      <CommentForm fetchData />
+      {switch state.commentsFetchStatus {
+      | FetchError => <AlertError errorMsg="Can't fetch the comments!" />
+      | CommentsFetched(comments) => <CommentList comments />
+      }}
     </div>
   </div>
 }

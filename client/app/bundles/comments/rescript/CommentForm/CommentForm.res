@@ -1,6 +1,6 @@
-type storeComment = Actions.Create.t => unit
-
 type formDisplay = Horizontal | Inline | Stacked
+
+type commentsStoreStatus = Idle | BusyLoading | StoreError
 
 type formData = {
   formName: string,
@@ -11,31 +11,60 @@ type state = {
   author: string,
   text: string,
   form: formDisplay,
+  commentsStoreStatus: commentsStoreStatus,
 }
 
 type action =
   | SetAuthor(string)
   | SetText(string)
   | SetFormType(formDisplay)
+  | SetStoreError
+  | ClearStoreError
+  | SetStoreStatusLoading
 
 let reducer = (state: state, action: action): state => {
   switch action {
   | SetAuthor(author) => {...state, author}
   | SetText(text) => {...state, text}
   | SetFormType(form) => {...state, form}
+  | SetStoreError => {...state, commentsStoreStatus: StoreError}
+  | ClearStoreError => {...state, commentsStoreStatus: Idle}
+  | SetStoreStatusLoading => {...state, commentsStoreStatus: BusyLoading}
   }
 }
 
 @react.component
-let make = (~storeComment: storeComment, ~disabled: bool, ~storeCommentError: bool) => {
+let make = ( ~fetchData ) => {
   let (state, dispatch) = React.useReducer(
     reducer,
     {
       author: "",
       text: "",
       form: Horizontal,
+      commentsStoreStatus: Idle,
     },
   )
+
+  let disabled = React.useMemo1(() => {switch state.commentsStoreStatus {
+                                      | BusyLoading => true
+                                      | Idle
+                                      | StoreError => false
+                                      }}, [state.commentsStoreStatus])
+
+  let storeComment = (newComment: Actions.Create.t) => {
+    SetStoreStatusLoading->dispatch
+    let saveAndFetchComments = async () => {
+      try {
+        let _ = await Actions.Create.storeComment(newComment)
+        ClearStoreError->dispatch
+
+        await fetchData();
+      } catch {
+      | _ => SetStoreError->dispatch
+      }
+    }
+    saveAndFetchComments()->ignore
+  }
 
   let handleAuthorChange = event => {
     let value = ReactEvent.Form.currentTarget(event)["value"]
@@ -103,6 +132,10 @@ let make = (~storeComment: storeComment, ~disabled: bool, ~storeCommentError: bo
         disabled
       />
     }}
-    {storeCommentError ? <AlertError errorMsg="Can't store the comment!" /> : React.null}
+    {switch state.commentsStoreStatus {
+    | StoreError => <AlertError errorMsg="Can't store the comment!" />
+    | Idle
+    | BusyLoading => React.null
+    }}
   </div>
 }

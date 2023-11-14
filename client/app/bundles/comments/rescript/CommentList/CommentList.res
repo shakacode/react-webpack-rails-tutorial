@@ -1,7 +1,7 @@
 @module("../ReScriptShow.module.scss") external css: {..} = "default"
 
 @react.component
-let make = (~comments: Actions.Fetch.comments, ~fetchCommentsError: bool) => {
+let make = (~comments: Actions.Fetch.comments) => {
   let cssTransitionGroupClassNames: ReactTransitionGroup.CSSTransition.t = {
     enter: css["elementEnter"],
     enterActive: css["elementEnterActive"],
@@ -10,7 +10,6 @@ let make = (~comments: Actions.Fetch.comments, ~fetchCommentsError: bool) => {
   }
 
   <div>
-    {fetchCommentsError ? <AlertError errorMsg="Can't fetch the comments!" /> : React.null}
     <ReactTransitionGroup.TransitionGroup className="commentList" component="div">
       {comments
       ->Array.map(comment =>
