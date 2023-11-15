@@ -1,6 +1,12 @@
-type formDisplay = Horizontal | Inline | Stacked
+type formDisplay =
+  | Horizontal
+  | Inline
+  | Stacked
 
-type commentsStoreStatus = Idle | BusyLoading | StoreError
+type savingStatus =
+  | Idle
+  | Saving
+  | Error
 
 type formData = {
   formName: string,
@@ -11,25 +17,25 @@ type state = {
   author: string,
   text: string,
   form: formDisplay,
-  commentsStoreStatus: commentsStoreStatus,
+  savingStatus: savingStatus,
 }
 
 type action =
   | SetAuthor(string)
   | SetText(string)
   | SetFormType(formDisplay)
-  | SetStoreError
-  | ClearStoreError
-  | SetStoreStatusLoading
+  | SetSavingError
+  | ClearSavingError
+  | SetStoreStatusSaving
 
 let reducer = (state: state, action: action): state => {
   switch action {
   | SetAuthor(author) => {...state, author}
   | SetText(text) => {...state, text}
   | SetFormType(form) => {...state, form}
-  | SetStoreError => {...state, commentsStoreStatus: StoreError}
-  | ClearStoreError => {...state, commentsStoreStatus: Idle}
-  | SetStoreStatusLoading => {...state, commentsStoreStatus: BusyLoading}
+  | SetSavingError => {...state, savingStatus: Error}
+  | ClearSavingError => {...state, savingStatus: Idle}
+  | SetStoreStatusSaving => {...state, savingStatus: Saving}
   }
 }
 
@@ -41,28 +47,28 @@ let make = (~fetchData) => {
       author: "",
       text: "",
       form: Horizontal,
-      commentsStoreStatus: Idle,
+      savingStatus: Idle,
     },
   )
 
   let disabled = React.useMemo1(() => {
-    switch state.commentsStoreStatus {
-    | BusyLoading => true
+    switch state.savingStatus {
+    | Saving => true
     | Idle
-    | StoreError => false
+    | Error => false
     }
-  }, [state.commentsStoreStatus])
+  }, [state.savingStatus])
 
   let storeComment = (newComment: Actions.Create.t) => {
-    SetStoreStatusLoading->dispatch
+    SetStoreStatusSaving->dispatch
     let saveAndFetchComments = async () => {
       try {
         let _ = await Actions.Create.storeComment(newComment)
-        ClearStoreError->dispatch
+        ClearSavingError->dispatch
 
         await fetchData()
       } catch {
-      | _ => SetStoreError->dispatch
+      | _ => SetSavingError->dispatch
       }
     }
     saveAndFetchComments()->ignore
@@ -134,10 +140,10 @@ let make = (~fetchData) => {
         disabled
       />
     }}
-    {switch state.commentsStoreStatus {
-    | StoreError => <AlertError errorMsg="Can't store the comment!" />
+    {switch state.savingStatus {
+    | Error => <AlertError errorMsg="Can't save the comment!" />
     | Idle
-    | BusyLoading => React.null
+    | Saving => React.null
     }}
   </div>
 }
