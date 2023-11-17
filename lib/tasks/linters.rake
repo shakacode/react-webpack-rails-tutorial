@@ -50,7 +50,7 @@ if %w[development test].include? Rails.env
     desc "See docs for task 'scss_lint'"
     task scss: :scss_lint
 
-    task lint: %i[rubocop js scss] do
+    task lint: %i[build_rescript rubocop js scss] do
       puts "Completed all linting"
     end
   end

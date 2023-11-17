@@ -1,0 +1,20 @@
+// The 0.5s must correspond to the 500s in:
+//   ./CommentList/AlertError/AlertError.res:10
+//   ./CommentList/Comment/Comment.res:18
+.elementEnter {
+  opacity: 0.01;
+
+  &.elementEnterActive {
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+  }
+}
+
+.elementLeave {
+  opacity: 1;
+
+  &.elementLeaveActive {
+    opacity: 0.01;
+    transition: opacity 0.5s ease-in;
+  }
+}

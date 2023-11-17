@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   root "pages#index"
 
   get "simple", to: "pages#simple"
+  get "rescript", to: "pages#rescript"
   get "no-router", to: "pages#no_router"
 
   # React Router needs a wildcard

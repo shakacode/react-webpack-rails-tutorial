@@ -1,0 +1,28 @@
+{
+  "name": "react-webpack-rails-tutorial",
+  "sources": [
+    {
+      "dir": "client/app/bundles/comments/rescript",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "bsc-flags": ["-open JsonCombinators", "-open Belt"],
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@rescript/react",
+    "@rescript/core",
+    "@glennsl/rescript-fetch",
+    "@glennsl/rescript-json-combinators",
+    "rescript-react-on-rails"
+  ],
+  "jsx": {
+    "version": 4,
+    "mode": "automatic"
+  }
+}
