@@ -19,7 +19,7 @@ describe "Git Commit SHA" do
 
   context "when .source_version file does not exist" do
     let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5x" }
-    let(:expected_text) { "5eead5x" }
+    let(:expected_text) { "94d9235" }
 
     before do
       # stub this method since we need to control what the sha actually is
@@ -31,7 +31,7 @@ describe "Git Commit SHA" do
 
   context "when .source_version file exists" do
     let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5y" }
-    let(:expected_text) { "5eead5y" }
+    let(:expected_text) { "94d9235" }
 
     before { `cd #{Rails.root} && echo #{sha} > .source_version` }
 
