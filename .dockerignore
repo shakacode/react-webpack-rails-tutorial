@@ -44,7 +44,6 @@ yarn-debug.log*
 
 ###################################################
 # Specific to .dockerignore
-.git/
 .github/
 spec/
 scripts/
