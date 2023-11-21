@@ -37,7 +37,7 @@ let default = () => {
   }
 
   let subscribeToCommentsChannel = () => {
-    let _ = ActionCable.subscribeConsumer(
+    ActionCable.subscribeConsumer(
       "CommentsChannel",
       {
         connected: () => {
@@ -53,7 +53,13 @@ let default = () => {
     )
   }
 
-  subscribeToCommentsChannel()
+  React.useEffect1(_ => {
+    let scription = subscribeToCommentsChannel()
+
+    Some(() => {
+      ActionCable.unsubscribeSubscription(scription)
+    })
+  }, [])
 
   React.useEffect1(_ => {
     fetchData()->ignore
