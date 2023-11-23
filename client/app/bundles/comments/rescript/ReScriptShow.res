@@ -15,6 +15,10 @@ let reducer = (_, action: action): state => {
   }
 }
 
+type subscriptionStatus =
+  | Disconnected(ActionCable.subscription<unit>)
+  | Connected(ActionCable.subscription<unit>)
+
 @react.component
 let default = () => {
   let (state, dispatch) = React.useReducer(
@@ -31,6 +35,33 @@ let default = () => {
     | Error(_) => SetFetchError->dispatch
     }
   }
+
+  let subscribeToCommentsChannel = () => {
+    ActionCable.subscribeConsumer(
+      "CommentsChannel",
+      {
+        connected: () => {
+          Js.Console.log("Connected")
+        },
+        received: (data: Actions.Fetch.t) => {
+          SetComments([data])->dispatch
+        },
+        disconnected: () => {
+          Js.Console.log("Disconnected")
+        },
+      },
+    )
+  }
+
+  React.useEffect1(_ => {
+    let scription = subscribeToCommentsChannel()
+
+    Some(
+      () => {
+        ActionCable.unsubscribeSubscription(scription)
+      },
+    )
+  }, [])
 
   React.useEffect1(_ => {
     fetchData()->ignore
