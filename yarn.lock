@@ -7966,10 +7966,10 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-on-rails@13.3.5:
-  version "13.3.5"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-13.3.5.tgz#7ad06ed1343861927338f77634ce757b683c6a68"
-  integrity sha512-3aAfuRaeEfPba0BpuoYv8KFczlWPUuLPXl8lvdZeVF9Y83gofsll5UPKRLk74y5fWK3a6H/3WUlOkjF4zQz+LQ==
+react-on-rails@13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-13.4.0.tgz#2dcae18413d3982e18fb6f53b950788abf337bf9"
+  integrity sha512-BsBUYnA8759h9mH8QIbLcd2N5MqfcQ/k4PJ60sVm0dJZTxAv8fXt2cvphS7bdr1CWdBbvg5/wFdio3vvQ+q4NQ==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.5"
     concurrently "^5.1.0"
@@ -8578,10 +8578,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/shakapacker/-/shakapacker-7.0.3.tgz#e67fca4e74c3ef380e1acf53a1d51ab4784ca01c"
-  integrity sha512-2kwNP8kadkmGOqb7Bp/iNzF3bV31zni8b35Uzst2DZHjnFcnDbW96MERXHc7lS3p3AmKJVbUBmHAFCPsLT9tcw==
+shakapacker@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/shakapacker/-/shakapacker-7.1.0.tgz#95bd37db60702ffa21f9ea29a88f438de3db25b2"
+  integrity sha512-xKfF4LKrFQdMLYeIi/uBV6pfkPTO4lgCAIMx3W5+MHW61ENOXu4WeQ50qVR9u5hV6XXzi7AiS7C6dWO2GFnYAg==
   dependencies:
     glob "^7.2.0"
     js-yaml "^4.1.0"
