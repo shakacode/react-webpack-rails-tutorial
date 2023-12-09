@@ -22,6 +22,9 @@ aliases:
       - redis
       - postgres
 
+    # To use the base image for a faster build process, uncomment this line:
+    # dockerfile: Dockerfile_from_base
+
 apps:
   react-webpack-rails-tutorial:
     <<: *common
