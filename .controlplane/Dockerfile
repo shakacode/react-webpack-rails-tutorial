@@ -1,26 +1,4 @@
-FROM ruby:3.1.2
-
-RUN apt-get update
-
-# install node and yarn
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
-RUN apt-get install -y nodejs
-RUN npm install -g yarn
-
-WORKDIR /app
-
-# install ruby gems
-COPY Gemfile* ./
-
-RUN bundle config set without 'development test' && \
-    bundle config set with 'staging production' && \
-    bundle install --jobs=3 --retry=3
-
-# install node packages
-COPY package.json yarn.lock ./
-RUN yarn install
-
-COPY . ./
+FROM ahangarha/rwrt-base:latest
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
@@ -29,11 +7,11 @@ ENV NODE_ENV=production
 ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
 
 RUN yarn res:build
-RUN rails react_on_rails:locale
-RUN rails assets:precompile
+RUN bin/rails react_on_rails:locale
+RUN bin/rails assets:precompile
 
 # add entrypoint
 COPY .controlplane/entrypoint.sh ./
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-CMD ["rails", "s"]
+CMD ["./bin/rails", "s"]
