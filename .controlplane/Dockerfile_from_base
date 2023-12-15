@@ -1,3 +1,7 @@
+# This Dockerfile should be used for a faster image build on top of the base
+# image from Docker hub (shakacode/rwrt-base:latest). To this end, uncomment
+# the line for the custom dockerfile in the controlplane.yml file.
+
 FROM ahangarha/rwrt-base:latest
 
 ENV RAILS_ENV=production
