@@ -1,5 +1,7 @@
 #!/bin/bash -e
 # Runs before the main command
+# This script is unique to this demo project as it ensures the database and redis are ready before running the rails server
+
 
 wait_for_service()
 {
@@ -25,4 +27,6 @@ if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
 fi
 
 echo " -- Finishing entrypoint.sh, executing '$@'"
+
+# Run the main command
 exec "$@"
