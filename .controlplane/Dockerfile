@@ -58,7 +58,9 @@ ENV RAILS_ENV=production \
     SECRET_KEY_BASE=NOT_USED_NON_BLANK
 # compiling assets requires any value for ENV of SECRET_KEY_BASE
 
-RUN yarn res:build && rails react_on_rails:locale && rails assets:precompile
+RUN yarn res:build
+RUN bin/rails react_on_rails:locale
+RUN bin/rails assets:precompile
 
 # add entrypoint
 COPY .controlplane/entrypoint.sh ./
