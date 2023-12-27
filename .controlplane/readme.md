@@ -15,13 +15,13 @@ You should have an `organization` `<your-org>` for testing in that account.
 You will modify value for `aliases.common.cpln_org` in `.controlplane/controlplane.yml`.
 If you need an organization, please [contact Shakacode](mailto:controlplane@shakacode.com).
 
-2. Run `cpln image docker-login --org <your-org>` to ensure that you have access to the Control Plane Docker registry.
-
-3. Install Control Plane CLI (and configure access) using `npm install -g @controlplane/cli`.
+2. Install Control Plane CLI (and configure access) using `npm install -g @controlplane/cli`.
 You can update the `cpln` command line with `npm update -g @controlplane/cli`.
 Then run `cpln login` to ensure access.
 For more informatation check out the
 [docs here](https://docs.controlplane.com/quickstart/quick-start-3-cli#getting-started-with-the-cli).
+
+3. Run `cpln image docker-login --org <your-org>` to ensure that you have access to the Control Plane Docker registry.
 
 4. Install the latest version of
 [`cpl` gem](https://rubygems.org/gems/cpl)
