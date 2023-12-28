@@ -27,6 +27,11 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'  # Specify your Ruby version here
+
       - name: Install Control Plane CLI
         shell: bash
         run: |
