@@ -1,0 +1,37 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Build
+      uses: docker/setup-buildx-action@v1
+
+    - name: install-control-plane-tools
+      run: |
+        sudo npm install -g @controlplane/cli && cpln --version
+        gem install cpl -v 1.1.2
+
+    - name: setup-control-plane-tools-staging
+      run: |
+        cpln profile create default --token ${{ secrets.CPLN_TOKEN_STAGING }} --org ${{ secrets.CPLN_TOKEN_STAGING }} --gvc ${{ secrets.APP_NAME_STAGING }}
+        cpln image docker-login
+
+    - name: Get short SHA
+      id: short_sha
+      run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+    - name: Containerize and push image
+      run: |
+        cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${env.SHORT_SHA::7}    
