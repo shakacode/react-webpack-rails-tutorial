@@ -43,9 +43,12 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: cpl build-image
+      - name: cpl profile
         run: |
           cpln profile update default --token ${CPLN_TOKEN}
+
+      - name: cpl build-image
+        run: |
           cpln image docker-login
           cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
 
