@@ -1,39 +1,69 @@
-FROM ruby:3.1.2
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=3.1.2
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
-RUN apt-get update
+# Install packages needed to build gems and node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential curl git libpq-dev libvips node-gyp pkg-config python-is-python3
 
-# install node and yarn
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
-RUN apt-get install -y nodejs
-RUN npm install -g yarn
+# Install JavaScript dependencies
+# Make sure NODE_VERSION matches the node version in .nvmrc and package.json
+ARG NODE_VERSION=18.13.0
+ARG YARN_VERSION=1.22.19
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g yarn@$YARN_VERSION && \
+    rm -rf /tmp/node-build-master
 
+# Rails app lives here
 WORKDIR /app
 
-# install ruby gems
-COPY Gemfile* ./
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development test"
 
-RUN bundle config set without 'development test' && \
-    bundle config set with 'staging production' && \
-    bundle install --jobs=3 --retry=3
 
-# install node packages
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# Install node modules
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
-COPY . ./
+# Copy application code
+COPY . .
 
-ENV RAILS_ENV=production
-ENV NODE_ENV=production
+# Final stage for app image
+FROM base
 
+# Install packages needed for deployment
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy built artifacts: gems, application
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /app /app
+
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    SECRET_KEY_BASE=NOT_USED_NON_BLANK
 # compiling assets requires any value for ENV of SECRET_KEY_BASE
-ENV SECRET_KEY_BASE=NOT_USED_NON_BLANK
 
 RUN yarn res:build
-RUN rails react_on_rails:locale
-RUN rails assets:precompile
+RUN bin/rails react_on_rails:locale
+RUN bin/rails assets:precompile
 
 # add entrypoint
 COPY .controlplane/entrypoint.sh ./
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-CMD ["rails", "s"]
+CMD ["rails", "server"]
