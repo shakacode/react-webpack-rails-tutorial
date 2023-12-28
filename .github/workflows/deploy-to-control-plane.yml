@@ -39,18 +39,19 @@ jobs:
           cpln --version
           gem install cpl -v 1.1.2
 
-      - name: setup-control-plane-tools-staging
-        run: |
-          cpln profile create default --token ${{ secrets.CPLN_TOKEN_STAGING }} --org ${{ secrets.CPLN_TOKEN_STAGING }} --gvc ${{ secrets.APP_NAME_STAGING }}
-          cpln image docker-login
-
       - name: Set Short SHA
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: Containerize and push image
+      - name: cpl build-image
         run: |
+          cpln profile update default --token ${CPLN_TOKEN}
+          cpln image docker-login
           cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
+
+#          cpln profile create default --token ${{ secrets.CPLN_TOKEN_STAGING }} --org ${{ secrets.CPLN_TOKEN_STAGING }} --gvc ${{ secrets.APP_NAME_STAGING }}
+#      - name: Containerize and push image
+#        run: |
 #      # Containerize and push the application to the org's private image repository. The tag is the short SHA of the commit.
 #      - name: Containerize application and push image
 #        shell: bash
