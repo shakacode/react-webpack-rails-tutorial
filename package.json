@@ -28,7 +28,8 @@
     "test:client": "cd client && yarn test",
     "build:test": "rm -rf public/packs-test && RAILS_ENV=test NODE_ENV=test bin/shakapacker",
     "build:dev": "rm -rf public/packs && RAILS_ENV=development NODE_ENV=development bin/shakapacker",
-    "build:clean": "rm -rf public/packs || true"
+    "build:clean": "rm -rf public/packs || true",
+    "build:prod": "rm -rf public/packs && RAILS_ENV=production NODE_ENV=production bin/shakapacker --profile --json"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
