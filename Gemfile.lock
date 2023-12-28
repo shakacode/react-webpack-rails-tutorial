@@ -116,11 +116,6 @@ GEM
       term-ansicolor (~> 1.6)
       thor (>= 0.20.3, < 2.0)
       tins (~> 1.16)
-    cpl (1.1.2)
-      debug (~> 1.7.1)
-      dotenv (~> 2.8.1)
-      psych (~> 5.1.0)
-      thor (~> 1.2.1)
     crass (1.0.6)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
@@ -135,7 +130,6 @@ GEM
     debug_inspector (1.1.0)
     diff-lcs (1.5.0)
     docile (1.4.0)
-    dotenv (2.8.1)
     drb (2.1.1)
       ruby2_keywords
     erubi (1.12.0)
@@ -429,7 +423,6 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   coveralls_reborn (~> 0.25.0)
-  cpl (~> 1.1.2)
   database_cleaner
   debug (>= 1.0.0)
   factory_bot_rails
