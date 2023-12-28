@@ -46,6 +46,14 @@ jobs:
         run: |
           cpln profile update default --token ${CPLN_TOKEN}
 
+      # Caching step
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/docker-layers
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
       - name: cpl build-image
         run: |
           cpln image docker-login
@@ -53,4 +61,4 @@ jobs:
 
       - name: Deploy to Control Plane
         run: |
-          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
+          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} 
