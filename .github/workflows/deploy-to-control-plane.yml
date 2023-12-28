@@ -5,9 +5,8 @@ name: Deploy-To-Control-Plane
 # Controls when the workflow will run
 on:
   # Uncomment the lines you want actions that will cause the workflow to Triggers the workflow on push or pull request events but only for the main branch
-
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
   # pull_request:
   #   branches: [main]
 
@@ -51,3 +50,13 @@ jobs:
         run: |
           cpln image docker-login
           cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
+
+  deploy-image:
+    needs: build-image-for-control-plane
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Control Plane
+        run: |
+          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
