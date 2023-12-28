@@ -48,13 +48,9 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: Get short SHA
-        id: short_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
       - name: Containerize and push image
         run: |
-          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${env.SHORT_SHA::7}
+          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
 #      # Containerize and push the application to the org's private image repository. The tag is the short SHA of the commit.
 #      - name: Containerize application and push image
 #        shell: bash
