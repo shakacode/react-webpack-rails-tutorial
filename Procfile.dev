@@ -1,7 +1,7 @@
 # Procfile for development using HMR
 # You can run these commands in separate shells
-rescript: yarn res:dev
+# rescript: yarn res:dev
 redis: redis-server
-rails: bundle exec rails s -p 3000
+rails: bundle exec rails s -p 3000 -b 0.0.0.0
 wp-client: HMR=true RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 wp-server: bundle exec rake react_on_rails:locale && HMR=true SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch

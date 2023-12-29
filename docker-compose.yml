@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  app:
+  # run `docker build -t my-rails-app .` to build the image
+    image: my-rails-app
+    environment:
+      DB_NAME: db
+      DB_USER: root
+      DB_PASSWD: password
+      DB_HOST: host.docker.internal
+    ports:
+      - 3000:3000
+  # I'm not using another container for the DB so commenting this 
+  # db:
+    # image: postgres:alpine3.15
+    # environment:
+      # POSTGRES_PASSWORD: example

@@ -27,11 +27,14 @@
 
 # Uncomment below for a setup with just postgres and change your Gemfile to reflect this
 default: &default
-  adapter: postgresql
+  adapter: mysql2
 
 development:
   <<: *default
-  database: react-webpack-rails-tutorial
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWD'] %>
+  host: <%= ENV['DB_HOST'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

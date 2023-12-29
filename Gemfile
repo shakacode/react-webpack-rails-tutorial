@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "3.1.4"
 
 gem "react_on_rails", "13.4.0"
 gem "shakapacker", "7.1.0"
@@ -112,3 +112,6 @@ end
 
 gem "stimulus-rails", "~> 1.2"
 gem "turbo-rails", "~> 1.4"
+
+gem "mysql2"
+gem "error_highlight"
