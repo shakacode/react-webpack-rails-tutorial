@@ -17,7 +17,7 @@ env:
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN}}
 
 jobs:
-  deploy-to-control-plane:
+  deploy-to-control-plane-staging:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,8 +55,8 @@ jobs:
       - name: cpl build-image
         run: |
           cpln image docker-login
-          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
+          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}} --org ${{secrets.CPLN_ORG_STAGING}} 
 
       - name: Deploy to Control Plane
         run: |
-          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} 
+          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} --org ${{secrets.CPLN_ORG_STAGING}}  

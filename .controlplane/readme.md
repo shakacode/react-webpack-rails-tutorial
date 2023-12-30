@@ -12,7 +12,8 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 1. Ensure your [Control Plane](https://controlplane.com) account is set up.
 You should have an `organization` `<your-org>` for testing in that account.
-You will modify value for `aliases.common.cpln_org` in `.controlplane/controlplane.yml`.
+Set ENV variable `CPLN_ORG` to `<your-org>`. Alternatively, you may modify the 
+value for `aliases.common.cpln_org` in `.controlplane/controlplane.yml`.
 If you need an organization, please [contact Shakacode](mailto:controlplane@shakacode.com).
 
 2. Install Control Plane CLI (and configure access) using `npm install -g @controlplane/cli`.
@@ -58,10 +59,10 @@ and not `cpln` which is the Control Plane CLI.
 
 ```sh
 # Use environment variable to prevent repetition
-export APP_NAME=tutorial-app
+export APP_NAME=react-webpack-rails-tutorial
 
 # Provision all infrastructure on Control Plane.
-# app tutorial-app will be created per definition in .controlplane/controlplane.yml
+# app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
 cpl apply-template gvc postgres redis rails daily-task -a $APP_NAME
 
 # Build and push docker image to Control Plane repository
@@ -83,11 +84,11 @@ cpl open -a $APP_NAME
 
 ### Promoting code updates
 
-After committing code, you will update your deployment of `tutorial-app` with the following commands:
+After committing code, you will update your deployment of `react-webpack-rails-tutorial` with the following commands:
 
 ```sh
-# Assuming you have already set APP_NAME env variable to tutorial-app
-# Build and push new image with sequential image tagging, e.g. 'tutorial-app:1', then 'tutorial-app:2', etc.
+# Assuming you have already set APP_NAME env variable to react-webpack-rails-tutorial
+# Build and push new image with sequential image tagging, e.g. 'react-webpack-rails-tutorial:1', then 'react-webpack-rails-tutorial:2', etc.
 cpl build-image -a $APP_NAME
 
 # Run database migrations (or other release tasks) with latest image,
@@ -102,7 +103,7 @@ cpl deploy-image -a $APP_NAME
 If you needed to push a new image with a specific commit SHA, you can run the following command:
 
 ```sh
-# Build and push with sequential image tagging and commit SHA, e.g. 'tutorial-app:123_ABCD'
+# Build and push with sequential image tagging and commit SHA, e.g. 'react-webpack-rails-tutorial:123_ABCD'
 cpl build-image -a $APP_NAME --commit ABCD
 ```
 

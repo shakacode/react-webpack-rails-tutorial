@@ -1,10 +1,19 @@
-# Configuration for "Heroku to CPLN playbook" custom scripts
+# Configuration for `cpl` commands.
+
+# Keys beginning with "cpln_" correspond to your settings in Control Plane.
+
+# Global settings that apply to `cpl` usage.
+# You can opt out of allowing the use of CPLN_ORG and CPLN_APP env vars
+# to avoid any accidents with the wrong org / app.
+allow_org_override_by_env: true
+allow_app_override_by_env: true
+
 aliases:
   common: &common
-    # Org for staging and QA apps is typically set as an alias
+    # Org for staging and QA apps is typically set as an alias, shared by all apps, except for production apps.
     # Production apps will use a different org than staging for security.
     # Change this value to your org name
-    # or set ENV value to CPLN_ORG as that will override whatever is used here for all cpl commands
+    # or set ENV CPLN_ORG to your org name as that will override whatever is used here for all cpl commands
     # cpln_org: shakacode-open-source-examples
 
     # Example apps use only location. CPLN offers the ability to use multiple locations.
@@ -25,11 +34,15 @@ aliases:
 apps:
   react-webpack-rails-tutorial:
     <<: *common
-  tutorial-app:
+    # Don't allow overriding the org and app by ENV vars b/c production is sensitive!
+    allow_org_override_by_env: false
+    allow_app_override_by_env: false
+  react-webpack-rails-tutorial-staging:
     <<: *common
   # QA Apps are like Heroku review apps, but the use `prefix` so you can run a commmand like
   # this to create a QA app for the tutorial app.
-  # `cpl setup gvc postgres redis rails -a qa-tutorial-app-pr-1234`
-  qa-tutorial-app:
+  # `cpl setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-pr-1234`
+  qa-react-webpack-rails-tutorial:
     <<: *common
+    # Prefix is used to identify these "qa" apps.
     prefix: true
