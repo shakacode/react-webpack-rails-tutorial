@@ -13,8 +13,8 @@ on:
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
-  CPLN_ORG: ${{secrets.CPLN_ORG}}
-  CPLN_TOKEN: ${{secrets.CPLN_TOKEN}}
+  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
+  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 jobs:
   deploy-to-control-plane-staging:
@@ -42,7 +42,8 @@ jobs:
 
       - name: cpl profile
         run: |
-          cpln profile update default --token ${CPLN_TOKEN}
+          cpln profile update default
+#          cpln profile update default --token ${CPLN_TOKEN}
 
       # Caching step
       - uses: actions/cache@v2
