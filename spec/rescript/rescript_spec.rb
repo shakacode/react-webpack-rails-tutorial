@@ -50,6 +50,9 @@ describe "with Rescript" do
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
       click_button("Post")
+
+      page.driver.browser.manage.timeouts.implicit_wait = 1
+
       expect(Comment.all.count).to equal(new_comment_count)
     end
 
@@ -57,6 +60,8 @@ describe "with Rescript" do
       initial_comment_count = Comment.all.count
       fill_in text_field, with: comment.text
       click_button("Post")
+
+      expect(page).to have_text(/Can't save the comment!/)
       expect(Comment.all.count).to equal(initial_comment_count)
     end
 
@@ -64,12 +69,16 @@ describe "with Rescript" do
       initial_comment_count = Comment.all.count
       fill_in author_field, with: comment.author
       click_button("Post")
+
+      expect(page).to have_text(/Can't save the comment!/)
       expect(Comment.all.count).to equal(initial_comment_count)
     end
 
     it "comment count remains the same when both form fields are empty" do
       initial_comment_count = Comment.all.count
       click_button("Post")
+
+      expect(page).to have_text(/Can't save the comment!/)
       expect(Comment.all.count).to equal(initial_comment_count)
     end
   end
