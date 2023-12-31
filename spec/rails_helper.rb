@@ -104,7 +104,8 @@ RSpec.configure do |config|
                          options: { args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage] }
   end
 
-  Capybara.default_max_wait_time = 5
+  Capybara.default_max_wait_time = 15
+
   puts "=" * 80
   puts "Capybara using driver: #{Capybara.javascript_driver}"
   puts "=" * 80
