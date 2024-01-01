@@ -4,7 +4,7 @@ require "rails_helper"
 require "system/shared/contexts"
 
 describe "Add new comment" do
-  context "when React Router", page: :main, js: true, type: :system do
+  context "when React Router", page: :main, js: true, type: :feature do
     describe "with Horizontal Form" do
       before do
         visit root_path
@@ -61,7 +61,7 @@ describe "Add new comment" do
     end
   end
 
-  context "when React/Redux", page: :react_demo, js: true, type: :system do
+  context "when React/Redux", page: :react_demo, js: true, type: :feature do
     describe "with Horizontal Form" do
       before do
         visit root_path
@@ -118,7 +118,7 @@ describe "Add new comment" do
     end
   end
 
-  context "when simple page", page: :simple, js: true, type: :system do
+  context "when simple page", page: :simple, js: true, type: :feature do
     describe "with Horizontal Form" do
       before do
         visit root_path

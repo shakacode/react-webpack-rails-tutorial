@@ -3,7 +3,7 @@
 require "rails_helper"
 require "system/shared/contexts"
 
-describe "React Router Routes", js: true, type: :system do
+describe "React Router Routes", js: true, type: :feature do
   context "when Root URL", page: :main do
     it "shows comments section" do
       visit root_path
