@@ -10,7 +10,7 @@ if Rails.env.development? || Rails.env.test?
 
   task rspec_tests: :environment do
     puts Rainbow("Running RSpec tests").green
-    sh "./bin/rspec"
+    sh "rspec"
   end
 
   task build_rescript: :environment do
