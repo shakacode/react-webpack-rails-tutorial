@@ -66,4 +66,4 @@ RUN bin/rails assets:precompile
 COPY .controlplane/entrypoint.sh ./
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-CMD ["rails", "server"]
+CMD ["./bin/rails", "server"]
