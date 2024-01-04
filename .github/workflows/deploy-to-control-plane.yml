@@ -34,7 +34,7 @@ jobs:
         run: |
           sudo npm install -g @controlplane/cli
           cpln --version
-          gem install cpl -v 1.1.2
+          gem install cpl -v 1.2.0
 
       - name: Set Short SHA
         id: vars
