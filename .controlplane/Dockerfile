@@ -17,6 +17,7 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 # Rails app lives here
+# Entry point and commands will be run from this directory
 WORKDIR /app
 
 # Set production environment
@@ -62,8 +63,8 @@ RUN yarn res:build
 RUN bin/rails react_on_rails:locale
 RUN bin/rails assets:precompile
 
-# add entrypoint
-COPY .controlplane/entrypoint.sh ./
-ENTRYPOINT ["/app/entrypoint.sh"]
+# add entrypoint and release script to docker image at top level
+COPY .controlplane/entrypoint.sh .controlplane/release_script.sh ./
+ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["./bin/rails", "server"]

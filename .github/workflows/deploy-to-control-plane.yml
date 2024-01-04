@@ -58,6 +58,13 @@ jobs:
           cpln image docker-login
           cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}} --org ${{secrets.CPLN_ORG_STAGING}} 
 
+      - name: Run release script
+        run: |
+          # Run database migrations (or other release tasks) with the latest image,
+          # while the app is still running on the previous image.
+          # This is analogous to the release phase.
+          cpl run:detached './release_script.sh' -a ${{ secrets.APP_NAME_STAGING }}  --image latest
+
       - name: Deploy to Control Plane
         run: |
           cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} --org ${{secrets.CPLN_ORG_STAGING}}  
