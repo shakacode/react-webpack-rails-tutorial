@@ -1,0 +1,25 @@
+kind: workload
+name: maintenance
+spec:
+  type: standard
+  containers:
+    - name: maintenance
+      env:
+        - name: PORT
+          value: "3000"
+        - name: PAGE_URL
+          value: ""
+      image: "shakacode/maintenance-mode"
+      ports:
+        - number: 3000
+          protocol: http
+  defaultOptions:
+    autoscaling:
+      minScale: 1
+      maxScale: 1
+    capacityAI: false
+    timeoutSeconds: 60
+  firewallConfig:
+    external:
+      inboundAllowCIDR:
+        - 0.0.0.0/0
