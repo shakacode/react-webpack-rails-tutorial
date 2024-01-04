@@ -53,8 +53,8 @@ describe "with Turbo and Stimulus" do
       fill_in text_field, with: comment.text
       click_button("Post")
 
-      # This will ensure we wait enough for the changes to be applied
-      expect(page).to have_text("")
+      expect(page).to have_content(comment.author)
+      expect(page).to have_content(comment.text)
 
       expect(Comment.all.count).to equal(new_comment_count)
     end
