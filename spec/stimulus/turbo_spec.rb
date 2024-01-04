@@ -39,23 +39,15 @@ describe "with Turbo and Stimulus" do
       visit "/stimulus"
     end
 
-    it "adds a new comment to the page" do
-      fill_in author_field, with: comment.author
-      fill_in text_field, with: comment.text
-      click_button("Post")
-      expect(page).to have_selector "h2", text: comment.author
-    end
-
-    it "comment count increases with successful form submission" do
+    it "adds a new comment to the page and database" do
       initital_comment_count = Comment.all.count
       new_comment_count = initital_comment_count + 1
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
       click_button("Post")
 
-      expect(page).to have_content(comment.author)
-      expect(page).to have_content(comment.text)
-
+      expect(page).to have_css("h2", text: comment.author)
+      expect(page).to have_css("p", text: comment.text)
       expect(Comment.all.count).to equal(new_comment_count)
     end
 
