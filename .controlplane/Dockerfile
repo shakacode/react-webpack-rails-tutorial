@@ -54,7 +54,7 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 # add entrypoint and release script to docker image at top level
-COPY --from=build .controlplane/entrypoint.sh .controlplane/release_script.sh ./
+COPY --from=build /app/.controlplane/entrypoint.sh /app/.controlplane/release_script.sh ./
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
