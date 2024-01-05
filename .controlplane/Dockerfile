@@ -54,6 +54,8 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
+RUN chmod +x /app/.controlplane/*.sh
+
 ENV RAILS_ENV=production \
     NODE_ENV=production \
     SECRET_KEY_BASE=NOT_USED_NON_BLANK
