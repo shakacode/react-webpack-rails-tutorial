@@ -29,7 +29,7 @@ describe "with Turbo and Stimulus" do
   end
 
   describe "form submission functions" do
-    let(:comment) { Comment.new(author: "Author", text: "This is a comment") }
+    let(:comment) { Comment.new(author: "Author", text: "This is a comment #{Time.now}") }
     let(:author_field) { "comment_author" }
     let(:author_error) { "Author: can't be blank" }
     let(:text_field) { "comment_text" }
