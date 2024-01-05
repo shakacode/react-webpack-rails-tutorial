@@ -53,8 +53,6 @@ RUN apt-get update -qq && \
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
-# add entrypoint and release script to docker image at top level
-COPY --from=build /app/.controlplane/entrypoint.sh /app/.controlplane/release_script.sh ./
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -66,6 +64,6 @@ RUN bin/rails react_on_rails:locale
 RUN bin/rails assets:precompile
 
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
 CMD ["./bin/rails", "server"]

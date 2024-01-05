@@ -48,6 +48,3 @@ yarn-debug.log*
 .github/
 spec/
 scripts/
-
-# No need for controlplane config in docker file. These are used locally and by CI
-.controlplane
