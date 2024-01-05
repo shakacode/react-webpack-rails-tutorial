@@ -17,6 +17,7 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 # Rails app lives here
+# Entry point and commands will be run from this directory
 WORKDIR /app
 
 # Set production environment
@@ -53,6 +54,8 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
+RUN chmod +x /app/.controlplane/*.sh
+
 ENV RAILS_ENV=production \
     NODE_ENV=production \
     SECRET_KEY_BASE=NOT_USED_NON_BLANK
@@ -62,8 +65,7 @@ RUN yarn res:build
 RUN bin/rails react_on_rails:locale
 RUN bin/rails assets:precompile
 
-# add entrypoint
-COPY .controlplane/entrypoint.sh ./
-ENTRYPOINT ["/app/entrypoint.sh"]
 
-CMD ["rails", "server"]
+ENTRYPOINT ["./.controlplane/entrypoint.sh"]
+
+CMD ["./bin/rails", "server"]

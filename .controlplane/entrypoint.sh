@@ -1,6 +1,7 @@
 #!/bin/bash -e
 # Runs before the main command
-# This script is unique to this demo project as it ensures the database and redis are ready before running the rails server
+# This script is unique to this demo project as it ensures the database and redis are ready
+# before running the rails server or other services.
 
 
 wait_for_service()
@@ -19,12 +20,6 @@ echo " -- Waiting for services"
 # Strip out the host and the port for curl and to keep full resource URL secret
 wait_for_service $(echo $DATABASE_URL | sed -e 's|^.*@||' -e 's|/.*$||')
 wait_for_service $(echo $REDIS_URL | sed -e 's|redis://||' -e 's|/.*$||')
-
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  echo " -- Preparing database"
-  ./bin/rails db:prepare
-fi
 
 echo " -- Finishing entrypoint.sh, executing '$@'"
 

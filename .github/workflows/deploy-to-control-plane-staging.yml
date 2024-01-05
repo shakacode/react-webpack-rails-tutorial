@@ -13,11 +13,11 @@ on:
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
-  CPLN_ORG: ${{secrets.CPLN_ORG}}
-  CPLN_TOKEN: ${{secrets.CPLN_TOKEN}}
+  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
+  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 jobs:
-  deploy-to-control-plane:
+  deploy-to-control-plane-staging:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: |
           sudo npm install -g @controlplane/cli
           cpln --version
-          gem install cpl -v 1.1.2
+          gem install cpl -v 1.2.0
 
       - name: Set Short SHA
         id: vars
@@ -42,21 +42,30 @@ jobs:
 
       - name: cpl profile
         run: |
-          cpln profile update default --token ${CPLN_TOKEN}
+          cpln profile update default
+#          cpln profile update default --token ${CPLN_TOKEN}
 
       # Caching step
       - uses: actions/cache@v2
         with:
-          path: /tmp/docker-layers
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          path: /tmp/.docker-cache
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
             ${{ runner.os }}-docker-
 
       - name: cpl build-image
         run: |
           cpln image docker-login
-          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}}
+          cpl build-image -a ${{ secrets.APP_NAME_STAGING }} --commit ${{steps.vars.outputs.sha_short}} --org ${{secrets.CPLN_ORG_STAGING}} 
+
+      - name: Run release script
+        run: |
+          # Run database migrations (or other release tasks) with the latest image,
+          # while the app is still running on the previous image.
+          # This is analogous to the release phase.
+          cpl run:detached './.controlplane/release_script.sh' -a ${{ secrets.APP_NAME_STAGING }}  --image latest
 
       - name: Deploy to Control Plane
         run: |
-          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} 
+          cpl deploy-image -a ${{ secrets.APP_NAME_STAGING }} --org ${{secrets.CPLN_ORG_STAGING}}  
