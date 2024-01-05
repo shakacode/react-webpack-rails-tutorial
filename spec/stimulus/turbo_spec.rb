@@ -29,7 +29,7 @@ describe "with Turbo and Stimulus" do
   end
 
   describe "form submission functions" do
-    let(:comment) { Comment.new(author: "Author", text: "This is a comment") }
+    let(:comment) { Comment.new(author: "Author", text: "This is a comment #{Time.zone.now}") }
     let(:author_field) { "comment_author" }
     let(:author_error) { "Author: can't be blank" }
     let(:text_field) { "comment_text" }
@@ -39,20 +39,15 @@ describe "with Turbo and Stimulus" do
       visit "/stimulus"
     end
 
-    it "adds a new comment to the page" do
-      fill_in author_field, with: comment.author
-      fill_in text_field, with: comment.text
-      click_button("Post")
-      expect(page).to have_selector "h2", text: comment.author
-    end
-
-    it "comment count increases with successful form submission" do
+    it "adds a new comment to the page and database" do
       initital_comment_count = Comment.all.count
       new_comment_count = initital_comment_count + 1
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
       click_button("Post")
-      sleep(1)
+
+      expect(page).to have_css("h2", text: comment.author)
+      expect(page).to have_css("p", text: comment.text)
       expect(Comment.all.count).to equal(new_comment_count)
     end
 
@@ -60,6 +55,8 @@ describe "with Turbo and Stimulus" do
       initial_comment_count = Comment.all.count
       fill_in text_field, with: comment.text
       click_button("Post")
+
+      expect(page).to have_text("Author: can't be blank")
       expect(Comment.all.count).to equal(initial_comment_count)
     end
 
@@ -67,12 +64,16 @@ describe "with Turbo and Stimulus" do
       initial_comment_count = Comment.all.count
       fill_in author_field, with: comment.author
       click_button("Post")
+
+      expect(page).to have_text("Text: can't be blank")
       expect(Comment.all.count).to equal(initial_comment_count)
     end
 
     it "comment count remains the same when both form fields are empty" do
       initial_comment_count = Comment.all.count
       click_button("Post")
+
+      expect(page).to have_text("Author: can't be blank")
       expect(Comment.all.count).to equal(initial_comment_count)
     end
   end
