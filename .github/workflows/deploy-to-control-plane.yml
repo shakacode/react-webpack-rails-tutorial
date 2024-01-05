@@ -64,7 +64,7 @@ jobs:
           # Run database migrations (or other release tasks) with the latest image,
           # while the app is still running on the previous image.
           # This is analogous to the release phase.
-          cpl run:detached './release_script.sh' -a ${{ secrets.APP_NAME_STAGING }}  --image latest
+          cpl run:detached './.controlplane/release_script.sh' -a ${{ secrets.APP_NAME_STAGING }}  --image latest
 
       - name: Deploy to Control Plane
         run: |
