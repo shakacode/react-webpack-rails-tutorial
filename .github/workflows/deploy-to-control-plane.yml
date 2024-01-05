@@ -48,9 +48,10 @@ jobs:
       # Caching step
       - uses: actions/cache@v2
         with:
-          path: /tmp/docker-layers
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          path: /tmp/.docker-cache
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
             ${{ runner.os }}-docker-
 
       - name: cpl build-image
