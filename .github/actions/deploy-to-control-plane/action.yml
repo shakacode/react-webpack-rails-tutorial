@@ -27,9 +27,11 @@ runs:
 
     - name: Set Short SHA
       id: vars
+      shell: bash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
     - name: cpl profile
+      shell: bash
       run: |
         cpln profile update default
   #          cpln profile update default --token ${CPLN_TOKEN}
@@ -44,11 +46,13 @@ runs:
           ${{ runner.os }}-docker-
 
     - name: cpl build-image
+      shell: bash
       run: |
         cpln image docker-login
         cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{secrets  .CPLN_ORG_STAGING}} 
 
     - name: Run release script
+      shell: bash
       run: |
         # Run database migrations (or other release tasks) with the latest image,
         # while the app is still running on the previous image.
@@ -56,5 +60,6 @@ runs:
         cpl run:detached './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
 
     - name: Deploy to Control Plane
-    run: |
-      cpl deploy-image -a ${{ inputs.app_name }} --org ${{secrets.CPLN_ORG_STAGING}}  
+      shell: bash
+      run: |
+        cpl deploy-image -a ${{ inputs.app_name }} --org ${{secrets.CPLN_ORG_STAGING}}  
