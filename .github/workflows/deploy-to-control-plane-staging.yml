@@ -27,3 +27,4 @@ jobs:
       - uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: secrets.APP_NAME_STAGING
+          org: secrets.CPLN_ORG_STAGING

@@ -8,7 +8,11 @@ inputs:
   app_name:
     description: 'The name of the app to deploy'
     required: true
-    default: 'react-webpack-rails-tutorial'
+    default:
+  org:
+    description: 'The org of the app to deploy'
+    required: true
+    default:
 
 runs:
   using: 'composite'
@@ -62,4 +66,4 @@ runs:
     - name: Deploy to Control Plane
       shell: bash
       run: |
-        cpl deploy-image -a ${{ inputs.app_name }} --org ${{secrets.CPLN_ORG_STAGING}}  
+        cpl deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
