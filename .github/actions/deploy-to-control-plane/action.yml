@@ -53,7 +53,7 @@ runs:
       shell: bash
       run: |
         cpln image docker-login
-        cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{secrets  .CPLN_ORG_STAGING}} 
+        cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}} --cache /tmp/.docker-cache 
 
     - name: Run release script
       shell: bash
