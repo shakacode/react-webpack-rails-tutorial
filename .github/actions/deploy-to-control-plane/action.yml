@@ -10,10 +10,6 @@ inputs:
     required: true
     default: 'react-webpack-rails-tutorial'
 
-env:
-  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
-  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
-
 runs:
   - name: Set up Ruby
     uses: ruby/setup-ruby@v1
