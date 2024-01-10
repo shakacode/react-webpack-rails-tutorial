@@ -15,9 +15,6 @@ env:
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 runs:
-  - name: Check out the repo
-    uses: actions/checkout@v2
-
   - name: Set up Ruby
     uses: ruby/setup-ruby@v1
     with:
