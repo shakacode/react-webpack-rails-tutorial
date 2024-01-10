@@ -1,7 +1,7 @@
 # Control Plane GitHub Action
 
 name: Deploy-To-Control-Plane
-description: Deploys both to staging and to review apps
+description: 'Deploys both to staging and to review apps'
 
 inputs:
   # The name of the app to deploy

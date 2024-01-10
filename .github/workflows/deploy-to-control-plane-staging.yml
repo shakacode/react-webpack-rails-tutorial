@@ -24,6 +24,6 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - uses: ./.github/actions/deploy-to-control-plane.yml
+      - uses: ../actions/deploy-to-control-plane.yml
         with:
           app_name: secrets.APP_NAME_STAGING
