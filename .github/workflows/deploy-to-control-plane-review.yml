@@ -6,6 +6,14 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+#    inputs:
+#      pr_number:
+#        description: 'Pull request number'
+#        required: false
+# Triggers the workflow on pull request events
+#  pull_request:
+#    branches:
+#      - main  # or the branch you want to trigger the workflow
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
@@ -20,7 +28,16 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Extract PR number from branch name
+        run: |
+          PR_NUMBER=$(echo ${GITHUB_REF#refs/heads/pr-})
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR_NUMBER is not set. Aborting."
+            exit 1
+          fi
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
       - uses: ./.github/actions/deploy-to-control-plane
         with:
-          app_name: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number }}
+          app_name: qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}
           org: ${{ secrets.CPLN_ORG_STAGING }}
