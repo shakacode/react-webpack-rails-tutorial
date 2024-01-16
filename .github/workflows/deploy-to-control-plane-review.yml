@@ -31,6 +31,7 @@ jobs:
       - name: Get PR number
         run: |
           echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
+          echo "github.ref: \"$GITHUB_REF\""
           API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open" \
           --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
           echo "API_RESPONSE: $API_RESPONSE"
