@@ -28,11 +28,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+
       - name: Get PR number
         run: |
-          PR_NUMBER=$(curl --location --request GET 'https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open' \
-          --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          | jq '.[] | select(.head.ref=="'${{ github.ref }}'") | .number')
+          API_RESPONSE=$(curl --location --request GET 'https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open' \
+          --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+          echo "API_RESPONSE: $API_RESPONSE"
+          PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'${{ github.ref }}'") | .number')
           if [ -z "$PR_NUMBER" ]; then
             echo "PR_NUMBER is not set. Aborting."
             exit 1
