@@ -31,11 +31,13 @@ jobs:
       - name: Get PR number
         run: |
           echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
-          echo "github.ref: \"$GITHUB_REF\""
+          REF=${{ github.ref }}
+          REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
+          echo "REF: \"$REF\""
           API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open" \
           --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
           echo "API_RESPONSE: $API_RESPONSE"
-          PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'${{ github.ref }}'") | .number')
+          PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'$REF'") | .number')
           echo "PR_NUMBER: $PR_NUMBER"
           if [ -z "$PR_NUMBER" ]; then
             echo "PR_NUMBER is not set. Aborting."
