@@ -1,0 +1,70 @@
+# Control Plane GitHub Action
+
+name: Deploy-To-Control-Plane
+description: 'Deploys both to staging and to review apps'
+
+inputs:
+  # The name of the app to deploy
+  app_name:
+    description: 'The name of the app to deploy'
+    required: true
+    default:
+  org:
+    description: 'The org of the app to deploy'
+    required: true
+    default:
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.2'  # Specify your Ruby version here
+
+    - name: Install Control Plane CLI
+      shell: bash
+      run: |
+        sudo npm install -g @controlplane/cli
+        cpln --version
+        gem install cpl -v 1.2.0
+
+    - name: Set Short SHA
+      id: vars
+      shell: bash
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+    - name: cpl profile
+      shell: bash
+      run: |
+        cpln profile update default
+  #          cpln profile update default --token ${CPLN_TOKEN}
+
+    # Caching step
+    - uses: actions/cache@v2
+      with:
+        path: /tmp/.docker-cache
+        key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha   }}
+        restore-keys: |
+          ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
+          ${{ runner.os }}-docker-
+
+    - name: cpl build-image
+      shell: bash
+      run: |
+        cpln image docker-login
+        cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
+        # --cache /tmp/.docker-cache 
+
+    - name: Run release script
+      shell: bash
+      run: |
+        # Run database migrations (or other release tasks) with the latest image,
+        # while the app is still running on the previous image.
+        # This is analogous to the release phase.
+        cpl run:detached './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
+
+    - name: Deploy to Control Plane
+      shell: bash
+      run: |
+        cpl deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
