@@ -90,7 +90,7 @@ let make = (~fetchData) => {
   }
 
   let forms: array<formData> = [
-    {formName: "Horizontal Form", formType: Horizontal},
+    {formName: "Horizontal Form XXXX", formType: Horizontal},
     {formName: "Inline Form", formType: Inline},
     {formName: "Stacked Form", formType: Stacked},
   ]
