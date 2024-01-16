@@ -1,6 +1,6 @@
 # Control Plane GitHub Action
 
-name: Deploy-To-Control-Plane-Staging
+name: Deploy Review App to Control Plane
 
 # Controls when the workflow will run
 on:
