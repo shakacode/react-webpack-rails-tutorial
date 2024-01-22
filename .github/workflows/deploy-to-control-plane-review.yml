@@ -47,6 +47,7 @@ jobs:
 
       - name: Get App Name
         run: |
+          echo "PR_NUMBER: ${{ env.PR_NUMBER }}"
           echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
           echo "App Name: ${{ env.APP_NAME }}"
 
