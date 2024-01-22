@@ -45,7 +45,12 @@ jobs:
           fi
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
 
+      - name: Get App Name
+        run: |
+          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
+          echo "App Name: ${{ env.APP_NAME }}"
+
       - uses: ./.github/actions/deploy-to-control-plane
         with:
-          app_name: qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}
+          app_name: ${{ env.APP_NAME }}
           org: ${{ secrets.CPLN_ORG_STAGING }}
