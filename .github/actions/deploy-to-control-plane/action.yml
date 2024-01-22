@@ -38,7 +38,6 @@ runs:
       shell: bash
       run: |
         cpln profile update default
-  #          cpln profile update default --token ${CPLN_TOKEN}
 
     # Caching step
     - uses: actions/cache@v2
@@ -48,6 +47,15 @@ runs:
         restore-keys: |
           ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
           ${{ runner.os }}-docker-
+
+    - name: cpflow setup-app
+      shell: bash
+      run: |
+        if ! cpflow exists -a ${{ inputs.app_name }} ; then
+          cpflow setup-app -a ${{ inputs.app_name }}
+        fi
+    # Provision all infrastructure on Control Plane.
+    # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
 
     - name: cpflow build-image
       shell: bash
