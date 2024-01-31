@@ -1,8 +1,8 @@
 #!/bin/bash -e
 # Runs before the main command
-# This script is unique to this demo project as it ensures the database and redis are ready
+# This script is unique to this demo project as it ensures the database and Redis are ready
 # before running the rails server or other services.
-
+# You can ignore this sort of "wait" if using external services, like AWS RDS or AWS Aurora.
 
 wait_for_service()
 {
