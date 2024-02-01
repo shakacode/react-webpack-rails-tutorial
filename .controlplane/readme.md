@@ -1,5 +1,16 @@
 # Deploying tutorial app on Control Plane
 
+---
+
+_If you need a free demo account for Control Plane (no CC required), you can contact [Justin Gordon, CEO of ShakaCode](mailto:justin@shakacode.com)._
+
+---
+
+Check [how the `cpl` gem (this project) is used in the Github actions](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/deploy-to-control-plane/action.yml).
+Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
+
+---
+
 ## Overview
 This simple example shows how to deploy a simple app on Control Plane using the `cpl` gem.
 
