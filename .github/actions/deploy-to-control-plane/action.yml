@@ -19,7 +19,7 @@ runs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2'  # Specify your Ruby version here
+        ruby-version: '3.1.2'  # Specify your Ruby version here
 
     - name: Install Control Plane CLI
       shell: bash
