@@ -58,11 +58,12 @@ apps:
   # `cpflow setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-pr-1234`
   qa-react-webpack-rails-tutorial:
     <<: *common
+    # Order matters!
     setup_app_templates:
-      - daily-task
-      - postgres
       - gvc
+      - postgres
       - redis
+      - daily-task
       - rails
     # Prefix is used to identify these "qa" apps.
     prefix: true
