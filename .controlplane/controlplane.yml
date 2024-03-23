@@ -34,6 +34,9 @@ aliases:
     # Configure the workload name used when maintenance mode is on (defaults to "maintenance").
     maintenance_workload: maintenance
 
+    # Configure the script to run when releasing an app., either with deploy-image or promote-app-from-upstream
+    release_script: release_script.sh
+
 apps:
   react-webpack-rails-tutorial:
     # Simulate Production Version
@@ -47,7 +50,6 @@ apps:
 
     upstream: react-webpack-rails-tutorial-staging
 
-    release_script: release_script.sh
 
   react-webpack-rails-tutorial-staging:
     <<: *common
