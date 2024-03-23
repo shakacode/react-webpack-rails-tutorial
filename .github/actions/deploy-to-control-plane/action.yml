@@ -59,7 +59,9 @@ runs:
       shell: bash
       run: |
         cpln image docker-login
-        BUILDKIT_PROGRESS=plain cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
+        # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
+        # BUILDKIT_PROGRESS=plain cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
+        cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
         # --cache /tmp/.docker-cache
     - name: Deploy to Control Plane
       shell: bash
