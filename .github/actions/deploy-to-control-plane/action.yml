@@ -4,7 +4,6 @@ name: Deploy-To-Control-Plane
 description: 'Deploys both to staging and to review apps'
 
 inputs:
-  # The name of the app to deploy
   app_name:
     description: 'The name of the app to deploy'
     required: true
@@ -28,6 +27,7 @@ runs:
         sudo npm install -g @controlplane/cli@3.1.0
         cpln --version
         gem install cpflow -v 4.0.0
+        cpflow --version
 
     - name: Set Short SHA
       id: vars
@@ -56,23 +56,13 @@ runs:
         fi
     # Provision all infrastructure on Control Plane.
     # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-
     - name: cpflow build-image
       shell: bash
       run: |
         cpln image docker-login
-        cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
-        # --cache /tmp/.docker-cache 
-
-    - name: Run release script
-      shell: bash
-      run: |
-        # Run database migrations (or other release tasks) with the latest image,
-        # while the app is still running on the previous image.
-        # This is analogous to the release phase.
-        cpflow run './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
-
+        BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
+        # --cache /tmp/.docker-cache
     - name: Deploy to Control Plane
       shell: bash
       run: |
-        cpflow deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
+        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}}  

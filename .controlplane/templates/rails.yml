@@ -14,7 +14,7 @@ spec:
           value: debug
       # Inherit other ENV values from GVC
       inheritEnv: true
-      image: '/org/APP_ORG/image/APP_IMAGE'
+      image: {{APP_IMAGE_LINK}}
       # 512 corresponds to a standard 1x dyno type
       memory: 512Mi
       ports:

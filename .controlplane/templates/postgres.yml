@@ -106,7 +106,7 @@ bindings:
 #      - use
 #      - view
     principalLinks:
-      - //gvc/APP_GVC/identity/postgres-poc-identity
+      - //gvc/{{APP_NAME}}/identity/postgres-poc-identity
 targetKind: secret
 targetLinks:
   - //secret/postgres-poc-credentials
@@ -139,9 +139,6 @@ spec:
       args:
         - "-c"
         - "cat /usr/local/bin/cpln-entrypoint.sh >> ./cpln-entrypoint.sh && chmod u+x ./cpln-entrypoint.sh && ./cpln-entrypoint.sh postgres"
-      #command:  "cpln-entrypoint.sh"
-      #args:
-      #  - "postgres"
       ports:
         - number: 5432
           protocol: tcp
