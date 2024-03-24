@@ -60,9 +60,14 @@ apps:
     <<: *common
     # Order matters!
     setup_app_templates:
+      # GVC template contains the identity
       - gvc
+
+      # Resources
       - postgres
       - redis
+
+      # Workloads, like Dynos types on Heroku
       - daily-task
       - rails
     # Prefix is used to identify these "qa" apps.
