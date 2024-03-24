@@ -23,3 +23,9 @@ spec:
   staticPlacement:
     locationLinks:
       - {{APP_LOCATION_LINK}}
+
+---
+
+# Identity is needed to access secrets
+kind: identity
+name: {{APP_IDENTITY}}

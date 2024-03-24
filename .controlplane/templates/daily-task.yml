@@ -30,3 +30,5 @@ spec:
     external:
       outboundAllowCIDR:
         - 0.0.0.0/0
+  # Identity is used for binding workload to secrets
+  identityLink: {{APP_IDENTITY_LINK}}
