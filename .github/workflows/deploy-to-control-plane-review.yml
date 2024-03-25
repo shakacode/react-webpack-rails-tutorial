@@ -6,6 +6,14 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+#    inputs:
+#      pr_number:
+#        description: 'Pull request number'
+#        required: false
+# Triggers the workflow on pull request events
+#  pull_request:
+#    branches:
+#      - main  # or the branch you want to trigger the workflow
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
@@ -20,7 +28,30 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Get PR number
+        run: |
+          echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
+          REF=${{ github.ref }}
+          REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
+          echo "REF: \"$REF\""
+          API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open" \
+          --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+          echo "API_RESPONSE: $API_RESPONSE"
+          PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'$REF'") | .number')
+          echo "PR_NUMBER: $PR_NUMBER"
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR_NUMBER is not set. Aborting."
+            exit 1
+          fi
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+      - name: Get App Name
+        run: |
+          echo "PR_NUMBER: ${{ env.PR_NUMBER }}"
+          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
+          echo "App Name: ${{ env.APP_NAME }}"
+
       - uses: ./.github/actions/deploy-to-control-plane
         with:
-          app_name: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number }}
+          app_name: ${{ env.APP_NAME }}
           org: ${{ secrets.CPLN_ORG_STAGING }}
