@@ -14,7 +14,7 @@ aliases:
     # Production apps will use a different org than staging for security.
     # Change this value to your org name
     # or set ENV CPLN_ORG to your org name as that will override whatever is used here for all cpflow commands
-    # cpln_org: shakacode-open-source-examples
+    cpln_org: shakacode-open-source-examples-staging
 
     # Example apps use only location. CPLN offers the ability to use multiple locations.
     default_location: aws-us-east-2
