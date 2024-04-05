@@ -1,0 +1,23 @@
+# Org level secrets are used to store sensitive information that is
+# shared across multiple apps in the same organization. This is
+# useful for storing things like API keys, database credentials, and
+# other sensitive information that is shared across multiple apps
+# in the same organization.
+
+# This is how you apply this once (not during CI)
+# cpl apply-template secrets  -a qa-react-webpack-rails-tutorial --org shakacode-open-source-examples-staging
+
+kind: secret
+name: {{APP_SECRETS}}
+type: dictionary
+data:
+  SOME_ENV: "123456"
+
+---
+
+# Policy is needed to allow identities to access secrets
+kind: policy
+name: {{APP_SECRETS_POLICY}}
+targetKind: secret
+targetLinks:
+  - //secret/{{APP_SECRETS}}

@@ -1,4 +1,4 @@
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile and actions.yml
 ARG RUBY_VERSION=3.1.2
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
@@ -63,8 +63,12 @@ ENV RAILS_ENV=production \
 
 RUN yarn res:build
 RUN bin/rails react_on_rails:locale
-RUN bin/rails assets:precompile
 
+
+# Precompile assets and remove build dependencies
+# Note, if you have some Node.js programs, you need to install those in a different
+# directory so you don't delete them here.
+RUN bin/rails assets:precompile && rm -rf lib/bs && rm -rf node_modules
 
 ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
