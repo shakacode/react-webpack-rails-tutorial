@@ -61,11 +61,18 @@ ENV RAILS_ENV=production \
     SECRET_KEY_BASE=NOT_USED_NON_BLANK
 # compiling assets requires any value for ENV of SECRET_KEY_BASE
 
-RUN yarn res:build
+# These files hardly ever change
 RUN bin/rails react_on_rails:locale
-RUN bin/rails assets:precompile
 
+# These files change together, /app/lib/bs are temp build files for rescript,
+# and /app/client/app are the client assets that are bundled, so not needed once built
+# Helps to have smaller images b/c of smaller Docker Layer Caches and smaller final images
+RUN yarn res:build && bin/rails assets:precompile && rm -rf /app/lib/bs /app/client/app
 
+# This is like the shell initialization that will take the CMD as args
+# For Kubernetes and ControlPlane, this is the command on the workload.
 ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
+# Default args to pass to the entry point that can be overridden
+# For Kubernetes and ControlPlane, these are the "workload args"
 CMD ["./bin/rails", "server"]
