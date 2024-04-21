@@ -136,7 +136,7 @@ See package.json and Gemfile for versions
 1. `cd react-webpack-rails-tutorial`
 1. `bundle install`
 1. `yarn`
-1. `yarn res:dev && yarn build:dev`
+1. `yarn rescript build && yarn build:dev`
 1. `rake db:setup && rake db:schema:load`
 1. `rails s`
     - Open a browser tab to http://localhost:3000 for the Rails app example
