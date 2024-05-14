@@ -7,7 +7,7 @@
 
 ## Control Plane Deployment Example
 
-[Control Plane](https://controlplane.com) offers a viable, cost-saving alternative to Heroku, especially when using the [cpl gem](https://rubygems.org/gems/cpl) to deploy to Control Plane.
+[Control Plane](https://shakacode.controlplane.com) offers a viable, cost-saving alternative to Heroku, especially when using the [cpl gem](https://rubygems.org/gems/cpl) to deploy to Control Plane.
 
 ShakaCode recently migrated [HiChee.com](https://hichee.com) to Control Plane, resulting in a two-thirds reduction in server hosting costs!
 
