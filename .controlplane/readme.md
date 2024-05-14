@@ -21,7 +21,7 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 ## Prerequisites
 
-1. Ensure your [Control Plane](https://controlplane.com) account is set up.
+1. Ensure your [Control Plane](https://shakacode.controlplane.com) account is set up.
 You should have an `organization` `<your-org>` for testing in that account.
 Set ENV variable `CPLN_ORG` to `<your-org>`. Alternatively, you may modify the 
 value for `aliases.common.cpln_org` in `.controlplane/controlplane.yml`.
@@ -31,7 +31,7 @@ If you need an organization, please [contact Shakacode](mailto:controlplane@shak
 You can update the `cpln` command line with `npm update -g @controlplane/cli`.
 Then run `cpln login` to ensure access.
 For more informatation check out the
-[docs here](https://docs.controlplane.com/quickstart/quick-start-3-cli#getting-started-with-the-cli).
+[docs here](https://shakadocs.controlplane.com/quickstart/quick-start-3-cli#getting-started-with-the-cli).
 
 3. Run `cpln image docker-login --org <your-org>` to ensure that you have access to the Control Plane Docker registry.
 
