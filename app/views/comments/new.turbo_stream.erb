@@ -1,0 +1,7 @@
+<%= turbo_stream.update "comment-form" do %>
+    <div class="p-5 m-5 border border-red-600 rounded">
+        <h2>New Comment</h2>
+
+        <%= react_component('HotwiredCommentForm', props: { }, prerender: false, force_load: true) %>
+    </div>
+<% end %>

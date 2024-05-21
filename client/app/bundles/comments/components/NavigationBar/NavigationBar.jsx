@@ -81,6 +81,14 @@ function NavigationBar(props) {
                 Simple React
               </a>
             </li>
+            <li className={classNames({ 'bg-yellow-100': pathname === paths.HOTWIRED_PATH })}>
+              <a
+                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                href={paths.HOTWIRED_PATH}
+              >
+                HotWired
+              </a>
+            </li>
             <li className={classNames({ 'bg-yellow-100': pathname === paths.STIMULUS_PATH })}>
               <a
                 className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"

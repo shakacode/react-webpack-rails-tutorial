@@ -38,6 +38,10 @@ class PagesController < ApplicationController
 
   def rescript; end
 
+  def hotwired
+    @props = comments_json_string
+  end
+
   private
 
   def set_comments

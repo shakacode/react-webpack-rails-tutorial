@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "simple", to: "pages#simple"
   get "rescript", to: "pages#rescript"
   get "no-router", to: "pages#no_router"
+  get "hotwired", to: "pages#hotwired"
 
   # React Router needs a wildcard
   get "react-router(/*all)", to: "pages#index"
@@ -22,4 +23,7 @@ Rails.application.routes.draw do
   get "comment-list", to: "comments#comment_list"
   resources :comments
   mount ActionCable.server => "/cable"
+
+
+  get "test_1508", to: "comments#test_1508", format: :turbo_stream
 end

@@ -1,0 +1,8 @@
+<h2>Demo React Over Hotwired</h2>
+
+<%= react_component('HotwiredCommentScreen', props: @props, prerender: false) %>
+
+
+<%= turbo_frame_tag "new_comment" do %>
+    <%= link_to "proof that #1508 fixed", "/test_1508", data: {turbo_stream: true} %>
+<% end %>
