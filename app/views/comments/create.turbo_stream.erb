@@ -1,0 +1,10 @@
+<%= turbo_stream.prepend "comments" do %>
+    <div>
+        <h2 class="text-blue-800"><%= @comment.author %></h2>
+        <span><%= markdown_to_html(@comment.text) %></span>
+    </div>
+<% end %>
+
+<%= turbo_stream.update "comment-form" do %>
+    <%= link_to "New Comment", new_comment_path, data: {turbo_stream: true} %>
+<% end %>

@@ -33,6 +33,7 @@ class CommentsController < ApplicationController
           format.html { redirect_to @comment, notice: I18n.t("Comment was successfully created.") }
         end
         format.json { render :show, status: :created, location: @comment }
+        format.turbo_stream
       else
         if turbo_frame_request?
           format.html
@@ -97,6 +98,10 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html { render partial: "comments/turbo/inline_form" }
     end
+  end
+
+  def test_1508
+    @comment = Comment.new
   end
 
   private
