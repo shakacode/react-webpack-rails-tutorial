@@ -45,10 +45,14 @@ gem "autoprefixer-rails"
 
 gem "awesome_print"
 
+# Needed until Ruby 3.3.4 is released https://github.com/ruby/ruby/pull/11006
+# Related issue: https://github.com/ruby/net-pop/issues/26
+gem "net-pop", github: "ruby/net-pop"
+
 # FIXME: quick fix for rails6, not needed since rails 7.0.1
 # https://github.com/rails/rails/pull/44083
 gem "net-imap", require: false
-gem "net-pop", require: false
+# gem "net-pop", require: false
 gem "net-smtp", require: false
 
 gem "redcarpet"
