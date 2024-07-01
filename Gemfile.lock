@@ -142,8 +142,6 @@ GEM
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
     ffi (1.17.0)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux)
     foreman (0.88.1)
     generator_spec (0.10.0)
       activesupport (>= 3.0.0)
