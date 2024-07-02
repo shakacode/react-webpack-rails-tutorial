@@ -125,7 +125,7 @@ See package.json and Gemfile for versions
 ## Basic Demo Setup
 
 ### Prerequisites
-- Node `v18.20.3` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
+- Node `v22.3.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
 - Ruby 3.3.3 or above
 - Postgres v9.2 or above
 - Redis. Check that you have Redis installed by running `which redis-server`. If missing and on MacOS, install with Homebrew (`brew install redis`)
