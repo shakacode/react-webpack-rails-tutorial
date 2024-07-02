@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18.x]
-        ruby: [3.1.2]
+        node: [22.x]
+        ruby: [3.3.3]
 
     env:
       RAILS_ENV: test

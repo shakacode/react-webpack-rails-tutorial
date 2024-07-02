@@ -1,5 +1,5 @@
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.1.2
+ARG RUBY_VERSION=3.3.3
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Install packages needed to build gems and node modules
@@ -8,7 +8,7 @@ RUN apt-get update -qq && \
 
 # Install JavaScript dependencies
 # Make sure NODE_VERSION matches the node version in .nvmrc and package.json
-ARG NODE_VERSION=18.13.0
+ARG NODE_VERSION=22.3.0
 ARG YARN_VERSION=1.22.19
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
