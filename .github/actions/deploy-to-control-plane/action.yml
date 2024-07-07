@@ -27,14 +27,14 @@ runs:
       run: |
         sudo npm install -g @controlplane/cli
         cpln --version
-        gem install cpl -v 1.2.0
+        gem install cpflow -v 3.0.1
 
     - name: Set Short SHA
       id: vars
       shell: bash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-    - name: cpl profile
+    - name: cpflow profile
       shell: bash
       run: |
         cpln profile update default
@@ -49,11 +49,11 @@ runs:
           ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
           ${{ runner.os }}-docker-
 
-    - name: cpl build-image
+    - name: cpflow build-image
       shell: bash
       run: |
         cpln image docker-login
-        cpl build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
+        cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
         # --cache /tmp/.docker-cache 
 
     - name: Run release script
@@ -62,9 +62,9 @@ runs:
         # Run database migrations (or other release tasks) with the latest image,
         # while the app is still running on the previous image.
         # This is analogous to the release phase.
-        cpl run:detached './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
+        cpflow run './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
 
     - name: Deploy to Control Plane
       shell: bash
       run: |
-        cpl deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
+        cpflow deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
