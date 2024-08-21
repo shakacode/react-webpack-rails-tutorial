@@ -10,9 +10,6 @@ error_exit() {
     exit 1
 }
 
-# Test error!
-error_exit
-
 log 'Running release_script.sh per controlplane.yml'
 
 if [ -x ./bin/rails ]; then
