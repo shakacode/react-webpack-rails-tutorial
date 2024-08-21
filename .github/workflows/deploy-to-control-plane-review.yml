@@ -6,19 +6,21 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-#    inputs:
-#      pr_number:
-#        description: 'Pull request number'
-#        required: false
-# Triggers the workflow on pull request events
-#  pull_request:
-#    branches:
-#      - main  # or the branch you want to trigger the workflow
+  #    inputs:
+  #      pr_number:
+  #        description: 'Pull request number'
+  #        required: false
+
+  # Triggers the workflow on pull request events
+  pull_request:
+    branches:
+      - main # or the branch you want to trigger the workflow
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
   CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
+  PR_NUMBER: ${{github.event.number}}
 
 jobs:
   deploy-to-control-plane-review:
@@ -31,13 +33,15 @@ jobs:
       - name: Get PR number
         run: |
           echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
-          REF=${{ github.ref }}
-          REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
-          echo "REF: \"$REF\""
-          API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open" \
-          --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
-          echo "API_RESPONSE: $API_RESPONSE"
-          PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'$REF'") | .number')
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR_NUMBER is not in the trigger event. Fetching PR number from open PRs."
+            REF=${{ github.ref }}
+            REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
+            echo "REF: \"$REF\""
+            API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?state=open" \
+            --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+            PR_NUMBER=$(echo $API_RESPONSE | jq '.[] | select(.head.ref=="'$REF'") | .number')
+          fi
           echo "PR_NUMBER: $PR_NUMBER"
           if [ -z "$PR_NUMBER" ]; then
             echo "PR_NUMBER is not set. Aborting."
@@ -54,4 +58,4 @@ jobs:
       - uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ env.APP_NAME }}
-          org: ${{ secrets.CPLN_ORG_STAGING }}
+          org: ${{ env.CPLN_ORG }}
