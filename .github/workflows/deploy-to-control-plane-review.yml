@@ -6,14 +6,6 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  #    inputs:
-  #      pr_number:
-  #        description: 'Pull request number'
-  #        required: false
-#    inputs:
-#      pr_number:
-#        description: 'Pull request number'
-#        required: false
   issue_comment:
     types: [created, edited]
 
