@@ -21,7 +21,7 @@ env:
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 jobs:
-  deploy-to-control-plane-staging:
+  deploy-to-control-plane-review:
     runs-on: ubuntu-latest
 
     steps:
