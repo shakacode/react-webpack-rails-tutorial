@@ -23,7 +23,7 @@ env:
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 jobs:
-  deploy-to-control-plane-staging:
+  deploy-to-control-plane-review:
     if: ${{ github.event_name != 'issue_comment' || (github.event.comment.body == '/deploy-review-app' && github.event.issue.pull_request) }}
     runs-on: ubuntu-latest
 
