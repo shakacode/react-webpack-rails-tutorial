@@ -61,7 +61,7 @@ apps:
     # Order matters!
     setup_app_templates:
       # GVC template contains the identity
-      - gvc
+      - app
 
       # Resources
       - postgres
