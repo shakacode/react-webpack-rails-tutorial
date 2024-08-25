@@ -34,7 +34,7 @@ runs:
       shell: bash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-    - name: cpflow profile
+    - name: cpln profile
       shell: bash
       run: |
         cpln profile update default
