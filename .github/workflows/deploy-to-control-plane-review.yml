@@ -73,7 +73,7 @@ jobs:
             echo "PR_NUMBER is not set. Aborting."
             exit 1
           fi
-          echo "PR_NUMBER=\"$PR_NUMBER\"" >> $GITHUB_ENV
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
       - name: Get App Name
         run: |
           echo "PR_NUMBER: ${{ env.PR_NUMBER }}"
