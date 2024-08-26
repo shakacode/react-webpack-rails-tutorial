@@ -8,7 +8,8 @@ jobs:
   comment-on-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v6
+      - name: Add GitHub Comment for review app instructions
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.createComment({
