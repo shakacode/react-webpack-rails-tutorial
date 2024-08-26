@@ -33,7 +33,7 @@ jobs:
       - name: Get PR HEAD Ref
         if: ${{ github.event_name == 'issue_comment' }}
         id: getRef
-        run: echo "PR_REF=$(gh pr view \"$PR_NUMBER\" --repo \"${{ github.repository }}\" --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        run: echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
