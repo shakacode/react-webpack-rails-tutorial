@@ -50,7 +50,6 @@ apps:
 
     upstream: react-webpack-rails-tutorial-staging
 
-
   react-webpack-rails-tutorial-staging:
     <<: *common
   # QA Apps are like Heroku review apps, but the use `prefix` so you can run a commmand like
@@ -70,5 +69,5 @@ apps:
       # Workloads, like Dynos types on Heroku
       - daily-task
       - rails
-    # Prefix is used to identify these "qa" apps.
-    prefix: true
+    # match_if_app_name_starts_with is used to identify these "qa" apps.
+    match_if_app_name_starts_with: true
