@@ -1,0 +1,25 @@
+# Control Plane GitHub Action
+
+name: 'Setup Environment'
+description: 'Sets up Ruby, installs Control Plane CLI, cpflow gem, and sets up the default profile'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3.3'
+
+    - name: Install Control Plane CLI and cpflow gem
+      shell: bash
+      run: |
+        sudo npm install -g @controlplane/cli@3.1.0
+        cpln --version
+        gem install cpflow -v 4.0.0
+        cpflow --version
+
+    - name: cpln profile
+      shell: bash
+      run: |
+        cpln profile update default
