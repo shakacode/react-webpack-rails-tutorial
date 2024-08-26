@@ -32,8 +32,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
+      - name: Get PR HEAD Ref
+        if: ${{ github.event_name == 'issue_comment' }}
+        id: getRef
+        run: echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout source code from Github
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
 
       - name: Add GitHub Comment
         if: ${{ github.event_name == 'issue_comment' }}
@@ -48,6 +58,7 @@ jobs:
             })
 
       - name: Get PR number
+        if: ${{ github.event_name != 'issue_comment' }}
         run: |
           echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
           if [ -z "$PR_NUMBER" ]; then
