@@ -1,0 +1,19 @@
+name: Add helper Comment on PR creation
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  comment-on-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Hi 👋 To deploy a review app, please comment `/deploy-review-app`"
+            })
