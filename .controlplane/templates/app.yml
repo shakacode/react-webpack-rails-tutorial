@@ -1,6 +1,6 @@
 # Template setup of the GVC, roughly corresponding to a Heroku app
 kind: gvc
-name: {{APP_NAME}}
+name: { { APP_NAME } }
 spec:
   # For using templates for test apps, put ENV values here, stored in git repo.
   # Production apps will have values configured manually after app creation.
@@ -22,10 +22,9 @@ spec:
   # Part of standard configuration
   staticPlacement:
     locationLinks:
-      - {{APP_LOCATION_LINK}}
+      - { { APP_LOCATION_LINK } }
 
 ---
-
 # Identity is needed to access secrets
 kind: identity
-name: {{APP_IDENTITY}}
+name: { { APP_IDENTITY } }
