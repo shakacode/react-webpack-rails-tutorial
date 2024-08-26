@@ -4,7 +4,6 @@ name: Deploy-To-Control-Plane
 description: 'Deploys both to staging and to review apps'
 
 inputs:
-  # The name of the app to deploy
   app_name:
     description: 'The name of the app to deploy'
     required: true
@@ -20,7 +19,7 @@ runs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2'  # Specify your Ruby version here
+        ruby-version: '3.3.3' # Specify your Ruby version here
 
     - name: Install Control Plane CLI
       shell: bash
@@ -28,17 +27,17 @@ runs:
         sudo npm install -g @controlplane/cli@3.1.0
         cpln --version
         gem install cpflow -v 4.0.0
+        cpflow --version
 
     - name: Set Short SHA
       id: vars
       shell: bash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-    - name: cpflow profile
+    - name: cpln profile
       shell: bash
       run: |
         cpln profile update default
-  #          cpln profile update default --token ${CPLN_TOKEN}
 
     # Caching step
     - uses: actions/cache@v2
@@ -49,22 +48,24 @@ runs:
           ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
           ${{ runner.os }}-docker-
 
+    - name: cpflow setup-app
+      shell: bash
+      run: |
+        if ! cpflow exists -a ${{ inputs.app_name }} ; then
+          cpflow setup-app -a ${{ inputs.app_name }}
+        fi
+    # Provision all infrastructure on Control Plane.
+    # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
     - name: cpflow build-image
       shell: bash
       run: |
         cpln image docker-login
+        # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
+        # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
         cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
-        # --cache /tmp/.docker-cache 
-
-    - name: Run release script
-      shell: bash
-      run: |
-        # Run database migrations (or other release tasks) with the latest image,
-        # while the app is still running on the previous image.
-        # This is analogous to the release phase.
-        cpflow run './.controlplane/release_script.sh' -a ${{ inputs.app_name }}  --image latest
-
+        # --cache /tmp/.docker-cache
     - name: Deploy to Control Plane
       shell: bash
       run: |
-        cpflow deploy-image -a ${{ inputs.app_name }} --org ${{inputs.org}}  
+        echo "Deploying to Control Plane"
+        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}}  --verbose

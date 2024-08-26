@@ -74,7 +74,7 @@ export APP_NAME=react-webpack-rails-tutorial
 
 # Provision all infrastructure on Control Plane.
 # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-cpflow apply-template gvc postgres redis rails daily-task -a $APP_NAME
+cpflow setup-app -a $APP_NAME
 
 # Build and push docker image to Control Plane repository
 # Note, may take many minutes. Be patient.

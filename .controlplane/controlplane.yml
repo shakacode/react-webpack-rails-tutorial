@@ -14,7 +14,7 @@ aliases:
     # Production apps will use a different org than staging for security.
     # Change this value to your org name
     # or set ENV CPLN_ORG to your org name as that will override whatever is used here for all cpflow commands
-    # cpln_org: shakacode-open-source-examples
+    cpln_org: shakacode-open-source-examples-staging
 
     # Example apps use only location. CPLN offers the ability to use multiple locations.
     default_location: aws-us-east-2
@@ -34,6 +34,9 @@ aliases:
     # Configure the workload name used when maintenance mode is on (defaults to "maintenance").
     maintenance_workload: maintenance
 
+    # Configure the script to run when releasing an app., either with deploy-image or promote-app-from-upstream
+    release_script: release_script.sh
+
 apps:
   react-webpack-rails-tutorial:
     # Simulate Production Version
@@ -47,8 +50,6 @@ apps:
 
     upstream: react-webpack-rails-tutorial-staging
 
-    release_script: release_script.sh
-
   react-webpack-rails-tutorial-staging:
     <<: *common
   # QA Apps are like Heroku review apps, but the use `prefix` so you can run a commmand like
@@ -56,5 +57,17 @@ apps:
   # `cpflow setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-pr-1234`
   qa-react-webpack-rails-tutorial:
     <<: *common
-    # Prefix is used to identify these "qa" apps.
-    prefix: true
+    # Order matters!
+    setup_app_templates:
+      # GVC template contains the identity
+      - app
+
+      # Resources
+      - postgres
+      - redis
+
+      # Workloads, like Dynos types on Heroku
+      - daily-task
+      - rails
+    # match_if_app_name_starts_with is used to identify these "qa" apps.
+    match_if_app_name_starts_with: true

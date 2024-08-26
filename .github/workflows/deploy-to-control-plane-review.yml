@@ -6,6 +6,13 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+  # Uncomment these lines to trigger the workflow on pull request events
+  # pull_request:
+  #   branches:
+  #     - master
+
+  # deploy on comment "/deploy-review-app"
   issue_comment:
     types: [created, edited]
 
@@ -13,17 +20,66 @@ on:
 env:
   CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
+  # Uncomment this line to use the PR number from the pull requests trigger event (that trigger is commented)
+  # PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
-  deploy-to-control-plane-staging:
+  deploy-to-control-plane-review:
     if: ${{ github.event_name != 'issue_comment' || (github.event.comment.body == '/deploy-review-app' && github.event.issue.pull_request) }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
+      - name: Get PR HEAD Ref
+        if: ${{ github.event_name == 'issue_comment' }}
+        id: getRef
+        run: echo "PR_REF=$(gh pr view \"$PR_NUMBER\" --repo \"${{ github.repository }}\" --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout source code from Github
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
+
+      - name: Add GitHub Comment
+        if: ${{ github.event_name == 'issue_comment' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "We started working on your review-app deployment. You can track progress in the "Actions" Tab [here](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/deploy-to-control-plane-review.yml) on Github."
+            })
+
+      - name: Get PR number
+        if: ${{ github.event_name != 'issue_comment' }}
+        run: |
+          echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR_NUMBER is not in the trigger event. Fetching PR number from open PRs."
+            REF="${{ github.ref }}"
+            REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
+            echo "REF: \"$REF\""
+            API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open" \
+            --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+            PR_NUMBER=$(echo "$API_RESPONSE" | jq '.[] | select(.head.ref=="'$REF'") | .number')
+          fi
+          echo "PR_NUMBER: $PR_NUMBER"
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR_NUMBER is not set. Aborting."
+            exit 1
+          fi
+          echo "PR_NUMBER=\"$PR_NUMBER\"" >> $GITHUB_ENV
+      - name: Get App Name
+        run: |
+          echo "PR_NUMBER: ${{ env.PR_NUMBER }}"
+          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> "$GITHUB_ENV"
+          echo "App Name: ${{ env.APP_NAME }}"
       - uses: ./.github/actions/deploy-to-control-plane
         with:
-          app_name: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number }}
-          org: ${{ secrets.CPLN_ORG_STAGING }}
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
