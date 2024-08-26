@@ -45,14 +45,14 @@ jobs:
 
       - name: Add GitHub Comment
         if: ${{ github.event_name == 'issue_comment' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "We started working on your review-app deployment. You can track progress in the "Actions" Tab [here](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/deploy-to-control-plane-review.yml) on Github."
+              body: "We started working on your review-app deployment. You can track progress in the `Actions` Tab [here](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/deploy-to-control-plane-review.yml) on Github."
             })
 
       - name: Get PR number
