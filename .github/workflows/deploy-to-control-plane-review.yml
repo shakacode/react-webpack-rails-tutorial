@@ -6,6 +6,8 @@ name: Deploy Review App to Control Plane
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  issue_comment:
+    types: [created, edited]
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
@@ -14,6 +16,7 @@ env:
 
 jobs:
   deploy-to-control-plane-staging:
+    if: ${{ github.event_name != 'issue_comment' || (github.event.comment.body == '/deploy-review-app' && github.event.issue.pull_request) }}
     runs-on: ubuntu-latest
 
     steps:
