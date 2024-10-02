@@ -16,28 +16,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3.3' # Specify your Ruby version here
-
-    - name: Install Control Plane CLI
-      shell: bash
-      run: |
-        sudo npm install -g @controlplane/cli@3.1.0
-        cpln --version
-        gem install cpflow -v 4.0.0
-        cpflow --version
+    - name: Setup Environment
+      uses: ./.github/actions/setup-environment
 
     - name: Set Short SHA
       id: vars
       shell: bash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-    - name: cpln profile
-      shell: bash
-      run: |
-        cpln profile update default
 
     # Caching step
     - uses: actions/cache@v2

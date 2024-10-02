@@ -1,0 +1,30 @@
+name: Nightly Remove Stale Review Apps and Images
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+env:
+  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
+  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
+
+jobs:
+  remove-stale-review-apps:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Run cleanup-stale-apps script
+        run: |
+          cpflow cleanup-stale-apps -a qa-react-webpack-rails-tutorial -y
+
+      - name: Run cleanup-images script
+        run: |
+          cpflow cleanup-images -a qa-react-webpack-rails-tutorial -y
