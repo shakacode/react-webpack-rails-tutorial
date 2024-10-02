@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
         if turbo_frame_request?
           format.html
         else
-          format.html { redirect_to @comment, notice: I18n.t("Comment was successfully created.") }
+          format.html { redirect_to @comment, notice: I18n.t(:comment_was_successfully_created) }
         end
         format.json { render :show, status: :created, location: @comment }
       else
@@ -49,7 +49,7 @@ class CommentsController < ApplicationController
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to @comment, notice: I18n.t("comment_was_successfully_updated") }
+        format.html { redirect_to @comment, notice: I18n.t(:comment_was_successfully_updated) }
         format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit }
@@ -63,7 +63,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy!
     respond_to do |format|
-      format.html { redirect_to comments_url, notice: I18n.t("comment_was_successfully_destroyed") }
+      format.html { redirect_to comments_url, notice: I18n.t(:comment_was_successfully_destroyed) }
       format.json { head :no_content }
     end
   end
