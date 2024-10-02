@@ -71,4 +71,5 @@ apps:
       - rails
     # match_if_app_name_starts_with is used to identify these "qa" apps.
     match_if_app_name_starts_with: true
+    image_retention_days: 5
     stale_app_image_deployed_days: 5 # If the app is older than 5 days, the nightly automations will clean stale apps.
