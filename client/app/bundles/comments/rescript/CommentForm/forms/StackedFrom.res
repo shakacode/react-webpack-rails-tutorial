@@ -1,8 +1,8 @@
 @react.component
 let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
-  <form onSubmit=handleSubmit disabled className="flex flex-col gap-4">
+  <form onSubmit=handleSubmit disabled className="flex flex-col gap-4" aria-label="Comment submission form">
     <div className="flex flex-col gap-0">
-      <label className="w-full"> {"Name"->React.string} </label>
+      <label htmlFor="comment_author" className="w-full"> {"Name"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
@@ -11,10 +11,12 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_author"
         onChange=handleAuthorChange
         value={author}
+        aria-label="Author name"
+        aria-required="true"
       />
     </div>
     <div className="flex flex-col gap-0">
-      <label className="w-full"> {"Text"->React.string} </label>
+      <label htmlFor="comment_text" className="w-full"> {"Text"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
@@ -23,6 +25,8 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_text"
         onChange=handleTextChange
         value={text}
+        aria-label="Comment text"
+        aria-required="true"
       />
     </div>
     <div className="flex flex-col gap-0">
@@ -30,6 +34,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
         value="Post"
+        aria-label="Submit comment"
       />
     </div>
   </form>

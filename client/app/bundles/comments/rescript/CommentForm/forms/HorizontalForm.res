@@ -1,8 +1,8 @@
 @react.component
 let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
-  <form className="form-horizontal flex flex-col gap-4" onSubmit=handleSubmit disabled>
+  <form className="form-horizontal flex flex-col gap-4" onSubmit=handleSubmit disabled aria-label="Comment submission form">
     <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-      <label className="w-full lg:w-2/12 lg:text-end shrink-0"> {"Name"->React.string} </label>
+      <label htmlFor="comment_author" className="w-full lg:w-2/12 lg:text-end shrink-0"> {"Name"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
@@ -11,10 +11,12 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_author"
         onChange=handleAuthorChange
         value={author}
+        aria-label="Author name"
+        aria-required="true"
       />
     </div>
     <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-      <label className="w-full lg:w-2/12 lg:text-end shrink-0"> {"Text"->React.string} </label>
+      <label htmlFor="comment_text" className="w-full lg:w-2/12 lg:text-end shrink-0"> {"Text"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
@@ -23,6 +25,8 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_text"
         onChange=handleTextChange
         value={text}
+        aria-label="Comment text"
+        aria-required="true"
       />
     </div>
     <div className="flex flex-col gap-0 lg:gap-4 lg:flex-row">
@@ -31,6 +35,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
         value="Post"
+        aria-label="Submit comment"
       />
     </div>
   </form>
