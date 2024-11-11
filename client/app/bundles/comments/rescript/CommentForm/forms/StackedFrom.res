@@ -29,7 +29,6 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
       <input
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
-        onSubmit=handleSubmit
         value="Post"
       />
     </div>
