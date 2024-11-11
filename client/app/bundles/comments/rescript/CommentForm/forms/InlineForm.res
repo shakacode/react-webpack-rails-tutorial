@@ -3,7 +3,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
   <form
     className="form-inline flex flex-col lg:flex-row flex-wrap gap-4"
     onSubmit=handleSubmit
-    disabled
+    disabled={disabled}
     aria-label="Comment submission form">
     <div className="flex gap-2 items-center">
       <label> htmlFor="comment_author" {"Name"->React.string} </label>

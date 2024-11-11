@@ -1,6 +1,6 @@
 @react.component
 let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
-  <form onSubmit=handleSubmit disabled className="flex flex-col gap-4" aria-label="Comment submission form">
+  <form onSubmit=handleSubmit disabled={disabled} className="flex flex-col gap-4" aria-label="Comment submission form">
     <div className="flex flex-col gap-0">
       <label htmlFor="comment_author" className="w-full"> {"Name"->React.string} </label>
       <input
