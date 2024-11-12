@@ -76,3 +76,7 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 # Default args to pass to the entry point that can be overridden
 # For Kubernetes and ControlPlane, these are the "workload args"
 CMD ["./bin/rails", "server"]
+
+# Current commit hash environment variable
+ARG GIT_COMMIT_SHA
+ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
