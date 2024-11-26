@@ -74,7 +74,7 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", "1.24.1", require: false
+  gem "rubocop", "1.69", require: false
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-rails"
   gem "rubocop-rspec", "~> 2.7"
