@@ -295,7 +295,10 @@ GEM
       rails (>= 5.2)
       rainbow (~> 3.0)
     redcarpet (3.6.0)
-    redis (4.8.1)
+    redis (5.3.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.2)
+      connection_pool
     regexp_parser (2.9.2)
     reline (0.5.9)
       io-console (~> 0.5)
@@ -469,7 +472,7 @@ DEPENDENCIES
   rainbow
   react_on_rails (= 14.0.3)
   redcarpet
-  redis (~> 4.0)
+  redis (~> 5.0)
   rspec-rails (~> 6.0.0)
   rubocop (= 1.24.1)
   rubocop-performance (~> 1.13)
