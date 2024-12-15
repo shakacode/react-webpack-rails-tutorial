@@ -37,6 +37,7 @@ export default class extends Controller {
       alertDiv.classList.add('hidden');
       errorList.innerHTML = '';
       inputText.value = '';
+      window.location.reload();
     }
   }
 
