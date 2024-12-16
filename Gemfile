@@ -109,5 +109,5 @@ group :test do
   gem "selenium-webdriver", "~> 4"
 end
 
-gem "stimulus-rails", "~> 1.2"
-gem "turbo-rails", "~> 1.4"
+gem "stimulus-rails", "~> 1.3"
+gem "turbo-rails", "~> 2.0"
