@@ -3,7 +3,7 @@
 require "rails_helper"
 require "system/shared/contexts"
 
-describe "Destroy a comment", existing_comment: true do
+describe "Destroy a comment", :existing_comment do
   context "when from classic page" do
     let(:comment) { build(:comment) }
 

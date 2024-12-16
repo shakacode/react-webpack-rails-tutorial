@@ -50,8 +50,6 @@ class PagesController < ApplicationController
   end
 
   def render_html
-    respond_to do |format|
-      format.html
-    end
+    respond_to(&:html)
   end
 end
