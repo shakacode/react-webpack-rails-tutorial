@@ -342,8 +342,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (2.11.1)
-      rubocop (~> 1.19)
+    rubocop-rspec (3.3.0)
+      rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     ruby_parser (3.21.0)
       racc (~> 1.5)
@@ -481,7 +481,7 @@ DEPENDENCIES
   rubocop (= 1.69)
   rubocop-performance (~> 1.13)
   rubocop-rails
-  rubocop-rspec (~> 2.7)
+  rubocop-rspec (~> 3.3)
   sass-rails
   scss_lint
   sdoc

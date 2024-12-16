@@ -77,7 +77,7 @@ group :development, :test do
   gem "rubocop", "1.69", require: false
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-rails"
-  gem "rubocop-rspec", "~> 2.7"
+  gem "rubocop-rspec", "~> 3.3"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "scss_lint", require: false
 
