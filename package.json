@@ -86,7 +86,7 @@
     "react-transition-group": "4.4.5",
     "redux": "^4.2.1",
     "redux-thunk": "^2.2.0",
-    "rescript": "^10.1.4",
+    "rescript": "^11.1.4",
     "rescript-react-on-rails": "^1.0.1",
     "resolve-url-loader": "^2.2.0",
     "sanitize-html": "^2.11.0",

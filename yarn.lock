@@ -7514,10 +7514,10 @@ rescript-react-on-rails@^1.0.1:
   resolved "https://registry.yarnpkg.com/rescript-react-on-rails/-/rescript-react-on-rails-1.0.1.tgz#541dffdae64ec5053a50a3792b9db8783c959d1b"
   integrity sha512-sbkDNCoiEWM9rqIiu+4joAj6W92yhM64KtLZQYfvYYm578jMcG02d98xpDeBT7MxZoPZZggFIed0m6Dj8bbDYA==
 
-rescript@^10.1.4:
-  version "10.1.4"
-  resolved "https://registry.yarnpkg.com/rescript/-/rescript-10.1.4.tgz#0f37710d371f32a704f17b4e804f66ce3c79a305"
-  integrity sha512-FFKlS9AG/XrLepWsyw7B+A9DtQBPWEPDPDKghV831Y2KGbie+eeFBOS0xtRHp0xbt7S0N2Dm6hhX+kTZQ/3Ybg==
+rescript@^11.1.4:
+  version "11.1.4"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-11.1.4.tgz#9a42ebc4fc5363707e39cef5b3188160b63bee42"
+  integrity sha512-0bGU0bocihjSC6MsE3TMjHjY0EUpchyrREquLS8VsZ3ohSMD+VHUEwimEfB3kpBI1vYkw3UFZ3WD8R28guz/Vw==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
