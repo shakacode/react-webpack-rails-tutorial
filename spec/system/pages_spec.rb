@@ -17,13 +17,16 @@ describe "Git Commit SHA" do
     GitCommitSha.reset_current_sha
   end
 
-  context "when .source_version file does not exist" do
-    let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5x" }
+  context "when GIT_COMMIT_SHA env var exists" do
+    let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5z" }
     let(:expected_text) { "94d9235" }
 
     before do
-      # stub this method since we need to control what the sha actually is
-      allow(GitCommitSha).to receive(:retrieve_sha_from_git) { sha }
+      ENV["GIT_COMMIT_SHA"] = sha
+    end
+
+    after do
+      ENV.delete("GIT_COMMIT_SHA")
     end
 
     it_behaves_like "Git Commit SHA"
@@ -36,6 +39,18 @@ describe "Git Commit SHA" do
     before { `cd #{Rails.root} && echo #{sha} > .source_version` }
 
     after { `cd #{Rails.root} && rm .source_version` }
+
+    it_behaves_like "Git Commit SHA"
+  end
+
+  context "when falling back to git command" do
+    let(:sha) { "94d92356828a56db25fccff9d50f41c525eead5x" }
+    let(:expected_text) { "94d9235" }
+
+    before do
+      # stub this method since we need to control what the sha actually is
+      allow(GitCommitSha).to receive(:retrieve_sha_from_git) { sha }
+    end
 
     it_behaves_like "Git Commit SHA"
   end

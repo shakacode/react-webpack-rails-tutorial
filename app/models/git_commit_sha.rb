@@ -5,7 +5,9 @@ class GitCommitSha
   attr_writer :current_sha
 
   def self.current_sha
-    @current_sha ||= retrieve_sha_from_file.presence || retrieve_sha_from_git
+    @current_sha ||= ENV["GIT_COMMIT_SHA"].presence ||
+                     retrieve_sha_from_file.presence ||
+                     retrieve_sha_from_git
   end
 
   def self.reset_current_sha
