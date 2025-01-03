@@ -26,7 +26,7 @@ if Rails.env.development? || Rails.env.test?
       puts Rainbow("PASSED").green
       puts ""
     rescue StandardError => e
-      puts e.to_s
+      puts e
       puts Rainbow("FAILED").red
       puts ""
       raise(e)
@@ -38,7 +38,7 @@ if Rails.env.development? || Rails.env.test?
       puts Rainbow("PASSED").green
       puts ""
     rescue StandardError => e
-      puts e.to_s
+      puts e
       puts Rainbow("FAILED").red
       puts ""
       raise(e)
@@ -50,7 +50,7 @@ if Rails.env.development? || Rails.env.test?
       puts Rainbow("PASSED").green
       puts ""
     rescue StandardError => e
-      puts e.to_s
+      puts e
       puts Rainbow("FAILED").red
       puts ""
       raise(e)

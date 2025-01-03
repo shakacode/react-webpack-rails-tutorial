@@ -9,22 +9,23 @@ describe "with Turbo and Stimulus" do
     end
 
     it "shows horizontal tab on visit" do
-      page.has_css?("form-horizontal")
+      expect(page).to have_css(".form-horizontal")
     end
 
     it "stops showing horizontal tab when other tab is clicked" do
       click_link("Inline Form")
-      page.has_no_css?("form-horizontal")
+      expect(page).to have_no_css(".form-horizontal")
     end
 
     it "shows inline form when Inline Form link is clicked" do
       click_link("Inline Form")
-      page.has_css?("form-inline")
+      expect(page).to have_css(".form-inline")
     end
 
     it "shows stacked form when Stacked Form link is clicked" do
       click_link("Stacked Form")
-      page.has_no_css?("form-inline") and page.has_no_css?("form-horizontal")
+      expect(page).to have_no_css(".form-inline")
+      expect(page).to have_no_css(".form-horizontal")
     end
   end
 

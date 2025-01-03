@@ -3,7 +3,7 @@
 require "rails_helper"
 require "system/shared/contexts"
 
-describe "Edit a comment", existing_comment: true do
+describe "Edit a comment", :existing_comment do
   let(:comment) { build(:comment) }
   let(:edited_name) { "Abraham Lincoln" }
 
@@ -20,7 +20,7 @@ describe "Edit a comment", existing_comment: true do
       expect(page).to have_css("#notice", text: "Comment was successfully updated.")
     end
 
-    it "comment is not updated when edit is submitted with blank fields", blank_form_submitted: true do
+    it "comment is not updated when edit is submitted with blank fields", :blank_form_submitted do
       visit comments_path
       click_link "New Comment"
       submit_form

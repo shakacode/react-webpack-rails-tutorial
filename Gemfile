@@ -10,7 +10,7 @@ gem "shakapacker", "8.0.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 7.1"
+gem "rails", "~> 8.0"
 
 gem "pg"
 
@@ -30,7 +30,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem "redis", "~> 4.0"
+gem "redis", "~> 5.0"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -74,10 +74,10 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", "1.24.1", require: false
+  gem "rubocop", "1.69", require: false
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-rails"
-  gem "rubocop-rspec", "~> 2.7"
+  gem "rubocop-rspec", "~> 3.3"
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "scss_lint", require: false
 
@@ -109,5 +109,5 @@ group :test do
   gem "selenium-webdriver", "~> 4"
 end
 
-gem "stimulus-rails", "~> 1.2"
-gem "turbo-rails", "~> 1.4"
+gem "stimulus-rails", "~> 1.3"
+gem "turbo-rails", "~> 2.0"
