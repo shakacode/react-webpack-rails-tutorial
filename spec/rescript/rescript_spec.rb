@@ -9,22 +9,23 @@ describe "with Rescript" do
     end
 
     it "shows horizontal tab on visit" do
-      page.has_css?("form-horizontal")
+      expect(page).to have_css(".form-horizontal")
     end
 
     it "stops showing horizontal tab when other tab is clicked" do
-      find("button", text: "Inline Form")
-      page.has_no_css?("form-horizontal")
+      find("button", text: "Inline Form").click
+      expect(page).to have_no_css(".form-horizontal")
     end
 
     it "shows inline form when Inline Form link is clicked" do
-      find("button", text: "Inline Form", wait: 10)
-      page.has_css?("form-inline")
+      find("button", text: "Inline Form").click
+      expect(page).to have_css(".form-inline")
     end
 
     it "shows stacked form when Stacked Form link is clicked" do
-      find("button", text: "Stacked Form")
-      page.has_no_css?("form-inline") and page.has_no_css?("form-horizontal")
+      find("button", text: "Stacked Form").click
+      expect(page).to have_no_css(".form-inline")
+      expect(page).to have_no_css(".form-horizontal")
     end
   end
 
