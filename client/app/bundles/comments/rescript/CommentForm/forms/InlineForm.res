@@ -4,9 +4,9 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
     className="form-inline flex flex-col lg:flex-row flex-wrap gap-4"
     onSubmit=handleSubmit
     disabled={disabled}
-    aria-label="Comment submission form">
+    ariaLabel="Comment submission form">
     <div className="flex gap-2 items-center">
-      <label> htmlFor="comment_author" {"Name"->React.string} </label>
+      <label htmlFor="comment_author"> {"Name"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded"
@@ -15,12 +15,12 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_author"
         value={author}
         onChange=handleAuthorChange
-        aria-label="Author name"
-        aria-required="true"
+        ariaLabel="Author name"
+        ariaRequired=true
       />
     </div>
     <div className="flex gap-2 items-center">
-      <label> htmlFor="comment_text" {"Text"->React.string} </label>
+      <label htmlFor="comment_text"> {"Text"->React.string} </label>
       <input
         type_="text"
         className="px-3 py-1 leading-4 border border-gray-300 rounded"
@@ -29,8 +29,8 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_text"
         onChange=handleTextChange
         value={text}
-        aria-label="Comment text"
-        aria-required="true"
+        ariaLabel="Comment text"
+        ariaRequired=true
       />
     </div>
     <div className="flex gap-2">
@@ -38,7 +38,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
         value="Post"
-        aria-label="Submit comment"
+        ariaLabel="Submit comment"
       />
     </div>
   </form>

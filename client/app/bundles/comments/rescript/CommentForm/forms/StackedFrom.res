@@ -1,6 +1,10 @@
 @react.component
 let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmit, ~disabled) => {
-  <form onSubmit=handleSubmit disabled={disabled} className="flex flex-col gap-4" aria-label="Comment submission form">
+  <form
+    onSubmit=handleSubmit
+    disabled={disabled}
+    className="flex flex-col gap-4"
+    ariaLabel="Comment submission form">
     <div className="flex flex-col gap-0">
       <label htmlFor="comment_author" className="w-full"> {"Name"->React.string} </label>
       <input
@@ -11,8 +15,8 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_author"
         onChange=handleAuthorChange
         value={author}
-        aria-label="Author name"
-        aria-required="true"
+        ariaLabel="Author name"
+        ariaRequired=true
       />
     </div>
     <div className="flex flex-col gap-0">
@@ -25,8 +29,8 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         id="comment_text"
         onChange=handleTextChange
         value={text}
-        aria-label="Comment text"
-        aria-required="true"
+        ariaLabel="Comment text"
+        ariaRequired=true
       />
     </div>
     <div className="flex flex-col gap-0">
@@ -34,7 +38,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
         type_="submit"
         className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
         value="Post"
-        aria-label="Submit comment"
+        ariaLabel="Submit comment"
       />
     </div>
   </form>
