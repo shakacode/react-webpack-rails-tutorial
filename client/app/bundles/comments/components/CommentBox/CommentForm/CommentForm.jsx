@@ -1,7 +1,6 @@
 /* eslint-disable react/no-find-dom-node, react/no-string-refs */
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
@@ -27,6 +26,13 @@ class CommentForm extends BaseComponent {
       comment: emptyComment,
     };
 
+    this.horizontalAuthorRef = React.createRef();
+    this.horizontalTextRef = React.createRef();
+    this.stackedAuthorRef = React.createRef();
+    this.stackedTextRef = React.createRef();
+    this.inlineAuthorRef = React.createRef();
+    this.inlineTextRef = React.createRef();
+
     _.bindAll(this, ['handleSelect', 'handleChange', 'handleSubmit', 'resetAndFocus']);
   }
 
@@ -40,22 +46,20 @@ class CommentForm extends BaseComponent {
     switch (this.state.formMode) {
       case 0:
         comment = {
-          author: ReactDOM.findDOMNode(this.refs.horizontalAuthorNode).value,
-          text: ReactDOM.findDOMNode(this.refs.horizontalTextNode).value,
+          author: this.horizontalAuthorRef.current.value,
+          text: this.horizontalTextRef.current.value,
         };
         break;
       case 1:
         comment = {
-          author: ReactDOM.findDOMNode(this.refs.stackedAuthorNode).value,
-          text: ReactDOM.findDOMNode(this.refs.stackedTextNode).value,
+          author: this.stackedAuthorRef.current.value,
+          text: this.stackedTextRef.current.value,
         };
         break;
       case 2:
         comment = {
-          // This is different because the input is a native HTML element
-          // rather than a React element.
-          author: ReactDOM.findDOMNode(this.refs.inlineAuthorNode).value,
-          text: ReactDOM.findDOMNode(this.refs.inlineTextNode).value,
+          author: this.inlineAuthorRef.current.value,
+          text: this.inlineTextRef.current.value,
         };
         break;
       default:
@@ -81,13 +85,13 @@ class CommentForm extends BaseComponent {
     let ref;
     switch (this.state.formMode) {
       case 0:
-        ref = ReactDOM.findDOMNode(this.refs.horizontalTextNode);
+        ref = this.horizontalTextRef.current;
         break;
       case 1:
-        ref = ReactDOM.findDOMNode(this.refs.stackedTextNode);
+        ref = this.stackedTextRef.current;
         break;
       case 2:
-        ref = ReactDOM.findDOMNode(this.refs.inlineTextNode);
+        ref = this.inlineTextRef.current;
         break;
       default:
         throw new Error(`Unexpected state.formMode ${this.state.formMode}`);
@@ -103,15 +107,15 @@ class CommentForm extends BaseComponent {
         <hr />
         <form className="form-horizontal flex flex-col gap-4" onSubmit={this.handleSubmit}>
           <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-            <label htmlFor="horizontalAuthorNode" className="w-full lg:w-2/12 lg:text-end shrink-0">
+            <label htmlFor="horizontalAuthorRef" className="w-full lg:w-2/12 lg:text-end shrink-0">
               {formatMessage(defaultMessages.inputNameLabel)}
             </label>
             <input
               type="text"
-              id="horizontalAuthorNode"
+              id="horizontalAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
-              ref="horizontalAuthorNode"
+              ref={this.horizontalAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
@@ -119,15 +123,15 @@ class CommentForm extends BaseComponent {
           </div>
 
           <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-            <label htmlFor="horizontalTextNode" className="w-full lg:w-2/12 lg:text-end shrink-0">
+            <label htmlFor="horizontalTextRef" className="w-full lg:w-2/12 lg:text-end shrink-0">
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
               type="textarea"
-              id="horizontalTextNode"
+              id="horizontalTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
-              ref="horizontalTextNode"
+              ref={this.horizontalTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
@@ -158,15 +162,15 @@ class CommentForm extends BaseComponent {
         <hr />
         <form className="flex flex-col gap-4" onSubmit={this.handleSubmit}>
           <div className="flex flex-col gap-0">
-            <label htmlFor="stackedAuthorNode" className="w-full">
+            <label htmlFor="stackedAuthorRef" className="w-full">
               {formatMessage(defaultMessages.inputNameLabel)}
             </label>
             <input
               type="text"
-              id="stackedAuthorNode"
+              id="stackedAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
-              ref="stackedAuthorNode"
+              ref={this.stackedAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
@@ -174,15 +178,15 @@ class CommentForm extends BaseComponent {
           </div>
 
           <div className="flex flex-col gap-0">
-            <label htmlFor="stackedTextNode" className="w-full">
+            <label htmlFor="stackedTextRef" className="w-full">
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
               type="text"
-              id="stackedTextNode"
+              id="stackedTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
-              ref="stackedTextNode"
+              ref={this.stackedTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
@@ -213,13 +217,13 @@ class CommentForm extends BaseComponent {
         <hr />
         <form className="form-inline flex flex-col lg:flex-row flex-wrap gap-4" onSubmit={this.handleSubmit}>
           <div className="flex gap-2 items-center">
-            <label htmlFor="inlineAuthorNode">{formatMessage(defaultMessages.inputNameLabel)}</label>
+            <label htmlFor="inlineAuthorRef">{formatMessage(defaultMessages.inputNameLabel)}</label>
             <input
               type="text"
-              id="inlineAuthorNode"
+              id="inlineAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded"
-              ref="inlineAuthorNode"
+              ref={this.inlineAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
@@ -227,13 +231,13 @@ class CommentForm extends BaseComponent {
           </div>
 
           <div className="flex gap-2 items-center">
-            <label htmlFor="inlineTextNode">{formatMessage(defaultMessages.inputTextLabel)}</label>
+            <label htmlFor="inlineTextRef">{formatMessage(defaultMessages.inputTextLabel)}</label>
             <input
               type="textarea"
-              id="inlineTextNode"
+              id="inlineTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               className="px-3 py-1 leading-4 border border-gray-300 rounded"
-              ref="inlineTextNode"
+              ref={this.inlineTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
               disabled={this.props.isSaving}
