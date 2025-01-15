@@ -122,7 +122,7 @@ let make = (~fetchData) => {
         disabled
       />
     | Stacked =>
-      <StackedFrom
+      <StackedForm
         author={state.author}
         handleAuthorChange
         text={state.text}
