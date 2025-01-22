@@ -68,6 +68,7 @@ Metrics/ClassLength:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/development.rb'
+    - 'config/environments/production.rb'
     - 'lib/tasks/linters.rake'
     - 'spec/rails_helper.rb'
     - 'spec/system/add_new_comment_spec.rb'
