@@ -92,7 +92,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
@@ -127,6 +127,6 @@ Rails.application.configure do
 
   # Action Cable endpoint configuration
 
-  config.action_cable.url = "wss://#{ENV['PRODUCTION_HOST']}/cable"
-  config.action_cable.allowed_request_origins = ["https://#{ENV['PRODUCTION_HOST']}"]
+  config.action_cable.url = "wss://#{ENV.fetch('PRODUCTION_HOST', nil)}/cable"
+  config.action_cable.allowed_request_origins = ["https://#{ENV.fetch('PRODUCTION_HOST', nil)}"]
 end
