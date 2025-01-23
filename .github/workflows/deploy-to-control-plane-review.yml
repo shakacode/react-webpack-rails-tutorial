@@ -81,7 +81,7 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
-            return deployment.data.id;
+            return { deployment_id: deployment.data.id };
 
       - name: Get PR HEAD Ref
         if: ${{ github.event_name == 'issue_comment' }}
