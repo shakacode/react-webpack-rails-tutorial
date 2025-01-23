@@ -1,56 +1,87 @@
 # Control Plane GitHub Action
 
-name: Deploy-To-Control-Plane
-description: 'Deploys both to staging and to review apps'
+name: Deploy to Control Plane
+description: 'Deploys an application to Control Plane'
 
 inputs:
   app_name:
-    description: 'The name of the app to deploy'
+    description: 'Name of the application'
     required: true
-    default:
   org:
-    description: 'The org of the app to deploy'
+    description: 'Organization name'
     required: true
-    default:
+  github_token:
+    description: 'GitHub token'
+    required: true
+  wait_timeout:
+    description: 'Timeout in seconds for waiting for workloads to be ready'
+    required: false
+    default: 600
+
+outputs:
+  review_app_url:
+    description: 'URL of the deployed application'
+    value: ${{ steps.deploy.outputs.review_app_url }}
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Setup Environment
       uses: ./.github/actions/setup-environment
 
-    - name: Set Short SHA
-      id: vars
+    - name: Get Commit SHA
+      id: get_sha
       shell: bash
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      run: ${{ github.action_path }}/scripts/get-commit-sha.sh
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        PR_NUMBER: ${{ env.PR_NUMBER }}
 
-    # Caching step
-    - uses: actions/cache@v2
-      with:
-        path: /tmp/.docker-cache
-        key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha   }}
-        restore-keys: |
-          ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
-          ${{ runner.os }}-docker-
-
-    - name: cpflow setup-app
-      shell: bash
-      run: |
-        if ! cpflow exists -a ${{ inputs.app_name }} ; then
-          cpflow setup-app -a ${{ inputs.app_name }}
-        fi
-    # Provision all infrastructure on Control Plane.
-    # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-    - name: cpflow build-image
-      shell: bash
-      run: |
-        cpln image docker-login
-        # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
-        # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
-        cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
-        # --cache /tmp/.docker-cache
     - name: Deploy to Control Plane
+      id: deploy
       shell: bash
       run: |
-        echo "Deploying to Control Plane"
-        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}}  --verbose
+        echo "🚀 Deploying app for PR #${PR_NUMBER}..."
+        
+        # Create temp file for output
+        TEMP_OUTPUT=$(mktemp)
+        trap 'rm -f "${TEMP_OUTPUT}"' EXIT
+        
+        # Deploy the application and show output in real-time while capturing it
+        if ! cpflow deploy-image -a "${{ inputs.app_name }}" --run-release-phase --org "${{ inputs.org }}" 2>&1 | tee "${TEMP_OUTPUT}"; then
+          echo "❌ Deployment failed for PR #${PR_NUMBER}"
+          echo "Error output:"
+          cat "${TEMP_OUTPUT}"
+          exit 1
+        fi
+        
+        # Extract app URL from captured output
+        REVIEW_APP_URL=$(grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' "${TEMP_OUTPUT}" | head -n1)
+        if [ -z "${REVIEW_APP_URL}" ]; then
+          echo "❌ Failed to get app URL from deployment output"
+          echo "Deployment output:"
+          cat "${TEMP_OUTPUT}"
+          exit 1
+        fi
+        
+        # Wait for all workloads to be ready
+        WAIT_TIMEOUT=${WAIT_TIMEOUT:-${{ inputs.wait_timeout }}}
+        echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)..."
+        
+        # Use timeout command with ps:wait and show output in real-time
+        if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"${{ inputs.app_name }}\"" 2>&1 | tee -a "${TEMP_OUTPUT}"; then
+          TIMEOUT_EXIT=$?
+          if [ ${TIMEOUT_EXIT} -eq 124 ]; then
+            echo "❌ Timed out waiting for workloads after ${WAIT_TIMEOUT} seconds"
+          else
+            echo "❌ Workloads did not become ready for PR #${PR_NUMBER} (exit code: ${TIMEOUT_EXIT})"
+          fi
+          echo "Full output:"
+          cat "${TEMP_OUTPUT}"
+          exit 1
+        fi
+        
+        echo "✅ Deployment successful for PR #${PR_NUMBER}"
+        echo "🌐 App URL: ${REVIEW_APP_URL}"
+        echo "review_app_url=${REVIEW_APP_URL}" >> $GITHUB_OUTPUT
+        echo "REVIEW_APP_URL=${REVIEW_APP_URL}" >> $GITHUB_ENV

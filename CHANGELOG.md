@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 See: [merged pull requests](https://github.com/shakacode/react-webpack-rails-tutorial/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Amerged).
+
+## 2025-01-22
+Improvements to control-plane-flow implementation.
+
+
+
  
 ## [2.1.0] - 2016-03-06
 ### Updated

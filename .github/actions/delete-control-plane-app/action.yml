@@ -1,0 +1,20 @@
+name: Delete Control Plane App
+description: 'Deletes a Control Plane application and all its resources'
+
+inputs:
+  app_name:
+    description: 'Name of the application to delete'
+    required: true
+  org:
+    description: 'Organization name'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Delete Application
+      shell: bash
+      run: ${{ github.action_path }}/../deploy-to-control-plane/scripts/delete-app.sh
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        CPLN_ORG: ${{ inputs.org }}

@@ -2,6 +2,10 @@
 ARG RUBY_VERSION=3.3.4
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
+# Current commit hash environment variable
+ARG GIT_COMMIT
+ENV GIT_COMMIT_SHA=${GIT_COMMIT}
+
 # Install packages needed to build gems and node modules
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl git libpq-dev libvips node-gyp pkg-config python-is-python3
@@ -76,7 +80,3 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 # Default args to pass to the entry point that can be overridden
 # For Kubernetes and ControlPlane, these are the "workload args"
 CMD ["./bin/rails", "server"]
-
-# Current commit hash environment variable
-ARG GIT_COMMIT_SHA
-ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}

@@ -1,6 +1,6 @@
 # Control Plane GitHub Action
 
-name: Deploy-To-Control-Plane-Staging
+name: Deploy Main Branch to Control Plane Staging
 
 # Controls when the workflow will run
 on:
@@ -21,8 +21,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper SHA handling
+          ref: master    # Explicitly checkout master branch
 
       - uses: ./.github/actions/deploy-to-control-plane
         with:

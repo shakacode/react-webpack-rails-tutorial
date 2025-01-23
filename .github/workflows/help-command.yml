@@ -1,0 +1,52 @@
+name: Show Help for Commands
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  show-help:
+    if: |
+      github.event_name == 'issue_comment' && 
+      github.event.issue.pull_request && 
+      github.event.comment.body == '/help'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show Available Commands
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const helpMessage = [
+              '## 📚 Available Commands',
+              '',
+              '### `/deploy`',
+              'Deploys your PR branch to a review environment on Control Plane.',
+              '- Creates a new review app if one doesn\'t exist',
+              '- Updates the existing review app if it already exists',
+              '- Provides a unique URL to preview your changes',
+              '- Shows build and deployment progress in real-time',
+              '',
+              '### `/delete-review-app`',
+              'Deletes the review app associated with this PR.',
+              '- Removes all resources from Control Plane',
+              '- Helpful for cleaning up when you\'re done testing',
+              '- Can be re-deployed later using `/deploy`',
+              '',
+              '### `/help`',
+              'Shows this help message explaining available commands.',
+              '',
+              '---',
+              '_Note: These commands only work in pull request comments._'
+            ].join('\n');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: helpMessage
+            });
