@@ -51,7 +51,7 @@ jobs:
 
     outputs:
       app_url: ${{ steps.deploy.outputs.app_url }}
-      deployment_id: ${{ steps.create-deployment.outputs.deployment_id }}
+      deployment_id: ${{ steps.create-deployment.outputs.result.deployment_id }}
 
     steps:
       - name: Notify deployment start
@@ -104,7 +104,7 @@ jobs:
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              deployment_id: ${{ steps.create-deployment.outputs.result.deployment_id }},
               state: 'in_progress',
               description: 'Deployment is in progress'
             });
@@ -143,7 +143,7 @@ jobs:
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              deployment_id: ${{ steps.create-deployment.outputs.result.deployment_id }},
               state: 'success',
               environment_url: '${{ steps.deploy.outputs.app_url }}',
               description: 'Deployment successful'
@@ -168,7 +168,7 @@ jobs:
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              deployment_id: ${{ steps.create-deployment.outputs.result.deployment_id }},
               state: 'failure',
               description: 'Deployment failed'
             });
