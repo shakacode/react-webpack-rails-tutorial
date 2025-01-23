@@ -14,9 +14,9 @@ runs:
     - name: Install Control Plane CLI and cpflow gem
       shell: bash
       run: |
-        sudo npm install -g @controlplane/cli@3.1.0
+        sudo npm install -g @controlplane/cli@3.3.0
         cpln --version
-        gem install cpflow -v 4.0.0
+        gem install cpflow -v 4.1.0
         cpflow --version
 
     - name: cpln profile

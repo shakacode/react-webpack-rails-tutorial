@@ -1,85 +1,103 @@
-# Control Plane GitHub Action
-
 name: Deploy Review App to Control Plane
 
-# Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-  # Uncomment these lines to trigger the workflow on pull request events
-  # pull_request:
-  #   branches:
-  #     - master
-
-  # deploy on comment "/deploy-review-app"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [master]
   issue_comment:
-    types: [created, edited]
+    types: [created]
 
-# Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
+concurrency:
+  group: review-app-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
 env:
   CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
-  # Uncomment this line to use the PR number from the pull requests trigger event (that trigger is commented)
-  # PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
-  PR_NUMBER: ${{ github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
   deploy-to-control-plane-review:
-    if: ${{ github.event_name != 'issue_comment' || (github.event.comment.body == '/deploy-review-app' && github.event.issue.pull_request) }}
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' && 
+       github.event.comment.body == '/deploy-review-app' && 
+       github.event.issue.pull_request)
     runs-on: ubuntu-latest
 
+    outputs:
+      app_url: ${{ steps.deploy.outputs.app_url }}
+      deployment_id: ${{ steps.create-deployment.outputs.deployment_id }}
+
     steps:
+      - name: Create GitHub Deployment
+        id: create-deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'review-app',
+              auto_merge: false,
+              required_contexts: []
+            });
+            return deployment.data.id;
+
       - name: Get PR HEAD Ref
         if: ${{ github.event_name == 'issue_comment' }}
         id: getRef
-        run: echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        run: |
+          echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout source code from Github
+      - name: Checkout source code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
 
-      - name: Add GitHub Comment
-        if: ${{ github.event_name == 'issue_comment' }}
+      - name: Update deployment status (in_progress)
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "We started working on your review-app deployment. You can track progress in the `Actions` Tab [here](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/deploy-to-control-plane-review.yml) on Github."
-            })
+              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              state: 'in_progress',
+              description: 'Deployment is in progress'
+            });
 
-      - name: Get PR number
-        if: ${{ github.event_name != 'issue_comment' }}
-        run: |
-          echo "GITHUB_REPOSITORY: \"$GITHUB_REPOSITORY\""
-          if [ -z "$PR_NUMBER" ]; then
-            echo "PR_NUMBER is not in the trigger event. Fetching PR number from open PRs."
-            REF="${{ github.ref }}"
-            REF=${REF#refs/heads/}  # Remove 'refs/heads/' prefix
-            echo "REF: \"$REF\""
-            API_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=open" \
-            --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
-            PR_NUMBER=$(echo "$API_RESPONSE" | jq '.[] | select(.head.ref=="'$REF'") | .number')
-          fi
-          echo "PR_NUMBER: $PR_NUMBER"
-          if [ -z "$PR_NUMBER" ]; then
-            echo "PR_NUMBER is not set. Aborting."
-            exit 1
-          fi
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-      - name: Get App Name
-        run: |
-          echo "PR_NUMBER: ${{ env.PR_NUMBER }}"
-          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> "$GITHUB_ENV"
-          echo "App Name: ${{ env.APP_NAME }}"
-      - uses: ./.github/actions/deploy-to-control-plane
+      # ... rest of your existing steps ...
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: actions/github-script@v7
         with:
-          app_name: ${{ env.APP_NAME }}
-          org: ${{ env.CPLN_ORG }}
+          script: |
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              state: 'success',
+              environment_url: '${{ steps.deploy.outputs.app_url }}',
+              description: 'Deployment successful'
+            });
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: ${{ steps.create-deployment.outputs.deployment_id }},
+              state: 'failure',
+              description: 'Deployment failed'
+            });
