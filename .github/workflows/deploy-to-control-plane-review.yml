@@ -60,26 +60,20 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const createComment = async (message) => {
+            async function createComment(message) {
               await github.rest.issues.createComment({
                 issue_number: context.issue.number || context.payload.pull_request.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: message
               });
-            };
+            }
             
-            core.exportVariable('createComment', createComment);
-
-      - name: Notify deployment start
-        uses: actions/github-script@v7
-        with:
-          script: |
             const message = `🚀 Starting new deployment for commit: ${context.sha.substring(0, 7)}
             ${context.payload.commits ? `\nChanges: ${context.payload.commits[0].message}` : ''}
             Status: ${{ env.STATUS_URL }}`;
             
-            await eval(process.env.createComment)(message);
+            await createComment(message);
 
       - name: Create GitHub Deployment
         id: create-deployment
