@@ -16,7 +16,7 @@ env:
   CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
-  STATUS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}?pr=${{ github.event.pull_request.number || github.event.issue.number }}
+  STATUS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}?pr=${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
   check-concurrent:
