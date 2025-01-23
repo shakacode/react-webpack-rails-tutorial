@@ -7,11 +7,9 @@ inputs:
   app_name:
     description: 'The name of the app to deploy'
     required: true
-    default:
   org:
     description: 'The org of the app to deploy'
     required: true
-    default:
 
 runs:
   using: 'composite'
@@ -22,13 +20,14 @@ runs:
     - name: Set Short SHA
       id: vars
       shell: bash
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      run: |
+        echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-    # Caching step
-    - uses: actions/cache@v2
+    # Updated caching step to v3
+    - uses: actions/cache@v3
       with:
         path: /tmp/.docker-cache
-        key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha   }}
+        key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
           ${{ runner.os }}-docker-
@@ -39,6 +38,7 @@ runs:
         if ! cpflow exists -a ${{ inputs.app_name }} ; then
           cpflow setup-app -a ${{ inputs.app_name }}
         fi
+
     # Provision all infrastructure on Control Plane.
     # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
     - name: cpflow build-image
@@ -48,9 +48,9 @@ runs:
         # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
         # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
         cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.vars.outputs.sha_short}} --org=${{inputs.org}}
-        # --cache /tmp/.docker-cache
+
     - name: Deploy to Control Plane
       shell: bash
       run: |
         echo "Deploying to Control Plane"
-        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}}  --verbose
+        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}} --verbose
