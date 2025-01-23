@@ -16,7 +16,6 @@ env:
   CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
   CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
-  STATUS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ steps.get_job_id.outputs.job_id }}?pr=${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
   check-concurrent:
@@ -55,11 +54,12 @@ jobs:
       deployment_id: ${{ steps.create-deployment.outputs.result }}
 
     steps:
-      - name: Get job ID
-        id: get_job_id
+      - name: Create initial comment and get job URL
+        id: init
         uses: actions/github-script@v7
         with:
           script: |
+            // Get the job ID from the Actions API
             const { data: jobs } = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -67,31 +67,23 @@ jobs:
             });
             
             const currentJob = jobs.jobs.find(job => job.name === context.job);
-            const jobId = currentJob.id;
-            
-            return jobId;
-
-      - name: Create comment
-        id: create-comment
-        uses: actions/github-script@v7
-        env:
-          JOB_ID: ${{ steps.get_job_id.outputs.result }}
-        with:
-          script: |
-            async function createComment(message) {
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number || context.payload.pull_request.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: message
-              });
+            if (!currentJob) {
+              throw new Error('Could not find current job in the workflow run');
             }
+            
+            const statusUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${currentJob.id}?pr=${context.issue.number || context.payload.pull_request.number}`;
+            core.exportVariable('statusUrl', statusUrl);
             
             const message = `🚀 Starting new deployment for commit: ${context.sha.substring(0, 7)}
             ${context.payload.commits ? `\nChanges: ${context.payload.commits[0].message}` : ''}
-            Status: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${JOB_ID}?pr=${context.issue.number || context.payload.pull_request.number}`;
+            Status: ${statusUrl}`;
             
-            await createComment(message);
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
 
       - name: Create GitHub Deployment
         id: create-deployment
@@ -148,7 +140,7 @@ jobs:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
 
-      - name: Update deployment status (success)
+      - name: Update deployment status success
         if: success()
         uses: actions/github-script@v7
         with:
@@ -157,9 +149,14 @@ jobs:
             Environment: review-app
             Commit: ${context.sha.substring(0, 7)}
             URL: ${{ steps.deploy.outputs.app_url }}
-            Status: ${{ env.STATUS_URL }}`;
+            Status: ${process.env.statusUrl}`;
             
-            await eval(process.env.createComment)(message);
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
             
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
@@ -170,16 +167,21 @@ jobs:
               description: 'Deployment successful'
             });
 
-      - name: Update deployment status (failure)
+      - name: Update deployment status failure
         if: failure()
         uses: actions/github-script@v7
         with:
           script: |
             const message = `❌ Deployment failed
             Commit: ${context.sha.substring(0, 7)}
-            Status: ${{ env.STATUS_URL }}`;
+            Status: ${process.env.statusUrl}`;
             
-            await eval(process.env.createComment)(message);
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
             
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
