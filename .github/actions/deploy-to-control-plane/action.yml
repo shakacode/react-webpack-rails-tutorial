@@ -10,6 +10,9 @@ inputs:
   org:
     description: 'The org of the app to deploy'
     required: true
+  github_token:
+    description: 'The GitHub token for authentication'
+    required: true
 
 runs:
   using: 'composite'
@@ -17,11 +20,21 @@ runs:
     - name: Setup Environment
       uses: ./.github/actions/setup-environment
 
-    - name: Set Short SHA
-      id: vars
+    - name: Get correct commit SHA
+      id: get_sha
       shell: bash
       run: |
-        echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+        if [[ "$GITHUB_EVENT_NAME" == "issue_comment" ]]; then
+          PR_SHA=$(gh pr view ${{ env.PR_NUMBER }} --json headRefOid --jq '.headRefOid')
+          echo "sha=$PR_SHA" >> $GITHUB_OUTPUT
+          echo "sha_short=${PR_SHA:0:7}" >> $GITHUB_OUTPUT
+        else
+          echo "sha=$GITHUB_SHA" >> $GITHUB_OUTPUT
+          echo "sha_short=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+        fi
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        PR_NUMBER: ${{ env.PR_NUMBER }}
 
     # Updated caching step to v3
     - uses: actions/cache@v3
@@ -41,13 +54,13 @@ runs:
 
     # Provision all infrastructure on Control Plane.
     # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-    - name: cpflow build-image
+    - name: Build and deploy
       shell: bash
       run: |
         cpln image docker-login
         # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
-        # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.vars.outputs.sha_short}} --org ${{inputs.org}}
-        cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.vars.outputs.sha_short}} --org=${{inputs.org}}
+        # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.get_sha.outputs.sha_short}} --org ${{inputs.org}}
+        cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}}
 
     - name: Deploy to Control Plane
       shell: bash
