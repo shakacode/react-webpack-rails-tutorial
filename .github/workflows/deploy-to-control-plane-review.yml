@@ -18,20 +18,56 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
-  deploy-to-control-plane-review:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'issue_comment' && 
-       github.event.comment.body == '/deploy-review-app' && 
-       github.event.issue.pull_request)
+  check-concurrent:
     runs-on: ubuntu-latest
+    outputs:
+      cancelled: ${{ steps.check.outputs.cancelled }}
+    steps:
+      - name: Check for concurrent deployment
+        id: check
+        run: |
+          if [ "${{ github.run_attempt }}" != "1" ]; then
+            echo "⚠️ Cancelling previous deployment due to new code push..."
+            echo "cancelled=true" >> $GITHUB_OUTPUT
+          else
+            echo "cancelled=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-to-control-plane-review:
+    needs: check-concurrent
+    if: |
+      needs.check-concurrent.outputs.cancelled != 'true' &&
+      (github.event_name == 'workflow_dispatch' ||
+       github.event_name == 'pull_request' ||
+       (github.event_name == 'issue_comment' && 
+        github.event.comment.body == '/deploy-review-app' && 
+        github.event.issue.pull_request))
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
 
     outputs:
       app_url: ${{ steps.deploy.outputs.app_url }}
       deployment_id: ${{ steps.create-deployment.outputs.deployment_id }}
 
     steps:
+      - name: Notify deployment start
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const message = `🚀 Starting new deployment for commit: ${context.sha.substring(0, 7)}
+            ${context.payload.commits ? `\nChanges: ${context.payload.commits[0].message}` : ''}`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
       - name: Create GitHub Deployment
         id: create-deployment
         uses: actions/github-script@v7
@@ -73,13 +109,37 @@ jobs:
               description: 'Deployment is in progress'
             });
 
-      # ... rest of your existing steps ...
+      - name: Configure app name
+        id: app-config
+        run: |
+          APP_NAME="qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}"
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "app_name=$APP_NAME" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Control Plane
+        id: deploy
+        uses: ./.github/actions/deploy-to-control-plane
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
 
       - name: Update deployment status (success)
         if: success()
         uses: actions/github-script@v7
         with:
           script: |
+            const message = `✅ Deployment successful!
+            Environment: review-app
+            Commit: ${context.sha.substring(0, 7)}
+            URL: ${{ steps.deploy.outputs.app_url }}`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+            
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -94,6 +154,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const message = `❌ Deployment failed
+            Commit: ${context.sha.substring(0, 7)}
+            Please check the [workflow logs](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}) for details.`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+            
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
