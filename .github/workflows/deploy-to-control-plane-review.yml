@@ -1,4 +1,4 @@
-name: Deploy Review App
+name: Deploy Review or Staging App
 
 on:
   pull_request:

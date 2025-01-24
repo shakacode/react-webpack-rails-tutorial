@@ -29,22 +29,39 @@ runs:
       id: get_sha
       shell: bash
       run: |
-        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-        echo "Using commit SHA: $(git rev-parse --short HEAD)"
+        if [ -n "$PR_NUMBER" ]; then
+          # If PR_NUMBER is set, get the PR's head SHA
+          PR_SHA=$(gh pr view $PR_NUMBER --json headRefOid --jq '.headRefOid')
+          echo "sha=$PR_SHA" >> $GITHUB_OUTPUT
+          echo "sha_short=${PR_SHA:0:7}" >> $GITHUB_OUTPUT
+          echo "Using PR head commit SHA: ${PR_SHA:0:7}"
+        else
+          # For direct branch deployments, use the current commit SHA
+          CURRENT_SHA=$(git rev-parse HEAD)
+          echo "sha=$CURRENT_SHA" >> $GITHUB_OUTPUT
+          echo "sha_short=${CURRENT_SHA:0:7}" >> $GITHUB_OUTPUT
+          echo "Using branch commit SHA: ${CURRENT_SHA:0:7}"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        PR_NUMBER: ${{ env.PR_NUMBER }}
 
-    - name: Deploy to Control Plane
+    - name: Build Image
+      id: build
+      shell: bash
+      run: |
+        echo "🏗️ Building image with commit: ${{steps.get_sha.outputs.sha_short}}"
+        cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}}
+
+    - name: Deploy Image
       id: deploy
       shell: bash
       run: |
         # Create temp file for output
         TEMP_OUTPUT=$(mktemp)
         
-        echo "🚀 Deploying with commit: ${{steps.get_sha.outputs.sha_short}}"
-        
-        # Build and deploy
-        if cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}} | tee "$TEMP_OUTPUT" && \
-           cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}} --verbose | tee -a "$TEMP_OUTPUT"; then
-          
+        echo "🚀 Deploying image..."
+        if cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}} --verbose | tee "$TEMP_OUTPUT"; then
           # Extract Rails URL
           RAILS_URL=$(grep -o 'https://rails-[^[:space:]]*\.cpln\.app' "$TEMP_OUTPUT")
           if [ -n "$RAILS_URL" ]; then
