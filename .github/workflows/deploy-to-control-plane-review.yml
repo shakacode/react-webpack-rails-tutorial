@@ -45,6 +45,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
 
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+
       - name: Initialize Deployment
         id: init-deployment
         uses: actions/github-script@v7
