@@ -141,35 +141,48 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract deployment URL
-        id: extract-url
-        run: |
-          RAILS_URL=$(echo "${{ steps.deploy.outputs.deployment_output }}" | grep -o 'https://rails-[^[:space:]]*\.cpln\.app')
-          echo "RAILS_URL=$RAILS_URL" >> $GITHUB_ENV
-          echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT
-
       - name: Update PR commit message
         if: success()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RAILS_URL: ${{ steps.deploy.outputs.rails_url }}
         run: |
-          PR_SHA=$(gh pr view ${{ env.PR_NUMBER }} --json commits --jq '.commits[-1].oid')
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git pull --rebase
-          git commit --amend -m "Rails review app deployed to ${{ env.RAILS_URL }}"
-          git push --force-with-lease origin HEAD
+          if [ -n "$RAILS_URL" ]; then
+            echo "🔄 Updating PR commit message with deployment URL..."
+            PR_SHA=$(gh pr view ${{ env.PR_NUMBER }} --json commits --jq '.commits[-1].oid')
+            if [ -n "$PR_SHA" ]; then
+              git config user.name "GitHub Actions"
+              git config user.email "actions@github.com"
+              git pull --rebase
+              git commit --amend -m "Rails review app deployed to $RAILS_URL"
+              if git push --force-with-lease origin HEAD; then
+                echo "✅ Successfully updated commit message"
+              else
+                echo "❌ Failed to push updated commit message"
+                exit 1
+              fi
+            else
+              echo "❌ Failed to get PR SHA"
+              exit 1
+            fi
+          else
+            echo "❌ No Rails URL found in deployment output"
+            exit 1
+          fi
 
       - name: Update deployment status success
         if: success()
         uses: actions/github-script@v7
+        env:
+          RAILS_URL: ${{ steps.deploy.outputs.rails_url }}
         with:
           script: |
             const message = `✅ Deployment successful!
+            
             Environment: review-app
             Commit: ${context.sha.substring(0, 7)}
-            URL: ${{ env.RAILS_URL }}
-            Status: ${process.env.statusUrl}`;
+            Rails URL: ${process.env.RAILS_URL}
+            Workflow Status: ${process.env.statusUrl}`;
             
             await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
@@ -183,18 +196,21 @@ jobs:
               repo: context.repo.repo,
               deployment_id: ${{ steps.create-deployment.outputs.result }},
               state: 'success',
-              environment_url: '${{ env.RAILS_URL }}',
-              description: 'Deployment successful'
+              environment_url: process.env.RAILS_URL,
+              description: '✅ Deployment successful'
             });
 
       - name: Update deployment status failure
         if: failure()
         uses: actions/github-script@v7
+        env:
+          RAILS_URL: ${{ steps.deploy.outputs.rails_url }}
         with:
           script: |
             const message = `❌ Deployment failed
+            
             Commit: ${context.sha.substring(0, 7)}
-            Status: ${process.env.statusUrl}`;
+            Workflow Status: ${process.env.statusUrl}`;
             
             await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
@@ -208,5 +224,5 @@ jobs:
               repo: context.repo.repo,
               deployment_id: ${{ steps.create-deployment.outputs.result }},
               state: 'failure',
-              description: 'Deployment failed'
+              description: '❌ Deployment failed'
             });

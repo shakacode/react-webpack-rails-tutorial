@@ -14,6 +14,11 @@ inputs:
     description: 'The GitHub token for authentication'
     required: true
 
+outputs:
+  rails_url:
+    description: 'The URL of the deployed Rails application'
+    value: ${{ steps.deploy.outputs.rails_url }}
+
 runs:
   using: 'composite'
   steps:
@@ -63,7 +68,42 @@ runs:
         cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}}
 
     - name: Deploy to Control Plane
+      id: deploy
       shell: bash
       run: |
-        echo "Deploying to Control Plane"
-        cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}} --verbose
+        # Deploy rails workload
+        echo "🚀 Starting deployment process..."
+        echo "📦 Building image with commit SHA: ${{steps.get_sha.outputs.sha_short}}"
+        
+        # Create a temporary file for the output
+        TEMP_OUTPUT=$(mktemp)
+        
+        # Run the command and tee output to both stdout and temp file
+        set -o pipefail  # Make sure we get the correct exit code from the cpln command
+        
+        echo "🔄 Updating Rails workload..."
+        if cpln workload update rails --gvc ${{ inputs.app_name }} --org ${{ inputs.org }} --set spec.containers.rails.image=/org/${{ inputs.org }}/image/${{ inputs.app_name }}:${{steps.get_sha.outputs.sha_short}} | tee "$TEMP_OUTPUT"; then
+          # Extract the URL from the deployment output
+          RAILS_URL=$(grep -o 'https://rails-[^[:space:]]*\.cpln\.app' "$TEMP_OUTPUT" || true)
+          if [ -n "$RAILS_URL" ]; then
+            echo "🌐 Found Rails deployment URL: $RAILS_URL"
+            echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT
+            
+            echo "🔄 Updating daily-task workload..."
+            if cpln workload update daily-task --gvc ${{ inputs.app_name }} --org ${{ inputs.org }} --set spec.containers.daily-task.image=/org/${{ inputs.org }}/image/${{ inputs.app_name }}:${{steps.get_sha.outputs.sha_short}} | tee "$TEMP_OUTPUT"; then
+              echo "✅ Both workloads updated successfully!"
+            else
+              echo "⚠️ Daily-task update failed, but Rails deployment was successful"
+            fi
+            
+            rm "$TEMP_OUTPUT"
+          else
+            rm "$TEMP_OUTPUT"
+            echo "❌ Failed to extract Rails URL from deployment output"
+            exit 1
+          fi
+        else
+          rm "$TEMP_OUTPUT"
+          echo "❌ Rails deployment failed"
+          exit 1
+        fi
