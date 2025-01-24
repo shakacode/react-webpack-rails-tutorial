@@ -1,114 +1,58 @@
 # Control Plane GitHub Action
 
-name: Deploy-To-Control-Plane
-description: 'Deploys both to staging and to review apps'
+name: Deploy to Control Plane
+description: 'Deploys the application to Control Plane'
 
 inputs:
   app_name:
-    description: 'The name of the app to deploy'
+    description: 'Name of the application'
     required: true
   org:
-    description: 'The org of the app to deploy'
+    description: 'Organization name'
     required: true
   github_token:
-    description: 'The GitHub token for authentication'
+    description: 'GitHub token'
     required: true
 
 outputs:
   rails_url:
-    description: 'The URL of the deployed Rails application'
+    description: 'URL of the deployed Rails application'
     value: ${{ steps.deploy.outputs.rails_url }}
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - name: Setup Environment
-      uses: ./.github/actions/setup-environment
-
-    - name: Get correct commit SHA
+    - name: Get commit SHA
       id: get_sha
       shell: bash
       run: |
-        if [[ "$GITHUB_EVENT_NAME" == "issue_comment" ]]; then
-          PR_SHA=$(gh pr view ${{ env.PR_NUMBER }} --json headRefOid --jq '.headRefOid')
-          echo "sha=$PR_SHA" >> $GITHUB_OUTPUT
-          echo "sha_short=${PR_SHA:0:7}" >> $GITHUB_OUTPUT
-        else
-          echo "sha=$GITHUB_SHA" >> $GITHUB_OUTPUT
-          echo "sha_short=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
-        fi
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
-
-    # Updated caching step to v3
-    - uses: actions/cache@v3
-      with:
-        path: /tmp/.docker-cache
-        key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/package.json', '**/yarn.lock') }}
-          ${{ runner.os }}-docker-
-
-    - name: cpflow setup-app
-      shell: bash
-      run: |
-        if ! cpflow exists -a ${{ inputs.app_name }} ; then
-          cpflow setup-app -a ${{ inputs.app_name }}
-        fi
-
-    # Provision all infrastructure on Control Plane.
-    # app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-    - name: Build and deploy
-      shell: bash
-      run: |
-        cpln image docker-login
-        # Use BUILDKIT_PROGRESS=plain to get more verbose logging of the build
-        # BUILDKIT_PROGRESS=plain cpflow build-image -a ${{ inputs.app_name }} --commit ${{steps.get_sha.outputs.sha_short}} --org ${{inputs.org}}
-        cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}}
+        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "Using commit SHA: $(git rev-parse --short HEAD)"
 
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
       run: |
-        # Debug git commit information
-        echo "🔍 Debugging git commit information:"
-        echo "Current directory: $(pwd)"
-        echo "Git status:"
-        git status
-        echo "Git log (last 5 commits):"
-        git log -n 5 --oneline
-        echo "steps.get_sha.outputs.sha_short: ${{steps.get_sha.outputs.sha_short}}"
-        echo "Full SHA from git rev-parse HEAD: $(git rev-parse HEAD)"
-        echo "Short SHA from git rev-parse --short HEAD: $(git rev-parse --short HEAD)"
-        
-        # Deploy rails workload
-        echo "🚀 Starting deployment process..."
-        echo "📦 Building image with commit SHA: ${{steps.get_sha.outputs.sha_short}}"
-        
-        # Create a temporary file for the output
+        # Create temp file for output
         TEMP_OUTPUT=$(mktemp)
         
-        # Run the command and tee output to both stdout and temp file
-        set -o pipefail  # Make sure we get the correct exit code from the cpln command
+        echo "🚀 Deploying with commit: ${{steps.get_sha.outputs.sha_short}}"
         
-        echo "🔄 Building and deploying with cpflow..."
+        # Build and deploy
         if cpflow build-image -a ${{ inputs.app_name }} --commit=${{steps.get_sha.outputs.sha_short}} --org=${{inputs.org}} | tee "$TEMP_OUTPUT" && \
            cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{inputs.org}} --verbose | tee -a "$TEMP_OUTPUT"; then
           
-          # Extract the URL from the deployment output
-          RAILS_URL=$(grep -o 'https://rails-[^[:space:]]*\.cpln\.app' "$TEMP_OUTPUT" || true)
+          # Extract Rails URL
+          RAILS_URL=$(grep -o 'https://rails-[^[:space:]]*\.cpln\.app' "$TEMP_OUTPUT")
           if [ -n "$RAILS_URL" ]; then
-            echo "🌐 Found Rails deployment URL: $RAILS_URL"
             echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT
-            rm "$TEMP_OUTPUT"
+            echo "✅ Deployment successful: $RAILS_URL"
           else
-            rm "$TEMP_OUTPUT"
-            echo "❌ Failed to extract Rails URL from deployment output"
+            echo "❌ Failed to extract Rails URL"
             exit 1
           fi
         else
-          rm "$TEMP_OUTPUT"
-          echo "❌ Deployment command failed"
+          echo "❌ Deployment failed"
           exit 1
         fi
+        rm -f "$TEMP_OUTPUT"

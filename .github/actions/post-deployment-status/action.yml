@@ -1,0 +1,70 @@
+name: 'Post Deployment Status'
+description: 'Posts deployment status updates to PR comments'
+inputs:
+  status:
+    description: 'Status of deployment (success/failure)'
+    required: true
+  rails-url:
+    description: 'URL of the Rails app'
+    required: false
+  github-token:
+    description: 'GitHub token'
+    required: true
+  deployment-id:
+    description: 'Deployment ID'
+    required: false
+    default: 'unknown'
+  comment-id:
+    description: 'Comment ID to update'
+    required: false
+  workflow-url:
+    description: 'Workflow URL'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Post status
+      uses: actions/github-script@v7
+      env:
+        RAILS_URL: ${{ inputs.rails-url }}
+        COMMENT_ID: ${{ inputs.comment-id }}
+        DEPLOYMENT_ID: ${{ inputs.deployment-id }}
+        STATUS_URL: ${{ inputs.workflow-url }}
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const isSuccess = '${{ inputs.status }}' === 'success';
+          
+          // Create appropriate message based on status
+          const message = isSuccess 
+            ? `✅ Deployment [${process.env.DEPLOYMENT_ID}] successful!\n\n🚀 Rails app: ${process.env.RAILS_URL}\n📊 Status: ${process.env.STATUS_URL}`
+            : `❌ Deployment [${process.env.DEPLOYMENT_ID}] failed\n\nCommit: ${context.sha.substring(0, 7)}\nWorkflow Status: ${process.env.STATUS_URL}`;
+
+          // Update or create comment
+          const commentParams = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message
+          };
+
+          try {
+            if (process.env.COMMENT_ID) {
+              await github.rest.issues.updateComment({
+                ...commentParams,
+                comment_id: process.env.COMMENT_ID
+              });
+            } else {
+              await github.rest.issues.createComment({
+                ...commentParams,
+                issue_number: context.issue.number || context.payload.pull_request.number
+              });
+            }
+          } catch (error) {
+            console.error('Failed to update/create comment:', error);
+            // Create a new comment if update fails
+            await github.rest.issues.createComment({
+              ...commentParams,
+              issue_number: context.issue.number || context.payload.pull_request.number
+            });
+          }
