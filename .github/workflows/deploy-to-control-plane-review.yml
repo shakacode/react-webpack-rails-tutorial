@@ -68,8 +68,7 @@ jobs:
               issue_number: context.issue.number || context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment for ${context.sha.substring(0, 7)}
-GitHub Actions Run: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${process.env.GITHUB_JOB_ID}?pr=${context.issue.number || context.payload.pull_request.number}`
+              body: `🚀 Starting deployment for ${context.sha.substring(0, 7)}\nGitHub Actions Run: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${process.env.GITHUB_JOB_ID}?pr=${context.issue.number || context.payload.pull_request.number}`
             });
             
             // Set deployment status to in_progress
