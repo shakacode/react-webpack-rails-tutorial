@@ -176,19 +176,38 @@ jobs:
           DEPLOYMENT_ID: ${{ env.deploymentId }}
         with:
           script: |
-            const message = "❌ Deployment [" + process.env.DEPLOYMENT_ID + "] failed\n\nCommit: " + context.sha.substring(0, 7) + "\nWorkflow Status: " + process.env.statusUrl;
+            console.log('Debug info:');
+            console.log('COMMENT_ID:', process.env.COMMENT_ID);
+            console.log('DEPLOYMENT_ID:', process.env.DEPLOYMENT_ID);
+            console.log('create-deployment result:', ${{ steps.create-deployment.outputs.result }});
             
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: process.env.COMMENT_ID,
-              body: message
-            });
+            const message = "❌ Deployment [" + (process.env.DEPLOYMENT_ID || 'unknown') + "] failed\n\nCommit: " + context.sha.substring(0, 7) + "\nWorkflow Status: " + process.env.statusUrl;
             
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: ${{ steps.create-deployment.outputs.result }},
-              state: 'failure',
-              description: '❌ Deployment failed'
-            });
+            // Only try to update comment if we have a comment ID
+            if (process.env.COMMENT_ID) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: process.env.COMMENT_ID,
+                body: message
+              });
+            } else {
+              // Fall back to creating a new comment
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number || context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            }
+            
+            // Only create deployment status if we have a deployment ID
+            if (${{ steps.create-deployment.outputs.result }}) {
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: ${{ steps.create-deployment.outputs.result }},
+                state: 'failure',
+                description: '❌ Deployment failed'
+              });
+            }
