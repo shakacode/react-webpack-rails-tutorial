@@ -32,22 +32,61 @@ jobs:
       issues: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Get PR HEAD Ref
+        if: ${{ github.event_name == 'issue_comment' }}
+        id: getRef
+        run: |
+          echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create initial comment
-        id: create-comment
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
+
+      - name: Initialize Deployment
+        id: init-deployment
         uses: actions/github-script@v7
         with:
           script: |
-            const deploymentId = Date.now().toString();
-            core.exportVariable('deploymentId', deploymentId);
+            // Create GitHub deployment
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'review-app',
+              auto_merge: false,
+              required_contexts: []
+            });
+            
+            // Create initial comment
             const comment = await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment [${deploymentId}] for ${context.sha.substring(0, 7)}`
+              body: `🚀 Starting deployment for ${context.sha.substring(0, 7)}\nDeployment ID: ${deployment.data.id}`
             });
-            core.setOutput('comment-id', comment.data.id);
+            
+            // Set deployment status to in_progress
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'in_progress',
+              description: 'Deployment is in progress'
+            });
+            
+            return {
+              deploymentId: deployment.data.id,
+              commentId: comment.data.id
+            };
+
+      - name: Setup cpflow app
+        run: |
+          if ! cpflow exists -a ${{ env.APP_NAME }} ; then
+            cpflow setup-app -a ${{ env.APP_NAME }}
+          fi
 
       - name: Deploy to Control Plane
         id: deploy
@@ -60,13 +99,34 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Post deployment status
+      - name: Update Status
         if: always()
-        uses: ./.github/actions/post-deployment-status
+        uses: actions/github-script@v7
         with:
-          status: ${{ job.status == 'success' && 'success' || 'failure' }}
-          rails-url: ${{ steps.deploy.outputs.rails_url }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deployment-id: ${{ env.deploymentId }}
-          comment-id: ${{ steps.create-comment.outputs.comment-id }}
-          workflow-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          script: |
+            const isSuccess = '${{ job.status }}' === 'success';
+            const deploymentId = ${{ fromJSON(steps.init-deployment.outputs.result).deploymentId }};
+            const commentId = ${{ fromJSON(steps.init-deployment.outputs.result).commentId }};
+            const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
+            
+            // Update deployment status
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deploymentId,
+              state: isSuccess ? 'success' : 'failure',
+              ...(isSuccess && { environment_url: railsUrl }),
+              description: isSuccess ? '✅ Deployment successful' : '❌ Deployment failed'
+            });
+            
+            // Update comment
+            const message = isSuccess
+              ? `✅ Deployment successful!\n\n🚀 Rails app: ${railsUrl}\n📊 Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              : `❌ Deployment failed\n\nCommit: ${context.sha.substring(0, 7)}\nWorkflow Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: message
+            });

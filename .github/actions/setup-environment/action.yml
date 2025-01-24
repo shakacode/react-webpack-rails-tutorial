@@ -35,3 +35,6 @@ runs:
         echo "Setting up Control Plane profile..."
         echo "Organization: $CPLN_ORG"
         cpln profile update default --org "$CPLN_ORG" --token "$CPLN_TOKEN"
+        
+        echo "Setting up Docker login for Control Plane registry..."
+        cpln image docker-login --org "$CPLN_ORG"
