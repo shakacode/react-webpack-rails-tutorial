@@ -19,7 +19,19 @@ runs:
         gem install cpflow -v 4.1.0
         cpflow --version
 
-    - name: cpln profile
+    - name: Setup Control Plane Profile
       shell: bash
       run: |
-        cpln profile update default
+        if [ -z "$CPLN_TOKEN" ]; then
+          echo " Error: CPLN_TOKEN environment variable is not set"
+          exit 1
+        fi
+        
+        if [ -z "$CPLN_ORG" ]; then
+          echo " Error: CPLN_ORG environment variable is not set"
+          exit 1
+        fi
+        
+        echo "Setting up Control Plane profile..."
+        echo "Organization: $CPLN_ORG"
+        cpln profile update default --org "$CPLN_ORG" --token "$CPLN_TOKEN"

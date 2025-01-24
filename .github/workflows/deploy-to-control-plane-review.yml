@@ -13,7 +13,8 @@ concurrency:
 
 env:
   APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
-  CPLN_ORG: ${{ secrets.CPLN_ORG }}
+  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
@@ -51,6 +52,9 @@ jobs:
       - name: Deploy to Control Plane
         id: deploy
         uses: ./.github/actions/deploy-to-control-plane
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
