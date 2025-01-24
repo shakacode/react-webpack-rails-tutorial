@@ -141,36 +141,7 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update PR commit message
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RAILS_URL: ${{ steps.deploy.outputs.rails_url }}
-        run: |
-          if [ -n "$RAILS_URL" ]; then
-            echo "🔄 Updating PR commit message with deployment URL..."
-            PR_SHA=$(gh pr view ${{ env.PR_NUMBER }} --json commits --jq '.commits[-1].oid')
-            if [ -n "$PR_SHA" ]; then
-              git config user.name "GitHub Actions"
-              git config user.email "actions@github.com"
-              git pull --rebase
-              git commit --amend -m "Rails review app deployed to $RAILS_URL"
-              if git push --force-with-lease origin HEAD; then
-                echo "✅ Successfully updated commit message"
-              else
-                echo "❌ Failed to push updated commit message"
-                exit 1
-              fi
-            else
-              echo "❌ Failed to get PR SHA"
-              exit 1
-            fi
-          else
-            echo "❌ No Rails URL found in deployment output"
-            exit 1
-          fi
-
-      - name: Update deployment status success
+      - name: Post deployment status
         if: success()
         uses: actions/github-script@v7
         env:
@@ -178,11 +149,9 @@ jobs:
         with:
           script: |
             const message = `✅ Deployment successful!
-            
-            Environment: review-app
-            Commit: ${context.sha.substring(0, 7)}
-            Rails URL: ${process.env.RAILS_URL}
-            Workflow Status: ${process.env.statusUrl}`;
+
+            🚀 Rails app: ${process.env.RAILS_URL}
+            📊 Status: ${process.env.statusUrl}`;
             
             await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
@@ -200,17 +169,15 @@ jobs:
               description: '✅ Deployment successful'
             });
 
-      - name: Update deployment status failure
+      - name: Post deployment failure
         if: failure()
         uses: actions/github-script@v7
-        env:
-          RAILS_URL: ${{ steps.deploy.outputs.rails_url }}
         with:
           script: |
             const message = `❌ Deployment failed
-            
-            Commit: ${context.sha.substring(0, 7)}
-            Workflow Status: ${process.env.statusUrl}`;
+
+Commit: ${context.sha.substring(0, 7)}
+Workflow Status: ${process.env.statusUrl}`;
             
             await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
