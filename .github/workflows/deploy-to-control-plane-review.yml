@@ -48,11 +48,15 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
 
+      - name: Get Job ID
+        id: get-job-id
+        run: echo "job_id=${GITHUB_RUN_ID}_${GITHUB_RUN_ATTEMPT}" >> $GITHUB_OUTPUT
+
       - name: Initialize Deployment
         id: init-deployment
         uses: actions/github-script@v7
         env:
-          JOB_ID: ${{ github.job }}
+          JOB_ID: ${{ steps.get-job-id.outputs.job_id }}
         with:
           script: |
             // Create GitHub deployment
@@ -72,7 +76,7 @@ jobs:
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment for PR ${prNumber}\nDeployment Log: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.job}?pr=${prNumber}`
+              body: `🚀 Starting deployment for PR ${prNumber}\nDeployment Log: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/jobs/${process.env.JOB_ID}?pr=${prNumber}`
             });
             
             // Set deployment status to in_progress
