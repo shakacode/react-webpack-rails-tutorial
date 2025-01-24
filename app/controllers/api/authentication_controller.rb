@@ -12,7 +12,7 @@ module Api
             message: 'Login successful', 
             token: token 
           }, status: :ok
-        rescue JWT::EncodeError => e
+        rescue JWT::EncodeError
           render json: { error: 'Authentication failed' }, status: :internal_server_error
         end
       else
@@ -36,7 +36,7 @@ module Api
             message: 'Signup successful', 
             token: token 
           }, status: :created
-        rescue JWT::EncodeError => e
+        rescue JWT::EncodeError
           render json: { error: 'Failed to generate authentication token' }, status: :internal_server_error
         end
       else
