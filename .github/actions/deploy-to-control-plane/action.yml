@@ -22,6 +22,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup Environment
+      uses: ./.github/actions/setup-environment
+
     - name: Get commit SHA
       id: get_sha
       shell: bash
