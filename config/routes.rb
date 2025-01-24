@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   root "pages#index"
 
   namespace :api do
+    post 'signup', to: 'authentication#signup'
     post 'login', to: 'authentication#create'
   end
 
