@@ -63,12 +63,14 @@ jobs:
               required_contexts: []
             });
             
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${process.env.GITHUB_JOB}?pr=${context.issue.number || context.payload.pull_request.number}`;
+            
             // Create initial comment
             const comment = await github.rest.issues.createComment({
               issue_number: context.issue.number || context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment for ${context.sha.substring(0, 7)}\nDeployment ID: ${deployment.data.id}`
+              body: `🚀 Starting deployment for ${context.sha.substring(0, 7)}\nDeployment ID: ${deployment.data.id}\nGitHub Actions Run: ${runUrl}`
             });
             
             // Set deployment status to in_progress
