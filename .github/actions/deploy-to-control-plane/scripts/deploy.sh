@@ -11,22 +11,30 @@
 
 set -e
 
-echo "🚀 Deploying to Control Plane..."
 TEMP_OUTPUT=$(mktemp)
 
-# Deploy the application and capture output
+# Build the Docker image
+echo "🏗️ Building Docker image..."
+if ! cpflow build-image -a "$APP_NAME" --commit="$GITHUB_SHA" --org="$CPLN_ORG"; then
+    echo "❌ Docker image build failed"
+    exit 1
+fi
+
+# Deploy the application
+echo "🚀 Deploying to Control Plane..."
 if cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose | tee "$TEMP_OUTPUT"; then
     # Extract Rails URL from deployment output
     RAILS_URL=$(grep -o 'https://rails-[^[:space:]]*\.cpln\.app' "$TEMP_OUTPUT")
     if [ -n "$RAILS_URL" ]; then
         echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT
-        echo "✅ Deployment successful: $RAILS_URL"
+        echo "✅ Deployment successful"
+        echo "🚀 Rails URL: $RAILS_URL"
     else
-        echo "❌ Failed to extract Rails URL"
+        echo "❌ Failed to extract Rails URL from deployment output"
         exit 1
     fi
 else
-    echo "❌ Deployment failed"
+    echo "❌ Deployment to Control Plane failed"
     exit 1
 fi
 

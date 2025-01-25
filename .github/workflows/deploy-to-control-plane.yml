@@ -1,4 +1,6 @@
-name: Deploy Review or Staging App
+name: Deploy to Control Plane
+
+run-name: ${{ github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && github.event.issue.pull_request) ? 'Deploying Review App' : format('Deploying {0} to Staging App', github.ref_name) }}
 
 on:
   pull_request:
@@ -155,25 +157,25 @@ jobs:
             await github.rest.repos.createDeploymentStatus(deploymentStatus);
             
             // Update the initial comment
-            const message = isSuccess
-              ? [
-                  '✅ Deployment Successful for PR ' + prNumber,
-                  '',
-                  '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
-                  '',
-                  '[View Workflow Status](' + workflowUrl + ')'
-                ].join('\n')
-              : [
-                  '❌ Deployment failed for PR ' + prNumber,
-                  '',
-                  'Commit: ' + context.sha.substring(0, 7),
-                  '',
-                  '[View Workflow Status](' + workflowUrl + ')'
-                ].join('\n');
+            const successMessage = [
+              '✅ Deployment Successful for PR ' + prNumber,
+              '',
+              '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
+              '',
+              '[View Workflow Status](' + workflowUrl + ')'
+            ].join('\n');
+            
+            const failureMessage = [
+              '❌ Deployment failed for PR ' + prNumber,
+              '',
+              'Commit: ' + context.sha.substring(0, 7),
+              '',
+              '[View Workflow Status](' + workflowUrl + ')'
+            ].join('\n');
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: commentId,
-              body: message
+              body: isSuccess ? successMessage : failureMessage
             });

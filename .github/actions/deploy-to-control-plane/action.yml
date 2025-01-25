@@ -35,13 +35,6 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PR_NUMBER: ${{ env.PR_NUMBER }}
 
-    - name: Build Docker Image
-      uses: ./.github/actions/build-docker-image
-      with:
-        app_name: ${{ inputs.app_name }}
-        org: ${{ inputs.org }}
-        commit: ${{ github.sha }}
-
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
