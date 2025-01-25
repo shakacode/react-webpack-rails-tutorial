@@ -61,25 +61,6 @@ runs:
             required_contexts: []
           });
           
-          const prNumber = context.issue.number || context.payload.pull_request.number;
-          
-          // Get the job ID from the workflow run
-          const jobs = await github.rest.actions.listJobsForWorkflowRun({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.runId
-          });
-          
-          const jobId = jobs.data.jobs.find(job => job.name === 'deploy')?.id;
-          
-          // Create initial comment
-          const comment = await github.rest.issues.createComment({
-            issue_number: prNumber,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `🚀 Starting deployment for PR ${prNumber}\nDeployment Log: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobId}?pr=${prNumber}`
-          });
-          
           // Set deployment status to in_progress
           await github.rest.repos.createDeploymentStatus({
             owner: context.repo.owner,
@@ -90,8 +71,7 @@ runs:
           });
           
           return {
-            deploymentId: deployment.data.id,
-            commentId: comment.data.id
+            deploymentId: deployment.data.id
           };
 
     - name: Build Docker Image

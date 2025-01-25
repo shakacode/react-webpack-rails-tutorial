@@ -133,10 +133,10 @@ jobs:
               description: isSuccess ? '✅ Deployment successful' : '❌ Deployment failed'
             });
             
-            // Update comment
+            // Update the initial comment
             const message = isSuccess
-              ? `✅ Deployment successful!\n\n🚀 Rails app: ${railsUrl}\n📊 Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-              : `❌ Deployment failed\n\nCommit: ${context.sha.substring(0, 7)}\nWorkflow Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              ? `✅ Deployment Successful for PR ${context.issue.number}\n\n🚀 Rails app: ${railsUrl}\n📊 Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              : `❌ Deployment failed for PR ${context.issue.number}\n\nCommit: ${context.sha.substring(0, 7)}\nWorkflow Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
