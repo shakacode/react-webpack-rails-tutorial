@@ -58,7 +58,7 @@ gem "redcarpet"
 
 gem "devise"
 
-gem 'jwt'
+gem "jwt"
 
 group :development do
   # Access an IRB console on exceptions page and /console in development
