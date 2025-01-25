@@ -53,6 +53,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // Helper functions
+            const getWorkflowUrl = (runId) => 
+              `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+              
+            const getJobUrl = (runId, jobId, prNumber) => 
+              `${getWorkflowUrl(runId)}/job/${jobId}?pr=${prNumber}`;
+            
+            // Get PR number consistently
+            const prNumber = process.env.PR_NUMBER;
+            
             // Create GitHub deployment
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
@@ -63,9 +73,7 @@ jobs:
               required_contexts: []
             });
             
-            const prNumber = context.issue.number || context.payload.pull_request.number;
-            
-            // Get the job ID from the workflow run
+            // Get the job ID
             const jobs = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -73,15 +81,18 @@ jobs:
             });
             
             const jobId = jobs.data.jobs.find(job => job.name === 'deploy')?.id;
+            const jobUrl = getJobUrl(context.runId, jobId, prNumber);
             
             // Create initial comment
             const comment = await github.rest.issues.createComment({
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment for PR ${prNumber}
-
-[View Deployment Log](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobId}?pr=${prNumber})`
+              body: [
+                '🚀 Starting deployment for PR ' + prNumber,
+                '',
+                '[View Deployment Log](' + jobUrl + ')'
+              ].join('\n')
             });
             
             // Set deployment status to in_progress
@@ -95,7 +106,8 @@ jobs:
             
             return {
               deploymentId: deployment.data.id,
-              commentId: comment.data.id
+              commentId: comment.data.id,
+              workflowUrl: getWorkflowUrl(context.runId)
             };
 
       - name: Setup cpflow app
@@ -123,7 +135,9 @@ jobs:
             const isSuccess = '${{ job.status }}' === 'success';
             const deploymentId = ${{ fromJSON(steps.init-deployment.outputs.result).deploymentId }};
             const commentId = ${{ fromJSON(steps.init-deployment.outputs.result).commentId }};
+            const workflowUrl = ${{ fromJSON(steps.init-deployment.outputs.result).workflowUrl }};
             const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
+            const prNumber = process.env.PR_NUMBER;
             
             // Update deployment status
             await github.rest.repos.createDeploymentStatus({
@@ -137,16 +151,20 @@ jobs:
             
             // Update the initial comment
             const message = isSuccess
-              ? `✅ Deployment Successful for PR ${context.issue.number}
-
-🚀 Rails App: [${railsUrl}](${railsUrl})
-
-[View Workflow Status](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
-              : `❌ Deployment failed for PR ${context.issue.number}
-
-Commit: ${context.sha.substring(0, 7)}
-
-[View Workflow Status](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+              ? [
+                  '✅ Deployment Successful for PR ' + prNumber,
+                  '',
+                  '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
+                  '',
+                  '[View Workflow Status](' + workflowUrl + ')'
+                ].join('\n')
+              : [
+                  '❌ Deployment failed for PR ' + prNumber,
+                  '',
+                  'Commit: ' + context.sha.substring(0, 7),
+                  '',
+                  '[View Workflow Status](' + workflowUrl + ')'
+                ].join('\n');
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
