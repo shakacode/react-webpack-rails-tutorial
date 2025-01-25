@@ -1,0 +1,36 @@
+name: Build Docker Image
+description: 'Builds a Docker image for the application'
+
+inputs:
+  app_name:
+    description: 'Name of the application'
+    required: true
+  org:
+    description: 'Organization name'
+    required: true
+  commit:
+    description: 'Commit SHA to tag the image with'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build Docker Image
+      id: build
+      shell: bash
+      run: |
+        # Redirect build output to a log file to keep Actions log clean
+        LOG_FILE=$(mktemp)
+        echo "🏗️ Building Docker image... (detailed logs will be shown at the end if there's an error)"
+        
+        if cpflow build-image -a ${{ inputs.app_name }} --commit=${{ inputs.commit }} --org=${{ inputs.org }} > "$LOG_FILE" 2>&1; then
+          echo "✅ Docker image build successful"
+        else
+          BUILD_EXIT_CODE=$?
+          echo "❌ Docker image build failed"
+          echo "==== Build Logs ===="
+          cat "$LOG_FILE"
+          rm -f "$LOG_FILE"
+          exit $BUILD_EXIT_CODE
+        fi
+        rm -f "$LOG_FILE"

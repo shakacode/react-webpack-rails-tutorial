@@ -140,14 +140,19 @@ jobs:
             const prNumber = process.env.PR_NUMBER;
             
             // Update deployment status
-            await github.rest.repos.createDeploymentStatus({
+            const deploymentStatus = {
               owner: context.repo.owner,
               repo: context.repo.repo,
               deployment_id: deploymentId,
               state: isSuccess ? 'success' : 'failure',
-              ...(isSuccess && { environment_url: railsUrl }),
               description: isSuccess ? '✅ Deployment successful' : '❌ Deployment failed'
-            });
+            };
+            
+            if (isSuccess) {
+              deploymentStatus.environment_url = railsUrl;
+            }
+            
+            await github.rest.repos.createDeploymentStatus(deploymentStatus);
             
             // Update the initial comment
             const message = isSuccess
