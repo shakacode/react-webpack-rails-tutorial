@@ -79,7 +79,9 @@ jobs:
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Starting deployment for PR ${prNumber}\nDeployment Log: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobId}?pr=${prNumber}`
+              body: `🚀 Starting deployment for PR ${prNumber}
+
+[View Deployment Log](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobId}?pr=${prNumber})`
             });
             
             // Set deployment status to in_progress
@@ -135,8 +137,16 @@ jobs:
             
             // Update the initial comment
             const message = isSuccess
-              ? `✅ Deployment Successful for PR ${context.issue.number}\n\n🚀 Rails app: ${railsUrl}\n📊 Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-              : `❌ Deployment failed for PR ${context.issue.number}\n\nCommit: ${context.sha.substring(0, 7)}\nWorkflow Status: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              ? `✅ Deployment Successful for PR ${context.issue.number}
+
+🚀 Rails App: [${railsUrl}](${railsUrl})
+
+[View Workflow Status](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
+              : `❌ Deployment failed for PR ${context.issue.number}
+
+Commit: ${context.sha.substring(0, 7)}
+
+[View Workflow Status](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
