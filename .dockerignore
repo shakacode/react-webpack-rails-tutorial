@@ -19,7 +19,10 @@ dump.rdb
 .DS_Store
 
 # Ignore bundle dependencies
-vendor/ruby
+vendor/bundle
+
+# Ignore GitHub Actions and workflows
+.github/
 
 # RVM gemset
 .ruby-gemset
@@ -45,6 +48,5 @@ yarn-debug.log*
 ###################################################
 # Specific to .dockerignore
 .git/
-.github/
 spec/
 scripts/

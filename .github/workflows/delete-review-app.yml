@@ -1,0 +1,109 @@
+name: Delete Review App
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+  issues: write
+
+env:
+  CPLN_ORG: ${{ secrets.CPLN_ORG }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.issue.number }}
+
+jobs:
+  debug-trigger:
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          echo "Debug information for delete-review-app command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR (raw): $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
+  Process-Delete-Command:
+    needs: debug-trigger
+    if: |
+      github.event_name == 'issue_comment' && 
+      github.event.issue.pull_request && 
+      github.event.comment.body == '/delete-review-app'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Required Secrets
+        run: |
+          missing_secrets=()
+          for secret in "CPLN_TOKEN" "CPLN_ORG"; do
+            if [ -z "${!secret}" ]; then
+              missing_secrets+=("$secret")
+            fi
+          done
+          
+          if [ ${#missing_secrets[@]} -ne 0 ]; then
+            echo " Required secrets are not set: ${missing_secrets[*]}"
+            exit 1
+          fi
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Create Initial Delete Comment
+        id: init-delete
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = await github.rest.issues.createComment({
+              issue_number: process.env.PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: ' Starting app deletion...'
+            });
+            return { commentId: comment.data.id };
+
+      - name: Delete Review App
+        uses: ./.github/actions/delete-control-plane-app
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+
+      - name: Update Delete Status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ job.status }}' === 'success';
+            const prNumber = process.env.PR_NUMBER;
+            const cpConsoleUrl = `https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME}`;
+            
+            const message = success
+              ? ' Review app for PR #' + prNumber + ' was successfully deleted'
+              : [
+                  ' Review app for PR #' + prNumber + ' failed to be deleted',
+                  '',
+                  '[Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
+                ].join('\n');
+            
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ fromJSON(steps.init-delete.outputs.result).commentId }},
+              body: message
+            });
