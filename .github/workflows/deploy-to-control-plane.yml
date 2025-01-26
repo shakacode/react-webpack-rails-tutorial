@@ -20,12 +20,12 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
-  process-command:
+  Process-Deployment-Command:
     if: |
       github.event_name == 'pull_request' || 
       (github.event_name == 'issue_comment' && 
        (github.event.comment.body == '/deploy-review-app' || 
-        github.event.comment.body == '/delete-app') && 
+        github.event.comment.body == '/delete-review-app') && 
        github.event.issue.pull_request)
     runs-on: ubuntu-latest
     permissions:
@@ -35,10 +35,19 @@ jobs:
       issues: write
 
     steps:
+      - name: Get PR HEAD Ref
+        if: github.event_name == 'issue_comment'
+        id: getRef
+        run: |
+          echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+          echo "PR_SHA=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefOid | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Determine Action
         id: determine_action
         run: |
-          if [[ "${{ github.event.comment.body }}" == "/delete-app" ]]; then
+          if [[ "${{ github.event.comment.body }}" == "/delete-review-app" ]]; then
             echo "action=delete" >> $GITHUB_OUTPUT
           else
             echo "action=deploy" >> $GITHUB_OUTPUT
@@ -83,8 +92,8 @@ jobs:
           script: |
             const success = '${{ steps.delete.outcome }}' === 'success';
             const message = success
-              ? '✅ App deletion successful'
-              : '❌ App deletion failed';
+              ? '✅ Review app successfully deleted'
+              : '❌ Review app deletion failed';
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
@@ -93,53 +102,38 @@ jobs:
               body: message
             });
 
-      # Deploy Steps (existing steps)
-      - name: Get PR HEAD Ref
-        if: steps.determine_action.outputs.action == 'deploy'
-        id: getRef
-        run: |
-          echo "PR_REF=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ steps.getRef.outputs.PR_REF || github.ref }}
-
+      # Deploy Steps
       - name: Initialize Deployment
+        if: steps.determine_action.outputs.action == 'deploy'
         id: init-deployment
         uses: actions/github-script@v7
         with:
           script: |
-            // Helper functions
+            const prNumber = process.env.PR_NUMBER;
             const getWorkflowUrl = (runId) => 
               `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
-              
-            const getJobUrl = (runId, jobId, prNumber) => 
-              `${getWorkflowUrl(runId)}/job/${jobId}?pr=${prNumber}`;
             
-            // Get PR number consistently
-            const prNumber = process.env.PR_NUMBER;
+            const getJobUrl = (runId, jobId, prNumber) =>
+              `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}?pr=${prNumber}`;
             
-            // Create GitHub deployment
+            // Create deployment
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.sha,
-              environment: 'review-app',
+              environment: 'review-' + prNumber,
               auto_merge: false,
               required_contexts: []
             });
             
-            // Get the job ID
+            // Get job URL
             const jobs = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.runId
             });
             
-            const jobId = jobs.data.jobs.find(job => job.name === 'process-command')?.id;
+            const jobId = jobs.data.jobs.find(job => job.name === 'Process-Deployment-Command')?.id;
             const jobUrl = getJobUrl(context.runId, jobId, prNumber);
             
             // Create initial comment
@@ -147,20 +141,7 @@ jobs:
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: [
-                '🚀 Starting deployment for PR ' + prNumber,
-                '',
-                '[View Deployment Log](' + jobUrl + ')'
-              ].join('\n')
-            });
-            
-            // Set deployment status to in_progress
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: 'in_progress',
-              description: 'Deployment is in progress'
+              body: '🚀 Deploying to Control Plane...\n\n[View Deployment Progress](' + jobUrl + ')'
             });
             
             return {
@@ -169,35 +150,23 @@ jobs:
               workflowUrl: getWorkflowUrl(context.runId)
             };
 
-      - name: Setup cpflow app
-        run: |
-          set -e
-          
-          # Validate required environment variables
-          : "${APP_NAME:?APP_NAME environment variable is required}"
-          
-          if ! cpflow exists -a ${{ env.APP_NAME }} ; then
-            echo "🔧 Setting up new application: ${{ env.APP_NAME }}"
-            if ! cpflow setup-app -a ${{ env.APP_NAME }}; then
-              echo "❌ Failed to setup application"
-              exit 1
-            fi
-            echo "✅ Application setup complete"
-          fi
+      - name: Build Docker Image
+        if: steps.determine_action.outputs.action == 'deploy'
+        uses: ./.github/actions/build-docker-image
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Control Plane
+        if: steps.determine_action.outputs.action == 'deploy'
         id: deploy
         uses: ./.github/actions/deploy-to-control-plane
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-          CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Status
-        if: always()
+        if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:
           script: |
@@ -208,6 +177,7 @@ jobs:
             const workflowUrl = result.workflowUrl;
             const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
             const prNumber = process.env.PR_NUMBER;
+            const commitSha = '${{ github.event.comment.body && steps.getRef.outputs.PR_SHA || github.sha }}';
             
             // Update deployment status
             const deploymentStatus = {
@@ -231,9 +201,9 @@ jobs:
             
             // Update the initial comment
             const successMessage = [
-              '✅ Deployment Successful for PR ' + prNumber,
+              '🚀 Rails App Deployed to Control Plane for Commit ' + commitSha.substring(0, 7),
               '',
-              '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
+              '🌐 Rails App: [' + railsUrl + '](' + railsUrl + ')',
               '',
               '[View Workflow Status](' + workflowUrl + ')'
             ].join('\n');
@@ -241,7 +211,7 @@ jobs:
             const failureMessage = [
               '❌ Deployment failed for PR ' + prNumber,
               '',
-              'Commit: ' + context.sha.substring(0, 7),
+              'Commit: ' + commitSha.substring(0, 7),
               '',
               '[View Workflow Status](' + workflowUrl + ')'
             ].join('\n');
