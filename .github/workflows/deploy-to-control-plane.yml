@@ -3,29 +3,26 @@ name: Deploy Review App to Control Plane
 run-name: ${{ (github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && github.event.issue.pull_request)) && 'Deploying Review App' || format('Deploying {0} to Staging App', github.ref_name) }}
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   issue_comment:
     types: [created]
 
 # Use concurrency to cancel in-progress runs
 concurrency:
-  group: deploy-${{ github.event.pull_request.number || github.event.issue.number }}
+  group: deploy-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 env:
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
   CPLN_ORG: ${{ secrets.CPLN_ORG }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
-  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
   Process-Deployment-Command:
     if: |
-      (github.event_name == 'pull_request') ||
-      (github.event_name == 'issue_comment' && 
-       github.event.issue.pull_request && 
-       github.event.comment.body == '/deploy-review-app')
+      github.event_name == 'issue_comment' && 
+      github.event.issue.pull_request && 
+      github.event.comment.body == '/deploy-review-app'
     runs-on: ubuntu-latest
     permissions:
       contents: read
