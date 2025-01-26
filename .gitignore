@@ -23,7 +23,7 @@ dump.rdb
 .DS_Store
 
 # Ignore bundle dependencies
-vendor/ruby
+vendor/bundle
 
 # RVM gemset
 .ruby-gemset

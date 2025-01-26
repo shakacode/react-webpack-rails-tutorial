@@ -123,3 +123,32 @@ cpflow build-image -a $APP_NAME --commit ABCD
 ### `entrypoint.sh`
 - waits for Postgres and Redis to be available
 - runs `rails db:prepare` to create/seed or migrate the database
+
+## CI Automation, Review Apps and Staging
+
+_Note, some of the URL references are internal for the ShakaCode team._
+
+ Review Apps (deployment of apps based on a PR) are done via Github Actions.
+
+The review apps work by creating isolated deployments for each branch through this automated process. When a branch is pushed, the action:
+
+1. Sets up the necessary environment and tools
+2. Creates a unique deployment for that branch if it doesn't exist
+3. Builds a Docker image tagged with the branch's commit SHA
+4. Deploys this image to Control Plane with its own isolated environment
+
+This allows teams to:
+- Preview changes in a production-like environment
+- Test features independently
+- Share working versions with stakeholders
+- Validate changes before merging to main branches
+
+The system uses Control Plane's infrastructure to manage these deployments, with each branch getting its own resources as defined in the controlplane.yml configuration.
+
+
+### Workflow for Developing Github Actions for Review Apps
+
+1. Create a PR with changes to the Github Actions workflow
+2. Make edits to file such as `.github/actions/deploy-to-control-plane/action.yml`
+3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
+4. Check the Github Actions tab in the PR to see the status of the workflow
