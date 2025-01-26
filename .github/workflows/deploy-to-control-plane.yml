@@ -24,7 +24,7 @@ jobs:
     if: |
       github.event_name == 'pull_request' || 
       (github.event_name == 'issue_comment' && 
-       (github.event.comment.body == '/deploy-review-pp' || 
+       (github.event.comment.body == '/deploy-review-app' || 
         github.event.comment.body == '/delete-review-app') && 
        github.event.issue.pull_request)
     runs-on: ubuntu-latest
@@ -116,10 +116,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = process.env.PR_NUMBER;
-            const getWorkflowUrl = (runId) => 
-              `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+            function getWorkflowUrl(runId) {
+              return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${context.job.id}`;
+            }
             
+            const prNumber = process.env.PR_NUMBER;
             const getJobUrl = (runId, jobId, prNumber) =>
               `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}?pr=${prNumber}`;
             
