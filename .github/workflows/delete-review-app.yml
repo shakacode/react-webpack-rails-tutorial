@@ -11,11 +11,31 @@ permissions:
   issues: write
 
 env:
-  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+  CPLN_ORG: ${{ secrets.CPLN_ORG }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
+  debug-trigger:
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          echo "Debug information for delete-review-app command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR (raw): $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
   Process-Delete-Command:
+    needs: debug-trigger
     if: |
       github.event_name == 'issue_comment' && 
       github.event.issue.pull_request && 
@@ -23,46 +43,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug Trigger Conditions
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          IS_PR: ${{ github.event.issue.pull_request != '' }}
-          COMMENT: ${{ github.event.comment.body }}
-          PR_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          echo "Debug information for delete-review-app command:"
-          echo "Event name: $EVENT_NAME"
-          echo "Is PR: $IS_PR"
-          echo "Comment body: $COMMENT"
-          echo "PR number: $PR_NUMBER"
-          echo "Raw event payload:"
-          echo '${{ toJSON(github.event) }}'
-
-      - name: Get PR number
-        id: pr
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const prNumber = context.payload.issue.number;
-            core.setOutput('pr_number', prNumber);
-            core.exportVariable('PR_NUMBER', prNumber);
-
-      - name: Set App Name
-        run: echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
-
       - uses: actions/checkout@v4
 
       - name: Validate Required Secrets
         run: |
           missing_secrets=()
-          for secret in "CPLN_TOKEN_STAGING" "CPLN_ORG_STAGING"; do
+          for secret in "CPLN_TOKEN" "CPLN_ORG"; do
             if [ -z "${!secret}" ]; then
               missing_secrets+=("$secret")
             fi
           done
           
           if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo "❌ Required secrets are not set: ${missing_secrets[*]}"
+            echo " Required secrets are not set: ${missing_secrets[*]}"
             exit 1
           fi
 
@@ -78,7 +71,7 @@ jobs:
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🗑️ Starting app deletion...'
+              body: ' Starting app deletion...'
             });
             return { commentId: comment.data.id };
 
@@ -101,11 +94,11 @@ jobs:
             const cpConsoleUrl = `https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME}`;
             
             const message = success
-              ? '✅ Review app for PR #' + prNumber + ' was successfully deleted'
+              ? ' Review app for PR #' + prNumber + ' was successfully deleted'
               : [
-                  '❌ Review app for PR #' + prNumber + ' failed to be deleted',
+                  ' Review app for PR #' + prNumber + ' failed to be deleted',
                   '',
-                  '[View in Control Plane Console](' + cpConsoleUrl + ')'
+                  '[Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
                 ].join('\n');
             
             await github.rest.issues.updateComment({
