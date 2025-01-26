@@ -92,7 +92,11 @@ jobs:
           script: |
             const success = '${{ steps.delete.outcome }}' === 'success';
             const message = success
-              ? '✅ Review app successfully deleted'
+              ? [
+                  '✅ Review app successfully deleted',
+                  '',
+                  '⚡ [Control Plane Console](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/workload)'
+                ].join('\n')
               : '❌ Review app deletion failed';
             
             await github.rest.issues.updateComment({
@@ -154,7 +158,9 @@ jobs:
         if: steps.determine_action.outputs.action == 'deploy'
         uses: ./.github/actions/build-docker-image
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
+          commit: ${{ github.event.comment.body && steps.getRef.outputs.PR_SHA || github.sha }}
 
       - name: Deploy to Control Plane
         if: steps.determine_action.outputs.action == 'deploy'
@@ -204,6 +210,8 @@ jobs:
               '🚀 Rails App Deployed to Control Plane for Commit ' + commitSha.substring(0, 7),
               '',
               '🌐 Rails App: [' + railsUrl + '](' + railsUrl + ')',
+              '',
+              '⚡ [Control Plane Console for Review App](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/workload)',
               '',
               '[View Workflow Status](' + workflowUrl + ')'
             ].join('\n');
