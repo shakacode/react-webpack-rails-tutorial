@@ -28,9 +28,7 @@ runs:
     - name: Get Commit SHA
       id: get_sha
       shell: bash
-      run: |
-        chmod +x ${{ github.action_path }}/scripts/get-commit-sha.sh
-        ${{ github.action_path }}/scripts/get-commit-sha.sh
+      run: ${{ github.action_path }}/scripts/get-commit-sha.sh
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PR_NUMBER: ${{ env.PR_NUMBER }}
@@ -38,9 +36,7 @@ runs:
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
-      run: |
-        chmod +x ${{ github.action_path }}/scripts/deploy.sh
-        ${{ github.action_path }}/scripts/deploy.sh
+      run: ${{ github.action_path }}/scripts/deploy.sh
       env:
         APP_NAME: ${{ inputs.app_name }}
         CPLN_ORG: ${{ inputs.org }}
