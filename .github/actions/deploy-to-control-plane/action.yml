@@ -142,15 +142,6 @@ runs:
           cpflow setup-app -a ${{ inputs.app_name }}
         fi
 
-        echo "🔧 Ensuring rails template is applied..."
-        if ! cpflow list-workloads -a ${{ inputs.app_name }} --org ${{ inputs.org }} | grep -q "rails"; then
-          echo "📦 Applying rails template..."
-          if ! cpflow apply-template rails -a ${{ inputs.app_name }} --org ${{ inputs.org }}; then
-            echo "❌ Failed to apply rails template"
-            exit 1
-          fi
-        fi
-
     - name: Update Status - Building
       uses: actions/github-script@v7
       with:
