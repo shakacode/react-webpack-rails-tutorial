@@ -31,9 +31,9 @@ trap 'rm -f "$TEMP_OUTPUT"' EXIT
 
 # Deploy the application
 echo "🚀 Deploying to Control Plane (timeout: ${WAIT_TIMEOUT}s)"
-if ! timeout "$WAIT_TIMEOUT" cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose | tee "$TEMP_OUTPUT"; then
+if ! timeout "${WAIT_TIMEOUT}" cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose 2>&1 | tee "$TEMP_OUTPUT"; then
   echo "❌ Deployment failed"
-  echo "Error output:"
+  echo "Full output:"
   cat "$TEMP_OUTPUT"
   exit 1
 fi
