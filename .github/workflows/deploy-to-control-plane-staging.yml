@@ -1,6 +1,6 @@
 # Control Plane GitHub Action
 
-name: Deploy-To-Control-Plane-Staging
+name: Deploy Main Branch to Control Plane Staging
 
 # Controls when the workflow will run
 on:
