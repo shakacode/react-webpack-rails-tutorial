@@ -1,0 +1,42 @@
+name: Review App Help
+
+on:
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  Post-Help-Message:
+    if: |
+      (github.event_name == 'pull_request') ||
+      (github.event_name == 'issue_comment' && 
+       github.event.issue.pull_request && 
+       github.event.comment.body == '/show-help')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post Help Message
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const helpMessage = [
+              '## Review App Commands',
+              '',
+              '- `/deploy-review-app` - Deploy a review app for this PR',
+              '- `/delete-review-app` - Delete the review app for this PR',
+              '- `/show-help` - Show this help message',
+              '',
+              'The review app will be automatically deleted when the PR is closed or merged.'
+            ].join('\n');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number || context.payload.pull_request.number,
+              body: helpMessage
+            });

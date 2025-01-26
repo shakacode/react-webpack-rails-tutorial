@@ -55,13 +55,13 @@ jobs:
           script: |
             core.exportVariable('GET_CONSOLE_LINK', `
               function getConsoleLink(prNumber) {
-                return ' [Control Plane Console for Review App with PR #' + prNumber + '](' + 
-                       'https://console.cpln.io/org/' + process.env.CPLN_ORG + '/workloads/' + process.env.APP_NAME + ')';
+                return '🎮 [Control Plane Console](' + 
+                       'https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/-info)';
               }
             `);
 
-      - name: Initialize Workflow
-        id: init-workflow
+      - name: Setup Workflow URL
+        id: setup-workflow-url
         uses: actions/github-script@v7
         with:
           script: |
