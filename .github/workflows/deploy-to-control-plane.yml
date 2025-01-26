@@ -25,7 +25,7 @@ jobs:
       (github.event_name == 'pull_request') ||
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
-       github.event.comment.body == '/deploy')
+       github.event.comment.body == '/deploy-review-app')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -80,7 +80,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
+            function getConsoleLink(prNumber) {
+              return `[Control Plane Console](https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME})`;
+            }
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
@@ -109,7 +111,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
+            function getConsoleLink(prNumber) {
+              return `[Control Plane Console](https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME})`;
+            }
             
             const isSuccess = '${{ job.status }}' === 'success';
             const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
