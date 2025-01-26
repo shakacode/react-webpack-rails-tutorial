@@ -1,6 +1,6 @@
 name: Deploy to Control Plane
 
-run-name: ${{ github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && github.event.issue.pull_request) ? 'Deploying Review App' : format('Deploying {0} to Staging App', github.ref_name) }}
+run-name: "${{ github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && github.event.issue.pull_request) ? 'Deploying Review App' : format('Deploying {0} to Staging App', github.ref_name) }}"
 
 on:
   pull_request:
@@ -114,8 +114,18 @@ jobs:
 
       - name: Setup cpflow app
         run: |
+          set -e
+          
+          # Validate required environment variables
+          : "${APP_NAME:?APP_NAME environment variable is required}"
+          
           if ! cpflow exists -a ${{ env.APP_NAME }} ; then
-            cpflow setup-app -a ${{ env.APP_NAME }}
+            echo "🔧 Setting up new application: ${{ env.APP_NAME }}"
+            if ! cpflow setup-app -a ${{ env.APP_NAME }}; then
+              echo "❌ Failed to setup application"
+              exit 1
+            fi
+            echo "✅ Application setup complete"
           fi
 
       - name: Deploy to Control Plane
@@ -135,9 +145,10 @@ jobs:
         with:
           script: |
             const isSuccess = '${{ job.status }}' === 'success';
-            const deploymentId = ${{ fromJSON(steps.init-deployment.outputs.result).deploymentId }};
-            const commentId = ${{ fromJSON(steps.init-deployment.outputs.result).commentId }};
-            const workflowUrl = ${{ fromJSON(steps.init-deployment.outputs.result).workflowUrl }};
+            const result = ${{ steps.init-deployment.outputs.result }};
+            const deploymentId = result.deploymentId;
+            const commentId = result.commentId;
+            const workflowUrl = result.workflowUrl;
             const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
             const prNumber = process.env.PR_NUMBER;
             
@@ -154,7 +165,12 @@ jobs:
               deploymentStatus.environment_url = railsUrl;
             }
             
-            await github.rest.repos.createDeploymentStatus(deploymentStatus);
+            try {
+              await github.rest.repos.createDeploymentStatus(deploymentStatus);
+            } catch (error) {
+              console.error('Failed to update deployment status:', error);
+              throw error;
+            }
             
             // Update the initial comment
             const successMessage = [
@@ -173,9 +189,14 @@ jobs:
               '[View Workflow Status](' + workflowUrl + ')'
             ].join('\n');
             
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: commentId,
-              body: isSuccess ? successMessage : failureMessage
-            });
+            try {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: commentId,
+                body: isSuccess ? successMessage : failureMessage
+              });
+            } catch (error) {
+              console.error('Failed to update comment:', error);
+              throw error;
+            }
