@@ -41,20 +41,22 @@ runs:
       id: deploy
       shell: bash
       run: |
-        echo "🚀 Deploying app for PR #$PR_NUMBER..."
+        echo "🚀 Deploying app for PR #${PR_NUMBER}..."
         
         # Deploy the application and capture the Rails URL
-        if ! DEPLOY_OUTPUT=$(cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{ inputs.org }}); then
-          echo "❌ Deployment failed for PR #$PR_NUMBER"
+        if ! DEPLOY_OUTPUT=$(cpflow deploy-image -a "${{ inputs.app_name }}" --run-release-phase --org "${{ inputs.org }}" 2>&1); then
+          echo "❌ Deployment failed for PR #${PR_NUMBER}"
+          echo "Error output:"
+          echo "${DEPLOY_OUTPUT}"
           exit 1
         fi
         
         # Extract Rails URL from deployment output
-        RAILS_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)
-        if [ -z "$RAILS_URL" ]; then
+        RAILS_URL=$(echo "${DEPLOY_OUTPUT}" | grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)
+        if [ -z "${RAILS_URL}" ]; then
           echo "❌ Failed to get Rails URL from deployment output"
           echo "Deployment output:"
-          echo "$DEPLOY_OUTPUT"
+          echo "${DEPLOY_OUTPUT}"
           exit 1
         fi
         
@@ -63,18 +65,18 @@ runs:
         echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)..."
         
         # Use timeout command with ps:wait
-        if ! timeout $WAIT_TIMEOUT bash -c "cpflow ps:wait -a ${{ inputs.app_name }}"; then
+        if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"${{ inputs.app_name }}\"" 2>&1; then
           TIMEOUT_EXIT=$?
-          if [ $TIMEOUT_EXIT -eq 124 ]; then
+          if [ ${TIMEOUT_EXIT} -eq 124 ]; then
             echo "❌ Timed out waiting for workloads after ${WAIT_TIMEOUT} seconds"
           else
-            echo "❌ Workloads did not become ready for PR #$PR_NUMBER (exit code: $TIMEOUT_EXIT)"
+            echo "❌ Workloads did not become ready for PR #${PR_NUMBER} (exit code: ${TIMEOUT_EXIT})"
           fi
           echo "Last deployment output:"
-          echo "$DEPLOY_OUTPUT"
+          echo "${DEPLOY_OUTPUT}"
           exit 1
         fi
         
-        echo "✅ Deployment successful for PR #$PR_NUMBER"
-        echo "🌐 Rails URL: $RAILS_URL"
-        echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT
+        echo "✅ Deployment successful for PR #${PR_NUMBER}"
+        echo "🌐 Rails URL: ${RAILS_URL}"
+        echo "rails_url=${RAILS_URL}" >> $GITHUB_OUTPUT
