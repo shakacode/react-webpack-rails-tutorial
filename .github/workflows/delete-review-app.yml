@@ -60,13 +60,11 @@ jobs:
               }
             `);
 
-      - name: Initialize Delete
-        id: init-delete
+      - name: Initialize and Set Workflow URL
+        id: init-workflow
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
-
             async function getWorkflowUrl(runId) {
               // Get the current job ID
               const jobs = await github.rest.actions.listJobsForWorkflowRun({
@@ -87,34 +85,16 @@ jobs:
             }
             
             const workflowUrl = await getWorkflowUrl(context.runId);
-            
-            const comment = await github.rest.issues.createComment({
-              issue_number: process.env.PR_NUMBER,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: [
-                ' Starting app deletion...',
-                '',
-                ' [View Delete Logs](' + workflowUrl + ')',
-                '',
-                getConsoleLink(process.env.PR_NUMBER)
-              ].join('\n')
-            });
-            
-            return { 
-              commentId: comment.data.id,
-              workflowUrl
-            };
-
-      - name: Set workflow URL
-        run: |
-          echo "WORKFLOW_URL=${{ fromJSON(steps.init-delete.outputs.result).workflowUrl }}" >> $GITHUB_ENV
+            core.exportVariable('WORKFLOW_URL', workflowUrl);
+            return { workflowUrl };
 
       - name: Create Initial Delete Comment
         id: init-delete
         uses: actions/github-script@v7
         with:
           script: |
+            eval(process.env.GET_CONSOLE_LINK);
+            
             let message = '🗑️ Starting app deletion';
             if ('${{ github.event_name }}' === 'pull_request') {
               const merged = '${{ github.event.pull_request.merged }}' === 'true';
@@ -125,7 +105,13 @@ jobs:
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: message
+              body: [
+                message,
+                '',
+                ' [View Delete Logs](' + process.env.WORKFLOW_URL + ')',
+                '',
+                getConsoleLink(process.env.PR_NUMBER)
+              ].join('\n')
             });
             return { commentId: comment.data.id };
 
