@@ -19,29 +19,7 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
-  debug-trigger:
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Trigger Conditions
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
-          COMMENT: ${{ github.event.comment.body }}
-          PR_ACTION: ${{ github.event.action }}
-          PR_MERGED: ${{ github.event.pull_request.merged }}
-        run: |
-          echo "Debug information for delete-review-app command:"
-          echo "Event name: $EVENT_NAME"
-          echo "Is PR (raw): $IS_PR"
-          echo "Comment body: $COMMENT"
-          echo "PR action: $PR_ACTION"
-          echo "PR merged: $PR_MERGED"
-          echo "Raw event payload:"
-          echo '${{ toJSON(github.event) }}'
-
   Process-Delete-Command:
-    needs: debug-trigger
     if: |
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
