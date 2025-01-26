@@ -37,6 +37,14 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PR_NUMBER: ${{ env.PR_NUMBER }}
 
+    - name: Setup Control Plane App If It Doesn't Exist
+      shell: bash
+      run: |
+        if ! cpflow exists -a ${{ inputs.app_name }} ; then
+          echo " Setting up new Control Plane app for app ${{ inputs.app_name }}..."
+          cpflow setup-app -a ${{ inputs.app_name }}
+        fi
+
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
