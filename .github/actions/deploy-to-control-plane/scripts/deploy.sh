@@ -14,20 +14,12 @@ set -e
 # Validate required environment variables
 : "${APP_NAME:?APP_NAME environment variable is required}"
 : "${CPLN_ORG:?CPLN_ORG environment variable is required}"
-: "${GITHUB_SHA:?GITHUB_SHA environment variable is required}"
 
 # Set deployment timeout (15 minutes)
 TIMEOUT=900
 
 TEMP_OUTPUT=$(mktemp)
 trap 'rm -f "$TEMP_OUTPUT"' EXIT
-
-# Build the Docker image
-echo "🏗️ Building Docker image..."
-if ! cpflow build-image -a "$APP_NAME" --commit="$GITHUB_SHA" --org="$CPLN_ORG"; then
-    echo "❌ Docker image build failed"
-    exit 1
-fi
 
 # Deploy the application
 echo "🚀 Deploying to Control Plane..."

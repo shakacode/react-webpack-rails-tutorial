@@ -1,7 +1,7 @@
 # Control Plane GitHub Action
 
 name: Deploy to Control Plane
-description: 'Deploys the application to Control Plane'
+description: 'Deploys an application to Control Plane'
 
 inputs:
   app_name:
@@ -36,7 +36,29 @@ runs:
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
-      run: ${{ github.action_path }}/scripts/deploy.sh
-      env:
-        APP_NAME: ${{ inputs.app_name }}
-        CPLN_ORG: ${{ inputs.org }}
+      run: |
+        echo "🚀 Deploying app for PR #$PR_NUMBER..."
+        
+        # Deploy the application using the already-built image
+        if ! cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{ inputs.org }}; then
+          echo "❌ Deployment failed for PR #$PR_NUMBER"
+          exit 1
+        fi
+        
+        # Wait for the deployment to be ready
+        echo "⏳ Waiting for deployment to be ready..."
+        if ! cpflow wait-ready -a ${{ inputs.app_name }} --org=${{ inputs.org }} --timeout=300; then
+          echo "❌ Deployment did not become ready for PR #$PR_NUMBER"
+          exit 1
+        fi
+        
+        # Get the Rails URL
+        RAILS_URL=$(cpflow get-url -a ${{ inputs.app_name }} --org=${{ inputs.org }})
+        if [ -z "$RAILS_URL" ]; then
+          echo "❌ Failed to get Rails URL for PR #$PR_NUMBER"
+          exit 1
+        fi
+        
+        echo "✅ Deployment successful for PR #$PR_NUMBER"
+        echo "🌐 Rails URL: $RAILS_URL"
+        echo "rails_url=$RAILS_URL" >> $GITHUB_OUTPUT

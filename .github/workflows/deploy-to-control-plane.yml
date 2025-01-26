@@ -157,14 +157,20 @@ jobs:
               workflowUrl: getWorkflowUrl(context.runId)
             };
 
+      - name: Set commit hash
+        if: steps.determine_action.outputs.action == 'deploy'
+        run: |
+          FULL_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || steps.getRef.outputs.PR_SHA || github.sha }}"
+          echo "COMMIT_HASH=${FULL_COMMIT:0:7}" >> $GITHUB_ENV
+
       - name: Build Docker Image
         if: steps.determine_action.outputs.action == 'deploy'
         uses: ./.github/actions/build-docker-image
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
-          # Use the same commit resolution as checkout
-          commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || steps.getRef.outputs.PR_SHA || github.sha }}
+          commit: ${{ env.COMMIT_HASH }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Deploy to Control Plane
         if: steps.determine_action.outputs.action == 'deploy'
