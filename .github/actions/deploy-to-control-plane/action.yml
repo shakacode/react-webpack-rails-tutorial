@@ -16,7 +16,7 @@ inputs:
   wait_timeout:
     description: 'Timeout in seconds for waiting for workloads to be ready'
     required: false
-    default: 600
+    default: '900'
 
 outputs:
   review_app_url:
@@ -66,7 +66,11 @@ runs:
         
         # Wait for all workloads to be ready
         WAIT_TIMEOUT=${WAIT_TIMEOUT:-${{ inputs.wait_timeout }}}
-        echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)..."
+        if ! [[ "${WAIT_TIMEOUT}" =~ ^[0-9]+$ ]]; then
+          echo "❌ Invalid timeout value: ${WAIT_TIMEOUT}"
+          exit 1
+        fi
+        echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)"
         
         # Use timeout command with ps:wait and show output in real-time
         if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"${{ inputs.app_name }}\"" 2>&1 | tee -a "${TEMP_OUTPUT}"; then

@@ -40,7 +40,7 @@ jobs:
         with:
           script: |
             const helpMessage = [
-              '## Available Commands',
+              '## 📚 Available Commands',
               '',
               '### `/deploy`',
               'Deploys your PR branch to a review environment on Control Plane.',
@@ -49,17 +49,37 @@ jobs:
               '- Provides a unique URL to preview your changes',
               '- Shows build and deployment progress in real-time',
               '',
+              '**Required Environment Variables:**',
+              '- `CPLN_TOKEN`: Control Plane authentication token',
+              '- `CPLN_ORG`: Control Plane organization name',
+              '',
+              '**Optional Configuration:**',
+              '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
+              '  - Must be a positive integer',
+              '  - Can be set in GitHub Actions variables',
+              '  - Applies to both deployment and workload readiness checks',
+              '',
               '### `/delete-review-app`',
               'Deletes the review app associated with this PR.',
               '- Removes all resources from Control Plane',
               '- Helpful for cleaning up when you\'re done testing',
               '- Can be re-deployed later using `/deploy`',
               '',
+              '**Required Environment Variables:**',
+              '- `CPLN_TOKEN`: Control Plane authentication token',
+              '- `CPLN_ORG`: Control Plane organization name',
+              '',
               '### `/help`',
-              'Shows this help message explaining available commands.',
+              'Shows this help message explaining available commands and configuration.',
               '',
               '---',
-              '_Note: These commands only work in pull request comments._'
+              '**Note:** These commands only work in pull request comments.',
+              '',
+              '**Environment Setup:**',
+              '1. Set required secrets in your repository settings:',
+              '   - `CPLN_TOKEN`',
+              '   - `CPLN_ORG`',
+              '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout'
             ].join('\n');
             
             await github.rest.issues.createComment({

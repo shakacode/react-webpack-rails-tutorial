@@ -60,7 +60,7 @@ jobs:
           done
           
           if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo "❌ Required secrets are not set: ${missing_secrets[*]}"
+            echo "Required secrets are not set: ${missing_secrets[*]}"
             exit 1
           fi
 
@@ -74,7 +74,7 @@ jobs:
           script: |
             core.exportVariable('GET_CONSOLE_LINK', `
               function getConsoleLink(prNumber) {
-                return '🎮 [Control Plane Console for Review App with PR #' + prNumber + '](' + 
+                return ' [Control Plane Console for Review App with PR #' + prNumber + '](' + 
                        'https://console.cpln.io/org/' + process.env.CPLN_ORG + '/workloads/' + process.env.APP_NAME + ')';
               }
             `);
@@ -110,7 +110,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: process.env.PR_NUMBER,
-              body: '⏳ Initializing deployment...'
+              body: ' Initializing deployment...'
             });
             
             // Create GitHub deployment
@@ -148,9 +148,9 @@ jobs:
             eval(process.env.GET_CONSOLE_LINK);
 
             const buildingMessage = [
-              '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
+              ' Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '📋 [View Build Logs](' + process.env.WORKFLOW_URL + ')',
+              ' [View Build Logs](' + process.env.WORKFLOW_URL + ')',
               '',
               getConsoleLink(process.env.PR_NUMBER)
             ].join('\n');
@@ -177,11 +177,11 @@ jobs:
             eval(process.env.GET_CONSOLE_LINK);
 
             const deployingMessage = [
-              '🚀 Deploying to Control Plane...',
+              ' Deploying to Control Plane...',
               '',
-              '⏳ Waiting for deployment to be ready...',
+              ' Waiting for deployment to be ready...',
               '',
-              '📋 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
+              ' [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
               '',
               getConsoleLink(process.env.PR_NUMBER)
             ].join('\n');
@@ -199,6 +199,7 @@ jobs:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
 
       - name: Update Status - Deployment Complete
         uses: actions/github-script@v7
@@ -226,19 +227,19 @@ jobs:
             
             // Define messages based on deployment status
             const successMessage = [
-              '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
+              ' Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '🚀 [Review App for PR #' + prNumber + '](' + appUrl + ')',
+              ' [Review App for PR #' + prNumber + '](' + appUrl + ')',
               '',
-              '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')',
+              ' [View Completed Action Build and Deploy Logs](' + workflowUrl + ')',
               '',
               getConsoleLink(prNumber)
             ].join('\n');
             
             const failureMessage = [
-              '❌ Deployment failed for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
+              ' Deployment failed for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '📋 [View Deployment Logs with Errors](' + workflowUrl + ')',
+              ' [View Deployment Logs with Errors](' + workflowUrl + ')',
               '',
               getConsoleLink(prNumber)
             ].join('\n');
@@ -282,7 +283,7 @@ jobs:
         with:
           script: |
             const helpMessage = [
-              '## 📚 Available Commands',
+              '##  Available Commands',
               '',
               '### `/deploy`',
               'Deploys your PR branch to a review environment on Control Plane.',
@@ -349,7 +350,7 @@ jobs:
           done
           
           if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo "❌ Required secrets are not set: ${missing_secrets[*]}"
+            echo "Required secrets are not set: ${missing_secrets[*]}"
             exit 1
           fi
 
@@ -365,7 +366,7 @@ jobs:
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🗑️ Starting app deletion...'
+              body: ' Starting app deletion...'
             });
             return { commentId: comment.data.id };
 
@@ -388,11 +389,11 @@ jobs:
             const cpConsoleUrl = `https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME}`;
             
             const message = success
-              ? '✅ Review app for PR #' + prNumber + ' was successfully deleted'
+              ? ' Review app for PR #' + prNumber + ' was successfully deleted'
               : [
-                  '❌ Review app for PR #' + prNumber + ' failed to be deleted',
+                  ' Review app for PR #' + prNumber + ' failed to be deleted',
                   '',
-                  '🎮 [Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
+                  ' [Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
                 ].join('\n');
             
             await github.rest.issues.updateComment({
