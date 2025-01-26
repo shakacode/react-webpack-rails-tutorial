@@ -151,7 +151,9 @@ jobs:
             const successMessage = [
               '✅ Review app for PR #' + prNumber + ' was successfully deleted',
               '',
-              ' [View Completed Delete Logs](' + process.env.WORKFLOW_URL + ')'
+              ' [View Completed Delete Logs](' + process.env.WORKFLOW_URL + ')',
+              '',
+              ' [Control Plane Organization](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/-info)'
             ].join('\n');
             
             const failureMessage = [

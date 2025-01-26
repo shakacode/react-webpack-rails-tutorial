@@ -31,7 +31,7 @@ jobs:
               const helpMessage = [
                 '## 📚 Available Commands',
                 '',
-                '### `/deploy`',
+                '### `/deploy-review-app`',
                 'Deploys your PR branch to a review environment on Control Plane.',
                 '- Creates a new review app if one doesn\'t exist',
                 '- Updates the existing review app if it already exists',
@@ -52,7 +52,7 @@ jobs:
                 'Deletes the review app associated with this PR.',
                 '- Removes all resources from Control Plane',
                 '- Helpful for cleaning up when you\'re done testing',
-                '- Can be re-deployed later using `/deploy`',
+                '- Can be re-deployed later using `/deploy-review-app`',
                 '',
                 '**Required Environment Variables:**',
                 '- `CPLN_TOKEN`: Control Plane authentication token',
