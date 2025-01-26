@@ -231,18 +231,30 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update Status - Success
+        if: steps.determine_action.outputs.action == 'deploy' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: steps.init-deployment.outputs.commentId,
+              body: `🚀 Review App for PR #${process.env.PR_NUMBER}: [\`${process.env.REVIEW_APP_URL}\`](${process.env.REVIEW_APP_URL})`
+            });
+
       - name: Update Status - Deployment Complete
         if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:
           script: |
+            const prNumber = process.env.PR_NUMBER;
+            const appUrl = process.env.REVIEW_APP_URL;
+            const workflowUrl = steps.init-deployment.outputs.workflowUrl;
             const isSuccess = '${{ job.status }}' === 'success';
             const result = ${{ steps.init-deployment.outputs.result }};
             const deploymentId = result.deploymentId;
             const commentId = result.commentId;
-            const workflowUrl = result.workflowUrl;
-            const railsUrl = '${{ steps.deploy.outputs.rails_url }}';
-            const prNumber = process.env.PR_NUMBER;
             
             // Update deployment status
             const deploymentStatus = {
@@ -250,24 +262,20 @@ jobs:
               repo: context.repo.repo,
               deployment_id: deploymentId,
               state: isSuccess ? 'success' : 'failure',
-              description: isSuccess ? '✅ Deployment successful' : '❌ Deployment failed'
+              environment_url: isSuccess ? appUrl : undefined,
+              log_url: workflowUrl,
+              environment: 'review'
             };
-            
-            if (isSuccess) {
-              deploymentStatus.environment_url = railsUrl;
-            }
             
             await github.rest.repos.createDeploymentStatus(deploymentStatus);
             
-            // Update the initial comment
+            // Define messages based on deployment status
             const successMessage = [
-              '✅ Deployment successful for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
+              '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
+              '🚀 Review App for PR #' + prNumber + ': [`' + appUrl + '`](' + appUrl + ')',
               '',
-              '⚡ [Control Plane Console](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/workload)',
-              '',
-              '[View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
+              '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
             ].join('\n');
             
             const failureMessage = [
@@ -276,6 +284,7 @@ jobs:
               '[View Workflow Status](' + workflowUrl + ')'
             ].join('\n');
             
+            // Update the comment with appropriate message
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

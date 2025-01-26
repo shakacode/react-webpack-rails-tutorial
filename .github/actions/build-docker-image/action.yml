@@ -22,11 +22,11 @@ runs:
       id: build
       shell: bash
       run: |
-        echo "🏗️ Building Docker image for PR #$PR_NUMBER (commit ${{ inputs.commit }})..."
+        echo "🏗️ Building Docker image for PR #${PR_NUMBER} (commit ${{ inputs.commit }})..."
         
-        if cpflow build-image -a ${{ inputs.app_name }} --commit=${{ inputs.commit }} --org=${{ inputs.org }}; then
-          echo "✅ Docker image build successful for PR #$PR_NUMBER (commit ${{ inputs.commit }})"
+        if cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}"; then
+          echo "✅ Docker image build successful for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
         else
-          echo "❌ Docker image build failed for PR #$PR_NUMBER (commit ${{ inputs.commit }})"
+          echo "❌ Docker image build failed for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
           exit 1
         fi
