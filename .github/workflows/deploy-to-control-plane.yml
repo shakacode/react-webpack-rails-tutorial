@@ -22,11 +22,10 @@ env:
 jobs:
   Process-Deployment-Command:
     if: |
-      github.event_name == 'pull_request' || 
+      (github.event_name == 'pull_request') ||
       (github.event_name == 'issue_comment' && 
-       (github.event.comment.body == '/deploy-review-app' || 
-        github.event.comment.body == '/delete-review-app') && 
-       github.event.issue.pull_request)
+       github.event.issue.pull_request && 
+       github.event.comment.body == '/deploy')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,72 +45,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine Action
-        id: determine_action
-        run: |
-          if [[ "${{ github.event.comment.body }}" == "/delete-review-app" ]]; then
-            echo "action=delete" >> $GITHUB_OUTPUT
-          else
-            echo "action=deploy" >> $GITHUB_OUTPUT
-          fi
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # For PR events: use the head SHA
-          # For PR comments: use the PR head SHA
-          # For other events: use the push SHA
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || steps.getRef.outputs.PR_SHA || github.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || steps.getRef.outputs.PR_REF || github.ref }}
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
 
-      # Delete App Steps
-      - name: Create Initial Delete Comment
-        if: steps.determine_action.outputs.action == 'delete'
-        uses: actions/github-script@v7
-        id: init-delete
-        with:
-          script: |
-            const comment = await github.rest.issues.createComment({
-              issue_number: process.env.PR_NUMBER,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🗑️ Starting app deletion...'
-            });
-            return { commentId: comment.data.id };
-
-      - name: Delete App
-        if: steps.determine_action.outputs.action == 'delete'
-        id: delete
-        run: |
-          echo "🗑️ Deleting review app: $APP_NAME"
-          ${{ github.workspace }}/.github/actions/deploy-to-control-plane/scripts/delete-app.sh
-
-      - name: Update Delete Status
-        if: steps.determine_action.outputs.action == 'delete'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const success = '${{ steps.delete.outcome }}' === 'success';
-            const message = success
-              ? [
-                  '✅ Review app successfully deleted',
-                  '',
-                  '⚡ [Control Plane Console](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/workload)'
-                ].join('\n')
-              : '❌ Review app deletion failed';
-            
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: ${{ fromJSON(steps.init-delete.outputs.result).commentId }},
-              body: message
-            });
-
-      # Deploy Steps
       - name: Initialize Deployment
-        if: steps.determine_action.outputs.action == 'deploy'
         id: init-deployment
         uses: actions/github-script@v7
         with:
@@ -162,19 +104,16 @@ jobs:
             };
 
       - name: Set comment ID and workflow URL
-        if: steps.determine_action.outputs.action == 'deploy'
         run: |
           echo "COMMENT_ID=${{ fromJSON(steps.init-deployment.outputs.result).commentId }}" >> $GITHUB_ENV
           echo "WORKFLOW_URL=${{ fromJSON(steps.init-deployment.outputs.result).workflowUrl }}" >> $GITHUB_ENV
 
       - name: Set commit hash
-        if: steps.determine_action.outputs.action == 'deploy'
         run: |
           FULL_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || steps.getRef.outputs.PR_SHA || github.sha }}"
           echo "COMMIT_HASH=${FULL_COMMIT:0:7}" >> $GITHUB_ENV
 
       - name: Update Status - Building
-        if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:
           script: |
@@ -192,7 +131,6 @@ jobs:
             });
 
       - name: Build Docker Image
-        if: steps.determine_action.outputs.action == 'deploy'
         uses: ./.github/actions/build-docker-image
         with:
           app_name: ${{ env.APP_NAME }}
@@ -201,7 +139,6 @@ jobs:
           PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Update Status - Deploying
-        if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:
           script: |
@@ -221,28 +158,13 @@ jobs:
             });
 
       - name: Deploy to Control Plane
-        if: steps.determine_action.outputs.action == 'deploy'
-        id: deploy
         uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Status - Success
-        if: steps.determine_action.outputs.action == 'deploy' && success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: process.env.COMMENT_ID,
-              body: `🚀 Review App for PR #${process.env.PR_NUMBER}: [\`${process.env.REVIEW_APP_URL}\`](${process.env.REVIEW_APP_URL})`
-            });
-
       - name: Update Status - Deployment Complete
-        if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:
           script: |
@@ -268,15 +190,15 @@ jobs:
             const successMessage = [
               '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '🚀 Review App for PR #' + prNumber + ': [`' + appUrl + '`](' + appUrl + ')',
+              '🚀 [Review App for PR #' + prNumber + '](' + appUrl + ')',
               '',
               '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
             ].join('\n');
             
             const failureMessage = [
-              '❌ Deployment failed for PR #' + prNumber,
+              '❌ Deployment failed for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '[View Workflow Status](' + workflowUrl + ')'
+              '📋 [View Deployment Logs with Errors](' + workflowUrl + ')'
             ].join('\n');
             
             // Update the existing comment
