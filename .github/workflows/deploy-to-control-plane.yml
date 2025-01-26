@@ -20,7 +20,25 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
+  debug-trigger:
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          echo "Debug information for deploy command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR (raw): $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
   Process-Deployment-Command:
+    needs: debug-trigger
     if: |
       (github.event_name == 'pull_request') ||
       (github.event_name == 'issue_comment' && 
