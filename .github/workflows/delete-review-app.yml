@@ -1,6 +1,8 @@
 name: Delete Review App
 
 on:
+  pull_request:
+    types: [closed]
   issue_comment:
     types: [created]
 
@@ -13,8 +15,8 @@ permissions:
 env:
   CPLN_ORG: ${{ secrets.CPLN_ORG }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
-  PR_NUMBER: ${{ github.event.issue.number }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
   debug-trigger:
@@ -26,20 +28,26 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
           COMMENT: ${{ github.event.comment.body }}
+          PR_ACTION: ${{ github.event.action }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
         run: |
           echo "Debug information for delete-review-app command:"
           echo "Event name: $EVENT_NAME"
           echo "Is PR (raw): $IS_PR"
           echo "Comment body: $COMMENT"
+          echo "PR action: $PR_ACTION"
+          echo "PR merged: $PR_MERGED"
           echo "Raw event payload:"
           echo '${{ toJSON(github.event) }}'
 
   Process-Delete-Command:
     needs: debug-trigger
     if: |
-      github.event_name == 'issue_comment' && 
-      github.event.issue.pull_request && 
-      github.event.comment.body == '/delete-review-app'
+      (github.event_name == 'issue_comment' && 
+       github.event.issue.pull_request && 
+       github.event.comment.body == '/delete-review-app') ||
+      (github.event_name == 'pull_request' && 
+       github.event.action == 'closed')
     runs-on: ubuntu-latest
 
     steps:
@@ -55,7 +63,7 @@ jobs:
           done
           
           if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo " Required secrets are not set: ${missing_secrets[*]}"
+            echo "Required secrets are not set: ${missing_secrets[*]}"
             exit 1
           fi
 
@@ -67,11 +75,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            let message = '🗑️ Starting app deletion';
+            if ('${{ github.event_name }}' === 'pull_request') {
+              const merged = '${{ github.event.pull_request.merged }}' === 'true';
+              message += merged ? ' (PR merged)' : ' (PR closed)';
+            }
+            
             const comment = await github.rest.issues.createComment({
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: ' Starting app deletion...'
+              body: message
             });
             return { commentId: comment.data.id };
 
@@ -93,13 +107,20 @@ jobs:
             const prNumber = process.env.PR_NUMBER;
             const cpConsoleUrl = `https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME}`;
             
-            const message = success
-              ? ' Review app for PR #' + prNumber + ' was successfully deleted'
-              : [
-                  ' Review app for PR #' + prNumber + ' failed to be deleted',
-                  '',
-                  '[Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
-                ].join('\n');
+            let message;
+            if (success) {
+              message = '✅ Review app for PR #' + prNumber + ' was successfully deleted';
+              if ('${{ github.event_name }}' === 'pull_request') {
+                const merged = '${{ github.event.pull_request.merged }}' === 'true';
+                message += merged ? ' after merge' : ' after PR was closed';
+              }
+            } else {
+              message = [
+                '❌ Review app for PR #' + prNumber + ' failed to be deleted',
+                '',
+                '🎮 [Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
+              ].join('\n');
+            }
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
