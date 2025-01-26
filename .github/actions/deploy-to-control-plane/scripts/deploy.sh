@@ -29,6 +29,15 @@ fi
 TEMP_OUTPUT=$(mktemp)
 trap 'rm -f "$TEMP_OUTPUT"' EXIT
 
+# Build the Docker image
+echo "🏗️ Building Docker image"
+if ! cpflow build-image -a "$APP_NAME" --org "$CPLN_ORG" --verbose 2>&1 | tee "$TEMP_OUTPUT"; then
+  echo "❌ Image build failed"
+  echo "Full output:"
+  cat "$TEMP_OUTPUT"
+  exit 1
+fi
+
 # Deploy the application
 echo "🚀 Deploying to Control Plane (timeout: ${WAIT_TIMEOUT}s)"
 if ! timeout "${WAIT_TIMEOUT}" cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose 2>&1 | tee "$TEMP_OUTPUT"; then
@@ -42,7 +51,7 @@ fi
 RAILS_URL=$(grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
 if [ -z "$RAILS_URL" ]; then
   echo "❌ Failed to get app URL from deployment output"
-  echo "Deployment output:"
+  echo "Full output:"
   cat "$TEMP_OUTPUT"
   exit 1
 fi

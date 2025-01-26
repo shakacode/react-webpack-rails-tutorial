@@ -92,13 +92,30 @@ jobs:
 
       - name: Checkout PR Branch
         if: |
-          github.event_name == 'issue_comment' || 
+          (github.event_name == 'issue_comment' && 
+           github.event.issue.pull_request && 
+           github.event.comment.body == '/deploy-review-app') || 
           (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
         run: git checkout ${{ steps.getRef.outputs.PR_REF }}
 
+      - name: Build Docker Image
+        if: |
+          (github.event_name == 'issue_comment' && 
+           github.event.issue.pull_request && 
+           github.event.comment.body == '/deploy-review-app') || 
+          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+        uses: ./.github/actions/build-docker-image
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
+          commit: ${{ steps.getRef.outputs.PR_SHA }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+
       - name: Deploy to Control Plane
         if: |
-          github.event_name == 'issue_comment' || 
+          (github.event_name == 'issue_comment' && 
+           github.event.issue.pull_request && 
+           github.event.comment.body == '/deploy-review-app') || 
           (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
         uses: ./.github/actions/deploy-to-control-plane
         with:

@@ -172,14 +172,6 @@ runs:
             body: buildingMessage
           });
 
-    - name: Build Docker Image
-      uses: ./.github/actions/build-docker-image
-      with:
-        app_name: ${{ inputs.app_name }}
-        org: ${{ inputs.org }}
-        commit: ${{ env.COMMIT_HASH }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
-
     - name: Update Status - Deploying
       uses: actions/github-script@v7
       with:
