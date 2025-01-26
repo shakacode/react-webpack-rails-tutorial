@@ -5,24 +5,30 @@ run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || 
 on:
   issue_comment:
     types: [created]
+  push:
+    branches-ignore:
+      - main   # Don't run on main branch pushes
+      - master # Don't run on master branch pushes
 
 # Use concurrency to cancel in-progress runs
 concurrency:
-  group: deploy-${{ github.event.issue.number }}
+  group: deploy-pr-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 env:
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
   CPLN_ORG: ${{ secrets.CPLN_ORG }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
-  PR_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
   Process-Deployment-Command:
+    # For issue comments, only run on /deploy-review-app command
+    # For push events, only run if PR exists and has a review app
     if: |
-      github.event_name == 'issue_comment' && 
-      github.event.issue.pull_request && 
-      github.event.comment.body == '/deploy-review-app'
+      (github.event_name == 'issue_comment' && 
+       github.event.issue.pull_request && 
+       github.event.comment.body == '/deploy-review-app') ||
+      (github.event_name == 'push' && 
+       github.event.pull_request)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,10 +41,47 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Get PR Number for Push Event
+        if: github.event_name == 'push'
+        id: get-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get PR number from branch
+          PR_NUMBER=$(gh pr list --head ${{ github.ref_name }} --json number --jq '.[0].number')
+          if [ -n "$PR_NUMBER" ]; then
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-$PR_NUMBER" >> $GITHUB_ENV
+          else
+            echo "No PR found for this branch"
+            exit 0
+          fi
+
+      - name: Set PR Number for Comment Event
+        if: github.event_name == 'issue_comment'
+        run: |
+          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
+          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
+
+      - name: Check if Review App Exists
+        id: check-app
+        if: github.event_name == 'push'
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+        run: |
+          if ! cpflow exists -a ${{ env.APP_NAME }}; then
+            echo "No review app exists for this PR"
+            exit 0
+          fi
+          echo "app_exists=true" >> $GITHUB_OUTPUT
+
       - name: Get PR HEAD Ref
         id: getRef
         run: |
-          PR_DATA=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName,headRefOid)
+          PR_DATA=$(gh pr view ${{ env.PR_NUMBER }} --repo ${{ github.repository }} --json headRefName,headRefOid)
           echo "PR_REF=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
           echo "PR_SHA=$(echo "$PR_DATA" | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
         env:
@@ -48,6 +91,7 @@ jobs:
         run: git checkout ${{ steps.getRef.outputs.PR_REF }}
 
       - name: Deploy to Control Plane
+        if: github.event_name == 'issue_comment' || steps.check-app.outputs.app_exists == 'true'
         uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ env.APP_NAME }}
