@@ -1,20 +1,30 @@
-name: Add helper Comment on PR creation
+name: Add Comment on PR Creation
 
 on:
   pull_request:
     types: [opened]
 
 jobs:
-  comment-on-pr:
+  add-comment:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
-      - name: Add GitHub Comment for review app instructions
+        name: Add GitHub Comment for review app instructions
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Hi 👋 To deploy a review app, please comment `/deploy-review-app`"
-            })
+              issue_number: context.payload.pull_request.number,
+              body: [
+                "Hi 👋 Here are the commands available for this PR:",
+                "",
+                "- `/deploy-review-app`: Deploy your changes to a review environment",
+                "- `/delete-review-app`: Clean up the review environment when you're done",
+                "- `/help`: Show detailed information about all commands",
+                "",
+                "Use `/help` to see full documentation, including configuration options."
+              ].join("\n")
+            });

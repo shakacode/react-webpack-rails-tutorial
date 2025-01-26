@@ -4,30 +4,17 @@ on:
   issue_comment:
     types: [created]
 
+# Use concurrency to prevent duplicate runs
+concurrency:
+  group: help-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
 permissions:
   issues: write
   pull-requests: write
 
 jobs:
-  debug-trigger:
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Trigger Conditions
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
-          COMMENT: ${{ github.event.comment.body }}
-        run: |
-          echo "Debug information for help command:"
-          echo "Event name: $EVENT_NAME"
-          echo "Is PR (raw): $IS_PR"
-          echo "Comment body: $COMMENT"
-          echo "Raw event payload:"
-          echo '${{ toJSON(github.event) }}'
-
   show-help:
-    needs: debug-trigger
     if: |
       github.event_name == 'issue_comment' && 
       github.event.issue.pull_request && 
@@ -39,52 +26,64 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const helpMessage = [
-              '## 📚 Available Commands',
-              '',
-              '### `/deploy`',
-              'Deploys your PR branch to a review environment on Control Plane.',
-              '- Creates a new review app if one doesn\'t exist',
-              '- Updates the existing review app if it already exists',
-              '- Provides a unique URL to preview your changes',
-              '- Shows build and deployment progress in real-time',
-              '',
-              '**Required Environment Variables:**',
-              '- `CPLN_TOKEN`: Control Plane authentication token',
-              '- `CPLN_ORG`: Control Plane organization name',
-              '',
-              '**Optional Configuration:**',
-              '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
-              '  - Must be a positive integer',
-              '  - Can be set in GitHub Actions variables',
-              '  - Applies to both deployment and workload readiness checks',
-              '',
-              '### `/delete-review-app`',
-              'Deletes the review app associated with this PR.',
-              '- Removes all resources from Control Plane',
-              '- Helpful for cleaning up when you\'re done testing',
-              '- Can be re-deployed later using `/deploy`',
-              '',
-              '**Required Environment Variables:**',
-              '- `CPLN_TOKEN`: Control Plane authentication token',
-              '- `CPLN_ORG`: Control Plane organization name',
-              '',
-              '### `/help`',
-              'Shows this help message explaining available commands and configuration.',
-              '',
-              '---',
-              '**Note:** These commands only work in pull request comments.',
-              '',
-              '**Environment Setup:**',
-              '1. Set required secrets in your repository settings:',
-              '   - `CPLN_TOKEN`',
-              '   - `CPLN_ORG`',
-              '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout'
-            ].join('\n');
-            
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.issue.number,
-              body: helpMessage
-            });
+            try {
+              console.log('Creating help message...');
+              const helpMessage = [
+                '## 📚 Available Commands',
+                '',
+                '### `/deploy`',
+                'Deploys your PR branch to a review environment on Control Plane.',
+                '- Creates a new review app if one doesn\'t exist',
+                '- Updates the existing review app if it already exists',
+                '- Provides a unique URL to preview your changes',
+                '- Shows build and deployment progress in real-time',
+                '',
+                '**Required Environment Variables:**',
+                '- `CPLN_TOKEN`: Control Plane authentication token',
+                '- `CPLN_ORG`: Control Plane organization name',
+                '',
+                '**Optional Configuration:**',
+                '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
+                '  - Must be a positive integer',
+                '  - Can be set in GitHub Actions variables',
+                '  - Applies to both deployment and workload readiness checks',
+                '',
+                '### `/delete-review-app`',
+                'Deletes the review app associated with this PR.',
+                '- Removes all resources from Control Plane',
+                '- Helpful for cleaning up when you\'re done testing',
+                '- Can be re-deployed later using `/deploy`',
+                '',
+                '**Required Environment Variables:**',
+                '- `CPLN_TOKEN`: Control Plane authentication token',
+                '- `CPLN_ORG`: Control Plane organization name',
+                '',
+                '### `/help`',
+                'Shows this help message explaining available commands and configuration.',
+                '',
+                '---',
+                '**Note:** These commands only work in pull request comments.',
+                '',
+                '**Environment Setup:**',
+                '1. Set required secrets in your repository settings:',
+                '   - `CPLN_TOKEN`',
+                '   - `CPLN_ORG`',
+                '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout'
+              ].join('\n');
+              
+              console.log('Issue number:', github.context.payload.issue.number);
+              console.log('Owner:', context.repo.owner);
+              console.log('Repo:', context.repo.repo);
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: github.context.payload.issue.number,
+                body: helpMessage
+              });
+              
+              console.log('Help message posted successfully');
+            } catch (error) {
+              console.error('Error posting help message:', error);
+              core.setFailed(`Failed to post help message: ${error.message}`);
+            }
