@@ -163,6 +163,27 @@ jobs:
           FULL_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || steps.getRef.outputs.PR_SHA || github.sha }}"
           echo "COMMIT_HASH=${FULL_COMMIT:0:7}" >> $GITHUB_ENV
 
+      - name: Update Status - Building
+        if: steps.determine_action.outputs.action == 'deploy'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const result = ${{ steps.init-deployment.outputs.result }};
+            const commentId = result.commentId;
+            
+            const buildingMessage = [
+              '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
+              '',
+              '[View Build Logs](' + result.workflowUrl + ')'
+            ].join('\n');
+            
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: buildingMessage
+            });
+
       - name: Build Docker Image
         if: steps.determine_action.outputs.action == 'deploy'
         uses: ./.github/actions/build-docker-image
@@ -171,6 +192,29 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           commit: ${{ env.COMMIT_HASH }}
           PR_NUMBER: ${{ env.PR_NUMBER }}
+
+      - name: Update Status - Deploying
+        if: steps.determine_action.outputs.action == 'deploy'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const result = ${{ steps.init-deployment.outputs.result }};
+            const commentId = result.commentId;
+            
+            const deployingMessage = [
+              '🚀 Deploying to Control Plane for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
+              '',
+              '⏳ Waiting for deployment to be ready...',
+              '',
+              '[View Deploy Logs](' + result.workflowUrl + ')'
+            ].join('\n');
+            
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: deployingMessage
+            });
 
       - name: Deploy to Control Plane
         if: steps.determine_action.outputs.action == 'deploy'
@@ -181,7 +225,7 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Status
+      - name: Update Status - Deployment Complete
         if: steps.determine_action.outputs.action == 'deploy'
         uses: actions/github-script@v7
         with:

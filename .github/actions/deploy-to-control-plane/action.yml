@@ -13,6 +13,10 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
+  wait_timeout:
+    description: 'Timeout in seconds for waiting for workloads to be ready'
+    required: false
+    default: 600
 
 outputs:
   rails_url:
@@ -39,23 +43,28 @@ runs:
       run: |
         echo "🚀 Deploying app for PR #$PR_NUMBER..."
         
-        # Deploy the application using the already-built image
-        if ! cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{ inputs.org }}; then
+        # Deploy the application and capture the Rails URL
+        if ! DEPLOY_OUTPUT=$(cpflow deploy-image -a ${{ inputs.app_name }} --run-release-phase --org ${{ inputs.org }}); then
           echo "❌ Deployment failed for PR #$PR_NUMBER"
           exit 1
         fi
         
-        # Wait for the deployment to be ready
-        echo "⏳ Waiting for deployment to be ready..."
-        if ! cpflow wait-ready -a ${{ inputs.app_name }} --org=${{ inputs.org }} --timeout=300; then
-          echo "❌ Deployment did not become ready for PR #$PR_NUMBER"
+        # Extract Rails URL from deployment output
+        RAILS_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)
+        if [ -z "$RAILS_URL" ]; then
+          echo "❌ Failed to get Rails URL from deployment output"
           exit 1
         fi
         
-        # Get the Rails URL
-        RAILS_URL=$(cpflow get-url -a ${{ inputs.app_name }} --org=${{ inputs.org }})
-        if [ -z "$RAILS_URL" ]; then
-          echo "❌ Failed to get Rails URL for PR #$PR_NUMBER"
+        # Wait for all workloads to be ready
+        WAIT_TIMEOUT=${WAIT_TIMEOUT:-${inputs.wait_timeout}}
+        echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)..."
+        if ! timeout $WAIT_TIMEOUT cpflow ps:wait -a ${{ inputs.app_name }}; then
+          if [ $? -eq 124 ]; then
+            echo "❌ Timed out waiting for workloads after ${WAIT_TIMEOUT} seconds"
+          else
+            echo "❌ Workloads did not become ready for PR #$PR_NUMBER"
+          fi
           exit 1
         fi
         
