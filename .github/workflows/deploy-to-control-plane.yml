@@ -1,6 +1,6 @@
 name: Deploy Review App to Control Plane
 
-run-name: ${{ github.event_name == 'issue_comment' && format('Deploying Review App for PR #{0}', github.event.issue.number) || format('Updating Review App for PR #{0}', env.PR_NUMBER) }}
+run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || format('Updating Review App for {0}', github.ref_name) }}
 
 on:
   issue_comment:
