@@ -60,7 +60,7 @@ jobs:
               }
             `);
 
-      - name: Initialize and Set Workflow URL
+      - name: Initialize Workflow
         id: init-workflow
         uses: actions/github-script@v7
         with:

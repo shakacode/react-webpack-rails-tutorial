@@ -1,6 +1,6 @@
 name: Deploy Review App to Control Plane
 
-run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || format('Deploying {0} to Staging App', github.ref_name) }}
+run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || format('Updating Review App for {0}', github.ref_name) }}
 
 on:
   issue_comment:
@@ -27,8 +27,7 @@ jobs:
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
        github.event.comment.body == '/deploy-review-app') ||
-      (github.event_name == 'push' && 
-       github.event.pull_request)
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -55,6 +54,7 @@ jobs:
           if [ -n "$PR_NUMBER" ]; then
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-$PR_NUMBER" >> $GITHUB_ENV
+            echo "has_pr=true" >> $GITHUB_OUTPUT
           else
             echo "No PR found for this branch"
             exit 0
@@ -68,7 +68,7 @@ jobs:
 
       - name: Check if Review App Exists
         id: check-app
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.get-pr.outputs.has_pr == 'true'
         env:
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
         run: |
@@ -80,6 +80,9 @@ jobs:
 
       - name: Get PR HEAD Ref
         id: getRef
+        if: |
+          github.event_name == 'issue_comment' || 
+          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
         run: |
           PR_DATA=$(gh pr view ${{ env.PR_NUMBER }} --repo ${{ github.repository }} --json headRefName,headRefOid)
           echo "PR_REF=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
@@ -88,10 +91,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout PR Branch
+        if: |
+          github.event_name == 'issue_comment' || 
+          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
         run: git checkout ${{ steps.getRef.outputs.PR_REF }}
 
       - name: Deploy to Control Plane
-        if: github.event_name == 'issue_comment' || steps.check-app.outputs.app_exists == 'true'
+        if: |
+          github.event_name == 'issue_comment' || 
+          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
         uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ env.APP_NAME }}
