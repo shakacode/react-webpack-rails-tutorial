@@ -79,11 +79,9 @@ jobs:
       - name: Delete App
         if: steps.determine_action.outputs.action == 'delete'
         id: delete
-        uses: ./.github/actions/delete-control-plane-app
-        continue-on-error: true
-        with:
-          app_name: ${{ env.APP_NAME }}
-          org: ${{ env.CPLN_ORG }}
+        run: |
+          echo "🗑️ Deleting review app: $APP_NAME"
+          ${{ github.workspace }}/.github/actions/deploy-to-control-plane/scripts/delete-app.sh
 
       - name: Update Delete Status
         if: steps.determine_action.outputs.action == 'delete'

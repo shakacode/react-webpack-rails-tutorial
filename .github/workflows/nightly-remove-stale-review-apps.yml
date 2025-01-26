@@ -45,18 +45,15 @@ jobs:
             return stalePRs;
 
       - name: Delete Stale Review Apps
-        uses: ./.github/actions/delete-control-plane-app
         if: ${{ steps.stale_prs.outputs.result != '[]' }}
-        env:
-          STALE_PRS: ${{ steps.stale_prs.outputs.result }}
         run: |
-          for pr in $(echo "$STALE_PRS" | jq -r '.[]'); do
+          for pr in $(echo "${{ steps.stale_prs.outputs.result }}" | jq -r '.[]'); do
             APP_NAME="qa-react-webpack-rails-tutorial-pr-$pr"
             echo "🗑️ Deleting stale review app for PR #$pr: $APP_NAME"
-            ./.github/actions/delete-control-plane-app/action.yml \
-              --app_name "$APP_NAME" \
-              --org "$CPLN_ORG"
+            ${{ github.workspace }}/.github/actions/deploy-to-control-plane/scripts/delete-app.sh
           done
+        env:
+          APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ steps.stale_prs.outputs.result }}
 
       - name: Run cleanup-images script
         run: |
