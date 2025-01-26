@@ -116,6 +116,25 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            async function getWorkflowUrl(runId) {
+              // Get the current job ID
+              const jobs = await github.rest.actions.listJobsForWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: runId
+              });
+              
+              const currentJob = jobs.data.jobs.find(job => job.status === 'in_progress');
+              const jobId = currentJob?.id;
+              
+              if (!jobId) {
+                console.log('Warning: Could not find current job ID');
+                return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+              }
+              
+              return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}`;
+            }
+            
             // Create initial deployment comment
             const comment = await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -133,15 +152,20 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
+
+            const workflowUrl = await getWorkflowUrl(context.runId);
             
             return {
               deploymentId: deployment.data.id,
-              commentId: comment.data.id
+              commentId: comment.data.id,
+              workflowUrl
             };
 
-      - name: Set comment ID
+      - name: Set comment ID and workflow URL
         if: steps.determine_action.outputs.action == 'deploy'
-        run: echo "COMMENT_ID=${{ fromJSON(steps.init-deployment.outputs.result).commentId }}" >> $GITHUB_ENV
+        run: |
+          echo "COMMENT_ID=${{ fromJSON(steps.init-deployment.outputs.result).commentId }}" >> $GITHUB_ENV
+          echo "WORKFLOW_URL=${{ fromJSON(steps.init-deployment.outputs.result).workflowUrl }}" >> $GITHUB_ENV
 
       - name: Set commit hash
         if: steps.determine_action.outputs.action == 'deploy'
@@ -154,19 +178,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const result = ${{ steps.init-deployment.outputs.result }};
-            const commentId = result.commentId;
-            
             const buildingMessage = [
               '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '[View Build Logs](' + `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.job.id}` + ')'
+              '[View Build Logs](' + process.env.WORKFLOW_URL + ')'
             ].join('\n');
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: commentId,
+              comment_id: process.env.COMMENT_ID,
               body: buildingMessage
             });
 
@@ -184,21 +205,18 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const result = ${{ steps.init-deployment.outputs.result }};
-            const commentId = result.commentId;
-            
             const deployingMessage = [
-              '🚀 Deploying to Control Plane for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
+              '🚀 Deploying to Control Plane...',
               '',
               '⏳ Waiting for deployment to be ready...',
               '',
-              '[View Deploy Logs](' + `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.job.id}` + ')'
+              '[View Deploy Logs](' + process.env.WORKFLOW_URL + ')'
             ].join('\n');
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: commentId,
+              comment_id: process.env.COMMENT_ID,
               body: deployingMessage
             });
 
@@ -230,7 +248,7 @@ jobs:
           script: |
             const prNumber = process.env.PR_NUMBER;
             const appUrl = process.env.REVIEW_APP_URL;
-            const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.job.id}`;
+            const workflowUrl = process.env.WORKFLOW_URL;
             const isSuccess = '${{ job.status }}' === 'success';
             
             // Create GitHub deployment status
