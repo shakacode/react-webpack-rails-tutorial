@@ -50,14 +50,42 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || steps.getRef.outputs.PR_REF || github.ref }}
 
+      - name: Validate Required Secrets
+        run: |
+          missing_secrets=()
+          for secret in "CPLN_TOKEN_STAGING" "CPLN_ORG_STAGING"; do
+            if [ -z "${!secret}" ]; then
+              missing_secrets+=("$secret")
+            fi
+          done
+          
+          if [ ${#missing_secrets[@]} -ne 0 ]; then
+            echo "❌ Required secrets are not set: ${missing_secrets[*]}"
+            exit 1
+          fi
+
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
+
+      - name: Set shared functions
+        id: shared-functions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('GET_CONSOLE_LINK', `
+              function getConsoleLink(prNumber) {
+                return '🎮 [Control Plane Console for Review App with PR #' + prNumber + '](' + 
+                       'https://console.cpln.io/org/' + process.env.CPLN_ORG + '/workloads/' + process.env.APP_NAME + ')';
+              }
+            `);
 
       - name: Initialize Deployment
         id: init-deployment
         uses: actions/github-script@v7
         with:
           script: |
+            eval(process.env.GET_CONSOLE_LINK);
+
             async function getWorkflowUrl(runId) {
               // Get the current job ID
               const jobs = await github.rest.actions.listJobsForWorkflowRun({
@@ -117,10 +145,14 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            eval(process.env.GET_CONSOLE_LINK);
+
             const buildingMessage = [
               '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '[View Build Logs](' + process.env.WORKFLOW_URL + ')'
+              '📋 [View Build Logs](' + process.env.WORKFLOW_URL + ')',
+              '',
+              getConsoleLink(process.env.PR_NUMBER)
             ].join('\n');
             
             await github.rest.issues.updateComment({
@@ -142,12 +174,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            eval(process.env.GET_CONSOLE_LINK);
+
             const deployingMessage = [
               '🚀 Deploying to Control Plane...',
               '',
               '⏳ Waiting for deployment to be ready...',
               '',
-              '[View Deploy Logs](' + process.env.WORKFLOW_URL + ')'
+              '📋 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
+              '',
+              getConsoleLink(process.env.PR_NUMBER)
             ].join('\n');
             
             await github.rest.issues.updateComment({
@@ -168,6 +204,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            eval(process.env.GET_CONSOLE_LINK);
+
             const prNumber = process.env.PR_NUMBER;
             const appUrl = process.env.REVIEW_APP_URL;
             const workflowUrl = process.env.WORKFLOW_URL;
@@ -192,13 +230,17 @@ jobs:
               '',
               '🚀 [Review App for PR #' + prNumber + '](' + appUrl + ')',
               '',
-              '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
+              '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')',
+              '',
+              getConsoleLink(prNumber)
             ].join('\n');
             
             const failureMessage = [
               '❌ Deployment failed for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '📋 [View Deployment Logs with Errors](' + workflowUrl + ')'
+              '📋 [View Deployment Logs with Errors](' + workflowUrl + ')',
+              '',
+              getConsoleLink(prNumber)
             ].join('\n');
             
             // Update the existing comment

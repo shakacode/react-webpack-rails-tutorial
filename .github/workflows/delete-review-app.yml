@@ -23,6 +23,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ github.event.issue.pull_request != '' }}
+          COMMENT: ${{ github.event.comment.body }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          echo "Debug information for delete-review-app command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR: $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "PR number: $PR_NUMBER"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
       - name: Get PR number
         id: pr
         uses: actions/github-script@v7
@@ -36,6 +51,20 @@ jobs:
         run: echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
+
+      - name: Validate Required Secrets
+        run: |
+          missing_secrets=()
+          for secret in "CPLN_TOKEN_STAGING" "CPLN_ORG_STAGING"; do
+            if [ -z "${!secret}" ]; then
+              missing_secrets+=("$secret")
+            fi
+          done
+          
+          if [ ${#missing_secrets[@]} -ne 0 ]; then
+            echo "❌ Required secrets are not set: ${missing_secrets[*]}"
+            exit 1
+          fi
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
@@ -55,9 +84,11 @@ jobs:
 
       - name: Delete Review App
         uses: ./.github/actions/delete-control-plane-app
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ env.CPLN_ORG }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          APP_NAME: ${{ env.APP_NAME }}
-          CPLN_ORG: ${{ secrets.CPLN_ORG }}
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
 
       - name: Update Delete Status

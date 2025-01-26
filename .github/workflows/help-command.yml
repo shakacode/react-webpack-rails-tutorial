@@ -17,6 +17,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ github.event.issue.pull_request != '' }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          echo "Debug information for help command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR: $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
       - name: Show Available Commands
         uses: actions/github-script@v7
         with:
