@@ -24,7 +24,7 @@ jobs:
     if: |
       github.event_name == 'pull_request' || 
       (github.event_name == 'issue_comment' && 
-       (github.event.comment.body == '/deploy-review-app' || 
+       (github.event.comment.body == '/deploy-review-pp' || 
         github.event.comment.body == '/delete-review-app') && 
        github.event.issue.pull_request)
     runs-on: ubuntu-latest
@@ -211,13 +211,13 @@ jobs:
             
             // Update the initial comment
             const successMessage = [
-              '✅ Deployment successful for PR #' + prNumber,
+              '✅ Deployment successful for PR #' + prNumber + ', commit ' + '${{ env.COMMIT_HASH }}',
               '',
-              '🚀 [Deployed Review App](' + railsUrl + ')',
+              '🚀 Rails App: [' + railsUrl + '](' + railsUrl + ')',
               '',
               '⚡ [Control Plane Console](https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/workload)',
               '',
-              '[View Workflow Status](' + workflowUrl + ')'
+              '[View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
             ].join('\n');
             
             const failureMessage = [
