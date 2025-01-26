@@ -34,6 +34,7 @@ echo "🚀 Deploying to Control Plane (timeout: ${WAIT_TIMEOUT}s)"
 if ! timeout "$WAIT_TIMEOUT" cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose | tee "$TEMP_OUTPUT"; then
   echo "❌ Deployment failed"
   echo "Error output:"
+  cat "$TEMP_OUTPUT"
   exit 1
 fi
 
@@ -41,6 +42,8 @@ fi
 RAILS_URL=$(grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
 if [ -z "$RAILS_URL" ]; then
   echo "❌ Failed to get app URL from deployment output"
+  echo "Deployment output:"
+  cat "$TEMP_OUTPUT"
   exit 1
 fi
 
