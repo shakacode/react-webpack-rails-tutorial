@@ -19,18 +19,11 @@ runs:
       id: build
       shell: bash
       run: |
-        # Redirect build output to a log file to keep Actions log clean
-        LOG_FILE=$(mktemp)
-        echo "🏗️ Building Docker image for commit ${{ inputs.commit }}... (detailed logs will be shown at the end if there's an error)"
+        echo "🏗️ Building Docker image for commit ${{ inputs.commit }}..."
         
-        if cpflow build-image -a ${{ inputs.app_name }} --commit=${{ inputs.commit }} --org=${{ inputs.org }} > "$LOG_FILE" 2>&1; then
+        if cpflow build-image -a ${{ inputs.app_name }} --commit=${{ inputs.commit }} --org=${{ inputs.org }}; then
           echo "✅ Docker image build successful for commit ${{ inputs.commit }}"
         else
-          BUILD_EXIT_CODE=$?
           echo "❌ Docker image build failed for commit ${{ inputs.commit }}"
-          echo "==== Build Logs ===="
-          cat "$LOG_FILE"
-          rm -f "$LOG_FILE"
-          exit $BUILD_EXIT_CODE
+          exit 1
         fi
-        rm -f "$LOG_FILE"
