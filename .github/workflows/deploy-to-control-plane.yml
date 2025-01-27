@@ -49,6 +49,9 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
+        with:
+          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          cpln_org: ${{ env.CPLN_ORG }}
 
       - name: Deploy to Control Plane
         id: deploy
@@ -94,6 +97,9 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
+        with:
+          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          cpln_org: ${{ env.CPLN_ORG }}
 
       - name: Get PR Number for Push Event
         if: github.event_name == 'push'
