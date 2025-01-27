@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CPLN_ORG: ${{ secrets.CPLN_ORG }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
 
 jobs:
   Process-Deployment-Command:
