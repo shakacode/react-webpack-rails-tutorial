@@ -59,22 +59,32 @@ jobs:
           
           echo "All required secrets and variables are set"
 
+      - name: Get PR Number for Push Event
+        if: github.event_name == 'push'
+        id: get-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get PR number from branch
+          PR_NUMBER=$(gh pr list --head ${{ github.ref_name }} --json number --jq '.[0].number')
+          if [ -n "$PR_NUMBER" ]; then
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "APP_NAME=${{ env.REVIEW_APP_PREFIX }}-pr-$PR_NUMBER" >> $GITHUB_ENV
+            echo "has_pr=true" >> $GITHUB_OUTPUT
+          else
+            echo "No PR found for this branch"
+            exit 0
+          fi
+
+      - name: Set PR Number for Comment Event
+        if: github.event_name == 'issue_comment'
+        run: |
+          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
+          echo "APP_NAME=${{ env.REVIEW_APP_PREFIX }}-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
+
       - name: Setup Deployment Configuration
         id: setup
         run: |
-          # Function to set PR deployment environment
-          setup_pr_deployment() {
-            local pr_number=$1
-            echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
-            echo "APP_NAME=${{ env.REVIEW_APP_PREFIX }}-pr-$pr_number" >> $GITHUB_ENV
-            echo "IS_STAGING=false" >> $GITHUB_ENV
-            
-            # Get PR ref and SHA
-            local pr_data=$(gh pr view $pr_number --repo ${{ github.repository }} --json headRefName,headRefOid)
-            echo "PR_REF=$(echo "$pr_data" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-            echo "PR_SHA=$(echo "$pr_data" | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
-          }
-
           # Function to check if app exists
           check_app_exists() {
             local app_name=$1
@@ -93,40 +103,31 @@ jobs:
           DEFAULT_BRANCH="refs/heads/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')"
           echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_OUTPUT
           
+          # Set staging app name if this is the default branch
+          if [[ "${{ github.ref }}" == "$DEFAULT_BRANCH" ]]; then
+            echo "APP_NAME=${{ env.STAGING_APP_NAME }}" >> $GITHUB_ENV
+            echo "IS_STAGING=true" >> $GITHUB_ENV
+          fi
+          
           # Check if we should deploy
           if [[ "${{ github.ref }}" == "$DEFAULT_BRANCH" ]]; then
             echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
-            echo "IS_STAGING=true" >> $GITHUB_ENV
-            echo "APP_NAME=${{ env.STAGING_APP_NAME }}" >> $GITHUB_ENV
           elif [[ "${{ github.event_name }}" == "issue_comment" && 
                  "${{ github.event.issue.pull_request }}" == "true" && 
                  "${{ github.event.comment.body }}" == "/deploy-review-app" ]]; then
             echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
-            setup_pr_deployment "${{ github.event.issue.number }}"
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
-            # Get PR number for the current branch, handling refs/heads/ prefix
-            BRANCH_NAME="${{ github.ref_name }}"
-            PR_NUMBER=$(gh pr list --head "$BRANCH_NAME" --json number,state --jq '.[] | select(.state=="OPEN") | .number')
-            
-            if [ -n "$PR_NUMBER" ]; then
-              echo "Found PR #$PR_NUMBER for branch $BRANCH_NAME"
-              APP_NAME="${{ env.REVIEW_APP_PREFIX }}-pr-$PR_NUMBER"
-              if check_app_exists "$APP_NAME"; then
-                echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
-                setup_pr_deployment "$PR_NUMBER"
-              else
-                no_deployment "No existing review app found for PR $PR_NUMBER"
-              fi
+          elif [[ "${{ github.event_name }}" == "push" && "${{ steps.get-pr.outputs.has_pr }}" == "true" ]]; then
+            if check_app_exists "${{ env.APP_NAME }}"; then
+              echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
             else
-              echo "No open PR found for branch $BRANCH_NAME"
-              no_deployment "No PR found for this branch"
+              no_deployment "No existing review app found for PR ${{ env.PR_NUMBER }}"
             fi
           else
             no_deployment "No deployment needed for this event"
           fi
 
           # Set console link after APP_NAME is set
-          echo "CONSOLE_LINK=[View in Control Plane Console](https://console.cpln.io/org/${{ env.CPLN_ORG }}/workload/$APP_NAME)" >> $GITHUB_ENV
+          echo "CONSOLE_LINK=[View in Control Plane Console](https://console.cpln.io/org/${{ env.CPLN_ORG }}/workload/${{ env.APP_NAME }})" >> $GITHUB_ENV
 
       - name: Set Workflow URL
         id: workflow-url
@@ -161,7 +162,6 @@ jobs:
             }
 
       - name: Create Initial Comment
-        if: env.IS_STAGING != 'true' && env.PR_NUMBER != ''
         id: create-comment
         uses: actions/github-script@v7
         with:
