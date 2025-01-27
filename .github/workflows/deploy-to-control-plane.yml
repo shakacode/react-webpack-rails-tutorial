@@ -148,12 +148,19 @@ jobs:
             
             const workflowUrl = await getWorkflowUrl(context.runId);
             core.exportVariable('WORKFLOW_URL', workflowUrl);
-            core.exportVariable('GET_CONSOLE_LINK', `
-              function getConsoleLink(prNumber) {
-                return '🎮 [Control Plane Console](' + 
-                       'https://console.cpln.io/console/org/' + process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/-info)';
-              }
-            `);
+
+      - name: Set Console Link
+        if: |
+          (github.event_name == 'issue_comment' && 
+           github.event.issue.pull_request && 
+           github.event.comment.body == '/deploy-review-app') || 
+          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const consoleLink = '🎮 [Control Plane Console](https://console.cpln.io/console/org/' + 
+                              process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/-info)';
+            core.exportVariable('CONSOLE_LINK', consoleLink);
 
       - name: Update Status - Building
         if: |
@@ -164,14 +171,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
-
             const buildingMessage = [
               '🏗️ Building Docker image...',
               '',
               '📝 [View Build Logs](' + process.env.WORKFLOW_URL + ')',
               '',
-              getConsoleLink(process.env.PR_NUMBER)
+              process.env.CONSOLE_LINK
             ].join('\n');
             
             await github.rest.issues.updateComment({
@@ -211,8 +216,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
-
             const deployingMessage = [
               '🚀 Deploying to Control Plane...',
               '',
@@ -220,7 +223,7 @@ jobs:
               '',
               '📝 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
               '',
-              getConsoleLink(process.env.PR_NUMBER)
+              process.env.CONSOLE_LINK
             ].join('\n');
             
             await github.rest.issues.updateComment({
@@ -236,6 +239,7 @@ jobs:
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
           (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+        id: deploy
         uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ env.APP_NAME }}
@@ -251,16 +255,14 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
-
             const successMessage = [
               '✅ Deployment successful!',
               '',
-              '🌐 Review app is ready at: ${{ env.REVIEW_APP_URL }}',
+              '🌐 Review app is ready at: ${{ steps.deploy.outputs.review_app_url }}',
               '',
               '📝 [View App Logs](' + process.env.WORKFLOW_URL + ')',
               '',
-              getConsoleLink(process.env.PR_NUMBER)
+              process.env.CONSOLE_LINK
             ].join('\n');
             
             await github.rest.issues.updateComment({
