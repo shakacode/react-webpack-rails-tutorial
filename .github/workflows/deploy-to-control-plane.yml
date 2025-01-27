@@ -1,6 +1,6 @@
 name: Deploy to Control Plane
 
-run-name: ${{ github.event_name == 'issue_comment' && format('Deploying Review App for {0}', github.ref_name) || github.ref == '${{ steps.default-branch.outputs.name }}' && 'Deploying to Staging' || format('Deploying Review App for {0}', github.ref_name) }}
+run-name: ${{ github.event_name == 'issue_comment' && format('Deploying Review App for {0}', github.ref_name) || github.ref == 'main' && 'Deploying to Staging' || format('Deploying Review App for {0}', github.ref_name) }}
 
 on:
   issue_comment:
@@ -15,7 +15,7 @@ on:
 
 # Use concurrency to cancel in-progress runs
 concurrency:
-  group: ${{ github.ref == '${{ steps.default-branch.outputs.name }}' && 'deploy-staging' || format('deploy-pr-{0}', github.event.issue.number) }}
+  group: ${{ github.ref == 'main' && 'deploy-staging' || format('deploy-pr-{0}', github.event.issue.number) }}
   cancel-in-progress: true
 
 jobs:
@@ -36,11 +36,10 @@ jobs:
       issues: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
       CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-      STAGING_APP_NAME: ${{ secrets.STAGING_APP_NAME }}
-      REVIEW_APP_PREFIX: ${{ secrets.REVIEW_APP_PREFIX }}
-      CPLN_APP_NAME: ${{ secrets.CPLN_APP_NAME || github.event.repository.name }}
+      CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
+      STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+      REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
 
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +55,12 @@ jobs:
           : "${STAGING_APP_NAME:?Required environment variable not set}"
           
           echo "All required environment variables are set"
+
+      - name: Set Default Branch
+        id: default-branch
+        run: |
+          DEFAULT_BRANCH="main"
+          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
 
       - name: Setup Deployment Configuration
         id: setup
@@ -87,12 +92,8 @@ jobs:
             exit 0
           }
           
-          # Get default branch
-          DEFAULT_BRANCH="refs/heads/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')"
-          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_OUTPUT
-          
           # Check if we should deploy
-          if [[ "${{ github.ref }}" == "$DEFAULT_BRANCH" ]]; then
+          if [[ "${{ github.ref }}" == "${{ env.DEFAULT_BRANCH }}" ]]; then
             echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
             echo "IS_STAGING=true" >> $GITHUB_ENV
             echo "APP_NAME=${{ env.STAGING_APP_NAME }}" >> $GITHUB_ENV
