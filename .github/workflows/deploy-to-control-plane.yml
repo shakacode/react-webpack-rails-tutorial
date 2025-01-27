@@ -59,6 +59,14 @@ jobs:
           
           echo "All required secrets and variables are set"
 
+      - name: Install Control Plane CLI
+        run: |
+          curl -L https://github.com/controlplane-com/cli/releases/latest/download/cpln-linux-amd64.tar.gz | tar xz
+          sudo mv cpln /usr/local/bin/
+          curl -L https://github.com/controlplane-com/cpln-cli-flow/releases/latest/download/cpflow-linux-amd64.tar.gz | tar xz
+          sudo mv cpflow /usr/local/bin/
+          cpln auth token "${{ env.CPLN_TOKEN }}"
+
       - name: Get PR Number for Push Event
         if: github.event_name == 'push'
         id: get-pr
