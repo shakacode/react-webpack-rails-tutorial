@@ -3,14 +3,6 @@
 name: 'Setup Environment'
 description: 'Sets up Ruby, installs Control Plane CLI, cpflow gem, and sets up the default profile'
 
-inputs:
-  cpln_token:
-    description: 'Control Plane token'
-    required: true
-  cpln_org:
-    description: 'Control Plane organization'
-    required: true
-
 runs:
   using: 'composite'
   steps:
@@ -30,8 +22,8 @@ runs:
     - name: Setup Control Plane Profile
       shell: bash
       env:
-        CPLN_TOKEN: ${{ inputs.cpln_token }}
-        CPLN_ORG: ${{ inputs.cpln_org }}
+        CPLN_TOKEN: ${{ env.CPLN_TOKEN }}
+        CPLN_ORG: ${{ env.CPLN_ORG }}
       run: |
         if [ -z "$CPLN_TOKEN" ]; then
           echo " Error: CPLN_TOKEN environment variable is not set"
