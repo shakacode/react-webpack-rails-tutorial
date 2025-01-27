@@ -43,32 +43,30 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
 
-      - name: Get PR Number for Push Event
-        if: github.event_name == 'push'
-        id: get-pr
+      - name: Set PR Number for Comment Event
+        if: |
+          (github.event_name == 'issue_comment' && 
+           github.event.issue.pull_request && 
+           github.event.comment.body == '/deploy-review-app') ||
+          github.event_name == 'push'
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
+            echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
+          else
+            # For push events, get PR number from branch
+            PR_NUMBER=$(gh pr list --head ${{ github.ref_name }} --json number --jq '.[0].number')
+            if [ -n "$PR_NUMBER" ]; then
+              echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+              echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-$PR_NUMBER" >> $GITHUB_ENV
+            fi
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Get PR number from branch
-          PR_NUMBER=$(gh pr list --head ${{ github.ref_name }} --json number --jq '.[0].number')
-          if [ -n "$PR_NUMBER" ]; then
-            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-            echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-$PR_NUMBER" >> $GITHUB_ENV
-            echo "has_pr=true" >> $GITHUB_OUTPUT
-          else
-            echo "No PR found for this branch"
-            exit 0
-          fi
-
-      - name: Set PR Number for Comment Event
-        if: github.event_name == 'issue_comment'
-        run: |
-          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
 
       - name: Check if Review App Exists
         id: check-app
-        if: github.event_name == 'push' && steps.get-pr.outputs.has_pr == 'true'
+        if: github.event_name == 'push' && github.event_name != 'issue_comment'
         env:
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
         run: |
@@ -84,7 +82,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         run: |
           PR_DATA=$(gh pr view ${{ env.PR_NUMBER }} --repo ${{ github.repository }} --json headRefName,headRefOid)
           echo "PR_REF=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
@@ -97,7 +95,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         id: create-comment
         uses: actions/github-script@v7
         with:
@@ -116,7 +114,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         run: echo "COMMENT_ID=${{ fromJSON(steps.create-comment.outputs.result).commentId }}" >> $GITHUB_ENV
 
       - name: Set Workflow URL
@@ -124,7 +122,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         id: workflow-url
         uses: actions/github-script@v7
         with:
@@ -154,7 +152,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         uses: actions/github-script@v7
         with:
           script: |
@@ -167,7 +165,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         uses: actions/github-script@v7
         with:
           script: |
@@ -191,7 +189,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         run: git checkout ${{ steps.getRef.outputs.PR_REF }}
 
       - name: Build Docker Image
@@ -199,7 +197,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         uses: ./.github/actions/build-docker-image
         with:
           app_name: ${{ env.APP_NAME }}
@@ -212,7 +210,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         uses: actions/github-script@v7
         with:
           script: |
@@ -238,7 +236,7 @@ jobs:
           (github.event_name == 'issue_comment' && 
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
-          (steps.get-pr.outputs.has_pr == 'true' && steps.check-app.outputs.app_exists == 'true')
+          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         id: deploy
         uses: ./.github/actions/deploy-to-control-plane
         with:
