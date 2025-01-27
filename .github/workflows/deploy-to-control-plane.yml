@@ -1,176 +1,189 @@
-name: Deploy Review App to Control Plane
+name: Deploy to Control Plane
 
-run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || format('Updating Review App for {0}', github.ref_name) }}
+run-name: ${{ github.event_name == 'issue_comment' && format('Deploying Review App for {0}', github.ref_name) || github.ref == '${{ steps.default-branch.outputs.name }}' && 'Deploying to Staging' || format('Deploying Review App for {0}', github.ref_name) }}
 
 on:
   issue_comment:
     types: [created]
   push:
-    branches-ignore:
-      - main   # Don't run on main branch pushes
-      - master # Don't run on master branch pushes
+    branches:
+      - '**'        # Allow all branches
+      - '!gh-pages' # Exclude gh-pages if it exists
+
+  # Allow manual triggers
+  workflow_dispatch:
 
 # Use concurrency to cancel in-progress runs
 concurrency:
-  group: deploy-pr-${{ github.event.issue.number }}
+  group: ${{ github.ref == '${{ steps.default-branch.outputs.name }}' && 'deploy-staging' || format('deploy-pr-{0}', github.event.issue.number) }}
   cancel-in-progress: true
 
-env:
-  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-
 jobs:
-  Process-Deployment-Command:
+  Process-Deployment:
     # For issue comments, only run on /deploy-review-app command
-    # For push events, only run if PR exists and has a review app
+    # For push events, run if it's master branch OR if PR exists and has a review app
     if: |
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
        github.event.comment.body == '/deploy-review-app') ||
-      github.event_name == 'push'
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
       pull-requests: write
       issues: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
+      CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+      STAGING_APP_NAME: ${{ secrets.STAGING_APP_NAME }}
+      REVIEW_APP_PREFIX: ${{ secrets.REVIEW_APP_PREFIX }}
+      CPLN_APP_NAME: ${{ secrets.CPLN_APP_NAME || github.event.repository.name }}
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-
-      - name: Set PR Number for Comment Event
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') ||
-          github.event_name == 'push'
+      - name: Verify Environment Variables
         run: |
-          if [ "${{ github.event_name }}" = "issue_comment" ]; then
-            echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-            echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
-          else
-            # For push events, get PR number from branch
+          # Required environment variables
+          : "${CPLN_ORG:?Required environment variable not set}"
+          : "${CPLN_TOKEN:?Required environment variable not set}"
+          : "${REVIEW_APP_PREFIX:?Required environment variable not set}"
+          : "${STAGING_APP_NAME:?Required environment variable not set}"
+          
+          echo "All required environment variables are set"
+
+      - name: Setup Deployment Configuration
+        id: setup
+        run: |
+          # Function to set PR deployment environment
+          setup_pr_deployment() {
+            local pr_number=$1
+            echo "PR_NUMBER=$pr_number" >> $GITHUB_ENV
+            echo "APP_NAME=${{ env.REVIEW_APP_PREFIX }}-pr-$pr_number" >> $GITHUB_ENV
+            echo "IS_STAGING=false" >> $GITHUB_ENV
+            
+            # Get PR ref and SHA
+            local pr_data=$(gh pr view $pr_number --repo ${{ github.repository }} --json headRefName,headRefOid)
+            echo "PR_REF=$(echo "$pr_data" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+            echo "PR_SHA=$(echo "$pr_data" | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
+          }
+
+          # Function to check if app exists
+          check_app_exists() {
+            local app_name=$1
+            cpln workload get "$app_name" --org "${{ env.CPLN_ORG }}" > /dev/null 2>&1
+          }
+
+          # Function to exit with message when deployment is not needed
+          no_deployment() {
+            local message=$1
+            echo "SHOULD_DEPLOY=false" >> $GITHUB_OUTPUT
+            echo "$message"
+            exit 0
+          }
+          
+          # Get default branch
+          DEFAULT_BRANCH="refs/heads/$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')"
+          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_OUTPUT
+          
+          # Check if we should deploy
+          if [[ "${{ github.ref }}" == "$DEFAULT_BRANCH" ]]; then
+            echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
+            echo "IS_STAGING=true" >> $GITHUB_ENV
+            echo "APP_NAME=${{ env.STAGING_APP_NAME }}" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "issue_comment" && 
+                 "${{ github.event.issue.pull_request }}" == "true" && 
+                 "${{ github.event.comment.body }}" == "/deploy-review-app" ]]; then
+            echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
+            setup_pr_deployment "${{ github.event.issue.number }}"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
             PR_NUMBER=$(gh pr list --head ${{ github.ref_name }} --json number --jq '.[0].number')
             if [ -n "$PR_NUMBER" ]; then
-              echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-              echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-$PR_NUMBER" >> $GITHUB_ENV
+              APP_NAME="${{ env.REVIEW_APP_PREFIX }}-pr-$PR_NUMBER"
+              if check_app_exists "$APP_NAME"; then
+                echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
+                setup_pr_deployment "$PR_NUMBER"
+              else
+                no_deployment "No existing review app found for PR $PR_NUMBER"
+              fi
+            else
+              no_deployment "No PR found for this branch"
             fi
+          else
+            no_deployment "No deployment needed for this event"
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if Review App Exists
-        id: check-app
-        if: github.event_name == 'push' && github.event_name != 'issue_comment'
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
-        run: |
-          if ! cpflow exists -a ${{ env.APP_NAME }}; then
-            echo "No review app exists for this PR"
-            exit 0
-          fi
-          echo "app_exists=true" >> $GITHUB_OUTPUT
-
-      - name: Get PR HEAD Ref
-        id: getRef
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
-        run: |
-          PR_DATA=$(gh pr view ${{ env.PR_NUMBER }} --repo ${{ github.repository }} --json headRefName,headRefOid)
-          echo "PR_REF=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-          echo "PR_SHA=$(echo "$PR_DATA" | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Initial Comment
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
-        id: create-comment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const result = await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: process.env.PR_NUMBER,
-              body: '🚀 Starting deployment process...'
-            });
-            console.log('Created comment:', result.data.id);
-            return { commentId: result.data.id };
-
-      - name: Set Comment ID
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
-        run: echo "COMMENT_ID=${{ fromJSON(steps.create-comment.outputs.result).commentId }}" >> $GITHUB_ENV
+          # Set console link after APP_NAME is set
+          echo "CONSOLE_LINK=[View in Control Plane Console](https://console.cpln.io/org/${{ env.CPLN_ORG }}/workload/$APP_NAME)" >> $GITHUB_ENV
 
       - name: Set Workflow URL
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         id: workflow-url
         uses: actions/github-script@v7
         with:
           script: |
-            async function getWorkflowUrl(runId) {
+            try {
               const jobs = await github.rest.actions.listJobsForWorkflowRun({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                run_id: runId
+                run_id: context.runId
               });
               
-              const currentJob = jobs.data.jobs.find(job => job.status === 'in_progress');
+              const currentJob = jobs.data.jobs.find(job => job.name === 'Process-Deployment');
+              if (!currentJob) {
+                console.log('Could not find Process-Deployment job, jobs found:', jobs.data.jobs.map(j => j.name));
+              }
               const jobId = currentJob?.id;
               
-              if (!jobId) {
-                return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
-              }
+              const workflowUrl = jobId
+                ? `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${jobId}`
+                : `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
               
-              return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}`;
+              core.exportVariable('WORKFLOW_URL', workflowUrl);
+              console.log('Set WORKFLOW_URL to:', workflowUrl);
+            } catch (error) {
+              console.log('Error getting job details:', error);
+              // Fallback to run URL
+              const workflowUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              core.exportVariable('WORKFLOW_URL', workflowUrl);
+              console.log('Fallback: Set WORKFLOW_URL to:', workflowUrl);
             }
-            
-            const workflowUrl = await getWorkflowUrl(context.runId);
-            core.exportVariable('WORKFLOW_URL', workflowUrl);
 
-      - name: Set Console Link
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
+      - name: Create Initial Comment
+        if: env.IS_STAGING != 'true'
+        id: create-comment
         uses: actions/github-script@v7
         with:
           script: |
-            const consoleLink = '🎮 [Control Plane Console](https://console.cpln.io/console/org/' + 
-                              process.env.CPLN_ORG + '/gvc/' + process.env.APP_NAME + '/-info)';
-            core.exportVariable('CONSOLE_LINK', consoleLink);
+            const initialMessage = [
+              '🚀 Deploying...',
+              '',
+              '📝 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
+              '',
+              process.env.CONSOLE_LINK
+            ].join('\n');
+            
+            const comment = await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: process.env.PR_NUMBER,
+              body: initialMessage
+            });
+            
+            core.exportVariable('COMMENT_ID', comment.data.id);
+            console.log('Created comment:', comment.data.id);
 
       - name: Update Status - Building
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
+        if: env.IS_STAGING != 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const buildingMessage = [
-              '🏗️ Building Docker image...',
+              '🏗️ Building...',
               '',
               '📝 [View Build Logs](' + process.env.WORKFLOW_URL + ')',
               '',
@@ -185,39 +198,23 @@ jobs:
             });
 
       - name: Checkout PR Branch
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
-        run: git checkout ${{ steps.getRef.outputs.PR_REF }}
+        if: env.IS_STAGING != 'true'
+        run: git checkout ${{ steps.setup.outputs.PR_REF }}
 
       - name: Build Docker Image
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         uses: ./.github/actions/build-docker-image
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
-          commit: ${{ steps.getRef.outputs.PR_SHA }}
-          PR_NUMBER: ${{ env.PR_NUMBER }}
+          commit: ${{ steps.setup.outputs.PR_SHA }}
 
       - name: Update Status - Deploying
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
+        if: env.IS_STAGING != 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const deployingMessage = [
-              '🚀 Deploying to Control Plane...',
-              '',
-              '⏳ Waiting for deployment to be ready...',
+              '🚀 Deploying...',
               '',
               '📝 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
               '',
@@ -232,11 +229,6 @@ jobs:
             });
 
       - name: Deploy to Control Plane
-        if: |
-          (github.event_name == 'issue_comment' && 
-           github.event.issue.pull_request && 
-           github.event.comment.body == '/deploy-review-app') || 
-          (github.event_name == 'push' && steps.check-app.outputs.app_exists == 'true')
         id: deploy
         uses: ./.github/actions/deploy-to-control-plane
         with:
@@ -244,19 +236,16 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-        env:
-          CPLN_TOKEN: ${{ env.CPLN_TOKEN }}
-          PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Update Status - Success
-        if: success()
+        if: success() && env.IS_STAGING != 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const successMessage = [
               '✅ Deployment successful!',
               '',
-              '🌐 Review app is ready at: ${{ steps.deploy.outputs.review_app_url }}',
+              '🌐 Review app is ready at: ${{ steps.deploy.outputs.REVIEW_APP_URL }}',
               '',
               '📝 [View App Logs](' + process.env.WORKFLOW_URL + ')',
               '',
@@ -268,4 +257,24 @@ jobs:
               repo: context.repo.repo,
               comment_id: process.env.COMMENT_ID,
               body: successMessage
+            });
+
+      - name: Update Status - Failure
+        if: failure() && env.IS_STAGING != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const failureMessage = [
+              '❌ Deployment failed!',
+              '',
+              '📝 [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
+              '',
+              process.env.CONSOLE_LINK
+            ].join('\n');
+            
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: process.env.COMMENT_ID,
+              body: failureMessage
             });
