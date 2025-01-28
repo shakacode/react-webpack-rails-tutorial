@@ -1,0 +1,36 @@
+name: Debug Workflow Information
+
+on:
+  workflow_call:
+    inputs:
+      debug_enabled:
+        required: false
+        type: boolean
+        default: false
+        description: 'Enable debug logging (defaults to false)'
+
+jobs:
+  debug-info:
+    runs-on: ubuntu-latest
+    if: inputs.debug_enabled || vars.DEBUG_WORKFLOW == 'true'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log Branch Info
+        run: |
+          echo "Branch for this run:"
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "Pull Request Source Branch: ${{ github.head_ref }}"
+          else
+            echo "Branch: ${{ github.ref_name }}"
+          fi
+
+      - name: Debug GitHub Context
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event path: ${{ github.event_path }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Full GitHub context:"
+          echo '${{ toJson(github) }}' 
