@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Show Available Commands
-      uses: actions/github-script
+      uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github-token }}
         script: |
@@ -83,7 +83,6 @@ runs:
             '3. Open an issue in this repository',
           ].join('\n');
 
-          const context = github.context;
           const issueNumber = inputs['issue-number'] || 
             (context.eventName === 'issue_comment' ? context.payload.issue.number : null);
 
