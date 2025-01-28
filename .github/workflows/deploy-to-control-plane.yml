@@ -1,28 +1,35 @@
 name: Deploy Review App to Control Plane
 
-run-name: ${{ github.event_name == 'issue_comment' && 'Deploying Review App' || format('Updating Review App for {0}', github.ref_name) }}
+run-name: Deploy Review App - ${{ github.ref_name }}
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request number to deploy'
+        required: true
+        type: number
 
 # Use concurrency to cancel in-progress runs
 concurrency:
-  group: deploy-pr-${{ github.event.pull_request.number || github.event.issue.number }}
+  group: deploy-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   cancel-in-progress: true
 
 env:
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
-  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
 
 jobs:
   Process-Deployment-Command:
     if: |
       (github.event_name == 'pull_request') ||
+      (github.event_name == 'workflow_dispatch') ||
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
        github.event.comment.body == '/deploy-review-app')
@@ -34,6 +41,17 @@ jobs:
       issues: write
 
     steps:
+      - name: Get PR HEAD Ref
+        if: github.event_name == 'issue_comment' || github.event_name == 'workflow_dispatch'
+        id: getRef
+        run: |
+          echo "PR_NUMBER=${{ github.event.issue.number || github.event.inputs.pr_number }}" >> $GITHUB_ENV
+          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number || github.event.inputs.pr_number }}" >> $GITHUB_ENV
+          # Get the PR head commit
+          PR_DATA=$(gh pr view ${{ github.event.issue.number || github.event.inputs.pr_number }} --repo ${{ github.repository }} --json headRefName,headRefOid)
+          echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
+          echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -44,18 +62,6 @@ jobs:
         with:
           token: ${{ env.CPLN_TOKEN }}
           org: ${{ env.CPLN_ORG }}
-
-      - name: Get PR HEAD Ref
-        if: github.event_name == 'issue_comment'
-        run: |
-          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-          echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}" >> $GITHUB_ENV
-          # For PR comments, get the actual PR head commit
-          PR_DATA=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName,headRefOid)
-          echo "PR_REF=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-          echo "PR_SHA=$(echo "$PR_DATA" | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check if Review App Exists
         id: check-app
