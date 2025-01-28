@@ -15,8 +15,8 @@ concurrency:
 
 env:
   APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
-  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       (github.event_name == 'pull_request') ||
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
-       github.event.comment.body == '/deploy')
+       github.event.comment.body == '/deploy-review-app')
     runs-on: ubuntu-latest
     permissions:
       contents: read

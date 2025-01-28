@@ -13,8 +13,8 @@ permissions:
   issues: write
 
 env:
-  CPLN_ORG: ${{ secrets.CPLN_ORG_STAGING }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
