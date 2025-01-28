@@ -7,6 +7,11 @@ on:
   issue_comment:
     types: [created]
   workflow_dispatch:
+    inputs:
+      issue-number:
+        description: 'PR/Issue number to post the help comment to'
+        required: true
+        type: number
 
 permissions:
   issues: write
@@ -25,7 +30,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout
 
-      - name: Show Help Information
+      - name: Process Help Command
         uses: ./.github/actions/help-command
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.inputs.issue-number }}
