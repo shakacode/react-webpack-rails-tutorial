@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0  # Fetch all history for proper SHA handling
           ref: master    # Explicitly checkout master branch
 
-      - uses: ./.github/actions/deploy-to-control-plane@justin808-working-for-deploys
+      - uses: ./.github/actions/deploy-to-control-plane@justin808-more-work-on-review-apps-1
         with:
           app_name: ${{ vars.STAGING_APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}

@@ -40,7 +40,7 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || steps.getRef.outputs.PR_REF || github.ref }}
 
       - name: Setup Environment
-        uses: ./.github/actions/setup-environment@justin808-working-for-deploys
+        uses: ./.github/actions/setup-environment@justin808-more-work-on-review-apps-1
         with:
           token: ${{ env.CPLN_TOKEN }}
           org: ${{ env.CPLN_ORG }}
@@ -228,7 +228,7 @@ jobs:
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
           (steps.check-app.outputs.app_exists == 'true')
-        uses: ./.github/actions/build-docker-image@justin808-working-for-deploys
+        uses: ./.github/actions/build-docker-image@justin808-more-work-on-review-apps-1
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
@@ -269,7 +269,7 @@ jobs:
            github.event.issue.pull_request && 
            github.event.comment.body == '/deploy-review-app') || 
           (steps.check-app.outputs.app_exists == 'true')
-        uses: ./.github/actions/deploy-to-control-plane@justin808-working-for-deploys
+        uses: ./.github/actions/deploy-to-control-plane@justin808-more-work-on-review-apps-1
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
