@@ -22,95 +22,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Identify Workflow Branch
-        run: |
-          echo "Workflow branch ref: ${{ github.ref }}"
+      - name: Checkout
+        uses: actions/checkout
 
-      - name: Show Available Commands
-        uses: actions/github-script@v7
+      - name: Show Help Information
+        uses: ./.github/actions/help-command
         with:
-          script: |
-            try {
-              console.log('Creating detailed help message...');
-              const helpMessage = [
-                '# 📚 Detailed Review App Commands Guide',
-                '',
-                'This is a detailed guide to using review app commands. For a quick reference, see the message posted when your PR was created.',
-                '',
-                '## Available Commands',
-                '',
-                '### `/deploy-review-app`',
-                'Deploys your PR branch to a review environment on Control Plane.',
-                '- Creates a new review app if one doesn\'t exist',
-                '- Updates the existing review app if it already exists',
-                '- Provides a unique URL to preview your changes',
-                '- Shows build and deployment progress in real-time',
-                '',
-                '**Required Environment Secrets:**',
-                '- `CPLN_TOKEN_STAGING`: Control Plane authentication token',
-                '- `CPLN_TOKEN_PRODUCTION`: Control Plane authentication token',
-                '',
-                '**Required GitHub Actions Variables:**',
-                '- `CPLN_ORG_STAGING`: Control Plane authentication token',
-                '- `CPLN_ORG_PRODUCTION`: Control Plane authentication token',
-                '',
-                '**Required GitHub Actions Variables (these need to match your control_plane.yml file:**',
-                '- `PRODUCTION_APP_NAME`: Control Plane production app name',
-                '- `STAGING_APP_NAME`: Control Plane staging app name',
-                '- `REVIEW_APP_PREFIX`: Control Plane review app prefix',
-                '',
-                '**Optional Configuration:**',
-                '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
-                '  - Must be a positive integer',
-                '  - Can be set in GitHub Actions variables',
-                '  - Applies to both deployment and workload readiness checks',
-                '',
-                '### `/delete-review-app`',
-                'Deletes the review app associated with this PR.',
-                '- Removes all resources from Control Plane',
-                '- Helpful for cleaning up when you\'re done testing',
-                '- Can be re-deployed later using `/deploy-review-app`',
-                '',
-                '**Required Environment Variables:**',
-                '- `CPLN_TOKEN`: Control Plane authentication token',
-                '- `CPLN_ORG`: Control Plane organization name',
-                '',
-                '### `/help`',
-                'Shows this detailed help message.',
-                '',
-                '---',
-                '## Environment Setup',
-                '',
-                '1. Set required secrets in your repository settings:',
-                '   - `CPLN_TOKEN`',
-                '   - `CPLN_ORG`',
-                '',
-                '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout',
-                '',
-                '## Control Plane Integration',
-                '',
-                'Review apps are deployed to Control Plane with the following configuration:',
-                '- App Name Format: `qa-react-webpack-rails-tutorial-pr-{PR_NUMBER}`',
-                '- Console URL: `https://console.cpln.io/console/org/{CPLN_ORG}/gvc/{APP_NAME}/-info`',
-                '',
-                '## Automatic Cleanup',
-                '',
-                'Review apps are automatically deleted when:',
-                '- The PR is closed (merged or not merged)',
-                '- The PR is stale (via nightly cleanup job)',
-                '',
-                'For more information, see the [React on Rails Tutorial documentation](https://github.com/shakacode/react-on-rails/tree/master/react-webpack-rails-tutorial)'
-              ].join('\n');
-              
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: helpMessage
-              });
-              
-              console.log('Help message posted successfully');
-            } catch (error) {
-              console.error('Error posting help message:', error);
-              core.setFailed(`Failed to post help message: ${error.message}`);
-            }
+          github-token: ${{ secrets.GITHUB_TOKEN }}
