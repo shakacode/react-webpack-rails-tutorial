@@ -16,7 +16,7 @@ inputs:
   wait_timeout:
     description: 'Timeout in seconds for waiting for workloads to be ready'
     required: false
-    default: 600
+    default: '900'
 
 outputs:
   review_app_url:
@@ -26,6 +26,21 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Validate Required Secrets
+      shell: bash
+      run: |
+        missing_secrets=()
+        for secret in "CPLN_TOKEN" "CPLN_ORG"; do
+          if [ -z "${!secret}" ]; then
+            missing_secrets+=("$secret")
+          fi
+        done
+        
+        if [ ${#missing_secrets[@]} -ne 0 ]; then
+          echo "Required secrets are not set: ${missing_secrets[*]}"
+          exit 1
+        fi
+
     - name: Setup Environment
       uses: ./.github/actions/setup-environment
 
