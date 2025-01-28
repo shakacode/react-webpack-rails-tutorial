@@ -5,6 +5,9 @@ inputs:
   github-token:
     description: 'GitHub token for posting comments'
     required: true
+  issue-number:
+    description: 'PR/Issue number to post the comment to (optional, defaults to event context)'
+    required: false
 
 runs:
   using: "composite"
@@ -81,11 +84,14 @@ runs:
           ].join('\n');
 
           const context = github.context;
-          if (context.eventName === 'issue_comment') {
+          const issueNumber = inputs['issue-number'] || 
+            (context.eventName === 'issue_comment' ? context.payload.issue.number : null);
+
+          if (issueNumber) {
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.issue.number,
+              issue_number: issueNumber,
               body: helpText
             });
           } else {
