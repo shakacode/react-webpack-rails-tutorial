@@ -103,9 +103,6 @@ jobs:
 
       - name: Check if Review App Exists
         id: check-app
-        if: github.event_name == 'push'
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
         run: |
           if ! cpflow exists -a ${{ env.APP_NAME }}; then
             echo "No review app exists for this PR"
@@ -283,9 +280,8 @@ jobs:
           org: ${{ env.CPLN_ORG }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-        env:
-          CPLN_TOKEN: ${{ env.CPLN_TOKEN }}
-          PR_NUMBER: ${{ env.PR_NUMBER }}
+          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          pr_number: ${{ env.PR_NUMBER }}
 
       - name: Update Status - Deployment Complete
         uses: actions/github-script@v7

@@ -30,8 +30,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout
 
-      - name: Show Help Information
-        uses: shakacode/shared-actions/help-command@justin808-more-work-on-review-apps-2
+      - name: Process Help Command
+        uses: shakacode/react-webpack-rails-tutorial/.github/actions/help-command@justin808-more-work-on-review-apps-2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.inputs.issue-number }}
