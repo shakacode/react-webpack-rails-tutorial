@@ -3,6 +3,7 @@ name: Show Help for Commands
 on:
   issue_comment:
     types: [created]
+  workflow_dispatch:
 
 permissions:
   issues: write
@@ -11,9 +12,10 @@ permissions:
 jobs:
   show-help:
     if: |
-      github.event_name == 'issue_comment' && 
-      github.event.issue.pull_request && 
-      github.event.comment.body == '/help'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' && 
+       github.event.issue.pull_request && 
+       github.event.comment.body == '/help')
     runs-on: ubuntu-latest
 
     steps:
@@ -84,14 +86,10 @@ jobs:
                 'For more information, see the [React on Rails Tutorial documentation](https://github.com/shakacode/react-on-rails/tree/master/react-webpack-rails-tutorial)'
               ].join('\n');
               
-              console.log('Issue number:', github.context.payload.issue.number);
-              console.log('Owner:', context.repo.owner);
-              console.log('Repo:', context.repo.repo);
-              
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: github.context.payload.issue.number,
+                issue_number: context.issue.number,
                 body: helpMessage
               });
               
