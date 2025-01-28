@@ -1,6 +1,6 @@
-name: Deploy Review App to Control Plane
+name: Deploy PR Review App to Control Plane
 
-run-name: Deploy Review App - ${{ github.ref_name }}
+run-name: Deploy PR Review App - PR #${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
 
 on:
   pull_request:
@@ -30,14 +30,20 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
 
 jobs:
+  debug:
+    uses: ./.github/workflows/debug-workflow.yml
+    with:
+      debug_enabled: false  # Will still run if vars.DEBUG_WORKFLOW is true
+  
   Process-Deployment-Command:
+    needs: debug  # Add this to ensure debug runs first
     if: |
       (github.event_name == 'pull_request') ||
       (github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch') ||
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
-       github.event.comment.body == '/deploy-review-app')
+       contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -91,51 +97,65 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get PR number based on event type
-          case "${{ github.event_name }}" in
-            "workflow_dispatch")
-              PR_NUMBER="${{ github.event.inputs.pr_number }}"
-              ;;
-            "issue_comment")
-              PR_NUMBER="${{ github.event.issue.number }}"
-              ;;
-            "pull_request")
-              PR_NUMBER="${{ github.event.pull_request.number }}"
-              ;;
-            "push")
-              # For push events, find associated PR
-              PR_DATA=$(gh pr list --head "${{ github.ref_name }}" --json number --jq '.[0].number')
-              if [[ -n "$PR_DATA" ]]; then
-                PR_NUMBER="$PR_DATA"
-              else
-                echo "Error: No PR found for branch ${{ github.ref_name }}"
+          # For push events, try to find associated PR first
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            PR_DATA=$(gh pr list --head "${{ github.ref_name }}" --json number,headRefName,headRefOid --jq '.[0]')
+            if [[ -n "$PR_DATA" ]]; then
+              PR_NUMBER=$(echo "$PR_DATA" | jq -r .number)
+            else
+              echo "No PR found for branch ${{ github.ref_name }}, skipping deployment"
+              echo "DO_DEPLOY=false" >> $GITHUB_ENV
+              exit 0
+            fi
+          else
+            # Get PR number based on event type
+            case "${{ github.event_name }}" in
+              "workflow_dispatch")
+                PR_NUMBER="${{ github.event.inputs.pr_number }}"
+                ;;
+              "issue_comment")
+                PR_NUMBER="${{ github.event.issue.number }}"
+                ;;
+              "pull_request")
+                PR_NUMBER="${{ github.event.pull_request.number }}"
+                ;;
+              *)
+                echo "Error: Unsupported event type ${{ github.event_name }}"
                 exit 1
-              fi
-              ;;
-            *)
-              echo "Error: Unsupported event type ${{ github.event_name }}"
-              exit 1
-              ;;
-          esac
-          
+                ;;
+            esac
+          fi
+
           if [[ -z "$PR_NUMBER" ]]; then
             echo "Error: Could not determine PR number"
+            echo "Event type: ${{ github.event_name }}"
+            echo "Event action: ${{ github.event.action }}"
+            echo "Ref name: ${{ github.ref_name }}"
+            echo "Available event data:"
+            echo "- PR number from inputs: ${{ github.event.inputs.pr_number }}"
+            echo "- PR number from issue: ${{ github.event.issue.number }}"
+            echo "- PR number from pull_request: ${{ github.event.pull_request.number }}"
             exit 1
           fi
           
-          # Set environment variables
+          # Get PR data
+          if [[ -z "$PR_DATA" ]]; then
+            PR_DATA=$(gh pr view "$PR_NUMBER" --json headRefName,headRefOid)
+            if [[ -z "$PR_DATA" ]]; then
+              echo "Error: PR DATA for PR #$PR_NUMBER not found"
+              echo "Event type: ${{ github.event_name }}"
+              echo "Event action: ${{ github.event.action }}"
+              echo "Ref name: ${{ github.ref_name }}"
+              echo "Attempted to fetch PR data with: gh pr view $PR_NUMBER"
+              exit 1
+            fi
+          fi
+          
+          # Extract and set PR data
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
           echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$PR_NUMBER" >> $GITHUB_ENV
-          
-          # Get PR data using GitHub CLI
-          PR_DATA=$(gh pr view $PR_NUMBER --repo shakacode/react-webpack-rails-tutorial --json headRefName,headRefOid)
-          if [[ $? -eq 0 ]]; then
-            echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
-            echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
-          else
-            echo "Error: Could not fetch PR data for PR #$PR_NUMBER"
-            exit 1
-          fi
+          echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
+          echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
 
       - name: Checkout PR code
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'issue_comment'
@@ -152,7 +172,6 @@ jobs:
 
       - name: Check if Review App Exists
         id: check-app
-        if: github.event_name == 'pull_request'
         env:
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         run: |
@@ -162,24 +181,63 @@ jobs:
             exit 1
           fi
 
-          # Then check if app exists
+          # Check if app exists and save state
           if ! cpflow exists -a ${{ env.APP_NAME }}; then
-            echo "No review app exists for this PR"
-            echo "DO_DEPLOY=false" >> $GITHUB_ENV
+            echo "APP_EXISTS=false" >> $GITHUB_ENV
           else
-            echo "DO_DEPLOY=true" >> $GITHUB_ENV
+            echo "APP_EXISTS=true" >> $GITHUB_ENV
           fi
 
       - name: Validate Deployment Request
         id: validate
-        if: env.DO_DEPLOY != 'false'
         run: |
+          # Skip validation if deployment is already disabled
+          if [[ "${{ env.DO_DEPLOY }}" == "false" ]]; then
+            echo "Skipping validation - deployment already disabled"
+            exit 0
+          fi
+
           if ! [[ "${{ github.event_name }}" == "workflow_dispatch" || \
-                 ("${{ github.event_name }}" == "issue_comment" && "${{ github.event.comment.body }}" == "/deploy-review-app") || \
-                 "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "Skipping deployment - not a valid trigger (event: ${{ github.event_name }})"
+                 "${{ github.event_name }}" == "issue_comment" || \
+                 "${{ github.event_name }}" == "pull_request" || \
+                 "${{ github.event_name }}" == "push" ]]; then
+            echo "Error: Unsupported event type ${{ github.event_name }}"
             exit 1
           fi
+
+          # Set DO_DEPLOY based on event type and conditions
+          if [[ "${{ github.event_name }}" == "pull_request" && \
+                ("${{ github.event.action }}" == "opened" || \
+                 "${{ github.event.action }}" == "synchronize" || \
+                 "${{ github.event.action }}" == "reopened") ]]; then
+            echo "DO_DEPLOY=true" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "DO_DEPLOY=true" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "DO_DEPLOY=true" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            if [[ "${{ github.event.issue.pull_request }}" ]]; then
+              # Trim spaces and check for exact command
+              COMMENT_BODY=$(echo "${{ github.event.comment.body }}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+              if [[ "$COMMENT_BODY" == "/deploy-review-app" ]]; then
+                echo "DO_DEPLOY=true" >> $GITHUB_ENV
+              else
+                echo "DO_DEPLOY=false" >> $GITHUB_ENV
+                echo "Skipping deployment - comment '$COMMENT_BODY' does not match '/deploy-review-app'"
+              fi
+            else
+              echo "DO_DEPLOY=false" >> $GITHUB_ENV
+              echo "Skipping deployment for non-PR comment"
+            fi
+          fi
+
+      - name: Setup Control Plane App if Not Existing
+        if: env.DO_DEPLOY == 'true' && env.APP_EXISTS == 'false'
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+        run: |
+          echo "🔧 Setting up new Control Plane app..."
+          cpflow setup-app -a ${{ env.APP_NAME }} --org ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Create Initial Comment
         if: env.DO_DEPLOY != 'false'
@@ -228,7 +286,7 @@ jobs:
                 repo: context.repo.repo,
                 run_id: runId
               });
-              return run.html_url;
+              return run.html_url + '/job/' + context.job;
             };
             
             const workflowUrl = await getWorkflowUrl(context.runId);
@@ -244,7 +302,7 @@ jobs:
         with:
           script: |
             const buildingMessage = [
-              '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + process.env.PR_SHA,
+              '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + '${{ env.PR_SHA }}',
               '',
               '📝 [View Build Logs](' + process.env.WORKFLOW_URL + ')',
               '',
@@ -261,6 +319,36 @@ jobs:
       - name: Checkout PR Branch
         if: env.DO_DEPLOY != 'false'
         run: git checkout ${{ steps.getRef.outputs.PR_REF }}
+
+      - name: Initialize GitHub Deployment
+        if: env.DO_DEPLOY != 'false'
+        uses: actions/github-script@v7
+        id: init-deployment
+        with:
+          script: |
+            const ref = process.env.PR_SHA;
+            const environment = process.env.ENVIRONMENT_NAME || 'review-app';
+            
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: ref,
+              environment: environment,
+              auto_merge: false,
+              required_contexts: [],
+              description: `Deployment for PR #${process.env.PR_NUMBER}`
+            });
+            
+            // Create initial deployment status
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'in_progress',
+              description: 'Deployment started'
+            });
+            
+            return deployment.data.id;
 
       - name: Build Docker Image
         if: env.DO_DEPLOY != 'false'
@@ -320,7 +408,7 @@ jobs:
             const deploymentStatus = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ fromJSON(steps.init-deployment.outputs.result).deploymentId }},
+              deployment_id:  JSON.parse(steps.init-deployment.outputs.result).deploymentId,
               state: isSuccess ? 'success' : 'failure',
               environment_url: isSuccess ? appUrl : undefined,
               log_url: workflowUrl,
