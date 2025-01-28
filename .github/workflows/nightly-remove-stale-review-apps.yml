@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Environment
-        uses: ./.github/actions/setup-environment@justin808-more-work-on-review-apps-1
+        uses: ./.github/actions/setup-environment
 
       - name: Get Stale PRs
         id: stale_prs

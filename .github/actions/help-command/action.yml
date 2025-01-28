@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: Show Available Commands
-      uses: actions/github-script@justin808-more-work-on-review-apps-1
+      uses: actions/github-script
       with:
         github-token: ${{ inputs.github-token }}
         script: |

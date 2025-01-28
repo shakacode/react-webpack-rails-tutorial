@@ -23,9 +23,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@justin808-more-work-on-review-apps-1
+        uses: actions/checkout
 
       - name: Show Help Information
-        uses: ./.github/actions/help-command@justin808-more-work-on-review-apps-1
+        uses: ./.github/actions/help-command
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
