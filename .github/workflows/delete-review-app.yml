@@ -5,6 +5,12 @@ on:
     types: [closed]
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to delete review app for'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -15,8 +21,8 @@ permissions:
 env:
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
-  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
 
 jobs:
   debug:
@@ -29,37 +35,15 @@ jobs:
        github.event.issue.pull_request && 
        github.event.comment.body == '/delete-review-app') ||
       (github.event_name == 'pull_request' && 
-       github.event.action == 'closed')
+       github.event.action == 'closed') ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get PR number
-        id: pr
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const prNumber = context.payload.issue.number;
-            core.setOutput('pr_number', prNumber);
-            core.exportVariable('PR_NUMBER', prNumber);
-
-      - name: Set App Name
-        run: echo "APP_NAME=qa-react-webpack-rails-tutorial-pr-${{ env.PR_NUMBER }}" >> $GITHUB_ENV
-
       - uses: actions/checkout@v4
 
-      - name: Validate Required Secrets
-        run: |
-          missing_secrets=()
-          for secret in "CPLN_TOKEN" "CPLN_ORG"; do
-            if [ -z "${!secret}" ]; then
-              missing_secrets+=("$secret")
-            fi
-          done
-          
-          if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo "Required secrets are not set: ${missing_secrets[*]}"
-            exit 1
-          fi
+      - name: Validate Required Secrets and Variables
+        uses: ./.github/actions/validate-required-vars
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment

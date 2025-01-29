@@ -1,0 +1,28 @@
+name: 'Validate Required Variables'
+description: 'Validates that all required secrets and variables for Control Plane operations'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate Required Secrets and Variables
+      shell: bash
+      run: |
+        missing=()
+        
+        # Check required secrets
+        if [ -z "$CPLN_TOKEN_STAGING" ]; then
+          missing+=("Secret: CPLN_TOKEN_STAGING")
+        fi
+        
+        # Check required variables
+        if [ -z "$CPLN_ORG_STAGING" ]; then
+          missing+=("Variable: CPLN_ORG_STAGING")
+        fi
+        if [ -z "$REVIEW_APP_PREFIX" ]; then
+          missing+=("Variable: REVIEW_APP_PREFIX")
+        fi
+        
+        if [ ${#missing[@]} -ne 0 ]; then
+          echo "Required secrets/variables are not set: ${missing[*]}"
+          exit 1
+        fi 
