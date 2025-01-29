@@ -230,7 +230,13 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: process.env.PR_NUMBER,
-              body: '🚀 Starting deployment process...\n\n' + process.env.CONSOLE_LINK
+              body: [
+                `🏗️ Building Docker image for PR [#${process.env.PR_NUMBER}](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/pull/${process.env.PR_NUMBER}), commit [${context.sha.substring(0, 7)}](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/commit/${context.sha})`,
+                '',
+                `📝 [View Build Logs](${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${context.job})`,
+                '',
+                process.env.CONSOLE_LINK
+              ].join('\n')
             });
             core.setOutput('comment-id', result.data.id);
 
@@ -316,25 +322,6 @@ jobs:
         with:
           token: ${{ secrets.CPLN_TOKEN_STAGING }}
           org: ${{ vars.CPLN_ORG_STAGING }}
-
-      - name: Update Status - Building
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const buildingMessage = [
-              '🏗️ Building Docker image for PR #${{ needs.process-deployment.outputs.pr_number }}, commit ${{ needs.process-deployment.outputs.pr_sha }}',
-              '',
-              '📝 [View Build Logs](${{ env.WORKFLOW_URL }})',
-              '',
-              process.env.CONSOLE_LINK
-            ].join('\n');
-            
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
-              body: buildingMessage
-            });
 
       - name: Build Docker Image
         id: build
