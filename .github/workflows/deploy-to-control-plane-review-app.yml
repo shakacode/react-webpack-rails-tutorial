@@ -70,28 +70,7 @@ jobs:
           fetch-depth: 0
 
       - name: Validate Required Secrets and Variables
-        shell: bash
-        run: |
-          missing=()
-          
-          # Check secrets
-          if [ -z "${{ secrets.CPLN_TOKEN_STAGING }}" ]; then
-            missing+=("Secret: CPLN_TOKEN_STAGING")
-          fi
-          
-          # Check variables
-          if [ -z "${{ vars.CPLN_ORG_STAGING }}" ]; then
-            missing+=("Variable: CPLN_ORG_STAGING")
-          fi
-          
-          if [ -z "${{ vars.REVIEW_APP_PREFIX }}" ]; then
-            missing+=("Variable: REVIEW_APP_PREFIX")
-          fi
-          
-          if [ ${#missing[@]} -ne 0 ]; then
-            echo "Required secrets/variables are not set: ${missing[*]}"
-            exit 1
-          fi
+        uses: ./.github/actions/validate-required-vars
 
       - name: Get PR HEAD Ref
         id: getRef
