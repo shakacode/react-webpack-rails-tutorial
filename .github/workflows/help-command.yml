@@ -1,42 +1,140 @@
-name: Show Help for Commands
+name: Help Command
 
 on:
-  push:
-    branches:
-      - "**" # Trigger on all branches, including feature branches
   issue_comment:
     types: [created]
-  workflow_dispatch:
-    inputs:
-      issue-number:
-        description: 'PR/Issue number to post the help comment to'
-        required: true
-        type: number
 
 permissions:
   issues: write
   pull-requests: write
 
 jobs:
-  debug:
-    uses: ./.github/workflows/debug-workflow.yml
-    with:
-      debug_enabled: false  # Will still run if vars.DEBUG_WORKFLOW is true
-  
-  show-help:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issue_comment' && 
-       github.event.issue.pull_request && 
-       github.event.comment.body == '/help')
+  help:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/help' }}
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout
-
-      - name: Process Help Command
-        uses: ./.github/actions/help-command
+      - name: Show Available Commands
+        uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.inputs.issue-number }}
+          script: |
+            const sections = {
+              commands: {
+                deploy: {
+                  title: '## `/deploy`',
+                  purpose: '**Purpose:** Deploy a review app for your pull request',
+                  details: [
+                    '**What it does:**',
+                    '- Creates a new review app in Control Plane',
+                    '- Deploys your changes to the review environment',
+                    '- Provides a unique URL to preview your changes',
+                    '- Shows build and deployment progress in real-time',
+                    '',
+                    '**Optional Configuration:**',
+                    '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
+                    '  - Must be a positive integer',
+                    '  - Example: `/deploy timeout=1800`'
+                  ]
+                },
+                destroy: {
+                  title: '## `/destroy`',
+                  purpose: '**Purpose:** Remove the review app for your pull request',
+                  details: [
+                    '**What it does:**',
+                    '- Deletes the review app from Control Plane',
+                    '- Cleans up associated resources',
+                    '- Updates PR with deletion status'
+                  ]
+                }
+              },
+              setup: {
+                title: '## Environment Setup',
+                sections: [
+                  {
+                    title: '**Required Environment Secrets:**',
+                    items: [
+                      '- `CPLN_TOKEN_STAGING`: Control Plane authentication token',
+                      '- `CPLN_TOKEN_PRODUCTION`: Control Plane authentication token'
+                    ]
+                  },
+                  {
+                    title: '**Required GitHub Actions Variables:**',
+                    items: [
+                      '- `CPLN_ORG_STAGING`: Control Plane authentication token',
+                      '- `CPLN_ORG_PRODUCTION`: Control Plane authentication token'
+                    ]
+                  },
+                  {
+                    title: '**Required GitHub Actions Variables (these need to match your control_plane.yml file:**',
+                    items: [
+                      '- `PRODUCTION_APP_NAME`: Control Plane production app name',
+                      '- `STAGING_APP_NAME`: Control Plane staging app name',
+                      '- `REVIEW_APP_PREFIX`: Control Plane review app prefix'
+                    ]
+                  }
+                ],
+                note: 'Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout'
+              },
+              integration: {
+                title: '## Control Plane Integration',
+                details: [
+                  '1. Review app naming convention:',
+                  '   ```',
+                  '   ${{ vars.REVIEW_APP_PREFIX }}-<pr-number>',
+                  '   ```',
+                  '2. Console URL: `https://console.cpln.io/console/org/{CPLN_ORG}/gvc/{APP_NAME}/-info`'
+                ]
+              },
+              cleanup: {
+                title: '## Automatic Cleanup',
+                details: [
+                  'Review apps are automatically destroyed when:',
+                  '1. The pull request is closed',
+                  '2. The `/destroy` command is used',
+                  '3. A new deployment is requested (old one is cleaned up first)'
+                ]
+              },
+              help: {
+                title: '## Need Help?',
+                details: [
+                  'For additional assistance:',
+                  '1. Check the [Control Plane documentation](https://docs.controlplane.com/)',
+                  '2. Contact the infrastructure team',
+                  '3. Open an issue in this repository'
+                ]
+              }
+            };
+
+            const generateHelpText = () => {
+              const parts = ['# Available Commands', ''];
+              
+              // Add commands
+              Object.values(sections.commands).forEach(cmd => {
+                parts.push(cmd.title, cmd.purpose, '', ...cmd.details, '');
+              });
+              
+              parts.push('---');
+              
+              // Add setup section
+              parts.push(sections.setup.title, '');
+              sections.setup.sections.forEach(section => {
+                parts.push(section.title, ...section.items, '');
+              });
+              parts.push(sections.setup.note, '');
+              
+              // Add remaining sections
+              ['integration', 'cleanup', 'help'].forEach(section => {
+                parts.push(sections[section].title, '', ...sections[section].details, '');
+              });
+              
+              return parts.join('\n');
+            };
+
+            const helpText = generateHelpText();
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: helpText
+            });
