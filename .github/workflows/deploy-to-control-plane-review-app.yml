@@ -213,7 +213,7 @@ jobs:
           fi
 
       - name: Setup Control Plane App if Not Existing
-        if: env.DO_DEPLOY == 'true' && env.APP_EXISTS == 'false'
+        if: env.DO_DEPLOY != 'false' && env.APP_EXISTS == 'false'
         env:
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         run: |
