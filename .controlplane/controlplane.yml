@@ -55,7 +55,7 @@ apps:
   # QA Apps are like Heroku review apps, but the use `prefix` so you can run a commmand like
   # this to create a QA app for the tutorial app.
   # `cpflow setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-pr-1234`
-  qa-react-webpack-rails-tutorial:
+  qa-react-webpack-rails-tutorial-pr:
     <<: *common
     # Order matters!
     setup_app_templates:
