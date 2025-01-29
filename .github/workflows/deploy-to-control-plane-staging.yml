@@ -53,8 +53,6 @@ jobs:
     needs: validate-branch
     if: needs.validate-branch.outputs.is_deployable == 'true'
     runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.build.outputs.image_tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
