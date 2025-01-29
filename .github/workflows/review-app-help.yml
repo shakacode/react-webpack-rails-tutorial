@@ -9,6 +9,11 @@ permissions:
   pull-requests: write
 
 jobs:
+  debug:
+    uses: ./.github/workflows/debug-workflow.yml
+    with:
+      debug_enabled: false  # Will still run if vars.DEBUG_WORKFLOW is true
+  
   show-quick-help:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest

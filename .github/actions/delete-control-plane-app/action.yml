@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Delete Application
       shell: bash
-      run: ${{ github.action_path }}/../deploy-to-control-plane/scripts/delete-app.sh
+      run: ${{ github.action_path }}/scripts/delete-app.sh
       env:
         APP_NAME: ${{ inputs.app_name }}
         CPLN_ORG: ${{ inputs.org }}
