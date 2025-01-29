@@ -116,7 +116,6 @@ jobs:
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🗑️ Starting app deletion...'
               body: [
                 message,
                 '',
@@ -167,3 +166,15 @@ jobs:
               comment_id: ${{ fromJSON(steps.create-delete-comment.outputs.result).commentId }},
               body: success ? successMessage : failureMessage
             });
+
+      - name: Debug Environment
+        run: |
+          echo "Organization: ${{ env.CPLN_ORG }}"
+          echo "App Name: ${{ env.APP_NAME }}"
+          echo "PR Number: ${{ env.PR_NUMBER }}"
+          # Don't echo the actual token, but verify it exists
+          if [ -n "${{ env.CPLN_TOKEN }}" ]; then
+            echo "CPLN_TOKEN is set"
+          else
+            echo "CPLN_TOKEN is empty"
+          fi
