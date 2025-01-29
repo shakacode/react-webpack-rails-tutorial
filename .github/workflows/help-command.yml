@@ -3,6 +3,12 @@ name: Help Command
 on:
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request number to post help comment on'
+        required: true
+        type: string
 
 permissions:
   issues: write
@@ -10,7 +16,7 @@ permissions:
 
 jobs:
   help:
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/help' }}
+    if: ${{ (github.event.issue.pull_request && github.event.comment.body == '/help') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     
     steps:
@@ -132,9 +138,13 @@ jobs:
 
             const helpText = generateHelpText();
             
+            const prNumber = context.eventName === 'workflow_dispatch' 
+              ? parseInt(context.payload.inputs.pr_number)
+              : context.issue.number;
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: prNumber,
               body: helpText
             });
