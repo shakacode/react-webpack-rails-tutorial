@@ -18,6 +18,11 @@ permissions:
   pull-requests: write
 
 jobs:
+  debug:
+    uses: ./.github/workflows/debug-workflow.yml
+    with:
+      debug_enabled: false  # Will still run if vars.DEBUG_WORKFLOW is true
+  
   show-help:
     if: |
       github.event_name == 'workflow_dispatch' ||
