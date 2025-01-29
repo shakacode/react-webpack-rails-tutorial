@@ -9,13 +9,18 @@ on:
         type: string
 
 jobs:
+  debug:
+    uses: ./.github/workflows/debug-workflow.yml
+    with:
+      debug_enabled: false
+
   promote-to-production:
     runs-on: ubuntu-latest
     if: github.event.inputs.confirm_promotion == 'promote'
     
     env:
       APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
-      CPLN_ORG: ${{ secrets.CPLN_ORG_PRODUCTION }}
+      CPLN_ORG: ${{ vars.CPLN_ORG_PRODUCTION }}
       CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
       UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
     
