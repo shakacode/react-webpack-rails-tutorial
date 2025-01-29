@@ -14,9 +14,10 @@ jobs:
     if: github.event.inputs.confirm_promotion == 'promote'
     
     env:
-      APP_NAME: react-webpack-rails-tutorial
-      CPLN_ORG: ${{ secrets.CPLN_ORG }}
-      UPSTREAM_TOKEN: ${{ secrets.STAGING_TOKEN }}
+      APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+      CPLN_ORG: ${{ secrets.CPLN_ORG_PRODUCTION }}
+      CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+      UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
     
     steps:
       - name: Checkout code
@@ -30,7 +31,7 @@ jobs:
       - name: Promote Staging to Production
         id: promote
         run: |
-          echo "🚀 Starting promotion from staging to production..."
+          echo "🚀 Starting promotion from staging to production... for app ${APP_NAME}"
           
           if ! cpflow promote-app-from-upstream -a "${APP_NAME}" -t "${UPSTREAM_TOKEN}" --org "${CPLN_ORG}"; then
             echo "❌ Failed to promote staging to production"
