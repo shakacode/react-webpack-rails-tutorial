@@ -71,6 +71,14 @@ jobs:
 
       - name: Validate Required Secrets and Variables
         uses: ./.github/actions/validate-required-vars
+        with:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
 
       - name: Get PR HEAD Ref
         id: getRef
