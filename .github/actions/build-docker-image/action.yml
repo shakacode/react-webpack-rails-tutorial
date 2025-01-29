@@ -25,8 +25,15 @@ runs:
         echo "🏗️ Building Docker image for PR #${PR_NUMBER} (commit ${{ inputs.commit }})..."
         
         if cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}"; then
+          image_tag="${{ inputs.org }}/${{ inputs.app_name }}:${{ inputs.commit }}"
+          echo "image_tag=${image_tag}" >> $GITHUB_OUTPUT
           echo "✅ Docker image build successful for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
         else
           echo "❌ Docker image build failed for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
           exit 1
         fi
+
+outputs:
+  image_tag:
+    description: 'The tag of the built Docker image'
+    value: ${{ steps.build.outputs.image_tag }}
