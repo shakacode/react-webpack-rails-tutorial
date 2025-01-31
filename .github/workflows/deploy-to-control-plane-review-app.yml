@@ -341,7 +341,7 @@ jobs:
             });
             
             const currentJob = jobs.jobs.find(job => job.name === context.job);
-            const currentJobUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${currentJob.id}?pr=${process.env.PR_NUMBER}`;
+            const currentJobUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${currentJob.id}`;
 
             // Update the PR comment with correct job URLs
             await github.rest.issues.updateComment({
@@ -357,7 +357,7 @@ jobs:
                 '',
                 process.env.CONSOLE_LINK,
                 '',
-                `📝 [View Build Logs](${process.env.BUILD_LOGS_URL}?pr=${process.env.PR_NUMBER})`,
+                `📝 [View Build Logs](${process.env.BUILD_LOGS_URL})`,
                 `📝 [View Deploy Logs](${currentJobUrl})`
               ].join('\n')
             });
@@ -393,7 +393,7 @@ jobs:
             });
             
             const currentJob = jobs.jobs.find(job => job.name === context.job);
-            const logsUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${currentJob.id}?pr=${prNumber}`;
+            const logsUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/job/${currentJob.id}`;
             
             // Create GitHub deployment status
             const deploymentStatus = {
