@@ -37,8 +37,9 @@ jobs:
       - name: Promote Staging to Production
         id: promote
         run: |
-          echo "🚀 Starting promotion from staging to production... for app ${APP_NAME}"
-          
+          echo "🚀 Starting promotion from staging to production for app ${APP_NAME}"
+         
+          echo "upstream_token is ${UPSTREAM_TOKEN}"
           if ! cpflow promote-app-from-upstream -a "${APP_NAME}" -t "${UPSTREAM_TOKEN}" --org "${CPLN_ORG}"  --verbose --trace   ; then
             echo "❌ Failed to promote staging to production"
             exit 1
