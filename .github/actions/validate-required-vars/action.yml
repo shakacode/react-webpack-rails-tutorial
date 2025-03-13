@@ -1,11 +1,23 @@
 name: 'Validate Required Variables'
 description: 'Validates that all required secrets and variables for Control Plane operations'
 
+inputs:
+  org:
+    description: 'Organization name'
+    required: true
+  prefix:
+    description: 'Review App Prefix'
+    required: true
+
 runs:
   using: 'composite'
   steps:
     - name: Validate Required Secrets and Variables
       shell: bash
+      env:
+        REVIEW_APP_PREFIX: ${{ inputs.prefix }}
+        CPLN_ORG_STAGING: ${{ inputs.org }}
+        CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
       run: |
         missing=()
         
@@ -18,6 +30,7 @@ runs:
         if [ -z "$CPLN_ORG_STAGING" ]; then
           missing+=("Variable: CPLN_ORG_STAGING")
         fi
+
         if [ -z "$REVIEW_APP_PREFIX" ]; then
           missing+=("Variable: REVIEW_APP_PREFIX")
         fi

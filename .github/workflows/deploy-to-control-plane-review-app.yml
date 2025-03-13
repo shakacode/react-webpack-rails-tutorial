@@ -71,6 +71,9 @@ jobs:
 
       - name: Validate Required Secrets and Variables
         uses: ./.github/actions/validate-required-vars
+        with:
+          prefix: ${{ vars.REVIEW_APP_PREFIX }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Get PR HEAD Ref
         id: getRef
