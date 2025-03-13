@@ -19,6 +19,7 @@ permissions:
   issues: write
 
 env:
+  PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
@@ -43,7 +44,28 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate Required Secrets and Variables
-        uses: ./.github/actions/validate-required-vars
+        shell: bash
+        run: |
+          missing=()
+          
+          # Check required secrets
+          if [ -z "$CPLN_TOKEN" ]; then
+            missing+=("Secret: CPLN_TOKEN_STAGING")
+          fi
+          
+          # Check required variables
+          if [ -z "$CPLN_ORG" ]; then
+            missing+=("Variable: CPLN_ORG_STAGING")
+          fi
+
+          if [ -z "$"PREFIX" }} ]; then
+            missing+=("Variable: REVIEW_APP_PREFIX")
+          fi
+          
+          if [ ${#missing[@]} -ne 0 ]; then
+            echo "Required secrets/variables are not set: ${missing[*]}"
+            exit 1
+          fi 
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
