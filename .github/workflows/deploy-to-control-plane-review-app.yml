@@ -24,6 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
   APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
@@ -70,10 +71,28 @@ jobs:
           fetch-depth: 0
 
       - name: Validate Required Secrets and Variables
-        uses: ./.github/actions/validate-required-vars
-        with:
-          prefix: ${{ vars.REVIEW_APP_PREFIX }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
+        shell: bash
+        run: |
+          missing=()
+          
+          # Check required secrets
+          if [ -z "$CPLN_TOKEN" ]; then
+            missing+=("Secret: CPLN_TOKEN_STAGING")
+          fi
+          
+          # Check required variables
+          if [ -z "$CPLN_ORG" ]; then
+            missing+=("Variable: CPLN_ORG_STAGING")
+          fi
+
+          if [ -z "$"PREFIX" }} ]; then
+            missing+=("Variable: REVIEW_APP_PREFIX")
+          fi
+          
+          if [ ${#missing[@]} -ne 0 ]; then
+            echo "Required secrets/variables are not set: ${missing[*]}"
+            exit 1
+          fi 
 
       - name: Get PR HEAD Ref
         id: getRef
