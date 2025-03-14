@@ -388,7 +388,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ steps.create-comment.outputs.comment-id }},
+              comment_id: '${{ steps.create-comment.outputs.comment-id }}',
               body: deployingMessage
             });
 
