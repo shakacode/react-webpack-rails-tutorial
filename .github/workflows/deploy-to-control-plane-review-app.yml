@@ -314,9 +314,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.build.outputs.image_tag }}
-      comment_id: ${{ needs.process-deployment.outputs.comment_id }}
-      pr_number: ${{ needs.process-deployment.outputs.pr_number }}
-      do_deploy: ${{ needs.process-deployment.outputs.do_deploy }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -388,7 +385,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: '${{ steps.create-comment.outputs.comment-id }}',
+              comment_id: '${{ needs.process-deployment.outputs.comment_id }}',
               body: deployingMessage
             });
 
@@ -419,7 +416,7 @@ jobs:
             const deploymentStatus = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ steps.init-deployment.outputs.result }},
+              deployment_id: ${{ needs.process-deployment.outputs.deployment_id }},
               state: isSuccess ? 'success' : 'failure',
               environment_url: isSuccess ? appUrl : undefined,
               log_url: workflowUrl,
