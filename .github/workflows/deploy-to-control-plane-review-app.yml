@@ -244,6 +244,7 @@ jobs:
               issue_number: process.env.PR_NUMBER,
               body: '🚀 Starting deployment process...\n\n' + process.env.CONSOLE_LINK
             });
+            // console.log(result);
             core.setOutput('comment-id', result.data.id);
 
       - name: Set Deployment URLs
@@ -374,7 +375,7 @@ jobs:
         run: echo '${{ needs.process-deployment.outputs.comment_id }}'
 
       - name: Print Comment id as env var
-        run: echo '${process.env.COMMENT_ID}'
+        run: echo $COMMENT_ID
 
       - name: Update Status - Deploying
         uses: actions/github-script@v7
@@ -455,6 +456,6 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ steps.create-comment.outputs.comment-id }},
+              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
               body: isSuccess ? successMessage : failureMessage
             });
