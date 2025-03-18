@@ -10,21 +10,21 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - uses: actions/github-script@v7
-      name: Add GitHub Comment for review app instructions
-      with:
-        script: |
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.pull_request.number,
-            body: [
-              "Hi 👋 Here are the commands available for this PR:",
-              "",
-              "- `/deploy-review-app`: Deploy your changes to a review environment",
-              "- `/delete-review-app`: Clean up the review environment when you're done",
-              "- `/help`: Show detailed information about all commands",
-              "",
-              "Use `/help` to see full documentation, including configuration options."
-            ].join("\n")
-          });
+        name: Add GitHub Comment for review app instructions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: [
+                "Hi 👋 Here are the commands available for this PR:",
+                "",
+                "- `/deploy-review-app`: Deploy your changes to a review environment",
+                "- `/delete-review-app`: Clean up the review environment when you're done",
+                "- `/help`: Show detailed information about all commands",
+                "",
+                "Use `/help` to see full documentation, including configuration options."
+              ].join("\n")
+            });

@@ -1,4 +1,4 @@
-name: Show Detailed Help
+name: Show Help for Commands
 
 on:
   issue_comment:
@@ -27,15 +27,11 @@ jobs:
         with:
           script: |
             try {
-              console.log('Creating detailed help message...');
+              console.log('Creating help message...');
               const helpMessage = [
-                '# 📚 Detailed Review App Commands Guide',
+                '## 📚 Available Commands',
                 '',
-                'This is a detailed guide to using review app commands. For a quick reference, see the message posted when your PR was created.',
-                '',
-                '## Available Commands',
-                '',
-                '### `/deploy-review-app`',
+                '### `/deploy`',
                 'Deploys your PR branch to a review environment on Control Plane.',
                 '- Creates a new review app if one doesn\'t exist',
                 '- Updates the existing review app if it already exists',
@@ -56,37 +52,23 @@ jobs:
                 'Deletes the review app associated with this PR.',
                 '- Removes all resources from Control Plane',
                 '- Helpful for cleaning up when you\'re done testing',
-                '- Can be re-deployed later using `/deploy-review-app`',
+                '- Can be re-deployed later using `/deploy`',
                 '',
                 '**Required Environment Variables:**',
                 '- `CPLN_TOKEN`: Control Plane authentication token',
                 '- `CPLN_ORG`: Control Plane organization name',
                 '',
                 '### `/help`',
-                'Shows this detailed help message.',
+                'Shows this help message explaining available commands and configuration.',
                 '',
                 '---',
-                '## Environment Setup',
+                '**Note:** These commands only work in pull request comments.',
                 '',
+                '**Environment Setup:**',
                 '1. Set required secrets in your repository settings:',
                 '   - `CPLN_TOKEN`',
                 '   - `CPLN_ORG`',
-                '',
-                '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout',
-                '',
-                '## Control Plane Integration',
-                '',
-                'Review apps are deployed to Control Plane with the following configuration:',
-                '- App Name Format: `qa-react-webpack-rails-tutorial-pr-{PR_NUMBER}`',
-                '- Console URL: `https://console.cpln.io/console/org/{CPLN_ORG}/gvc/{APP_NAME}/-info`',
-                '',
-                '## Automatic Cleanup',
-                '',
-                'Review apps are automatically deleted when:',
-                '- The PR is closed (merged or not merged)',
-                '- The PR is stale (via nightly cleanup job)',
-                '',
-                'For more information, see the [React on Rails Tutorial documentation](https://github.com/shakacode/react-on-rails/tree/master/react-webpack-rails-tutorial)'
+                '2. Optional: Configure `WAIT_TIMEOUT` in GitHub Actions variables to customize deployment timeout'
               ].join('\n');
               
               console.log('Issue number:', github.context.payload.issue.number);
