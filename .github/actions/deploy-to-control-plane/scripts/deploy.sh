@@ -19,6 +19,9 @@ set -e
 : "${APP_NAME:?APP_NAME environment variable is required}"
 : "${CPLN_ORG:?CPLN_ORG environment variable is required}"
 
+auth_check=$(cpln profile get 2>&1)
+echo "$auth_check"
+
 # Set and validate deployment timeout
 WAIT_TIMEOUT=${WAIT_TIMEOUT:-900}
 if ! [[ "${WAIT_TIMEOUT}" =~ ^[0-9]+$ ]]; then
@@ -38,6 +41,8 @@ if ! timeout "${WAIT_TIMEOUT}" cpflow deploy-image -a "$APP_NAME" --run-release-
   exit 1
 fi
 
+echo "🚀 Rocket launched!"
+
 # Wait for all workloads to be ready
 echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)"
 if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"$APP_NAME\"" 2>&1 | tee -a "$TEMP_OUTPUT"; then
@@ -52,7 +57,10 @@ if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"$APP_NAME\"" 2>&1 | 
   exit 1
 fi
 
+echo "⏳ Wait complete!"
+
 # Extract app URL from deployment output
+echo "🙏 Extracting app URL"
 APP_URL=$(grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
 if [ -z "$APP_URL" ]; then
   echo "❌ Error: Could not find app URL in deployment output"
