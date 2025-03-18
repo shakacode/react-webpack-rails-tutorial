@@ -32,9 +32,10 @@ jobs:
                 'Remove the review app when done',
                 '',
                 '### `/help`',
-                'Show detailed instructions, environment setup, and configuration options.'
+                'Show detailed documentation',
                 '',
                 '---',
+                '**Note:** Type `/help` for detailed instructions, environment setup, and configuration options.'
               ].join('\n');
               
               await github.rest.issues.createComment({

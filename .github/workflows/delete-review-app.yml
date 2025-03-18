@@ -58,7 +58,7 @@ jobs:
           fi
 
       - name: Setup Environment
-        uses: ./.github/actions/setup-environment
+        uses: ./.github/actions/setup-environment@justin808-working-for-deploys
         with:
           org: ${{ env.CPLN_ORG }}
           token: ${{ env.CPLN_TOKEN }}
@@ -132,7 +132,7 @@ jobs:
             return { commentId: comment.data.id };
 
       - name: Delete Review App
-        uses: ./.github/actions/delete-control-plane-app
+        uses: ./.github/actions/delete-control-plane-app@justin808-working-for-deploys
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ env.CPLN_ORG }}
