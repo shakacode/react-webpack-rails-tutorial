@@ -5,15 +5,12 @@ inputs:
   github-token:
     description: 'GitHub token for posting comments'
     required: true
-  issue-number:
-    description: 'PR/Issue number to post the comment to (optional, defaults to event context)'
-    required: false
 
 runs:
   using: "composite"
   steps:
     - name: Show Available Commands
-      uses: actions/github-script@v7
+      uses: actions/github-script
       with:
         github-token: ${{ inputs.github-token }}
         script: |
@@ -83,14 +80,12 @@ runs:
             '3. Open an issue in this repository',
           ].join('\n');
 
-          const issueNumber = inputs['issue-number'] || 
-            (context.eventName === 'issue_comment' ? context.payload.issue.number : null);
-
-          if (issueNumber) {
+          const context = github.context;
+          if (context.eventName === 'issue_comment') {
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issueNumber,
+              issue_number: context.payload.issue.number,
               body: helpText
             });
           } else {

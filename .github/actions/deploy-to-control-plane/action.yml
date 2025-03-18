@@ -17,12 +17,6 @@ inputs:
     description: 'Timeout in seconds for waiting for workloads to be ready'
     required: false
     default: '900'
-  cpln_token:
-    description: 'Control Plane token'
-    required: true
-  pr_number:
-    description: 'Pull Request number'
-    required: true
 
 outputs:
   review_app_url:
@@ -56,14 +50,11 @@ runs:
       run: ${{ github.action_path }}/scripts/get-commit-sha.sh
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-        PR_NUMBER: ${{ inputs.pr_number }}
+        PR_NUMBER: ${{ env.PR_NUMBER }}
 
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
-      env:
-        CPLN_TOKEN: ${{ inputs.cpln_token }}
-        PR_NUMBER: ${{ inputs.pr_number }}
       run: |
         echo "🚀 Deploying app for PR #${PR_NUMBER}..."
         
