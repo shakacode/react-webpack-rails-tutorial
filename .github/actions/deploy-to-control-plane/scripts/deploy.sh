@@ -38,13 +38,6 @@ if ! timeout "${WAIT_TIMEOUT}" cpflow deploy-image -a "$APP_NAME" --run-release-
   exit 1
 fi
 
-# Extract app URL from deployment output
-APP_URL=$(grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
-if [ -z "$APP_URL" ]; then
-  echo "❌ Error: Could not find app URL in deployment output"
-  exit 1
-fi
-
 # Wait for all workloads to be ready
 echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)"
 if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"$APP_NAME\"" 2>&1 | tee -a "$TEMP_OUTPUT"; then
@@ -56,6 +49,13 @@ if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"$APP_NAME\"" 2>&1 | 
   fi
   echo "Full output:"
   cat "$TEMP_OUTPUT"
+  exit 1
+fi
+
+# Extract app URL from deployment output
+APP_URL=$(grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
+if [ -z "$APP_URL" ]; then
+  echo "❌ Error: Could not find app URL in deployment output"
   exit 1
 fi
 
