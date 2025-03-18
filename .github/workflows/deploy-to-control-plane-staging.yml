@@ -1,96 +1,32 @@
 # Control Plane GitHub Action
 
-name: Deploy to Control Plane Staging
-run-name: Deploy Control Plane Staging App
+name: Deploy Main Branch to Control Plane Staging
 
 # Controls when the workflow will run
 on:
+  # Uncomment the lines you want actions that will cause the workflow to Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches:
-      - '*'
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
-  APP_NAME: ${{ vars.STAGING_APP_NAME }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
-  STAGING_APP_BRANCH: ${{ vars.STAGING_APP_BRANCH }}
-
-concurrency:
-  group: deploy-staging
-  cancel-in-progress: true
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
 
 jobs:
-  debug:
-    uses: ./.github/workflows/debug-workflow.yml
-    with:
-      debug_enabled: false
-
-  validate-branch:
+  deploy-to-control-plane-staging:
     runs-on: ubuntu-latest
-    outputs:
-      is_deployable: ${{ steps.check_branch.outputs.is_deployable }}
+
     steps:
-      - name: Check if allowed branch
-        id: check_branch
-        run: |
-          if [[ -n "${STAGING_APP_BRANCH}" ]]; then
-            if [[ "${GITHUB_REF#refs/heads/}" == "${STAGING_APP_BRANCH}" ]]; then
-              echo "is_deployable=true" >> $GITHUB_OUTPUT
-            else
-              echo "Branch '${GITHUB_REF#refs/heads/}' is not the configured deployment branch '${STAGING_APP_BRANCH}'"
-              echo "is_deployable=false" >> $GITHUB_OUTPUT
-            fi
-          elif [[ "${GITHUB_REF}" == "refs/heads/main" || "${GITHUB_REF}" == "refs/heads/master" ]]; then
-            echo "is_deployable=true" >> $GITHUB_OUTPUT
-          else
-            echo "Branch '${GITHUB_REF#refs/heads/}' is not main/master (no STAGING_APP_BRANCH configured)"
-            echo "is_deployable=false" >> $GITHUB_OUTPUT
-          fi
-
-  build:
-    needs: validate-branch
-    if: needs.validate-branch.outputs.is_deployable == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history for proper SHA handling
+          ref: master    # Explicitly checkout master branch
 
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-
-      - name: Build Docker Image
-        id: build
-        uses: ./.github/actions/build-docker-image
-        with:
-          app_name: ${{ env.APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-          commit: ${{ github.sha }}
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-
-      - name: Deploy to Control Plane
-        uses: ./.github/actions/deploy-to-control-plane
+      - uses: ./.github/actions/deploy-to-control-plane
         with:
           app_name: ${{ vars.STAGING_APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}

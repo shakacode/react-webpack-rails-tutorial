@@ -13,7 +13,7 @@ inputs:
     required: true
   PR_NUMBER:
     description: 'PR number'
-    required: false
+    required: true
 
 runs:
   using: "composite"
@@ -22,18 +22,11 @@ runs:
       id: build
       shell: bash
       run: |
-        PR_INFO=""
-        if [ -n "${PR_NUMBER}" ]; then
-          PR_INFO=" for PR #${PR_NUMBER}"
-        fi
-        
-        echo "🏗️ Building Docker image${PR_INFO} (commit ${{ inputs.commit }})..."
+        echo "🏗️ Building Docker image for PR #${PR_NUMBER} (commit ${{ inputs.commit }})..."
         
         if cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}"; then
-          image_tag="${{ inputs.org }}/${{ inputs.app_name }}:${{ inputs.commit }}"
-          echo "image_tag=${image_tag}" >> $GITHUB_OUTPUT
-          echo "✅ Docker image build successful${PR_INFO} (commit ${{ inputs.commit }})"
+          echo "✅ Docker image build successful for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
         else
-          echo "❌ Docker image build failed${PR_INFO} (commit ${{ inputs.commit }})"
+          echo "❌ Docker image build failed for PR #${PR_NUMBER} (commit ${{ inputs.commit }})"
           exit 1
         fi
