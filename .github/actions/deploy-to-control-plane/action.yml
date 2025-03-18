@@ -44,59 +44,205 @@ runs:
     - name: Setup Environment
       uses: ./.github/actions/setup-environment
 
-    - name: Get Commit SHA
-      id: get_sha
+    - name: Set shared functions
+      id: shared-functions
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('GET_CONSOLE_LINK', `
+            function getConsoleLink(prNumber) {
+              return ' [Control Plane Console for Review App with PR #' + prNumber + '](' + 
+                     'https://console.cpln.io/org/' + process.env.CPLN_ORG + '/workloads/' + process.env.APP_NAME + ')';
+            }
+          `);
+
+    - name: Initialize Deployment
+      id: init-deployment
+      uses: actions/github-script@v7
+      with:
+        script: |
+          eval(process.env.GET_CONSOLE_LINK);
+
+          async function getWorkflowUrl(runId) {
+            // Get the current job ID
+            const jobs = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId
+            });
+            
+            const currentJob = jobs.data.jobs.find(job => job.status === 'in_progress');
+            const jobId = currentJob?.id;
+            
+            if (!jobId) {
+              console.log('Warning: Could not find current job ID');
+              return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+            }
+            
+            return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}`;
+          }
+          
+          // Create initial deployment comment
+          const comment = await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: process.env.PR_NUMBER,
+            body: ' Initializing deployment...'
+          });
+          
+          // Create GitHub deployment
+          const deployment = await github.rest.repos.createDeployment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: context.sha,
+            environment: 'review',
+            auto_merge: false,
+            required_contexts: []
+          });
+
+          const workflowUrl = await getWorkflowUrl(context.runId);
+          
+          core.exportVariable('WORKFLOW_URL', workflowUrl);
+          core.exportVariable('COMMENT_ID', comment.data.id);
+          core.exportVariable('DEPLOYMENT_ID', deployment.data.id);
+
+    - name: Set commit hash
       shell: bash
-      run: ${{ github.action_path }}/scripts/get-commit-sha.sh
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
+      run: |
+        FULL_COMMIT=$(git rev-parse HEAD)
+        echo "COMMIT_HASH=${FULL_COMMIT:0:7}" >> $GITHUB_ENV
+
+    - name: Update Status - Setting Up
+      uses: actions/github-script@v7
+      with:
+        script: |
+          eval(process.env.GET_CONSOLE_LINK);
+
+          const setupMessage = [
+            '🔧 Setting up Control Plane app...',
+            '',
+            ' [View Setup Logs](' + process.env.WORKFLOW_URL + ')',
+            '',
+            getConsoleLink(process.env.PR_NUMBER)
+          ].join('\n');
+          
+          await github.rest.issues.updateComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            comment_id: process.env.COMMENT_ID,
+            body: setupMessage
+          });
+
+    - name: Setup Control Plane App
+      shell: bash
+      run: |
+        echo "🔧 Checking if app exists..."
+        if ! cpflow exists -a ${{ inputs.app_name }} ; then
+          echo "📦 Setting up new Control Plane app..."
+          cpflow setup-app -a ${{ inputs.app_name }}
+        fi
+
+    - name: Update Status - Building
+      uses: actions/github-script@v7
+      with:
+        script: |
+          eval(process.env.GET_CONSOLE_LINK);
+
+          const buildingMessage = [
+            '🏗️ Building Docker image for PR #' + process.env.PR_NUMBER + ', commit ' + process.env.COMMIT_HASH,
+            '',
+            ' [View Build Logs](' + process.env.WORKFLOW_URL + ')',
+            '',
+            getConsoleLink(process.env.PR_NUMBER)
+          ].join('\n');
+          
+          await github.rest.issues.updateComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            comment_id: process.env.COMMENT_ID,
+            body: buildingMessage
+          });
+
+    - name: Update Status - Deploying
+      uses: actions/github-script@v7
+      with:
+        script: |
+          eval(process.env.GET_CONSOLE_LINK);
+
+          const deployingMessage = [
+            '🚀 Deploying to Control Plane...',
+            '',
+            '⏳ Waiting for deployment to be ready...',
+            '',
+            ' [View Deploy Logs](' + process.env.WORKFLOW_URL + ')',
+            '',
+            getConsoleLink(process.env.PR_NUMBER)
+          ].join('\n');
+          
+          await github.rest.issues.updateComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            comment_id: process.env.COMMENT_ID,
+            body: deployingMessage
+          });
 
     - name: Deploy to Control Plane
       id: deploy
       shell: bash
-      run: |
-        echo "🚀 Deploying app for PR #${PR_NUMBER}..."
-        
-        # Create temp file for output
-        TEMP_OUTPUT=$(mktemp)
-        trap 'rm -f "${TEMP_OUTPUT}"' EXIT
-        
-        # Deploy the application and show output in real-time while capturing it
-        if ! cpflow deploy-image -a "${{ inputs.app_name }}" --run-release-phase --org "${{ inputs.org }}" 2>&1 | tee "${TEMP_OUTPUT}"; then
-          echo "❌ Deployment failed for PR #${PR_NUMBER}"
-          echo "Error output:"
-          cat "${TEMP_OUTPUT}"
-          exit 1
-        fi
-        
-        # Extract app URL from captured output
-        REVIEW_APP_URL=$(grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' "${TEMP_OUTPUT}" | head -n1)
-        if [ -z "${REVIEW_APP_URL}" ]; then
-          echo "❌ Failed to get app URL from deployment output"
-          echo "Deployment output:"
-          cat "${TEMP_OUTPUT}"
-          exit 1
-        fi
-        
-        # Wait for all workloads to be ready
-        WAIT_TIMEOUT=${WAIT_TIMEOUT:-${{ inputs.wait_timeout }}}
-        echo "⏳ Waiting for all workloads to be ready (timeout: ${WAIT_TIMEOUT}s)..."
-        
-        # Use timeout command with ps:wait and show output in real-time
-        if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"${{ inputs.app_name }}\"" 2>&1 | tee -a "${TEMP_OUTPUT}"; then
-          TIMEOUT_EXIT=$?
-          if [ ${TIMEOUT_EXIT} -eq 124 ]; then
-            echo "❌ Timed out waiting for workloads after ${WAIT_TIMEOUT} seconds"
-          else
-            echo "❌ Workloads did not become ready for PR #${PR_NUMBER} (exit code: ${TIMEOUT_EXIT})"
-          fi
-          echo "Full output:"
-          cat "${TEMP_OUTPUT}"
-          exit 1
-        fi
-        
-        echo "✅ Deployment successful for PR #${PR_NUMBER}"
-        echo "🌐 App URL: ${REVIEW_APP_URL}"
-        echo "review_app_url=${REVIEW_APP_URL}" >> $GITHUB_OUTPUT
-        echo "REVIEW_APP_URL=${REVIEW_APP_URL}" >> $GITHUB_ENV
+      run: ${{ github.action_path }}/scripts/deploy.sh
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        CPLN_ORG: ${{ inputs.org }}
+        WAIT_TIMEOUT: ${{ inputs.wait_timeout }}
+
+    - name: Update Status - Deployment Complete
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          eval(process.env.GET_CONSOLE_LINK);
+
+          const prNumber = process.env.PR_NUMBER;
+          const appUrl = process.env.REVIEW_APP_URL;
+          const workflowUrl = process.env.WORKFLOW_URL;
+          const isSuccess = '${{ job.status }}' === 'success';
+          
+          // Create GitHub deployment status
+          const deploymentStatus = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: process.env.DEPLOYMENT_ID,
+            state: isSuccess ? 'success' : 'failure',
+            environment_url: isSuccess ? appUrl : undefined,
+            log_url: workflowUrl,
+            environment: 'review'
+          };
+          
+          await github.rest.repos.createDeploymentStatus(deploymentStatus);
+          
+          // Define messages based on deployment status
+          const successMessage = [
+            '✅ Deployment complete for PR #' + prNumber + ', commit ' + process.env.COMMIT_HASH,
+            '',
+            '🌐 [Review App for PR #' + prNumber + '](' + appUrl + ')',
+            '',
+            ' [View Completed Action Build and Deploy Logs](' + workflowUrl + ')',
+            '',
+            getConsoleLink(prNumber)
+          ].join('\n');
+          
+          const failureMessage = [
+            '❌ Deployment failed for PR #' + prNumber + ', commit ' + process.env.COMMIT_HASH,
+            '',
+            ' [View Deployment Logs with Errors](' + workflowUrl + ')',
+            '',
+            getConsoleLink(prNumber)
+          ].join('\n');
+          
+          // Update the existing comment
+          await github.rest.issues.updateComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            comment_id: process.env.COMMENT_ID,
+            body: isSuccess ? successMessage : failureMessage
+          });

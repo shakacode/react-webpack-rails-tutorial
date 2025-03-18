@@ -1,12 +1,13 @@
-name: Show Help for Commands
+name: Show Detailed Help
 
 on:
-  push:
-    branches:
-      - "**" # Trigger on all branches, including feature branches
   issue_comment:
     types: [created]
-  workflow_dispatch:
+
+# Use concurrency to prevent duplicate runs
+concurrency:
+  group: help-${{ github.event.issue.number }}
+  cancel-in-progress: true
 
 permissions:
   issues: write
@@ -15,17 +16,12 @@ permissions:
 jobs:
   show-help:
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issue_comment' && 
-       github.event.issue.pull_request && 
-       github.event.comment.body == '/help')
+      github.event_name == 'issue_comment' && 
+      github.event.issue.pull_request && 
+      github.event.comment.body == '/help'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Identify Workflow Branch
-        run: |
-          echo "Workflow branch ref: ${{ github.ref }}"
-
       - name: Show Available Commands
         uses: actions/github-script@v7
         with:
@@ -46,18 +42,9 @@ jobs:
                 '- Provides a unique URL to preview your changes',
                 '- Shows build and deployment progress in real-time',
                 '',
-                '**Required Environment Secrets:**',
-                '- `CPLN_TOKEN_STAGING`: Control Plane authentication token',
-                '- `CPLN_TOKEN_PRODUCTION`: Control Plane authentication token',
-                '',
-                '**Required GitHub Actions Variables:**',
-                '- `CPLN_ORG_STAGING`: Control Plane authentication token',
-                '- `CPLN_ORG_PRODUCTION`: Control Plane authentication token',
-                '',
-                '**Required GitHub Actions Variables (these need to match your control_plane.yml file:**',
-                '- `PRODUCTION_APP_NAME`: Control Plane production app name',
-                '- `STAGING_APP_NAME`: Control Plane staging app name',
-                '- `REVIEW_APP_PREFIX`: Control Plane review app prefix',
+                '**Required Environment Variables:**',
+                '- `CPLN_TOKEN`: Control Plane authentication token',
+                '- `CPLN_ORG`: Control Plane organization name',
                 '',
                 '**Optional Configuration:**',
                 '- `WAIT_TIMEOUT`: Deployment timeout in seconds (default: 900)',
@@ -102,10 +89,14 @@ jobs:
                 'For more information, see the [React on Rails Tutorial documentation](https://github.com/shakacode/react-on-rails/tree/master/react-webpack-rails-tutorial)'
               ].join('\n');
               
+              console.log('Issue number:', github.context.payload.issue.number);
+              console.log('Owner:', context.repo.owner);
+              console.log('Repo:', context.repo.repo);
+              
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                issue_number: github.context.payload.issue.number,
                 body: helpMessage
               });
               

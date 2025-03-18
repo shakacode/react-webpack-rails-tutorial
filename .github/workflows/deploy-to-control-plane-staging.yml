@@ -13,8 +13,8 @@ on:
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
-  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
-  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
+  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
 
 jobs:
   deploy-to-control-plane-staging:
@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0  # Fetch all history for proper SHA handling
           ref: master    # Explicitly checkout master branch
 
-      - uses: ./.github/actions/deploy-to-control-plane@justin808-working-for-deploys
+      - uses: ./.github/actions/deploy-to-control-plane
         with:
-          app_name: ${{ vars.STAGING_APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
+          app_name: ${{ secrets.APP_NAME_STAGING }}
+          org: ${{ secrets.CPLN_ORG_STAGING }}
