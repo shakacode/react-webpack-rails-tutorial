@@ -19,10 +19,6 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
 jobs:
-  debug:
-    uses: ./.github/workflows/debug-workflow.yml
-    with:
-      debug_enabled: false  # Will still run if vars.DEBUG_WORKFLOW is true
   Process-Delete-Command:
     if: |
       (github.event_name == 'issue_comment' && 

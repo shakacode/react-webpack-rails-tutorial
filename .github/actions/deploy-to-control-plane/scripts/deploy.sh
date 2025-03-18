@@ -11,7 +11,7 @@
 #                 Must be a positive integer
 #
 # Outputs:
-# - ENV APP_URL: URL of the deployed application
+# - rails_url: URL of the deployed Rails application
 
 set -e
 
@@ -39,9 +39,11 @@ if ! timeout "${WAIT_TIMEOUT}" cpflow deploy-image -a "$APP_NAME" --run-release-
 fi
 
 # Extract app URL from deployment output
-APP_URL=$(grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
-if [ -z "$APP_URL" ]; then
-  echo "❌ Error: Could not find app URL in deployment output"
+RAILS_URL=$(grep -oP 'https://rails-[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
+if [ -z "$RAILS_URL" ]; then
+  echo "❌ Failed to get app URL from deployment output"
+  echo "Full output:"
+  cat "$TEMP_OUTPUT"
   exit 1
 fi
 
@@ -60,5 +62,5 @@ if ! timeout "${WAIT_TIMEOUT}" bash -c "cpflow ps:wait -a \"$APP_NAME\"" 2>&1 | 
 fi
 
 echo "✅ Deployment successful"
-echo "🌐 App URL: $APP_URL"
-echo "APP_URL=$APP_URL" >> "$GITHUB_OUTPUT"
+echo "🌐 Rails URL: $RAILS_URL"
+echo "rails_url=$RAILS_URL" >> "$GITHUB_OUTPUT"
