@@ -1,8 +1,6 @@
 name: Delete Review App
 
 on:
-  pull_request:
-    types: [closed]
   issue_comment:
     types: [created]
 
@@ -15,17 +13,33 @@ permissions:
 env:
   CPLN_ORG: ${{ secrets.CPLN_ORG }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
-  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.pull_request.number || github.event.issue.number }}
-  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+  APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ github.event.issue.number }}
+  PR_NUMBER: ${{ github.event.issue.number }}
 
 jobs:
+  debug-trigger:
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Trigger Conditions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IS_PR: ${{ toJSON(github.event.issue.pull_request) }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          echo "Debug information for delete-review-app command:"
+          echo "Event name: $EVENT_NAME"
+          echo "Is PR (raw): $IS_PR"
+          echo "Comment body: $COMMENT"
+          echo "Raw event payload:"
+          echo '${{ toJSON(github.event) }}'
+
   Process-Delete-Command:
+    needs: debug-trigger
     if: |
-      (github.event_name == 'issue_comment' && 
-       github.event.issue.pull_request && 
-       github.event.comment.body == '/delete-review-app') ||
-      (github.event_name == 'pull_request' && 
-       github.event.action == 'closed')
+      github.event_name == 'issue_comment' && 
+      github.event.issue.pull_request && 
+      github.event.comment.body == '/delete-review-app'
     runs-on: ubuntu-latest
 
     steps:
@@ -41,91 +55,23 @@ jobs:
           done
           
           if [ ${#missing_secrets[@]} -ne 0 ]; then
-            echo "Required secrets are not set: ${missing_secrets[*]}"
+            echo " Required secrets are not set: ${missing_secrets[*]}"
             exit 1
           fi
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
 
-      - name: Set shared functions
-        id: shared-functions
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('GET_CONSOLE_LINK', `
-              function getConsoleLink(prNumber) {
-                return ' [Control Plane Console for Review App with PR #' + prNumber + '](' + 
-                       'https://console.cpln.io/org/' + process.env.CPLN_ORG + '/workloads/' + process.env.APP_NAME + ')';
-              }
-            `);
-
-      - name: Initialize Delete
-        id: init-delete
-        uses: actions/github-script@v7
-        with:
-          script: |
-            eval(process.env.GET_CONSOLE_LINK);
-
-            async function getWorkflowUrl(runId) {
-              // Get the current job ID
-              const jobs = await github.rest.actions.listJobsForWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: runId
-              });
-              
-              const currentJob = jobs.data.jobs.find(job => job.status === 'in_progress');
-              const jobId = currentJob?.id;
-              
-              if (!jobId) {
-                console.log('Warning: Could not find current job ID');
-                return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
-              }
-              
-              return `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/job/${jobId}`;
-            }
-            
-            const workflowUrl = await getWorkflowUrl(context.runId);
-            
-            const comment = await github.rest.issues.createComment({
-              issue_number: process.env.PR_NUMBER,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: [
-                ' Starting app deletion...',
-                '',
-                ' [View Delete Logs](' + workflowUrl + ')',
-                '',
-                getConsoleLink(process.env.PR_NUMBER)
-              ].join('\n')
-            });
-            
-            return { 
-              commentId: comment.data.id,
-              workflowUrl
-            };
-
-      - name: Set workflow URL
-        run: |
-          echo "WORKFLOW_URL=${{ fromJSON(steps.init-delete.outputs.result).workflowUrl }}" >> $GITHUB_ENV
-
       - name: Create Initial Delete Comment
         id: init-delete
         uses: actions/github-script@v7
         with:
           script: |
-            let message = '🗑️ Starting app deletion';
-            if ('${{ github.event_name }}' === 'pull_request') {
-              const merged = '${{ github.event.pull_request.merged }}' === 'true';
-              message += merged ? ' (PR merged)' : ' (PR closed)';
-            }
-            
             const comment = await github.rest.issues.createComment({
               issue_number: process.env.PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: message
+              body: ' Starting app deletion...'
             });
             return { commentId: comment.data.id };
 
@@ -143,28 +89,21 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            eval(process.env.GET_CONSOLE_LINK);
-            
             const success = '${{ job.status }}' === 'success';
             const prNumber = process.env.PR_NUMBER;
+            const cpConsoleUrl = `https://console.cpln.io/org/${process.env.CPLN_ORG}/workloads/${process.env.APP_NAME}`;
             
-            const successMessage = [
-              '✅ Review app for PR #' + prNumber + ' was successfully deleted',
-              '',
-              ' [View Completed Delete Logs](' + process.env.WORKFLOW_URL + ')'
-            ].join('\n');
-            
-            const failureMessage = [
-              '❌ Review app for PR #' + prNumber + ' failed to be deleted',
-              '',
-              ' [View Delete Logs with Errors](' + process.env.WORKFLOW_URL + ')',
-              '',
-              getConsoleLink(prNumber)
-            ].join('\n');
+            const message = success
+              ? ' Review app for PR #' + prNumber + ' was successfully deleted'
+              : [
+                  ' Review app for PR #' + prNumber + ' failed to be deleted',
+                  '',
+                  '[Control Plane Console for Review App with PR #' + prNumber + '](' + cpConsoleUrl + ')'
+                ].join('\n');
             
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: ${{ fromJSON(steps.init-delete.outputs.result).commentId }},
-              body: success ? successMessage : failureMessage
+              body: message
             });
