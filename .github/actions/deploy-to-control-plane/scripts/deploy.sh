@@ -56,6 +56,8 @@ fi
 APP_URL=$(grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' "$TEMP_OUTPUT" | head -n1)
 if [ -z "$APP_URL" ]; then
   echo "❌ Error: Could not find app URL in deployment output"
+  echo "Full output:"
+  cat "$TEMP_OUTPUT"
   exit 1
 fi
 
