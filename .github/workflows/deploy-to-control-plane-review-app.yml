@@ -2,14 +2,12 @@ name: Deploy PR Review App to Control Plane
 
 run-name: Deploy PR Review App - PR #${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
 
+
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
-    branches:
-      - '**'        # Any branch
-      - '!main'     # Except main
-      - '!master'   # Except master
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -24,6 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
   APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
@@ -35,8 +34,7 @@ jobs:
     with:
       debug_enabled: false
 
-  process-deployment:
-    needs: debug
+  deploy:
     if: |
       (github.event_name == 'pull_request') ||
       (github.event_name == 'push') ||
@@ -45,13 +43,6 @@ jobs:
        github.event.issue.pull_request && 
        contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
-    outputs:
-      pr_number: ${{ env.PR_NUMBER }}
-      pr_sha: ${{ env.PR_SHA }}
-      pr_ref: ${{ steps.getRef.outputs.PR_REF }}
-      do_deploy: ${{ env.DO_DEPLOY }}
-      comment_id: ${{ steps.create-comment.outputs.comment-id }}
-      deployment_id: ${{ steps.init-deployment.outputs.result }}
     steps:
       # Initial checkout only for pull_request and push events
       - name: Checkout code
@@ -70,7 +61,28 @@ jobs:
           fetch-depth: 0
 
       - name: Validate Required Secrets and Variables
-        uses: ./.github/actions/validate-required-vars
+        shell: bash
+        run: |
+          missing=()
+          
+          # Check required secrets
+          if [ -z "$CPLN_TOKEN" ]; then
+            missing+=("Secret: CPLN_TOKEN_STAGING")
+          fi
+          
+          # Check required variables
+          if [ -z "$CPLN_ORG" ]; then
+            missing+=("Variable: CPLN_ORG_STAGING")
+          fi
+
+          if [ -z "$PREFIX" ]; then
+            missing+=("Variable: REVIEW_APP_PREFIX")
+          fi
+          
+          if [ ${#missing[@]} -ne 0 ]; then
+            echo "Required secrets/variables are not set: ${missing[*]}"
+            exit 1
+          fi 
 
       - name: Get PR HEAD Ref
         id: getRef
@@ -288,33 +300,12 @@ jobs:
             
             return deployment.data.id;
 
-  build:
-    needs: process-deployment
-    if: needs.process-deployment.outputs.do_deploy != 'false'
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.build.outputs.image_tag }}
-      comment_id: ${{ needs.process-deployment.outputs.comment_id }}
-      pr_number: ${{ needs.process-deployment.outputs.pr_number }}
-      do_deploy: ${{ needs.process-deployment.outputs.do_deploy }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.process-deployment.outputs.pr_ref }}
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-
       - name: Update Status - Building
         uses: actions/github-script@v7
         with:
           script: |
             const buildingMessage = [
-              '🏗️ Building Docker image for PR #${{ needs.process-deployment.outputs.pr_number }}, commit ${{ needs.process-deployment.outputs.pr_sha }}',
+              '🏗️ Building Docker image for PR #${{ env.PR_NUMBER }}, commit ${{ env.PR_SHA }}',
               '',
               '📝 [View Build Logs](${{ env.WORKFLOW_URL }})',
               '',
@@ -324,7 +315,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
+              comment_id: ${{ steps.create-comment.outputs.comment-id }},
               body: buildingMessage
             });
 
@@ -334,22 +325,8 @@ jobs:
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
-          commit: ${{ needs.process-deployment.outputs.pr_sha }}
-          PR_NUMBER: ${{ needs.process-deployment.outputs.pr_number }}
-
-  deploy:
-    needs: build
-    if: needs.build.outputs.do_deploy != 'false'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
+          commit: ${{ env.PR_SHA }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Update Status - Deploying
         uses: actions/github-script@v7
@@ -374,14 +351,11 @@ jobs:
 
       - name: Deploy to Control Plane
         if: env.DO_DEPLOY != 'false'
-        uses: ./.github/actions/deploy-to-control-plane
-        with:
-          app_name: ${{ env.APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          pr_number: ${{ env.PR_NUMBER }}
+        run: cpflow deploy-image -a ${{ env.APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_STAGING }} --verbose
+
+      - name: Retrieve App URL
+        id: workload
+        run: echo "WORKLOAD_URL=$(cpln workload get rails --gvc ${{ env.APP_NAME }} | tee | grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)"  >> "$GITHUB_OUTPUT"
 
       - name: Update Status - Deployment Complete
         if: env.DO_DEPLOY != 'false'
@@ -389,7 +363,7 @@ jobs:
         with:
           script: |
             const prNumber = process.env.PR_NUMBER;
-            const appUrl = process.env.APP_URL;
+            const appUrl = '${{ steps.workload.outputs.WORKLOAD_URL }}';
             const workflowUrl = process.env.WORKFLOW_URL;
             const isSuccess = '${{ job.status }}' === 'success';
             
