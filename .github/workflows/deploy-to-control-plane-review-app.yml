@@ -327,12 +327,6 @@ jobs:
           org: ${{ vars.CPLN_ORG_STAGING }}
           commit: ${{ env.PR_SHA }}
           PR_NUMBER: ${{ env.PR_NUMBER }}
-      
-      - name: Confirm Auth
-        run: cpln profile get
-
-      - name: Confirm Workloads
-        run: cpln workload get --gvc ${{ env.APP_NAME }} | tee
 
       - name: Update Status - Deploying
         uses: actions/github-script@v7
@@ -359,13 +353,17 @@ jobs:
         if: env.DO_DEPLOY != 'false'
         run: cpflow deploy-image -a ${{ env.APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_STAGING }} --verbose
 
+      - name: Retrieve App URL
+        id: workload
+        run: echo "WORKLOAD_URL=${cpln workload get rails --gvc ${{ env.APP_NAME }} | tee | grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1}"  >> "$GITHUB_OUTPUT"
+
       - name: Update Status - Deployment Complete
         if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
         with:
           script: |
             const prNumber = process.env.PR_NUMBER;
-            const appUrl = process.env.APP_URL;
+            const appUrl = ${{ steps.workload.outputs.WORKLOAD_URL }};
             const workflowUrl = process.env.WORKFLOW_URL;
             const isSuccess = '${{ job.status }}' === 'success';
             
