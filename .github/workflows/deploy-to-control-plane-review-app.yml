@@ -396,14 +396,7 @@ jobs:
 
       - name: Deploy to Control Plane
         if: env.DO_DEPLOY != 'false'
-        uses: ./.github/actions/deploy-to-control-plane
-        with:
-          app_name: ${{ env.APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          pr_number: ${{ env.PR_NUMBER }}
+        run: cpflow deploy-image -a ${{ env.APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_STAGING }} --verbose
 
       - name: Update Status - Deployment Complete
         if: env.DO_DEPLOY != 'false'
