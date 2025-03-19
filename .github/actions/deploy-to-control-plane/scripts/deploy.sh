@@ -29,6 +29,9 @@ fi
 TEMP_OUTPUT=$(mktemp)
 trap 'rm -f "$TEMP_OUTPUT"' EXIT
 
+last_output=$(cpln workload get 2>&1)
+echo "$last_output"
+
 # Deploy the application
 echo "🚀 Deploying to Control Plane (timeout: ${WAIT_TIMEOUT}s)"
 if timeout "$WAIT_TIMEOUT" cpflow deploy-image -a "$APP_NAME" --run-release-phase --org "$CPLN_ORG" --verbose | tee "$TEMP_OUTPUT"; then
