@@ -29,8 +29,7 @@ fi
 TEMP_OUTPUT=$(mktemp)
 trap 'rm -f "$TEMP_OUTPUT"' EXIT
 
-last_output=$(cpln workload get 2>&1)
-echo "$last_output"
+cpln workload get | tee
 
 # Deploy the application
 echo "🚀 Deploying to Control Plane (timeout: ${WAIT_TIMEOUT}s)"

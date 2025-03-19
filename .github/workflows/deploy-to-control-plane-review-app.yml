@@ -178,8 +178,7 @@ jobs:
           if ! cpflow exists -a ${{ env.APP_NAME }}; then
             echo "APP_EXISTS=false" >> $GITHUB_ENV
           else
-            last_output=$(cpln workload get 2>&1)
-            echo "$last_output"
+            cpln workload get | tee
             echo "APP_EXISTS=true" >> $GITHUB_ENV
           fi
 
