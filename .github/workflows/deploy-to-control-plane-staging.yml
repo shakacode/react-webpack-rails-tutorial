@@ -87,10 +87,4 @@ jobs:
           org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Deploy to Control Plane
-        uses: ./.github/actions/deploy-to-control-plane
-        with:
-          app_name: ${{ vars.STAGING_APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          wait_timeout: ${{ vars.WAIT_TIMEOUT || 900 }}
-          cpln_token: ${{ secrets.CPLN_TOKEN_STAGING }}
+        run: cpflow deploy-image -a ${{ env.APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_STAGING }} --verbose
