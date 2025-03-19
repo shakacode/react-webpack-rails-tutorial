@@ -4,10 +4,6 @@ run-name: Deploy PR Review App - PR #${{ github.event.pull_request.number || git
 
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
   issue_comment:
     types: [created]
   workflow_dispatch:
