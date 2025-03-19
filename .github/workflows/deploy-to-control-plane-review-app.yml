@@ -34,8 +34,7 @@ jobs:
     with:
       debug_enabled: false
 
-  process-deployment:
-    needs: debug
+  deploy:
     if: |
       (github.event_name == 'pull_request') ||
       (github.event_name == 'push') ||
@@ -44,13 +43,6 @@ jobs:
        github.event.issue.pull_request && 
        contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
-    outputs:
-      pr_number: ${{ env.PR_NUMBER }}
-      pr_sha: ${{ env.PR_SHA }}
-      pr_ref: ${{ steps.getRef.outputs.PR_REF }}
-      do_deploy: ${{ env.DO_DEPLOY }}
-      comment_id: ${{ steps.create-comment.outputs.comment-id }}
-      deployment_id: ${{ steps.init-deployment.outputs.result }}
     steps:
       # Initial checkout only for pull_request and push events
       - name: Checkout code
@@ -178,7 +170,6 @@ jobs:
           if ! cpflow exists -a ${{ env.APP_NAME }}; then
             echo "APP_EXISTS=false" >> $GITHUB_ENV
           else
-            cpln workload get | tee
             echo "APP_EXISTS=true" >> $GITHUB_ENV
           fi
 
@@ -309,30 +300,12 @@ jobs:
             
             return deployment.data.id;
 
-  build:
-    needs: process-deployment
-    if: needs.process-deployment.outputs.do_deploy != 'false'
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.build.outputs.image_tag }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.process-deployment.outputs.pr_ref }}
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-
       - name: Update Status - Building
         uses: actions/github-script@v7
         with:
           script: |
             const buildingMessage = [
-              '🏗️ Building Docker image for PR #${{ needs.process-deployment.outputs.pr_number }}, commit ${{ needs.process-deployment.outputs.pr_sha }}',
+              '🏗️ Building Docker image for PR #${{ env.PR_NUMBER }}, commit ${{ env.PR_SHA }}',
               '',
               '📝 [View Build Logs](${{ env.WORKFLOW_URL }})',
               '',
@@ -342,7 +315,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
+              comment_id: ${{ steps.create-comment.outputs.comment-id }},
               body: buildingMessage
             });
 
@@ -352,25 +325,14 @@ jobs:
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
-          commit: ${{ needs.process-deployment.outputs.pr_sha }}
-          PR_NUMBER: ${{ needs.process-deployment.outputs.pr_number }}
-
-  deploy:
-    needs: [build, process-deployment]
-    if: needs.build.outputs.do_deploy != 'false'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
+          commit: ${{ env.PR_SHA }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
       
       - name: Confirm Auth
         run: cpln profile get
+
+      - name: Confirm Workloads
+        run: cpln workload get --gvc ${{ env.APP_NAME }} | tee
 
       - name: Update Status - Deploying
         uses: actions/github-script@v7
@@ -389,7 +351,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
+              comment_id: ${{ steps.create-comment.outputs.comment-id }},
               body: deployingMessage
             });
 
@@ -413,7 +375,7 @@ jobs:
             const deploymentStatus = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: ${{ needs.process-deployment.outputs.deployment_id }},
+              deployment_id: ${{ steps.init-deployment.outputs.result }},
               state: isSuccess ? 'success' : 'failure',
               environment_url: isSuccess ? appUrl : undefined,
               log_url: workflowUrl,
@@ -444,6 +406,6 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ needs.process-deployment.outputs.comment_id }},
+              comment_id: ${{ steps.create-comment.outputs.comment-id }},
               body: isSuccess ? successMessage : failureMessage
             });
