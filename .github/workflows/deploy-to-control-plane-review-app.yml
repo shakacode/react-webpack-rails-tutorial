@@ -355,8 +355,7 @@ jobs:
 
       - name: Retrieve App URL
         id: workload
-        run: echo "WORKLOAD_URL=${cpln workload get rails --gvc ${{ env.APP_NAME }} | tee | grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1}"  >> "$GITHUB_OUTPUT"
-
+        run: echo "WORKLOAD_URL=$(cpln workload get rails --gvc ${{ env.APP_NAME }} | tee | grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)"  >> "$GITHUB_OUTPUT"
       - name: Update Status - Deployment Complete
         if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
