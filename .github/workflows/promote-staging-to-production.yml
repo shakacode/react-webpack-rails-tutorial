@@ -13,24 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.inputs.confirm_promotion == 'promote'
     
-    env:
-      APP_NAME: ${{ vars.STAGING_APP_NAME }}
-      UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+        with:
+          token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          org: ${{ vars.CPLN_ORG_PRODUCTION }}
       
       - name: Copy Image from Staging
-        run: cpflow copy-image-from-upstream -a "${APP_NAME}" -t "${UPSTREAM_TOKEN}" -v
+        run: cpflow copy-image-from-upstream -a "${{ vars.STAGING_APP_NAME }}" -t "${{ secrets.CPLN_TOKEN_STAGING }}" -v
       
       - name: Deploy Image to Production
-        run: cpflow deploy-image -v
+        run: cpflow deploy-image -v --run-release-phase
       
       - name: Create GitHub Release
         if: success()
