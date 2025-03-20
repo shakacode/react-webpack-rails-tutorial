@@ -24,7 +24,7 @@ jobs:
           org: ${{ vars.CPLN_ORG_PRODUCTION }}
       
       - name: Copy Image from Staging
-        run: cpflow copy-image-from-upstream -a "${{ vars.STAGING_APP_NAME }}" -t "${{ secrets.CPLN_TOKEN_STAGING }}" -v
+        run: cpflow copy-image-from-upstream -a "${{ vars.STAGING_APP_NAME }}" -t "${{ secrets.CPLN_TOKEN_STAGING }}" --verbose
       
       - name: Deploy Image to Production
         run: cpflow deploy-image -v --run-release-phase
