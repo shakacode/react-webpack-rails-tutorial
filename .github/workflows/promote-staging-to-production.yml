@@ -20,17 +20,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
         with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-      
-      - name: Copy Image from Staging
-        run: cpflow copy-image-from-upstream -a "${{ vars.STAGING_APP_NAME }}" -t "${{ secrets.CPLN_TOKEN_STAGING }}" --verbose
-      
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
           token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           org: ${{ vars.CPLN_ORG_PRODUCTION }}
+      
+      - name: Copy Image from Staging
+        run: cpflow copy-image-from-upstream -a "${{ vars.PRODUCTION_APP_NAME }}" -t "${{ secrets.CPLN_TOKEN_STAGING }}" --verbose --trace
       
       - name: Deploy Image to Production
         run: cpflow deploy-image -v --run-release-phase
