@@ -46,7 +46,7 @@ apps:
     allow_app_override_by_env: false
 
     # Use a different organization for production.
-    cpln_org: shakacode-open-source-examples
+    cpln_org: shakacode-open-source-examples-production
 
     upstream: react-webpack-rails-tutorial-staging
 
