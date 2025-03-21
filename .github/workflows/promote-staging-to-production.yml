@@ -13,31 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.inputs.confirm_promotion == 'promote'
     
-    env:
-      APP_NAME: react-webpack-rails-tutorial
-      CPLN_ORG: ${{ secrets.CPLN_ORG }}
-      UPSTREAM_TOKEN: ${{ secrets.STAGING_TOKEN }}
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+        with:
+          token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          org: ${{ vars.CPLN_ORG_PRODUCTION }}
       
-      - name: Promote Staging to Production
-        id: promote
-        run: |
-          echo "🚀 Starting promotion from staging to production..."
-          
-          if ! cpflow promote-app-from-upstream -a "${APP_NAME}" -t "${UPSTREAM_TOKEN}" --org "${CPLN_ORG}"; then
-            echo "❌ Failed to promote staging to production"
-            exit 1
-          fi
-          
-          echo "✅ Successfully promoted staging to production"
+      - name: Copy Image from Staging
+        run: cpflow copy-image-from-upstream -a ${{ vars.PRODUCTION_APP_NAME }} -t ${{ secrets.CPLN_TOKEN_STAGING }}
+      
+      - name: Deploy Image to Production
+        run: cpflow deploy-image -a ${{ vars.PRODUCTION_APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_PRODUCTION }}
       
       - name: Create GitHub Release
         if: success()
