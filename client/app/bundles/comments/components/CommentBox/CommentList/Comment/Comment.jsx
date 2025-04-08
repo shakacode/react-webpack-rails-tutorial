@@ -19,6 +19,7 @@ const Comment = React.forwardRef((props, ref) => {
     <div ref={ref}>
       <h2 className="js-comment-author text-blue-800">{author}</h2>
       <span dangerouslySetInnerHTML={{ __html: sanitizedRawMarkup }} className="js-comment-text" />
+      <hr />
     </div>
   );
 });
