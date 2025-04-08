@@ -23,6 +23,7 @@ env:
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  PR_SHA: ${{ github.sha }}
 
 jobs:
   debug:
@@ -198,7 +199,7 @@ jobs:
         id: init-deployment
         with:
           script: |
-            const ref = github.sha;
+            const ref = process.env.PR_SHA;
             const environment = process.env.ENVIRONMENT_NAME || 'review-app';
             
             const deployment = await github.rest.repos.createDeployment({
