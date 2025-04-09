@@ -41,21 +41,6 @@ jobs:
        contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
     steps:
-      # Initial checkout only for pull_request and push events
-      - name: Checkout code
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-
-      # Basic checkout for other events (workflow_dispatch, issue_comment)
-      # We'll do proper checkout after getting PR info
-      - name: Initial checkout
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'issue_comment'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Validate Required Secrets and Variables
         shell: bash
@@ -145,6 +130,12 @@ jobs:
           echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$PR_NUMBER" >> $GITHUB_ENV
           echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
           echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
+          
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.PR_SHA }}
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
