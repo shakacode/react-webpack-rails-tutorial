@@ -43,10 +43,19 @@ jobs:
     steps:
       # Initial checkout only for pull_request and push events
       - name: Checkout code
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+
+      # Basic checkout for other events (workflow_dispatch, issue_comment)
+      # We'll do proper checkout after getting PR info
+      - name: Initial checkout
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'issue_comment'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Validate Required Secrets and Variables
         shell: bash
@@ -71,6 +80,71 @@ jobs:
             echo "Required secrets/variables are not set: ${missing[*]}"
             exit 1
           fi 
+
+      - name: Get PR HEAD Ref
+        id: getRef
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # For push events, try to find associated PR first
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            PR_DATA=$(gh pr list --head "${{ github.ref_name }}" --json number,headRefName,headRefOid --jq '.[0]')
+            if [[ -n "$PR_DATA" ]]; then
+              PR_NUMBER=$(echo "$PR_DATA" | jq -r .number)
+            else
+              echo "No PR found for branch ${{ github.ref_name }}, skipping deployment"
+              echo "DO_DEPLOY=false" >> $GITHUB_ENV
+              exit 0
+            fi
+          else
+            # Get PR number based on event type
+            case "${{ github.event_name }}" in
+              "workflow_dispatch")
+                PR_NUMBER="${{ github.event.inputs.pr_number }}"
+                ;;
+              "issue_comment")
+                PR_NUMBER="${{ github.event.issue.number }}"
+                ;;
+              "pull_request")
+                PR_NUMBER="${{ github.event.pull_request.number }}"
+                ;;
+              *)
+                echo "Error: Unsupported event type ${{ github.event_name }}"
+                exit 1
+                ;;
+            esac
+          fi
+
+          if [[ -z "$PR_NUMBER" ]]; then
+            echo "Error: Could not determine PR number"
+            echo "Event type: ${{ github.event_name }}"
+            echo "Event action: ${{ github.event.action }}"
+            echo "Ref name: ${{ github.ref_name }}"
+            echo "Available event data:"
+            echo "- PR number from inputs: ${{ github.event.inputs.pr_number }}"
+            echo "- PR number from issue: ${{ github.event.issue.number }}"
+            echo "- PR number from pull_request: ${{ github.event.pull_request.number }}"
+            exit 1
+          fi
+          
+          # Get PR data
+          if [[ -z "$PR_DATA" ]]; then
+            PR_DATA=$(gh pr view "$PR_NUMBER" --json headRefName,headRefOid)
+            if [[ -z "$PR_DATA" ]]; then
+              echo "Error: PR DATA for PR #$PR_NUMBER not found"
+              echo "Event type: ${{ github.event_name }}"
+              echo "Event action: ${{ github.event.action }}"
+              echo "Ref name: ${{ github.ref_name }}"
+              echo "Attempted to fetch PR data with: gh pr view $PR_NUMBER"
+              exit 1
+            fi
+          fi
+          
+          # Extract and set PR data
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$PR_NUMBER" >> $GITHUB_ENV
+          echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
+          echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
@@ -228,7 +302,7 @@ jobs:
         with:
           script: |
             const buildingMessage = [
-              '🏗️ Building Docker image for PR #${{ env.PR_NUMBER }}, commit ${{ github.sha }}',
+              '🏗️ Building Docker image for PR #${{ env.PR_NUMBER }}, commit ${{ env.PR_SHA }}',
               '',
               '📝 [View Build Logs](${{ env.WORKFLOW_URL }})',
               '',
@@ -248,7 +322,7 @@ jobs:
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
-          commit: ${{ github.sha }}
+          commit: ${{ env.PR_SHA }}
           PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Update Status - Deploying
@@ -307,7 +381,7 @@ jobs:
             
             // Define messages based on deployment status
             const successMessage = [
-              '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ github.sha }}',
+              '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.PR_SHA }}',
               '',
               '🚀 [Review App for PR #' + prNumber + '](' + appUrl + ')',
               consoleLink,
@@ -316,7 +390,7 @@ jobs:
             ].join('\n');
             
             const failureMessage = [
-              '❌ Deployment failed for PR #' + prNumber + ', commit ' + '${{ github.sha }}',
+              '❌ Deployment failed for PR #' + prNumber + ', commit ' + '${{ env.PR_SHA }}',
               '',
               consoleLink,
               '',
