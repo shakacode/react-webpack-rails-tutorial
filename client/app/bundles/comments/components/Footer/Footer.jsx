@@ -14,7 +14,7 @@ export default class Footer extends BaseComponent {
           </a>
           <a href="https://x.com/railsonmaui" className="flex gap-4 items-center">
             <div className="w-16 h-16 bg-[url('../images/twitter_64.png')]" />
-            Rails On Maui on Twitter
+            Rails On Maui on X (Twitter)
           </a>
         </div>
       </footer>
