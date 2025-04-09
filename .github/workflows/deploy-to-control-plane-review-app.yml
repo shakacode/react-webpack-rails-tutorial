@@ -23,7 +23,6 @@ env:
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
-  PR_SHA: ${{ github.sha }}
 
 jobs:
   debug:
@@ -41,30 +40,8 @@ jobs:
        contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
     steps:
-
-      - name: Validate Required Secrets and Variables
-        shell: bash
-        run: |
-          missing=()
-          
-          # Check required secrets
-          if [ -z "$CPLN_TOKEN" ]; then
-            missing+=("Secret: CPLN_TOKEN_STAGING")
-          fi
-          
-          # Check required variables
-          if [ -z "$CPLN_ORG" ]; then
-            missing+=("Variable: CPLN_ORG_STAGING")
-          fi
-
-          if [ -z "$PREFIX" ]; then
-            missing+=("Variable: REVIEW_APP_PREFIX")
-          fi
-          
-          if [ ${#missing[@]} -ne 0 ]; then
-            echo "Required secrets/variables are not set: ${missing[*]}"
-            exit 1
-          fi 
+      - name: Initial Checkout
+        uses: actions/checkout@v4
 
       - name: Get PR HEAD Ref
         id: getRef
@@ -130,11 +107,10 @@ jobs:
           echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$PR_NUMBER" >> $GITHUB_ENV
           echo "PR_REF=$(echo $PR_DATA | jq -r .headRefName)" >> $GITHUB_OUTPUT
           echo "PR_SHA=$(echo $PR_DATA | jq -r .headRefOid)" >> $GITHUB_ENV
-          
-      - name: Checkout code
+
+      - name: Checkout the correct ref
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: ${{ env.PR_SHA }}
 
       - name: Setup Environment
