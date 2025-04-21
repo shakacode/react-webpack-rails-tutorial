@@ -5,21 +5,10 @@ run-name: Deploy Control Plane Staging App
 
 # Controls when the workflow will run
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
     branches:
-      - '**'        # Any branch
-      - '!main'     # Except main
-      - '!master'   # Except master
-  issue_comment:
-    types: [created]
+      - '*'
   workflow_dispatch:
-    inputs:
-      pr_number:
-        description: 'Pull Request number to deploy'
-        required: true
-        type: number
 
 # Convert the GitHub secret variables to environment variables for use by the Control Plane CLI
 env:
