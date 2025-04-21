@@ -6,10 +6,6 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
-env:
-  CPLN_ORG: ${{secrets.CPLN_ORG_STAGING}}
-  CPLN_TOKEN: ${{secrets.CPLN_TOKEN_STAGING}}
-
 jobs:
   remove-stale-review-apps:
     runs-on: ubuntu-latest
@@ -20,6 +16,9 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Get Stale PRs
         id: stale_prs

@@ -46,11 +46,6 @@ RUN yarn install --frozen-lockfile
 # Copy application code
 COPY . .
 
-RUN echo "ZYXYZYXYZ"
-
-RUN ls -l
-RUN ls -l app
-
 # Final stage for app image
 FROM base
 
@@ -62,10 +57,6 @@ RUN apt-get update -qq && \
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
-
-RUN ls -l app
-
-RUN cat /app/client/app/bundles/comments/components/Footer/Footer.jsx
 
 RUN chmod +x /app/.controlplane/*.sh
 

@@ -28,8 +28,6 @@ runs:
         fi
         
         echo "🏗️ Building Docker image${PR_INFO} (commit ${{ inputs.commit }})..."
-
-        /usr/bin/git log -1 --format=%H
         
         if cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}"; then
           image_tag="${{ inputs.org }}/${{ inputs.app_name }}:${{ inputs.commit }}"
