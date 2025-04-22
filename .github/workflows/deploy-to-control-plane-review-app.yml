@@ -6,11 +6,6 @@ run-name: Deploy PR Review App - PR #${{ github.event.pull_request.number || git
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - '**'        # Any branch
-      - '!main'     # Except main
-      - '!master'   # Except master
   issue_comment:
     types: [created]
   workflow_dispatch:
