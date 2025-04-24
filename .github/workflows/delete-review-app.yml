@@ -58,7 +58,7 @@ jobs:
             missing+=("Variable: CPLN_ORG_STAGING")
           fi
 
-          if [ -z "$"PREFIX" }} ]; then
+          if [ -z "$PREFIX" }} ]; then
             missing+=("Variable: REVIEW_APP_PREFIX")
           fi
           
