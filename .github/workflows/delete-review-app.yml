@@ -58,7 +58,7 @@ jobs:
             missing+=("Variable: CPLN_ORG_STAGING")
           fi
 
-          if [ -z "$PREFIX" }} ]; then
+          if [ -z "$PREFIX" ]; then
             missing+=("Variable: REVIEW_APP_PREFIX")
           fi
           
@@ -145,7 +145,7 @@ jobs:
         uses: ./.github/actions/delete-control-plane-app
         with:
           app_name: ${{ env.APP_NAME }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Update Delete Status
         if: always()
