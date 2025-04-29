@@ -50,5 +50,5 @@ jobs:
             APP_NAME="qa-react-webpack-rails-tutorial-pr-$pr"
             CPLN_ORG=${{ vars.CPLN_ORG_STAGING }}
             echo "🗑️ Deleting stale review app for PR #$pr: $APP_NAME"
-            ${{ github.workspace }}/.github/actions/delete-control-plane-app/delete-app.sh
+            APP_NAME=$APP_NAME CPLN_ORG=$CPLN_ORG ${{ github.workspace }}/.github/actions/delete-control-plane-app/delete-app.sh
           done
