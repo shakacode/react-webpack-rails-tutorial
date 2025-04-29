@@ -22,7 +22,7 @@ env:
   PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
 
 jobs:

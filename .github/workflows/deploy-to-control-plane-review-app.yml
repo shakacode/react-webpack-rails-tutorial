@@ -21,7 +21,7 @@ concurrency:
 
 env:
   PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
-  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
