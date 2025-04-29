@@ -28,7 +28,7 @@ fi
 
 # Delete the application
 echo "🗑️ Deleting application: $APP_NAME"
-if ! cpflow delete -a "$APP_NAME" --org "$CPLN_ORG"; then
+if ! cpflow delete -a "$APP_NAME" --org "$CPLN_ORG" --yes; then
     echo "❌ Failed to delete application: $APP_NAME" >&2
     exit 1
 fi
