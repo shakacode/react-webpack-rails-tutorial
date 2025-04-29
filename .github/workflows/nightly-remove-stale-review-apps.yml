@@ -21,4 +21,4 @@ jobs:
           org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Delete Stale Review Apps
-        run: cpflow cleanup-stale-apps --yes
+        run: cpflow cleanup-stale-apps -a "qa-react-webpack-rails-tutorial" --yes
