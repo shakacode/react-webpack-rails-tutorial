@@ -7,9 +7,11 @@
 
 set -e
 
+printenv
+
 # Validate required environment variables
-: "${APP_NAME:?APP_NAME environment variable is required}"
-: "${CPLN_ORG:?CPLN_ORG environment variable is required}"
+: "${$APP_NAME:?APP_NAME environment variable is required}"
+: "${$CPLN_ORG:?CPLN_ORG environment variable is required}"
 
 # Safety check: prevent deletion of production or staging apps
 if echo "$APP_NAME" | grep -iqE '(production|staging)'; then

@@ -131,13 +131,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '🗑️ Starting app deletion...'
-              body: [
-                message,
-                '',
-                ' 🗑️ [View Delete Logs](' + process.env.WORKFLOW_URL + ')',
-                '',
-                getConsoleLink(process.env.PR_NUMBER)
-              ].join('\n')
             });
             return { commentId: comment.data.id };
 
@@ -148,7 +141,6 @@ jobs:
           cpln_org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Update Delete Status
-        if: always()
         uses: actions/github-script@v7
         with:
           script: |
