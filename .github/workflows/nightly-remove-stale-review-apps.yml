@@ -20,40 +20,5 @@ jobs:
           token: ${{ secrets.CPLN_TOKEN_STAGING }}
           org: ${{ vars.CPLN_ORG_STAGING }}
 
-      - name: Get Stale PRs
-        id: stale_prs
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            const prs = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'closed',
-              sort: 'updated',
-              direction: 'desc'
-            });
-            
-            const stalePRs = prs.data
-              .filter(pr => new Date(pr.updated_at) < thirtyDaysAgo)
-              .map(pr => pr.number);
-            
-            console.log('Found stale PRs:', stalePRs);
-            return stalePRs;
-
       - name: Delete Stale Review Apps
-        if: ${{ steps.stale_prs.outputs.result != '[]' }}
-        run: |
-          for pr in $(echo "${{ steps.stale_prs.outputs.result }}" | jq -r '.[]'); do
-            APP_NAME="qa-react-webpack-rails-tutorial-pr-$pr"
-            echo "🗑️ Deleting stale review app for PR #$pr: $APP_NAME"
-            ${{ github.workspace }}/.github/actions/deploy-to-control-plane/scripts/delete-app.sh
-          done
-        env:
-          APP_NAME: qa-react-webpack-rails-tutorial-pr-${{ steps.stale_prs.outputs.result }}
-
-      - name: Run cleanup-images script
-        run: |
-          cpflow cleanup-images -a qa-react-webpack-rails-tutorial -y
+        run: cpflow cleanup-stale-apps -a "qa-react-webpack-rails-tutorial" --yes

@@ -22,7 +22,7 @@ env:
   PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number }}
 
 jobs:
@@ -58,7 +58,7 @@ jobs:
             missing+=("Variable: CPLN_ORG_STAGING")
           fi
 
-          if [ -z "$"PREFIX" }} ]; then
+          if [ -z "$PREFIX" ]; then
             missing+=("Variable: REVIEW_APP_PREFIX")
           fi
           
@@ -131,13 +131,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '🗑️ Starting app deletion...'
-              body: [
-                message,
-                '',
-                ' 🗑️ [View Delete Logs](' + process.env.WORKFLOW_URL + ')',
-                '',
-                getConsoleLink(process.env.PR_NUMBER)
-              ].join('\n')
             });
             return { commentId: comment.data.id };
 
@@ -145,15 +138,9 @@ jobs:
         uses: ./.github/actions/delete-control-plane-app
         with:
           app_name: ${{ env.APP_NAME }}
-          org: ${{ env.CPLN_ORG }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          APP_NAME: ${{ env.APP_NAME }}
-          CPLN_ORG: ${{ secrets.CPLN_ORG }}
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN }}
+          cpln_org: ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Update Delete Status
-        if: always()
         uses: actions/github-script@v7
         with:
           script: |

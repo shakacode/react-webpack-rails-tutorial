@@ -21,7 +21,7 @@ concurrency:
 
 env:
   PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
-  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-pr-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
   CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
   CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
@@ -181,9 +181,12 @@ jobs:
               echo "Skipping deployment for non-PR comment"
             fi
           fi
+          if [[ "${{ env.DO_DEPLOY }}" == "false" ]]; then
+            exit 0
+          fi
 
       - name: Setup Control Plane App if Not Existing
-        if: env.DO_DEPLOY == 'true' && env.APP_EXISTS == 'false'
+        if: env.APP_EXISTS == 'false'
         env:
           CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         run: |
@@ -191,7 +194,6 @@ jobs:
           cpflow setup-app -a ${{ env.APP_NAME }} --org ${{ vars.CPLN_ORG_STAGING }}
 
       - name: Create Initial Comment
-        if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
         id: create-comment
         with:
@@ -200,13 +202,12 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: process.env.PR_NUMBER,
-              body: '🚀 Starting deployment process...\n\n' + process.env.CONSOLE_LINK
+              body: '🚀 Starting deployment process...\n\n'
             });
             core.setOutput('comment-id', result.data.id);
 
       - name: Set Deployment URLs
         id: set-urls
-        if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
         with:
           script: |
@@ -237,7 +238,6 @@ jobs:
             );
 
       - name: Initialize GitHub Deployment
-        if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
         id: init-deployment
         with:
@@ -316,7 +316,6 @@ jobs:
             });
 
       - name: Deploy to Control Plane
-        if: env.DO_DEPLOY != 'false'
         run: cpflow deploy-image -a ${{ env.APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_STAGING }} --verbose
 
       - name: Retrieve App URL
@@ -324,7 +323,6 @@ jobs:
         run: echo "WORKLOAD_URL=$(cpln workload get rails --gvc ${{ env.APP_NAME }} | tee | grep -oP 'https://[^[:space:]]*\.cpln\.app(?=\s|$)' | head -n1)"  >> "$GITHUB_OUTPUT"
 
       - name: Update Status - Deployment Complete
-        if: env.DO_DEPLOY != 'false'
         uses: actions/github-script@v7
         with:
           script: |
