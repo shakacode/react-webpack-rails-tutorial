@@ -27,7 +27,7 @@ jobs:
             const sections = {
               commands: {
                 deploy: {
-                  title: '## `/deploy`',
+                  title: '## `/deploy-review-app`',
                   purpose: '**Purpose:** Deploy a review app for your pull request',
                   details: [
                     '**What it does:**',
@@ -43,7 +43,7 @@ jobs:
                   ]
                 },
                 destroy: {
-                  title: '## `/destroy`',
+                  title: '## `/delete-review-app`',
                   purpose: '**Purpose:** Remove the review app for your pull request',
                   details: [
                     '**What it does:**',
@@ -94,9 +94,9 @@ jobs:
               cleanup: {
                 title: '## Automatic Cleanup',
                 details: [
-                  'Review apps are automatically destroyed when:',
+                  'Review apps are automatically deleted when:',
                   '1. The pull request is closed',
-                  '2. The `/destroy` command is used',
+                  '2. The `/delete-review-app` command is used',
                   '3. A new deployment is requested (old one is cleaned up first)'
                 ]
               },
