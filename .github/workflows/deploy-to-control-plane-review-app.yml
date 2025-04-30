@@ -27,11 +27,6 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
 
 jobs:
-  debug:
-    uses: ./.github/workflows/debug-workflow.yml
-    with:
-      debug_enabled: false
-
   deploy:
     if: |
       (github.event_name == 'pull_request') ||
@@ -371,3 +366,40 @@ jobs:
               comment_id: ${{ steps.create-comment.outputs.comment-id }},
               body: isSuccess ? successMessage : failureMessage
             });
+        
+      - name: Show Quick Reference
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              console.log('Creating quick reference message...');
+              const helpMessage = [
+                '# 🚀 Quick Review App Commands',
+                '',
+                'Welcome! Here are the commands you can use in this PR:',
+                '',
+                '### `/deploy-review-app`',
+                'Deploy your PR branch for testing',
+                '',
+                '### `/delete-review-app`',
+                'Remove the review app when done',
+                '',
+                '### `/help`',
+                'Show detailed instructions, environment setup, and configuration options.',
+                '',
+                '---'
+              ].join('\n');
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: helpMessage
+              });
+              
+              console.log('Quick reference posted successfully');
+            } catch (error) {
+              console.error('Error posting quick reference:', error);
+              core.setFailed(`Failed to post quick reference: ${error.message}`);
+            }
