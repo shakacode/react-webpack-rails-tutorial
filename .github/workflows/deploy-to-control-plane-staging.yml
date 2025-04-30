@@ -22,10 +22,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  debug:
-    uses: ./.github/workflows/debug-workflow.yml
-    with:
-      debug_enabled: false
 
   validate-branch:
     runs-on: ubuntu-latest
