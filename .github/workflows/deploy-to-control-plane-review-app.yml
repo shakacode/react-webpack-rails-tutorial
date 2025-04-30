@@ -32,33 +32,6 @@ jobs:
        contains(github.event.comment.body, '/deploy-review-app'))
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Environment
-        uses: ./.github/actions/setup-environment
-        with:
-          token: ${{ secrets.CPLN_TOKEN_STAGING }}
-          org: ${{ vars.CPLN_ORG_STAGING }}
-
-      - name: Check if Review App Exists
-        id: check-app
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
-        run: |
-          # First check if cpflow exists
-          if ! command -v cpflow &> /dev/null; then
-            echo "Error: cpflow command not found"
-            exit 1
-          fi
-
-          # Check if app exists and save state
-          if ! cpflow exists -a ${{ env.APP_NAME }}; then
-            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              exit 0
-            fi
-            echo "APP_EXISTS=false" >> $GITHUB_ENV
-          else
-            echo "APP_EXISTS=true" >> $GITHUB_ENV
-          fi
-
       - name: Initial Checkout
         uses: actions/checkout@v4
 
@@ -119,6 +92,33 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ env.PR_SHA }}
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+
+      - name: Check if Review App Exists
+        id: check-app
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+        run: |
+          # First check if cpflow exists
+          if ! command -v cpflow &> /dev/null; then
+            echo "Error: cpflow command not found"
+            exit 1
+          fi
+
+          # Check if app exists and save state
+          if ! cpflow exists -a ${{ env.APP_NAME }}; then
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              exit 0
+            fi
+            echo "APP_EXISTS=false" >> $GITHUB_ENV
+          else
+            echo "APP_EXISTS=true" >> $GITHUB_ENV
+          fi
 
       - name: Validate Deployment Request
         id: validate
