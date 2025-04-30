@@ -21,6 +21,8 @@ concurrency:
   group: deploy-staging
   cancel-in-progress: true
 
+jobs:
+
   validate-branch:
     runs-on: ubuntu-latest
     outputs:
