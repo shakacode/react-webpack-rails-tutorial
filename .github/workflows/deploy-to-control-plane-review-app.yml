@@ -5,7 +5,7 @@ run-name: Deploy PR Review App - PR #${{ github.event.pull_request.number || git
 # Controls when the workflow will run
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [synchronize, reopened]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -26,7 +26,6 @@ jobs:
   deploy:
     if: |
       (github.event_name == 'pull_request') ||
-      (github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch') ||
       (github.event_name == 'issue_comment' && 
        github.event.issue.pull_request && 
@@ -41,34 +40,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # For push events, try to find associated PR first
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            PR_DATA=$(gh pr list --head "${{ github.ref_name }}" --json number,headRefName,headRefOid --jq '.[0]')
-            if [[ -n "$PR_DATA" ]]; then
-              PR_NUMBER=$(echo "$PR_DATA" | jq -r .number)
-            else
-              echo "No PR found for branch ${{ github.ref_name }}, skipping deployment"
-              echo "DO_DEPLOY=false" >> $GITHUB_ENV
-              exit 0
-            fi
-          else
-            # Get PR number based on event type
-            case "${{ github.event_name }}" in
-              "workflow_dispatch")
-                PR_NUMBER="${{ github.event.inputs.pr_number }}"
-                ;;
-              "issue_comment")
-                PR_NUMBER="${{ github.event.issue.number }}"
-                ;;
-              "pull_request")
-                PR_NUMBER="${{ github.event.pull_request.number }}"
-                ;;
-              *)
-                echo "Error: Unsupported event type ${{ github.event_name }}"
-                exit 1
-                ;;
-            esac
-          fi
+          # Get PR number based on event type
+          case "${{ github.event_name }}" in
+            "workflow_dispatch")
+              PR_NUMBER="${{ github.event.inputs.pr_number }}"
+              ;;
+            "issue_comment")
+              PR_NUMBER="${{ github.event.issue.number }}"
+              ;;
+            "pull_request")
+              PR_NUMBER="${{ github.event.pull_request.number }}"
+              ;;
+            *)
+              echo "Error: Unsupported event type ${{ github.event_name }}"
+              exit 1
+              ;;
+          esac
 
           if [[ -z "$PR_NUMBER" ]]; then
             echo "Error: Could not determine PR number"
@@ -125,6 +112,9 @@ jobs:
 
           # Check if app exists and save state
           if ! cpflow exists -a ${{ env.APP_NAME }}; then
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              exit 0
+            fi
             echo "APP_EXISTS=false" >> $GITHUB_ENV
           else
             echo "APP_EXISTS=true" >> $GITHUB_ENV
