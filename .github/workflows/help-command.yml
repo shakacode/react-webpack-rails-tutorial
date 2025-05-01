@@ -66,8 +66,8 @@ jobs:
                   {
                     title: '**Required GitHub Actions Variables:**',
                     items: [
-                      '- `CPLN_ORG_STAGING`: Control Plane authentication token',
-                      '- `CPLN_ORG_PRODUCTION`: Control Plane authentication token'
+                      '- `CPLN_ORG_STAGING`: Control Plane Staging Org Name',
+                      '- `CPLN_ORG_PRODUCTION`: Control Plane Production Org Name'
                     ]
                   },
                   {
