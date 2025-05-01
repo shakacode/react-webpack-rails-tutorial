@@ -36,11 +36,12 @@ jobs:
         run: |
           # Get the current date in YYYY-MM-DD format
           RELEASE_DATE=$(date '+%Y-%m-%d')
+          TIMESTAMP=$(date '+%H%M')
           
           # Create a release tag
-          RELEASE_TAG="production-${RELEASE_DATE}"
+          RELEASE_TAG="production-${RELEASE_DATE}-${TIMESTAMP}"
           
           # Create GitHub release
           gh release create "${RELEASE_TAG}" \
-            --title "Production Release ${RELEASE_DATE}" \
-            --notes "🚀 Production deployment on ${RELEASE_DATE}"
+            --title "Production Release ${RELEASE_DATE} ${TIMESTAMP}" \
+            --notes "🚀 Production deployment on ${RELEASE_DATE} at ${TIMESTAMP}"
