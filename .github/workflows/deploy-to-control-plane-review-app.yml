@@ -111,10 +111,13 @@ jobs:
           fi
 
           # Check if app exists and save state
+          echo (cpflow exists -a ${{ env.APP_NAME }})
           if cpflow exists -a ${{ env.APP_NAME }}; then
+            echo "review app does not exist!"
             if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "Canceling job as review app has not been previously deployed."; sleep inf
             fi
+            echo "APP_EXISTS=false"
             echo "APP_EXISTS=false" >> $GITHUB_ENV
           fi
 
