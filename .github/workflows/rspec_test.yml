@@ -73,6 +73,9 @@ jobs:
       - name: Build i18n libraries
         run: bundle exec rake react_on_rails:locale
 
+      - name: Generate React on Rails packs
+        run: bundle exec rails react_on_rails:generate_packs
+
       - name: Build Rescript components
         run: yarn res:build
 
