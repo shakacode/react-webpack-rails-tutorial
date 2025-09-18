@@ -5,9 +5,6 @@ import { Turbo } from '@hotwired/turbo-rails';
 // eslint-disable-next-line no-unused-vars
 import controllers from '../controllers';
 
-import NavigationBarApp from '../bundles/comments/startup/NavigationBarApp';
-import Footer from '../bundles/comments/components/Footer/Footer';
-
 import '../assets/styles/application';
 
 Turbo.session.drive = false;
@@ -18,7 +15,5 @@ ReactOnRails.setOptions({
   traceTurbolinks: true,
 });
 
-ReactOnRails.register({
-  NavigationBarApp,
-  Footer,
-});
+// Components are now auto-registered via ror_components directories
+// No need for manual registration
