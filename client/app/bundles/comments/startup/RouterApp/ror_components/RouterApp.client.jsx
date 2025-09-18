@@ -1,9 +1,9 @@
-// Compare to ../ServerRouterApp.jsx
+// Compare to ./RouterApp.server.jsx
 import { Provider } from 'react-redux';
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
 import { BrowserRouter } from 'react-router-dom';
-import routes from '../routes/routes.jsx';
+import routes from '../../../routes/routes.jsx';
 
 function ClientRouterApp(_props) {
   const store = ReactOnRails.getStore('routerCommentsStore');

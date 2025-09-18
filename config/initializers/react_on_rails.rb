@@ -2,8 +2,9 @@
 
 # Shown below are the defaults for configuration
 ReactOnRails.configure do |config|
-  # Define the files for we need to check for webpack compilation when running tests
-  config.webpack_generated_files = %w[client-bundle.js server-bundle.js]
+  # Auto-registration configuration for v16
+  config.components_subdirectory = "ror_components"
+  config.auto_load_bundle = true
 
   config.build_test_command = "RAILS_ENV=test bin/shakapacker"
   config.build_production_command = "RAILS_ENV=production NODE_ENV=production bin/shakapacker"

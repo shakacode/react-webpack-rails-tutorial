@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
 
-import NavigationBar from '../components/NavigationBar/NavigationBar.jsx';
-import NavigationBarContainer from '../containers/NavigationBarContainer.jsx';
-import * as paths from '../constants/paths';
+import NavigationBar from '../../../components/NavigationBar/NavigationBar.jsx';
+import NavigationBarContainer from '../../../containers/NavigationBarContainer.jsx';
+import * as paths from '../../../constants/paths';
 
 /*
  *  Export a function that returns a ReactComponent, depending on a store named SharedReduxStore.
