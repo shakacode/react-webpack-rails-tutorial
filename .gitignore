@@ -57,5 +57,5 @@ client/app/bundles/comments/rescript/**/*.bs.js
 # Using React on Rails default directory
 /ssr-generated/
 
-# Generated files
-/client/app/generated/
+# Generated React on Rails packs
+**/generated/**
