@@ -143,8 +143,10 @@ See package.json and Gemfile for versions
 ### Basic Command Line
 - Run all linters and tests: `rake`
 - See all npm commands: `yarn run`
-- To start all development processes: `foreman start -f Procfile.dev`
-- To start only all Rails development processes: `foreman start -f Procfile.hot`
+- To start development with HMR: `./bin/dev` (or `./bin/dev hmr`)
+- To start with static assets: `./bin/dev static`
+- To start with production-like assets: `./bin/dev prod`
+- For help with options: `./bin/dev help`
 
 ## Rails Integration
 **We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modules within Rails!**
@@ -162,7 +164,7 @@ See package.json and Gemfile for versions
 
 + Be sure to see [Integration Test Notes](./docs/integration-test-notes.md) for advice on running your integration tests.
 
-+ **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
++ **Testing Mode**: When running tests, it is useful to run `./bin/dev static` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
 ## Webpack
@@ -203,12 +205,31 @@ export default class CommentBox extends React.Component {
 The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server.
 
 ## Process management during development
+
+**Recommended approach** using the enhanced `bin/dev` script:
+
+```bash
+./bin/dev              # HMR development (default)
+./bin/dev static       # Static assets development
+./bin/dev prod         # Production-like assets
+./bin/dev help         # See all options
+```
+
+**Advanced options:**
+```bash
+./bin/dev --route=comments         # Custom route in URLs
+./bin/dev prod --rails-env=production  # Full production environment
+```
+
+**Alternative approach** using foreman directly:
 ```
 bundle exec foreman start -f <Procfile>
 ```
 
-1. [`Procfile.dev`](Procfile.dev): Starts the Webpack Dev Server and Rails with Hot Reloading.
-1. [`Procfile.static`](Procfile.dev-static): Starts the Rails server and generates static assets that are used for tests.
+Available Procfiles:
+1. [`Procfile.dev`](Procfile.dev): Webpack Dev Server and Rails with Hot Reloading
+1. [`Procfile.dev-static-assets`](Procfile.dev-static-assets): Rails server with static asset generation
+1. [`Procfile.dev-prod-assets`](Procfile.dev-prod-assets): Rails server with production-optimized assets
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
