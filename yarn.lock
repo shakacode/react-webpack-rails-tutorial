@@ -1006,14 +1006,6 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime-corejs3@^7.12.5":
-  version "7.22.10"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.22.10.tgz#5ecc3d32faa70009f084cc2e087d79e5f5cdcca9"
-  integrity sha512-IcixfV2Jl3UrqZX4c81+7lVg5++2ufYJyAFW3Aux/ZTvY6LVYYhJ9rMgnbX0zGVq6eqfVpnoatTjZdVki/GmWA==
-  dependencies:
-    core-js-pure "^3.30.2"
-    regenerator-runtime "^0.14.0"
-
 "@babel/runtime@^7.12.1":
   version "7.26.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.0.tgz#8600c2f595f277c60815256418b85356a65173c1"
@@ -3263,7 +3255,7 @@ core-js-compat@^3.31.0:
   dependencies:
     browserslist "^4.21.9"
 
-core-js-pure@^3.23.3, core-js-pure@^3.30.2:
+core-js-pure@^3.23.3:
   version "3.32.0"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.32.0.tgz#5d79f85da7a4373e9a06494ccbef995a4c639f8b"
   integrity sha512-qsev1H+dTNYpDUEURRuOXMvpdtAnNEvQWS/FMJ2Vb5AY8ZP4rAPQldkE27joykZPJTe0+IVgHZYh1P5Xu1/i1g==
@@ -7276,12 +7268,10 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-on-rails@14.0.3:
-  version "14.0.3"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-14.0.3.tgz#5a870644c0fbfd0a4f4adcc62623573a40de8ad8"
-  integrity sha512-BGvnvSI871K63JXg72KgMy73izKYralp9rrf40VSiR+OvusnXJkwVa4gaUP21226R835gzU7VSbbf64L7H9GhQ==
-  dependencies:
-    "@babel/runtime-corejs3" "^7.12.5"
+react-on-rails@16.0.1-rc.0:
+  version "16.0.1-rc.0"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.0.1-rc.0.tgz#dc99c843430585b3017113a464035179488bb154"
+  integrity sha512-xCrrp1X/vfT+QZjRwN9TDzWfxsf8Iz11QMqXumMs1TrT+KgJ33LLgUXYvYxAdnYgv41MbRvDCXG4Q/2ieakxoA==
 
 react-proxy@^1.1.7:
   version "1.1.8"
