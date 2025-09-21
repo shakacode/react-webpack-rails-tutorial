@@ -1346,7 +1346,7 @@
   resolved "https://registry.npmjs.org/@glennsl/rescript-fetch/-/rescript-fetch-0.2.3.tgz#99ab3c2a9c87fcc301d71e906f8cd476a2a17321"
   integrity sha512-0MuaXeJHGii0/SKzR4ASB1Wal+ogdnNsD1K6HSTFUVc+TQzAZY+V8Nb7Z8K4OUqMJzmurIgVXNmirx3DC1Huyg==
 
-"@glennsl/rescript-json-combinators@^1.2.1":
+"@glennsl/rescript-json-combinators@^1.4.0":
   version "1.4.0"
   resolved "https://registry.npmjs.org/@glennsl/rescript-json-combinators/-/rescript-json-combinators-1.4.0.tgz#3d4be72870a99be737e2121fb86d30ccc9d4ca45"
   integrity sha512-tIhAJoAqyfF3Mbd66Koipl6WZxLKJTJFHTx99jDG5+YAv/Hr6XrXYryCXs1Qi8BWUwx5WQcgKay3lUzElUYC7Q==
@@ -7673,10 +7673,10 @@ react-is@^18.0.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails@16.0.1-rc.2:
-  version "16.0.1-rc.2"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.0.1-rc.2.tgz#efa95be66173f7653d954271005a38814cbb6065"
-  integrity sha512-A4aiSqoFpebpFlW5aFf0+vm+icFazO6PHmyvs9PdEfvgSwvFfakvYZ132hrNsZmHdHB+nl8C+xg0gFxG7lMmfA==
+react-on-rails@14.2.1:
+  version "14.2.1"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-14.2.1.tgz#e3072f21bb76a45de789fc78046d2bf0d9496878"
+  integrity sha512-1a7RCDzhM2/oAZChnJMcYDV023Gl6nwa5SAS+NW13jIpkigihiRw2ecYAFSjQq2BfCnASDw2z1ElmfTXhrYagw==
 
 react-proxy@^1.1.7:
   version "1.1.8"
