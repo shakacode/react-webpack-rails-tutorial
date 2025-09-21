@@ -7268,10 +7268,10 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-on-rails@14.2.1:
-  version "14.2.1"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-14.2.1.tgz#e3072f21bb76a45de789fc78046d2bf0d9496878"
-  integrity sha512-1a7RCDzhM2/oAZChnJMcYDV023Gl6nwa5SAS+NW13jIpkigihiRw2ecYAFSjQq2BfCnASDw2z1ElmfTXhrYagw==
+react-on-rails@16.0.1-rc.2:
+  version "16.0.1-rc.2"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.0.1-rc.2.tgz#efa95be66173f7653d954271005a38814cbb6065"
+  integrity sha512-A4aiSqoFpebpFlW5aFf0+vm+icFazO6PHmyvs9PdEfvgSwvFfakvYZ132hrNsZmHdHB+nl8C+xg0gFxG7lMmfA==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -7499,10 +7499,10 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
 
-rescript-react-on-rails@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/rescript-react-on-rails/-/rescript-react-on-rails-1.0.1.tgz#541dffdae64ec5053a50a3792b9db8783c959d1b"
-  integrity sha512-sbkDNCoiEWM9rqIiu+4joAj6W92yhM64KtLZQYfvYYm578jMcG02d98xpDeBT7MxZoPZZggFIed0m6Dj8bbDYA==
+rescript-react-on-rails@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/rescript-react-on-rails/-/rescript-react-on-rails-1.1.0.tgz#391eaaab3fa70cbee501a30e99dcb806ce5d16ed"
+  integrity sha512-ujYfNlf8nm2wivoFWXanuluLT3K22oCgmB6oAUHtCNZ0ObXutZBtSmptkrWpMkGQViZ9Y+VsLBcYkgdwFccXrg==
 
 rescript@^11.1.4:
   version "11.1.4"

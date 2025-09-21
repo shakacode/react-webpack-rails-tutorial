@@ -14,6 +14,16 @@ ReactOnRails.configure do |config|
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
 
+  # React on Rails 16 compatibility: Workaround for removed error handling
+  #
+  # BREAKING CHANGE in v16: React on Rails 14.2.1 had robust error handling that would
+  # fallback to the Shakapacker output path when bundle lookup failed. This was removed
+  # in v16.0.1.rc.2, causing it to look in the wrong directory during tests.
+  #
+  # This configuration tells React on Rails where to find bundles in test environment.
+  # Without this, it defaults to public/webpack/test/ instead of public/packs/
+  config.generated_assets_dir = Rails.public_path.join("packs").to_s if Rails.env.test?
+
   ################################################################################
   # CLIENT RENDERING OPTIONS
   # Below options can be overriden by passing options to the react_on_rails
