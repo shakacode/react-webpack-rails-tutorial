@@ -1,30 +1,19 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-def installed?(process)
-  IO.popen "#{process} -v"
-rescue Errno::ENOENT
-  false
+# ReactOnRails Development Server - Static Assets Mode
+#
+# This runs development with static assets instead of HMR.
+# Useful when you want faster startup or HMR is causing issues.
+
+begin
+  require "bundler/setup"
+  require "react_on_rails/dev"
+rescue LoadError
+  # Fallback for when gem is not yet installed
+  puts "Loading ReactOnRails development tools..."
+  require_relative "../../lib/react_on_rails/dev"
 end
 
-def run(process)
-  system "#{process} start -f Procfile.dev-static"
-rescue Errno::ENOENT
-  warn <<~MSG
-    ERROR:
-    Please ensure `Procfile.dev-static` exists in your project!
-  MSG
-  exit!
-end
-
-if installed? "overmind"
-  run "overmind"
-elsif installed? "foreman"
-  run "foreman"
-else
-  warn <<~MSG
-    NOTICE:
-    For this script to run, you need either 'overmind' or 'foreman' installed on your machine. Please try this script after installing one of them.
-  MSG
-  exit!
-end
+# Force static mode by passing 'static' argument
+ReactOnRails::Dev::ServerManager.run_from_command_line(['static'])
