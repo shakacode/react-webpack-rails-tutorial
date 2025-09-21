@@ -41,7 +41,7 @@ class PagesController < ApplicationController
   private
 
   def set_comments
-    @comments = Comment.all.order("id DESC")
+    @comments = Comment.order("id DESC")
   end
 
   def comments_json_string

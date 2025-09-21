@@ -22,9 +22,7 @@ ReactOnRails.configure do |config|
   #
   # This configuration tells React on Rails where to find bundles in test environment.
   # Without this, it defaults to public/webpack/test/ instead of public/packs/
-  if Rails.env.test?
-    config.generated_assets_dir = File.join(Rails.root, "public", "packs")
-  end
+  config.generated_assets_dir = Rails.public_path.join("packs").to_s if Rails.env.test?
 
   ################################################################################
   # CLIENT RENDERING OPTIONS

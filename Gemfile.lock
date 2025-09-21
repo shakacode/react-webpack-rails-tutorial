@@ -512,9 +512,9 @@ DEPENDENCIES
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
   rubocop (= 1.69)
-  rubocop-performance (~> 1.13)
-  rubocop-rails
-  rubocop-rspec (~> 3.3)
+  rubocop-performance (= 1.23.1)
+  rubocop-rails (= 2.29.1)
+  rubocop-rspec (= 3.4.0)
   sass-rails
   scss_lint
   sdoc
