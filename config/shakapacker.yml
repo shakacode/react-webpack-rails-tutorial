@@ -51,6 +51,7 @@ development:
 test:
   <<: *default
   compile: true
+  public_output_path: packs
 
 production:
   <<: *default
