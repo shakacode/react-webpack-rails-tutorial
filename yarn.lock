@@ -7910,9 +7910,9 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@^8.2.0:
+shakapacker@8.2.0:
   version "8.2.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-8.2.0.tgz"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-8.2.0.tgz#c7bed87b8be2ae565cfe616f68552be545c77e14"
   integrity sha512-Ct7BFqJVnKbxdqCzG+ja7Q6LPt/PlB7sSVBfG5jsAvmVCADM05cuoNwEgYNjFGKbDzHAxUqy5XgoI9Y030+JKQ==
   dependencies:
     js-yaml "^4.1.0"
