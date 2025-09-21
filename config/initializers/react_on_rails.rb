@@ -14,8 +14,14 @@ ReactOnRails.configure do |config|
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
 
-  # React on Rails 16 compatibility: Override generated_assets_dir for test environment
-  # This ensures React on Rails looks in the correct Shakapacker output directory
+  # React on Rails 16 compatibility: Workaround for removed error handling
+  #
+  # BREAKING CHANGE in v16: React on Rails 14.2.1 had robust error handling that would
+  # fallback to the Shakapacker output path when bundle lookup failed. This was removed
+  # in v16.0.1.rc.2, causing it to look in the wrong directory during tests.
+  #
+  # This configuration tells React on Rails where to find bundles in test environment.
+  # Without this, it defaults to public/webpack/test/ instead of public/packs/
   if Rails.env.test?
     config.generated_assets_dir = File.join(Rails.root, "public", "packs")
   end
