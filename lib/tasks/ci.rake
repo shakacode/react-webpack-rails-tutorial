@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
   # See tasks/linters.rake
 
   task js_tests: :environment do
