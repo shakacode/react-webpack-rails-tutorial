@@ -7,3 +7,6 @@ spec/support/
 client/app/libs/i18n/translations.js
 client/app/libs/i18n/default.js
 vendor/bundle
+
+# ReScript generated files should not be formatted
+**/*.bs.js

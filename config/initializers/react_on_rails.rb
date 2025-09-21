@@ -14,6 +14,12 @@ ReactOnRails.configure do |config|
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
 
+  # React on Rails 16 compatibility: Override generated_assets_dir for test environment
+  # This ensures React on Rails looks in the correct Shakapacker output directory
+  if Rails.env.test?
+    config.generated_assets_dir = File.join(Rails.root, "public", "packs")
+  end
+
   ################################################################################
   # CLIENT RENDERING OPTIONS
   # Below options can be overriden by passing options to the react_on_rails
