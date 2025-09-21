@@ -41,7 +41,7 @@ describe "with Turbo and Stimulus" do
     end
 
     it "adds a new comment to the page and database" do
-      initital_comment_count = Comment.all.count
+      initital_comment_count = Comment.count
       new_comment_count = initital_comment_count + 1
       fill_in author_field, with: comment.author
       fill_in text_field, with: comment.text
@@ -49,33 +49,33 @@ describe "with Turbo and Stimulus" do
 
       expect(page).to have_css("h2", text: comment.author)
       expect(page).to have_css("p", text: comment.text)
-      expect(Comment.all.count).to equal(new_comment_count)
+      expect(Comment.count).to equal(new_comment_count)
     end
 
     it "comment count remains the same when author field is empty" do
-      initial_comment_count = Comment.all.count
+      initial_comment_count = Comment.count
       fill_in text_field, with: comment.text
       click_button("Post")
 
       expect(page).to have_text("Author: can't be blank")
-      expect(Comment.all.count).to equal(initial_comment_count)
+      expect(Comment.count).to equal(initial_comment_count)
     end
 
     it "comment count remains the same when text field is empty" do
-      initial_comment_count = Comment.all.count
+      initial_comment_count = Comment.count
       fill_in author_field, with: comment.author
       click_button("Post")
 
       expect(page).to have_text("Text: can't be blank")
-      expect(Comment.all.count).to equal(initial_comment_count)
+      expect(Comment.count).to equal(initial_comment_count)
     end
 
     it "comment count remains the same when both form fields are empty" do
-      initial_comment_count = Comment.all.count
+      initial_comment_count = Comment.count
       click_button("Post")
 
       expect(page).to have_text("Author: can't be blank")
-      expect(Comment.all.count).to equal(initial_comment_count)
+      expect(Comment.count).to equal(initial_comment_count)
     end
   end
 end

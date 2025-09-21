@@ -102,7 +102,7 @@ class CommentsController < ApplicationController
   private
 
   def set_comments
-    @comments = Comment.all.order("id DESC")
+    @comments = Comment.order("id DESC")
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -116,6 +116,6 @@ class CommentsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def comment_params
-    params.require(:comment).permit(:author, :text)
+    params.expect(comment: %i[author text])
   end
 end
