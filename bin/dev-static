@@ -16,4 +16,4 @@ rescue LoadError
 end
 
 # Force static mode by passing 'static' argument
-ReactOnRails::Dev::ServerManager.run_from_command_line(['static'])
+ReactOnRails::Dev::ServerManager.run_from_command_line(["static"])
