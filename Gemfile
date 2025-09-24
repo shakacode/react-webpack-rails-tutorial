@@ -5,8 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.3.4"
 
-gem "react_on_rails", "14.2.1"
-gem "shakapacker", "8.0.0"
+gem "react_on_rails", "16.0.1.rc.4"
+gem "shakapacker", "8.2.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
