@@ -298,7 +298,7 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
-    react_on_rails (16.0.1.rc.2)
+    react_on_rails (16.0.1.rc.4)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -485,7 +485,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 16.0.1.rc.2)
+  react_on_rails (= 16.0.1.rc.4)
   redcarpet
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
