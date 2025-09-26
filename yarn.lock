@@ -7268,10 +7268,10 @@ react-is@^18.0.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-on-rails@16.0.1-rc.4:
-  version "16.0.1-rc.4"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.0.1-rc.4.tgz#c4ed21579dbf8d4602f1fbff26b1ada581f2188c"
-  integrity sha512-V6unOWd/PvcbEcgtsjf/i10wf2BgZ0NBJ9Dq5jWXm9OtlzRGvIqMXsK05YkyJ1auPlaExxxJezNPC+BQKLRhEg==
+react-on-rails@16.1.1:
+  version "16.1.1"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.1.1.tgz#bf5e752c44381252204482342ae5722d9f45f715"
+  integrity sha512-Ntw/4HSB/p9QJ1V2kc0aETzK0W0Vy0suSh0Ugs3Ctfso2ovIT2YUegJJyPtFzX9jUZSR6Q/tkmkgNgzASkO0pw==
 
 react-proxy@^1.1.7:
   version "1.1.8"
