@@ -12,7 +12,7 @@ ReactOnRails.configure do |config|
   # If you are never using server rendering, you may set this to "".
   # If you are using the same file for client and server rendering, having this set probably does
   # not affect performance.
-  config.server_bundle_js_file = "server-bundle.js"
+  config.server_bundle_js_file = "app/assets/builds/server-bundle.js"
 
   # React on Rails 16 compatibility: Workaround for removed error handling
   #

@@ -31,6 +31,7 @@ vendor/bundle
 # Generated js bundles
 /public/packs
 /public/packs-test
+/app/assets/builds
 
 # Rubymine/IntelliJ
 .idea

@@ -45,12 +45,13 @@ const configureServer = () => {
 
   // Custom output for the server-bundle that matches the config in
   // config/initializers/react_on_rails.rb
+  const path = require('path');
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
     // If using the React on Rails Pro node server renderer, uncomment the next line
     // libraryTarget: 'commonjs2',
-    path: config.outputPath,
+    path: path.resolve(__dirname, '../../app/assets/builds'),
     publicPath: config.publicPath,
     // https://webpack.js.org/configuration/output/#outputglobalobject
   };
