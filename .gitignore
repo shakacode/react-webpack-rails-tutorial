@@ -52,3 +52,8 @@ lib/bs
 /lib/ocaml
 
 client/app/bundles/comments/rescript/**/*.bs.js
+
+# Generated React on Rails packs
+**/generated/**
+
+.claude/
