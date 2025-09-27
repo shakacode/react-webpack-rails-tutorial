@@ -1,28 +1,22 @@
-// The source code including full typescript support is available at:
-// https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/development.js
-
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+// The source code including full typescript support is available at: 
+// https://github.com/shakacode/react_on_rails_demo_ssr_hmr/blob/master/config/webpack/development.js
 
 const { devServer, inliningCss } = require('shakapacker');
 
-const webpackConfig = require('./webpackConfig');
+const generateWebpackConfigs = require('./generateWebpackConfigs');
 
 const developmentEnvOnly = (clientWebpackConfig, _serverWebpackConfig) => {
-  // plugins
-  if (inliningCss) {
-    // Note, when this is run, we're building the server and client bundles in separate processes.
-    // Thus, this plugin is not applied to the server bundle.
-
+  // React Refresh (Fast Refresh) setup - only when webpack-dev-server is running (HMR mode)
+  // This matches the condition in generateWebpackConfigs.js and babel.config.js
+  if (process.env.WEBPACK_SERVE) {
     // eslint-disable-next-line global-require
     const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
     clientWebpackConfig.plugins.push(
       new ReactRefreshWebpackPlugin({
-        overlay: {
-          sockPort: devServer.port,
-        },
+        // Use default overlay configuration for better compatibility
       }),
     );
   }
 };
 
-module.exports = webpackConfig(developmentEnvOnly);
+module.exports = generateWebpackConfigs(developmentEnvOnly);

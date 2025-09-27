@@ -12,7 +12,7 @@ import { translations } from 'libs/i18n/translations';
 
 import CommentForm from '../CommentBox/CommentForm/CommentForm';
 import CommentList from '../CommentBox/CommentList/CommentList';
-import css from './SimpleCommentScreen.module.scss';
+import * as css from './SimpleCommentScreen.module.scss';
 
 class SimpleCommentScreen extends BaseComponent {
   constructor(props) {
