@@ -2,7 +2,7 @@
 # This file contains the defaults used by shakapacker.
 
 default: &default
-  source_path: app/javascript
+  source_path: client/app
 
   # You can have a subdirectory of the source_path, like 'packs' (recommended).
   # Alternatively, you can use '/' to use the whole source_path directory.

@@ -1,0 +1,36 @@
+// Translation messages for react-intl
+export const translations = {
+  en: {
+    'nav.toggle': 'Toggle navigation',
+    'nav.examples': 'Examples',
+    'nav.rails_ujs': 'Rails UJS Demo',
+    'nav.turbo_demo': 'Turbo Demo',
+    'nav.stimulus_demo': 'Stimulus Demo',
+    'nav.simple_react': 'Simple React',
+    'nav.rescript': 'Rescript',
+    'nav.server_rendering': 'Server Rendering',
+    'nav.react_router': 'React Router',
+    'nav.react_router_express': 'React Router Express',
+    'nav.code': 'Code',
+    'comment.form.name.placeholder': 'Name',
+    'comment.form.comment.placeholder': 'Comment',
+    'comment.form.submit': 'Post',
+    'comment.form.posting': 'Posting...',
+    'comment.form.posted': 'Posted!',
+    'comment.form.error_saving': 'Error Saving Comment',
+    'comment.form.characters_left': '{count, number} characters left',
+    'comment.form.characters_over_limit': '{count, number} characters over limit',
+    'comment.actions.add': 'Add Comment',
+    'comment.actions.delete': 'delete',
+    'comment.actions.edit': 'edit',
+    'comment.actions.save': 'save',
+    'comment.actions.cancel': 'cancel',
+    'comment.empty': 'No comments yet',
+    'comment.loading': 'Loading...',
+    'comment.error.fetch': 'Error fetching comments',
+    'comment.error.delete': 'Error deleting comment',
+    'comment.error.update': 'Error updating comment',
+  },
+};
+
+export default translations;
