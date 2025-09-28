@@ -1,3 +1,5 @@
+# Procfile for development with production assets 
+# Uses production-optimized, precompiled assets with development environment
 # You can run these commands in separate shells
 web: bin/rails s -p 3001
 redis: redis-server
