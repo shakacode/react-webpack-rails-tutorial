@@ -12,8 +12,11 @@ ReactOnRails.configure do |config|
   # If you are never using server rendering, you may set this to "".
   # If you are using the same file for client and server rendering, having this set probably does
   # not affect performance.
-  # Server bundle is now in a private directory (not in public/)
-  config.server_bundle_js_file = Rails.root.join("app", "assets", "builds", "server-bundle.js").to_s
+  config.server_bundle_js_file = "server-bundle.js"
+  
+  # Server bundle output path for private SSR bundles (React on Rails 16+)
+  # This keeps server bundles separate from public assets for security
+  config.server_bundle_output_path = "app/assets/builds"
 
   # React on Rails 16 compatibility: Workaround for removed error handling
   #
