@@ -46,13 +46,14 @@ const configureServer = () => {
   // Custom output for the server-bundle that matches the config in
   // config/initializers/react_on_rails.rb
   // Output to a private directory for SSR bundles (not in public/)
+  // Using the default React on Rails path: ssr-generated
   const path = require('path');
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
     // If using the React on Rails Pro node server renderer, uncomment the next line
     // libraryTarget: 'commonjs2',
-    path: path.resolve(__dirname, '../../app/assets/builds'),
+    path: path.resolve(__dirname, '../../ssr-generated'),
     publicPath: config.publicPath,
     // https://webpack.js.org/configuration/output/#outputglobalobject
   };

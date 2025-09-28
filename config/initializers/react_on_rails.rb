@@ -16,7 +16,8 @@ ReactOnRails.configure do |config|
   
   # Server bundle output path for private SSR bundles (React on Rails 16+)
   # This keeps server bundles separate from public assets for security
-  config.server_bundle_output_path = "app/assets/builds"
+  # Using the default from React on Rails docs
+  config.server_bundle_output_path = "ssr-generated"
 
   # React on Rails 16 compatibility: Workaround for removed error handling
   #
