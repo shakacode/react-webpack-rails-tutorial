@@ -1,6 +1,7 @@
 // The source code including full typescript support is available at:
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/serverWebpackConfig.js
 
+const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
@@ -47,7 +48,6 @@ const configureServer = () => {
   // config/initializers/react_on_rails.rb
   // Output to a private directory for SSR bundles (not in public/)
   // Using the default React on Rails path: ssr-generated
-  const path = require('path');
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
