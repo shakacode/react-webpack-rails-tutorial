@@ -60,3 +60,4 @@ baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig)
 const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
 module.exports = commonWebpackConfig;
+
