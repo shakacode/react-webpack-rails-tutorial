@@ -29,17 +29,23 @@ const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) 
 
 // Configure sass-loader to use the modern API
 const scssRule = baseClientWebpackConfig.module.rules[scssConfigIndex];
-const sassLoaderIndex = scssRule.use.findIndex((loader) => 
-  loader.loader === 'sass-loader' || (typeof loader === 'string' && loader.includes('sass-loader'))
-);
+const sassLoaderIndex = scssRule.use.findIndex((loader) => {
+  if (typeof loader === 'string') {
+    return loader.includes('sass-loader');
+  }
+  return loader.loader && loader.loader.includes('sass-loader');
+});
 
 if (sassLoaderIndex !== -1) {
   const sassLoader = scssRule.use[sassLoaderIndex];
   if (typeof sassLoader === 'string') {
     scssRule.use[sassLoaderIndex] = {
-      loader: 'sass-loader',
+      loader: sassLoader,
       options: {
-        api: 'modern'
+        api: 'modern',
+        sassOptions: {
+          includePaths: []
+        }
       }
     };
   } else {
