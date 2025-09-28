@@ -13,7 +13,7 @@ ReactOnRails.configure do |config|
   # If you are using the same file for client and server rendering, having this set probably does
   # not affect performance.
   config.server_bundle_js_file = "server-bundle.js"
-  
+
   # Server bundle output path for private SSR bundles (React on Rails 16+)
   # This keeps server bundles separate from public assets for security
   # Using the default from React on Rails docs
