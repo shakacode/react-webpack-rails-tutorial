@@ -9,11 +9,8 @@
 
   <%= append_stylesheet_pack_tag('stimulus-bundle') %>
   <%= append_javascript_pack_tag('stimulus-bundle') %>
-  
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
-  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 </head>
-<body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
+<body class="min-h-screen flex flex-col bg-sky-50 text-gray-700" data-turbo-suppress-warning="true">
   <%= react_component "NavigationBarApp" %>
 
   <div class="container mx-auto px-4 flex-grow">
@@ -21,5 +18,8 @@
   </div>
 
   <%= react_component "Footer" %>
+  
+  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
+  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 </body>
 </html>
