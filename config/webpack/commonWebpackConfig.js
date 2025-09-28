@@ -27,9 +27,37 @@ const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) 
   '.scss'.match(config.test),
 );
 
+// Configure sass-loader to use the modern API
+const scssRule = baseClientWebpackConfig.module.rules[scssConfigIndex];
+const sassLoaderIndex = scssRule.use.findIndex((loader) => {
+  if (typeof loader === 'string') {
+    return loader.includes('sass-loader');
+  }
+  return loader.loader && loader.loader.includes('sass-loader');
+});
+
+if (sassLoaderIndex !== -1) {
+  const sassLoader = scssRule.use[sassLoaderIndex];
+  if (typeof sassLoader === 'string') {
+    scssRule.use[sassLoaderIndex] = {
+      loader: sassLoader,
+      options: {
+        api: 'modern',
+        sassOptions: {
+          includePaths: []
+        }
+      }
+    };
+  } else {
+    sassLoader.options = sassLoader.options || {};
+    sassLoader.options.api = 'modern';
+  }
+}
+
 baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
 const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
 module.exports = commonWebpackConfig;
+

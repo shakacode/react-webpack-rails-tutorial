@@ -25,3 +25,4 @@ const configureClient = () => {
 };
 
 module.exports = configureClient;
+
