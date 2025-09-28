@@ -1,10 +1,19 @@
-// The source code including full typescript support is available at: 
-// https://github.com/shakacode/react_on_rails_demo_ssr_hmr/blob/master/config/webpack/clientWebpackConfig.js
+// The source code including full typescript support is available at:
+// https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/clientWebpackConfig.js
 
+const webpack = require('webpack');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
 const configureClient = () => {
   const clientConfig = commonWebpackConfig();
+
+  clientConfig.plugins.push(
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      ActionCable: '@rails/actioncable',
+    }),
+  );
 
   // server-bundle is special and should ONLY be built by the serverConfig
   // In case this entry is not deleted, a very strange "window" not found
