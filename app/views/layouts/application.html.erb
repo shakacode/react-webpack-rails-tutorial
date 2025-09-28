@@ -9,6 +9,9 @@
   <%= append_javascript_pack_tag('stimulus-bundle') %>
   <%= append_javascript_pack_tag('stores-registration') %>
 
+  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
+  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
+
   <%= csrf_meta_tags %>
 </head>
 <body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
@@ -19,9 +22,6 @@
   </div>
 
   <%= react_component "Footer" %>
-
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
-  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 
   <!-- This is a placeholder for ReactOnRails to know where to render the store props for
       client side hydration -->
