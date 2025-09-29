@@ -38,7 +38,7 @@ ReactOnRails.configure do |config|
 
   # Default is false. Can be overriden at the component level.
   # Set to false for debugging issues before turning on to true.
-  config.prerender = false
+  config.prerender = true
 
   # default is true for development, off otherwise
   config.trace = Rails.env.development?
