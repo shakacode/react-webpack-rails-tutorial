@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RailsReactTutorial</title>
 
-  <%= append_stylesheet_pack_tag('stimulus-bundle') %>
-  <%= append_javascript_pack_tag('stimulus-bundle') %>
+  <%= stylesheet_pack_tag('client-bundle',
+                                        media: 'all',
+                                        'data-turbolinks-track': true) %>
+
+  <%= javascript_pack_tag('stimulus-bundle',
+                                       'data-turbolinks-track': true,
+                                       defer: true) %>
 
   <%= csrf_meta_tags %>
 </head>
@@ -18,8 +23,6 @@
   </div>
 
   <%= react_component "Footer" %>
-
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
-  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 </body>
 </html>
+
