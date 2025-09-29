@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RailsReactTutorial</title>
 
-  <%= csrf_meta_tags %>
-
   <%= append_stylesheet_pack_tag('stimulus-bundle') %>
   <%= append_javascript_pack_tag('stimulus-bundle') %>
+
+  <%= csrf_meta_tags %>
 </head>
 <body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
   <%= react_component "NavigationBarApp" %>
