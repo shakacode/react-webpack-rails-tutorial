@@ -2905,9 +2905,9 @@ balanced-match@^1.0.0:
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
 baseline-browser-mapping@^2.8.3:
-  version "2.8.8"
-  resolved "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.8.tgz#ca0de7b23bf9c49d72e21dcbfba26f2bb223ea2e"
-  integrity sha512-be0PUaPsQX/gPWWgFsdD+GFzaoig5PXaUC1xLkQiYdDnANU8sMnHoQd8JhbJQuvTWrWLyeFN9Imb5Qtfvr4RrQ==
+  version "2.8.9"
+  resolved "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.9.tgz#fd0b8543c4f172595131e94965335536b3101b75"
+  integrity sha512-hY/u2lxLrbecMEWSB0IpGzGyDyeoMFQhCvZd2jGFSE5I17Fh01sYUBPCJtkWERw7zrac9+cIghxm/ytJa2X8iA==
 
 batch@0.6.1:
   version "0.6.1"
@@ -3888,9 +3888,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.5.218:
-  version "1.5.226"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.226.tgz#2f9f795829dc5c5d1c5387f4c2648ca180cc933d"
-  integrity sha512-0tS/r72Ze0WUBiDwnqw4X43TxA7gEuZg0kFwLthoCzkshIbNQFjkf6D8xEzBe6tY6Y65fUhZIuNedTugw+11Lw==
+  version "1.5.227"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.227.tgz#c81b6af045b0d6098faed261f0bd611dc282d3a7"
+  integrity sha512-ITxuoPfJu3lsNWUi2lBM2PaBPYgH3uqmxut5vmBxgYvyI4AlJ6P3Cai1O76mOrkJCBzq0IxWg/NtqOrpu/0gKA==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -8263,10 +8263,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@8.2.0:
-  version "8.2.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-8.2.0.tgz#c7bed87b8be2ae565cfe616f68552be545c77e14"
-  integrity sha512-Ct7BFqJVnKbxdqCzG+ja7Q6LPt/PlB7sSVBfG5jsAvmVCADM05cuoNwEgYNjFGKbDzHAxUqy5XgoI9Y030+JKQ==
+shakapacker@8.4.0:
+  version "8.4.0"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-8.4.0.tgz#be37a2adba5a090f581811b8c0c1a00f2e227580"
+  integrity sha512-ZfuxfHxy5tdjv7tCdRZHJKJQLDFwvFXOVBVUj150zgNuRKUlOAyXzOBp9/G5hUhu4MLzuPAif/fuKOdjnZeVtw==
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
