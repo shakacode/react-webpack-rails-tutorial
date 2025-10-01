@@ -54,6 +54,25 @@ if (sassLoaderIndex !== -1) {
   }
 }
 
+// Fix css-loader configuration for CSS modules
+// When namedExport is true, exportLocalsConvention must be camelCaseOnly or dashesOnly
+const cssLoaderIndex = scssRule.use.findIndex((loader) => {
+  if (typeof loader === 'string') {
+    return loader.includes('css-loader');
+  }
+  return loader.loader && loader.loader.includes('css-loader');
+});
+
+if (cssLoaderIndex !== -1) {
+  const cssLoader = scssRule.use[cssLoaderIndex];
+  if (typeof cssLoader === 'object' && cssLoader.options && cssLoader.options.modules) {
+    // If namedExport is enabled, ensure exportLocalsConvention is properly set
+    if (cssLoader.options.modules.namedExport) {
+      cssLoader.options.modules.exportLocalsConvention = 'camelCaseOnly';
+    }
+  }
+}
+
 baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
