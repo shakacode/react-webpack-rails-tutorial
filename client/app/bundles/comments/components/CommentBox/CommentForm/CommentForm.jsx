@@ -101,8 +101,7 @@ class CommentForm extends BaseComponent {
   }
 
   formHorizontal() {
-    const { intl } = this.props;
-    const { formatMessage } = intl;
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
@@ -157,8 +156,7 @@ class CommentForm extends BaseComponent {
   }
 
   formStacked() {
-    const { intl } = this.props;
-    const { formatMessage } = intl;
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
@@ -213,8 +211,7 @@ class CommentForm extends BaseComponent {
 
   // Head up! We have some CSS modules going on here with the className props below.
   formInline() {
-    const { intl } = this.props;
-    const { formatMessage } = intl;
+    const { formatMessage } = this.props.intl;
     return (
       <div>
         <hr />
@@ -317,8 +314,7 @@ class CommentForm extends BaseComponent {
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
     }
 
-    const { intl } = this.props;
-    const { formatMessage } = intl;
+    const { formatMessage } = this.props.intl;
 
     // For animation with TransitionGroup
     //   https://reactcommunity.org/react-transition-group/transition-group
