@@ -356,7 +356,6 @@ class CommentForm extends BaseComponent {
           >
             {formatMessage(defaultMessages.formInline)}
           </button>
-          {}
         </div>
         {inputForm}
       </div>

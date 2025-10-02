@@ -26,21 +26,22 @@ module DriverRegistration
   end
 
   def self.register_selenium_chrome_headless
-    return if @selenium_headless_registered
+    # Force re-register to ensure our configuration is used
+    Capybara.drivers.delete(:selenium_chrome_headless)
 
     Capybara.register_driver :selenium_chrome_headless do |app|
-      options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument("--headless=new")
-      options.add_argument("--disable-gpu")
-      options.add_argument("--no-sandbox")
-      options.add_argument("--disable-dev-shm-usage")
-      options.add_argument("--window-size=1920,1080")
+      browser_options = ::Selenium::WebDriver::Chrome::Options.new
+      browser_options.args << "--headless"
+      browser_options.args << "--disable-gpu"
+      browser_options.args << "--no-sandbox"
+      browser_options.args << "--disable-dev-shm-usage"
+      browser_options.args << "--window-size=1920,1080"
 
-      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
     end
-    Capybara::Screenshot.register_driver(:selenium_chrome_headless) do |js_driver, path|
-      js_driver.browser.save_screenshot(path)
+
+    Capybara::Screenshot.register_driver(:selenium_chrome_headless) do |driver, path|
+      driver.browser.save_screenshot(path)
     end
-    @selenium_headless_registered = true
   end
 end
