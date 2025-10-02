@@ -42,10 +42,7 @@ if (sassLoaderIndex !== -1) {
     scssRule.use[sassLoaderIndex] = {
       loader: sassLoader,
       options: {
-        api: 'modern',
-        sassOptions: {
-          includePaths: []
-        }
+        api: 'modern'
       }
     };
   } else {
