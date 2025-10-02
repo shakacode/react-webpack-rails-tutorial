@@ -19,7 +19,7 @@ describe "with Turbo and Stimulus" do
 
     it "shows inline form when Inline Form link is clicked" do
       click_link("Inline Form")
-      expect(page).to have_css(".form-inline", wait: 5)
+      expect(page).to have_css(".form-inline")
     end
 
     it "shows stacked form when Stacked Form link is clicked" do
