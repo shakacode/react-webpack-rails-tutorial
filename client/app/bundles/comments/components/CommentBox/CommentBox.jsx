@@ -74,8 +74,7 @@ class CommentBox extends BaseComponent {
 
   render() {
     const { actions, data, intl } = this.props;
-    // Safeguard for SSR where intl might not be properly initialized
-    const formatMessage = intl && intl.formatMessage ? intl.formatMessage : (msg) => msg.defaultMessage || '';
+    const { formatMessage } = intl;
     const cssTransitionGroupClassNames = {
       enter: css.elementEnter,
       enterActive: css.elementEnterActive,

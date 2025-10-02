@@ -101,9 +101,8 @@ class CommentForm extends BaseComponent {
   }
 
   formHorizontal() {
-    // Safeguard for SSR where intl might not be properly initialized
     const { intl } = this.props;
-    const formatMessage = intl && intl.formatMessage ? intl.formatMessage : (msg) => msg.defaultMessage || '';
+    const { formatMessage } = intl;
     return (
       <div>
         <hr />
@@ -158,9 +157,8 @@ class CommentForm extends BaseComponent {
   }
 
   formStacked() {
-    // Safeguard for SSR where intl might not be properly initialized
     const { intl } = this.props;
-    const formatMessage = intl && intl.formatMessage ? intl.formatMessage : (msg) => msg.defaultMessage || '';
+    const { formatMessage } = intl;
     return (
       <div>
         <hr />
@@ -215,9 +213,8 @@ class CommentForm extends BaseComponent {
 
   // Head up! We have some CSS modules going on here with the className props below.
   formInline() {
-    // Safeguard for SSR where intl might not be properly initialized
     const { intl } = this.props;
-    const formatMessage = intl && intl.formatMessage ? intl.formatMessage : (msg) => msg.defaultMessage || '';
+    const { formatMessage } = intl;
     return (
       <div>
         <hr />
@@ -320,9 +317,8 @@ class CommentForm extends BaseComponent {
         throw new Error(`Unknown form mode: ${this.state.formMode}.`);
     }
 
-    // Safeguard for SSR where intl might not be properly initialized
     const { intl } = this.props;
-    const formatMessage = intl && intl.formatMessage ? intl.formatMessage : (msg) => msg.defaultMessage || '';
+    const { formatMessage } = intl;
 
     // For animation with TransitionGroup
     //   https://reactcommunity.org/react-transition-group/transition-group
