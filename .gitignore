@@ -41,8 +41,9 @@ spec/examples.txt
 dump.rdb
 
 # Ignore i18n-js
-client/app/libs/i18n/translations.js
-client/app/libs/i18n/default.js
+# Note: These files are now required for the build, so we commit them
+# client/app/libs/i18n/translations.js
+# client/app/libs/i18n/default.js
 
 /yarn-error.log
 yarn-debug.log*
