@@ -241,12 +241,11 @@ jobs:
         with:
           script: |
             const deployingMessage = [
-              '🚀 Deploying to Control Plane...',
+              '## 🚀 Deploying to Control Plane...',
               '',
-              '⏳ Waiting for deployment to be ready...',
+              '⏳ **Waiting for deployment to be ready...**',
               '',
               '📝 [View Deploy Logs](${{ env.WORKFLOW_URL }})',
-              '',
               process.env.CONSOLE_LINK
             ].join('\n');
             
