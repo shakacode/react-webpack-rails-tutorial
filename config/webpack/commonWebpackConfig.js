@@ -24,19 +24,19 @@ const ignoreWarningsConfig = {
 };
 
 const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) =>
-  '.scss'.match(config.test),
+  '.scss'.match(config.test) && config.use,
 );
 
 // Configure sass-loader to use the modern API
 const scssRule = baseClientWebpackConfig.module.rules[scssConfigIndex];
-const sassLoaderIndex = scssRule.use.findIndex((loader) => {
+const sassLoaderIndex = scssRule?.use?.findIndex((loader) => {
   if (typeof loader === 'string') {
     return loader.includes('sass-loader');
   }
   return loader.loader && loader.loader.includes('sass-loader');
 });
 
-if (sassLoaderIndex !== -1) {
+if (sassLoaderIndex !== -1 && sassLoaderIndex !== undefined) {
   const sassLoader = scssRule.use[sassLoaderIndex];
   if (typeof sassLoader === 'string') {
     scssRule.use[sassLoaderIndex] = {
@@ -53,7 +53,7 @@ if (sassLoaderIndex !== -1) {
 
 // Fix css-loader configuration for CSS modules if namedExport is enabled
 // When namedExport is true, exportLocalsConvention must be camelCaseOnly or dashesOnly
-const cssLoader = scssRule.use.find(loader => {
+const cssLoader = scssRule?.use?.find(loader => {
   const loaderName = typeof loader === 'string' ? loader : loader?.loader;
   return loaderName?.includes('css-loader');
 });
@@ -62,7 +62,9 @@ if (cssLoader?.options?.modules?.namedExport) {
   cssLoader.options.modules.exportLocalsConvention = 'camelCaseOnly';
 }
 
-baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
+if (scssRule?.use) {
+  baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
+}
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
 const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
