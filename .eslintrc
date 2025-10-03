@@ -1,9 +1,19 @@
+root: true
+
 extends:
   - eslint-config-shakacode
   - plugin:react/recommended
   - plugin:prettier/recommended
   - plugin:jsx-a11y/recommended
   - prettier
+
+parser: espree
+
+parserOptions:
+  ecmaVersion: 2022
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
 
 plugins:
   - react
