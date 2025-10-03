@@ -42,16 +42,24 @@ if (sassLoaderIndex !== -1) {
     scssRule.use[sassLoaderIndex] = {
       loader: sassLoader,
       options: {
-        api: 'modern',
-        sassOptions: {
-          includePaths: []
-        }
+        api: 'modern'
       }
     };
   } else {
     sassLoader.options = sassLoader.options || {};
     sassLoader.options.api = 'modern';
   }
+}
+
+// Fix css-loader configuration for CSS modules if namedExport is enabled
+// When namedExport is true, exportLocalsConvention must be camelCaseOnly or dashesOnly
+const cssLoader = scssRule.use.find(loader => {
+  const loaderName = typeof loader === 'string' ? loader : loader?.loader;
+  return loaderName?.includes('css-loader');
+});
+
+if (cssLoader?.options?.modules?.namedExport) {
+  cssLoader.options.modules.exportLocalsConvention = 'camelCaseOnly';
 }
 
 baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
