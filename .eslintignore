@@ -3,3 +3,4 @@ tmp/
 public/
 postcss.config.js
 client/app/bundles/comments/rescript/
+client/app/libs/i18n/
