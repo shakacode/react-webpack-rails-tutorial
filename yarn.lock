@@ -8263,10 +8263,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@9.0.0-beta.7:
-  version "9.0.0-beta.7"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.0.0-beta.7.tgz#c00b9590b84f365bf0fd4e7b7efdd59104901a00"
-  integrity sha512-m4xGyTg9yy4ys+wz44jBdygsxwKDbARBlgYqsyirwowQKWZHqnyb+ucS9yz5cKQHUtHeDlJOhPHKhRsCwhJcDQ==
+shakapacker@9.0.0-beta.8:
+  version "9.0.0-beta.8"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.0.0-beta.8.tgz#ab951f8ab575d1c178639c2048a296ae27c9a467"
+  integrity sha512-NPu5cTB6lL/Bzl8XDl1NfjlljLARWPH9YhjIh1CvXEuSdaNP2qJLSiIr68Bqv3IGHQmqtifgRl1iXQB8pNnAfQ==
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
