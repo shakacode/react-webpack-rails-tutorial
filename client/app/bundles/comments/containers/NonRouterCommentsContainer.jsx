@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import Intl from 'intl';
 import { IntlProvider } from 'react-intl';
 import BaseComponent from '../../../libs/components/BaseComponent.jsx';
-import { translations } from '../../../libs/i18n/translations';
+import translations from '../../../libs/i18n/translations';
 import { defaultLocale } from '../../../libs/i18n/default';
 
 import CommentScreen from '../components/CommentScreen/CommentScreen.jsx';

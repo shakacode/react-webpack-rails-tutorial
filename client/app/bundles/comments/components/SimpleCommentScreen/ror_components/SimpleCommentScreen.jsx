@@ -8,7 +8,7 @@ import { IntlProvider, injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
-import { translations } from 'libs/i18n/translations';
+import translations from 'libs/i18n/translations';
 
 import CommentForm from '../../CommentBox/CommentForm/CommentForm';
 import CommentList from '../../CommentBox/CommentList/CommentList';

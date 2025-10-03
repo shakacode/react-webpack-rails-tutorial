@@ -36,5 +36,4 @@ const translations = {
   },
 };
 
-export { translations };
 export default translations;
