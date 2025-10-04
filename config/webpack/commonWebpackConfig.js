@@ -80,13 +80,16 @@ const commonWebpackConfig = () => {
   );
 
   if (swcRuleIndex !== -1) {
-    // Change SWC rule to only handle TypeScript files
-    config.module.rules[swcRuleIndex].test = /\.(ts|tsx)(\.erb)?$/;
+    const swcRule = config.module.rules[swcRuleIndex];
 
-    // Add Babel loader for all JavaScript files
+    // Change SWC rule to only handle TypeScript files
+    swcRule.test = /\.(ts|tsx)(\.erb)?$/;
+
+    // Add Babel loader for all JavaScript files, using the same include/exclude as SWC
     config.module.rules.push({
       test: /\.(js|jsx|mjs)(\.erb)?$/,
-      exclude: /node_modules/,
+      include: swcRule.include,
+      exclude: swcRule.exclude,
       use: {
         loader: 'babel-loader',
         options: {
