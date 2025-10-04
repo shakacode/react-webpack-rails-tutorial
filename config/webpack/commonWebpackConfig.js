@@ -3,6 +3,7 @@
 
 // Common configuration applying to client and server configuration
 const { generateWebpackConfig, merge } = require('shakapacker');
+const path = require('path');
 
 const baseClientWebpackConfig = generateWebpackConfig();
 const commonOptions = {
@@ -72,6 +73,8 @@ if (scssConfigIndex === -1) {
 const commonWebpackConfig = () => {
   const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
+  const controllersPath = path.resolve(__dirname, '../../client/app/controllers');
+
   // Find and modify the SWC rule to exclude Stimulus controllers
   const swcRuleIndex = config.module.rules.findIndex(rule =>
     rule.test && /\.(ts|tsx|js|jsx|mjs|coffee)/.test(rule.test.toString())
@@ -81,13 +84,13 @@ const commonWebpackConfig = () => {
     const originalExclude = config.module.rules[swcRuleIndex].exclude;
     config.module.rules[swcRuleIndex].exclude = [
       originalExclude,
-      /client\/app\/controllers/
+      controllersPath
     ].filter(Boolean);
 
     // Add Babel loader specifically for Stimulus controllers
     config.module.rules.push({
       test: /\.js$/,
-      include: /client\/app\/controllers/,
+      include: controllersPath,
       use: {
         loader: 'babel-loader',
         options: {
