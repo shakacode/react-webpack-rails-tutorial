@@ -10,7 +10,7 @@ marked.use(mangle());
 export default class extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
-  resetText(event) {
+  resetText() {
     const inputAuthor = this.commentAuthorTarget;
     const inputText = this.commentTextTarget;
     const alertDiv = this.alertDivTarget;
@@ -18,18 +18,14 @@ export default class extends Controller {
 
     const errors = [];
 
-    // Clear previous errors
-    errorList.innerHTML = '';
-    alertDiv.classList.add('hidden');
-
     if (!inputAuthor.value || !inputText.value) {
-      // Prevent form submission if validation fails
-      event.preventDefault();
-
+      errorList.innerHTML = '';
       if (!inputAuthor.value) {
         errors.push('Author');
-      }
-      if (!inputText.value) {
+      } else if (!inputText.value) {
+        errors.push('Text');
+      } else {
+        errors.push('Author');
         errors.push('Text');
       }
       errors.forEach((error) => {
@@ -37,6 +33,11 @@ export default class extends Controller {
         errorList.insertAdjacentHTML('afterbegin', errorString);
       });
       alertDiv.classList.remove('hidden');
+    } else {
+      alertDiv.classList.add('hidden');
+      errorList.innerHTML = '';
+      inputText.value = '';
+      this.refreshCommentList();
     }
   }
 

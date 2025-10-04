@@ -4,7 +4,7 @@
 
   <hr />
 
-  <%= form_with(model: @comment, data: { action: "submit->comments#resetText" }, class: "form-inline flex flex-col lg:flex-row flex-wrap gap-4") do |f| %>
+  <%= form_with(model: @comment, data: { action: "turbo:submit-end->comments#resetText" }, class: "form-inline flex flex-col lg:flex-row flex-wrap gap-4") do |f| %>
     <div class="flex gap-2 items-center">
       <%= f.label "Name", class: "form-label mr-15" %>
       <%= f.text_field :author, data: { comments_target: "commentAuthor" }, class: "px-3 py-1 leading-4 border border-gray-300 rounded", placeholder: "Your Name" %>
