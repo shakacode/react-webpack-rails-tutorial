@@ -9,9 +9,14 @@
       "react": {
         "runtime": "automatic"
       }
-    }
+    },
+    "loose": true
   },
   "module": {
     "type": "es6"
+  },
+  "env": {
+    "coreJs": 3,
+    "mode": "entry"
   }
 }
