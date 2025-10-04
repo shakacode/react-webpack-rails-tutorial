@@ -68,8 +68,34 @@ if (scssConfigIndex === -1) {
   baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 }
 
+// Add Babel loader for Stimulus controllers (SWC has compatibility issues with Stimulus)
+const stimulusRule = {
+  test: /\.js$/,
+  include: /client\/app\/controllers/,
+  exclude: /node_modules/,
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: [
+        ['@babel/preset-env', {
+          useBuiltIns: 'entry',
+          corejs: 3,
+          modules: 'auto',
+          bugfixes: true,
+          exclude: ['transform-typeof-symbol']
+        }]
+      ]
+    }
+  }
+};
+
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
-const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
+const commonWebpackConfig = () => {
+  const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
+  // Add the Stimulus-specific Babel rule at the beginning so it takes precedence
+  config.module.rules.unshift(stimulusRule);
+  return config;
+};
 
 module.exports = commonWebpackConfig;
 
