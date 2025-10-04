@@ -73,24 +73,20 @@ if (scssConfigIndex === -1) {
 const commonWebpackConfig = () => {
   const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
-  const controllersPath = path.resolve(__dirname, '../../client/app/controllers');
-
-  // Find and modify the SWC rule to exclude Stimulus controllers
+  // Find the SWC rule and restrict it to only TypeScript files
+  // Use Babel for all JavaScript files (SWC has compatibility issues with Stimulus)
   const swcRuleIndex = config.module.rules.findIndex(rule =>
     rule.test && /\.(ts|tsx|js|jsx|mjs|coffee)/.test(rule.test.toString())
   );
 
   if (swcRuleIndex !== -1) {
-    const originalExclude = config.module.rules[swcRuleIndex].exclude;
-    config.module.rules[swcRuleIndex].exclude = [
-      originalExclude,
-      controllersPath
-    ].filter(Boolean);
+    // Change SWC rule to only handle TypeScript files
+    config.module.rules[swcRuleIndex].test = /\.(ts|tsx)(\.erb)?$/;
 
-    // Add Babel loader specifically for Stimulus controllers
+    // Add Babel loader for all JavaScript files
     config.module.rules.push({
-      test: /\.js$/,
-      include: controllersPath,
+      test: /\.(js|jsx|mjs)(\.erb)?$/,
+      exclude: /node_modules/,
       use: {
         loader: 'babel-loader',
         options: {
@@ -101,6 +97,11 @@ const commonWebpackConfig = () => {
               modules: 'auto',
               bugfixes: true,
               exclude: ['transform-typeof-symbol']
+            }],
+            ['@babel/preset-react', {
+              runtime: 'automatic',
+              development: process.env.NODE_ENV !== 'production',
+              useBuiltIns: true
             }]
           ]
         }
