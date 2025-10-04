@@ -8,7 +8,7 @@ ENV GIT_COMMIT_SHA=${GIT_COMMIT}
 
 # Install packages needed to build gems and node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential curl git libpq-dev libvips node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y build-essential curl git libyaml-dev libpq-dev libvips node-gyp pkg-config python-is-python3
 
 # Install JavaScript dependencies
 # Make sure NODE_VERSION matches the node version in .nvmrc and package.json
