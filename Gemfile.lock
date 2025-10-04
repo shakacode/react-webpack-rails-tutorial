@@ -1,10 +1,3 @@
-GIT
-  remote: https://github.com/ruby/net-pop.git
-  revision: e8d0afe2773b9eb6a23c39e9e437f6fc0fc7c733
-  specs:
-    net-pop (0.1.2)
-      net-protocol
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -148,8 +141,6 @@ GEM
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
     ffi (1.17.0)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
     foreman (0.88.1)
     generator_spec (0.10.0)
       activesupport (>= 3.0.0)
@@ -194,6 +185,8 @@ GEM
       protocol (~> 2.0)
     net-imap (0.5.10)
       date
+      net-protocol
+    net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
       timeout
@@ -455,9 +448,11 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
+  arm64-darwin
   arm64-darwin-22
   ruby
   x86_64-linux
+  x86_64-linux-gnu
 
 DEPENDENCIES
   autoprefixer-rails
@@ -474,7 +469,6 @@ DEPENDENCIES
   jbuilder
   launchy
   listen
-  net-pop!
   pg
   pry
   pry-byebug
@@ -508,7 +502,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.3.4p94
+   ruby 3.4.6p54
 
 BUNDLED WITH
    2.4.17
