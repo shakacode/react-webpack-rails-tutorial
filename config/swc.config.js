@@ -4,9 +4,8 @@ module.exports = {
       react: {
         runtime: "automatic"
       }
-    }
-  },
-  env: {
-    targets: "defaults and supports es6-class"
+    },
+    // Preserve ES6 classes for Stimulus compatibility
+    keepClassNames: true
   }
 };
