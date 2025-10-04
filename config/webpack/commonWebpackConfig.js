@@ -76,7 +76,8 @@ const stimulusRule = {
   use: {
     loader: 'babel-loader',
     options: {
-      inputSourceMap: false,
+      sourceMaps: false,
+      inputSourceMap: undefined,
       presets: [
         ['@babel/preset-env', {
           useBuiltIns: 'entry',
