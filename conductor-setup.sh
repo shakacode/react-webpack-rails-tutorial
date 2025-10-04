@@ -3,7 +3,7 @@ set -e
 
 echo "🚀 Setting up React on Rails workspace..."
 
-# Note: This project requires Ruby 3.3.4. 
+# Note: This project requires Ruby 3.4.6.
 # Please ensure you have the correct Ruby version active before running this script.
 
 # Copy environment files if they exist in the root

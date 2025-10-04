@@ -148,8 +148,6 @@ GEM
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
     ffi (1.17.0)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
     foreman (0.88.1)
     generator_spec (0.10.0)
       activesupport (>= 3.0.0)
@@ -508,7 +506,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.3.4p94
+   ruby 3.4.6p54
 
 BUNDLED WITH
    2.4.17
