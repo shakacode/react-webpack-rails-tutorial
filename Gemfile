@@ -45,11 +45,6 @@ gem "autoprefixer-rails"
 
 gem "awesome_print"
 
-# Needed until Ruby 3.4.6 is released https://github.com/ruby/ruby/pull/11006
-# Related issue: https://github.com/ruby/net-pop/issues/26
-# TODO: When Ruby 3.4.6 is released, upgrade Ruby and remove this line
-gem "net-pop", github: "ruby/net-pop"
-
 gem "redcarpet"
 
 # jquery as the JavaScript library has been moved under /client and managed by npm.
