@@ -31,11 +31,6 @@
     "build:clean": "rm -rf public/packs || true"
   },
   "dependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.0",
-    "@babel/plugin-transform-runtime": "^7.21.0",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
     "@babel/runtime": "^7.17.9",
     "@glennsl/rescript-fetch": "^0.2.0",
     "@glennsl/rescript-json-combinators": "^1.2.1",
@@ -47,9 +42,6 @@
     "@rescript/react": "^0.11.0",
     "autoprefixer": "^10.4.14",
     "axios": "^0.21.1",
-    "babel-loader": "^9.1.2",
-    "babel-plugin-macros": "^3.1.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "classnames": "^2.3.2",
     "compression-webpack-plugin": "10.0.0",
     "css-loader": "^6.7.3",
@@ -106,11 +98,15 @@
     "webpack-merge": "5"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.0",
     "@babel/eslint-parser": "^7.16.5",
+    "@babel/preset-react": "^7.18.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@swc/core": "^1.3.100",
+    "@swc/jest": "^0.2.29",
     "@tailwindcss/typography": "^0.5.10",
+    "swc-loader": "^0.2.3",
     "@webpack-cli/serve": "^2.0.5",
-    "babel-jest": "^29.5.0",
     "body-parser": "^1.20.2",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
@@ -155,7 +151,7 @@
     ],
     "testRegex": "./app/.*.spec\\.jsx?$",
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
+      "^.+\\.jsx?$": "@swc/jest"
     }
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
