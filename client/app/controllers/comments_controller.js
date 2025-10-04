@@ -22,8 +22,10 @@ export default class extends Controller {
       errorList.innerHTML = '';
       if (!inputAuthor.value) {
         errors.push('Author');
-      }
-      if (!inputText.value) {
+      } else if (!inputText.value) {
+        errors.push('Text');
+      } else {
+        errors.push('Author');
         errors.push('Text');
       }
       errors.forEach((error) => {
