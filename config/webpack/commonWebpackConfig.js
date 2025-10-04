@@ -68,34 +68,43 @@ if (scssConfigIndex === -1) {
   baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
 }
 
-// Add Babel loader for Stimulus controllers (SWC has compatibility issues with Stimulus)
-const stimulusRule = {
-  test: /\.js$/,
-  include: /client\/app\/controllers/,
-  exclude: /node_modules/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      sourceMaps: false,
-      inputSourceMap: undefined,
-      presets: [
-        ['@babel/preset-env', {
-          useBuiltIns: 'entry',
-          corejs: 3,
-          modules: 'auto',
-          bugfixes: true,
-          exclude: ['transform-typeof-symbol']
-        }]
-      ]
-    }
-  }
-};
-
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
 const commonWebpackConfig = () => {
   const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
-  // Add the Stimulus-specific Babel rule at the beginning so it takes precedence
-  config.module.rules.unshift(stimulusRule);
+
+  // Find and modify the SWC rule to exclude Stimulus controllers
+  const swcRuleIndex = config.module.rules.findIndex(rule =>
+    rule.test && /\.(ts|tsx|js|jsx|mjs|coffee)/.test(rule.test.toString())
+  );
+
+  if (swcRuleIndex !== -1) {
+    const originalExclude = config.module.rules[swcRuleIndex].exclude;
+    config.module.rules[swcRuleIndex].exclude = [
+      originalExclude,
+      /client\/app\/controllers/
+    ].filter(Boolean);
+
+    // Add Babel loader specifically for Stimulus controllers
+    config.module.rules.push({
+      test: /\.js$/,
+      include: /client\/app\/controllers/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/preset-env', {
+              useBuiltIns: 'entry',
+              corejs: 3,
+              modules: 'auto',
+              bugfixes: true,
+              exclude: ['transform-typeof-symbol']
+            }]
+          ]
+        }
+      }
+    });
+  }
+
   return config;
 };
 
