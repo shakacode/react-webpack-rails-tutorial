@@ -5,6 +5,12 @@ extends:
   - plugin:jsx-a11y/recommended
   - prettier
 
+parserOptions:
+  requireConfigFile: false
+  babelOptions:
+    presets:
+      - "@babel/preset-react"
+
 plugins:
   - react
   - jsx-a11y
