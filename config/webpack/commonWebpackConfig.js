@@ -73,8 +73,7 @@ if (scssConfigIndex === -1) {
 const commonWebpackConfig = () => {
   const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
-  // Find the SWC rule and restrict it to only TypeScript files
-  // Use Babel for all JavaScript files (SWC has compatibility issues with Stimulus)
+  // Find the SWC rule and get its include/exclude
   const swcRuleIndex = config.module.rules.findIndex(rule =>
     rule.test && /\.(ts|tsx|js|jsx|mjs|coffee)/.test(rule.test.toString())
   );
@@ -82,11 +81,9 @@ const commonWebpackConfig = () => {
   if (swcRuleIndex !== -1) {
     const swcRule = config.module.rules[swcRuleIndex];
 
-    // Change SWC rule to only handle TypeScript files
-    swcRule.test = /\.(ts|tsx)(\.erb)?$/;
-
-    // Add Babel loader for all JavaScript files, using the same include/exclude as SWC
-    config.module.rules.push({
+    // Insert Babel rule BEFORE SWC rule so it matches .js files first
+    // This allows Babel to handle all JavaScript while SWC continues to match TypeScript
+    config.module.rules.splice(swcRuleIndex, 0, {
       test: /\.(js|jsx|mjs)(\.erb)?$/,
       include: swcRule.include,
       exclude: swcRule.exclude,
