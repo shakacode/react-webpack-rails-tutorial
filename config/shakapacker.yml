@@ -8,7 +8,7 @@ default: &default
   cache_path: tmp/shakapacker
   webpack_compile_output: true
   nested_entries: true
-  javascript_transpiler: babel
+  javascript_transpiler: swc
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
@@ -16,7 +16,7 @@ default: &default
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
-  
+
   # Use the config.build_production_command in config/initializers/react_on_rails.rb
   shakapacker_precompile: false
 
