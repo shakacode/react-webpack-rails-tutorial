@@ -104,7 +104,7 @@ let make = (~fetchData) => {
           className={`px-6 py-2 font-semibold border-0 rounded ${state.form == form.formType
               ? "text-sky-50 bg-sky-600"
               : "text-sky-600 hover:bg-gray-100"}`}
-          onClick={event => SetFormType(form.formType)->dispatch}>
+          onClick={_event => SetFormType(form.formType)->dispatch}>
           {form.formName->React.string}
         </button>
       )
