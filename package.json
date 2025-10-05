@@ -102,6 +102,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/eslint-parser": "^7.16.5",
+    "@babel/preset-react": "^7.18.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@swc/jest": "^0.2.29",
     "@tailwindcss/typography": "^0.5.10",
