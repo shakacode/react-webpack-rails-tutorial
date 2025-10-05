@@ -10,6 +10,8 @@ module.exports = {
       }
     },
     // Preserve ES6 classes for Stimulus compatibility
-    keepClassNames: true
+    keepClassNames: true,
+    // Disable loose mode to ensure proper class method binding for Stimulus
+    loose: false
   }
 };
