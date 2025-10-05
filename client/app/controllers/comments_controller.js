@@ -7,7 +7,7 @@ import { mangle } from 'marked-mangle';
 marked.use(gfmHeadingId());
 marked.use(mangle());
 
-export default class extends Controller {
+export default class CommentsController extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
   resetText() {
