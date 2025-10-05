@@ -10,7 +10,7 @@ marked.use(mangle());
 export default class CommentsController extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
-  resetText = () => {
+  resetText() {
     const inputAuthor = this.commentAuthorTarget;
     const inputText = this.commentTextTarget;
     const alertDiv = this.alertDivTarget;
@@ -41,12 +41,12 @@ export default class CommentsController extends Controller {
     }
   }
 
-  refreshCommentList = () => {
+  refreshCommentList() {
     const refreshBtn = this.commentRefreshTarget;
     refreshBtn.click();
   }
 
-  connect = () => {
+  connect() {
     console.log('connected to Stimulus comments_controller');
 
     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';

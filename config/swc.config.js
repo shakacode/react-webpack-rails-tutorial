@@ -13,17 +13,24 @@ module.exports = {
     transform: {
       react: {
         runtime: "automatic"
+      },
+      // Disable optimizer to preserve class structure for Stimulus
+      optimizer: {
+        globals: {
+          vars: {}
+        }
       }
     },
-    // Critical for Stimulus: preserve class names and use spec-compliant transforms
+    // Critical for Stimulus: preserve class names and method bindings
     keepClassNames: true,
     // Use spec-compliant class transforms (not loose mode)
     loose: false,
-    // Don't use external helpers to avoid any potential binding issues
+    // Don't use external helpers
     externalHelpers: false,
-    target: "es2015"
+    // Target ES2022 to avoid transforming class features
+    target: "es2022"
   },
-  // Preserve original semantics for class fields/methods
+  // Preserve ES6 module semantics
   module: {
     type: "es6"
   }
