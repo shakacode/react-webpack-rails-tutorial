@@ -69,47 +69,7 @@ if (scssConfigIndex === -1) {
 }
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
-const commonWebpackConfig = () => {
-  const config = merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
-
-  // Find the SWC rule and get its include/exclude
-  const swcRuleIndex = config.module.rules.findIndex(rule =>
-    rule.test && /\.(ts|tsx|js|jsx|mjs|coffee)/.test(rule.test.toString())
-  );
-
-  if (swcRuleIndex !== -1) {
-    const swcRule = config.module.rules[swcRuleIndex];
-
-    // Insert Babel rule BEFORE SWC rule so it matches .js files first
-    // This allows Babel to handle all JavaScript while SWC continues to match TypeScript
-    config.module.rules.splice(swcRuleIndex, 0, {
-      test: /\.(js|jsx|mjs)(\.erb)?$/,
-      include: swcRule.include,
-      exclude: swcRule.exclude,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            ['@babel/preset-env', {
-              useBuiltIns: 'entry',
-              corejs: 3,
-              modules: 'auto',
-              bugfixes: true,
-              exclude: ['transform-typeof-symbol']
-            }],
-            ['@babel/preset-react', {
-              runtime: 'automatic',
-              development: process.env.NODE_ENV !== 'production',
-              useBuiltIns: true
-            }]
-          ]
-        }
-      }
-    });
-  }
-
-  return config;
-};
+const commonWebpackConfig = () => merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
 
 module.exports = commonWebpackConfig;
 
