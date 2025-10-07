@@ -7,6 +7,8 @@ const customConfig = {
       keepClassNames: true,
       transform: {
         react: {
+          // Use automatic runtime (React 17+) - no need to import React
+          runtime: 'automatic',
           // Enable React Fast Refresh in development
           refresh: env.isDevelopment && env.runningWebpackDevServer,
         },
