@@ -48,6 +48,9 @@ client/app/libs/i18n/default.js
 yarn-debug.log*
 .yarn-integrity
 
+# npm lock file (project uses yarn)
+package-lock.json
+
 lib/bs
 /lib/ocaml
 
