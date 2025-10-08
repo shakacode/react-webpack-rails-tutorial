@@ -152,9 +152,9 @@
       "\\.scss$": "identity-obj-proxy"
     },
     "setupFiles": [
-      "./app/libs/testHelper.js"
+      "./client/app/libs/testHelper.js"
     ],
-    "testRegex": "./app/.*.spec\\.jsx?$",
+    "testRegex": "./client/app/.*.spec\\.jsx?$",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
