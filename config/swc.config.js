@@ -12,8 +12,6 @@ const customConfig = {
         react: {
           // Use automatic runtime (React 17+) - no need to import React
           runtime: 'automatic',
-          // Enable better dev error messages (like Babel's development mode)
-          development: env.isDevelopment,
           // Enable React Fast Refresh in development
           refresh: env.isDevelopment && env.runningWebpackDevServer,
         },
