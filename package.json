@@ -154,7 +154,7 @@
     "setupFiles": [
       "./client/app/libs/testHelper.js"
     ],
-    "testRegex": "./client/app/.*.spec\\.jsx?$",
+    "testRegex": "./client/(app|__tests__)/.*.spec\\.jsx?$",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
