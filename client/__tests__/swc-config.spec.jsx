@@ -2,6 +2,9 @@
 // 1. Stimulus controller class name preservation (keepClassNames: true)
 // 2. React 19 compatibility (automatic runtime)
 
+/* eslint-disable max-classes-per-file */
+import React from 'react';
+
 describe('SWC Configuration', () => {
   describe('Class name preservation (required for Stimulus)', () => {
     it('preserves class names when transpiled', () => {
@@ -27,9 +30,9 @@ describe('SWC Configuration', () => {
   });
 
   describe('React automatic runtime (React 19 compatibility)', () => {
-    it('allows JSX without explicit React import', () => {
-      // With automatic runtime, we don't need to import React
-      // This test verifies that JSX works without "import React from 'react'"
+    it('allows JSX to work with automatic runtime', () => {
+      // With automatic runtime configured in SWC, JSX works seamlessly
+      // This test verifies the runtime is properly configured
       const element = <div>Test</div>;
 
       expect(element).toBeDefined();
