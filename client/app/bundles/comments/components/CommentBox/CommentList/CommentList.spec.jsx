@@ -1,10 +1,7 @@
 import { List, Map } from 'immutable';
-import { React, TestUtils } from '../../../../../libs/testHelper';
+import { React, render, screen } from '../../../../../libs/testHelper';
 
 import CommentList from './CommentList.jsx';
-import Comment from './Comment/Comment.jsx';
-
-const { renderIntoDocument, findRenderedDOMComponentWithTag, scryRenderedComponentsWithType } = TestUtils;
 
 const cssTransitionGroupClassNames = {
   enter: 'elementEnter',
@@ -30,17 +27,22 @@ describe('CommentList', () => {
   );
 
   it('renders a list of Comments in normal order', () => {
-    const component = renderIntoDocument(
+    render(
       <CommentList $$comments={comments} cssTransitionGroupClassNames={cssTransitionGroupClassNames} />,
     );
-    const list = scryRenderedComponentsWithType(component, Comment);
-    expect(list.length).toEqual(2);
-    expect(list[0].props.author).toEqual('Frank');
-    expect(list[1].props.author).toEqual('Furter');
+
+    // Verify both authors are rendered in order
+    expect(screen.getByText('Frank')).toBeInTheDocument();
+    expect(screen.getByText('Furter')).toBeInTheDocument();
+
+    // Verify order by checking their positions in the DOM
+    const authors = screen.getAllByRole('heading', { level: 2 });
+    expect(authors[0]).toHaveTextContent('Frank');
+    expect(authors[1]).toHaveTextContent('Furter');
   });
 
   it('renders an alert if errors', () => {
-    const component = renderIntoDocument(
+    render(
       <CommentList
         $$comments={comments}
         error="zomg"
@@ -48,7 +50,7 @@ describe('CommentList', () => {
       />,
     );
 
-    const alert = findRenderedDOMComponentWithTag(component, 'strong');
-    expect(alert.textContent).toEqual('Comments could not be retrieved. ');
+    const alert = screen.getByText('Comments could not be retrieved.');
+    expect(alert.tagName).toBe('STRONG');
   });
 });
