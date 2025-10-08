@@ -49,6 +49,8 @@
     "ajv": "^8.17.1",
     "autoprefixer": "^10.4.14",
     "axios": "^0.21.1",
+    "babel-loader": "^9.1.2",
+    "babel-plugin-macros": "^3.1.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "classnames": "^2.3.2",
     "compression-webpack-plugin": "10.0.0",
@@ -152,9 +154,9 @@
       "\\.scss$": "identity-obj-proxy"
     },
     "setupFiles": [
-      "./client/app/libs/testHelper.js"
+      "./app/libs/testHelper.js"
     ],
-    "testRegex": "./client/app/.*.spec\\.jsx?$",
+    "testRegex": "./app/.*.spec\\.jsx?$",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
