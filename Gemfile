@@ -3,10 +3,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.6"
+ruby "3.4.3"
 
 gem "react_on_rails", "16.1.1"
-gem "shakapacker", "9.0.0.beta.8"
+gem "shakapacker", "9.1.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
