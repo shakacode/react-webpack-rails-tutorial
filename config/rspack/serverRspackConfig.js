@@ -92,8 +92,12 @@ const configureServer = () => {
 
         return testValue.includes('css-loader');
       });
-      if (cssLoader && cssLoader.options) {
-        cssLoader.options.modules = { exportOnlyLocals: true };
+      if (cssLoader && cssLoader.options && cssLoader.options.modules) {
+        // Preserve existing modules config but add exportOnlyLocals for SSR
+        cssLoader.options.modules = {
+          ...cssLoader.options.modules,
+          exportOnlyLocals: true,
+        };
       }
 
       // Skip writing image files during SSR by setting emitFile to false
