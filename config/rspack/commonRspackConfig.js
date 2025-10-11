@@ -4,7 +4,7 @@ const { generateWebpackConfig, merge } = require('shakapacker');
 const baseClientRspackConfig = generateWebpackConfig();
 const commonOptions = {
   resolve: {
-    extensions: ['.css', '.ts', '.tsx'],
+    extensions: ['.css', '.ts', '.tsx', '.bs.js'],
   },
 };
 
