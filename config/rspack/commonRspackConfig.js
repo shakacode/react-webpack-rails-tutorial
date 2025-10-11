@@ -20,6 +20,22 @@ const ignoreWarningsConfig = {
   ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
 };
 
+// Fix all CSS-related loaders to use default exports instead of named exports
+// Shakapacker 9 defaults to namedExport: true, but existing code expects default exports
+baseClientRspackConfig.module.rules.forEach((rule) => {
+  if (rule.use && Array.isArray(rule.use)) {
+    const cssLoader = rule.use.find((loader) => {
+      const loaderName = typeof loader === 'string' ? loader : loader?.loader;
+      return loaderName?.includes('css-loader');
+    });
+
+    if (cssLoader?.options?.modules) {
+      cssLoader.options.modules.namedExport = false;
+      cssLoader.options.modules.exportLocalsConvention = 'camelCase';
+    }
+  }
+});
+
 const scssConfigIndex = baseClientRspackConfig.module.rules.findIndex((config) =>
   '.scss'.match(config.test) && config.use,
 );
@@ -49,17 +65,6 @@ if (scssConfigIndex === -1) {
       sassLoader.options = sassLoader.options || {};
       sassLoader.options.api = 'modern';
     }
-  }
-
-  // Fix css-loader configuration for CSS modules if namedExport is enabled
-  // When namedExport is true, exportLocalsConvention must be camelCaseOnly or dashesOnly
-  const cssLoader = scssRule.use.find((loader) => {
-    const loaderName = typeof loader === 'string' ? loader : loader?.loader;
-    return loaderName?.includes('css-loader');
-  });
-
-  if (cssLoader?.options?.modules?.namedExport) {
-    cssLoader.options.modules.exportLocalsConvention = 'camelCaseOnly';
   }
 
   baseClientRspackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
