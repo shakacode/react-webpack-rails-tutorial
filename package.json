@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
+    "postinstall": "patch-package",
     "res:clean": "rescript clean",
     "res:format": "rescript format -all",
     "res:dev": "yarn res:clean && rescript build -w",
@@ -133,6 +134,8 @@
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^30.2.0",
     "mini-css-extract-plugin": "^2.7.2",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "preload-webpack-plugin": "^3.0.0-alpha.1",
     "prettier": "^2.2.1",
     "prettier-eslint-cli": "^7.1.0",
