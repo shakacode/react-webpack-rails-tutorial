@@ -1,23 +1,22 @@
 diff --git a/node_modules/@glennsl/rescript-json-combinators/bsconfig.json b/node_modules/@glennsl/rescript-json-combinators/bsconfig.json
-index 8cc8a16..70a588d 100644
+index 9c45da7..70a588d 100644
 --- a/node_modules/@glennsl/rescript-json-combinators/bsconfig.json
 +++ b/node_modules/@glennsl/rescript-json-combinators/bsconfig.json
-@@ -2,9 +2,14 @@
+@@ -2,10 +2,13 @@
    "name": "@glennsl/rescript-json-combinators",
    "namespace": "JsonCombinators",
    "sources": [
 -    "src",
--    {
--      "dir": "examples",
--      "type": "dev"
--    }
 +    "src"
 +  ],
 +  "package-specs": [
-+    {
+     {
+-      "dir": "examples",
+-      "type": "dev"
 +      "module": "esmodule",
 +      "in-source": true
-+    }
+     }
+-  ]
 +  ],
 +  "suffix": ".bs.js"
  }
