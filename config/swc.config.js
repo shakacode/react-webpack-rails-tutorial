@@ -10,8 +10,8 @@ const customConfig = {
       loose: false,
       transform: {
         react: {
-          // Use automatic runtime (React 17+) - no need to import React
-          runtime: 'automatic',
+          // Use classic runtime for better SSR compatibility with React on Rails
+          runtime: 'classic',
           // Enable React Fast Refresh in development
           refresh: env.isDevelopment && env.runningWebpackDevServer,
         },

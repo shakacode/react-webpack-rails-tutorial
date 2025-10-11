@@ -9,6 +9,7 @@ default: &default
   webpack_compile_output: true
   nested_entries: true
   javascript_transpiler: swc
+  assets_bundler: rspack
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
