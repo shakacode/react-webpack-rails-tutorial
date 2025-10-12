@@ -6,10 +6,27 @@ const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
 // Auto-detect bundler from shakapacker config and load the appropriate library
+// This allows the same config to work with both Webpack and Rspack
 const bundler = config.assets_bundler === 'rspack'
   ? require('@rspack/core')
   : require('webpack');
 
+/**
+ * Generates the server-side rendering (SSR) bundle configuration.
+ *
+ * This creates a separate bundle optimized for server-side rendering:
+ * - Single chunk (no code splitting for Node.js execution)
+ * - CSS extraction disabled (uses exportOnlyLocals for class name mapping)
+ * - No asset hashing (not served directly to clients)
+ * - Outputs to ssr-generated/ directory
+ *
+ * Key differences from client config:
+ * - Removes CSS extraction loaders (mini-css-extract-plugin/CssExtractRspackPlugin)
+ * - Preserves CSS Modules configuration but adds exportOnlyLocals: true
+ * - Disables optimization/minification for faster builds and better debugging
+ *
+ * @returns {Object} Webpack/Rspack configuration object for server bundle
+ */
 const configureServer = () => {
   // We need to use "merge" because the clientConfigObject, EVEN after running
   // toWebpackConfig() is a mutable GLOBAL. Thus any changes, like modifying the

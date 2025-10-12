@@ -6,11 +6,12 @@ const { generateWebpackConfig, merge } = require('shakapacker');
 
 const commonOptions = {
   resolve: {
+    // Add .bs.js extension for ReScript-compiled modules
     extensions: ['.css', '.ts', '.tsx', '.bs.js'],
   },
 };
 
-// add sass resource loader
+// Sass resource loader config - globally imports app variables
 const sassLoaderConfig = {
   loader: 'sass-resources-loader',
   options: {
@@ -19,16 +20,33 @@ const sassLoaderConfig = {
 };
 
 const ignoreWarningsConfig = {
+  // React 19 uses react-dom/client but not all deps have migrated yet
   ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
 };
 
-// Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals
+/**
+ * Generates the common webpack/rspack configuration used by both client and server bundles.
+ *
+ * IMPORTANT: This function calls generateWebpackConfig() fresh on each invocation, so mutations
+ * to the returned config are safe and won't affect other builds. The config is regenerated
+ * for each build (client, server, etc.).
+ *
+ * Key customizations:
+ * - CSS Modules: Configured for default exports (namedExport: false) for backward compatibility
+ * - Sass: Configured with modern API and global variable imports
+ * - ReScript: Added .bs.js to resolve extensions
+ *
+ * @returns {Object} Webpack/Rspack configuration object (auto-detected based on shakapacker.yml)
+ */
 const commonWebpackConfig = () => {
-  const baseClientWebpackConfig = generateWebpackConfig();
+  // Generate fresh config - safe to mutate since it's a new object each time
+  const baseWebpackConfig = generateWebpackConfig();
 
-  // Fix all CSS-related loaders to use default exports instead of named exports
-  // Shakapacker 9 defaults to namedExport: true, but existing code expects default exports
-  baseClientWebpackConfig.module.rules.forEach((rule) => {
+  // Fix CSS Modules to use default exports for backward compatibility
+  // Shakapacker 9 changed default to namedExport: true, breaking existing imports like:
+  // import css from './file.module.scss'
+  // This ensures css is an object with properties, not undefined
+  baseWebpackConfig.module.rules.forEach((rule) => {
     if (rule.use && Array.isArray(rule.use)) {
       const cssLoader = rule.use.find((loader) => {
         const loaderName = typeof loader === 'string' ? loader : loader?.loader;
@@ -42,15 +60,16 @@ const commonWebpackConfig = () => {
     }
   });
 
-  const scssConfigIndex = baseClientWebpackConfig.module.rules.findIndex((config) =>
+  const scssConfigIndex = baseWebpackConfig.module.rules.findIndex((config) =>
     '.scss'.match(config.test) && config.use,
   );
 
   if (scssConfigIndex === -1) {
     console.warn('No SCSS rule with use array found in webpack config');
+    // Not throwing error since config might work without SCSS
   } else {
     // Configure sass-loader to use the modern API
-    const scssRule = baseClientWebpackConfig.module.rules[scssConfigIndex];
+    const scssRule = baseWebpackConfig.module.rules[scssConfigIndex];
     const sassLoaderIndex = scssRule.use.findIndex((loader) => {
       if (typeof loader === 'string') {
         return loader.includes('sass-loader');
@@ -73,10 +92,10 @@ const commonWebpackConfig = () => {
       }
     }
 
-    baseClientWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
+    baseWebpackConfig.module.rules[scssConfigIndex].use.push(sassLoaderConfig);
   }
 
-  return merge({}, baseClientWebpackConfig, commonOptions, ignoreWarningsConfig);
+  return merge({}, baseWebpackConfig, commonOptions, ignoreWarningsConfig);
 };
 
 module.exports = commonWebpackConfig;
