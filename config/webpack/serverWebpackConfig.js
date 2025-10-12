@@ -5,7 +5,10 @@ const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
-const webpack = require('webpack');
+// Auto-detect bundler from shakapacker config and load the appropriate library
+const bundler = config.assets_bundler === 'rspack'
+  ? require('@rspack/core')
+  : require('webpack');
 
 const configureServer = () => {
   // We need to use "merge" because the clientConfigObject, EVEN after running
@@ -42,7 +45,7 @@ const configureServer = () => {
   serverWebpackConfig.optimization = {
     minimize: false,
   };
-  serverWebpackConfig.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
+  serverWebpackConfig.plugins.unshift(new bundler.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 
   // Custom output for the server-bundle that matches the config in
   // config/initializers/react_on_rails.rb
@@ -68,13 +71,13 @@ const configureServer = () => {
   );
 
   // Configure loader rules for SSR
-  // Remove the mini-css-extract-plugin from the style loaders because
+  // Remove the mini-css-extract-plugin/CssExtractRspackPlugin from the style loaders because
   // the client build will handle exporting CSS.
   // replace file-loader with null-loader
   const rules = serverWebpackConfig.module.rules;
   rules.forEach((rule) => {
     if (Array.isArray(rule.use)) {
-      // remove the mini-css-extract-plugin and style-loader
+      // remove the mini-css-extract-plugin/CssExtractRspackPlugin and style-loader
       rule.use = rule.use.filter((item) => {
         let testValue;
         if (typeof item === 'string') {
@@ -82,7 +85,7 @@ const configureServer = () => {
         } else if (typeof item.loader === 'string') {
           testValue = item.loader;
         }
-        return !(testValue.match(/mini-css-extract-plugin/) || testValue === 'style-loader');
+        return !(testValue?.match(/mini-css-extract-plugin/) || testValue?.includes('cssExtractLoader') || testValue === 'style-loader');
       });
       const cssLoader = rule.use.find((item) => {
         let testValue;
@@ -93,10 +96,14 @@ const configureServer = () => {
           testValue = item.loader;
         }
 
-        return testValue.includes('css-loader');
+        return testValue?.includes('css-loader');
       });
-      if (cssLoader && cssLoader.options) {
-        cssLoader.options.modules = { exportOnlyLocals: true };
+      if (cssLoader && cssLoader.options && cssLoader.options.modules) {
+        // Preserve existing modules config but add exportOnlyLocals for SSR
+        cssLoader.options.modules = {
+          ...cssLoader.options.modules,
+          exportOnlyLocals: true,
+        };
       }
 
       // Skip writing image files during SSR by setting emitFile to false
