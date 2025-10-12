@@ -181,19 +181,21 @@ assets_bundler: webpack
 
 ### Performance Comparison
 
-Measured build times for this project:
+Measured bundler compile times for this project (client + server bundles):
 
 | Build Type | Webpack | Rspack | Improvement |
 |------------|---------|--------|-------------|
-| Development | 4.74s | 2.15s | **2.2x faster** |
-| Production | 11.26s | 7.21s | **1.56x faster** |
+| Development | ~3.1s | ~1.0s | **~3x faster** |
+| Production (cold) | ~22s | ~10.7s | **~2x faster** |
 
 **Benefits of Rspack:**
-- 54% faster development builds (saves ~2.6s per build)
-- 36% faster production builds (saves ~4s per build)
+- 67% faster development builds (saves ~2.1s per incremental build)
+- 51% faster production builds (saves ~11s on cold builds)
 - Faster incremental rebuilds during development
 - Reduced CI build times
 - Drop-in replacement - same configuration files work for both bundlers
+
+_Note: These are actual bundler compile times. Total build times including package manager overhead may vary._
 
 ### Configuration Files
 
