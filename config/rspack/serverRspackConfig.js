@@ -71,7 +71,7 @@ const configureServer = () => {
   const rules = serverRspackConfig.module.rules;
   rules.forEach((rule) => {
     if (Array.isArray(rule.use)) {
-      // remove the mini-css-extract-plugin and style-loader
+      // remove the mini-css-extract-plugin/CssExtractRspackPlugin and style-loader
       rule.use = rule.use.filter((item) => {
         let testValue;
         if (typeof item === 'string') {
@@ -79,7 +79,7 @@ const configureServer = () => {
         } else if (typeof item.loader === 'string') {
           testValue = item.loader;
         }
-        return !(testValue.match(/mini-css-extract-plugin/) || testValue === 'style-loader');
+        return !(testValue?.match(/mini-css-extract-plugin/) || testValue?.includes('cssExtractLoader') || testValue === 'style-loader');
       });
       const cssLoader = rule.use.find((item) => {
         let testValue;
