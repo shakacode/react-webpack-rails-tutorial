@@ -83,11 +83,15 @@ const commonWebpackConfig = () => {
         scssRule.use[sassLoaderIndex] = {
           loader: sassLoader,
           options: {
+            // Use modern API for better performance and to support sass-resources-loader
+            // The modern API uses the Sass JavaScript API instead of the legacy Node API
             api: 'modern'
           }
         };
       } else {
         sassLoader.options = sassLoader.options || {};
+        // Use modern API for better performance and to support sass-resources-loader
+        // The modern API uses the Sass JavaScript API instead of the legacy Node API
         sassLoader.options.api = 'modern';
       }
     }

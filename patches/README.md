@@ -31,6 +31,23 @@ import * as Json from "@glennsl/rescript-json-combinators/src/Json.bs.js";
 
 **TODO**: Check if patch is still needed when upgrading `@glennsl/rescript-json-combinators`
 
+## Verifying Patches
+
+After running `yarn install`, verify the patch was applied correctly:
+
+```bash
+# Run ReScript build - should succeed without errors
+yarn res:build
+
+# Expected output: Compiled successfully
+# If you see errors about missing .bs.js files, the patch wasn't applied
+```
+
+**Common issues**:
+- **Patch not applied**: Check that `postinstall` script ran (look for patch-package output during install)
+- **Build fails**: Run `yarn install --force` to reapply patches
+- **Wrong ReScript version**: Ensure ReScript version matches the patched package expectations
+
 ## How Patches Work
 
 1. **Creation**: When you modify a package in `node_modules/`, run:

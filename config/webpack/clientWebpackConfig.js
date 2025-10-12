@@ -1,15 +1,11 @@
 // The source code including full typescript support is available at:
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/clientWebpackConfig.js
 
-const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
-
-// Auto-detect bundler from shakapacker config and load the appropriate library
-const bundler = config.assets_bundler === 'rspack'
-  ? require('@rspack/core')
-  : require('webpack');
+const { getBundler } = require('./bundlerUtils');
 
 const configureClient = () => {
+  const bundler = getBundler();
   const clientConfig = commonWebpackConfig();
 
   clientConfig.plugins.push(

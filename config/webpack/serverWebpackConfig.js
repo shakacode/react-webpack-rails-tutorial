@@ -4,12 +4,7 @@
 const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
-
-// Auto-detect bundler from shakapacker config and load the appropriate library
-// This allows the same config to work with both Webpack and Rspack
-const bundler = config.assets_bundler === 'rspack'
-  ? require('@rspack/core')
-  : require('webpack');
+const { getBundler } = require('./bundlerUtils');
 
 /**
  * Generates the server-side rendering (SSR) bundle configuration.
@@ -28,6 +23,8 @@ const bundler = config.assets_bundler === 'rspack'
  * @returns {Object} Webpack/Rspack configuration object for server bundle
  */
 const configureServer = () => {
+  const bundler = getBundler();
+
   // We need to use "merge" because the clientConfigObject, EVEN after running
   // toWebpackConfig() is a mutable GLOBAL. Thus any changes, like modifying the
   // entry value will result in changing the client config!
@@ -41,7 +38,9 @@ const configureServer = () => {
 
   if (!serverEntry['server-bundle']) {
     throw new Error(
-      "Create a pack with the file name 'server-bundle.js' containing all the server rendering files",
+      "Server bundle entry 'server-bundle' not found. " +
+      "Check that client/app/packs/server-bundle.js exists and is configured in shakapacker.yml. " +
+      "Verify nested_entries is set correctly and the file is in the source_entry_path.",
     );
   }
 
