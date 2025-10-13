@@ -14,8 +14,8 @@ RSpec.describe 'Bundler Switching', type: :feature do
 
   describe 'switching between webpack and rspack' do
     it 'successfully builds with webpack' do
-      # Set bundler to webpack
-      config = original_config
+      # Set bundler to webpack (deep copy to avoid mutating original_config)
+      config = YAML.load(YAML.dump(original_config))
       config['default']['assets_bundler'] = 'webpack'
       File.write(shakapacker_config_path, YAML.dump(config))
 
@@ -28,8 +28,8 @@ RSpec.describe 'Bundler Switching', type: :feature do
     end
 
     it 'successfully builds with rspack' do
-      # Set bundler to rspack
-      config = original_config
+      # Set bundler to rspack (deep copy to avoid mutating original_config)
+      config = YAML.load(YAML.dump(original_config))
       config['default']['assets_bundler'] = 'rspack'
       File.write(shakapacker_config_path, YAML.dump(config))
 
@@ -45,8 +45,8 @@ RSpec.describe 'Bundler Switching', type: :feature do
       bundlers = %w[webpack rspack]
 
       bundlers.each do |bundler|
-        # Set bundler
-        config = original_config
+        # Set bundler (deep copy to avoid mutating original_config)
+        config = YAML.load(YAML.dump(original_config))
         config['default']['assets_bundler'] = bundler
         File.write(shakapacker_config_path, YAML.dump(config))
 

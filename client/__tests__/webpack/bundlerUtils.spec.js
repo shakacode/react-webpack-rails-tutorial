@@ -104,4 +104,38 @@ describe('bundlerUtils', () => {
       expect(plugin.name).toBe('MockCssExtractRspackPlugin');
     });
   });
+
+  describe('Edge cases and error handling', () => {
+    it('defaults to webpack when assets_bundler is undefined', () => {
+      mockConfig.assets_bundler = undefined;
+      jest.doMock('shakapacker', () => ({ config: mockConfig }));
+      const utils = require('../../../config/webpack/bundlerUtils');
+
+      const bundler = utils.getBundler();
+
+      expect(bundler).toBeDefined();
+      expect(bundler.ProvidePlugin.name).toBe('MockProvidePlugin');
+    });
+
+    it('throws error for invalid bundler type', () => {
+      mockConfig.assets_bundler = 'invalid-bundler';
+      jest.doMock('shakapacker', () => ({ config: mockConfig }));
+      const utils = require('../../../config/webpack/bundlerUtils');
+
+      expect(() => utils.getBundler()).toThrow('Invalid assets_bundler: "invalid-bundler"');
+      expect(() => utils.getBundler()).toThrow('Must be one of: webpack, rspack');
+    });
+
+    it('returns cached bundler on subsequent calls', () => {
+      mockConfig.assets_bundler = 'webpack';
+      jest.doMock('shakapacker', () => ({ config: mockConfig }));
+      const utils = require('../../../config/webpack/bundlerUtils');
+
+      const bundler1 = utils.getBundler();
+      const bundler2 = utils.getBundler();
+
+      // Should return same instance (memoized)
+      expect(bundler1).toBe(bundler2);
+    });
+  });
 });

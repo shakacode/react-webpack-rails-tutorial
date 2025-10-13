@@ -8,15 +8,45 @@
 
 const { config } = require('shakapacker');
 
+const VALID_BUNDLERS = ['webpack', 'rspack'];
+
+// Cache for bundler module (config is read at startup and cannot change without restart)
+let _cachedBundler = null;
+let _cachedBundlerType = null;
+
 /**
  * Gets the appropriate bundler module based on shakapacker.yml configuration.
  *
+ * Note: The bundler configuration is read from shakapacker.yml at startup.
+ * Changing the config requires restarting the Node process. This function
+ * memoizes the result for performance.
+ *
  * @returns {Object} Either webpack or @rspack/core module
+ * @throws {Error} If assets_bundler is not 'webpack' or 'rspack'
  */
 const getBundler = () => {
-  return config.assets_bundler === 'rspack'
+  // Return cached bundler if config hasn't changed
+  if (_cachedBundler && _cachedBundlerType === config.assets_bundler) {
+    return _cachedBundler;
+  }
+
+  // Validate bundler configuration
+  const bundlerType = config.assets_bundler || 'webpack'; // Default to webpack
+  if (!VALID_BUNDLERS.includes(bundlerType)) {
+    throw new Error(
+      `Invalid assets_bundler: "${bundlerType}". ` +
+      `Must be one of: ${VALID_BUNDLERS.join(', ')}. ` +
+      `Check config/shakapacker.yml`,
+    );
+  }
+
+  // Load and cache the bundler module
+  _cachedBundlerType = bundlerType;
+  _cachedBundler = bundlerType === 'rspack'
     ? require('@rspack/core')
     : require('webpack');
+
+  return _cachedBundler;
 };
 
 /**
