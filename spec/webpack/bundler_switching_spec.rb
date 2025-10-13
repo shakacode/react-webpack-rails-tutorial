@@ -5,7 +5,7 @@ require 'yaml'
 
 RSpec.describe 'Bundler Switching', type: :feature do
   let(:shakapacker_config_path) { Rails.root.join('config', 'shakapacker.yml') }
-  let(:original_config) { YAML.load_file(shakapacker_config_path) }
+  let(:original_config) { YAML.load_file(shakapacker_config_path, aliases: true) }
 
   after do
     # Restore original config after each test
