@@ -37,10 +37,19 @@ const configureServer = () => {
   };
 
   if (!serverEntry['server-bundle']) {
+    const sourcePath = config.source_path || 'client/app';
+    const entryPath = config.source_entry_path || 'packs';
+    const fullPath = `${sourcePath}/${entryPath}/server-bundle.js`;
+
     throw new Error(
-      "Server bundle entry 'server-bundle' not found. " +
-      "Check that client/app/packs/server-bundle.js exists and is configured in shakapacker.yml. " +
-      "Verify nested_entries is set correctly and the file is in the source_entry_path.",
+      `Server bundle entry 'server-bundle' not found.\n` +
+      `Expected file: ${fullPath}\n` +
+      `Current source_path: ${config.source_path}\n` +
+      `Current source_entry_path: ${config.source_entry_path}\n` +
+      `Verify:\n` +
+      `1. The server-bundle.js file exists at the expected location\n` +
+      `2. nested_entries is configured correctly in shakapacker.yml\n` +
+      `3. The file is properly exported from your entry point`,
     );
   }
 
