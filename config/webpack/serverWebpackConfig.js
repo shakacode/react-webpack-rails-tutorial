@@ -87,11 +87,12 @@ const configureServer = () => {
   };
 
   // Don't hash the server bundle b/c would conflict with the client manifest
-  // And no need for the MiniCssExtractPlugin
+  // And no need for CSS extraction plugins (MiniCssExtractPlugin or CssExtractRspackPlugin)
   serverWebpackConfig.plugins = serverWebpackConfig.plugins.filter(
     (plugin) =>
       plugin.constructor.name !== 'WebpackAssetsManifest' &&
       plugin.constructor.name !== 'MiniCssExtractPlugin' &&
+      plugin.constructor.name !== 'CssExtractRspackPlugin' &&
       plugin.constructor.name !== 'ForkTsCheckerWebpackPlugin',
   );
 
@@ -110,7 +111,12 @@ const configureServer = () => {
         } else if (typeof item.loader === 'string') {
           testValue = item.loader;
         }
-        return !(testValue?.match(/mini-css-extract-plugin/) || testValue?.includes('cssExtractLoader') || testValue === 'style-loader');
+        return !(
+          testValue?.match(/mini-css-extract-plugin/) ||
+          testValue?.match(/CssExtractRspackPlugin/) ||
+          testValue?.includes('cssExtractLoader') ||
+          testValue === 'style-loader'
+        );
       });
       const cssLoader = rule.use.find((item) => {
         let testValue;

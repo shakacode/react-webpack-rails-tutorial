@@ -10,7 +10,10 @@ const { config } = require('shakapacker');
 
 const VALID_BUNDLERS = ['webpack', 'rspack'];
 
-// Cache for bundler module (config is read at startup and cannot change without restart)
+// Cache for bundler module
+// IMPORTANT: Shakapacker config is immutable at runtime - it's loaded once when the
+// Node process starts. Changing shakapacker.yml requires restarting the server.
+// This cache is safe because config.assets_bundler cannot change during execution.
 let _cachedBundler = null;
 let _cachedBundlerType = null;
 
