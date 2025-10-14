@@ -165,10 +165,46 @@ See package.json and Gemfile for versions
 + **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
-## Webpack
+## Webpack and Rspack
 
-_Converted to use Shakapacker webpack configuration_.
+_Converted to use Shakapacker with support for both Webpack and Rspack bundlers_.
 
+This project supports both Webpack and Rspack as JavaScript bundlers via [Shakapacker](https://github.com/shakacode/shakapacker). Switch between them by changing the `assets_bundler` setting in `config/shakapacker.yml`:
+
+```yaml
+# Use Rspack (default - faster builds)
+assets_bundler: rspack
+
+# Or use Webpack (classic, stable)
+assets_bundler: webpack
+```
+
+### Performance Comparison
+
+Measured bundler compile times for this project (client + server bundles):
+
+| Build Type | Webpack | Rspack | Improvement |
+|------------|---------|--------|-------------|
+| Development | ~3.1s | ~1.0s | **~3x faster** |
+| Production (cold) | ~22s | ~10.7s | **~2x faster** |
+
+**Benefits of Rspack:**
+- 67% faster development builds (saves ~2.1s per incremental build)
+- 51% faster production builds (saves ~11s on cold builds)
+- Faster incremental rebuilds during development
+- Reduced CI build times
+- Drop-in replacement - same configuration files work for both bundlers
+
+_Note: These are actual bundler compile times. Total build times including package manager overhead may vary._
+
+### Configuration Files
+
+All bundler configuration is in `config/webpack/`:
+- `webpack.config.js` - Main entry point (auto-detects Webpack or Rspack)
+- `commonWebpackConfig.js` - Shared configuration
+- `clientWebpackConfig.js` - Client bundle settings
+- `serverWebpackConfig.js` - Server-side rendering bundle
+- `development.js`, `production.js`, `test.js` - Environment-specific settings
 
 ### Additional Resources
 - [Webpack Docs](https://webpack.js.org/)

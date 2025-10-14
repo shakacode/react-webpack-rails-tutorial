@@ -1,14 +1,15 @@
 // The source code including full typescript support is available at:
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/clientWebpackConfig.js
 
-const webpack = require('webpack');
 const commonWebpackConfig = require('./commonWebpackConfig');
+const { getBundler } = require('./bundlerUtils');
 
 const configureClient = () => {
+  const bundler = getBundler();
   const clientConfig = commonWebpackConfig();
 
   clientConfig.plugins.push(
-    new webpack.ProvidePlugin({
+    new bundler.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       ActionCable: '@rails/actioncable',

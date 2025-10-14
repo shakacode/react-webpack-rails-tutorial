@@ -4,10 +4,27 @@
 const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
+const { getBundler } = require('./bundlerUtils');
 
-const webpack = require('webpack');
-
+/**
+ * Generates the server-side rendering (SSR) bundle configuration.
+ *
+ * This creates a separate bundle optimized for server-side rendering:
+ * - Single chunk (no code splitting for Node.js execution)
+ * - CSS extraction disabled (uses exportOnlyLocals for class name mapping)
+ * - No asset hashing (not served directly to clients)
+ * - Outputs to ssr-generated/ directory
+ *
+ * Key differences from client config:
+ * - Removes CSS extraction loaders (mini-css-extract-plugin/CssExtractRspackPlugin)
+ * - Preserves CSS Modules configuration but adds exportOnlyLocals: true
+ * - Disables optimization/minification for faster builds and better debugging
+ *
+ * @returns {Object} Webpack/Rspack configuration object for server bundle
+ */
 const configureServer = () => {
+  const bundler = getBundler();
+
   // We need to use "merge" because the clientConfigObject, EVEN after running
   // toWebpackConfig() is a mutable GLOBAL. Thus any changes, like modifying the
   // entry value will result in changing the client config!
@@ -20,8 +37,19 @@ const configureServer = () => {
   };
 
   if (!serverEntry['server-bundle']) {
+    const sourcePath = config.source_path || 'client/app';
+    const entryPath = config.source_entry_path || 'packs';
+    const fullPath = `${sourcePath}/${entryPath}/server-bundle.js`;
+
     throw new Error(
-      "Create a pack with the file name 'server-bundle.js' containing all the server rendering files",
+      `Server bundle entry 'server-bundle' not found.\n` +
+      `Expected file: ${fullPath}\n` +
+      `Current source_path: ${config.source_path}\n` +
+      `Current source_entry_path: ${config.source_entry_path}\n` +
+      `Verify:\n` +
+      `1. The server-bundle.js file exists at the expected location\n` +
+      `2. nested_entries is configured correctly in shakapacker.yml\n` +
+      `3. The file is properly exported from your entry point`,
     );
   }
 
@@ -42,7 +70,7 @@ const configureServer = () => {
   serverWebpackConfig.optimization = {
     minimize: false,
   };
-  serverWebpackConfig.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
+  serverWebpackConfig.plugins.unshift(new bundler.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 
   // Custom output for the server-bundle that matches the config in
   // config/initializers/react_on_rails.rb
@@ -59,22 +87,23 @@ const configureServer = () => {
   };
 
   // Don't hash the server bundle b/c would conflict with the client manifest
-  // And no need for the MiniCssExtractPlugin
+  // And no need for CSS extraction plugins (MiniCssExtractPlugin or CssExtractRspackPlugin)
   serverWebpackConfig.plugins = serverWebpackConfig.plugins.filter(
     (plugin) =>
       plugin.constructor.name !== 'WebpackAssetsManifest' &&
       plugin.constructor.name !== 'MiniCssExtractPlugin' &&
+      plugin.constructor.name !== 'CssExtractRspackPlugin' &&
       plugin.constructor.name !== 'ForkTsCheckerWebpackPlugin',
   );
 
   // Configure loader rules for SSR
-  // Remove the mini-css-extract-plugin from the style loaders because
+  // Remove the mini-css-extract-plugin/CssExtractRspackPlugin from the style loaders because
   // the client build will handle exporting CSS.
   // replace file-loader with null-loader
   const rules = serverWebpackConfig.module.rules;
   rules.forEach((rule) => {
     if (Array.isArray(rule.use)) {
-      // remove the mini-css-extract-plugin and style-loader
+      // remove the mini-css-extract-plugin/CssExtractRspackPlugin and style-loader
       rule.use = rule.use.filter((item) => {
         let testValue;
         if (typeof item === 'string') {
@@ -82,7 +111,12 @@ const configureServer = () => {
         } else if (typeof item.loader === 'string') {
           testValue = item.loader;
         }
-        return !(testValue.match(/mini-css-extract-plugin/) || testValue === 'style-loader');
+        return !(
+          testValue?.match(/mini-css-extract-plugin/) ||
+          testValue?.match(/CssExtractRspackPlugin/) ||
+          testValue?.includes('cssExtractLoader') ||
+          testValue === 'style-loader'
+        );
       });
       const cssLoader = rule.use.find((item) => {
         let testValue;
@@ -93,10 +127,14 @@ const configureServer = () => {
           testValue = item.loader;
         }
 
-        return testValue.includes('css-loader');
+        return testValue?.includes('css-loader');
       });
-      if (cssLoader && cssLoader.options) {
-        cssLoader.options.modules = { exportOnlyLocals: true };
+      if (cssLoader && cssLoader.options && cssLoader.options.modules) {
+        // Preserve existing modules config but add exportOnlyLocals for SSR
+        cssLoader.options.modules = {
+          ...cssLoader.options.modules,
+          exportOnlyLocals: true,
+        };
       }
 
       // Skip writing image files during SSR by setting emitFile to false
