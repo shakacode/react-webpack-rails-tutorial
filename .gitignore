@@ -60,4 +60,8 @@ client/app/bundles/comments/rescript/**/*.bs.js
 # Generated React on Rails packs
 **/generated/**
 
+# Generated ReScript files (compiled from .res source files)
+**/*.res.js
+**/*.res.mjs
+
 .claude/
