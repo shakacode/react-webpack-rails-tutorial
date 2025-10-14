@@ -63,5 +63,6 @@ client/app/bundles/comments/rescript/**/*.bs.js
 # Generated ReScript files (compiled from .res source files)
 **/*.res.js
 **/*.res.mjs
+**/*.bs.js
 
 .claude/
