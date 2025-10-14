@@ -6,6 +6,7 @@
   <title>RailsReactTutorial</title>
 
   <%= append_stylesheet_pack_tag('stimulus-bundle') %>
+  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
   <%= append_javascript_pack_tag('stimulus-bundle') %>
 
   <%= csrf_meta_tags %>
@@ -19,7 +20,6 @@
 
   <%= react_component "Footer" %>
 
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
   <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 </body>
 </html>
