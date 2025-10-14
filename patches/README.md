@@ -2,53 +2,30 @@
 
 This directory contains patches applied to npm packages using [patch-package](https://github.com/ds300/patch-package).
 
-## Why Patches?
+## Current Status
 
-Patches are used when npm packages need modifications that haven't been released upstream yet, or when quick fixes are needed for compatibility issues.
+**No patches currently needed!** 🎉
 
-## Current Patches
+This project previously required a patch for `@glennsl/rescript-json-combinators`, but we've migrated to the modern ReScript suffix convention (`.res.js` instead of `.bs.js`), which eliminates the need for patching.
 
-### @glennsl/rescript-json-combinators+1.4.0.patch
+## Historical Context
 
-**Issue**: This package ships with only ReScript source files (`.res`), not compiled JavaScript files (`.bs.js`). Its `bsconfig.json` lacks the `package-specs` configuration needed to generate compiled output.
+### Removed: @glennsl/rescript-json-combinators patch
 
-**Impact**: Without this patch, Rspack/Webpack cannot resolve imports like:
-```javascript
-import * as Json from "@glennsl/rescript-json-combinators/src/Json.bs.js";
-```
+**Previous Issue**: The project used `.bs.js` suffix (older ReScript convention) while the package used `.res.js` (modern default). We were patching the package to match our old convention.
 
-**What the patch does**:
-1. Removes reference to non-existent `examples` directory
-2. Adds `package-specs` configuration for ES module output
-3. Adds `suffix: ".bs.js"` to generate `.bs.js` files
+**Solution**: Updated `bsconfig.json` to use `"suffix": ".res.js"` (modern ReScript standard). This aligns with:
+- ReScript v11+ recommendations (`.bs` being phased out)
+- All modern ReScript packages
+- Future ReScript compatibility
 
-**When applied**: Automatically during `yarn install` via the `postinstall` script
+**Why this is better**:
+- ✅ No patch maintenance burden
+- ✅ Follows modern ReScript conventions
+- ✅ Compatible with future ReScript versions
+- ✅ Works with ReScript packages out of the box
 
-**Upstream status**:
-- Opened issue: https://github.com/glennsl/rescript-json-combinators/issues/9
-- This is a common pattern for in-source builds with ReScript
-- May not be accepted upstream if author prefers source-only distribution
-
-**TODO**: Check if patch is still needed when upgrading `@glennsl/rescript-json-combinators`
-
-## Verifying Patches
-
-After running `yarn install`, verify the patch was applied correctly:
-
-```bash
-# Run ReScript build - should succeed without errors
-yarn res:build
-
-# Expected output: Compiled successfully
-# If you see errors about missing .bs.js files, the patch wasn't applied
-```
-
-**Common issues**:
-- **Patch not applied**: Check that `postinstall` script ran (look for patch-package output during install)
-- **Build fails**: Run `yarn install --force` to reapply patches
-- **Wrong ReScript version**: Ensure ReScript version matches the patched package expectations
-
-## How Patches Work
+## How Patches Work (If Needed in Future)
 
 1. **Creation**: When you modify a package in `node_modules/`, run:
    ```bash

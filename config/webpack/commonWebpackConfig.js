@@ -6,8 +6,8 @@ const { generateWebpackConfig, merge } = require('shakapacker');
 
 const commonOptions = {
   resolve: {
-    // Add .bs.js extension for ReScript-compiled modules
-    extensions: ['.css', '.ts', '.tsx', '.bs.js'],
+    // Add .res.js extension for ReScript-compiled modules (modern ReScript convention)
+    extensions: ['.css', '.ts', '.tsx', '.res.js'],
   },
 };
 
@@ -34,7 +34,7 @@ const ignoreWarningsConfig = {
  * Key customizations:
  * - CSS Modules: Configured for default exports (namedExport: false) for backward compatibility
  * - Sass: Configured with modern API and global variable imports
- * - ReScript: Added .bs.js to resolve extensions
+ * - ReScript: Added .res.js to resolve extensions (modern ReScript v11+ convention)
  *
  * @returns {Object} Webpack/Rspack configuration object (auto-detected based on shakapacker.yml)
  */
