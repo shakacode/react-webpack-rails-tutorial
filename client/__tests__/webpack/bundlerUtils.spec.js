@@ -1,9 +1,12 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable global-require */
 /**
  * Unit tests for bundlerUtils.js
  * Tests bundler auto-detection and helper functions
  *
  * Note: These tests verify the bundler selection logic without actually
  * loading Rspack (which requires Node.js globals not available in jsdom).
+ * We use require() inside tests to ensure proper mocking order.
  */
 
 // Mock the bundler packages to avoid loading them
