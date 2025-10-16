@@ -5,19 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RailsReactTutorial</title>
 
-  <%= yield :head %>
+  <%= append_stylesheet_pack_tag('stimulus-bundle') %>
+  <%= append_javascript_pack_tag('stimulus-bundle') %>
+  <%= append_javascript_pack_tag('stores-registration') %>
+  <%= yield :packs %>
   <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
   <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 
   <%= csrf_meta_tags %>
 </head>
 <body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
-  <% content_for :head do %>
-    <%= append_stylesheet_pack_tag('stimulus-bundle') %>
-    <%= append_javascript_pack_tag('stimulus-bundle') %>
-    <%= append_javascript_pack_tag('stores-registration') %>
-  <% end %>
-
   <%= react_component "NavigationBarApp" %>
 
   <div class="container mx-auto px-4 flex-grow">
