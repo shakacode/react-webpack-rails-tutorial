@@ -6,6 +6,7 @@
   <title>RailsReactTutorial</title>
 
   <%= append_stylesheet_pack_tag('stimulus-bundle') %>
+  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
   <%= append_javascript_pack_tag('stimulus-bundle') %>
   <%= append_javascript_pack_tag('stores-registration') %>
 
@@ -20,7 +21,6 @@
 
   <%= react_component "Footer" %>
 
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
   <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 
   <!-- This is a placeholder for ReactOnRails to know where to render the store props for

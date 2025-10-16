@@ -4,7 +4,7 @@
 ReactOnRails.configure do |config|
   # Auto-registration configuration for v16
   config.components_subdirectory = "ror_components"
-  config.auto_load_bundle = true
+  config.auto_load_bundle = false
 
   config.build_test_command = "RAILS_ENV=test bin/shakapacker"
   config.build_production_command = "RAILS_ENV=production NODE_ENV=production bin/shakapacker"
