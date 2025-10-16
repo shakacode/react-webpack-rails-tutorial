@@ -1,20 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RailsReactTutorial</title>
-
-  <%= append_stylesheet_pack_tag('stimulus-bundle') %>
-  <%= append_javascript_pack_tag('stimulus-bundle') %>
-  <%= append_javascript_pack_tag('stores-registration') %>
-  <%= yield :packs %>
-  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
-  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
-
-  <%= csrf_meta_tags %>
-</head>
-<body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
+<% content_for :body_content do %>
   <%= react_component "NavigationBarApp" %>
 
   <div class="container mx-auto px-4 flex-grow">
@@ -26,5 +10,23 @@
   <!-- This is a placeholder for ReactOnRails to know where to render the store props for
       client side hydration -->
   <%= redux_store_hydration_data %>
+<% end %>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RailsReactTutorial</title>
+
+  <%= append_stylesheet_pack_tag('stimulus-bundle') %>
+  <%= append_javascript_pack_tag('stimulus-bundle') %>
+  <%= append_javascript_pack_tag('stores-registration') %>
+  <%= stylesheet_pack_tag(media: 'all', 'data-turbolinks-track': true) %>
+  <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
+
+  <%= csrf_meta_tags %>
+</head>
+<body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
+  <%= yield :body_content %>
 </body>
 </html>
