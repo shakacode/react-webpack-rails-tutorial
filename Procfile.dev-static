@@ -1,5 +1,5 @@
 # You can run these commands in separate shells
-web: rails s -p 3000 --early-hints
+web: rails s -p 3000
 redis: redis-server
 
 # Next line runs a watch process with webpack to compile the changed files.
