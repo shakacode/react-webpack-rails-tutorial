@@ -63,3 +63,7 @@ production:
 
   # Cache manifest.json for performance
   cache_manifest: true
+
+  # Early hints configuration
+  early_hints:
+    enabled: true
