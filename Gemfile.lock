@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/shakacode/shakapacker.git
-  revision: 9cbe1ffaad29030f4a070b88d6066cee22608ea8
+  revision: ba00742030554a9e631e84398ea45e1e4f164322
   branch: justin808/early-hints
   specs:
     shakapacker (9.3.0.beta.2)

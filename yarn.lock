@@ -4523,9 +4523,9 @@ entities@^6.0.0:
   integrity sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==
 
 envinfo@^7.7.3:
-  version "7.18.0"
-  resolved "https://registry.npmjs.org/envinfo/-/envinfo-7.18.0.tgz#38793d9dab9a5dec7b2a3146ed094cda8e754ed8"
-  integrity sha512-02QGCLRW+Jb8PC270ic02lat+N57iBaWsvHjcJViqp6UVupRB+Vsg7brYPTqEFXvsdTql3KnSczv5ModZFpl8Q==
+  version "7.19.0"
+  resolved "https://registry.npmjs.org/envinfo/-/envinfo-7.19.0.tgz#b4b4507a27e9900b0175f556167fd3a95f8623f1"
+  integrity sha512-DoSM9VyG6O3vqBf+p3Gjgr/Q52HYBBtO3v+4koAxt1MnWr+zEnxE+nke/yXS4lt2P4SYCHQ4V3f1i88LQVOpAw==
 
 error-ex@^1.3.1:
   version "1.3.4"
@@ -9154,7 +9154,7 @@ setprototypeof@1.2.0:
 
 "shakapacker@github:shakacode/shakapacker#justin808/early-hints":
   version "9.3.0-beta.2"
-  resolved "https://codeload.github.com/shakacode/shakapacker/tar.gz/9cbe1ffaad29030f4a070b88d6066cee22608ea8"
+  resolved "https://codeload.github.com/shakacode/shakapacker/tar.gz/ba00742030554a9e631e84398ea45e1e4f164322"
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
