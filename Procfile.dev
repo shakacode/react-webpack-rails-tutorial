@@ -2,7 +2,7 @@
 # You can run these commands in separate shells
 rescript: yarn res:dev
 redis: redis-server
-rails: bundle exec rails s -p 3000
+rails: bundle exec rails s -p 3000 --early-hints
 # Sleep to allow rescript files to compile before starting webpack
 wp-client: sleep 5 &&  RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 wp-server: sleep 5 && bundle exec rake react_on_rails:locale && HMR=true SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
