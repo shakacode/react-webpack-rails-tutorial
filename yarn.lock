@@ -9154,7 +9154,7 @@ setprototypeof@1.2.0:
 
 "shakapacker@github:shakacode/shakapacker#justin808/early-hints":
   version "9.3.0-beta.2"
-  resolved "https://codeload.github.com/shakacode/shakapacker/tar.gz/ba00742030554a9e631e84398ea45e1e4f164322"
+  resolved "https://codeload.github.com/shakacode/shakapacker/tar.gz/9a55db5d7c798154ecc2a95121ef3afa63f1e13e"
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
