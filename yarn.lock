@@ -9135,7 +9135,7 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@shakacode/shakapacker#justin808/early-hints:
+"shakapacker@github:shakacode/shakapacker#justin808/early-hints":
   version "9.3.0-beta.2"
   resolved "https://codeload.github.com/shakacode/shakapacker/tar.gz/6bf6bf5c21388a402362c516370606529d6cfecd"
   dependencies:
