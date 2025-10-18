@@ -79,4 +79,4 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
 # Default args to pass to the entry point that can be overridden
 # For Kubernetes and ControlPlane, these are the "workload args"
-CMD ["./bin/rails", "server"]
+CMD ["./bin/rails", "server", "--early-hints"]
