@@ -1,1 +1,1 @@
-web: bundle exec puma -C config/puma.rb --early-hints
+web: bundle exec thrust bin/rails server

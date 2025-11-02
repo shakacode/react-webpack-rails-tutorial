@@ -1,15 +1,3 @@
-GIT
-  remote: https://github.com/shakacode/shakapacker.git
-  revision: 915edce51481bb1135853f9b877fd243623a9820
-  branch: justin808/early-hints
-  specs:
-    shakapacker (9.3.0.beta.2)
-      activesupport (>= 5.2)
-      package_json
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -152,7 +140,6 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    ffi (1.17.2)
     ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     foreman (0.88.1)
@@ -193,7 +180,6 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.26.0)
     mize (0.4.1)
       protocol (~> 2.0)
@@ -207,9 +193,6 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.10)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.18.10-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-gnu)
@@ -398,6 +381,12 @@ GEM
       websocket (~> 1.0)
     semantic_range (3.1.0)
     sexp_processor (4.17.1)
+    shakapacker (9.3.0)
+      activesupport (>= 5.2)
+      package_json
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -423,6 +412,8 @@ GEM
       mize
       tins (~> 1.0)
     thor (1.4.0)
+    thruster (0.1.16-arm64-darwin)
+    thruster (0.1.16-x86_64-linux)
     tilt (2.4.0)
     timeout (0.4.3)
     tins (1.33.0)
@@ -459,7 +450,6 @@ GEM
 PLATFORMS
   arm64-darwin
   arm64-darwin-22
-  ruby
   x86_64-linux
   x86_64-linux-gnu
 
@@ -502,10 +492,11 @@ DEPENDENCIES
   scss_lint
   sdoc
   selenium-webdriver (~> 4)
-  shakapacker!
+  shakapacker (= 9.3.0)
   spring
   spring-commands-rspec
   stimulus-rails (~> 1.3)
+  thruster
   turbo-rails (~> 2.0)
   uglifier
   web-console

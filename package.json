@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/shakacode/react-webpack-rails-tutorial",
   "scripts": {
-    "postinstall": "patch-package && if [ -f node_modules/shakapacker/package/index.ts ] && [ ! -f node_modules/shakapacker/package/index.js ]; then cd node_modules/shakapacker && yarn install --production=false && yarn build; fi",
+    "postinstall": "patch-package",
     "res:clean": "rescript clean",
     "res:format": "rescript format -all",
     "res:dev": "yarn res:clean && rescript build -w",
@@ -92,7 +92,7 @@
     "sass": "^1.58.3",
     "sass-loader": "^13.3.2",
     "sass-resources-loader": "^2.2.5",
-    "shakapacker": "github:shakacode/shakapacker#justin808/early-hints",
+    "shakapacker": "9.3.0",
     "stimulus": "^3.0.1",
     "style-loader": "^3.3.1",
     "swc-loader": "^0.2.6",
