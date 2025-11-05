@@ -19,7 +19,7 @@ spec:
       memory: 512Mi
       ports:
         - number: 3000
-          protocol: http
+          protocol: http2
   defaultOptions:
     # Start out like this for "test apps"
     autoscaling:

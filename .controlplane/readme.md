@@ -118,6 +118,120 @@ If you needed to push a new image with a specific commit SHA, you can run the fo
 cpflow build-image -a $APP_NAME --commit ABCD
 ```
 
+## HTTP/2 and Thruster Configuration
+
+This application uses [Thruster](https://github.com/basecamp/thruster), a zero-config HTTP/2 proxy from Basecamp, for optimized performance on Control Plane.
+
+### What is Thruster?
+
+Thruster is a small, fast HTTP/2 proxy designed for Ruby web applications. It provides:
+- **HTTP/2 Support**: Automatic HTTP/2 with multiplexing for faster asset loading
+- **Asset Caching**: Intelligent caching of static assets
+- **Compression**: Automatic gzip/Brotli compression
+- **TLS Termination**: Built-in Let's Encrypt support (not needed on Control Plane)
+
+### Control Plane Configuration for Thruster
+
+To enable Thruster with HTTP/2 on Control Plane, two configuration changes are required:
+
+#### 1. Dockerfile CMD (`.controlplane/Dockerfile`)
+
+The Dockerfile must use Thruster to start the Rails server:
+
+```dockerfile
+# Use Thruster HTTP/2 proxy for optimized performance
+CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
+```
+
+**Note:** Do NOT use `--early-hints` flag as Thruster handles this automatically.
+
+#### 2. Workload Port Protocol (`.controlplane/templates/rails.yml`)
+
+The workload port must be configured for HTTP/2:
+
+```yaml
+ports:
+  - number: 3000
+    protocol: http2  # Must be http2, not http
+```
+
+### Important: Dockerfile vs Procfile
+
+**On Heroku:** The `Procfile` defines how dynos start:
+```
+web: bundle exec thrust bin/rails server
+```
+
+**On Control Plane/Kubernetes:** The `Dockerfile CMD` defines how containers start. The Procfile is ignored.
+
+This is a common source of confusion when migrating from Heroku. Always ensure your Dockerfile CMD matches your intended startup command.
+
+### Verifying HTTP/2 is Enabled
+
+After deployment, verify HTTP/2 is working:
+
+1. **Check workload logs:**
+   ```bash
+   cpflow logs -a react-webpack-rails-tutorial-staging
+   ```
+
+   You should see Thruster startup messages:
+   ```
+   [thrust] Starting Thruster HTTP/2 proxy
+   [thrust] Proxying to http://localhost:3000
+   [thrust] Serving from ./public
+   ```
+
+2. **Test HTTP/2 in browser:**
+   - Open DevTools → Network tab
+   - Load the site
+   - Check the Protocol column (should show "h2" for HTTP/2)
+
+3. **Check response headers:**
+   ```bash
+   curl -I https://your-app.cpln.app
+   ```
+   Look for HTTP/2 indicators in the response.
+
+### Troubleshooting
+
+#### Workload fails to start
+
+**Symptom:** Workload shows as unhealthy or crashing
+
+**Solution:** Check logs with `cpflow logs -a <app-name>`. Common issues:
+- Missing `thruster` gem in Gemfile
+- Incorrect CMD syntax in Dockerfile
+- Port mismatch (ensure Rails listens on 3000)
+
+#### HTTP/2 not working (showing HTTP/1.1)
+
+**Symptom:** Browser shows protocol as "http/1.1" instead of "h2"
+
+**Solution:**
+1. Verify `protocol: http2` in `.controlplane/templates/rails.yml`
+2. Apply the template: `cpflow apply-template rails -a <app-name>`
+3. Redeploy: `cpflow deploy-image -a <app-name>`
+
+#### Assets not loading or CORS errors
+
+**Symptom:** Static assets return 404 or fail to load
+
+**Solution:**
+- Ensure `bin/rails assets:precompile` runs in Dockerfile
+- Verify `public/packs/` directory exists in container
+- Check Thruster is serving from correct directory
+
+### Performance Benefits
+
+With Thruster and HTTP/2 enabled on Control Plane, you should see:
+- **20-30% faster** initial page loads due to HTTP/2 multiplexing
+- **40-60% reduction** in transfer size with Brotli compression
+- **Improved caching** of static assets
+- **Lower server load** due to efficient asset serving
+
+For detailed Thruster documentation, see [docs/thruster.md](../docs/thruster.md).
+
 ## Other notes
 
 ### `entrypoint.sh`

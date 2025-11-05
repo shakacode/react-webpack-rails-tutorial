@@ -145,11 +145,43 @@ Heroku automatically:
 
 ### Control Plane
 
-For Control Plane deployments (see [.controlplane/readme.md](../.controlplane/readme.md)), Thruster provides:
+For Control Plane deployments, Thruster requires specific configuration in two places:
 
-- Efficient static asset serving
-- HTTP/2 support for faster page loads
-- Built-in compression to reduce bandwidth costs
+#### 1. Dockerfile Configuration
+
+The Dockerfile CMD must use Thruster (`.controlplane/Dockerfile`):
+
+```dockerfile
+CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
+```
+
+#### 2. Workload Port Configuration
+
+The workload port must be set to HTTP/2 (`.controlplane/templates/rails.yml`):
+
+```yaml
+ports:
+  - number: 3000
+    protocol: http2  # Required for HTTP/2
+```
+
+**Important:** On Control Plane/Kubernetes, the `Dockerfile CMD` determines container startup, NOT the `Procfile`. This differs from Heroku where Procfile is used.
+
+#### Deployment Commands
+
+```bash
+# Apply the updated workload template
+cpflow apply-template rails -a <app-name>
+
+# Build and deploy new image
+cpflow build-image -a <app-name>
+cpflow deploy-image -a <app-name>
+
+# Verify Thruster is running
+cpflow logs -a <app-name>
+```
+
+For detailed Control Plane setup, see [.controlplane/readme.md](../.controlplane/readme.md#http2-and-thruster-configuration).
 
 ### Other Platforms
 
