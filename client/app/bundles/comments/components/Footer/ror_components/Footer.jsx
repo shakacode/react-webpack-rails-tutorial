@@ -17,26 +17,70 @@ export default class Footer extends BaseComponent {
             Rails On Maui on Twitter
           </a>
           <div className="mt-6 pt-6 border-t border-neutral-700 text-sm text-neutral-400">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>
-                Powered by{' '}
-                <a
-                  href="https://github.com/basecamp/thruster"
-                  className="text-blue-400 hover:text-blue-300 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Thruster HTTP/2
-                </a>{' '}
-                for optimized performance
-              </span>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>
+                  Powered by{' '}
+                  <a
+                    href="https://github.com/basecamp/thruster"
+                    className="text-blue-400 hover:text-blue-300 underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Thruster HTTP/2
+                  </a>{' '}
+                  for optimized performance
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-2 ml-6">
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-xs">HTTP/2 Enabled</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-xs">Early Hints</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-xs">
+                    Hosted on{' '}
+                    <a
+                      href="https://shakacode.controlplane.com"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Control Plane
+                    </a>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
