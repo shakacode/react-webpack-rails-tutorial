@@ -157,15 +157,20 @@ CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
 
 #### 2. Workload Port Configuration
 
-The workload port must be set to HTTP/2 (`.controlplane/templates/rails.yml`):
+The workload port should remain as HTTP/1.1 (`.controlplane/templates/rails.yml`):
 
 ```yaml
 ports:
   - number: 3000
-    protocol: http2  # Required for HTTP/2
+    protocol: http  # Keep as http, NOT http2
 ```
 
-**Important:** On Control Plane/Kubernetes, the `Dockerfile CMD` determines container startup, NOT the `Procfile`. This differs from Heroku where Procfile is used.
+**Important:** Keep the protocol as `http` (not `http2`) because:
+- Thruster handles HTTP/2 on the public-facing TLS connection
+- Control Plane's load balancer communicates with containers via HTTP/1.1
+- Setting `protocol: http2` causes 502 protocol errors
+
+**Note:** On Control Plane/Kubernetes, the `Dockerfile CMD` determines container startup, NOT the `Procfile`. This differs from Heroku where Procfile is used.
 
 #### Deployment Commands
 

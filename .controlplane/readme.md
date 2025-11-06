@@ -147,13 +147,19 @@ CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
 
 #### 2. Workload Port Protocol (`.controlplane/templates/rails.yml`)
 
-The workload port must be configured for HTTP/2:
+The workload port should remain as HTTP/1.1:
 
 ```yaml
 ports:
   - number: 3000
-    protocol: http2  # Must be http2, not http
+    protocol: http  # Keep as http, not http2
 ```
+
+**Important:** This may seem counter-intuitive, but here's why:
+- **Thruster handles HTTP/2** on the public-facing TLS connection
+- **Control Plane's load balancer** communicates with the container via HTTP/1.1
+- Setting `protocol: http2` causes a protocol mismatch and 502 errors
+- Thruster automatically provides HTTP/2 to end users through its TLS termination
 
 ### Important: Dockerfile vs Procfile
 
@@ -204,14 +210,18 @@ After deployment, verify HTTP/2 is working:
 - Incorrect CMD syntax in Dockerfile
 - Port mismatch (ensure Rails listens on 3000)
 
-#### HTTP/2 not working (showing HTTP/1.1)
+#### Getting 502 errors after enabling HTTP/2
 
-**Symptom:** Browser shows protocol as "http/1.1" instead of "h2"
+**Symptom:** Workload returns 502 Bad Gateway with "protocol error"
+
+**Root Cause:** Setting `protocol: http2` in rails.yml causes a protocol mismatch
 
 **Solution:**
-1. Verify `protocol: http2` in `.controlplane/templates/rails.yml`
+1. Change `protocol: http2` back to `protocol: http` in `.controlplane/templates/rails.yml`
 2. Apply the template: `cpflow apply-template rails -a <app-name>`
-3. Redeploy: `cpflow deploy-image -a <app-name>`
+3. The workload will immediately update (no redeploy needed)
+
+**Why:** Thruster provides HTTP/2 to end users, but Control Plane's load balancer communicates with containers via HTTP/1.1. Setting the port protocol to `http2` tells the load balancer to expect HTTP/2 from the container, which Thruster doesn't provide on the backend.
 
 #### Assets not loading or CORS errors
 
