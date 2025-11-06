@@ -242,6 +242,50 @@ With Thruster and HTTP/2 enabled on Control Plane, you should see:
 
 For detailed Thruster documentation, see [docs/thruster.md](../docs/thruster.md).
 
+### Key Learnings: Thruster + HTTP/2 Architecture
+
+This section documents important insights gained from deploying Thruster with HTTP/2 on Control Plane.
+
+#### Protocol Configuration is Critical
+
+**Common Mistake:** Setting `protocol: http2` in the workload port configuration
+**Result:** 502 Bad Gateway with "protocol error"
+**Correct Configuration:** Use `protocol: http`
+
+#### Why This Works
+
+Control Plane's architecture differs from standalone Thruster deployments:
+
+**Standalone Thruster (e.g., VPS):**
+```
+User → HTTPS/HTTP2 → Thruster → HTTP/1.1 → Rails
+      (Thruster handles TLS + HTTP/2)
+```
+
+**Control Plane + Thruster:**
+```
+User → HTTPS/HTTP2 → Control Plane LB → HTTP/1.1 → Thruster → HTTP/1.1 → Rails
+                      (LB handles TLS)    (protocol: http)  (HTTP/2 features)
+```
+
+#### What Thruster Provides on Control Plane
+
+Even with `protocol: http`, Thruster still provides:
+- ✅ Asset caching and compression
+- ✅ Efficient static file serving
+- ✅ Early hints support
+- ✅ HTTP/2 multiplexing features (via Control Plane LB)
+
+The HTTP/2 protocol is terminated at Control Plane's load balancer, which then communicates with Thruster via HTTP/1.1. Thruster's caching, compression, and early hints features work regardless of the protocol between the LB and container.
+
+#### Debugging Tips
+
+If you encounter 502 errors:
+1. Verify Thruster is running: `cpln workload exec ... -- cat /proc/1/cmdline`
+2. Test internal connectivity: `cpln workload exec ... -- curl localhost:3000`
+3. Check protocol setting: Should be `protocol: http` not `http2`
+4. Review workload logs: `cpln workload eventlog <workload> --gvc <gvc> --org <org>`
+
 ## Other notes
 
 ### `entrypoint.sh`
