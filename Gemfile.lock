@@ -295,7 +295,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    react_on_rails (16.1.1)
+    react_on_rails (16.2.0.beta.4)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -484,7 +484,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 16.1.1)
+  react_on_rails (= 16.2.0.beta.4)
   redcarpet
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
