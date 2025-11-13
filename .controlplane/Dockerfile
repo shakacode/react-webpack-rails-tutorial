@@ -79,5 +79,4 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
 # Default args to pass to the entry point that can be overridden
 # For Kubernetes and ControlPlane, these are the "workload args"
-# Use Thruster HTTP/2 proxy for optimized performance
-CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
+CMD ["./bin/rails", "server"]
