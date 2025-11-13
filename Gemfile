@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.6"
+ruby "3.4.3"
 
 gem "react_on_rails", "16.2.0.beta.4"
 gem "shakapacker", "9.3.2"
