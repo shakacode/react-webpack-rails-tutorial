@@ -67,4 +67,4 @@ production:
   # Early hints configuration
   early_hints:
     enabled: true
-    debug: true # Outputs debug info as HTML comments
+    debug: false # Set to true to output debug info as HTML comments

@@ -15,7 +15,7 @@ gem "rails", "~> 8.0"
 gem "pg"
 
 gem "puma"
-gem "thruster"
+gem "thruster", "~> 0.1"
 
 # Use SCSS for stylesheets
 gem "sass-rails"
