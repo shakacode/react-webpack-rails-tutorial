@@ -386,7 +386,7 @@ GEM
       websocket (~> 1.0)
     semantic_range (3.1.0)
     sexp_processor (4.17.1)
-    shakapacker (9.3.3)
+    shakapacker (9.3.4.beta.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -496,7 +496,7 @@ DEPENDENCIES
   scss_lint
   sdoc
   selenium-webdriver (~> 4)
-  shakapacker (= 9.3.3)
+  shakapacker (= 9.3.4.beta.0)
   spring
   spring-commands-rspec
   stimulus-rails (~> 1.3)
