@@ -19,6 +19,11 @@ spec:
     - name: REDIS_URL
       # No password for GVC local Redis. See comment above for postgres.
       value: 'redis://redis.{{APP_NAME}}.cpln.local:6379'
+    - name: SECRET_KEY_BASE
+      # For test apps, a placeholder value is fine. For production apps, this should be
+      # set to a secure random value using: openssl rand -hex 64
+      # Production apps should configure this manually after app creation via a secret.
+      value: 'placeholder_secret_key_base_for_test_apps_only'
   # Part of standard configuration
   staticPlacement:
     locationLinks:
