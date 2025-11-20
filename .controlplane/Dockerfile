@@ -65,7 +65,8 @@ ENV RAILS_ENV=production \
     NODE_ENV=production
 
 # These files hardly ever change
-RUN bin/rails react_on_rails:locale
+# SECRET_KEY_BASE is required for Rails initialization but is not persisted in the image
+RUN SECRET_KEY_BASE=precompile_placeholder bin/rails react_on_rails:locale
 
 # These files change together, /app/lib/bs are temp build files for rescript,
 # and /app/client/app are the client assets that are bundled, so not needed once built
