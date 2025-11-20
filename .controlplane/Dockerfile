@@ -1,6 +1,6 @@
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.4.3
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+ARG RUBY_VERSION=3.4.6
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 
 # Current commit hash environment variable
 ARG GIT_COMMIT
@@ -32,7 +32,7 @@ ENV RAILS_ENV="production" \
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -60,10 +60,9 @@ COPY --from=build /app /app
 
 RUN chmod +x /app/.controlplane/*.sh
 
+# Set environment variables for asset compilation
 ENV RAILS_ENV=production \
-    NODE_ENV=production \
-    SECRET_KEY_BASE=NOT_USED_NON_BLANK
-# compiling assets requires any value for ENV of SECRET_KEY_BASE
+    NODE_ENV=production
 
 # These files hardly ever change
 RUN bin/rails react_on_rails:locale
@@ -71,7 +70,10 @@ RUN bin/rails react_on_rails:locale
 # These files change together, /app/lib/bs are temp build files for rescript,
 # and /app/client/app are the client assets that are bundled, so not needed once built
 # Helps to have smaller images b/c of smaller Docker Layer Caches and smaller final images
-RUN yarn res:build && bin/rails assets:precompile && rm -rf /app/lib/bs /app/client/app
+# SECRET_KEY_BASE is required for asset precompilation but is not persisted in the image
+RUN SECRET_KEY_BASE=precompile_placeholder yarn res:build && \
+    SECRET_KEY_BASE=precompile_placeholder bin/rails assets:precompile && \
+    rm -rf /app/lib/bs /app/client/app
 
 # This is like the shell initialization that will take the CMD as args
 # For Kubernetes and ControlPlane, this is the command on the workload.
@@ -79,4 +81,5 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
 # Default args to pass to the entry point that can be overridden
 # For Kubernetes and ControlPlane, these are the "workload args"
-CMD ["./bin/rails", "server"]
+# Use Thruster HTTP/2 proxy for optimized performance
+CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
