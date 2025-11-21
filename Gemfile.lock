@@ -161,7 +161,7 @@ GEM
     jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.14.1)
+    json (2.16.0)
     language_server-protocol (3.17.0.5)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -293,7 +293,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    react_on_rails (16.2.0.beta.11)
+    react_on_rails (16.2.0.beta.12)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -483,7 +483,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails (= 16.2.0.beta.11)
+  react_on_rails (= 16.2.0.beta.12)
   redcarpet
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
