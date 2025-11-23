@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/shakacode/react_on_rails.git
-  revision: 2306825e09d761a88fdd20960e5d5072bc753293
+  revision: 1969b2d22d4fd32b5ff181e18084a6949c052ac6
   branch: master
   specs:
     react_on_rails (16.2.0.beta.12)
