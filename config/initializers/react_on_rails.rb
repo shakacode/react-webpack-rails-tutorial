@@ -8,7 +8,8 @@ ReactOnRails.configure do |config|
 
   # Build commands with locale generation
   config.build_test_command = "RAILS_ENV=test bin/shakapacker"
-  config.build_production_command = "bundle exec rake react_on_rails:locale && RAILS_ENV=production NODE_ENV=production bin/shakapacker"
+  config.build_production_command =
+    "bundle exec rake react_on_rails:locale && RAILS_ENV=production NODE_ENV=production bin/shakapacker"
 
   # This is the file used for server rendering of React when using `(prerender: true)`
   # If you are never using server rendering, you may set this to "".
