@@ -68,8 +68,15 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  Capybara.default_driver = :selenium_chrome_headless
-  Capybara.javascript_driver = :selenium_chrome_headless
+  # Use custom :headless_chrome driver (not Capybara's built-in :selenium_chrome_headless)
+  # to ensure Chrome 109+ --headless=new flag is used
+  Capybara.default_driver = :headless_chrome
+  Capybara.javascript_driver = :headless_chrome
+
+  # Also configure system specs (Rails 5.1+) to use our headless driver
+  config.before(:each, type: :system) do
+    driven_by :headless_chrome
+  end
 
   puts "=" * 80
   puts "Capybara using driver: #{Capybara.javascript_driver}"

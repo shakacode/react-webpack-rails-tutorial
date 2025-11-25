@@ -28,10 +28,10 @@ module DriverRegistration
   end
 
   def self.register_selenium_chrome_headless
-    # Force re-register to ensure our configuration is used
-    Capybara.drivers.delete(:selenium_chrome_headless)
-
-    Capybara.register_driver :selenium_chrome_headless do |app|
+    # Use a custom driver name to avoid conflicts with Capybara's built-in
+    # :selenium_chrome_headless which uses the old --headless flag.
+    # Chrome 109+ requires --headless=new for proper headless operation.
+    Capybara.register_driver :headless_chrome do |app|
       browser_options = ::Selenium::WebDriver::Chrome::Options.new
       browser_options.args << "--headless=new"
       browser_options.args << "--disable-gpu"
@@ -42,7 +42,7 @@ module DriverRegistration
       Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
     end
 
-    Capybara::Screenshot.register_driver(:selenium_chrome_headless) do |driver, path|
+    Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
       driver.browser.save_screenshot(path)
     end
   end
