@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/shakacode/react_on_rails.git
-  revision: 1969b2d22d4fd32b5ff181e18084a6949c052ac6
+  revision: b50a74d9045015479d2eb515adee5060963ec72d
   branch: master
   specs:
     react_on_rails (16.2.0.beta.12)
@@ -125,7 +125,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.3.5)
-    connection_pool (2.5.4)
+    connection_pool (2.5.5)
     coveralls_reborn (0.25.0)
       simplecov (>= 0.18.1, < 0.22.0)
       term-ansicolor (~> 1.6)
