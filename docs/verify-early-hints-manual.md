@@ -4,8 +4,11 @@ This guide shows you how to manually verify that HTTP 103 Early Hints are workin
 
 ## Prerequisites
 
+> **Note:** Throughout this guide, replace `YOUR-REVIEW-APP` with your actual Control Plane review app identifier.
+> You can find this URL in the PR's deployment status or Control Plane dashboard.
+
 - Chrome, Edge, or Firefox browser (with HTTP/2 103 support)
-- Access to the PR review app URL: https://rails-pdzxq1kxxwqg8.cpln.app/
+- Access to the PR review app URL: `https://YOUR-REVIEW-APP.cpln.app/`
 
 ## Method 1: Chrome DevTools Network Tab (Recommended)
 
@@ -15,7 +18,7 @@ This guide shows you how to manually verify that HTTP 103 Early Hints are workin
 2. Press `Cmd+Option+I` (Mac) or `F12` (Windows/Linux) to open DevTools
 3. Click the **Network** tab
 4. **Important:** Check "Disable cache" checkbox in Network tab
-5. Navigate to: https://rails-pdzxq1kxxwqg8.cpln.app/
+5. Navigate to: `https://YOUR-REVIEW-APP.cpln.app/`
 
 ### Step 2: Look for Early Hints Evidence
 
@@ -73,7 +76,7 @@ Firefox has better support for displaying informational responses:
 1. Open Firefox
 2. Press `Cmd+Option+I` or `F12`
 3. Go to **Network** tab
-4. Load: https://rails-pdzxq1kxxwqg8.cpln.app/
+4. Load: `https://YOUR-REVIEW-APP.cpln.app/`
 5. Look in the **Status** column for `103` entries
 
 Firefox tends to show HTTP 103 responses more explicitly than Chrome.
@@ -84,7 +87,7 @@ For command-line verification:
 
 ```bash
 # Verbose curl to see all HTTP frames
-curl -v --http2 https://rails-pdzxq1kxxwqg8.cpln.app/ 2>&1 | less
+curl -v --http2 https://YOUR-REVIEW-APP.cpln.app/ 2>&1 | less
 
 # Look for lines like:
 # < HTTP/2 103
@@ -143,7 +146,7 @@ If early hints aren't working, you'd see:
 From curl testing the PR review app:
 
 ```bash
-$ curl https://rails-pdzxq1kxxwqg8.cpln.app/ 2>&1 | grep -A5 "Early Hints"
+$ curl https://YOUR-REVIEW-APP.cpln.app/ 2>&1 | grep -A5 "Early Hints"
 ```
 
 **Result:**
@@ -200,13 +203,13 @@ curl -I https://reactrails.com/ | grep -E "server:|cf-"
 
 **Without Cloudflare (PR Review App):**
 ```bash
-curl -I https://rails-pdzxq1kxxwqg8.cpln.app/ | grep -E "server:|cf-"
+curl -I https://YOUR-REVIEW-APP.cpln.app/ | grep -E "server:|cf-"
 # Should show:
 # server: undefined
 # (no cf-ray header)
 ```
 
-Only the PR review app (direct Control Plane) will show early hints working.
+Only the PR review app (direct to Control Plane, without Cloudflare) will show early hints working.
 
 ## Next Steps
 
