@@ -57,7 +57,10 @@ const req = http.get('http://localhost:9222/json', (res) => {
           // Look for Early Hints debug comments
           const earlyHintsMatch = html.match(/<!--[\s\S]*?Early Hints[\s\S]{0,500}?-->/g);
 
+          let earlyHintsFound = false;
+
           if (earlyHintsMatch) {
+            earlyHintsFound = true;
             console.log('🎉 Found Early Hints debug comments in HTML!\n');
             earlyHintsMatch.forEach(match => {
               console.log(match);
@@ -82,7 +85,7 @@ const req = http.get('http://localhost:9222/json', (res) => {
           }
 
           ws.close();
-          process.exit(0);
+          process.exit(earlyHintsFound ? 0 : 1);
         }
       } catch (e) {
         // Ignore parse errors for other messages
