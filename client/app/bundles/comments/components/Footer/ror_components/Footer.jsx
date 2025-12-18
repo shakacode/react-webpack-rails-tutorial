@@ -1,6 +1,37 @@
 import React from 'react';
 import BaseComponent from 'libs/components/BaseComponent';
 
+// Reusable icon components to reduce SVG duplication
+const CheckmarkIcon = ({ className = 'w-4 h-4', color = 'text-green-400' }) => (
+  <svg className={`${className} ${color}`} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const CheckmarkCircleIcon = ({ className = 'w-4 h-4', color = 'text-green-400' }) => (
+  <svg className={`${className} ${color}`} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const InfoIcon = ({ className = 'w-4 h-4', color = 'text-yellow-400' }) => (
+  <svg className={`${className} ${color}`} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
 export default class Footer extends BaseComponent {
   render() {
     return (
@@ -19,13 +50,7 @@ export default class Footer extends BaseComponent {
           <div className="mt-6 pt-6 border-t border-neutral-700 text-sm text-neutral-400">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <CheckmarkCircleIcon className="w-4 h-4" color="text-green-400" />
                 <span>
                   Powered by{' '}
                   <a
@@ -41,37 +66,19 @@ export default class Footer extends BaseComponent {
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-2 ml-6">
                 <div className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckmarkIcon className="w-3.5 h-3.5" color="text-emerald-400" />
                   <span className="text-xs">HTTP/2 Enabled</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <InfoIcon className="w-3.5 h-3.5" color="text-yellow-400" />
                   <span className="text-xs" title="Configured in Rails but stripped by Cloudflare CDN">
                     Early Hints (Configured)
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckmarkIcon className="w-3.5 h-3.5" color="text-emerald-400" />
                   <span className="text-xs">
-                    Hosted on{' '}
+                    Supports{' '}
                     <a
                       href="https://shakacode.controlplane.com"
                       className="text-blue-400 hover:text-blue-300 underline"
@@ -80,6 +87,7 @@ export default class Footer extends BaseComponent {
                     >
                       Control Plane
                     </a>
+                    {' '}hosting
                   </span>
                 </div>
               </div>

@@ -256,6 +256,12 @@ If the MCP server is too complex, you could also:
    ```
 
 2. **Create a test script:**
+
+   > **Note:** Playwright's `page.on('response')` does not capture HTTP 1xx informational
+   > responses (status 103). The browser handles 103 Early Hints as preload hints without
+   > exposing them as regular Response objects. To detect Early Hints programmatically,
+   > you need to use the Chrome DevTools Protocol (CDP) directly.
+
    ```javascript
    // verify-early-hints.js
    const { chromium } = require('playwright');
@@ -265,12 +271,19 @@ If the MCP server is too complex, you could also:
      const context = await browser.newContext();
      const page = await context.newPage();
 
-     // Listen to all network responses
+     // Use CDP to detect Early Hints (103 responses)
+     const client = await context.newCDPSession(page);
+     await client.send('Network.enable');
+
+     // Listen for Early Hints via CDP
+     client.on('Network.responseReceivedEarlyHints', (params) => {
+       console.log('✅ Early Hints detected!');
+       console.log('Headers:', params.headers);
+     });
+
+     // Regular responses (won't include 103)
      page.on('response', response => {
        console.log(`${response.status()} ${response.url()}`);
-       if (response.status() === 103) {
-         console.log('✅ Early Hints detected!');
-       }
      });
 
      await page.goto('https://rails-pdzxq1kxxwqg8.cpln.app/');

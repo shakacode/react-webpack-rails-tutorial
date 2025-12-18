@@ -295,6 +295,24 @@ Thruster works seamlessly with Shakapacker for both Webpack and Rspack:
 - Manifest files are properly served
 - Hot Module Replacement (HMR) still works in development
 
+#### Shakapacker Early Hints Configuration
+
+To enable early hints in production, add the following to your `config/shakapacker.yml`:
+
+```yaml
+# config/shakapacker.yml
+production:
+  <<: *default
+  # ... other settings ...
+
+  # Early hints configuration
+  early_hints:
+    enabled: true
+    debug: true  # Set to true to output debug info as HTML comments
+```
+
+This allows Shakapacker to send Link headers for webpack assets, which Thruster can use to optimize asset loading via HTTP/2 server push or 103 Early Hints responses.
+
 ## Performance Expectations
 
 Based on typical Rails applications with Thruster:
