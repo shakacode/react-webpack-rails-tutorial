@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BaseComponent from 'libs/components/BaseComponent';
 
 // Reusable icon components to reduce SVG duplication
@@ -12,6 +13,11 @@ const CheckmarkIcon = ({ className = 'w-4 h-4', color = 'text-green-400' }) => (
   </svg>
 );
 
+CheckmarkIcon.propTypes = {
+  className: PropTypes.string,
+  color: PropTypes.string,
+};
+
 const CheckmarkCircleIcon = ({ className = 'w-4 h-4', color = 'text-green-400' }) => (
   <svg className={`${className} ${color}`} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
     <path
@@ -22,6 +28,11 @@ const CheckmarkCircleIcon = ({ className = 'w-4 h-4', color = 'text-green-400' }
   </svg>
 );
 
+CheckmarkCircleIcon.propTypes = {
+  className: PropTypes.string,
+  color: PropTypes.string,
+};
+
 const InfoIcon = ({ className = 'w-4 h-4', color = 'text-yellow-400' }) => (
   <svg className={`${className} ${color}`} fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
     <path
@@ -31,6 +42,11 @@ const InfoIcon = ({ className = 'w-4 h-4', color = 'text-yellow-400' }) => (
     />
   </svg>
 );
+
+InfoIcon.propTypes = {
+  className: PropTypes.string,
+  color: PropTypes.string,
+};
 
 export default class Footer extends BaseComponent {
   render() {
