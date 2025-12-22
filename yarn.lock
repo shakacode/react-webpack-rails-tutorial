@@ -9135,10 +9135,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@9.3.3:
-  version "9.3.3"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.3.3.tgz#aed2070eb6136f75cf3e92ace740764bacefc7de"
-  integrity sha512-u2SSKb2d1wgMqcvUcg2XT1h9rJzHvGBssFnTO/gvTz3mvnrJAL71A6CVGSDe25gcOkt6TpeBDCxqfaKBXtjJnw==
+shakapacker@9.4.0:
+  version "9.4.0"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.4.0.tgz#a47120208a0433159740a5ba45f8b4736999f9b8"
+  integrity sha512-Kf5+LADw5kkaPHqXDA6NknGt6p8MK9jjWuiudM+ESHcF/POxFZ1S5p7lMsyezvuMRMm0HrltQCM/NPadGEEnVg==
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
