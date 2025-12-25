@@ -67,3 +67,7 @@ client/app/bundles/comments/rescript/**/*.bs.js
 
 .claude/
 .context/
+
+# Chrome DevTools debug scripts (development-only)
+check_early_hints.js
+check_early_hints.py

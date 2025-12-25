@@ -35,11 +35,13 @@ def run_precompile_tasks
 
   # Build ReScript files first
   print "   ReScript build... "
-  if system("yarn res:build > /dev/null 2>&1")
+  output = `yarn res:build 2>&1`
+  if $?.success?
     puts "✅"
   else
     puts "❌"
-    puts "   Failed to build ReScript files. Run 'yarn res:build' to see errors."
+    puts "   Failed to build ReScript files:"
+    output.each_line { |line| puts "   #{line}" }
     exit 1
   end
 
