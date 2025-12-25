@@ -66,3 +66,4 @@ client/app/bundles/comments/rescript/**/*.bs.js
 **/*.bs.js
 
 .claude/
+.context/
