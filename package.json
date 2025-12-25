@@ -21,6 +21,7 @@
     "res:clean": "rescript clean",
     "res:format": "rescript format -all",
     "res:dev": "yarn res:clean && rescript build -w",
+    "res:watch": "rescript build -w",
     "res:build": "yarn res:clean && rescript build",
     "lint:eslint": "yarn eslint client --ext \".js,.jsx,.ts\"",
     "lint:prettier": "yarn prettier \"**/*.@(js|jsx)\" --list-different",

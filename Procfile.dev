@@ -1,10 +1,14 @@
 # Procfile for development using HMR
 # You can run these commands in separate shells
-# ReScript: clean and rebuild, then watch for changes
-rescript: yarn res:dev
+#
+# Note: bin/dev runs precompile tasks (rescript + locale) BEFORE starting these processes.
+# This ensures all generated files exist before webpack starts watching.
+#
+# ReScript watch mode (no clean - bin/dev already did the clean build)
+rescript: yarn res:watch
 # redis: redis-server  # Run Redis as a system service instead (brew services start redis)
 rails: bundle exec thrust bin/rails server -p 3000
-# Sleep to allow rescript files to compile before starting webpack
-# Increased sleep time to ensure rescript initial build completes
-wp-client: sleep 15 &&  RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
-wp-server: sleep 15 && bundle exec rake react_on_rails:locale && HMR=true SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
+# Client webpack dev server with HMR
+wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
+# Server webpack watcher for SSR bundle
+wp-server: HMR=true SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch

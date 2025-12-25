@@ -6,10 +6,11 @@ ReactOnRails.configure do |config|
   config.components_subdirectory = "ror_components"
   config.auto_load_bundle = true
 
-  # Build commands with locale generation
-  config.build_test_command = "RAILS_ENV=test bin/shakapacker"
-  config.build_production_command =
-    "bundle exec rake react_on_rails:locale && RAILS_ENV=production NODE_ENV=production bin/shakapacker"
+  # Build commands
+  # Note: react_on_rails:assets:webpack (run by assets:precompile) depends on react_on_rails:locale,
+  # so locale generation happens automatically. We just need rescript to run first.
+  config.build_test_command = "yarn res:build && RAILS_ENV=test bin/shakapacker"
+  config.build_production_command = "yarn res:build && RAILS_ENV=production NODE_ENV=production bin/shakapacker"
 
   # This is the file used for server rendering of React when using `(prerender: true)`
   # If you are never using server rendering, you may set this to "".
