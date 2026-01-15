@@ -68,8 +68,15 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  Capybara.default_driver = :selenium_chrome_headless
-  Capybara.javascript_driver = :selenium_chrome_headless
+  # Use custom :headless_chrome driver (not Capybara's built-in :selenium_chrome_headless)
+  # to ensure Chrome 109+ --headless=new flag is used
+  Capybara.default_driver = :headless_chrome
+  Capybara.javascript_driver = :headless_chrome
+
+  # Also configure system specs (Rails 5.1+) to use our headless driver
+  config.before(:each, type: :system) do
+    driven_by :headless_chrome
+  end
 
   puts "=" * 80
   puts "Capybara using driver: #{Capybara.javascript_driver}"
@@ -82,20 +89,6 @@ RSpec.configure do |config|
     Capybara.reset_sessions!
   end
 
-  # RSpec Rails can automatically mix in different behaviours to your tests
-  # based on their file location, for example enabling you to call `get` and
-  # `post` in specs under `spec/controllers`.
-  #
-  # You can disable this behaviour by removing the line below, and instead
-  # explicitly tag your specs with their type, e.g.:
-  #
-  #     RSpec.describe UsersController, :type => :controller do
-  #       # ...
-  #     end
-  #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
-  config.infer_spec_type_from_file_location!
   config.include Capybara::DSL
 
   # This will insert a <base> tag with the asset host into the pages created by

@@ -1,5 +1,5 @@
 # You can run these commands in separate shells
-web: bin/rails s -p 3001
+web: bundle exec thrust bin/rails server -p 3001
 redis: redis-server
 
 # Next line runs a watch process with webpack to compile the changed files.
