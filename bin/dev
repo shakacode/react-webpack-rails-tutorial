@@ -26,11 +26,13 @@
 
 require "bundler/setup"
 require "react_on_rails/dev"
-require_relative "../config/environment"
 
 # Run precompile tasks before starting development server
 # This ensures rescript and locale files are generated before webpack starts
 def run_precompile_tasks
+  # Load Rails environment only when needed (saves 1-3s for help/kill commands)
+  require_relative "../config/environment"
+
   puts "📦 Running precompile tasks..."
 
   # Build ReScript files first

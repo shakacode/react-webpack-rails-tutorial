@@ -11,4 +11,4 @@ rails: bundle exec thrust bin/rails server -p 3000
 # Client webpack dev server with HMR
 wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 # Server webpack watcher for SSR bundle
-wp-server: HMR=true SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
+wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
