@@ -3,10 +3,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.3"
+ruby "3.4.6"
 
-gem "react_on_rails", "16.2.0.beta.20"
-gem "shakapacker", "9.3.4.beta.0"
+gem "react_on_rails", "16.2.1"
+gem "shakapacker", "9.5.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
@@ -15,6 +15,7 @@ gem "rails", "~> 8.0"
 gem "pg"
 
 gem "puma"
+gem "thruster", "~> 0.1"
 
 # Use SCSS for stylesheets
 gem "sass-rails"

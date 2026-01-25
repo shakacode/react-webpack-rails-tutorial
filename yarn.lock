@@ -8508,10 +8508,10 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails@16.2.0-beta.20:
-  version "16.2.0-beta.20"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.2.0-beta.20.tgz#e79fd11847ecd6ca628e26892f736ad16fb937dc"
-  integrity sha512-dUCGPzhaff/xvDjr6xKajXhJVFAbibNh7jcd5LExiWjubWuCBmfTLWGOyX3araHapfCEY41jNvorndtlmCHpjg==
+react-on-rails@16.2.1:
+  version "16.2.1"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.2.1.tgz#174874739e5891676414e110bf02a8a92b138761"
+  integrity sha512-47hZ5y69sU6H8RK8H0RDBvBnl4N314DibxsmRVtFIKeoIvvd6nlPyNCqp54jgNehB/mA15VG2H7EeVMHL0u8kA==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -9135,10 +9135,10 @@ setprototypeof@1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@9.3.4-beta.0:
-  version "9.3.4-beta.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.3.4-beta.0.tgz#bcfaec95e1011bfaf3068b687f28e0e1bc448d42"
-  integrity sha512-rKnrS41JNXZFVfQ0lLmMp5achNW7wEQowa3zJ2/v7p965k3si8BwRQbW81VeKts2tCdjuLMbn5jYZn/iV7eGEw==
+shakapacker@9.5.0:
+  version "9.5.0"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.5.0.tgz#761aee7f4c01d8a37b13d628968b6730897c967b"
+  integrity sha512-pTGHzHCc74CIoXeg8otCoBa8DjGWZUoYVKu9eyWwpdO9Jq6yHxSD9u5Qp36nXjC9jupd9gnfhCY5YHqkJHpfLA==
   dependencies:
     js-yaml "^4.1.0"
     path-complete-extname "^1.0.0"
