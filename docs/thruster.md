@@ -41,27 +41,27 @@ After running `bundle install`, the `thrust` executable is available.
 All Procfiles in this project have been updated to use Thruster:
 
 #### Production (`Procfile`)
-```
+```text
 web: bundle exec thrust bin/rails server
 ```
 
 #### Development with HMR (`Procfile.dev`)
-```
+```text
 rails: bundle exec thrust bin/rails server -p 3000
 ```
 
 #### Development with Production Assets (`Procfile.dev-prod-assets`)
-```
+```text
 web: bundle exec thrust bin/rails server -p 3001
 ```
 
 #### Development with Static Webpack (`Procfile.dev-static`)
-```
+```text
 web: bundle exec thrust bin/rails server -p 3000
 ```
 
 #### Development with Static Assets (`Procfile.dev-static-assets`)
-```
+```text
 web: bundle exec thrust bin/rails server -p 3000
 ```
 
@@ -122,7 +122,7 @@ Thruster will automatically:
 
 When the server starts, you'll see Thruster initialization in the logs:
 
-```
+```text
 [thrust] Starting Thruster HTTP/2 proxy
 [thrust] Proxying to http://localhost:3000
 [thrust] Serving from ./public
@@ -134,7 +134,7 @@ When the server starts, you'll see Thruster initialization in the logs:
 
 Thruster works seamlessly with Heroku. The standard `Procfile` is already configured:
 
-```
+```text
 web: bundle exec thrust bin/rails server
 ```
 
@@ -208,7 +208,7 @@ Thruster will automatically:
 
 Thruster logs important events:
 
-```
+```text
 [thrust] Starting Thruster HTTP/2 proxy
 [thrust] Proxying to http://localhost:3000
 [thrust] Serving from ./public
@@ -273,12 +273,12 @@ config.public_file_server.headers = {
 ### From Puma Early Hints
 
 Previous configuration:
-```
+```text
 web: bundle exec puma -C config/puma.rb --early-hints
 ```
 
 New configuration:
-```
+```text
 web: bundle exec thrust bin/rails server
 ```
 

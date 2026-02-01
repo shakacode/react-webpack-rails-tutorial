@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import json
+import re
+import sys
 import urllib.request
 import websocket
 import ssl
@@ -10,7 +12,7 @@ tabs = json.loads(response.read())
 
 if not tabs:
     print("No Chrome tabs found")
-    exit(1)
+    sys.exit(1)
 
 # Use the first tab (the one we saw with the PR review app)
 tab = tabs[0]
@@ -60,7 +62,6 @@ for i in range(10):  # Read a few messages
                     print("🎉 Found Early Hints debug comments in HTML!\n")
 
                     # Extract the comments
-                    import re
                     matches = re.findall(r'<!--[\s\S]*?Early Hints[\s\S]*?-->', html)
                     for match in matches:
                         print(match)
@@ -84,6 +85,8 @@ ws.close()
 
 if found_early_hints:
     print("\n✅ SUCCESS: Early Hints are working!")
+    sys.exit(0)
 else:
     print("\n⚠️  Could not verify Early Hints in the current page state")
     print("The page may need to be reloaded to capture HTTP 103 responses")
+    sys.exit(1)

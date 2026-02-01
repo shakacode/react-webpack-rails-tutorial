@@ -1,4 +1,5 @@
 const http = require('http');
+const WebSocket = require('ws');
 
 // Fetch Chrome tabs
 const req = http.get('http://localhost:9222/json', (res) => {
@@ -13,7 +14,7 @@ const req = http.get('http://localhost:9222/json', (res) => {
 
     if (tabs.length === 0) {
       console.log('No Chrome tabs found');
-      return;
+      process.exit(1);
     }
 
     const tab = tabs[0];
@@ -21,7 +22,6 @@ const req = http.get('http://localhost:9222/json', (res) => {
     console.log(`🔗 URL: ${tab.url}\n`);
 
     // Connect to WebSocket
-    const WebSocket = require('ws');
     const ws = new WebSocket(tab.webSocketDebuggerUrl);
 
     let msgId = 1;
@@ -30,26 +30,32 @@ const req = http.get('http://localhost:9222/json', (res) => {
       console.log('✅ Connected to Chrome DevTools Protocol\n');
 
       // Enable Runtime
-      ws.send(JSON.stringify({
-        id: msgId++,
-        method: 'Runtime.enable'
-      }));
+      ws.send(
+        JSON.stringify({
+          id: msgId,
+          method: 'Runtime.enable',
+        }),
+      );
+      msgId += 1;
 
       // Get HTML content
       setTimeout(() => {
-        ws.send(JSON.stringify({
-          id: msgId++,
-          method: 'Runtime.evaluate',
-          params: {
-            expression: 'document.documentElement.outerHTML'
-          }
-        }));
+        ws.send(
+          JSON.stringify({
+            id: msgId,
+            method: 'Runtime.evaluate',
+            params: {
+              expression: 'document.documentElement.outerHTML',
+            },
+          }),
+        );
+        msgId += 1;
       }, 500);
     });
 
-    ws.on('message', (data) => {
+    ws.on('message', (msgData) => {
       try {
-        const msg = JSON.parse(data);
+        const msg = JSON.parse(msgData);
 
         if (msg.result && msg.result.result && msg.result.result.value) {
           const html = msg.result.result.value;
@@ -62,7 +68,7 @@ const req = http.get('http://localhost:9222/json', (res) => {
           if (earlyHintsMatch) {
             earlyHintsFound = true;
             console.log('🎉 Found Early Hints debug comments in HTML!\n');
-            earlyHintsMatch.forEach(match => {
+            earlyHintsMatch.forEach((match) => {
               console.log(match);
               console.log();
             });
@@ -79,7 +85,7 @@ const req = http.get('http://localhost:9222/json', (res) => {
           const linkMatches = html.match(/<link[^>]*rel=["']preload["'][^>]*>/g);
           if (linkMatches) {
             console.log(`\n📦 Found ${linkMatches.length} preload links in HTML head:`);
-            linkMatches.slice(0, 5).forEach(link => {
+            linkMatches.slice(0, 5).forEach((link) => {
               console.log(`  ${link}`);
             });
           }
