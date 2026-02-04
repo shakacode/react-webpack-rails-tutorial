@@ -20,6 +20,8 @@ spec:
       ports:
         - number: 3000
           protocol: http
+          # Note: Keep as 'http' - Thruster handles HTTP/2 on the TLS frontend,
+          # but the load balancer communicates with the container via HTTP/1.1
   defaultOptions:
     # Start out like this for "test apps"
     autoscaling:

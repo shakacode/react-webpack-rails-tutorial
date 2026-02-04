@@ -21,6 +21,11 @@ default: &default
   # Use the config.build_production_command in config/initializers/react_on_rails.rb
   shakapacker_precompile: false
 
+  # Note: precompile_hook is not used here because:
+  # - In development: bin/dev runs rescript + locale before starting processes
+  # - In production: build_production_command includes rescript, and
+  #   react_on_rails:assets:webpack already depends on react_on_rails:locale
+
 development:
   <<: *default
   # This is false since we're running `bin/shakapacker -w` in Procfile.dev-setic
@@ -28,7 +33,7 @@ development:
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
-    https: false
+    server: http
     host: localhost
     port: 3035
     # Hot Module Replacement updates modules while the application is running without a full reload
@@ -63,3 +68,8 @@ production:
 
   # Cache manifest.json for performance
   cache_manifest: true
+
+  # Early hints configuration
+  early_hints:
+    enabled: true
+    debug: false # Set to true to output debug info as HTML comments (exposes internals)
