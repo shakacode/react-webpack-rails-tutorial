@@ -286,6 +286,74 @@ If you encounter 502 errors:
 3. Check protocol setting: Should be `protocol: http` not `http2`
 4. Review workload logs: `cpln workload eventlog <workload> --gvc <gvc> --org <org>`
 
+## Troubleshooting Deployment Failures
+
+For detailed debugging guidance, see [docs/debugging-deployment-failures.md](docs/debugging-deployment-failures.md).
+
+### Using the Control Plane MCP for Debugging
+
+The Control Plane MCP (Model Context Protocol) provides AI-assisted debugging tools that can diagnose deployment issues quickly. If you're using Claude Code or another MCP-compatible AI assistant, you can use these tools:
+
+```python
+# Set context for your organization
+mcp__cpln__set_context(org="your-org", defaultGvc="your-gvc")
+
+# Check workload deployment status
+mcp__cpln__get_workload_deployments(gvc="your-gvc", name="rails")
+
+# View events (shows Capacity AI changes, errors)
+mcp__cpln__get_workload_events(gvc="your-gvc", name="rails")
+
+# Update workload settings (e.g., disable Capacity AI)
+mcp__cpln__update_workload(gvc="your-gvc", name="rails", capacityAI=false, memory="512Mi")
+```
+
+### Common Issues
+
+#### Container Crash Loop with Exit Code 1
+
+**Symptoms:** High restart count, 503 errors, "MinimumReplicasUnavailable"
+
+**Debugging steps:**
+1. Check container logs: `cpflow logs -a <app-name>`
+2. Look for application errors (missing env vars, database issues)
+3. Check if Capacity AI reduced resources too low
+
+**Common causes:**
+- Missing `SECRET_KEY_BASE` (required for Rails 8.1+)
+- Database connection failures
+- Capacity AI memory starvation
+
+#### Capacity AI Reduces Resources Too Low
+
+**Symptoms:** Memory reduced to <100Mi, crash loop
+
+**Fix:**
+```bash
+# Via cpflow
+cpflow run -a <app-name> -- echo "test"  # Verify access
+
+# Via MCP tools
+mcp__cpln__update_workload(
+  gvc="your-gvc",
+  name="rails",
+  capacityAI=false,
+  memory="512Mi",
+  cpu="300m"
+)
+```
+
+#### Missing Environment Variables (Rails 8.1+)
+
+Rails 8.1+ requires `SECRET_KEY_BASE` at runtime. Add it to your GVC environment:
+
+```bash
+# Generate a secret
+openssl rand -hex 64
+
+# Add to GVC via Control Plane UI or MCP tools
+```
+
 ## Other notes
 
 ### `entrypoint.sh`
