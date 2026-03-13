@@ -8510,7 +8510,7 @@ react-is@^18.0.0, react-is@^18.3.1:
 
 react-on-rails@16.4.0-rc.9:
   version "16.4.0-rc.9"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-16.4.0-rc.9.tgz#d8d0e7b01f2e276a8b10306e27487dc7bf455d9d"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.4.0-rc.9.tgz#d8d0e7b01f2e276a8b10306e27487dc7bf455d9d"
   integrity sha512-+JA41YxSmm43uIqaLzbyCoXPPpc4waGzcCY00jfINGqofA+YSiLhBQGojstpLlLnrCEGHfgf/b/TexvdqOSzeA==
 
 react-proxy@^1.1.7:
@@ -9137,7 +9137,7 @@ setprototypeof@1.2.0:
 
 shakapacker@9.6.1:
   version "9.6.1"
-  resolved "https://registry.yarnpkg.com/shakapacker/-/shakapacker-9.6.1.tgz#de307cf75b6bf13f3c7e09c966a38e7822dd9999"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-9.6.1.tgz#de307cf75b6bf13f3c7e09c966a38e7822dd9999"
   integrity sha512-xE1RAm6c1C6o1Erj+8Iih/WqmauKpcGUiZ2t8NJRBlKmOypvWpyk+h2DQ3u02ii3aiOYlDDSboJMk/yzmaIOPA==
   dependencies:
     js-yaml "^4.1.0"
