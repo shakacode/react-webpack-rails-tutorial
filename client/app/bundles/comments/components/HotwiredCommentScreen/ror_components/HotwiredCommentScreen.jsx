@@ -8,8 +8,8 @@ import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import { translations } from 'libs/i18n/translations';
 
-import CommentList from '../CommentBox/CommentList/CommentList';
-import css from './HotwiredCommentScreen.module.scss';
+import CommentList from '../../CommentBox/CommentList/CommentList';
+import css from '../HotwiredCommentScreen.module.scss';
 
 class HotwiredCommentScreen extends BaseComponent {
   constructor(props) {

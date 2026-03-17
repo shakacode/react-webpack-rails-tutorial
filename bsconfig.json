@@ -8,12 +8,12 @@
   ],
   "package-specs": [
     {
-      "module": "es6",
+      "module": "esmodule",
       "in-source": true
     }
   ],
   "bsc-flags": ["-open JsonCombinators", "-open Belt"],
-  "suffix": ".bs.js",
+  "suffix": ".res.js",
   "bs-dependencies": [
     "@rescript/react",
     "@rescript/core",

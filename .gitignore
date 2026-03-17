@@ -52,3 +52,18 @@ lib/bs
 /lib/ocaml
 
 client/app/bundles/comments/rescript/**/*.bs.js
+
+# Server-side rendering bundles (private)
+# Using React on Rails default directory
+/ssr-generated/
+
+# Generated React on Rails packs
+**/generated/**
+
+# Generated ReScript files (compiled from .res source files)
+**/*.res.js
+**/*.res.mjs
+**/*.bs.js
+
+.claude/
+.context/

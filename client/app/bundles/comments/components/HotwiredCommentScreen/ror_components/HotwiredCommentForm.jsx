@@ -10,8 +10,8 @@ import { defaultLocale } from 'libs/i18n/default';
 import { translations } from 'libs/i18n/translations';
 
 import { Turbo } from '@hotwired/turbo-rails';
-import CommentForm from '../CommentBox/CommentForm/CommentForm';
-import css from './HotwiredCommentScreen.module.scss';
+import CommentForm from '../../CommentBox/CommentForm/CommentForm';
+import css from '../HotwiredCommentScreen.module.scss';
 
 class HotwiredCommentForm extends BaseComponent {
   constructor(props) {

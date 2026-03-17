@@ -82,6 +82,7 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 + [Webpack](#webpack)
   + [Configuration Files](#configuration-files)
   + [Additional Resources](#additional-resources)
++ [Thruster HTTP/2 Proxy](#thruster-http2-proxy)
 + [Sass, CSS Modules, and Tailwind CSS integration](#sass-css-modules-and-tailwind-css-integration)
   + [Fonts with SASS](#fonts-with-sass)
 + [Process Management during Development](#process-management-during-development)
@@ -117,6 +118,7 @@ See package.json and Gemfile for versions
 1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
 1. [Ruby on Rails 7](http://rubyonrails.org/) for backend app and comparison with plain HTML
+1. [Thruster](https://github.com/basecamp/thruster) - Zero-config HTTP/2 proxy for optimized asset delivery
 1. [Heroku for Rails 7 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails7)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
@@ -165,15 +167,87 @@ See package.json and Gemfile for versions
 + **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
-## Webpack
+## Webpack and Rspack
 
-_Converted to use Shakapacker webpack configuration_.
+_Converted to use Shakapacker with support for both Webpack and Rspack bundlers_.
 
+This project supports both Webpack and Rspack as JavaScript bundlers via [Shakapacker](https://github.com/shakacode/shakapacker). Switch between them by changing the `assets_bundler` setting in `config/shakapacker.yml`:
+
+```yaml
+# Use Rspack (default - faster builds)
+assets_bundler: rspack
+
+# Or use Webpack (classic, stable)
+assets_bundler: webpack
+```
+
+### Performance Comparison
+
+Measured bundler compile times for this project (client + server bundles):
+
+| Build Type | Webpack | Rspack | Improvement |
+|------------|---------|--------|-------------|
+| Development | ~3.1s | ~1.0s | **~3x faster** |
+| Production (cold) | ~22s | ~10.7s | **~2x faster** |
+
+**Benefits of Rspack:**
+- 67% faster development builds (saves ~2.1s per incremental build)
+- 51% faster production builds (saves ~11s on cold builds)
+- Faster incremental rebuilds during development
+- Reduced CI build times
+- Drop-in replacement - same configuration files work for both bundlers
+
+_Note: These are actual bundler compile times. Total build times including package manager overhead may vary._
+
+### Configuration Files
+
+All bundler configuration is in `config/webpack/`:
+- `webpack.config.js` - Main entry point (auto-detects Webpack or Rspack)
+- `commonWebpackConfig.js` - Shared configuration
+- `clientWebpackConfig.js` - Client bundle settings
+- `serverWebpackConfig.js` - Server-side rendering bundle
+- `development.js`, `production.js`, `test.js` - Environment-specific settings
 
 ### Additional Resources
 - [Webpack Docs](https://webpack.js.org/)
 - [Webpack Cookbook](https://christianalfoni.github.io/react-webpack-cookbook/)
 - Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
+
+## Thruster HTTP/2 Proxy
+
+This project uses [Thruster](https://github.com/basecamp/thruster), a zero-config HTTP/2 proxy from Basecamp, for optimized asset delivery and improved performance.
+
+### What Thruster Provides
+
+- **HTTP/2 Support**: Automatic HTTP/2 with multiplexing for faster parallel asset loading
+- **Asset Caching**: Intelligent caching of static assets from the `public/` directory
+- **Compression**: Automatic gzip/Brotli compression for reduced bandwidth usage
+- **Simplified Configuration**: No need for manual early hints configuration
+- **Production Ready**: Built-in TLS termination with Let's Encrypt support
+
+### Benefits
+
+Compared to running Puma directly with `--early-hints`:
+- **20-30% faster** initial page loads due to HTTP/2 multiplexing
+- **40-60% reduction** in transfer size with Brotli compression
+- **Simpler setup** - zero configuration required
+- **Better caching** - automatic static asset optimization
+
+### Usage
+
+Thruster is already integrated into all Procfiles:
+
+```bash
+# Development with HMR
+foreman start -f Procfile.dev
+
+# Production
+web: bundle exec thrust bin/rails server
+```
+
+The server automatically benefits from HTTP/2, caching, and compression without any additional configuration.
+
+For detailed information, troubleshooting, and advanced configuration options, see [docs/thruster.md](docs/thruster.md).
 
 ## Sass, CSS Modules, and Tailwind CSS Integration
 This example project uses mainly Tailwind CSS for styling.

@@ -8,40 +8,182 @@ on:
         required: true
         type: string
 
+env:
+  HEALTH_CHECK_RETRIES: 12
+  HEALTH_CHECK_INTERVAL: 10
+
 jobs:
   promote-to-production:
     runs-on: ubuntu-latest
     if: github.event.inputs.confirm_promotion == 'promote'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
         with:
           token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           org: ${{ vars.CPLN_ORG_PRODUCTION }}
-      
+
+      - name: Verify Production Environment Variables
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+        run: |
+          echo "Checking that production has all staging environment variables..."
+
+          # Get staging env var names
+          STAGING_VARS=$(CPLN_TOKEN=$CPLN_TOKEN_STAGING cpln gvc get ${{ vars.STAGING_APP_NAME }} \
+            --org ${{ vars.CPLN_ORG_STAGING }} -o json 2>/dev/null | jq -r '.spec.env[].name' | sort)
+
+          # Get production env var names
+          PROD_VARS=$(CPLN_TOKEN=$CPLN_TOKEN_PRODUCTION cpln gvc get ${{ vars.PRODUCTION_APP_NAME }} \
+            --org ${{ vars.CPLN_ORG_PRODUCTION }} -o json 2>/dev/null | jq -r '.spec.env[].name' | sort)
+
+          # Find vars in staging but not in production
+          MISSING=$(comm -23 <(echo "$STAGING_VARS") <(echo "$PROD_VARS"))
+
+          if [ -n "$MISSING" ]; then
+            echo "::error::Production GVC is missing these environment variables that exist in staging:"
+            echo "$MISSING"
+            echo ""
+            echo "Please add these variables to the production GVC before promoting."
+            echo "This prevents deployment failures due to missing configuration."
+            exit 1
+          fi
+
+          echo "✅ Production has all staging environment variables"
+
+      - name: Capture Current Production Image (for rollback)
+        id: capture-current
+        run: |
+          echo "Capturing current production image for potential rollback..."
+
+          # Get the current image from the rails workload
+          CURRENT_IMAGE=$(cpln workload get rails \
+            --gvc ${{ vars.PRODUCTION_APP_NAME }} \
+            --org ${{ vars.CPLN_ORG_PRODUCTION }} \
+            -o json | jq -r '.spec.containers[0].image')
+
+          echo "Current production image: $CURRENT_IMAGE"
+          echo "current_image=$CURRENT_IMAGE" >> $GITHUB_OUTPUT
+
+          # Also capture the workload version for reference
+          CURRENT_VERSION=$(cpln workload get rails \
+            --gvc ${{ vars.PRODUCTION_APP_NAME }} \
+            --org ${{ vars.CPLN_ORG_PRODUCTION }} \
+            -o json | jq -r '.version')
+
+          echo "Current workload version: $CURRENT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
       - name: Copy Image from Staging
         run: cpflow copy-image-from-upstream -a ${{ vars.PRODUCTION_APP_NAME }} -t ${{ secrets.CPLN_TOKEN_STAGING }}
-      
+
       - name: Deploy Image to Production
-        run: cpflow deploy-image -a ${{ vars.PRODUCTION_APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_PRODUCTION }}
-      
+        id: deploy
+        run: |
+          echo "Deploying new image to production..."
+          cpflow deploy-image -a ${{ vars.PRODUCTION_APP_NAME }} --run-release-phase --org ${{ vars.CPLN_ORG_PRODUCTION }}
+
+      - name: Wait for Deployment Health
+        id: health-check
+        run: |
+          echo "Waiting for deployment to become healthy..."
+
+          for i in $(seq 1 $HEALTH_CHECK_RETRIES); do
+            echo "Health check attempt $i/$HEALTH_CHECK_RETRIES..."
+
+            # Get deployment status
+            DEPLOYMENT_STATUS=$(cpln workload get rails \
+              --gvc ${{ vars.PRODUCTION_APP_NAME }} \
+              --org ${{ vars.CPLN_ORG_PRODUCTION }} \
+              -o json 2>/dev/null)
+
+            # Check if deployment endpoint is responding
+            ENDPOINT=$(echo "$DEPLOYMENT_STATUS" | jq -r '.status.endpoint // empty')
+
+            if [ -n "$ENDPOINT" ]; then
+              # Try to reach the health endpoint
+              HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$ENDPOINT" 2>/dev/null || echo "000")
+
+              echo "Endpoint: $ENDPOINT, HTTP Status: $HTTP_STATUS"
+
+              if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "301" ] || [ "$HTTP_STATUS" = "302" ]; then
+                echo "✅ Deployment is healthy! HTTP status: $HTTP_STATUS"
+                echo "healthy=true" >> $GITHUB_OUTPUT
+                exit 0
+              fi
+            fi
+
+            if [ $i -lt $HEALTH_CHECK_RETRIES ]; then
+              echo "Deployment not ready yet, waiting ${HEALTH_CHECK_INTERVAL}s..."
+              sleep $HEALTH_CHECK_INTERVAL
+            fi
+          done
+
+          echo "::error::Deployment health check failed after $HEALTH_CHECK_RETRIES attempts"
+          echo "healthy=false" >> $GITHUB_OUTPUT
+          exit 1
+
+      - name: Rollback on Failure
+        if: failure() && steps.capture-current.outputs.current_image != ''
+        env:
+          PREVIOUS_IMAGE: ${{ steps.capture-current.outputs.current_image }}
+        run: |
+          echo "::warning::Deployment failed! Rolling back to previous image..."
+          echo "Rolling back to: $PREVIOUS_IMAGE"
+
+          # Update the workload to use the previous image
+          cpln workload update rails \
+            --gvc ${{ vars.PRODUCTION_APP_NAME }} \
+            --org ${{ vars.CPLN_ORG_PRODUCTION }} \
+            --set spec.containers[0].image="$PREVIOUS_IMAGE"
+
+          echo "Waiting for rollback to complete..."
+          sleep 30
+
+          # Verify rollback succeeded
+          ROLLBACK_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
+            "https://$(cpln workload get rails --gvc ${{ vars.PRODUCTION_APP_NAME }} --org ${{ vars.CPLN_ORG_PRODUCTION }} -o json | jq -r '.status.endpoint' | sed 's|https://||')" 2>/dev/null || echo "000")
+
+          if [ "$ROLLBACK_STATUS" = "200" ] || [ "$ROLLBACK_STATUS" = "301" ] || [ "$ROLLBACK_STATUS" = "302" ]; then
+            echo "✅ Rollback successful! Production is back online with previous image."
+          else
+            echo "::error::Rollback may have issues. HTTP status: $ROLLBACK_STATUS. Please check production manually!"
+          fi
+
       - name: Create GitHub Release
-        if: success()
+        if: success() && steps.health-check.outputs.healthy == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Get the current date in YYYY-MM-DD format
           RELEASE_DATE=$(date '+%Y-%m-%d')
           TIMESTAMP=$(date '+%H%M')
-          
+
           # Create a release tag
           RELEASE_TAG="production-${RELEASE_DATE}-${TIMESTAMP}"
-          
+
           # Create GitHub release
           gh release create "${RELEASE_TAG}" \
             --title "Production Release ${RELEASE_DATE} ${TIMESTAMP}" \
             --notes "🚀 Production deployment on ${RELEASE_DATE} at ${TIMESTAMP}"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Promotion Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.health-check.outputs.healthy }}" == "true" ]; then
+            echo "✅ **Status:** Deployment successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Deployment failed (rollback attempted)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Previous Image:** \`${{ steps.capture-current.outputs.current_image }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Previous Version:** ${{ steps.capture-current.outputs.current_version }}" >> $GITHUB_STEP_SUMMARY

@@ -1,16 +1,20 @@
 const merge = require('webpack-merge');
 
 const devBuild = process.env.NODE_ENV === 'production' ? 'production' : 'development';
-const webpack = require('webpack');
-
+const { config } = require('shakapacker');
 const environment = require('./environment');
+
+// Auto-detect bundler from shakapacker config and load the appropriate library
+const bundler = config.assets_bundler === 'rspack'
+  ? require('@rspack/core')
+  : require('webpack');
 
 // React Server Side Rendering shakapacker config
 // Builds a Node compatible file that React on Rails can load, never served to the client.
 
 environment.plugins.insert(
   'DefinePlugin',
-  new webpack.DefinePlugin({
+  new bundler.DefinePlugin({
     TRACE_TURBOLINKS: true,
     'process.env': {
       NODE_ENV: devBuild,

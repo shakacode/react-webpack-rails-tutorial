@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import ReactOnRails from 'react-on-rails';
 
-import NonRouterCommentsContainer from '../containers/NonRouterCommentsContainer.jsx';
+import NonRouterCommentsContainer from '../../../containers/NonRouterCommentsContainer.jsx';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/de';
 import 'intl/locale-data/jsonp/ja';

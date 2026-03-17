@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import TestUtils from 'react-dom/test-utils';
+import { render, screen, within } from '@testing-library/react';
 
-export { React, TestUtils };
+export { React, render, screen, within };

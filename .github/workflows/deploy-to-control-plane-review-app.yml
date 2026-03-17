@@ -241,12 +241,11 @@ jobs:
         with:
           script: |
             const deployingMessage = [
-              '🚀 Deploying to Control Plane...',
+              '## 🚀 Deploying to Control Plane...',
               '',
-              '⏳ Waiting for deployment to be ready...',
+              '⏳ **Waiting for deployment to be ready...**',
               '',
               '📝 [View Deploy Logs](${{ env.WORKFLOW_URL }})',
-              '',
               process.env.CONSOLE_LINK
             ].join('\n');
             
@@ -293,11 +292,13 @@ jobs:
             
             // Define messages based on deployment status
             const successMessage = [
-              '✅ Deployment complete for PR #' + prNumber + ', commit ' + '${{ env.PR_SHA }}',
+              '## 🎉 ✨ Deploy Complete! 🚀',
               '',
-              '🚀 [Review App for PR #' + prNumber + '](' + appUrl + ')',
+              '### 🌐 [**➡️ Open Review App**](' + appUrl + ')',
+              '',
+              '_Deployment successful for PR #' + prNumber + ', commit ' + '${{ env.PR_SHA }}' + '_',
+              '',
               consoleLink,
-              '',
               '📋 [View Completed Action Build and Deploy Logs](' + workflowUrl + ')'
             ].join('\n');
             

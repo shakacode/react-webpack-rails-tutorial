@@ -7,7 +7,7 @@ import { mangle } from 'marked-mangle';
 marked.use(gfmHeadingId());
 marked.use(mangle());
 
-export default class extends Controller {
+export default class CommentsController extends Controller {
   static targets = ['commentList', 'commentAuthor', 'commentText', 'commentRefresh', 'alertDiv', 'errorList'];
 
   resetText() {
@@ -22,10 +22,8 @@ export default class extends Controller {
       errorList.innerHTML = '';
       if (!inputAuthor.value) {
         errors.push('Author');
-      } else if (!inputText.value) {
-        errors.push('Text');
-      } else {
-        errors.push('Author');
+      }
+      if (!inputText.value) {
         errors.push('Text');
       }
       errors.forEach((error) => {
