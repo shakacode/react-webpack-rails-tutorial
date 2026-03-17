@@ -1,6 +1,5 @@
 const devBuild = process.env.NODE_ENV === 'development';
 const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const { config } = require('shakapacker');
 const environment = require('./environment');
 
@@ -24,8 +23,8 @@ environment.plugins.append(
   }),
 );
 
-if (devBuild && isHMR) {
-  environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());
+if (devBuild && isHMR && config.assets_bundler !== 'rspack') {
+  // Rspack is the only supported bundler for this repo; no webpack refresh plugin wiring.
 }
 
 module.exports = environment;

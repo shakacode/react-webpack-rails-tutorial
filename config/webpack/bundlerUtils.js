@@ -1,53 +1,38 @@
 /**
- * Bundler utilities for automatic Webpack/Rspack detection.
+ * Bundler utilities for Rspack-only configuration.
  *
- * Shakapacker 9.1+ supports both Webpack and Rspack as bundlers.
- * The bundler is selected via config/shakapacker.yml:
- *   assets_bundler: webpack  # or 'rspack'
+ * This repository standardizes on Rspack with Shakapacker.
  */
 
 const { config } = require('shakapacker');
 
-const VALID_BUNDLERS = ['webpack', 'rspack'];
-
 // Cache for bundler module
-// IMPORTANT: Shakapacker config is immutable at runtime - it's loaded once when the
-// Node process starts. Changing shakapacker.yml requires restarting the server.
-// This cache is safe because config.assets_bundler cannot change during execution.
 let _cachedBundler = null;
-let _cachedBundlerType = null;
+
+const ensureRspack = () => {
+  if (config.assets_bundler !== 'rspack') {
+    throw new Error(
+      `Invalid assets_bundler: "${config.assets_bundler}". ` +
+      'This project is configured for Rspack only. ' +
+      'Set assets_bundler: rspack in config/shakapacker.yml',
+    );
+  }
+};
 
 /**
- * Gets the appropriate bundler module based on shakapacker.yml configuration.
+ * Gets the Rspack module for the current build.
  *
- * Note: The bundler configuration is read from shakapacker.yml at startup.
- * Changing the config requires restarting the Node process. This function
- * memoizes the result for performance.
- *
- * @returns {Object} Either webpack or @rspack/core module
- * @throws {Error} If assets_bundler is not 'webpack' or 'rspack'
+ * @returns {Object} @rspack/core module
+ * @throws {Error} If assets_bundler is not 'rspack'
  */
 const getBundler = () => {
-  // Return cached bundler if config hasn't changed
-  if (_cachedBundler && _cachedBundlerType === config.assets_bundler) {
+  ensureRspack();
+
+  if (_cachedBundler) {
     return _cachedBundler;
   }
 
-  // Validate bundler configuration
-  const bundlerType = config.assets_bundler || 'webpack'; // Default to webpack
-  if (!VALID_BUNDLERS.includes(bundlerType)) {
-    throw new Error(
-      `Invalid assets_bundler: "${bundlerType}". ` +
-      `Must be one of: ${VALID_BUNDLERS.join(', ')}. ` +
-      `Check config/shakapacker.yml`,
-    );
-  }
-
-  // Load and cache the bundler module
-  _cachedBundlerType = bundlerType;
-  _cachedBundler = bundlerType === 'rspack'
-    ? require('@rspack/core')
-    : require('webpack');
+  _cachedBundler = require('@rspack/core');
 
   return _cachedBundler;
 };
@@ -55,20 +40,16 @@ const getBundler = () => {
 /**
  * Checks if the current bundler is Rspack.
  *
- * @returns {boolean} True if using Rspack, false if using Webpack
+ * @returns {boolean} True if using Rspack
  */
 const isRspack = () => config.assets_bundler === 'rspack';
 
 /**
- * Gets the appropriate CSS extraction plugin for the current bundler.
+ * Gets the CSS extraction plugin for Rspack.
  *
- * @returns {Object} Either mini-css-extract-plugin (Webpack) or CssExtractRspackPlugin (Rspack)
+ * @returns {Object} CssExtractRspackPlugin
  */
-const getCssExtractPlugin = () => {
-  return isRspack()
-    ? getBundler().CssExtractRspackPlugin
-    : require('mini-css-extract-plugin');
-};
+const getCssExtractPlugin = () => getBundler().CssExtractRspackPlugin;
 
 module.exports = {
   getBundler,

@@ -3,31 +3,15 @@
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-const { devServer, inliningCss, config } = require('shakapacker');
+const { inliningCss } = require('shakapacker');
 
 const webpackConfig = require('./webpackConfig');
 
-const developmentEnvOnly = (clientWebpackConfig, _serverWebpackConfig) => {
-  // plugins
+const developmentEnvOnly = (_clientWebpackConfig, _serverWebpackConfig) => {
   if (inliningCss) {
-    // Note, when this is run, we're building the server and client bundles in separate processes.
-    // Thus, this plugin is not applied to the server bundle.
-
-    // ReactRefreshWebpackPlugin is not compatible with rspack
-    const isRspack = config.assets_bundler === 'rspack';
-    if (!isRspack) {
-      // eslint-disable-next-line global-require
-      const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-      clientWebpackConfig.plugins.push(
-        new ReactRefreshWebpackPlugin({
-          overlay: {
-            sockPort: devServer.port,
-          },
-        }),
-      );
-    }
+    // Rspack HMR/refresh is handled by Shakapacker + @rspack/plugin-react-refresh.
+    // No extra development-only plugin wiring is needed here.
   }
 };
 
 module.exports = webpackConfig(developmentEnvOnly);
-
