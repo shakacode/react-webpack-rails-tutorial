@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Be sure to restart your server when you modify this file.
 
 # Define an application-wide content security policy.
@@ -21,6 +19,10 @@
 #   # Generate session nonces for permitted importmap, inline scripts, and inline styles.
 #   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
 #   config.content_security_policy_nonce_directives = %w(script-src style-src)
+#
+#   # Automatically add `nonce` to `javascript_tag`, `javascript_include_tag`, and `stylesheet_link_tag`
+#   # if the corresponding directives are specified in `content_security_policy_nonce_directives`.
+#   # config.content_security_policy_nonce_auto = true
 #
 #   # Report violations without enforcing the policy.
 #   # config.content_security_policy_report_only = true
