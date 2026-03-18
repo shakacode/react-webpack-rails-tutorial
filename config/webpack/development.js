@@ -4,13 +4,13 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const { inliningCss } = require('shakapacker');
+const ReactRefreshRspackPlugin = require('@rspack/plugin-react-refresh');
 
 const webpackConfig = require('./webpackConfig');
 
-const developmentEnvOnly = (_clientWebpackConfig, _serverWebpackConfig) => {
+const developmentEnvOnly = (clientWebpackConfig, _serverWebpackConfig) => {
   if (inliningCss) {
-    // Rspack HMR/refresh is handled by Shakapacker + @rspack/plugin-react-refresh.
-    // No extra development-only plugin wiring is needed here.
+    clientWebpackConfig.plugins.push(new ReactRefreshRspackPlugin());
   }
 };
 

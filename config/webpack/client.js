@@ -23,8 +23,4 @@ environment.plugins.append(
   }),
 );
 
-if (devBuild && isHMR && config.assets_bundler !== 'rspack') {
-  // Rspack is the only supported bundler for this repo; no webpack refresh plugin wiring.
-}
-
 module.exports = environment;
