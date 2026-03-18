@@ -71,24 +71,6 @@ describe('bundlerUtils', () => {
     });
   });
 
-  describe('isRspack()', () => {
-    it('returns true when assets_bundler is rspack', () => {
-      mockConfig.assets_bundler = 'rspack';
-      jest.doMock('shakapacker', () => ({ config: mockConfig }));
-      const utils = require('../../../config/webpack/bundlerUtils');
-
-      expect(utils.isRspack()).toBe(true);
-    });
-
-    it('throws when assets_bundler is webpack', () => {
-      mockConfig.assets_bundler = 'webpack';
-      jest.doMock('shakapacker', () => ({ config: mockConfig }));
-      const utils = require('../../../config/webpack/bundlerUtils');
-
-      expect(() => utils.isRspack()).toThrow('configured for Rspack only');
-    });
-  });
-
   describe('getCssExtractPlugin()', () => {
     it('returns CssExtractRspackPlugin when using rspack', () => {
       mockConfig.assets_bundler = 'rspack';

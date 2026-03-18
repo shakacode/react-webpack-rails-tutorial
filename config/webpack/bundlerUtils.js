@@ -38,16 +38,6 @@ const getBundler = () => {
 };
 
 /**
- * Validates rspack-only mode and returns true.
- *
- * @returns {boolean} Always true after validation
- */
-const isRspack = () => {
-  ensureRspack();
-  return true;
-};
-
-/**
  * Gets the CSS extraction plugin for Rspack.
  *
  * @returns {Object} CssExtractRspackPlugin
@@ -56,6 +46,5 @@ const getCssExtractPlugin = () => getBundler().CssExtractRspackPlugin;
 
 module.exports = {
   getBundler,
-  isRspack,
   getCssExtractPlugin,
 };
