@@ -10,12 +10,13 @@ gem "shakapacker", "9.6.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "listen"
-gem "rails", "~> 8.0"
+gem "rails", "~> 8.1.2"
 
 gem "pg"
 
 gem "puma"
 gem "thruster", "~> 0.1"
+gem "bootsnap", require: false
 
 # Use SCSS for stylesheets
 gem "sass-rails"
