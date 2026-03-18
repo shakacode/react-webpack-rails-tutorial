@@ -2,13 +2,13 @@
 # You can run these commands in separate shells
 #
 # Note: bin/dev runs precompile tasks (rescript + locale) BEFORE starting these processes.
-# This ensures all generated files exist before webpack starts watching.
+# This ensures all generated files exist before Rspack starts watching.
 #
 # ReScript watch mode (no clean - bin/dev already did the clean build)
 rescript: yarn res:watch
 # redis: redis-server  # Run Redis as a system service instead (brew services start redis)
 rails: bundle exec thrust bin/rails server -p 3000
-# Client webpack dev server with HMR
+# Client Rspack dev server with HMR
 wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
-# Server webpack watcher for SSR bundle
+# Server Rspack watcher for SSR bundle
 wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch

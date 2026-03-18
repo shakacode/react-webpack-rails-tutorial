@@ -65,5 +65,7 @@ client/app/bundles/comments/rescript/**/*.bs.js
 **/*.res.mjs
 **/*.bs.js
 
-.claude/
+.claude/*
+!.claude/commands/
+!.claude/commands/address-review.md
 .context/

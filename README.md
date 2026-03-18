@@ -1,6 +1,6 @@
    [![Code Climate](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial/badges/gpa.svg)](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial) [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
 
-# React, Redux, Tailwind CSS, ES7, Webpack, Ruby on Rails Demo
+# React, Redux, Tailwind CSS, ES2024, Rspack, Ruby on Rails Demo
 
 * Server-Side Rendering of React via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
 * Live at [www.reactrails.com](http://www.reactrails.com/)
@@ -30,8 +30,8 @@ React on Rails Pro provides Node server rendering and other performance enhancem
 
 For more information, see the [React on Rails Pro Docs](https://www.shakacode.com/react-on-rails-pro/).
 
-* Optimizing your front end setup with Webpack v5+ and Shakapacker for React on Rails including code splitting with loadable-components.
-* Upgrading your app to use the current Webpack setup that skips the Sprockets asset pipeline.
+* Optimizing your front-end setup with Rspack + Shakapacker for React on Rails, including SSR and code splitting.
+* Upgrading your app to the current React on Rails 16.4 / Shakapacker 9.7 stack with modern asset builds.
 * Better performance client and server side.
 
 ShakaCode can also help you with your custom software development needs. We specialize in marketplace and e-commerce applications that utilize both Rails and React. We can even leverage our code for [HiChee.com](https://hichee.com) for your app!
@@ -77,9 +77,9 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
   + [Technologies Involved](#technologies-involved)
 + [Basic Demo Setup](#basic-demo-setup)
   + [Basic Command Line](#basic-command-line)
-+ [Javascript Development without Rails](#javascript-development-without-rails-using-the-webpack-dev-server)
++ [Javascript Development without Rails](#javascript-development-without-rails-using-the-rspack-dev-server)
 + [Rails Integration](#rails-integration)
-+ [Webpack](#webpack)
++ [Rspack](#rspack-with-shakapacker)
   + [Configuration Files](#configuration-files)
   + [Additional Resources](#additional-resources)
 + [Thruster HTTP/2 Proxy](#thruster-http2-proxy)
@@ -95,13 +95,13 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 ## Demoed Functionality
 
-- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy react/webpack integration with Rails.
-- Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside of Rails using Webpack as described in [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/).
+- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy React + Rspack integration with Rails.
+- Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside Rails using modern Shakapacker/Rspack builds.
 - Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
 - Example of React/Redux with Rails Action Cable.
-- Example of Rails 7 with ReactJs/Redux/React-Router with Webpack and ES7.
-- Enabling development of a JS client independently from Rails using the [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/). You can see this by starting the app and visiting http://localhost:4000
-- Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Webpack](https://webpack.github.io/).
+- Example of Rails 8 with ReactJs/Redux/React-Router with Rspack and modern JavaScript.
+- Enabling development of a JS client independently from Rails using the Rspack dev server. You can see this by starting the app and visiting http://localhost:4000
+- Enabling the use of npm modules and [Babel](https://babeljs.io/) with a Rails application using [Rspack](https://rspack.dev/).
 - Easily enable retrofitting such a JS framework into an existing Rails app. You don't need a brand new single page app!
 - Example setting up Ruby and JavaScript linting in a real project, with corresponding CI rake tasks.
 - Enabling the i18n functionality with [react-intl](https://github.com/yahoo/react-intl).
@@ -115,11 +115,11 @@ See package.json and Gemfile for versions
 1. [Redux](https://github.com/reactjs/redux)
 1. [react-router](https://github.com/reactjs/react-router)
 1. [react-router-redux](https://github.com/reactjs/react-router-redux)
-1. [Webpack with hot-reload](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) (for local dev)
+1. [Rspack with hot-reload](https://rspack.dev/guide/features/dev-server) (for local dev)
 1. [Babel transpiler](https://github.com/babel/babel)
-1. [Ruby on Rails 7](http://rubyonrails.org/) for backend app and comparison with plain HTML
+1. [Ruby on Rails 8](http://rubyonrails.org/) for backend app and comparison with plain HTML
 1. [Thruster](https://github.com/basecamp/thruster) - Zero-config HTTP/2 proxy for optimized asset delivery
-1. [Heroku for Rails 7 deployment](https://devcenter.heroku.com/articles/getting-started-with-rails7)
+1. [Heroku deployment guide](https://devcenter.heroku.com/articles/getting-started-with-rails7)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 1. [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
@@ -128,7 +128,7 @@ See package.json and Gemfile for versions
 
 ### Prerequisites
 - Node `v22.3.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
-- Ruby 3.3.3 or above
+- Ruby 3.4.6 or above
 - Postgres v9.2 or above
 - Redis. Check that you have Redis installed by running `which redis-server`. If missing and on MacOS, install with Homebrew (`brew install redis`)
 - [Yarn](https://yarnpkg.com/).
@@ -148,8 +148,12 @@ See package.json and Gemfile for versions
 - To start all development processes: `foreman start -f Procfile.dev`
 - To start only all Rails development processes: `foreman start -f Procfile.hot`
 
+## Javascript Development without Rails using the Rspack Dev Server
+
+Start the full development stack with `foreman start -f Procfile.dev`, then open <http://localhost:4000> to iterate on the JavaScript client with hot reloading.
+
 ## Rails Integration
-**We're now using Webpack for all Sass and JavaScript assets so we can do CSS Modules within Rails!**
+**We're now using Rspack for all Sass and JavaScript assets so we can do CSS Modules within Rails!**
 
 + **Production Deployment**: [heroku-deployment.md](https://github.com/shakacode/react_on_rails/blob/master/docs/additional-reading/heroku-deployment.md).
    + Configure Buildpacks
@@ -164,54 +168,44 @@ See package.json and Gemfile for versions
 
 + Be sure to see [Integration Test Notes](./docs/integration-test-notes.md) for advice on running your integration tests.
 
-+ **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have webpack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the webpack bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
++ **Testing Mode**: When running tests, it is useful to run `foreman start -f Procfile.spec` in order to have Rspack automatically recompile the static bundles. Rspec is configured to automatically check whether or not this process is running. If it is not, it will automatically rebuild the bundle to ensure you are not running tests on stale client code. This is achieved via the `ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)`
 line in the `rails_helper.rb` file. If you are using this project as an example and are not using RSpec, you may want to implement similar logic in your own project.
 
-## Webpack and Rspack
+## Rspack with Shakapacker
 
-_Converted to use Shakapacker with support for both Webpack and Rspack bundlers_.
+_This project is standardized on Rspack with Shakapacker._
 
-This project supports both Webpack and Rspack as JavaScript bundlers via [Shakapacker](https://github.com/shakacode/shakapacker). Switch between them by changing the `assets_bundler` setting in `config/shakapacker.yml`:
+Bundler selection is fixed in `config/shakapacker.yml`:
 
 ```yaml
-# Use Rspack (default - faster builds)
 assets_bundler: rspack
-
-# Or use Webpack (classic, stable)
-assets_bundler: webpack
 ```
 
-### Performance Comparison
+### Version Targets
 
-Measured bundler compile times for this project (client + server bundles):
+- `react_on_rails` gem: `16.4.0`
+- `react-on-rails` npm package: `16.4.0`
+- `shakapacker` gem/npm package: `9.7.0`
+- `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7` (latest published v2 prerelease at the time of this update)
 
-| Build Type | Webpack | Rspack | Improvement |
-|------------|---------|--------|-------------|
-| Development | ~3.1s | ~1.0s | **~3x faster** |
-| Production (cold) | ~22s | ~10.7s | **~2x faster** |
+### Why Rspack
 
-**Benefits of Rspack:**
-- 67% faster development builds (saves ~2.1s per incremental build)
-- 51% faster production builds (saves ~11s on cold builds)
-- Faster incremental rebuilds during development
-- Reduced CI build times
-- Drop-in replacement - same configuration files work for both bundlers
-
-_Note: These are actual bundler compile times. Total build times including package manager overhead may vary._
+- Faster dev/test/prod compile times
+- Better incremental rebuild performance for local development
+- One bundler path for browser bundles and SSR bundles
 
 ### Configuration Files
 
 All bundler configuration is in `config/webpack/`:
-- `webpack.config.js` - Main entry point (auto-detects Webpack or Rspack)
+- `webpack.config.js` - Main Shakapacker entry point
 - `commonWebpackConfig.js` - Shared configuration
 - `clientWebpackConfig.js` - Client bundle settings
 - `serverWebpackConfig.js` - Server-side rendering bundle
 - `development.js`, `production.js`, `test.js` - Environment-specific settings
 
 ### Additional Resources
-- [Webpack Docs](https://webpack.js.org/)
-- [Webpack Cookbook](https://christianalfoni.github.io/react-webpack-cookbook/)
-- Good overview: [Pete Hunt's Webpack Howto](https://github.com/petehunt/webpack-howto)
+- [Shakapacker Documentation](https://github.com/shakacode/shakapacker)
+- [Rspack Documentation](https://rspack.dev/)
 
 ## Thruster HTTP/2 Proxy
 
@@ -253,7 +247,7 @@ For detailed information, troubleshooting, and advanced configuration options, s
 This example project uses mainly Tailwind CSS for styling.
 Besides this, it also demonstrates Sass and CSS modules, particularly for some CSS transitions.
 
-We're using Webpack to handle Sass assets so that we can use CSS modules. The best way to understand how we're handling assets is to close follow this example. We'll be working on more docs soon. If you'd like to give us a hand, that's a great way to learn about this!
+We're using Rspack to handle Sass assets so that we can use CSS modules. The best way to understand how we're handling assets is to closely follow this example. We'll be working on more docs soon. If you'd like to give us a hand, that's a great way to learn about this!
 
 For example in [client/app/bundles/comments/components/CommentBox/CommentBox.jsx](client/app/bundles/comments/components/CommentBox/CommentBox.jsx), see how we use standard JavaScript import syntax to refer to class names that come from CSS modules:
 
@@ -274,15 +268,15 @@ export default class CommentBox extends React.Component {
 ```
 
 ### Fonts with SASS
-The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Webpack HMR server.
+The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Rspack HMR server.
 
 ## Process management during development
 ```
 bundle exec foreman start -f <Procfile>
 ```
 
-1. [`Procfile.dev`](Procfile.dev): Starts the Webpack Dev Server and Rails with Hot Reloading.
-1. [`Procfile.static`](Procfile.dev-static): Starts the Rails server and generates static assets that are used for tests.
+1. [`Procfile.dev`](Procfile.dev): Starts the Rspack Dev Server and Rails with Hot Reloading.
+1. [`Procfile.dev-static`](Procfile.dev-static): Starts the Rails server and generates static assets that are used for tests.
 
 ## Contributors
 [The Shaka Code team!](http://www.shakacode.com/about/), led by [Justin Gordon](https://github.com/justin808/), along with with many others. See [contributors.md](docs/contributors.md)
