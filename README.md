@@ -30,7 +30,7 @@ React on Rails Pro provides Node server rendering and other performance enhancem
 
 For more information, see the [React on Rails Pro Docs](https://www.shakacode.com/react-on-rails-pro/).
 
-* Optimizing your front end setup with Rspack + Shakapacker for React on Rails, including SSR and code splitting.
+* Optimizing your front-end setup with Rspack + Shakapacker for React on Rails, including SSR and code splitting.
 * Upgrading your app to the current React on Rails 16.4 / Shakapacker 9.7 stack with modern asset builds.
 * Better performance client and server side.
 

@@ -7,4 +7,4 @@ redis: redis-server
 # upon saving rather than when you refresh your browser page.
 # Note, if using React on Rails localization you will need to run
 # `bundle exec rake react_on_rails:locale` before you run bin/shakapacker
-rspack: sh -c 'bundle exec rake react_on_rails:locale && rm -rf public/packs/* || true && bin/shakapacker -w'
+rspack: sh -c 'bundle exec rake react_on_rails:locale && rm -rf public/packs/* && bin/shakapacker -w'

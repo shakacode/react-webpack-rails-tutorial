@@ -1,12 +1,9 @@
 const devBuild = process.env.NODE_ENV === 'development';
 const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
-const { config } = require('shakapacker');
+const { getBundler } = require('./bundlerUtils');
 const environment = require('./environment');
 
-// Auto-detect bundler from shakapacker config and load the appropriate library
-const bundler = config.assets_bundler === 'rspack'
-  ? require('@rspack/core')
-  : require('webpack');
+const bundler = getBundler();
 
 if (devBuild && !isHMR) {
   environment.loaders.get('sass').use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
@@ -22,9 +19,5 @@ environment.plugins.append(
     Popper: ['popper.js', 'default'],
   }),
 );
-
-if (devBuild && isHMR && config.assets_bundler !== 'rspack') {
-  // Rspack is the only supported bundler for this repo; no webpack refresh plugin wiring.
-}
 
 module.exports = environment;

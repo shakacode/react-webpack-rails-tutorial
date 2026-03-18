@@ -13,8 +13,8 @@ const ensureRspack = () => {
   if (config.assets_bundler !== 'rspack') {
     throw new Error(
       `Invalid assets_bundler: "${config.assets_bundler}". ` +
-      'This project is configured for Rspack only. ' +
-      'Set assets_bundler: rspack in config/shakapacker.yml',
+        'This project is configured for Rspack only. ' +
+        'Set assets_bundler: rspack in config/shakapacker.yml',
     );
   }
 };
@@ -38,13 +38,6 @@ const getBundler = () => {
 };
 
 /**
- * Checks if the current bundler is Rspack.
- *
- * @returns {boolean} True if using Rspack
- */
-const isRspack = () => config.assets_bundler === 'rspack';
-
-/**
  * Gets the CSS extraction plugin for Rspack.
  *
  * @returns {Object} CssExtractRspackPlugin
@@ -53,6 +46,5 @@ const getCssExtractPlugin = () => getBundler().CssExtractRspackPlugin;
 
 module.exports = {
   getBundler,
-  isRspack,
   getCssExtractPlugin,
 };

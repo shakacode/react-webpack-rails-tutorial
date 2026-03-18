@@ -8,4 +8,4 @@ redis: redis-server
 # Note, if using React on Rails localization you will need to run
 # `bundle exec rake react_on_rails:locale` before you run bin/shakapacker
 # Sleep 5 to allow other rescript files to build
-rspack: sleep 5 && sh -c 'bundle exec rake react_on_rails:locale && rm -rf public/packs/* || true && bin/shakapacker -w'
+rspack: sleep 5 && sh -c 'bundle exec rake react_on_rails:locale && rm -rf public/packs/* && bin/shakapacker -w'
