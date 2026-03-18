@@ -78,7 +78,7 @@ export default class CommentList extends BaseComponent {
       <div>
         {this.errorWarning()}
 
-        <TransitionGroup className="commentList" component="div">
+        <TransitionGroup id="comments" className="commentList" component="div">
           {commentNodes}
         </TransitionGroup>
       </div>

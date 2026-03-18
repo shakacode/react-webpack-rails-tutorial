@@ -38,6 +38,10 @@ class PagesController < ApplicationController
 
   def rescript; end
 
+  def hotwired
+    @props = comments_json_string
+  end
+
   private
 
   def set_comments
@@ -46,7 +50,7 @@ class PagesController < ApplicationController
 
   def comments_json_string
     render_to_string(template: "/comments/index",
-                     locals: { comments: Comment.all }, formats: :json)
+                     locals: { comments: @comments }, formats: :json)
   end
 
   def render_html

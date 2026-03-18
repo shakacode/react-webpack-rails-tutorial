@@ -33,13 +33,11 @@ class CommentsController < ApplicationController
           format.html { redirect_to @comment, notice: I18n.t(:comment_was_successfully_created) }
         end
         format.json { render :show, status: :created, location: @comment }
+        format.turbo_stream
       else
-        if turbo_frame_request?
-          format.html
-        else
-          format.html { render :new }
-        end
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
