@@ -7,6 +7,7 @@ import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import { translations } from 'libs/i18n/translations';
+import { NEW_COMMENT_PATH } from '../../../constants/paths';
 
 import CommentList from '../../CommentBox/CommentList/CommentList';
 import css from '../HotwiredCommentScreen.module.scss';
@@ -42,7 +43,7 @@ class HotwiredCommentScreen extends BaseComponent {
           />
 
           <div id="comment-form">
-            <a data-turbo-stream="true" href="/comments/new">New Comment</a>
+            <a data-turbo-stream="true" href={NEW_COMMENT_PATH}>New Comment</a>
           </div>
         </turbo-frame>
       </div>

@@ -8,6 +8,7 @@ import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultLocale } from 'libs/i18n/default';
 import { translations } from 'libs/i18n/translations';
+import { COMMENTS_TURBO_STREAM_PATH } from '../../../constants/paths';
 
 import { Turbo } from '@hotwired/turbo-rails';
 import CommentForm from '../../CommentBox/CommentForm/CommentForm';
@@ -34,7 +35,7 @@ class HotwiredCommentForm extends BaseComponent {
     };
 
     return request
-      .post('/comments.turbo_stream', { comment }, requestConfig)
+      .post(COMMENTS_TURBO_STREAM_PATH, { comment }, requestConfig)
       .then(r => r.data)
       .then(html => {
         Turbo.renderStreamMessage(html);

@@ -35,12 +35,9 @@ class CommentsController < ApplicationController
         format.json { render :show, status: :created, location: @comment }
         format.turbo_stream
       else
-        if turbo_frame_request?
-          format.html
-        else
-          format.html { render :new }
-        end
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -98,10 +95,6 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html { render partial: "comments/turbo/inline_form" }
     end
-  end
-
-  def test1508
-    @comment = Comment.new
   end
 
   private

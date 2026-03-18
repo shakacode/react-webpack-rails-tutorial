@@ -6,3 +6,5 @@ export const SIMPLE_REACT_PATH = '/simple';
 export const HOTWIRED_PATH = '/hotwired';
 export const STIMULUS_PATH = '/stimulus';
 export const RAILS_PATH = '/comments';
+export const NEW_COMMENT_PATH = '/comments/new';
+export const COMMENTS_TURBO_STREAM_PATH = '/comments.turbo_stream';

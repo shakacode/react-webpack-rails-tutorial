@@ -23,5 +23,4 @@ Rails.application.routes.draw do
   get "comment-list", to: "comments#comment_list"
   resources :comments
   mount ActionCable.server => "/cable"
-  get "test_1508", to: "comments#test1508", format: :turbo_stream
 end
