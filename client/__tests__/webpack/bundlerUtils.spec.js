@@ -80,12 +80,12 @@ describe('bundlerUtils', () => {
       expect(utils.isRspack()).toBe(true);
     });
 
-    it('returns false when assets_bundler is webpack', () => {
+    it('throws when assets_bundler is webpack', () => {
       mockConfig.assets_bundler = 'webpack';
       jest.doMock('shakapacker', () => ({ config: mockConfig }));
       const utils = require('../../../config/webpack/bundlerUtils');
 
-      expect(utils.isRspack()).toBe(false);
+      expect(() => utils.isRspack()).toThrow('configured for Rspack only');
     });
   });
 
