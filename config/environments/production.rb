@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -37,8 +39,8 @@ Rails.application.configure do
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT with the current request id as a default log tag.
-  config.log_tags = [ :request_id ]
-  config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
+  config.log_tags = [:request_id]
+  config.logger   = ActiveSupport::TaggedLogging.logger($stdout)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!).
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
@@ -79,7 +81,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Only use :id for inspections in production.
-  config.active_record.attributes_for_inspect = [ :id ]
+  config.active_record.attributes_for_inspect = [:id]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
@@ -91,6 +93,6 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Action Cable endpoint configuration
-  config.action_cable.url = "wss://#{ENV.fetch('PRODUCTION_HOST', nil)}/cable"
-  config.action_cable.allowed_request_origins = ["https://#{ENV.fetch('PRODUCTION_HOST', nil)}"]
+  config.action_cable.url = "wss://#{ENV.fetch('PRODUCTION_HOST')}/cable"
+  config.action_cable.allowed_request_origins = ["https://#{ENV.fetch('PRODUCTION_HOST')}"]
 end

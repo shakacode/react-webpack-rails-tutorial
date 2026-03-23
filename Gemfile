@@ -14,9 +14,9 @@ gem "rails", "~> 8.1.2"
 
 gem "pg"
 
+gem "bootsnap", require: false
 gem "puma"
 gem "thruster", "~> 0.1"
-gem "bootsnap", require: false
 
 # Use SCSS for stylesheets
 gem "sass-rails"
