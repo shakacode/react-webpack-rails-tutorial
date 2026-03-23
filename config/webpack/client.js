@@ -7,7 +7,11 @@ const environment = require('./environment');
 const bundler = getBundler();
 
 if (devBuild && !isHMR) {
-  environment.loaders.get('sass').use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
+  const sassLoader = environment.loaders.get('sass');
+  const sassLoaderConfig = sassLoader && sassLoader.use.find((item) => item.loader === 'sass-loader');
+  if (sassLoaderConfig) {
+    sassLoaderConfig.options.sourceMap = false;
+  }
 }
 
 environment.plugins.append(

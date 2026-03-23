@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
 
-const devBuild = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const { getBundler } = require('./bundlerUtils');
 const environment = require('./environment');
 
@@ -14,7 +14,7 @@ environment.plugins.insert(
   new bundler.DefinePlugin({
     TRACE_TURBOLINKS: true,
     'process.env': {
-      NODE_ENV: devBuild,
+      NODE_ENV: nodeEnv,
     },
   }),
   { after: 'Environment' },
