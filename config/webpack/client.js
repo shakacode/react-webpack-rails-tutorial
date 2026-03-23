@@ -1,16 +1,17 @@
 const devBuild = process.env.NODE_ENV === 'development';
+// Set by shakapacker dev-server for both webpack and rspack.
 const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const { config } = require('shakapacker');
+const { getBundler } = require('./bundlerUtils');
 const environment = require('./environment');
 
-// Auto-detect bundler from shakapacker config and load the appropriate library
-const bundler = config.assets_bundler === 'rspack'
-  ? require('@rspack/core')
-  : require('webpack');
+const bundler = getBundler();
 
 if (devBuild && !isHMR) {
-  environment.loaders.get('sass').use.find((item) => item.loader === 'sass-loader').options.sourceMap = false;
+  const sassLoader = environment.loaders.get('sass');
+  const sassLoaderConfig = sassLoader && sassLoader.use.find((item) => item.loader === 'sass-loader');
+  if (sassLoaderConfig) {
+    sassLoaderConfig.options.sourceMap = false;
+  }
 }
 
 environment.plugins.append(
@@ -23,9 +24,5 @@ environment.plugins.append(
     Popper: ['popper.js', 'default'],
   }),
 );
-
-if (devBuild && isHMR) {
-  environment.plugins.insert('ReactRefreshWebpackPlugin', new ReactRefreshWebpackPlugin());
-}
 
 module.exports = environment;
