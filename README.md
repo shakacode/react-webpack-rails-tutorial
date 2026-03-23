@@ -271,7 +271,7 @@ export default class CommentBox extends React.Component {
 The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Rspack HMR server.
 
 ## Process management during development
-```
+```bash
 bundle exec foreman start -f <Procfile>
 ```
 
