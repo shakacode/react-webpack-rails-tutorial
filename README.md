@@ -197,7 +197,7 @@ assets_bundler: rspack
 ### Configuration Files
 
 All bundler configuration is in `config/webpack/`:
-- `webpack.config.js` - Main Shakapacker entry point
+- `webpackConfig.js` - Main Shakapacker entry point
 - `commonWebpackConfig.js` - Shared configuration
 - `clientWebpackConfig.js` - Client bundle settings
 - `serverWebpackConfig.js` - Server-side rendering bundle

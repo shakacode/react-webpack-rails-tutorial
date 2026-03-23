@@ -38,11 +38,11 @@ const getBundler = () => {
 };
 
 /**
- * Indicates this repository is standardized on Rspack.
+ * Checks whether the configured bundler is Rspack.
  *
- * @returns {boolean} Always true
+ * @returns {boolean} True when assets_bundler is rspack
  */
-const isRspack = () => true;
+const isRspack = () => config.assets_bundler === 'rspack';
 
 /**
  * Gets the CSS extraction plugin for Rspack.
