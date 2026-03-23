@@ -1,4 +1,5 @@
 const devBuild = process.env.NODE_ENV === 'development';
+// Set by shakapacker dev-server for both webpack and rspack.
 const isHMR = process.env.WEBPACK_DEV_SERVER === 'TRUE';
 const { getBundler } = require('./bundlerUtils');
 const environment = require('./environment');

@@ -38,14 +38,11 @@ const getBundler = () => {
 };
 
 /**
- * Validates rspack-only mode and returns true.
+ * Indicates this repository is standardized on Rspack.
  *
- * @returns {boolean} Always true after validation
+ * @returns {boolean} Always true
  */
-const isRspack = () => {
-  ensureRspack();
-  return true;
-};
+const isRspack = () => true;
 
 /**
  * Gets the CSS extraction plugin for Rspack.

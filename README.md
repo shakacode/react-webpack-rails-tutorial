@@ -119,7 +119,7 @@ See package.json and Gemfile for versions
 1. [Babel transpiler](https://github.com/babel/babel)
 1. [Ruby on Rails 8](http://rubyonrails.org/) for backend app and comparison with plain HTML
 1. [Thruster](https://github.com/basecamp/thruster) - Zero-config HTTP/2 proxy for optimized asset delivery
-1. [Heroku deployment guide](https://devcenter.heroku.com/articles/getting-started-with-rails7)
+1. [Heroku deployment guide](https://devcenter.heroku.com/articles/getting-started-with-rails8)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
 1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 1. [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)

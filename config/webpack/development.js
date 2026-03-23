@@ -5,5 +5,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const webpackConfig = require('./webpackConfig');
 
-// Rspack HMR/refresh is handled by Shakapacker + @rspack/plugin-react-refresh.
+// Shakapacker auto-registers ReactRefreshRspackPlugin in dev-server mode
+// when @rspack/plugin-react-refresh is present.
 module.exports = webpackConfig();
