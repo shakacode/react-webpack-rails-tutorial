@@ -1,6 +1,21 @@
 #!/usr/bin/env ruby
-require_relative "../config/boot"
-require "active_support/continuous_integration"
+# frozen_string_literal: true
 
-CI = ActiveSupport::ContinuousIntegration
-require_relative "../config/ci.rb"
+require "English"
+require_relative "../config/ci"
+
+def run_step(name, command)
+  puts "\n== #{name} =="
+  puts "$ #{command}"
+  system(command)
+  return if $CHILD_STATUS.success?
+
+  warn "\nStep failed: #{name}"
+  exit($CHILD_STATUS.exitstatus || 1)
+end
+
+TutorialCI::STEPS.each do |name, command|
+  run_step(name, command)
+end
+
+puts "\nAll CI steps passed."

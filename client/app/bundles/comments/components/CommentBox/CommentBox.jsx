@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import _ from 'lodash';
+import * as ActionCable from '@rails/actioncable';
 import { injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
+import actionCableUrl from 'libs/actionCableUrl';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import CommentForm from './CommentForm/CommentForm';
@@ -34,11 +36,7 @@ class CommentBox extends BaseComponent {
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
-    // ActionCable is a global added through webpack.providePlugin
-    // eslint-disable-next-line no-undef
-    this.cable = ActionCable.createConsumer(cableUrl);
+    this.cable = ActionCable.createConsumer(actionCableUrl());
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
     this.cable.subscriptions.create(

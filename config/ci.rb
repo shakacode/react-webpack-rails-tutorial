@@ -1,24 +1,17 @@
 # frozen_string_literal: true
 
-# Run using bin/ci
-
-CI.run do
-  step "Setup", "bin/setup --skip-server"
-
-  step "Style: Ruby", "bin/rubocop"
-  step "Style: JavaScript", "yarn lint:eslint"
-
-  step "Tests: RSpec", "bin/rspec"
-  step "Tests: Jest", "yarn test:client"
-
-  # Optional: Run system tests
-  # step "Tests: System", "bin/rails test:system"
-
-  # Optional: set a green GitHub commit status to unblock PR merge.
-  # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.
-  # if success?
-  #   step "Signoff: All systems go. Ready for merge and deploy.", "gh signoff"
-  # else
-  #   failure "Signoff: CI failed. Do not merge or deploy.", "Fix the issues and try again."
-  # end
+module TutorialCI
+  STEPS = [
+    ["Setup", "bin/conductor-exec bin/setup --skip-server"],
+    ["Style: Ruby", "bin/conductor-exec bin/rubocop"],
+    ["Style: JavaScript", "bin/conductor-exec yarn lint:eslint"],
+    [
+      "Build: Test assets",
+      "RAILS_ENV=test bin/conductor-exec bin/rails react_on_rails:generate_packs && " \
+      "bin/conductor-exec yarn res:build && " \
+      "bin/conductor-exec yarn build:test",
+    ],
+    ["Tests: RSpec", "bin/conductor-exec bin/rspec"],
+    ["Tests: Jest", "bin/conductor-exec yarn test:client"],
+  ].freeze
 end

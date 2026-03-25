@@ -48,8 +48,8 @@ Rails.application.configure do
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
 
-  # Don't log any deprecations.
-  config.active_support.report_deprecations = false
+  # Keep deprecations visible by default so upgrades don't hide breaking changes.
+  config.active_support.report_deprecations = ENV["RAILS_REPORT_DEPRECATIONS"] != "false"
 
   # Replace the default in-process memory cache store with a durable alternative.
   # config.cache_store = :mem_cache_store
@@ -93,6 +93,9 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Action Cable endpoint configuration
-  config.action_cable.url = "wss://#{ENV.fetch('PRODUCTION_HOST')}/cable"
-  config.action_cable.allowed_request_origins = ["https://#{ENV.fetch('PRODUCTION_HOST')}"]
+  production_host = ENV["PRODUCTION_HOST"]
+  if production_host.present?
+    config.action_cable.url = "wss://#{production_host}/cable"
+    config.action_cable.allowed_request_origins = ["https://#{production_host}"]
+  end
 end
