@@ -9,9 +9,9 @@ module TutorialCI
       "Build: Test assets",
       "RAILS_ENV=test bin/conductor-exec bin/rails react_on_rails:generate_packs && " \
       "bin/conductor-exec yarn res:build && " \
-      "bin/conductor-exec yarn build:test",
+      "bin/conductor-exec yarn build:test"
     ],
     ["Tests: RSpec", "bin/conductor-exec bin/rspec"],
-    ["Tests: Jest", "bin/conductor-exec yarn test:client"],
+    ["Tests: Jest", "bin/conductor-exec yarn test:client"]
   ].freeze
 end

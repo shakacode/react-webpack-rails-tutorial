@@ -93,7 +93,7 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   # Action Cable endpoint configuration
-  production_host = ENV["PRODUCTION_HOST"]
+  production_host = ENV.fetch("PRODUCTION_HOST", nil)
   if production_host.present?
     config.action_cable.url = "wss://#{production_host}/cable"
     config.action_cable.allowed_request_origins = ["https://#{production_host}"]

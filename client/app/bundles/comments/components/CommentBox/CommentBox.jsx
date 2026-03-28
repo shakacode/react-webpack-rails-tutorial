@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import * as ActionCable from '@rails/actioncable';
 import { injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
 import actionCableUrl from 'libs/actionCableUrl';
@@ -36,6 +35,11 @@ class CommentBox extends BaseComponent {
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
+
+    // Avoid loading ActionCable during server-side rendering.
+    // eslint-disable-next-line global-require
+    const actionCableModule = require('@rails/actioncable');
+    const ActionCable = actionCableModule.default || actionCableModule;
     this.cable = ActionCable.createConsumer(actionCableUrl());
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
@@ -62,7 +66,7 @@ class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    this.cable.subscriptions.remove({ channel: 'CommentsChannel' });
+    this.cable?.subscriptions.remove({ channel: 'CommentsChannel' });
   }
 
   refreshComments() {
