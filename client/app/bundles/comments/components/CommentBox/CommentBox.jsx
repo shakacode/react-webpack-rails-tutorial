@@ -43,7 +43,7 @@ class CommentBox extends BaseComponent {
     this.cable = ActionCable.createConsumer(actionCableUrl());
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
-    this.cable.subscriptions.create(
+    this.subscription = this.cable.subscriptions.create(
       { channel: 'CommentsChannel' },
       {
         connected: () => {
@@ -66,7 +66,8 @@ class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    this.cable?.subscriptions.remove({ channel: 'CommentsChannel' });
+    this.subscription?.unsubscribe();
+    this.cable?.disconnect();
   }
 
   refreshComments() {

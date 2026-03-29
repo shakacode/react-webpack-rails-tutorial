@@ -50,7 +50,7 @@ export default class CommentsController extends Controller {
 
     this.cable = ActionCable.createConsumer(actionCableUrl());
 
-    this.cable.subscriptions.create('CommentsChannel', {
+    this.subscription = this.cable.subscriptions.create('CommentsChannel', {
       connected: () => {
         console.log('connected to comments channel using Stimulus controller');
       },
@@ -63,5 +63,10 @@ export default class CommentsController extends Controller {
         this.commentListTarget.insertAdjacentHTML('afterbegin', htmlComment);
       },
     });
+  }
+
+  disconnect() {
+    this.subscription?.unsubscribe();
+    this.cable?.disconnect();
   }
 }
