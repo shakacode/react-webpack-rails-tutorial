@@ -3,6 +3,7 @@ import * as ActionCable from '@rails/actioncable';
 import * as marked from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { mangle } from 'marked-mangle';
+import actionCableUrl from 'libs/actionCableUrl';
 
 marked.use(gfmHeadingId());
 marked.use(mangle());
@@ -47,12 +48,9 @@ export default class CommentsController extends Controller {
   connect() {
     console.log('connected to Stimulus comments_controller');
 
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
+    this.cable = ActionCable.createConsumer(actionCableUrl());
 
-    this.cable = ActionCable.createConsumer(cableUrl);
-
-    this.cable.subscriptions.create('CommentsChannel', {
+    this.subscription = this.cable.subscriptions.create('CommentsChannel', {
       connected: () => {
         console.log('connected to comments channel using Stimulus controller');
       },
@@ -65,5 +63,10 @@ export default class CommentsController extends Controller {
         this.commentListTarget.insertAdjacentHTML('afterbegin', htmlComment);
       },
     });
+  }
+
+  disconnect() {
+    this.subscription?.unsubscribe();
+    this.cable?.disconnect();
   }
 }

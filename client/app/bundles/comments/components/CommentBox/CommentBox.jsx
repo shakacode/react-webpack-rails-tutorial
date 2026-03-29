@@ -4,6 +4,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import { injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
+import actionCableUrl from 'libs/actionCableUrl';
 import SelectLanguage from 'libs/i18n/selectLanguage';
 import { defaultMessages, defaultLocale } from 'libs/i18n/default';
 import CommentForm from './CommentForm/CommentForm';
@@ -34,14 +35,15 @@ class CommentBox extends BaseComponent {
 
   subscribeChannel() {
     const { messageReceived } = this.props.actions;
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const cableUrl = `${protocol}${window.location.hostname}:${window.location.port}/cable`;
-    // ActionCable is a global added through webpack.providePlugin
-    // eslint-disable-next-line no-undef
-    this.cable = ActionCable.createConsumer(cableUrl);
+
+    // Avoid loading ActionCable during server-side rendering.
+    // eslint-disable-next-line global-require
+    const actionCableModule = require('@rails/actioncable');
+    const ActionCable = actionCableModule.default || actionCableModule;
+    this.cable = ActionCable.createConsumer(actionCableUrl());
 
     /* eslint no-console: ["error", { allow: ["log"] }] */
-    this.cable.subscriptions.create(
+    this.subscription = this.cable.subscriptions.create(
       { channel: 'CommentsChannel' },
       {
         connected: () => {
@@ -64,7 +66,8 @@ class CommentBox extends BaseComponent {
   }
 
   componentWillUnmount() {
-    this.cable.subscriptions.remove({ channel: 'CommentsChannel' });
+    this.subscription?.unsubscribe();
+    this.cable?.disconnect();
   }
 
   refreshComments() {

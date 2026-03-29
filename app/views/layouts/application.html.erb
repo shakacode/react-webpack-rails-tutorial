@@ -25,6 +25,7 @@
   <%= javascript_pack_tag('data-turbolinks-track': true, defer: true) %>
 
   <%= csrf_meta_tags %>
+  <%= action_cable_meta_tag %>
 </head>
 <body class="min-h-screen flex flex-col bg-sky-50 text-gray-700">
   <%= yield :body_content %>
