@@ -9,7 +9,6 @@ gem "react_on_rails", "16.4.0.rc.9"
 gem "shakapacker", "9.6.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "listen"
 gem "rails", "~> 8.1.2"
 
 gem "pg"

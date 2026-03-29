@@ -169,9 +169,6 @@ GEM
     launchy (3.0.1)
       addressable (~> 2.8)
       childprocess (~> 5.0)
-    listen (3.9.0)
-      rb-fsevent (~> 0.10, >= 0.10.3)
-      rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
     loofah (2.25.1)
       crass (~> 1.0.2)
@@ -477,7 +474,6 @@ DEPENDENCIES
   generator_spec
   jbuilder
   launchy
-  listen
   pg
   pry
   pry-byebug
