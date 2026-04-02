@@ -25,11 +25,18 @@
       <p class="mt-2 text-sm leading-6 text-slate-600">ShakaCode is actively seeking new React, React Native, and Rails projects, with support ranging from code reviews to pairing.</p>
     <% end %>
 
-    <%= link_to "https://shakacode.controlplane.com",
+    <%= link_to "https://github.com/shakacode/control-plane-flow",
                 class: "group rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
       <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Deployment</p>
-      <p class="mt-3 text-xl font-semibold text-slate-900">Control Plane Example</p>
-      <p class="mt-2 text-sm leading-6 text-slate-600">This tutorial is deployed on Control Plane and ties into the Heroku-to-Control Plane migration tooling.</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">control-plane-flow Library</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">See the library behind the review-app and deployment flow, including the slash-command-driven Control Plane workflow used around this project.</p>
+    <% end %>
+
+    <%= link_to "#review-app-commands",
+                class: "group rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+      <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Review Apps</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">Quick PR Commands</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">Promote the fast path for preview environments with <code>/deploy-review-app</code>, <code>/delete-review-app</code>, and <code>/help</code>.</p>
     <% end %>
 
     <%= link_to "https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/README.md",
