@@ -3,18 +3,42 @@
   src: url('../../assets/fonts/OpenSans-Light.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'OpenSans-Bold';
+  src: url('../../assets/fonts/OpenSans-Bold.ttf') format('truetype');
+}
+
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+body {
+  font-family: 'OpenSans-Light', 'Avenir Next', 'Segoe UI', sans-serif;
+  background-image:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 38%),
+    radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.12), transparent 28%),
+    linear-gradient(180deg, #fffef9 0%, #eff6ff 50%, #fffaf0 100%);
+}
+
+h1,
+h2 {
+  font-family: 'OpenSans-Bold', 'Avenir Next', 'Segoe UI', sans-serif;
+  @apply tracking-tight;
+}
 
 h2 {
   @apply text-3xl font-medium mt-5 mb-2.5;
 }
 
 h3 {
-  @apply text-xl font-medium mt-5 mb-2.5
+  font-family: 'OpenSans-Bold', 'Avenir Next', 'Segoe UI', sans-serif;
+  @apply text-xl font-medium mt-5 mb-2.5;
 }
 
 a {
-  @apply text-sky-700
+  @apply text-sky-700 transition-colors duration-200;
+}
+
+::selection {
+  @apply bg-amber-200 text-slate-900;
 }

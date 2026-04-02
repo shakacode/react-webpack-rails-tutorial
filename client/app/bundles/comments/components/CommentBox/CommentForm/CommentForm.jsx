@@ -8,6 +8,16 @@ import { defaultMessages } from 'libs/i18n/default';
 import BaseComponent from 'libs/components/BaseComponent';
 
 const emptyComment = { author: '', text: '' };
+const inputClasses =
+  'w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 leading-5 text-slate-700 shadow-sm shadow-slate-200 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100 disabled:cursor-not-allowed disabled:bg-slate-100';
+const submitButtonClasses =
+  'inline-flex items-center rounded-full bg-sky-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-200 transition hover:bg-sky-800 disabled:cursor-not-allowed disabled:bg-slate-400';
+const tabButtonClasses = (isActive) =>
+  `rounded-full px-4 py-2 text-sm font-semibold transition ${
+    isActive
+      ? 'bg-slate-900 text-white shadow-lg shadow-slate-200'
+      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+  }`;
 
 class CommentForm extends BaseComponent {
   static propTypes = {
@@ -104,17 +114,20 @@ class CommentForm extends BaseComponent {
     const { formatMessage } = this.props.intl;
     return (
       <div>
-        <hr />
-        <form className="form-horizontal flex flex-col gap-4" onSubmit={this.handleSubmit}>
-          <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-            <label htmlFor="horizontalAuthorRef" className="w-full lg:w-2/12 lg:text-end shrink-0">
+        <div className="mt-6 border-t border-slate-200" />
+        <form className="form-horizontal mt-6 flex flex-col gap-5" onSubmit={this.handleSubmit}>
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
+            <label
+              htmlFor="horizontalAuthorRef"
+              className="w-full text-sm font-semibold text-slate-700 lg:w-2/12 lg:text-end shrink-0"
+            >
               {formatMessage(defaultMessages.inputNameLabel)}
             </label>
             <input
               type="text"
               id="horizontalAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              className={inputClasses}
               ref={this.horizontalAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -122,15 +135,18 @@ class CommentForm extends BaseComponent {
             />
           </div>
 
-          <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
-            <label htmlFor="horizontalTextRef" className="w-full lg:w-2/12 lg:text-end shrink-0">
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
+            <label
+              htmlFor="horizontalTextRef"
+              className="w-full text-sm font-semibold text-slate-700 lg:w-2/12 lg:text-end shrink-0"
+            >
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
               type="textarea"
               id="horizontalTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              className={inputClasses}
               ref={this.horizontalTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -138,13 +154,9 @@ class CommentForm extends BaseComponent {
             />
           </div>
 
-          <div className="flex flex-col gap-0 lg:gap-4 lg:flex-row">
+          <div className="flex flex-col gap-0 lg:flex-row lg:gap-4">
             <div className="hidden lg:block lg:w-2/12 grow-0" />
-            <button
-              type="submit"
-              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
-              disabled={this.props.isSaving}
-            >
+            <button type="submit" className={submitButtonClasses} disabled={this.props.isSaving}>
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
@@ -159,17 +171,17 @@ class CommentForm extends BaseComponent {
     const { formatMessage } = this.props.intl;
     return (
       <div>
-        <hr />
-        <form className="flex flex-col gap-4" onSubmit={this.handleSubmit}>
-          <div className="flex flex-col gap-0">
-            <label htmlFor="stackedAuthorRef" className="w-full">
+        <div className="mt-6 border-t border-slate-200" />
+        <form className="mt-6 flex flex-col gap-5" onSubmit={this.handleSubmit}>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="stackedAuthorRef" className="w-full text-sm font-semibold text-slate-700">
               {formatMessage(defaultMessages.inputNameLabel)}
             </label>
             <input
               type="text"
               id="stackedAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              className={inputClasses}
               ref={this.stackedAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -177,15 +189,15 @@ class CommentForm extends BaseComponent {
             />
           </div>
 
-          <div className="flex flex-col gap-0">
-            <label htmlFor="stackedTextRef" className="w-full">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="stackedTextRef" className="w-full text-sm font-semibold text-slate-700">
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
               type="text"
               id="stackedTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded w-full"
+              className={inputClasses}
               ref={this.stackedTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -194,11 +206,7 @@ class CommentForm extends BaseComponent {
           </div>
 
           <div className="flex flex-col gap-0">
-            <button
-              type="submit"
-              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
-              disabled={this.props.isSaving}
-            >
+            <button type="submit" className={submitButtonClasses} disabled={this.props.isSaving}>
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
@@ -214,15 +222,20 @@ class CommentForm extends BaseComponent {
     const { formatMessage } = this.props.intl;
     return (
       <div>
-        <hr />
-        <form className="form-inline flex flex-col lg:flex-row flex-wrap gap-4" onSubmit={this.handleSubmit}>
-          <div className="flex gap-2 items-center">
-            <label htmlFor="inlineAuthorRef">{formatMessage(defaultMessages.inputNameLabel)}</label>
+        <div className="mt-6 border-t border-slate-200" />
+        <form
+          className="form-inline mt-6 flex flex-col gap-4 lg:flex-row lg:flex-wrap"
+          onSubmit={this.handleSubmit}
+        >
+          <div className="flex flex-col gap-2 lg:min-w-[14rem]">
+            <label htmlFor="inlineAuthorRef" className="text-sm font-semibold text-slate-700">
+              {formatMessage(defaultMessages.inputNameLabel)}
+            </label>
             <input
               type="text"
               id="inlineAuthorRef"
               placeholder={formatMessage(defaultMessages.inputNamePlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded"
+              className={inputClasses}
               ref={this.inlineAuthorRef}
               value={this.state.comment.author}
               onChange={this.handleChange}
@@ -230,13 +243,15 @@ class CommentForm extends BaseComponent {
             />
           </div>
 
-          <div className="flex gap-2 items-center">
-            <label htmlFor="inlineTextRef">{formatMessage(defaultMessages.inputTextLabel)}</label>
+          <div className="flex flex-col gap-2 lg:min-w-[18rem] lg:flex-1">
+            <label htmlFor="inlineTextRef" className="text-sm font-semibold text-slate-700">
+              {formatMessage(defaultMessages.inputTextLabel)}
+            </label>
             <input
               type="textarea"
               id="inlineTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
-              className="px-3 py-1 leading-4 border border-gray-300 rounded"
+              className={inputClasses}
               ref={this.inlineTextRef}
               value={this.state.comment.text}
               onChange={this.handleChange}
@@ -244,12 +259,8 @@ class CommentForm extends BaseComponent {
             />
           </div>
 
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="self-start px-3 py-1 font-semibold border-0 rounded text-sky-50 bg-sky-600 hover:bg-sky-800"
-              disabled={this.props.isSaving}
-            >
+          <div className="flex items-end gap-2">
+            <button type="submit" className={submitButtonClasses} disabled={this.props.isSaving}>
               {this.props.isSaving
                 ? `${formatMessage(defaultMessages.inputSaving)}...`
                 : formatMessage(defaultMessages.inputPost)}
@@ -289,7 +300,7 @@ class CommentForm extends BaseComponent {
 
     return (
       <div
-        className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1"
+        className="mb-5 rounded-[1.4rem] border border-pink-200 bg-pink-50 p-4 text-red-900 prose-strong:text-red-900 prose-ul:my-1"
         key="commentSubmissionError"
       >
         <strong>Your comment was not saved!</strong>
@@ -324,30 +335,24 @@ class CommentForm extends BaseComponent {
       <div>
         <TransitionGroup component={null}>{this.errorWarning()}</TransitionGroup>
 
-        <div className="flex gap-1 not-prose">
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            className={`px-6 py-2 font-semibold border-0 rounded ${
-              this.state.formMode === 0 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
-            }`}
+            className={tabButtonClasses(this.state.formMode === 0)}
             onClick={() => this.handleSelect(0)}
           >
             {formatMessage(defaultMessages.formHorizontal)}
           </button>
           <button
             type="button"
-            className={`px-6 py-2 font-semibold border-0 rounded ${
-              this.state.formMode === 1 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
-            }`}
+            className={tabButtonClasses(this.state.formMode === 1)}
             onClick={() => this.handleSelect(1)}
           >
             {formatMessage(defaultMessages.formStacked)}
           </button>
           <button
             type="button"
-            className={`px-6 py-2 font-semibold border-0 rounded ${
-              this.state.formMode === 2 ? 'text-sky-50 bg-sky-600' : 'text-sky-600 hover:bg-gray-100'
-            }`}
+            className={tabButtonClasses(this.state.formMode === 2)}
             onClick={() => this.handleSelect(2)}
           >
             {formatMessage(defaultMessages.formInline)}
