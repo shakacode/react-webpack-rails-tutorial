@@ -8,7 +8,7 @@ describe('Comment', () => {
 
     const author = container.querySelector('h2.js-comment-author');
     expect(author).toBeInTheDocument();
-    const text = container.querySelector('span.js-comment-text');
+    const text = container.querySelector('.js-comment-text');
     expect(text).toBeInTheDocument();
   });
 
@@ -22,9 +22,9 @@ describe('Comment', () => {
   it('shows the comment text in markdown', () => {
     const { container } = render(<Comment author="Frank" text="Hi!" />);
 
-    // The text is rendered inside a span with dangerouslySetInnerHTML
+    // The text is rendered from markdown via dangerouslySetInnerHTML
     // Using querySelector since the content is HTML from markdown
-    const comment = container.querySelector('span.js-comment-text');
+    const comment = container.querySelector('.js-comment-text');
     expect(comment).toBeInTheDocument();
     expect(comment).toHaveTextContent('Hi!');
   });
