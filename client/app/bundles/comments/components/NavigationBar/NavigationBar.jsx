@@ -14,7 +14,8 @@ function NavigationBar(props) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuWrapperClasses = 'flex flex-col gap-1 pb-4 lg:pb-0 lg:flex-row lg:flex-wrap lg:items-center';
+  const menuWrapperClasses =
+    'flex flex-col gap-1 pb-4 lg:visible lg:flex-row lg:flex-wrap lg:items-center lg:pb-0';
   const navItemClassName = (isActive) =>
     classNames(
       'inline-flex w-full rounded-full px-4 py-2.5 text-sm font-semibold transition lg:w-auto',

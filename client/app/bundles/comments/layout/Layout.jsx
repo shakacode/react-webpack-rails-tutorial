@@ -57,13 +57,13 @@ export default class Layout extends Component {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link end to="/" className={routeLinkClassName}>
-              Comments Root
+              Comments (Root URL)
             </Link>
             <Link to="/react-router" className={routeLinkClassName}>
-              Route Transition
+              Test React Router (&apos;/react-router&apos;)
             </Link>
             <Link to="/react-router/redirect" className={routeLinkClassName}>
-              Redirect Demo
+              Test Redirect (url to &apos;/react-router/redirect&apos; which goes to root &apos;/&apos;)
             </Link>
           </div>
         </header>
