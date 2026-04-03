@@ -7,7 +7,7 @@ describe "React Router Routes" do
   context "when Root URL", page: :main do
     it "shows comments section" do
       visit root_path
-      click_link "Comments (Root URL)"
+      click_link "Comments"
       expect(page).to have_selector("h2", text: "Comments")
     end
   end
@@ -15,7 +15,7 @@ describe "React Router Routes" do
   context "when /react-router URL", page: :main do
     it "shows 'React Router is working!' message" do
       visit root_path
-      click_link "Test React Router ('/react-router')"
+      click_link "Route"
       expect(page).to have_selector("h1", text: "React Router is working!")
     end
   end
@@ -23,7 +23,7 @@ describe "React Router Routes" do
   context "when /react-router/redirect URL", page: :main do
     before do
       visit root_path
-      click_link "Test Redirect (url to '/react-router/redirect' which goes to root '/')"
+      click_link "Redirect"
     end
 
     it "shows comments section" do
