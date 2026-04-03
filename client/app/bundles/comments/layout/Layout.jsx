@@ -19,41 +19,26 @@ export default class Layout extends Component {
     return (
       <section className="space-y-8">
         <header className="overflow-hidden rounded-[2rem] bg-slate-900 px-6 py-7 text-slate-100 shadow-[0_26px_70px_-42px_rgba(15,23,42,0.7)] sm:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">
-                Router Playground
-              </p>
-              <h2 className="mt-3 text-3xl text-white sm:text-4xl">
-                Compare the root comments flow, route transitions, and redirects in one live bundle.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                This section is server-rendered first, then hydrated on the client. Use the route pills to
-                inspect how the demo behaves across navigation states without leaving the page.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">Server First</p>
-                <p className="mt-2 text-sm text-slate-200">
-                  HTML arrives ready to read before JavaScript takes over.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">Shared Store</p>
-                <p className="mt-2 text-sm text-slate-200">
-                  Routes and comments run off the same Redux-backed data flow.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">Redirect Test</p>
-                <p className="mt-2 text-sm text-slate-200">
-                  The redirect route proves navigation still resolves cleanly after SSR.
-                </p>
-              </div>
-            </div>
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">
+              Router Playground
+            </p>
+            <h2 className="mt-3 text-3xl text-white sm:text-4xl">Switch between the three router states.</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              Root comments, a route transition, and a redirect all live in this same server-rendered bundle.
+            </p>
           </div>
+
+          <details className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-white">
+              Why this section exists
+            </summary>
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <li>Server render first, then hydrate on the client.</li>
+              <li>Keep routing and comments in the same Redux-backed flow.</li>
+              <li>Verify redirects still resolve cleanly after SSR.</li>
+            </ul>
+          </details>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link end to="/" className={routeLinkClassName}>
