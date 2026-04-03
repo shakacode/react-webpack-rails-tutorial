@@ -130,15 +130,11 @@ export default class Footer extends BaseComponent {
               </a>
 
               <div className="space-y-3">
-                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">
-                  Formerly Rails on Maui
-                </div>
                 <p
                   className="max-w-2xl text-sm leading-7 text-slate-600"
                   style={{ fontFamily: "'OpenSans-Light', 'Avenir Next', 'Segoe UI', sans-serif" }}
                 >
-                  Current company name, current links, and current branding. The legacy Rails on Maui name
-                  only remains as historical context for older community references.
+                  ShakaCode builds the open source tools, docs, and deployment workflows around this tutorial.
                 </p>
               </div>
 
@@ -236,7 +232,7 @@ export default class Footer extends BaseComponent {
 
           <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
             <span>Copyright 2026 ShakaCode</span>
-            <span>ShakaCode is the current name. Rails on Maui is the legacy name.</span>
+            <span>Open source Rails and React tooling by ShakaCode.</span>
           </div>
         </div>
       </footer>
