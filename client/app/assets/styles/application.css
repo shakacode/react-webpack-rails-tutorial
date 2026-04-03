@@ -1,28 +1,28 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @font-face {
-  font-family: "OpenSans-Light";
-  src: url("../../assets/fonts/OpenSans-Light.ttf") format("truetype");
+  font-family: 'OpenSans-Light';
+  src: url('../../assets/fonts/OpenSans-Light.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "OpenSans-Bold";
-  src: url("../../assets/fonts/OpenSans-Bold.ttf") format("truetype");
+  font-family: 'OpenSans-Bold';
+  src: url('../../assets/fonts/OpenSans-Bold.ttf') format('truetype');
 }
 
 body {
   background-image: radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 38%),
     radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.12), transparent 28%),
     linear-gradient(180deg, rgb(255 254 249) 0%, rgb(239 246 255) 50%, rgb(255 250 240) 100%);
-  font-family: "OpenSans-Light", "Avenir Next", "Segoe UI", sans-serif;
+  font-family: 'OpenSans-Light', 'Avenir Next', 'Segoe UI', sans-serif;
 }
 
 @layer base {
   h1,
   h2 {
-    font-family: "OpenSans-Bold", "Avenir Next", "Segoe UI", sans-serif;
+    font-family: 'OpenSans-Bold', 'Avenir Next', 'Segoe UI', sans-serif;
     @apply tracking-tight;
   }
 
@@ -31,7 +31,7 @@ body {
   }
 
   h3 {
-    font-family: "OpenSans-Bold", "Avenir Next", "Segoe UI", sans-serif;
+    font-family: 'OpenSans-Bold', 'Avenir Next', 'Segoe UI', sans-serif;
     @apply text-xl font-medium mt-5 mb-2.5;
   }
 }
