@@ -22,8 +22,7 @@ function NavigationBar(props) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuWrapperClasses =
-    'flex flex-col gap-1 pb-4 lg:visible lg:flex-row lg:flex-wrap lg:items-center lg:pb-0';
+  const menuWrapperClasses = 'flex-col gap-1 pb-4 lg:flex lg:flex-row lg:flex-wrap lg:items-center lg:pb-0';
 
   return (
     <nav className="border-b border-white/70 bg-white/80 backdrop-blur">
@@ -64,7 +63,7 @@ function NavigationBar(props) {
             </button>
           </div>
 
-          <ul className={`${menuWrapperClasses} ${isOpen ? '' : ' collapse'}`}>
+          <ul className={`${menuWrapperClasses} ${isOpen ? 'flex' : 'hidden'}`}>
             <li>
               <a
                 className={navItemClassName(
