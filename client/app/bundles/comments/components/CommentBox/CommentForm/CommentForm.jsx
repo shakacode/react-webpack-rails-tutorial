@@ -143,7 +143,7 @@ class CommentForm extends BaseComponent {
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
-              type="textarea"
+              type="text"
               id="horizontalTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               className={inputClasses}
@@ -248,7 +248,7 @@ class CommentForm extends BaseComponent {
               {formatMessage(defaultMessages.inputTextLabel)}
             </label>
             <input
-              type="textarea"
+              type="text"
               id="inlineTextRef"
               placeholder={formatMessage(defaultMessages.inputTextPlaceholder)}
               className={inputClasses}

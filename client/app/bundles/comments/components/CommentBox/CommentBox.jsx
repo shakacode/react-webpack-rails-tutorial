@@ -10,6 +10,25 @@ import CommentForm from './CommentForm/CommentForm';
 import CommentList, { commentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.module.scss';
 
+const noteDefinitions = [
+  {
+    eyebrow: 'Markdown',
+    message: defaultMessages.descriptionSupportMarkdown,
+  },
+  {
+    eyebrow: 'Cleanup',
+    message: defaultMessages.descriptionDeleteRule,
+  },
+  {
+    eyebrow: 'Validation',
+    message: defaultMessages.descriptionSubmitRule,
+  },
+  {
+    eyebrow: 'Realtime',
+    message: defaultMessages.descriptionSeeActionCable,
+  },
+];
+
 class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
@@ -30,6 +49,7 @@ class CommentBox extends BaseComponent {
     super();
     _.bindAll(this, ['refreshComments']);
     this.cable = null;
+    this.errorNodeRef = React.createRef();
   }
 
   subscribeChannel() {
@@ -83,25 +103,6 @@ class CommentBox extends BaseComponent {
     };
     const locale = data.get('locale') || defaultLocale;
     const isFetching = data.get('isFetching');
-    const notes = [
-      {
-        eyebrow: 'Markdown',
-        body: formatMessage(defaultMessages.descriptionSupportMarkdown),
-      },
-      {
-        eyebrow: 'Cleanup',
-        body: formatMessage(defaultMessages.descriptionDeleteRule),
-      },
-      {
-        eyebrow: 'Validation',
-        body: formatMessage(defaultMessages.descriptionSubmitRule),
-      },
-      {
-        eyebrow: 'Realtime',
-        body: formatMessage(defaultMessages.descriptionSeeActionCable),
-      },
-    ];
-
     return (
       <div className="commentBox space-y-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
@@ -134,16 +135,16 @@ class CommentBox extends BaseComponent {
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
               <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600">
-                Polling every 60 seconds
+                Manual refresh available
               </div>
               <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-800">
-                {isFetching ? 'Refreshing comments now' : 'Action Cable subscription active'}
+                {isFetching ? 'Refreshing comments now' : 'Auto-updates via Action Cable'}
               </div>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-            {notes.map((note) => (
+            {noteDefinitions.map((note) => (
               <div
                 key={note.eyebrow}
                 className="rounded-[1.6rem] border border-slate-200 bg-slate-50/90 p-5 shadow-sm shadow-slate-200"
@@ -151,7 +152,7 @@ class CommentBox extends BaseComponent {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">
                   {note.eyebrow}
                 </p>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{note.body}</p>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{formatMessage(note.message)}</p>
               </div>
             ))}
           </div>
@@ -174,7 +175,7 @@ class CommentBox extends BaseComponent {
 
             <CommentForm
               isSaving={data.get('isSaving')}
-              error={{ error: data.get('submitCommentError'), nodeRef: React.createRef(null) }}
+              error={{ error: data.get('submitCommentError'), nodeRef: this.errorNodeRef }}
               actions={actions}
               cssTransitionGroupClassNames={cssTransitionGroupClassNames}
             />

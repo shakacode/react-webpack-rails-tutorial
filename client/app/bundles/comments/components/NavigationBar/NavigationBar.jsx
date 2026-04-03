@@ -9,6 +9,14 @@ import PropTypes from 'prop-types';
 import CommentsCount from './CommentsCount.jsx';
 import * as paths from '../../constants/paths';
 
+const navItemClassName = (isActive) =>
+  classNames(
+    'inline-flex w-full rounded-full px-4 py-2.5 text-sm font-semibold transition lg:w-auto',
+    isActive
+      ? 'bg-slate-900 text-white shadow-lg shadow-slate-200'
+      : 'text-slate-600 hover:bg-sky-50 hover:text-sky-700',
+  );
+
 function NavigationBar(props) {
   const { commentsCount, pathname } = props;
 
@@ -16,13 +24,6 @@ function NavigationBar(props) {
 
   const menuWrapperClasses =
     'flex flex-col gap-1 pb-4 lg:visible lg:flex-row lg:flex-wrap lg:items-center lg:pb-0';
-  const navItemClassName = (isActive) =>
-    classNames(
-      'inline-flex w-full rounded-full px-4 py-2.5 text-sm font-semibold transition lg:w-auto',
-      isActive
-        ? 'bg-slate-900 text-white shadow-lg shadow-slate-200'
-        : 'text-slate-600 hover:bg-sky-50 hover:text-sky-700',
-    );
 
   return (
     <nav className="border-b border-white/70 bg-white/80 backdrop-blur">

@@ -58,6 +58,12 @@ InfoIcon.propTypes = {
 };
 
 function ShakaCodeLogo({ className = 'h-12 w-auto' }) {
+  const uniqueId = React.useId();
+  const gradientId = `${uniqueId}-footer-shaka-b`;
+  const highlightId = `${uniqueId}-footer-shaka-c`;
+  const pathId = `${uniqueId}-footer-shaka-a`;
+  const maskId = `${uniqueId}-footer-shaka-d`;
+
   return (
     <svg
       viewBox="0 0 206 47"
@@ -67,17 +73,17 @@ function ShakaCodeLogo({ className = 'h-12 w-auto' }) {
       aria-label="ShakaCode"
     >
       <defs>
-        <linearGradient id="footer-shaka-b" x1="50%" y1="0%" x2="50%" y2="100%">
+        <linearGradient id={gradientId} x1="50%" y1="0%" x2="50%" y2="100%">
           <stop stopColor="#F32B05" offset="0%" />
           <stop stopColor="#B00012" offset="100%" />
         </linearGradient>
-        <linearGradient id="footer-shaka-c" x1="50%" y1="24.608%" x2="50%" y2="72.622%">
+        <linearGradient id={highlightId} x1="50%" y1="24.608%" x2="50%" y2="72.622%">
           <stop stopColor="#FF6956" offset=".792%" />
           <stop stopColor="#FF6956" stopOpacity=".01" offset="96.579%" />
         </linearGradient>
         <path
           d="M11.207 10h41.586a2 2 0 011.77 1.069l8.702 16.534a2 2 0 01-.453 2.437L33.317 55.848a2 2 0 01-2.634 0L1.188 30.04a2 2 0 01-.453-2.437l8.703-16.534A2 2 0 0111.208 10z"
-          id="footer-shaka-a"
+          id={pathId}
         />
       </defs>
       <g fill="none" fillRule="evenodd">
@@ -94,14 +100,14 @@ function ShakaCodeLogo({ className = 'h-12 w-auto' }) {
         </text>
         <g transform="translate(0 -10)">
           <path d="M0 0h64v64H0z" />
-          <mask id="footer-shaka-d" fill="#fff">
-            <use xlinkHref="#footer-shaka-a" />
+          <mask id={maskId} fill="#fff">
+            <use href={`#${pathId}`} />
           </mask>
-          <use fill="url(#footer-shaka-b)" xlinkHref="#footer-shaka-a" />
+          <use fill={`url(#${gradientId})`} href={`#${pathId}`} />
           <path
             d="M7 43c22.118-2.144 33.57-6.578 34.354-13.303 1.178-10.088-17.4-1.454-20.927-1 9.658-7.17 22.018-11.721 37.08-13.652H66V57H7V43z"
-            fill="url(#footer-shaka-c)"
-            mask="url(#footer-shaka-d)"
+            fill={`url(#${highlightId})`}
+            mask={`url(#${maskId})`}
           />
         </g>
       </g>
@@ -130,10 +136,7 @@ export default class Footer extends BaseComponent {
               </a>
 
               <div className="space-y-3">
-                <p
-                  className="max-w-2xl text-sm leading-7 text-slate-600"
-                  style={{ fontFamily: "'OpenSans-Light', 'Avenir Next', 'Segoe UI', sans-serif" }}
-                >
+                <p className="max-w-2xl text-sm leading-7 text-slate-600">
                   ShakaCode builds the open source tools, docs, and deployment workflows around this tutorial.
                 </p>
               </div>
@@ -231,7 +234,7 @@ export default class Footer extends BaseComponent {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-            <span>Copyright 2026 ShakaCode</span>
+            <span>Copyright {new Date().getFullYear()} ShakaCode</span>
             <span>Open source Rails and React tooling by ShakaCode.</span>
           </div>
         </div>
