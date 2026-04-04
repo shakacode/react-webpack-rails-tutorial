@@ -1,8 +1,10 @@
+'use client';
+
 // Compare to ./RouterApp.client.jsx
 import { Provider } from 'react-redux';
 import React from 'react';
 import { StaticRouter } from 'react-router-dom/server';
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 import routes from '../../../routes/routes.jsx';
 
 function ServerRouterApp(_props, railsContext) {

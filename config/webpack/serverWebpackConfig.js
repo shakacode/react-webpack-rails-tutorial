@@ -5,6 +5,22 @@ const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
 const { getBundler } = require('./bundlerUtils');
+const { RspackRscPlugin } = require('./rspackRscPlugin');
+
+/**
+ * Extract a specific loader from a webpack rule's use array.
+ *
+ * @param {Object} rule - Webpack rule with a use array
+ * @param {string} loaderName - Substring to match against loader names
+ * @returns {Object|null} The matching loader entry, or null
+ */
+function extractLoader(rule, loaderName) {
+  if (!Array.isArray(rule.use)) return null;
+  return rule.use.find((item) => {
+    const testValue = typeof item === 'string' ? item : item?.loader;
+    return testValue && testValue.includes(loaderName);
+  });
+}
 
 /**
  * Generates the server-side rendering (SSR) bundle configuration.
@@ -153,7 +169,10 @@ const configureServer = () => {
   // If using the React on Rails Pro node server renderer, uncomment the next line
   // serverWebpackConfig.target = 'node'
 
+  // RSC: Generate react-server-client-manifest.json for SSR component resolution
+  serverWebpackConfig.plugins.push(new RspackRscPlugin({ isServer: true }));
+
   return serverWebpackConfig;
 };
 
-module.exports = configureServer;
+module.exports = { default: configureServer, extractLoader };

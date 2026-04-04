@@ -1,4 +1,6 @@
-import ReactOnRails from 'react-on-rails';
+'use client';
+
+import ReactOnRails from 'react-on-rails-pro';
 import 'jquery-ujs';
 import { Turbo } from '@hotwired/turbo-rails';
 
@@ -17,3 +19,11 @@ ReactOnRails.setOptions({
 
 // Components are now auto-registered via ror_components directories
 // No need for manual registration
+
+// React Server Components registration (client-side)
+import registerServerComponent from 'react-on-rails-pro/registerServerComponent/client';
+
+registerServerComponent(
+  { rscPayloadGenerationUrlPath: 'rsc_payload/' },
+  'ServerComponentsPage',
+);

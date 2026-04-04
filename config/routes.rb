@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  # React Server Components payload route
+  rsc_payload_route
+
   # Serve websocket cable requests in-process
   # mount ActionCable.server => '/cable'
 
@@ -11,6 +14,7 @@ Rails.application.routes.draw do
   get "simple", to: "pages#simple"
   get "rescript", to: "pages#rescript"
   get "no-router", to: "pages#no_router"
+  get "server-components", to: "pages#server_components"
 
   # React Router needs a wildcard
   get "react-router(/*all)", to: "pages#index"
