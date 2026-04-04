@@ -1,6 +1,7 @@
 'use client';
 
 import ReactOnRails from 'react-on-rails-pro';
+import registerServerComponent from 'react-on-rails-pro/registerServerComponent/client';
 import 'jquery-ujs';
 import { Turbo } from '@hotwired/turbo-rails';
 
@@ -21,8 +22,6 @@ ReactOnRails.setOptions({
 // No need for manual registration
 
 // React Server Components registration (client-side)
-import registerServerComponent from 'react-on-rails-pro/registerServerComponent/client';
-
 registerServerComponent(
   { rscPayloadGenerationUrlPath: 'rsc_payload/' },
   'ServerComponentsPage',

@@ -13,6 +13,7 @@ marked.use(gfmHeadingId());
 
 async function CommentsFeed() {
   // Simulate network latency to demonstrate streaming
+  // eslint-disable-next-line no-promise-executor-return
   await new Promise((resolve) => setTimeout(resolve, 800));
 
   // Fetch comments directly from the Rails API — no client-side fetch needed

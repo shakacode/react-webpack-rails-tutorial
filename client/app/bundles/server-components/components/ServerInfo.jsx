@@ -40,8 +40,8 @@ async function ServerInfo() {
         used to format it never reaches the browser.
       </p>
       <div className="grid md:grid-cols-2 gap-x-8 gap-y-1">
-        {grouped.map((group, gi) => (
-          <div key={gi} className="space-y-1">
+        {grouped.map((group) => (
+          <div key={group.map(([k]) => k).join('-')} className="space-y-1">
             {group.map(([key, value]) => (
               <div key={key} className="flex justify-between py-1.5 border-b border-emerald-100 last:border-0">
                 <span className="text-sm text-emerald-700 font-medium">{labels[key] || key}</span>
