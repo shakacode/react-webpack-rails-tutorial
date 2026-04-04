@@ -66,6 +66,7 @@ async function CommentsFeed() {
             </div>
             <TogglePanel title="Show rendered markdown">
               {/* Content is sanitized via sanitize-html before rendering */}
+              {/* eslint-disable-next-line react/no-danger */}
               <div
                 className="prose prose-sm prose-slate max-w-none"
                 dangerouslySetInnerHTML={{ __html: safeHtml }}

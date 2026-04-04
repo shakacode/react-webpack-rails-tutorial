@@ -1,5 +1,5 @@
+// eslint-disable max-classes-per-file
 'use client';
-/* eslint-disable max-classes-per-file */
 
 import React from 'react';
 import request from 'axios';
