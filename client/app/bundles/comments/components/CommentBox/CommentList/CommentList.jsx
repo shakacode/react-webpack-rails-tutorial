@@ -40,7 +40,7 @@ export default class CommentList extends BaseComponent {
       >
         <div
           ref={nodeRef}
-          className="bg-pink-100 p-4 mb-4 border border-pink-200 rounded text-red-800 prose-strong:text-red-800 prose-ul:my-1"
+          className="mb-5 rounded-[1.4rem] border border-pink-200 bg-pink-50 p-4 text-red-900 prose-strong:text-red-900 prose-ul:my-1"
         >
           <strong>Comments could not be retrieved.</strong> A server error prevented loading comments. Please
           try again.
@@ -78,7 +78,7 @@ export default class CommentList extends BaseComponent {
       <div>
         {this.errorWarning()}
 
-        <TransitionGroup className="commentList" component="div">
+        <TransitionGroup className="commentList space-y-4" component="div">
           {commentNodes}
         </TransitionGroup>
       </div>

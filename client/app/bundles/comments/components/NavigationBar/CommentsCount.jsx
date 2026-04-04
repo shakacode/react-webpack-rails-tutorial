@@ -7,8 +7,12 @@ const href =
 function CommentsCount(props) {
   const { commentsCount } = props;
   return (
-    <li className="border-t border-gray-300 lg:border-t-0 lg:border-l">
-      <a id="js-comment-count" href={href} className="px-2 py-4 inline-block">
+    <li className="pt-2 lg:pt-0 lg:pl-2">
+      <a
+        id="js-comment-count"
+        href={href}
+        className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-sky-300 hover:text-sky-700"
+      >
         Comments: {commentsCount}
       </a>
     </li>

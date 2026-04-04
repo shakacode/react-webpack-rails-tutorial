@@ -11,6 +11,25 @@ import CommentForm from './CommentForm/CommentForm';
 import CommentList, { commentPropTypes } from './CommentList/CommentList';
 import css from './CommentBox.module.scss';
 
+const noteDefinitions = [
+  {
+    eyebrow: 'Markdown',
+    message: defaultMessages.descriptionSupportMarkdown,
+  },
+  {
+    eyebrow: 'Cleanup',
+    message: defaultMessages.descriptionDeleteRule,
+  },
+  {
+    eyebrow: 'Validation',
+    message: defaultMessages.descriptionSubmitRule,
+  },
+  {
+    eyebrow: 'Realtime',
+    message: defaultMessages.descriptionSeeActionCable,
+  },
+];
+
 class CommentBox extends BaseComponent {
   static propTypes = {
     pollInterval: PropTypes.number.isRequired,
@@ -31,6 +50,7 @@ class CommentBox extends BaseComponent {
     super();
     _.bindAll(this, ['refreshComments']);
     this.cable = null;
+    this.errorNodeRef = React.createRef();
   }
 
   subscribeChannel() {
@@ -85,42 +105,104 @@ class CommentBox extends BaseComponent {
       exitActive: css.elementLeaveActive,
     };
     const locale = data.get('locale') || defaultLocale;
-    /* eslint-disable no-script-url */
+    const isFetching = data.get('isFetching');
     return (
-      <div className="commentBox prose max-w-none prose-a:text-sky-700 prose-li:my-0">
-        <h2>
-          {formatMessage(defaultMessages.comments)}
-          {data.get('isFetching') && formatMessage(defaultMessages.loading)}
-        </h2>
-        {SelectLanguage(actions.setLocale, locale)}
-        <ul>
-          <li>
-            {(data.get('isFetching') && <br />) || (
+      <div className="commentBox space-y-8">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
+          <div className="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-[0_24px_60px_-42px_rgba(14,165,233,0.45)] sm:p-7">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700">Live Data</p>
+                <h2 className="mt-3 text-4xl text-slate-900">
+                  {formatMessage(defaultMessages.comments)}
+                  {isFetching && ` ${formatMessage(defaultMessages.loading)}`}
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
+                  This widget exercises the tutorial&apos;s full stack: Rails endpoints, server rendering,
+                  Redux state, Markdown rendering, and Action Cable updates.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 shadow-sm shadow-slate-200">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Language</p>
+                <div className="mt-2">{SelectLanguage(actions.setLocale, locale)}</div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
-                className="m-0 text-sky-700 hover:underline"
+                className="inline-flex items-center rounded-full bg-sky-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-200 transition hover:bg-sky-800"
                 onClick={this.refreshComments}
                 type="button"
               >
                 {formatMessage(defaultMessages.descriptionForceRefrech)}
               </button>
-            )}
-          </li>
-          <li>{formatMessage(defaultMessages.descriptionSupportMarkdown)}</li>
-          <li>{formatMessage(defaultMessages.descriptionDeleteRule)}</li>
-          <li>{formatMessage(defaultMessages.descriptionSubmitRule)}</li>
-          <li>{formatMessage(defaultMessages.descriptionSeeActionCable)}</li>
-        </ul>
-        <CommentForm
-          isSaving={data.get('isSaving')}
-          error={{ error: data.get('submitCommentError'), nodeRef: React.createRef(null) }}
-          actions={actions}
-          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-        />
-        <CommentList
-          $$comments={data.get('$$comments')}
-          error={data.get('fetchCommentError')}
-          cssTransitionGroupClassNames={cssTransitionGroupClassNames}
-        />
+              <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600">
+                Manual refresh available
+              </div>
+              <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-800">
+                {isFetching ? 'Refreshing comments now' : 'Auto-updates via Action Cable'}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+            {noteDefinitions.map((note) => (
+              <div
+                key={note.eyebrow}
+                className="rounded-[1.6rem] border border-slate-200 bg-slate-50/90 p-5 shadow-sm shadow-slate-200"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">
+                  {note.eyebrow}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{formatMessage(note.message)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+          <div className="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.5)] sm:p-7">
+            <div className="mb-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">
+                Write Something
+              </p>
+              <h3 className="mt-3 text-3xl text-slate-900">
+                Post a new comment in the layout that fits your use case.
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                Switch between horizontal, stacked, and inline form layouts to see how the same Rails-backed
+                workflow adapts to different interface constraints.
+              </p>
+            </div>
+
+            <CommentForm
+              isSaving={data.get('isSaving')}
+              error={{ error: data.get('submitCommentError'), nodeRef: this.errorNodeRef }}
+              actions={actions}
+              cssTransitionGroupClassNames={cssTransitionGroupClassNames}
+            />
+          </div>
+
+          <div className="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.5)] sm:p-7">
+            <div className="mb-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">Stream</p>
+              <h3 className="mt-3 text-3xl text-slate-900">
+                Recent comments render below with Markdown support.
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                Submitted Markdown is sanitized before display, so the example demonstrates both richer
+                content and safe rendering.
+              </p>
+            </div>
+
+            <CommentList
+              $$comments={data.get('$$comments')}
+              error={data.get('fetchCommentError')}
+              cssTransitionGroupClassNames={cssTransitionGroupClassNames}
+            />
+          </div>
+        </div>
       </div>
     );
   }

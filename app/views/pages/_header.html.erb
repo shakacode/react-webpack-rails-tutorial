@@ -1,47 +1,78 @@
-<div class="prose max-w-full prose-a:text-sky-700 prose-li:my-0 prose-code:text-rose-600 prose-code:bg-yellow-100 prose-headings:text-gray-700">
-  <p>Current Commit:
-    <%= link_to git_commit_sha_short,
-                "https://github.com/shakacode/react-webpack-rails-tutorial/commit/#{git_commit_sha}",
-                id: "git-commit-sha" %>
-  </p>
+<section class="overflow-hidden rounded-[2rem] border border-white/80 bg-white/80 p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.45)] backdrop-blur sm:p-8">
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700">Quick Links</p>
+      <h2 class="mt-3 text-4xl text-slate-900">Pull the next thing you need, not the whole library.</h2>
+      <p class="mt-3 text-base leading-7 text-slate-600">
+        Start with the essentials here. Open the extra reading only if you want more context.
+      </p>
+    </div>
 
-  <ul>
-    <li>
-      <%= link_to "Can ShakaCode Help You?",
-                  "https://blog.shakacode.com/can-shakacode-help-you-4a5b1e5a8a63#.jex6tg9w9" %>
-      We're actively seeking new projects with React, React-Native, or Ruby on Rails
-    </li>
-    <li>
-      This project is deployed on
-      <%= link_to "Control Plane",
-                  "https://shakacode.controlplane.com" %>
-      using
-      <%= link_to "Heroku to Control Plane",
-                  "https://github.com/shakacode/heroku-to-control-plane" %>
-      Ruby gem.
-    </li>
-    <li>
-      See the
-      <%= link_to "github.com/shakacode/react-webpack-rails-tutorial/README.md",
-                  "https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/README.md" %>
-      for details of how this example site was built.
-    </li>
-    <li>
-      Read <%= link_to "Documentation for React on Rails",
-                  "https://shakacode.gitbooks.io/react-on-rails/content/" %> and
-      <%= link_to "The React on Rails Doctrine",
-                  "https://www.shakacode.com/blog/the-react-on-rails-doctrine" %>.
-    </li>
-    <li>
-      Watch the <%= link_to "React On Rails Tutorial Series",
-                  "https://www.youtube.com/playlist?list=PL5VAKH-U1M6dj84BApfUtvBjvF-0-JfEU" %>.
-    </li>
-    <li>
-      <%= link_to "ShakaCode", "http://www.shakacode.com"%>
-      is doing support for React on Rails, including a private Slack channel, source code reviews, and pair programming sessions.
-      <b><%= link_to "Click here", "http://www.shakacode.com/work/index.html" %></b> for more information.
-    </li>
-  </ul>
-</div>
+    <div class="inline-flex items-center gap-3 self-start rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 shadow-sm shadow-slate-200">
+      <span class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Current Commit</span>
+      <%= link_to git_commit_sha_short,
+                  "https://github.com/shakacode/react-webpack-rails-tutorial/commit/#{git_commit_sha}",
+                  id: "git-commit-sha",
+                  class: "font-semibold text-slate-900 hover:text-sky-700" %>
+    </div>
+  </div>
 
-<hr class="border-t my-8"/>
+  <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+
+    <%= link_to "https://github.com/shakacode/control-plane-flow",
+                class: "rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+      <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Deployment</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">control-plane-flow Library</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">The library behind this project’s review-app workflow.</p>
+    <% end %>
+
+    <%= link_to root_path(anchor: "review-app-commands"),
+                class: "rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+      <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Review Apps</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">Quick PR Commands</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">Keep <code>/deploy-review-app</code>, <code>/delete-review-app</code>, and <code>/help</code> close.</p>
+    <% end %>
+
+    <%= link_to "https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/README.md",
+                class: "rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+      <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Build Notes</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">Repository README</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">Setup, structure, and local run instructions.</p>
+    <% end %>
+
+    <%= link_to "https://shakacode.gitbooks.io/react-on-rails/content/",
+                class: "rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+      <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Docs</p>
+      <p class="mt-3 text-xl font-semibold text-slate-900">React on Rails Documentation</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">Go deeper once the live demo clicks.</p>
+    <% end %>
+  </div>
+
+  <details class="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50/70 p-5">
+    <summary class="cursor-pointer text-sm font-semibold text-slate-900">
+      More reading and support
+    </summary>
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <%= link_to "https://www.shakacode.com/work/index.html",
+                  class: "rounded-3xl border border-slate-200 bg-white/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Services</p>
+        <p class="mt-3 text-xl font-semibold text-slate-900">ShakaCode Help</p>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Consulting, pairing, and delivery support.</p>
+      <% end %>
+
+      <%= link_to "https://www.shakacode.com/blog/the-react-on-rails-doctrine",
+                  class: "rounded-3xl border border-slate-200 bg-white/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Doctrine</p>
+        <p class="mt-3 text-xl font-semibold text-slate-900">Philosophy</p>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Why Rails and React belong together here.</p>
+      <% end %>
+
+      <%= link_to "https://www.youtube.com/playlist?list=PL5VAKH-U1M6dj84BApfUtvBjvF-0-JfEU",
+                  class: "rounded-3xl border border-slate-200 bg-white/80 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:no-underline hover:shadow-lg hover:shadow-sky-100" do %>
+        <p class="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">Video</p>
+        <p class="mt-3 text-xl font-semibold text-slate-900">Tutorial Series</p>
+        <p class="mt-2 text-sm leading-6 text-slate-600">The longer historical walkthrough.</p>
+      <% end %>
+    </div>
+  </details>
+</section>

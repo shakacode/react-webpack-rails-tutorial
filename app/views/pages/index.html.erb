@@ -1,15 +1,207 @@
-<h2>
-  <%= link_to "Open Source example",
-              "https://github.com/shakacode/react-webpack-rails-tutorial/" %> of using the <%= link_to "React on Rails gem", "https://github.com/shakacode/react_on_rails" %>
-  and the <%= link_to "Shakapacker gem", "https://github.com/shakacode/shakapacker" %>
-</h2>
-<h3>Using <%= link_to "Ruby on Rails", "http://rubyonrails.org/" %> with
-  <%= link_to "Action Cable", "http://guides.rubyonrails.org/action_cable_overview.html" %> +
-  <%= link_to "React", "http://facebook.github.io/react/" %> (Server rendering) +
-  <%= link_to "Redux", "https://github.com/reactjs/redux" %> +
-  <%= link_to "React Router", "https://github.com/reactjs/react-router" %>
-</h3>
-<%= render "header" %>
+<div class="relative isolate overflow-hidden py-10 sm:py-14">
+  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.18),_transparent_42%),radial-gradient(circle_at_80%_20%,_rgba(245,158,11,0.14),_transparent_32%)]"></div>
 
-<!--Note, pre-rendering set in /config/initializers/react_on_rails.rb -->
-<%= react_component('RouterApp', id: "RouterApp-react-component-0") %>
+  <section class="mx-auto max-w-6xl">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-start">
+      <div class="space-y-6">
+        <span class="inline-flex items-center rounded-full border border-sky-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-sky-700 shadow-sm shadow-sky-100 backdrop-blur">
+          React on Rails Tutorial
+        </span>
+
+        <div class="space-y-4">
+          <h1 class="max-w-4xl text-5xl leading-[1.05] text-slate-900 sm:text-6xl">
+            A cleaner way to explore Rails, React, and server rendering together.
+          </h1>
+          <p class="max-w-3xl text-lg leading-8 text-slate-600 sm:text-xl">
+            Start with the live demo, then branch into the
+            <%= link_to "React on Rails gem", "https://github.com/shakacode/react_on_rails" %>
+            and
+            <%= link_to "Shakapacker gem", "https://github.com/shakacode/shakapacker" %>
+            integration patterns without digging through a wall of docs first.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <%= link_to "Browse the Source",
+                      "https://github.com/shakacode/react-webpack-rails-tutorial/",
+                      class: "inline-flex items-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-200 transition hover:bg-slate-800" %>
+          <%= link_to "Explore control-plane-flow",
+                      "https://github.com/shakacode/control-plane-flow",
+                      class: "inline-flex items-center rounded-full border border-sky-300 bg-sky-50 px-5 py-3 text-sm font-semibold text-sky-800 shadow-sm shadow-sky-100 transition hover:border-sky-400 hover:bg-sky-100" %>
+          <%= link_to "Jump to the Live Demo",
+                      "#live-playground",
+                      class: "inline-flex items-center rounded-full border border-slate-300 bg-white/80 px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-200 transition hover:border-sky-300 hover:text-sky-700" %>
+        </div>
+
+        <details class="max-w-3xl rounded-[1.5rem] border border-slate-200/80 bg-white/75 p-5 shadow-sm shadow-slate-100 backdrop-blur">
+          <summary class="cursor-pointer text-sm font-semibold text-slate-900">
+            More routes and docs
+          </summary>
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Jump Directly</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <%= link_to "React-only Route",
+                            no_router_path,
+                            class: "inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition hover:border-amber-300 hover:bg-amber-100" %>
+                <%= link_to "Classic Rails",
+                            comments_path,
+                            class: "inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-sky-300 hover:text-sky-700" %>
+                <%= link_to "README",
+                            "https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/README.md",
+                            class: "inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-sky-300 hover:text-sky-700" %>
+              </div>
+            </div>
+
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">This Demo Covers</p>
+              <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                <li>Server rendering and hydration.</li>
+                <li>React Router transitions and redirects.</li>
+                <li>Live comments over Action Cable.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <section id="review-app-commands" class="overflow-hidden rounded-[2rem] border border-sky-100 bg-white/85 p-6 shadow-[0_26px_70px_-48px_rgba(14,165,233,0.45)] backdrop-blur sm:p-7">
+          <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,1fr)] lg:items-start">
+            <div class="space-y-4">
+              <p class="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700">Review Apps</p>
+              <h2 class="mt-0 text-3xl text-slate-900 sm:text-4xl">Three commands, one preview environment.</h2>
+              <p class="text-base leading-7 text-slate-600">
+                Use
+                <%= link_to "control-plane-flow", "https://github.com/shakacode/control-plane-flow" %>
+                to deploy, inspect, or remove a PR preview without leaving the thread.
+              </p>
+              <details class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                <summary class="cursor-pointer text-sm font-semibold text-slate-900">
+                  Why this workflow matters
+                </summary>
+                <p class="mt-3 text-sm leading-6 text-slate-600">
+                  The review-app flow turns deployment into a lightweight PR action instead of a separate setup task.
+                </p>
+                <div class="mt-3 flex flex-wrap gap-3">
+                  <%= link_to "control-plane-flow on GitHub",
+                              "https://github.com/shakacode/control-plane-flow",
+                              class: "inline-flex items-center rounded-full bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-sky-200 transition hover:bg-sky-800" %>
+                  <%= link_to "Control Plane Example",
+                              "https://shakacode.controlplane.com",
+                              class: "inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-200 transition hover:border-sky-300 hover:text-sky-700" %>
+                </div>
+              </details>
+            </div>
+
+            <div class="rounded-[1.7rem] border border-slate-200 bg-slate-50/90 p-5 shadow-sm shadow-slate-200">
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">Quick Review App Commands</p>
+              <div class="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <p><code>/deploy-review-app</code></p>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Deploy your PR branch for testing.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <p><code>/delete-review-app</code></p>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Remove the review app when done.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <p><code>/help</code></p>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Show detailed instructions, environment setup, and configuration options.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="flex flex-wrap gap-3 pt-1 text-sm">
+          <span class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-4 py-2 font-semibold text-slate-700 shadow-sm shadow-sky-100 backdrop-blur">
+            SSR + hydration
+          </span>
+          <span class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-4 py-2 font-semibold text-slate-700 shadow-sm shadow-sky-100 backdrop-blur">
+            Action Cable updates
+          </span>
+          <span class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-4 py-2 font-semibold text-slate-700 shadow-sm shadow-sky-100 backdrop-blur">
+            Review app commands
+          </span>
+          <span class="inline-flex items-center rounded-full border border-white/80 bg-white/70 px-4 py-2 font-semibold text-slate-700 shadow-sm shadow-sky-100 backdrop-blur">
+            Multiple Rails + React paths
+          </span>
+        </div>
+      </div>
+
+      <aside class="relative overflow-hidden rounded-[2rem] border border-slate-800/5 bg-slate-900 px-6 py-7 text-slate-100 shadow-2xl shadow-sky-100">
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.35),_transparent_60%)]"></div>
+        <div class="relative space-y-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">Explore the App</p>
+            <h2 class="mt-3 text-3xl text-white">Pick a path.</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-300">
+              Each route shows a different integration style inside the same Rails project.
+            </p>
+          </div>
+
+          <div class="grid gap-3">
+            <%= link_to simple_path,
+                        class: "group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-sky-300/40 hover:bg-white/10 hover:no-underline" do %>
+              <p class="text-sm font-semibold text-white">Simple React</p>
+              <p class="mt-1 text-sm text-slate-300">Smallest client-rendered React example.</p>
+            <% end %>
+
+            <%= link_to stimulus_path,
+                        class: "group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-sky-300/40 hover:bg-white/10 hover:no-underline" do %>
+              <p class="text-sm font-semibold text-white">Stimulus Demo</p>
+              <p class="mt-1 text-sm text-slate-300">Hotwire-style behavior in the same app shell.</p>
+            <% end %>
+
+            <%= link_to rescript_path,
+                        class: "group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-sky-300/40 hover:bg-white/10 hover:no-underline" do %>
+              <p class="text-sm font-semibold text-white">ReScript Variant</p>
+              <p class="mt-1 text-sm text-slate-300">A typed front-end route using the same backend story.</p>
+            <% end %>
+          </div>
+
+          <details class="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <summary class="cursor-pointer text-sm font-semibold text-white">Show stack notes</summary>
+            <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+              <li>Ruby on Rails for routing, controllers, persistence, and the demo shell.</li>
+              <li>React + Redux for the interactive comment workflow.</li>
+              <li>React Router for server rendering and route transitions.</li>
+              <li>Tailwind CSS for utility-first styling layered on the Rails app.</li>
+            </ul>
+          </details>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="mx-auto mt-12 max-w-6xl">
+    <%= render "header" %>
+  </div>
+
+  <section id="live-playground" class="mx-auto mt-12 max-w-6xl">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700">Live Playground</p>
+        <h2 class="mt-3 text-4xl text-slate-900">The main demo is already running below.</h2>
+        <p class="mt-3 text-base leading-7 text-slate-600">
+          Stay on this page, or jump straight to the plain Rails and React variants.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <%= link_to "Classic Rails",
+                    comments_path,
+                    class: "inline-flex items-center rounded-full border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-200 transition hover:border-sky-300 hover:text-sky-700" %>
+        <%= link_to "No Router React",
+                    no_router_path,
+                    class: "inline-flex items-center rounded-full border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-200 transition hover:border-sky-300 hover:text-sky-700" %>
+      </div>
+    </div>
+
+    <div class="relative mt-8 overflow-hidden rounded-[2rem] border border-white/80 bg-white/80 p-6 shadow-[0_32px_80px_-48px_rgba(15,23,42,0.5)] backdrop-blur sm:p-8 lg:p-10">
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-50 via-white/60 to-transparent"></div>
+      <div class="relative">
+        <%= react_component('RouterApp', id: "RouterApp-react-component-0") %>
+      </div>
+    </div>
+  </section>
+</div>

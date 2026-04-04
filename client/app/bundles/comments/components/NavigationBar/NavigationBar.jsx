@@ -9,19 +9,30 @@ import PropTypes from 'prop-types';
 import CommentsCount from './CommentsCount.jsx';
 import * as paths from '../../constants/paths';
 
+const navItemClassName = (isActive) =>
+  classNames(
+    'inline-flex w-full rounded-full px-4 py-2.5 text-sm font-semibold transition lg:w-auto',
+    isActive
+      ? 'bg-slate-900 text-white shadow-lg shadow-slate-200'
+      : 'text-slate-600 hover:bg-sky-50 hover:text-sky-700',
+  );
+
 function NavigationBar(props) {
   const { commentsCount, pathname } = props;
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuWrapperClasses = 'flex flex-col lg:flex-row flex-wrap lg:items-center lg:visible';
+  const menuWrapperClasses = 'flex-col gap-1 pb-4 lg:flex lg:flex-row lg:flex-wrap lg:items-center lg:pb-0';
 
   return (
-    <nav className="bg-yellow-50">
-      <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row justify-between">
+    <nav className="border-b border-white/70 bg-white/80 backdrop-blur">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div className="flex justify-between items-center align-middle">
-            <a className="p-3 text-2xl" href="http://www.shakacode.com">
+            <a
+              className="py-4 text-2xl font-semibold tracking-tight text-slate-900 hover:text-sky-700"
+              href="http://www.shakacode.com"
+            >
               ShakaCode
             </a>
 
@@ -52,72 +63,55 @@ function NavigationBar(props) {
             </button>
           </div>
 
-          <ul className={`${menuWrapperClasses} ${isOpen ? '' : ' collapse'}`}>
-            <li
-              className={classNames({
-                'bg-yellow-100': pathname === paths.ROUTER_PATH || pathname === paths.REACT_ROUTER_PATH,
-              })}
-            >
+          <ul className={`${menuWrapperClasses} ${isOpen ? 'flex' : 'hidden'}`}>
+            <li>
               <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                className={navItemClassName(
+                  pathname === paths.ROUTER_PATH || pathname === paths.REACT_ROUTER_PATH,
+                )}
                 href={paths.ROUTER_PATH}
               >
                 React Router Demo
               </a>
             </li>
-            <li className={classNames({ 'bg-yellow-100': pathname === paths.NO_ROUTER_PATH })}>
-              <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
-                href={paths.NO_ROUTER_PATH}
-              >
+            <li>
+              <a className={navItemClassName(pathname === paths.NO_ROUTER_PATH)} href={paths.NO_ROUTER_PATH}>
                 React Demo
               </a>
             </li>
-            <li className={classNames({ 'bg-yellow-100': pathname === paths.SIMPLE_REACT_PATH })}>
+            <li>
               <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                className={navItemClassName(pathname === paths.SIMPLE_REACT_PATH)}
                 href={paths.SIMPLE_REACT_PATH}
               >
                 Simple React
               </a>
             </li>
-            <li className={classNames({ 'bg-yellow-100': pathname === paths.STIMULUS_PATH })}>
-              <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
-                href={paths.STIMULUS_PATH}
-              >
+            <li>
+              <a className={navItemClassName(pathname === paths.STIMULUS_PATH)} href={paths.STIMULUS_PATH}>
                 Stimulus Demo
               </a>
             </li>
-            <li className={classNames({ 'bg-yellow-100': pathname === paths.RAILS_PATH })}>
-              <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
-                href={paths.RAILS_PATH}
-              >
+            <li>
+              <a className={navItemClassName(pathname === paths.RAILS_PATH)} href={paths.RAILS_PATH}>
                 Classic Rails
               </a>
             </li>
-            <li className={classNames({ 'bg-yellow-100': pathname === paths.RESCRIPT_PATH })}>
-              <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
-                href={paths.RESCRIPT_PATH}
-              >
+            <li>
+              <a className={navItemClassName(pathname === paths.RESCRIPT_PATH)} href={paths.RESCRIPT_PATH}>
                 Rescript
               </a>
             </li>
             <li>
               <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
+                className={navItemClassName(false)}
                 href="https://github.com/shakacode/react-webpack-rails-tutorial"
               >
                 Source
               </a>
             </li>
             <li>
-              <a
-                className="px-2 py-4 w-full inline-block text-gray-500 hover:text-gray-700"
-                href="https://forum.shakacode.com/c/reactjs"
-              >
+              <a className={navItemClassName(false)} href="https://forum.shakacode.com/c/reactjs">
                 Forum
               </a>
             </li>
