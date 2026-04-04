@@ -24,8 +24,9 @@ function hasUseClientDirective(filePath) {
     fs.closeSync(fd);
 
     const head = buf.toString('utf-8');
-    // Check for 'use client' as the first statement (with or without semicolons/quotes)
-    result = /^(?:\s*\/\/[^\n]*\n)*\s*['"]use client['"]/.test(head);
+    // Check for 'use client' as the first statement.
+    // Allow comments (single-line // or block /* */) before the directive.
+    result = /^(?:\s*(?:\/\/[^\n]*\n|\/\*[\s\S]*?\*\/))*\s*['"]use client['"]/.test(head);
   } catch (_) {
     // file doesn't exist or can't be read
   }
