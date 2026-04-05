@@ -95,7 +95,6 @@ const configureServer = () => {
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
-    // If using the React on Rails Pro node server renderer, uncomment the next line
     // libraryTarget: 'commonjs2',
     path: path.resolve(__dirname, '../../ssr-generated'),
     publicPath: config.publicPath,
@@ -164,10 +163,14 @@ const configureServer = () => {
   // The default of cheap-module-source-map is slow and provides poor info.
   serverWebpackConfig.devtool = 'eval';
 
-  // If using the default 'web', then libraries like Emotion and loadable-components
-  // break with SSR. The fix is to use a node renderer and change the target.
-  // If using the React on Rails Pro node server renderer, uncomment the next line
-  // serverWebpackConfig.target = 'node'
+  // Alias react-dom/server to the Node.js version for the Pro Node renderer.
+  // The default browser version uses MessageChannel which isn't available in the Node VM.
+  serverWebpackConfig.resolve = serverWebpackConfig.resolve || {};
+  serverWebpackConfig.resolve.alias = {
+    ...serverWebpackConfig.resolve.alias,
+    'react-dom/server.browser$': 'react-dom/server.node',
+    'react-dom/server.browser.js$': 'react-dom/server.node.js',
+  };
 
   // RSC: Generate react-server-client-manifest.json for SSR component resolution
   serverWebpackConfig.plugins.push(new RspackRscPlugin({ isServer: true }));

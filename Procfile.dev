@@ -14,3 +14,5 @@ wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
 # RSC Rspack watcher for React Server Components bundle
 wp-rsc: RSC_BUNDLE_ONLY=true bin/shakapacker --watch
+# React on Rails Pro Node renderer for SSR and RSC payload generation
+node-renderer: RENDERER_PASSWORD=devPassword node react-on-rails-pro-node-renderer.js
