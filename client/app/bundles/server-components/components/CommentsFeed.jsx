@@ -12,12 +12,19 @@ const marked = new Marked();
 marked.use(gfmHeadingId());
 
 async function CommentsFeed() {
-  // Simulate network latency to demonstrate streaming
-  // eslint-disable-next-line no-promise-executor-return
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  // Simulate network latency to demonstrate Suspense streaming (development only)
+  if (process.env.NODE_ENV !== 'production') {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 800);
+    });
+  }
 
   // Fetch comments directly from the Rails API — no client-side fetch needed
-  const response = await fetch('http://localhost:3000/comments.json');
+  const baseUrl = process.env.RAILS_INTERNAL_URL || 'http://localhost:3000';
+  const response = await fetch(`${baseUrl}/comments.json`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
+  }
   const comments = await response.json();
 
   // Use lodash to process (stays on server)
@@ -45,6 +52,11 @@ async function CommentsFeed() {
         const rawHtml = marked.parse(comment.text || '');
         const safeHtml = sanitizeHtml(rawHtml, {
           allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+          allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            img: ['src', 'alt', 'title', 'width', 'height'],
+          },
+          allowedSchemes: ['https', 'http', 'data'],
         });
 
         return (

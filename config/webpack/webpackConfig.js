@@ -22,6 +22,7 @@ const webpackConfig = (envSpecific) => {
     result = serverConfig;
   } else if (process.env.RSC_BUNDLE_ONLY) {
     const rscConfig = rscWebpackConfig();
+    if (envSpecific) envSpecific(null, null, rscConfig);
     // eslint-disable-next-line no-console
     console.log('[React on Rails] Creating only the RSC bundle.');
     result = rscConfig;
@@ -29,7 +30,7 @@ const webpackConfig = (envSpecific) => {
     const clientConfig = clientWebpackConfig();
     const serverConfig = serverWebpackConfig();
     const rscConfig = rscWebpackConfig();
-    if (envSpecific) envSpecific(clientConfig, serverConfig);
+    if (envSpecific) envSpecific(clientConfig, serverConfig, rscConfig);
     // eslint-disable-next-line no-console
     console.log('[React on Rails] Creating client, server, and RSC bundles.');
     result = [clientConfig, serverConfig, rscConfig];

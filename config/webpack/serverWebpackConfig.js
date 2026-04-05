@@ -5,7 +5,6 @@ const path = require('path');
 const { config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
 const { getBundler } = require('./bundlerUtils');
-const { RspackRscPlugin } = require('./rspackRscPlugin');
 
 /**
  * Extract a specific loader from a webpack rule's use array.
@@ -171,9 +170,6 @@ const configureServer = () => {
     'react-dom/server.browser$': 'react-dom/server.node',
     'react-dom/server.browser.js$': 'react-dom/server.node.js',
   };
-
-  // RSC: Generate react-server-client-manifest.json for SSR component resolution
-  serverWebpackConfig.plugins.push(new RspackRscPlugin({ isServer: true }));
 
   return serverWebpackConfig;
 };

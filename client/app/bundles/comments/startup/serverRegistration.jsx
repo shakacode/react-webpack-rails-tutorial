@@ -1,5 +1,3 @@
-'use client';
-
 // Example of React + Redux
 import ReactOnRails from 'react-on-rails-pro';
 

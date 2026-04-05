@@ -62,8 +62,11 @@ const configureRsc = () => {
       if (cssLoader?.options?.modules) {
         cssLoader.options.modules = { ...cssLoader.options.modules, exportOnlyLocals: true };
       }
-    } else if (rule.use && (rule.use.loader === 'url-loader' || rule.use.loader === 'file-loader')) {
-      rule.use.options.emitFile = false;
+    } else if (
+      rule.use?.loader
+      && (rule.use.loader.includes('url-loader') || rule.use.loader.includes('file-loader'))
+    ) {
+      rule.use.options = { ...(rule.use.options || {}), emitFile: false };
     }
   });
 

@@ -48,6 +48,11 @@ class RspackRscPlugin {
   }
 
   apply(compiler) {
+    // Clear cache on each compilation so watch-mode picks up 'use client' changes
+    compiler.hooks.thisCompilation.tap('RspackRscPlugin-ClearCache', () => {
+      useClientCache.clear();
+    });
+
     compiler.hooks.thisCompilation.tap('RspackRscPlugin', (compilation) => {
       compilation.hooks.processAssets.tap(
         {
