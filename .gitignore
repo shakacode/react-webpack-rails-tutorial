@@ -57,6 +57,9 @@ client/app/bundles/comments/rescript/**/*.bs.js
 # Using React on Rails default directory
 /ssr-generated/
 
+# Node renderer bundle cache
+.node-renderer-bundles/
+
 # Generated React on Rails packs
 **/generated/**
 
