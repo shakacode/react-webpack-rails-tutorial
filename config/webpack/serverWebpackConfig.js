@@ -172,14 +172,15 @@ const configureServer = () => {
   };
 
   // react-on-rails-pro includes RSC-related modules that import Node.js builtins
-  // (path, fs, stream). These code paths aren't used in the traditional SSR bundle,
-  // so provide empty fallbacks to avoid resolution errors.
-  serverWebpackConfig.resolve.fallback = {
-    ...serverWebpackConfig.resolve.fallback,
-    path: false,
-    fs: false,
-    'fs/promises': false,
-    stream: false,
+  // (path, fs, stream). Externalize them so they resolve at runtime via require()
+  // in the Node.js environment where the SSR bundle executes.
+  const existingExternals = serverWebpackConfig.externals || {};
+  serverWebpackConfig.externals = {
+    ...(typeof existingExternals === 'object' && !Array.isArray(existingExternals) ? existingExternals : {}),
+    path: 'commonjs path',
+    fs: 'commonjs fs',
+    'fs/promises': 'commonjs fs/promises',
+    stream: 'commonjs stream',
   };
 
   return serverWebpackConfig;
