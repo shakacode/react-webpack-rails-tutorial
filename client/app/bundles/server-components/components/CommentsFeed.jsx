@@ -11,33 +11,59 @@ import TogglePanel from './TogglePanel';
 const marked = new Marked();
 marked.use(gfmHeadingId());
 
+function resolveRailsBaseUrl() {
+  if (process.env.RAILS_INTERNAL_URL) {
+    return process.env.RAILS_INTERNAL_URL;
+  }
+
+  // Local defaults are okay in development/test, but production should be explicit.
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+    return 'http://localhost:3000';
+  }
+
+  throw new Error('RAILS_INTERNAL_URL must be set outside development/test');
+}
+
 async function CommentsFeed() {
-  // Simulate network latency to demonstrate Suspense streaming (development only)
-  if (process.env.NODE_ENV !== 'production') {
+  // Simulate network latency only when explicitly enabled for demos.
+  if (process.env.RSC_SUSPENSE_DEMO_DELAY === 'true') {
     await new Promise((resolve) => {
       setTimeout(resolve, 800);
     });
   }
 
-  // Fetch comments directly from the Rails API — no client-side fetch needed
-  const baseUrl = process.env.RAILS_INTERNAL_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/comments.json`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
-  }
-  const comments = await response.json();
+  let recentComments = [];
+  try {
+    // Fetch comments directly from the Rails API — no client-side fetch needed
+    const baseUrl = resolveRailsBaseUrl();
+    const response = await fetch(`${baseUrl}/comments.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
+    }
+    const comments = await response.json();
 
-  // Use lodash to process (stays on server)
-  const sortedComments = _.orderBy(comments, ['created_at'], ['desc']);
-  const recentComments = _.take(sortedComments, 10);
+    // Use lodash to process (stays on server)
+    const sortedComments = _.orderBy(comments, ['created_at'], ['desc']);
+    recentComments = _.take(sortedComments, 10);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('CommentsFeed failed to load comments', error);
+    return (
+      <div className="bg-rose-50 border border-rose-200 rounded-lg p-6 text-center">
+        <p className="text-rose-700">Could not load comments right now. Please try again later.</p>
+      </div>
+    );
+  }
 
   if (recentComments.length === 0) {
     return (
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
         <p className="text-amber-700">
           No comments yet. Add some comments from the{' '}
-          <a href="/" className="underline font-medium">home page</a> to see them rendered here
-          by server components.
+          <a href="/" className="underline font-medium">
+            home page
+          </a>{' '}
+          to see them rendered here by server components.
         </p>
       </div>
     );
@@ -56,7 +82,7 @@ async function CommentsFeed() {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ['src', 'alt', 'title', 'width', 'height'],
           },
-          allowedSchemes: ['https', 'http', 'data'],
+          allowedSchemes: ['https', 'http'],
         });
 
         return (
@@ -89,8 +115,8 @@ async function CommentsFeed() {
         );
       })}
       <p className="text-xs text-slate-400 text-center pt-2">
-        {recentComments.length} comment{recentComments.length !== 1 ? 's' : ''} rendered on the server using
-        {' '}<code>marked</code> + <code>sanitize-html</code> (never sent to browser)
+        {recentComments.length} comment{recentComments.length !== 1 ? 's' : ''} rendered on the server using{' '}
+        <code>marked</code> + <code>sanitize-html</code> (never sent to browser)
       </p>
     </div>
   );

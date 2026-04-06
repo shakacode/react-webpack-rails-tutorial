@@ -2,7 +2,7 @@
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/webpackConfig.js
 
 const clientWebpackConfig = require('./clientWebpackConfig');
-const { default: serverWebpackConfig } = require('./serverWebpackConfig');
+const serverWebpackConfig = require('./serverWebpackConfig');
 const rscWebpackConfig = require('./rscWebpackConfig');
 
 const webpackConfig = (envSpecific) => {

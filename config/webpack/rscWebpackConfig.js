@@ -28,9 +28,7 @@ const configureRsc = () => {
   // Use the dedicated rsc-bundle entry point
   const rscEntry = rscConfig.entry['rsc-bundle'];
   if (!rscEntry) {
-    throw new Error(
-      'RSC bundle entry not found. Ensure client/app/packs/rsc-bundle.js exists.',
-    );
+    throw new Error('RSC bundle entry not found. Ensure client/app/packs/rsc-bundle.js exists.');
   }
   rscConfig.entry = { 'rsc-bundle': rscEntry };
 
@@ -63,8 +61,8 @@ const configureRsc = () => {
         cssLoader.options.modules = { ...cssLoader.options.modules, exportOnlyLocals: true };
       }
     } else if (
-      rule.use?.loader
-      && (rule.use.loader.includes('url-loader') || rule.use.loader.includes('file-loader'))
+      rule.use?.loader &&
+      (rule.use.loader.includes('url-loader') || rule.use.loader.includes('file-loader'))
     ) {
       rule.use.options = { ...(rule.use.options || {}), emitFile: false };
     }
@@ -103,7 +101,7 @@ const configureRsc = () => {
 
   // Target Node.js so server-only modules (os, fs, stream, etc.) resolve correctly
   rscConfig.target = 'node';
-  rscConfig.devtool = 'eval';
+  rscConfig.devtool = process.env.NODE_ENV === 'production' ? 'source-map' : 'eval';
 
   // RSC manifest plugin
   rscConfig.plugins.push(new RspackRscPlugin({ isServer: true }));

@@ -58,13 +58,13 @@ const configureServer = () => {
 
     throw new Error(
       `Server bundle entry 'server-bundle' not found.\n` +
-      `Expected file: ${fullPath}\n` +
-      `Current source_path: ${config.source_path}\n` +
-      `Current source_entry_path: ${config.source_entry_path}\n` +
-      `Verify:\n` +
-      `1. The server-bundle.js file exists at the expected location\n` +
-      `2. nested_entries is configured correctly in shakapacker.yml\n` +
-      `3. The file is properly exported from your entry point`,
+        `Expected file: ${fullPath}\n` +
+        `Current source_path: ${config.source_path}\n` +
+        `Current source_entry_path: ${config.source_entry_path}\n` +
+        `Verify:\n` +
+        `1. The server-bundle.js file exists at the expected location\n` +
+        `2. nested_entries is configured correctly in shakapacker.yml\n` +
+        `3. The file is properly exported from your entry point`,
     );
   }
 
@@ -94,7 +94,7 @@ const configureServer = () => {
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
-    // libraryTarget: 'commonjs2',
+    libraryTarget: 'commonjs2',
     path: path.resolve(__dirname, '../../ssr-generated'),
     publicPath: config.publicPath,
     // https://webpack.js.org/configuration/output/#outputglobalobject
@@ -199,4 +199,5 @@ const configureServer = () => {
   return serverWebpackConfig;
 };
 
-module.exports = { default: configureServer, extractLoader };
+module.exports = configureServer;
+module.exports.extractLoader = extractLoader;

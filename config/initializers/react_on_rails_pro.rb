@@ -2,9 +2,20 @@
 
 ReactOnRailsPro.configure do |config|
   # Node renderer for server-side rendering and RSC payload generation
-  config.server_renderer = "NodeRenderer"
-  config.renderer_url = ENV["REACT_RENDERER_URL"] || "http://localhost:3800"
-  config.renderer_password = ENV.fetch("RENDERER_PASSWORD", "devPassword")
+  use_node_renderer = Rails.env.development? || ENV["REACT_USE_NODE_RENDERER"] == "true"
+
+  if use_node_renderer
+    renderer_host = ENV.fetch("RENDERER_HOST", "localhost")
+    renderer_port = ENV.fetch("RENDERER_PORT", "3800")
+
+    config.server_renderer = "NodeRenderer"
+    config.renderer_url = ENV.fetch("REACT_RENDERER_URL", "http://#{renderer_host}:#{renderer_port}")
+    config.renderer_password = if Rails.env.local?
+                                 ENV.fetch("RENDERER_PASSWORD", "local-dev-renderer-password")
+                               else
+                                 ENV.fetch("RENDERER_PASSWORD")
+                               end
+  end
 
   # Enable React Server Components support
   config.enable_rsc_support = true
