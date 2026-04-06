@@ -33,6 +33,7 @@ jobs:
       DRIVER: selenium_chrome
       CHROME_BIN: /usr/bin/google-chrome
       USE_COVERALLS: true
+      RENDERER_PASSWORD: devPassword
 
     steps:
       - name: Install Chrome
@@ -81,6 +82,20 @@ jobs:
 
       - name: Build shakapacker chunks
         run: NODE_ENV=development bundle exec bin/shakapacker
+
+      - name: Start Node renderer for SSR
+        run: |
+          node react-on-rails-pro-node-renderer.js &
+          echo "Waiting for Node renderer on port 3800..."
+          for i in $(seq 1 30); do
+            if nc -z localhost 3800 2>/dev/null; then
+              echo "Node renderer is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Node renderer failed to start within 30 seconds"
+          exit 1
 
       - name: Run rspec with xvfb
         uses: coactions/setup-xvfb@v1

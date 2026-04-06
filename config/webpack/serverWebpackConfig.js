@@ -162,26 +162,39 @@ const configureServer = () => {
   // The default of cheap-module-source-map is slow and provides poor info.
   serverWebpackConfig.devtool = 'eval';
 
-  // Alias react-dom/server to the Node.js version for the Pro Node renderer.
-  // The default browser version uses MessageChannel which isn't available in the Node VM.
+  // react-on-rails-pro includes RSC-related modules that import Node.js builtins
+  // (path, fs, stream). These code paths aren't exercised in the SSR bundle,
+  // so provide empty fallbacks to satisfy the resolver without bundling them.
   serverWebpackConfig.resolve = serverWebpackConfig.resolve || {};
-  serverWebpackConfig.resolve.alias = {
-    ...serverWebpackConfig.resolve.alias,
-    'react-dom/server.browser$': 'react-dom/server.node',
-    'react-dom/server.browser.js$': 'react-dom/server.node.js',
+  serverWebpackConfig.resolve.fallback = {
+    ...serverWebpackConfig.resolve.fallback,
+    path: false,
+    fs: false,
+    'fs/promises': false,
+    stream: false,
   };
 
-  // react-on-rails-pro includes RSC-related modules that import Node.js builtins
-  // (path, fs, stream). Externalize them so they resolve at runtime via require()
-  // in the Node.js environment where the SSR bundle executes.
-  const existingExternals = serverWebpackConfig.externals || {};
-  serverWebpackConfig.externals = {
-    ...(typeof existingExternals === 'object' && !Array.isArray(existingExternals) ? existingExternals : {}),
-    path: 'commonjs path',
-    fs: 'commonjs fs',
-    'fs/promises': 'commonjs fs/promises',
-    stream: 'commonjs stream',
-  };
+  // The Node renderer runs bundles in a VM sandbox that lacks browser globals
+  // like MessageChannel and TextEncoder. Inject polyfills at the top of the
+  // bundle so react-dom/server.browser can initialize.
+  serverWebpackConfig.plugins.push(
+    new bundler.BannerPlugin({
+      banner: [
+        'if(typeof MessageChannel==="undefined"){',
+        '  globalThis.MessageChannel=class MessageChannel{',
+        '    constructor(){',
+        '      this.port1={onmessage:null};',
+        '      this.port2={postMessage:function(msg){',
+        '        var p=this._port1;if(p.onmessage)p.onmessage({data:msg});',
+        '      }};',
+        '      this.port2._port1=this.port1;',
+        '    }',
+        '  };',
+        '}',
+      ].join('\n'),
+      raw: true,
+    }),
+  );
 
   return serverWebpackConfig;
 };
