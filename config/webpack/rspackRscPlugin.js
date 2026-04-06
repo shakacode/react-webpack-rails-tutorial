@@ -9,32 +9,6 @@
 const fs = require('fs');
 const { sources } = require('@rspack/core');
 
-// Cache for file 'use client' checks
-const useClientCache = new Map();
-
-function hasUseClientDirective(filePath) {
-  if (useClientCache.has(filePath)) return useClientCache.get(filePath);
-
-  let result = false;
-  try {
-    // Read the first ~200 bytes — 'use client' must be at the very top of the file
-    const fd = fs.openSync(filePath, 'r');
-    const buf = Buffer.alloc(200);
-    fs.readSync(fd, buf, 0, 200, 0);
-    fs.closeSync(fd);
-
-    const head = buf.toString('utf-8');
-    // Check for 'use client' as the first statement.
-    // Allow comments (single-line // or block /* */) before the directive.
-    result = /^(?:\s*(?:\/\/[^\n]*\n|\/\*[\s\S]*?\*\/))*\s*['"]use client['"]/.test(head);
-  } catch (_) {
-    // file doesn't exist or can't be read
-  }
-
-  useClientCache.set(filePath, result);
-  return result;
-}
-
 class RspackRscPlugin {
   constructor(options) {
     if (!options || typeof options.isServer !== 'boolean') {
@@ -45,12 +19,13 @@ class RspackRscPlugin {
       ? 'react-server-client-manifest.json'
       : 'react-client-manifest.json';
     this.ssrManifestFilename = 'react-ssr-manifest.json';
+    this.useClientCache = new Map();
   }
 
   apply(compiler) {
     // Clear cache on each compilation so watch-mode picks up 'use client' changes
     compiler.hooks.thisCompilation.tap('RspackRscPlugin-ClearCache', () => {
-      useClientCache.clear();
+      this.useClientCache.clear();
     });
 
     compiler.hooks.thisCompilation.tap('RspackRscPlugin', (compilation) => {
@@ -103,6 +78,36 @@ class RspackRscPlugin {
     });
   }
 
+  _hasUseClientDirective(filePath) {
+    if (this.useClientCache.has(filePath)) return this.useClientCache.get(filePath);
+
+    let result = false;
+    let fd;
+    try {
+      // Read the first ~200 bytes — 'use client' must be at the very top of the file.
+      fd = fs.openSync(filePath, 'r');
+      const buf = Buffer.alloc(200);
+      fs.readSync(fd, buf, 0, 200, 0);
+
+      const head = buf.toString('utf-8');
+      // Allow comments before the directive.
+      result = /^(?:\s*(?:\/\/[^\n]*\n|\/\*[\s\S]*?\*\/))*\s*['"]use client['"]/.test(head);
+    } catch (_) {
+      // file doesn't exist or can't be read
+    } finally {
+      if (fd !== undefined) {
+        try {
+          fs.closeSync(fd);
+        } catch (_) {
+          // no-op
+        }
+      }
+    }
+
+    this.useClientCache.set(filePath, result);
+    return result;
+  }
+
   _processModule(mod, chunk, chunkFiles, manifest, compilation) {
     const resource = mod.resource || mod.userRequest;
     if (!resource || !resource.match(/\.(js|jsx|ts|tsx)$/)) return;
@@ -110,11 +115,9 @@ class RspackRscPlugin {
     if (resource.includes('node_modules')) return;
 
     // Check original file for 'use client' directive
-    if (!hasUseClientDirective(resource)) return;
+    if (!this._hasUseClientDirective(resource)) return;
 
-    const moduleId = compilation.chunkGraph
-      ? compilation.chunkGraph.getModuleId(mod)
-      : mod.id;
+    const moduleId = compilation.chunkGraph ? compilation.chunkGraph.getModuleId(mod) : mod.id;
 
     if (moduleId == null) return;
 
