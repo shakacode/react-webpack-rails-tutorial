@@ -40,7 +40,8 @@ async function CommentsFeed() {
     if (!response.ok) {
       throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
     }
-    const comments = await response.json();
+    const data = await response.json();
+    const comments = data.comments;
 
     // Use lodash to process (stays on server)
     const sortedComments = _.orderBy(comments, ['created_at'], ['desc']);

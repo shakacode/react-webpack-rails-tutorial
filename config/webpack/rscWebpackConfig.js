@@ -42,9 +42,9 @@ const configureRsc = () => {
   );
 
   // Remove CSS extraction loaders from style rules
-  rscConfig.module.rules.forEach((rule) => {
+  rscConfig.module.rules = rscConfig.module.rules.map((rule) => {
     if (Array.isArray(rule.use)) {
-      rule.use = rule.use.filter((item) => {
+      const filteredUse = rule.use.filter((item) => {
         const testValue = typeof item === 'string' ? item : item?.loader;
         return !(
           testValue?.match(/mini-css-extract-plugin/) ||
@@ -53,32 +53,37 @@ const configureRsc = () => {
           testValue === 'style-loader'
         );
       });
-      const cssLoader = rule.use.find((item) => {
+      const cssLoader = filteredUse.find((item) => {
         const testValue = typeof item === 'string' ? item : item?.loader;
         return testValue?.includes('css-loader');
       });
-      if (cssLoader?.options?.modules) {
-        cssLoader.options.modules = { ...cssLoader.options.modules, exportOnlyLocals: true };
-      }
-    } else if (
+      const updatedCssOptions = cssLoader?.options?.modules
+        ? { ...cssLoader.options, modules: { ...cssLoader.options.modules, exportOnlyLocals: true } }
+        : cssLoader?.options;
+      const updatedUse = updatedCssOptions
+        ? filteredUse.map((item) => (item === cssLoader ? { ...item, options: updatedCssOptions } : item))
+        : filteredUse;
+      return { ...rule, use: updatedUse };
+    }
+    if (
       rule.use?.loader &&
       (rule.use.loader.includes('url-loader') || rule.use.loader.includes('file-loader'))
     ) {
-      rule.use.options = { ...(rule.use.options || {}), emitFile: false };
+      return { ...rule, use: { ...rule.use, options: { ...(rule.use.options || {}), emitFile: false } } };
     }
+    return rule;
   });
 
   // Add the RSC WebpackLoader to transpiler rules.
   // This loader handles 'use client' directive detection and server/client component separation.
-  rscConfig.module.rules.forEach((rule) => {
+  rscConfig.module.rules = rscConfig.module.rules.map((rule) => {
     if (Array.isArray(rule.use)) {
       const transpilerLoader = extractLoader(rule, 'swc-loader') || extractLoader(rule, 'babel-loader');
       if (transpilerLoader) {
-        rule.use.push({
-          loader: 'react-on-rails-rsc/WebpackLoader',
-        });
+        return { ...rule, use: [...rule.use, { loader: 'react-on-rails-rsc/WebpackLoader' }] };
       }
     }
+    return rule;
   });
 
   // Enable react-server condition for server component resolution

@@ -92,8 +92,12 @@ class RspackRscPlugin {
       const head = buf.toString('utf-8');
       // Allow comments before the directive.
       result = /^(?:\s*(?:\/\/[^\n]*\n|\/\*[\s\S]*?\*\/))*\s*['"]use client['"]/.test(head);
-    } catch (_) {
-      // file doesn't exist or can't be read
+    } catch (err) {
+      // ENOENT is expected for virtual/generated modules; anything else is a real problem.
+      if (err.code !== 'ENOENT') {
+        // eslint-disable-next-line no-console
+        console.warn(`[RscPlugin] Failed to read ${filePath}:`, err.message);
+      }
     } finally {
       if (fd !== undefined) {
         try {

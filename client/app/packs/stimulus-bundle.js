@@ -22,7 +22,4 @@ ReactOnRails.setOptions({
 // No need for manual registration
 
 // React Server Components registration (client-side)
-registerServerComponent(
-  { rscPayloadGenerationUrlPath: 'rsc_payload/' },
-  'ServerComponentsPage',
-);
+registerServerComponent('ServerComponentsPage');

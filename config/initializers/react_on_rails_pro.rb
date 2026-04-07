@@ -2,7 +2,7 @@
 
 ReactOnRailsPro.configure do |config|
   # Node renderer for server-side rendering and RSC payload generation
-  use_node_renderer = Rails.env.development? || ENV["REACT_USE_NODE_RENDERER"] == "true"
+  use_node_renderer = Rails.env.local? || ENV["REACT_USE_NODE_RENDERER"] == "true"
 
   if use_node_renderer
     renderer_host = ENV.fetch("RENDERER_HOST", "localhost")
