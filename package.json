@@ -114,6 +114,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-react": "^7.18.6",
+    "@rspack/dev-server": "2.0.0-beta.7",
     "@rspack/plugin-react-refresh": "1.6.1",
     "@tailwindcss/typography": "^0.5.10",
     "@testing-library/dom": "^10.4.1",

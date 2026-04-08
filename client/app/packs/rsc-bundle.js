@@ -3,6 +3,11 @@
 // It imports the same client component registrations as server-bundle.js,
 // plus the server component registrations.
 
+// Initialize ReactOnRails RSC support. With the 'react-server' resolve condition,
+// this resolves to ReactOnRailsRSC.js which sets isRSCBundle = true and registers
+// serverRenderRSCReactComponent. Must be imported before other registrations.
+import 'react-on-rails-pro';
+
 // Import stores registration (has 'use client' — RSC loader replaces with client reference)
 import './stores-registration';
 
