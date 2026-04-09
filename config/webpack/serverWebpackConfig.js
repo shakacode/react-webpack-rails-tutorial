@@ -176,16 +176,18 @@ const configureServer = () => {
 
   // The Node renderer runs bundles in a VM sandbox that lacks browser globals
   // like MessageChannel and TextEncoder. Inject polyfills at the top of the
-  // bundle so react-dom/server.browser can initialize.
+  // bundle so react-dom/server.browser can initialize with the async task
+  // boundary its scheduler expects.
   serverWebpackConfig.plugins.push(
     new bundler.BannerPlugin({
       banner: [
         'if(typeof MessageChannel==="undefined"){',
+        '  var enqueueTask=typeof setImmediate==="function"?setImmediate:function(cb){setTimeout(cb,0);};',
         '  globalThis.MessageChannel=class MessageChannel{',
         '    constructor(){',
         '      this.port1={onmessage:null};',
         '      this.port2={postMessage:function(msg){',
-        '        var p=this._port1;if(p.onmessage)p.onmessage({data:msg});',
+        '        var p=this._port1;enqueueTask(function(){if(p.onmessage)p.onmessage({data:msg});});',
         '      }};',
         '      this.port2._port1=this.port1;',
         '    }',

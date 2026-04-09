@@ -4,8 +4,8 @@
 // The RSC bundle runs server components in the Node renderer and produces
 // the Flight payload that React uses to hydrate on the client.
 //
-// Unlike the server bundle (which uses ExecJS), the RSC bundle targets Node.js
-// and can use Node.js built-in modules like os, fs, path, etc.
+// Unlike the server bundle (which runs in the Node renderer VM sandbox), the
+// RSC bundle targets Node.js and can use built-in modules like os, fs, path, etc.
 
 const path = require('path');
 const { config } = require('shakapacker');

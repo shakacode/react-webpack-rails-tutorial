@@ -7,6 +7,8 @@
 // that the React flight protocol needs to resolve client component references.
 
 const fs = require('fs');
+const path = require('path');
+const { pathToFileURL } = require('url');
 const { sources } = require('@rspack/core');
 
 class RspackRscPlugin {
@@ -18,7 +20,6 @@ class RspackRscPlugin {
     this.clientManifestFilename = options.isServer
       ? 'react-server-client-manifest.json'
       : 'react-client-manifest.json';
-    this.ssrManifestFilename = 'react-ssr-manifest.json';
     this.useClientCache = new Map();
   }
 
@@ -35,7 +36,15 @@ class RspackRscPlugin {
           stage: compilation.constructor.PROCESS_ASSETS_STAGE_REPORT || 5000,
         },
         () => {
-          const manifest = {};
+          const filePathToModuleMetadata = {};
+          const configuredCrossOriginLoading = this._getCrossOriginLoading(compilation);
+          const manifest = {
+            moduleLoading: {
+              prefix: compilation.outputOptions.publicPath || '',
+              crossOrigin: configuredCrossOriginLoading,
+            },
+            filePathToModuleMetadata,
+          };
 
           for (const chunk of compilation.chunks) {
             const chunkFiles = [];
@@ -51,11 +60,11 @@ class RspackRscPlugin {
               : [];
 
             for (const mod of modules) {
-              this._processModule(mod, chunk, chunkFiles, manifest, compilation);
+              this._processModule(mod, chunk, chunkFiles, filePathToModuleMetadata, compilation);
               // Handle concatenated modules
               if (mod.modules) {
                 for (const innerMod of mod.modules) {
-                  this._processModule(innerMod, chunk, chunkFiles, manifest, compilation);
+                  this._processModule(innerMod, chunk, chunkFiles, filePathToModuleMetadata, compilation);
                 }
               }
             }
@@ -65,17 +74,19 @@ class RspackRscPlugin {
             this.clientManifestFilename,
             new sources.RawSource(JSON.stringify(manifest, null, 2)),
           );
-
-          // Emit SSR manifest (maps module IDs to SSR module data)
-          if (!this.isServer) {
-            compilation.emitAsset(
-              this.ssrManifestFilename,
-              new sources.RawSource(JSON.stringify({}, null, 2)),
-            );
-          }
         },
       );
     });
+  }
+
+  _getCrossOriginLoading(compilation) {
+    const configuredCrossOriginLoading = compilation.outputOptions.crossOriginLoading;
+
+    if (typeof configuredCrossOriginLoading !== 'string') {
+      return null;
+    }
+
+    return configuredCrossOriginLoading === 'use-credentials' ? configuredCrossOriginLoading : 'anonymous';
   }
 
   _hasUseClientDirective(filePath) {
@@ -112,11 +123,12 @@ class RspackRscPlugin {
     return result;
   }
 
-  _processModule(mod, chunk, chunkFiles, manifest, compilation) {
+  _processModule(mod, chunk, chunkFiles, filePathToModuleMetadata, compilation) {
     const resource = mod.resource || mod.userRequest;
     if (!resource || !resource.match(/\.(js|jsx|ts|tsx)$/)) return;
     // Skip node_modules
     if (resource.includes('node_modules')) return;
+    if (!this._shouldIncludeInManifest(resource)) return;
 
     // Check original file for 'use client' directive
     if (!this._hasUseClientDirective(resource)) return;
@@ -130,27 +142,43 @@ class RspackRscPlugin {
       chunks.push(chunk.id, file);
     }
 
-    // Build the module entry with all exported names
-    const ssrEntry = {
+    const key = pathToFileURL(resource).href;
+    const existingEntry = filePathToModuleMetadata[key];
+
+    if (existingEntry) {
+      const knownChunkIds = new Set();
+      for (let index = 0; index < existingEntry.chunks.length; index += 2) {
+        knownChunkIds.add(existingEntry.chunks[index]);
+      }
+
+      for (let index = 0; index < chunks.length; index += 2) {
+        if (!knownChunkIds.has(chunks[index])) {
+          existingEntry.chunks.push(chunks[index], chunks[index + 1]);
+          knownChunkIds.add(chunks[index]);
+        }
+      }
+      return;
+    }
+
+    filePathToModuleMetadata[key] = {
       id: moduleId,
       chunks: chunks,
       name: '*',
-      async: false,
     };
+  }
 
-    // Use resource path as the key (React flight protocol convention)
-    const key = resource;
-    if (!manifest[key]) {
-      manifest[key] = {};
-    }
-    manifest[key]['*'] = ssrEntry;
-    manifest[key][''] = ssrEntry;
+  _shouldIncludeInManifest(resource) {
+    const normalizedResource = path.normalize(resource);
+    const serverComponentsRoot = path.normalize('client/app/bundles/server-components/');
+    const storesRegistrationPath = path.normalize('client/app/packs/stores-registration.js');
 
-    // Also add default export entry
-    manifest[key]['default'] = {
-      ...ssrEntry,
-      name: 'default',
-    };
+    // The RSC runtime only needs client references that can appear inside the
+    // server-components demo tree. Pulling in unrelated app bundles causes the
+    // client and server manifests to diverge and breaks buildClientRenderer().
+    return (
+      normalizedResource.includes(serverComponentsRoot) ||
+      normalizedResource.endsWith(storesRegistrationPath)
+    );
   }
 }
 

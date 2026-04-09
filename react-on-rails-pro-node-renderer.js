@@ -8,13 +8,32 @@ if (!rendererPassword) {
   throw new Error('RENDERER_PASSWORD must be set in production');
 }
 
+function parseIntegerEnv(name, defaultValue, { min, max = Number.MAX_SAFE_INTEGER }) {
+  const rawValue = process.env[name];
+  if (rawValue == null || rawValue.trim() === '') {
+    return defaultValue;
+  }
+
+  const normalized = rawValue.trim();
+  if (!/^\d+$/.test(normalized)) {
+    throw new Error(`Invalid ${name}: "${rawValue}". Expected an integer.`);
+  }
+
+  const parsed = Number.parseInt(normalized, 10);
+  if (parsed < min || parsed > max) {
+    throw new Error(`Invalid ${name}: "${rawValue}". Expected a value between ${min} and ${max}.`);
+  }
+
+  return parsed;
+}
+
 const config = {
   serverBundleCachePath: path.resolve(__dirname, '.node-renderer-bundles'),
   logLevel: process.env.RENDERER_LOG_LEVEL || 'debug',
   password: rendererPassword,
-  port: process.env.RENDERER_PORT || 3800,
+  port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),
   supportModules: true,
-  workersCount: Number(process.env.NODE_RENDERER_CONCURRENCY || 3),
+  workersCount: parseIntegerEnv('NODE_RENDERER_CONCURRENCY', 3, { min: 0 }),
 };
 
 if (process.env.CI) {
