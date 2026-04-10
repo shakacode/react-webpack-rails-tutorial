@@ -36,7 +36,10 @@ async function CommentsFeed() {
   try {
     // Fetch comments directly from the Rails API — no client-side fetch needed
     const baseUrl = resolveRailsBaseUrl();
-    const response = await fetch(`${baseUrl}/comments.json`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch(`${baseUrl}/comments.json`, { signal: controller.signal });
+    clearTimeout(timeoutId);
     if (!response.ok) {
       throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
     }
