@@ -36,7 +36,7 @@ const config = {
   workersCount: parseIntegerEnv('NODE_RENDERER_CONCURRENCY', 3, { min: 0 }),
 };
 
-if (process.env.CI) {
+if (process.env.CI && process.env.NODE_RENDERER_CONCURRENCY == null) {
   config.workersCount = 2;
 }
 

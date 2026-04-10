@@ -15,4 +15,4 @@ wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
 # RSC Rspack watcher for React Server Components bundle
 wp-rsc: RSC_BUNDLE_ONLY=true bin/shakapacker --watch
 # React on Rails Pro Node renderer for SSR and RSC payload generation
-node-renderer: node react-on-rails-pro-node-renderer.js
+node-renderer: NODE_ENV=development node react-on-rails-pro-node-renderer.js

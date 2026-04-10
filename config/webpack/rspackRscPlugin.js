@@ -169,15 +169,16 @@ class RspackRscPlugin {
 
   _shouldIncludeInManifest(resource) {
     const normalizedResource = path.normalize(resource);
-    const serverComponentsRoot = path.normalize('client/app/bundles/server-components/');
-    const storesRegistrationPath = path.normalize('client/app/packs/stores-registration.js');
+    const repoRoot = path.resolve(__dirname, '../../');
+    const serverComponentsRoot = path.join(repoRoot, 'client/app/bundles/server-components/');
+    const storesRegistrationPath = path.join(repoRoot, 'client/app/packs/stores-registration.js');
 
     // The RSC runtime only needs client references that can appear inside the
     // server-components demo tree. Pulling in unrelated app bundles causes the
     // client and server manifests to diverge and breaks buildClientRenderer().
     return (
-      normalizedResource.includes(serverComponentsRoot) ||
-      normalizedResource.endsWith(storesRegistrationPath)
+      normalizedResource.startsWith(serverComponentsRoot) ||
+      normalizedResource === storesRegistrationPath
     );
   }
 }
