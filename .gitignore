@@ -72,3 +72,4 @@ client/app/bundles/comments/rescript/**/*.bs.js
 !.claude/commands/
 !.claude/commands/address-review.md
 .context/
+napkin.md
