@@ -25,7 +25,7 @@ export default class Layout extends Component {
             </p>
             <h2 className="mt-3 text-3xl text-slate-900 sm:text-4xl">The same comments app, with routing.</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-              Use the pills to view the comments route, a plain routed screen, and a redirect back to root.
+              Sasah, Use the pills to view the comments route, a plain routed screen, and a redirect back to root.
             </p>
           </div>
 
