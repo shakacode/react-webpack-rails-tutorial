@@ -1,0 +1,37 @@
+name: Show Review App Commands on PR Open
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  show-help:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post quick reference
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              "# Control Plane review app commands",
+              "",
+              "`/deploy-review-app`",
+              "Create the review app or redeploy the PR branch to it.",
+              "",
+              "`/delete-review-app`",
+              "Delete the review app and its temporary resources.",
+              "",
+              "`/help`",
+              "Show the required GitHub variables, secrets, and workflow behavior."
+            ].join("\n");
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

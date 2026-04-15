@@ -11,7 +11,7 @@
 
 ShakaCode recently migrated [HiChee.com](https://hichee.com) to Control Plane, resulting in a two-thirds reduction in server hosting costs!
 
-See doc in [./.controlplane/readme.md](./.controlplane/readme.md) for how to easily deploy this app to Control Plane.
+See [./.controlplane/readme.md](./.controlplane/readme.md) for local `cpflow` setup plus the shared `cpflow-*` GitHub Actions flow for review apps, automatic staging deploys, and manual promotion to production.
 
 The instructions leverage the `cpflow` CLI, with source code and many more tips on how to migrate from Heroku to Control Plane
 in https://github.com/shakacode/heroku-to-control-plane.

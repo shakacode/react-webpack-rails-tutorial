@@ -1,0 +1,47 @@
+name: Cleanup Stale Review Apps
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpflow-cleanup-stale-review-apps
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets and variables
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          missing=()
+          [[ -n "${{ secrets.CPLN_TOKEN_STAGING }}" ]] || missing+=("secret:CPLN_TOKEN_STAGING")
+          [[ -n "${{ vars.CPLN_ORG_STAGING }}" ]] || missing+=("variable:CPLN_ORG_STAGING")
+          [[ -n "${{ vars.REVIEW_APP_PREFIX }}" ]] || missing+=("variable:REVIEW_APP_PREFIX")
+
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
+            exit 1
+          fi
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+
+      - name: Remove stale review apps
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow cleanup-stale-apps -a "${{ vars.REVIEW_APP_PREFIX }}" --org "${{ vars.CPLN_ORG_STAGING }}" --yes

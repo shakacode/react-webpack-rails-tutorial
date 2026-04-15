@@ -6,7 +6,7 @@ _If you need a free demo account for Control Plane (no CC required), you can con
 
 ---
 
-Check [how the `cpflow` gem (this project) is used in the Github actions](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/deploy-to-control-plane/action.yml).
+See the reusable `cpflow-*` GitHub Actions files in this repo's [`.github`](https://github.com/shakacode/react-webpack-rails-tutorial/tree/master/.github) directory for review apps, staging deploys, and production promotion.
 Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
 
 ---
@@ -69,54 +69,98 @@ You should be able to see this information in the Control Plane UI.
 and not `cpln` which is the Control Plane CLI.
 
 ```sh
-# Use environment variable to prevent repetition
-export APP_NAME=react-webpack-rails-tutorial
+# Use the staging app defined in .controlplane/controlplane.yml
+export APP_NAME=react-webpack-rails-tutorial-staging
 
 # Provision all infrastructure on Control Plane.
-# app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
-cpflow setup-app -a $APP_NAME
+cpflow setup-app -a "$APP_NAME"
 
-# Build and push docker image to Control Plane repository
-# Note, may take many minutes. Be patient.
-# Check for error messages, such as forgetting to run `cpln image docker-login --org <your-org>`
-cpflow build-image -a $APP_NAME
+# Build and push the Docker image to the Control Plane registry.
+cpflow build-image -a "$APP_NAME"
 
-# Promote image to app after running `cpflow build-image command`
-# Note, the UX of images may not show the image for up to 5 minutes.
-# However, it's ready.
-cpflow deploy-image -a $APP_NAME
+# Run the configured release phase before cutting staging over to the new image.
+cpflow deploy-image -a "$APP_NAME" --run-release-phase
 
-# See how app is starting up
-cpflow logs -a $APP_NAME
+# See how the app is starting up
+cpflow logs -a "$APP_NAME"
 
 # Open app in browser (once it has started up)
-cpflow open -a $APP_NAME
+cpflow open -a "$APP_NAME"
 ```
 
 ### Promoting code updates
 
-After committing code, you will update your deployment of `react-webpack-rails-tutorial` with the following commands:
+After committing code, you will update your staging deployment with the following commands:
 
 ```sh
-# Assuming you have already set APP_NAME env variable to react-webpack-rails-tutorial
-# Build and push new image with sequential image tagging, e.g. 'react-webpack-rails-tutorial:1', then 'react-webpack-rails-tutorial:2', etc.
-cpflow build-image -a $APP_NAME
+# Assuming APP_NAME is still react-webpack-rails-tutorial-staging
+cpflow build-image -a "$APP_NAME"
 
 # Run database migrations (or other release tasks) with latest image,
 # while app is still running on previous image.
 # This is analogous to the release phase.
-cpflow run -a $APP_NAME --image latest -- rails db:migrate
+cpflow run -a "$APP_NAME" --image latest -- rails db:migrate
 
 # Pomote latest image to app after migrations run
-cpflow deploy-image -a $APP_NAME
+cpflow deploy-image -a "$APP_NAME" --run-release-phase
 ```
 
 If you needed to push a new image with a specific commit SHA, you can run the following command:
 
 ```sh
-# Build and push with sequential image tagging and commit SHA, e.g. 'react-webpack-rails-tutorial:123_ABCD'
-cpflow build-image -a $APP_NAME --commit ABCD
+# Build and push with sequential image tagging and commit SHA
+cpflow build-image -a "$APP_NAME" --commit ABCD
 ```
+
+## GitHub Actions Flow
+
+This repo now uses the shared `cpflow-*` GitHub Actions scaffolding:
+
+- `.github/workflows/cpflow-review-app-help.yml`
+- `.github/workflows/cpflow-help-command.yml`
+- `.github/workflows/cpflow-deploy-review-app.yml`
+- `.github/workflows/cpflow-delete-review-app.yml`
+- `.github/workflows/cpflow-deploy-staging.yml`
+- `.github/workflows/cpflow-promote-staging-to-production.yml`
+- `.github/workflows/cpflow-cleanup-stale-review-apps.yml`
+
+Behavior:
+
+- comment `/deploy-review-app` on a PR to create or update a review app
+- later pushes to that PR auto-redeploy the existing review app
+- pushes to `master` auto-deploy staging unless `STAGING_APP_BRANCH` overrides it
+- production promotion happens manually from the Actions tab
+- stale review apps are cleaned up nightly
+
+This repo keeps its historical `qa-react-webpack-rails-tutorial` prefix for review apps, so:
+
+- `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`
+- PR 123 deploys to `qa-react-webpack-rails-tutorial-123`
+
+Required GitHub repository secrets:
+
+- `CPLN_TOKEN_STAGING`
+- `CPLN_TOKEN_PRODUCTION`
+
+Required GitHub repository variables:
+
+- `CPLN_ORG_STAGING`
+- `CPLN_ORG_PRODUCTION`
+- `STAGING_APP_NAME=react-webpack-rails-tutorial-staging`
+- `PRODUCTION_APP_NAME=react-webpack-rails-tutorial-production`
+- `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`
+
+Optional variables:
+
+- `STAGING_APP_BRANCH=master`
+- `PRIMARY_WORKLOAD=rails`
+- `DOCKER_BUILD_EXTRA_ARGS`
+
+Operational notes:
+
+- `/deploy-review-app` and `/delete-review-app` only run for trusted commenters (`OWNER`, `MEMBER`, `COLLABORATOR`)
+- fork PRs still receive help comments, but review app deploys are skipped because the workflow builds Docker images with repository secrets
+- PR pushes do not auto-create review apps; the first deploy remains opt-in
 
 ## HTTP/2 and Thruster Configuration
 
@@ -362,29 +406,12 @@ openssl rand -hex 64
 
 ## CI Automation, Review Apps and Staging
 
-_Note, some of the URL references are internal for the ShakaCode team._
+Review apps, staging deploys, and production promotion are all driven by the
+`cpflow-*` workflows in `.github/workflows/`.
 
- Review Apps (deployment of apps based on a PR) are done via Github Actions.
+### Workflow for Developing GitHub Actions for Review Apps
 
-The review apps work by creating isolated deployments for each branch through this automated process. When a branch is pushed, the action:
-
-1. Sets up the necessary environment and tools
-2. Creates a unique deployment for that branch if it doesn't exist
-3. Builds a Docker image tagged with the branch's commit SHA
-4. Deploys this image to Control Plane with its own isolated environment
-
-This allows teams to:
-- Preview changes in a production-like environment
-- Test features independently
-- Share working versions with stakeholders
-- Validate changes before merging to main branches
-
-The system uses Control Plane's infrastructure to manage these deployments, with each branch getting its own resources as defined in the controlplane.yml configuration.
-
-
-### Workflow for Developing Github Actions for Review Apps
-
-1. Create a PR with changes to the Github Actions workflow
-2. Make edits to file such as `.github/actions/deploy-to-control-plane/action.yml`
-3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
-4. Check the Github Actions tab in the PR to see the status of the workflow
+1. Create a PR with changes to the GitHub Actions workflow.
+2. Make edits to files such as `.github/workflows/cpflow-deploy-review-app.yml` or `.github/actions/cpflow-build-docker-image/action.yml`.
+3. Commit and push the `.github` changes.
+4. Check the GitHub Actions tab in the PR to see the status of the workflow.

@@ -1,0 +1,120 @@
+name: Deploy Staging to Control Plane
+
+run-name: Deploy Control Plane staging app
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: ${{ vars.STAGING_APP_NAME }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+  STAGING_APP_BRANCH: ${{ vars.STAGING_APP_BRANCH }}
+
+concurrency:
+  group: cpflow-deploy-staging-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  validate-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      is_deployable: ${{ steps.check-branch.outputs.is_deployable }}
+    steps:
+      - name: Check whether this branch should deploy staging
+        id: check-branch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${STAGING_APP_BRANCH}" ]]; then
+            if [[ "${GITHUB_REF_NAME}" == "${STAGING_APP_BRANCH}" ]]; then
+              echo "is_deployable=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "Branch '${GITHUB_REF_NAME}' does not match STAGING_APP_BRANCH='${STAGING_APP_BRANCH}'"
+              echo "is_deployable=false" >> "$GITHUB_OUTPUT"
+            fi
+          elif [[ "${GITHUB_REF_NAME}" == "main" || "${GITHUB_REF_NAME}" == "master" ]]; then
+            echo "is_deployable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Branch '${GITHUB_REF_NAME}' is not main/master and no STAGING_APP_BRANCH is configured"
+            echo "is_deployable=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate required secrets and variables
+        if: steps.check-branch.outputs.is_deployable == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          missing=()
+          [[ -n "${{ secrets.CPLN_TOKEN_STAGING }}" ]] || missing+=("secret:CPLN_TOKEN_STAGING")
+          [[ -n "${{ vars.CPLN_ORG_STAGING }}" ]] || missing+=("variable:CPLN_ORG_STAGING")
+          [[ -n "${{ vars.STAGING_APP_NAME }}" ]] || missing+=("variable:STAGING_APP_NAME")
+
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
+            exit 1
+          fi
+
+  build:
+    needs: validate-branch
+    if: needs.validate-branch.outputs.is_deployable == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+
+      - name: Build Docker image
+        uses: ./.github/actions/cpflow-build-docker-image
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          commit: ${{ github.sha }}
+          docker_build_extra_args: ${{ vars.DOCKER_BUILD_EXTRA_ARGS }}
+          docker_build_ssh_key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+
+  deploy:
+    needs: [validate-branch, build]
+    if: needs.validate-branch.outputs.is_deployable == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+
+      - name: Detect release phase support
+        id: release-phase
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if cpflow config -a "${APP_NAME}" | grep -q "release_script:"; then
+            echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
+          else
+            echo "flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy staging image
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow deploy-image -a "${APP_NAME}" ${{ steps.release-phase.outputs.flag }} --org "${CPLN_ORG}" --verbose
