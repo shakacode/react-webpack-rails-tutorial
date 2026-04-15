@@ -17,14 +17,20 @@ fi
 echo "🔍 Checking if application exists: $APP_NAME"
 exists_output=""
 if ! exists_output="$(cpflow exists -a "$APP_NAME" --org "$CPLN_ORG" 2>&1)"; then
-  if [[ -z "$exists_output" ]]; then
-    echo "⚠️ Application does not exist: $APP_NAME"
-    exit 0
+  case "$exists_output" in
+    *"Double check your org"*|*"Unknown API token format"*|*"ERROR"*|*"Error:"*|*"Traceback"*|*"Net::"*)
+      echo "❌ ERROR: failed to determine whether application exists: $APP_NAME" >&2
+      printf '%s\n' "$exists_output" >&2
+      exit 1
+      ;;
+  esac
+
+  if [[ -n "$exists_output" ]]; then
+    printf '%s\n' "$exists_output"
   fi
 
-  echo "❌ ERROR: failed to determine whether application exists: $APP_NAME" >&2
-  printf '%s\n' "$exists_output" >&2
-  exit 1
+  echo "⚠️ Application does not exist: $APP_NAME"
+  exit 0
 fi
 
 if [[ -n "$exists_output" ]]; then

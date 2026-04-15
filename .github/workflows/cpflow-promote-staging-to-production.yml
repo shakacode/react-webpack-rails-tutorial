@@ -187,7 +187,7 @@ jobs:
           exit 1
 
       - name: Roll back on failure
-        if: failure() && steps.capture-current.outputs.rollback_state != ''
+        if: failure() && steps.capture-current.outputs.rollback_state != '{}'
         env:
           ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
         shell: bash

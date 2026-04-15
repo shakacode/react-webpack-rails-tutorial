@@ -19,7 +19,8 @@ jobs:
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
-       github.event.comment.body == '/help') ||
+       github.event.comment.body == '/help' &&
+       contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
@@ -46,6 +47,7 @@ jobs:
               "",
               "- `CPLN_TOKEN_STAGING`",
               "- `CPLN_TOKEN_PRODUCTION`",
+              "- `DOCKER_BUILD_SSH_KEY` (optional, when Docker builds fetch private dependencies over SSH)",
               "",
               "## Repository variables",
               "",
@@ -56,6 +58,8 @@ jobs:
               "- `REVIEW_APP_PREFIX`",
               "- `STAGING_APP_BRANCH` (optional, defaults to `main` or `master`)",
               "- `PRIMARY_WORKLOAD` (optional, defaults to `rails`)",
+              "- `DOCKER_BUILD_EXTRA_ARGS` (optional Docker build flags)",
+              "- `DOCKER_BUILD_SSH_KNOWN_HOSTS` (optional when SSH build hosts are not GitHub.com)",
               "",
               "## Workflow behavior",
               "",

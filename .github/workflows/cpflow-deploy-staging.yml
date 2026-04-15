@@ -4,6 +4,8 @@ run-name: Deploy Control Plane staging app
 
 on:
   push:
+    # GitHub does not allow repository vars in branch filters, so this workflow listens to
+    # every branch and exits early unless the ref matches STAGING_APP_BRANCH/main/master.
     branches: ["**"]
   workflow_dispatch:
 
@@ -86,6 +88,7 @@ jobs:
           commit: ${{ github.sha }}
           docker_build_extra_args: ${{ vars.DOCKER_BUILD_EXTRA_ARGS }}
           docker_build_ssh_key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+          docker_build_ssh_known_hosts: ${{ vars.DOCKER_BUILD_SSH_KNOWN_HOSTS }}
 
   deploy:
     needs: [validate-branch, build]

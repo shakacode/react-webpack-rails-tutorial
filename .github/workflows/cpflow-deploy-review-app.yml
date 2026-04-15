@@ -254,6 +254,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
+
             const body = [
               `🏗️ Building Docker image for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}`,
               "",
@@ -265,7 +271,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: Number("${{ steps.create-comment.outputs.comment-id }}"),
+              comment_id: commentId,
               body
             });
 
@@ -279,12 +285,19 @@ jobs:
           pr_number: ${{ env.PR_NUMBER }}
           docker_build_extra_args: ${{ vars.DOCKER_BUILD_EXTRA_ARGS }}
           docker_build_ssh_key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+          docker_build_ssh_known_hosts: ${{ vars.DOCKER_BUILD_SSH_KNOWN_HOSTS }}
 
       - name: Update PR comment with deploy status
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: actions/github-script@v7
         with:
           script: |
+            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
+
             const body = [
               "🚀 Deploying review app to Control Plane...",
               "",
@@ -296,7 +309,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: Number("${{ steps.create-comment.outputs.comment-id }}"),
+              comment_id: commentId,
               body
             });
 
@@ -355,6 +368,11 @@ jobs:
               `[Open Control Plane console](${process.env.CONSOLE_URL})`,
               `[View workflow logs](${process.env.WORKFLOW_URL})`
             ].join("\n");
+
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
 
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
