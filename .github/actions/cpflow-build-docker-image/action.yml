@@ -15,7 +15,7 @@ inputs:
     description: Pull request number for status messaging
     required: false
   docker_build_extra_args:
-    description: Optional newline-delimited extra arguments passed through to docker build
+    description: Optional newline-delimited extra docker build tokens. Use key=value forms like --build-arg=FOO=bar.
     required: false
   docker_build_ssh_key:
     description: Optional private SSH key used for Docker builds that fetch private dependencies with RUN --mount=type=ssh
@@ -49,6 +49,13 @@ runs:
           while IFS= read -r arg; do
             arg="${arg%$'\r'}"
             [[ -n "${arg}" ]] || continue
+
+            if [[ "${arg}" =~ [[:space:]] ]]; then
+              echo "docker_build_extra_args entries must be single docker-build tokens. " \
+                   "Use key=value forms like --build-arg=FOO=bar." >&2
+              exit 1
+            fi
+
             docker_build_args+=("${arg}")
           done <<< "${{ inputs.docker_build_extra_args }}"
         fi
@@ -74,7 +81,7 @@ EOF
           eval "$(ssh-agent -s)"
           trap 'ssh-agent -k >/dev/null' EXIT
           ssh-add - <<< "${{ inputs.docker_build_ssh_key }}"
-          docker_build_args+=("--ssh" "default")
+          docker_build_args+=("--ssh=default")
         fi
 
         echo "🏗️ Building Docker image${PR_INFO} (commit ${{ inputs.commit }})..."
