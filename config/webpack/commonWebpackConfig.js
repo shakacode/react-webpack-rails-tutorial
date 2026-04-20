@@ -8,6 +8,13 @@ const commonOptions = {
   resolve: {
     // Add .res.js extension for ReScript-compiled modules (modern ReScript convention)
     extensions: ['.css', '.ts', '.tsx', '.res.js'],
+    // Alias react-on-rails to react-on-rails-pro so third-party packages
+    // (like rescript-react-on-rails) that import 'react-on-rails' get the Pro version.
+    // This avoids "Cannot mix react-on-rails (core) with react-on-rails-pro" errors.
+    alias: {
+      'react-on-rails$': 'react-on-rails-pro',
+      'react-on-rails/node_package': 'react-on-rails-pro/node_package',
+    },
   },
 };
 
