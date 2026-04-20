@@ -17,13 +17,8 @@ ReactOnRailsPro.configure do |config|
   config.renderer_url = ENV.fetch("REACT_RENDERER_URL", "http://localhost:3800")
 
   # Shared secret for renderer authentication. Must match renderer/node-renderer.js.
-  # In dev and test, both sides default to the same value so `bin/dev` works
-  # without setup. In production, RENDERER_PASSWORD must be set explicitly —
-  # falling back to a known-public dev string in prod would auth-bypass the
-  # renderer.
-  config.renderer_password = if Rails.env.local?
-                               ENV.fetch("RENDERER_PASSWORD", "local-dev-renderer-password")
-                             else
-                               ENV.fetch("RENDERER_PASSWORD")
-                             end
+  # In production-like envs, Pro's configuration.rb raises at boot if this is
+  # blank and RENDERER_PASSWORD isn't in the environment — so the dev fallback
+  # below never reaches prod as long as RENDERER_PASSWORD is set there.
+  config.renderer_password = ENV.fetch("RENDERER_PASSWORD", "local-dev-renderer-password")
 end
