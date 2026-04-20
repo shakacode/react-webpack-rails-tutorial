@@ -33,6 +33,9 @@ jobs:
       DRIVER: selenium_chrome
       CHROME_BIN: /usr/bin/google-chrome
       USE_COVERALLS: true
+      # Must match config.renderer_password in config/initializers/react_on_rails_pro.rb.
+      # Setting explicitly avoids silent drift if the two-sided defaults ever diverge.
+      RENDERER_PASSWORD: local-dev-renderer-password
 
     steps:
       - name: Install Chrome

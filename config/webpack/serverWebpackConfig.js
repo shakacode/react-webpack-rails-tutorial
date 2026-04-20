@@ -87,18 +87,31 @@ const configureServer = (rscBundle = false) => {
   serverWebpackConfig.plugins.unshift(new bundler.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 
   if (!rscBundle) {
-    serverWebpackConfig.plugins.push(new RSCWebpackPlugin({ isServer: true }));
+    // Limit client-reference discovery to the app source directory. Without
+    // `clientReferences`, the plugin may traverse into node_modules/ and hit
+    // non-JS source files (e.g. .tsx that aren't configured for a loader),
+    // and would re-scan nodes we don't care about. Matches the Pro dummy
+    // pattern in react_on_rails_pro/spec/dummy/config/webpack/serverWebpackConfig.js.
+    serverWebpackConfig.plugins.push(
+      new RSCWebpackPlugin({
+        isServer: true,
+        clientReferences: [
+          { directory: path.resolve(__dirname, '../../client/app'), recursive: true, include: /\.(js|ts|jsx|tsx)$/ },
+        ],
+      }),
+    );
   }
 
   // Custom output for the server-bundle.
-  // libraryTarget: 'commonjs2' is required by the Pro Node renderer so it can
-  // `require()` the evaluated bundle.
+  // - libraryTarget: 'commonjs2' is required by the Pro Node renderer so it
+  //   can `require()` the evaluated bundle.
+  // - No publicPath: the server bundle is loaded by the Node renderer via the
+  //   filesystem, never served over HTTP, so asset URLs would go unused.
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
     libraryTarget: 'commonjs2',
     path: path.resolve(__dirname, '../../ssr-generated'),
-    publicPath: config.publicPath,
   };
 
   // Don't hash the server bundle b/c would conflict with the client manifest
