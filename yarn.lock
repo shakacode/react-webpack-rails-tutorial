@@ -8738,12 +8738,12 @@ react-deep-force-update@^1.0.0:
   resolved "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.1.2.tgz"
   integrity sha512-WUSQJ4P/wWcusaH+zZmbECOk7H5N2pOIl0vzheeornkIMhu+qrNdGFm0bDZLCb0hSF0jf/kH1SgkNGfBdTc4wA==
 
-react-dom@^19.0.0:
-  version "19.2.0"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz"
-  integrity sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==
+react-dom@19.0.4:
+  version "19.0.4"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.0.4.tgz#792d2868dc672c6f8abfce62bdb250e913dcfe2b"
+  integrity sha512-JiVlwQwuINIQf2+XUjtRFtLxhTE6hcyX7ZyCmY0HM7I/Kgi7qyXThkzwzg6uCfu3rTg9Ofe1x8qWYrfqthIrzg==
   dependencies:
-    scheduler "^0.27.0"
+    scheduler "^0.25.0"
 
 react-intl@^6.4.4:
   version "6.8.9"
@@ -8873,10 +8873,10 @@ react-transition-group@4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@^19.0.0:
-  version "19.2.0"
-  resolved "https://registry.npmjs.org/react/-/react-19.2.0.tgz"
-  integrity sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==
+react@19.0.4:
+  version "19.0.4"
+  resolved "https://registry.npmjs.org/react/-/react-19.0.4.tgz#8031673e73cbb8ecba2c35c8c461396aa38dc69d"
+  integrity sha512-6RpEg9/n0sThnO+2CaMLWuvL1iyctm9/lcSTwvmyCoJYD5eiIrwxevXtrMqrtUr96HCdQB8/Yf+oK1QGy8kXEQ==
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -9307,10 +9307,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.27.0:
-  version "0.27.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz"
-  integrity sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==
+scheduler@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.25.0.tgz#336cd9768e8cceebf52d3c80e3dcf5de23e7e015"
+  integrity sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==
 
 schema-utils@^3.0.0, schema-utils@^3.3.0:
   version "3.3.0"
