@@ -1,4 +1,4 @@
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 import 'jquery-ujs';
 import { Turbo } from '@hotwired/turbo-rails';
 

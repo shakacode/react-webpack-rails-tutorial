@@ -1,5 +1,5 @@
 // Example of React + Redux
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 
 import App from './App/ror_components/App';
 import RouterApp from './RouterApp/ror_components/RouterApp.server';

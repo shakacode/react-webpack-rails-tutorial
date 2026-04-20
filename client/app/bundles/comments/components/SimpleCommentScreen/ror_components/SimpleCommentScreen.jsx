@@ -3,7 +3,7 @@ import React from 'react';
 import request from 'axios';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 import { IntlProvider, injectIntl } from 'react-intl';
 import BaseComponent from 'libs/components/BaseComponent';
 import SelectLanguage from 'libs/i18n/selectLanguage';
