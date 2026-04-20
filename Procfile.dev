@@ -10,5 +10,7 @@ rescript: yarn res:watch
 rails: bundle exec thrust bin/rails server -p 3000
 # Client Rspack dev server with HMR
 wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
-# Server Rspack watcher for SSR bundle
+# Server webpack watcher for SSR bundle
 wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
+# Pro Node renderer — executes the server bundle for SSR (port 3800)
+renderer: NODE_ENV=development node renderer/node-renderer.js

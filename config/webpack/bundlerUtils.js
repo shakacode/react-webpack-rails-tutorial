@@ -1,38 +1,24 @@
 /**
- * Bundler utilities for Rspack-only configuration.
- *
- * This repository standardizes on Rspack with Shakapacker.
+ * Bundler utilities. Returns the active bundler module based on shakapacker.yml's
+ * `assets_bundler` setting. Supports both webpack and rspack so this project can
+ * switch between them without touching every config file.
  */
 
 const { config } = require('shakapacker');
 
-// Cache for bundler module
 let _cachedBundler = null;
 
-const ensureRspack = () => {
-  if (config.assets_bundler !== 'rspack') {
-    throw new Error(
-      `Invalid assets_bundler: "${config.assets_bundler}". ` +
-        'This project is configured for Rspack only. ' +
-        'Set assets_bundler: rspack in config/shakapacker.yml',
-    );
-  }
-};
-
 /**
- * Gets the Rspack module for the current build.
+ * Gets the bundler module for the current build.
  *
- * @returns {Object} @rspack/core module
- * @throws {Error} If assets_bundler is not 'rspack'
+ * @returns {Object} webpack or @rspack/core module
  */
 const getBundler = () => {
-  ensureRspack();
-
   if (_cachedBundler) {
     return _cachedBundler;
   }
 
-  _cachedBundler = require('@rspack/core');
+  _cachedBundler = config.assets_bundler === 'rspack' ? require('@rspack/core') : require('webpack');
 
   return _cachedBundler;
 };
@@ -45,11 +31,21 @@ const getBundler = () => {
 const isRspack = () => config.assets_bundler === 'rspack';
 
 /**
- * Gets the CSS extraction plugin for Rspack.
+ * Gets the CSS extraction plugin. Only meaningful on rspack — webpack projects
+ * use mini-css-extract-plugin directly via shakapacker's generated config.
  *
  * @returns {Object} CssExtractRspackPlugin
+ * @throws {Error} If assets_bundler is not rspack
  */
-const getCssExtractPlugin = () => getBundler().CssExtractRspackPlugin;
+const getCssExtractPlugin = () => {
+  if (!isRspack()) {
+    throw new Error(
+      'getCssExtractPlugin() is only available when assets_bundler is rspack. ' +
+        "On webpack, rely on shakapacker's generated MiniCssExtractPlugin configuration.",
+    );
+  }
+  return getBundler().CssExtractRspackPlugin;
+};
 
 module.exports = {
   getBundler,
