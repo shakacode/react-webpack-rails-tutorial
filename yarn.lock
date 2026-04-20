@@ -7455,6 +7455,13 @@ p-try@^2.0.0:
   resolved "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
+pack-config-diff@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/pack-config-diff/-/pack-config-diff-0.1.0.tgz#c15025e196ff85009806890cca0841e96aaa6a1b"
+  integrity sha512-gx60G4pnT4GFQ7WECdf7SCq9vdsvBhodLXXzwisy37/t0zkAZ3hMgLCdOGivudF1l0gcLZhIWVYreS89be15QA==
+  dependencies:
+    js-yaml "^4.1.0"
+
 package-json-from-dist@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz"
@@ -8403,10 +8410,17 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails@16.6.0-rc.0:
-  version "16.6.0-rc.0"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.6.0-rc.0.tgz#ed0ed7085133905ad1e243cc97233e97d10a1c99"
-  integrity sha512-fSEomzwojgWob6uTWSfkbpP+XE++8kQBjNFpTT7V419QOON1daIHypQwA9gc8L8uX1If5r8hmAs57iWyGWmJuQ==
+react-on-rails-pro@16.6.0:
+  version "16.6.0"
+  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-16.6.0.tgz#19a5ea99d7b397dd56f14cff1f31955211b4d0a2"
+  integrity sha512-Uc8o3gdHyIETvY5J9wVUyONKOhnkw9kGJDREMHQb/IuXoB5/Vo51UK487Rcep2Z+Dzz/bEvNoF+GuZohORZ7Zw==
+  dependencies:
+    react-on-rails "16.6.0"
+
+react-on-rails@16.6.0:
+  version "16.6.0"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.6.0.tgz#da7f117fec14f420f7f6ffe6bdb34b7fc2e01b3a"
+  integrity sha512-LqLi7A0n0Tv5c3yMYlwS9s6rE82gvXNMj3sscmK2LOgIJ+mLQlOX65n0Jq5ZJ4Nsl9SRgxEOOQmcrfvDeB9F1g==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -9059,12 +9073,13 @@ setprototypeof@1.2.0, setprototypeof@~1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@10.0.0-rc.0:
-  version "10.0.0-rc.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.0.0-rc.0.tgz#472258e85c7aef3f705d36b6e06f303e680df8fa"
-  integrity sha512-Sv58iSE+z1N73o0ksAHPE2BrMjynTySttsc9EmiAdsqeW5U5KYC/N0CdCEXQxQoT5ybAYA2t0j+NJHdWIM/PCg==
+shakapacker@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.0.0.tgz#870f823531c7362836975ab9bb16732234a580a0"
+  integrity sha512-bLKU/xGxIpC/oXvTBRLnpH6bjVK/wyYeWiwE35zd3xxbcg6WfbbQxls0L/AmO8p560RR2PgfR3QtHb7klBmu0A==
   dependencies:
     js-yaml "^4.1.0"
+    pack-config-diff "^0.1.0"
     path-complete-extname "^1.0.0"
     webpack-merge "^5.8.0"
     yargs "^17.7.2"

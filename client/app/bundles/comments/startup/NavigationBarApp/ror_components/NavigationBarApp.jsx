@@ -3,7 +3,7 @@
 
 import { Provider } from 'react-redux';
 import React from 'react';
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 
 import NavigationBar from '../../../components/NavigationBar/NavigationBar.jsx';
 import NavigationBarContainer from '../../../containers/NavigationBarContainer.jsx';
