@@ -8,17 +8,6 @@ const { RSCWebpackPlugin } = require('react-on-rails-rsc/WebpackPlugin');
 const commonWebpackConfig = require('./commonWebpackConfig');
 const { getBundler } = require('./bundlerUtils');
 
-/**
- * Locates a loader in a rule's `use` array by loader name substring.
- *
- * Exposed on the module exports so rscWebpackConfig.js can call it when
- * deriving the RSC bundle from serverWebpackConfig(true). Matches the
- * `extractLoader` helper used in the Pro dummy and marketplace references.
- *
- * @param {Object} rule Webpack module rule with a `use` array
- * @param {string} loaderName Substring to match against each loader's name
- * @returns {Object|string|undefined} Matching loader entry, or undefined
- */
 function extractLoader(rule, loaderName) {
   if (!Array.isArray(rule.use)) return undefined;
   return rule.use.find((item) => {
@@ -27,26 +16,6 @@ function extractLoader(rule, loaderName) {
   });
 }
 
-/**
- * Generates the server-side rendering (SSR) bundle configuration for Pro's
- * Node renderer.
- *
- * Key Pro-specific settings (applied after shakapacker's generated config):
- * - target: 'node' + node: false — required for Node execution in the renderer
- * - libraryTarget: 'commonjs2' — required so the renderer can `require()` the bundle
- * - RSCWebpackPlugin({ isServer: true }) — emits the server manifest used by
- *   React Server Components (inert until RSC support is enabled in Sub-PR 3)
- * - babelLoader caller = { ssr: true } — lets Babel pick SSR-specific transforms
- * - CSS extraction disabled; css-loader switches to exportOnlyLocals for class
- *   name mapping only
- *
- * The `rscBundle` arg exists so Sub-PR 3's rscWebpackConfig.js can derive the
- * RSC bundle from this same config — when true, the server-manifest plugin is
- * skipped (the RSC bundle emits the client manifest instead).
- *
- * @param {boolean} [rscBundle=false] True when called from rscWebpackConfig.js
- * @returns {Object} Webpack configuration object for the SSR bundle
- */
 const configureServer = (rscBundle = false) => {
   const bundler = getBundler();
 
@@ -56,7 +25,6 @@ const configureServer = (rscBundle = false) => {
   // Using webpack-merge into an empty object avoids this issue.
   const serverWebpackConfig = commonWebpackConfig();
 
-  // We just want the single server bundle entry
   const serverEntry = {
     'server-bundle': serverWebpackConfig.entry['server-bundle'],
   };
@@ -80,18 +48,15 @@ const configureServer = (rscBundle = false) => {
 
   serverWebpackConfig.entry = serverEntry;
 
-  // No splitting of chunks for a server bundle
   serverWebpackConfig.optimization = {
     minimize: false,
   };
   serverWebpackConfig.plugins.unshift(new bundler.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 
   if (!rscBundle) {
-    // Limit client-reference discovery to the app source directory. Without
-    // `clientReferences`, the plugin may traverse into node_modules/ and hit
-    // non-JS source files (e.g. .tsx that aren't configured for a loader),
-    // and would re-scan nodes we don't care about. Matches the Pro dummy
-    // pattern in react_on_rails_pro/spec/dummy/config/webpack/serverWebpackConfig.js.
+    // Scope client-reference discovery to the app source dir. Without this,
+    // the plugin can walk into node_modules and hit .tsx source files that
+    // aren't configured for a loader. Matches the Pro dummy pattern.
     serverWebpackConfig.plugins.push(
       new RSCWebpackPlugin({
         isServer: true,
@@ -102,11 +67,9 @@ const configureServer = (rscBundle = false) => {
     );
   }
 
-  // Custom output for the server-bundle.
-  // - libraryTarget: 'commonjs2' is required by the Pro Node renderer so it
-  //   can `require()` the evaluated bundle.
-  // - No publicPath: the server bundle is loaded by the Node renderer via the
-  //   filesystem, never served over HTTP, so asset URLs would go unused.
+  // libraryTarget: 'commonjs2' is required by the Pro Node renderer so it can
+  // `require()` the evaluated bundle. No publicPath: the server bundle is
+  // loaded from the filesystem, never served over HTTP.
   serverWebpackConfig.output = {
     filename: 'server-bundle.js',
     globalObject: 'this',
@@ -114,9 +77,6 @@ const configureServer = (rscBundle = false) => {
     path: path.resolve(__dirname, '../../ssr-generated'),
   };
 
-  // Don't hash the server bundle b/c would conflict with the client manifest
-  // And no need for CSS extraction plugins (webpack's MiniCssExtractPlugin or
-  // rspack's CssExtractRspackPlugin).
   serverWebpackConfig.plugins = serverWebpackConfig.plugins.filter(
     (plugin) =>
       plugin.constructor.name !== 'WebpackAssetsManifest' &&
@@ -125,11 +85,6 @@ const configureServer = (rscBundle = false) => {
       plugin.constructor.name !== 'ForkTsCheckerWebpackPlugin',
   );
 
-  // Configure loader rules for SSR:
-  // - strip CSS extraction and style-loader (client build handles CSS export)
-  // - css-loader exportOnlyLocals: true (keep class name mapping only)
-  // - babel-loader caller.ssr: true (Babel picks SSR-specific transforms)
-  // - url/file-loader emitFile: false (don't duplicate image assets during SSR)
   serverWebpackConfig.module.rules.forEach((rule) => {
     if (Array.isArray(rule.use)) {
       rule.use = rule.use.filter((item) => {
@@ -161,16 +116,12 @@ const configureServer = (rscBundle = false) => {
     }
   });
 
-  // eval works well for the SSR bundle because it's the fastest and shows
-  // lines in the server bundle which is good for debugging SSR.
   serverWebpackConfig.devtool = 'eval';
 
-  // Target 'node' so the bundle uses real CommonJS require() and Node globals
-  // like __dirname. Avoids polyfills and fixes libraries like Emotion and
-  // loadable-components that break under target: 'web' in SSR.
+  // target: 'node' fixes SSR breakage in libraries (Emotion, loadable-components, etc.)
+  // that don't behave under the default 'web' target. node: false disables the
+  // polyfill shims that only matter when targeting 'web'.
   serverWebpackConfig.target = 'node';
-
-  // Disable Node.js polyfill shims — not needed when targeting Node.
   serverWebpackConfig.node = false;
 
   return serverWebpackConfig;

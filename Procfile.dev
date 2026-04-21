@@ -12,5 +12,4 @@ rails: bundle exec thrust bin/rails server -p 3000
 wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 # Server webpack watcher for SSR bundle
 wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
-# Pro Node renderer — executes the server bundle for SSR (port 3800)
 node-renderer: NODE_ENV=development node renderer/node-renderer.js

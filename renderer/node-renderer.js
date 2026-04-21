@@ -29,21 +29,19 @@ function parseIntegerEnv(name, defaultValue, { min, max = Number.MAX_SAFE_INTEGE
 
 const config = {
   serverBundleCachePath: path.resolve(__dirname, '.node-renderer-bundles'),
-  // Default to info per Pro docs (docs/oss/building-features/node-renderer/
-  // container-deployment.md: "logLevel: 'info' // General renderer logs").
-  // Override with RENDERER_LOG_LEVEL=debug when actively debugging.
   logLevel: process.env.RENDERER_LOG_LEVEL || 'info',
   password: rendererPassword,
   port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),
   supportModules: true,
   workersCount: parseIntegerEnv('NODE_RENDERER_CONCURRENCY', 3, { min: 0 }),
-  // Expose globals the renderer's VM sandbox doesn't auto-provide but that
-  // downstream dependencies use during SSR (react-router-dom's NavLink calls
-  // `new URL(...)` via encodeLocation; various libs use AbortController).
+  // Expose globals the VM sandbox doesn't auto-provide but that downstream
+  // deps rely on during SSR. Without URL, react-router-dom's NavLink throws
+  // `ReferenceError: URL is not defined` via encodeLocation.
   additionalContext: { URL, AbortController },
 };
 
-// Cap CI workers unless the caller has set NODE_RENDERER_CONCURRENCY explicitly.
+// CI hosts report more CPUs than allocated to the container; cap workers to
+// avoid oversubscribing memory.
 if (process.env.CI && process.env.NODE_RENDERER_CONCURRENCY == null) {
   config.workersCount = 2;
 }
