@@ -112,3 +112,9 @@ jobs:
           run: bundle exec rake ci:rspec
           working-directory: ./ #optional
           options: ":99 -ac -screen scn 1600x1200x16"
+
+      - name: Dump Node renderer log on rspec failure
+        if: failure()
+        run: |
+          echo "=== /tmp/node-renderer.log ==="
+          cat /tmp/node-renderer.log || echo "(log not available)"
