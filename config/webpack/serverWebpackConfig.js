@@ -56,12 +56,14 @@ const configureServer = (rscBundle = false) => {
   if (!rscBundle) {
     // Scope client-reference discovery to the app source dir. Without this,
     // the plugin can walk into node_modules and hit .tsx source files that
-    // aren't configured for a loader. Matches the Pro dummy pattern.
+    // aren't configured for a loader. Derive from config.source_path so the
+    // scope follows shakapacker.yml instead of hardcoding client/app.
+    const clientReferencesDir = path.resolve(config.source_path || 'client/app');
     serverWebpackConfig.plugins.push(
       new RSCWebpackPlugin({
         isServer: true,
         clientReferences: [
-          { directory: path.resolve(__dirname, '../../client/app'), recursive: true, include: /\.(js|ts|jsx|tsx)$/ },
+          { directory: clientReferencesDir, recursive: true, include: /\.(js|ts|jsx|tsx)$/ },
         ],
       }),
     );
