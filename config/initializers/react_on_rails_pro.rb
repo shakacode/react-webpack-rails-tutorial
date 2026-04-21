@@ -10,7 +10,7 @@ ReactOnRailsPro.configure do |config|
   # degrading to ExecJS (default is true).
   config.renderer_use_fallback_exec_js = false
 
-  config.renderer_url = ENV.fetch("REACT_RENDERER_URL", "http://localhost:3800")
+  config.renderer_url = ENV.fetch("RENDERER_URL", "http://localhost:3800")
 
   # Must match the password in renderer/node-renderer.js.
   config.renderer_password = ENV.fetch("RENDERER_PASSWORD", "local-dev-renderer-password")

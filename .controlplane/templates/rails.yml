@@ -15,8 +15,9 @@ spec:
       # Inherit other ENV values from GVC
       inheritEnv: true
       image: {{APP_IMAGE_LINK}}
-      # 512 corresponds to a standard 1x dyno type
-      memory: 512Mi
+      # Bumped from 512Mi because the container now runs both Rails and the
+      # Pro Node renderer. Matches the marketplace demo's rails.yml.
+      memory: 2Gi
       ports:
         - number: 3000
           protocol: http
