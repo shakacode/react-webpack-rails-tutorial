@@ -12,6 +12,10 @@ ReactOnRailsPro.configure do |config|
 
   config.renderer_url = ENV.fetch("RENDERER_URL", "http://localhost:3800")
 
-  # Must match the password in renderer/node-renderer.js.
-  config.renderer_password = ENV.fetch("RENDERER_PASSWORD", "local-dev-renderer-password")
+  # Must match the password in renderer/node-renderer.js. Use .presence so
+  # a blank value (e.g. the literal `RENDERER_PASSWORD=` that ships in
+  # .env.example) falls back to the dev default. ENV.fetch would leave
+  # Rails with "" while the renderer treats "" as unset via `||`,
+  # producing a silent auth mismatch.
+  config.renderer_password = ENV["RENDERER_PASSWORD"].presence || "local-dev-renderer-password"
 end
