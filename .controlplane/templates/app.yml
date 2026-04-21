@@ -34,12 +34,15 @@ spec:
       value: '2'
     - name: RENDERER_URL
       value: http://localhost:3800
-    # RENDERER_PASSWORD and REACT_ON_RAILS_PRO_LICENSE must be created as a
-    # Control Plane Secret named `<app>-secrets` in each org before deploy.
+    # RENDERER_PASSWORD and REACT_ON_RAILS_PRO_LICENSE must be created in the
+    # Control Plane Secret named by {{APP_SECRETS}} before deploy. cpflow
+    # resolves {{APP_SECRETS}} to `{APP_PREFIX}-secrets` — which means review
+    # apps all share one `qa-react-webpack-rails-tutorial-secrets` (thanks to
+    # match_if_app_name_starts_with: true on the qa template).
     - name: RENDERER_PASSWORD
-      value: cpln://secret/{{APP_NAME}}-secrets.RENDERER_PASSWORD
+      value: cpln://secret/{{APP_SECRETS}}.RENDERER_PASSWORD
     - name: REACT_ON_RAILS_PRO_LICENSE
-      value: cpln://secret/{{APP_NAME}}-secrets.REACT_ON_RAILS_PRO_LICENSE
+      value: cpln://secret/{{APP_SECRETS}}.REACT_ON_RAILS_PRO_LICENSE
   # Part of standard configuration
   staticPlacement:
     locationLinks:
