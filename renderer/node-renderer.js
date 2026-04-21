@@ -33,7 +33,7 @@ const config = {
   password: rendererPassword,
   port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),
   supportModules: true,
-  workersCount: parseIntegerEnv('NODE_RENDERER_CONCURRENCY', 3, { min: 0 }),
+  workersCount: parseIntegerEnv('RENDERER_WORKERS_COUNT', 3, { min: 0 }),
   // Expose globals the VM sandbox doesn't auto-provide but that downstream
   // deps rely on during SSR. Without URL, react-router-dom's NavLink throws
   // `ReferenceError: URL is not defined` via encodeLocation.
@@ -42,7 +42,7 @@ const config = {
 
 // CI hosts report more CPUs than allocated to the container; cap workers to
 // avoid oversubscribing memory.
-if (process.env.CI && process.env.NODE_RENDERER_CONCURRENCY == null) {
+if (process.env.CI && process.env.RENDERER_WORKERS_COUNT == null) {
   config.workersCount = 2;
 }
 
