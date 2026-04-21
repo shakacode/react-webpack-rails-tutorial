@@ -29,7 +29,10 @@ function parseIntegerEnv(name, defaultValue, { min, max = Number.MAX_SAFE_INTEGE
 
 const config = {
   serverBundleCachePath: path.resolve(__dirname, '.node-renderer-bundles'),
-  logLevel: process.env.RENDERER_LOG_LEVEL || 'debug',
+  // Default to info per Pro docs (docs/oss/building-features/node-renderer/
+  // container-deployment.md: "logLevel: 'info' // General renderer logs").
+  // Override with RENDERER_LOG_LEVEL=debug when actively debugging.
+  logLevel: process.env.RENDERER_LOG_LEVEL || 'info',
   password: rendererPassword,
   port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),
   supportModules: true,
