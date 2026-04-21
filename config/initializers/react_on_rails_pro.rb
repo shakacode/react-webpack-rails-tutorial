@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # See https://reactonrails.com/docs/configuration/configuration-pro
-# License: Set REACT_ON_RAILS_PRO_LICENSE environment variable
+# Production license: set REACT_ON_RAILS_PRO_LICENSE to the JWT token from
+# https://pro.reactonrails.com/. Development and test environments don't
+# require a license — the Pro engine logs an info-level notice only.
 ReactOnRailsPro.configure do |config|
   config.server_renderer = "NodeRenderer"
   # Raise loudly when the renderer is unavailable instead of silently
