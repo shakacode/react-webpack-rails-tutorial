@@ -87,13 +87,12 @@ jobs:
 
       - name: Start Node renderer for SSR
         run: |
-          node renderer/node-renderer.js > /tmp/node-renderer.log 2>&1 &
+          node renderer/node-renderer.js &
           RENDERER_PID=$!
           echo "Waiting for Node renderer (PID $RENDERER_PID) on port 3800..."
           for i in $(seq 1 30); do
             if ! kill -0 $RENDERER_PID 2>/dev/null; then
-              echo "Node renderer process exited unexpectedly. Log output:"
-              cat /tmp/node-renderer.log
+              echo "Node renderer process exited unexpectedly (see output above)."
               exit 1
             fi
             if nc -z localhost 3800 2>/dev/null; then
@@ -102,8 +101,7 @@ jobs:
             fi
             sleep 1
           done
-          echo "Node renderer failed to start within 30 seconds. Log output:"
-          cat /tmp/node-renderer.log
+          echo "Node renderer failed to start within 30 seconds (see output above)."
           exit 1
 
       - name: Run rspec with xvfb
@@ -112,9 +110,3 @@ jobs:
           run: bundle exec rake ci:rspec
           working-directory: ./ #optional
           options: ":99 -ac -screen scn 1600x1200x16"
-
-      - name: Dump Node renderer log on rspec failure
-        if: failure()
-        run: |
-          echo "=== /tmp/node-renderer.log ==="
-          cat /tmp/node-renderer.log || echo "(log not available)"
