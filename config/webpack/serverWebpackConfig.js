@@ -16,10 +16,6 @@ function extractLoader(rule, loaderName) {
   });
 }
 
-// rscBundle: set to true in Sub-PR 3 for the RSC client-reference bundle,
-// which handles RSCWebpackPlugin(isServer: false) separately. Default
-// false builds the SSR bundle with RSCWebpackPlugin(isServer: true).
-// Follows the Pro dummy's `serverWebpackConfig(rscBundle)` pattern.
 const configureServer = (rscBundle = false) => {
   const bundler = getBundler();
 
