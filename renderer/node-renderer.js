@@ -33,17 +33,14 @@ const config = {
   password: rendererPassword,
   port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),
   supportModules: true,
-  workersCount: parseIntegerEnv('RENDERER_WORKERS_COUNT', 3, { min: 0 }),
+  // CI hosts report more CPUs than allocated to the container; default to
+  // 2 workers on CI to avoid oversubscribing memory. Explicit
+  // RENDERER_WORKERS_COUNT still wins on either path.
+  workersCount: parseIntegerEnv('RENDERER_WORKERS_COUNT', process.env.CI ? 2 : 3, { min: 0 }),
   // Expose globals the VM sandbox doesn't auto-provide but that downstream
   // deps rely on during SSR. Without URL, react-router-dom's NavLink throws
   // `ReferenceError: URL is not defined` via encodeLocation.
   additionalContext: { URL, AbortController },
 };
-
-// CI hosts report more CPUs than allocated to the container; cap workers to
-// avoid oversubscribing memory.
-if (process.env.CI && process.env.RENDERER_WORKERS_COUNT == null) {
-  config.workersCount = 2;
-}
 
 reactOnRailsProNodeRenderer(config);
