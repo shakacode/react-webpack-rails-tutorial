@@ -9,12 +9,11 @@ default: &default
   webpack_compile_output: true
   nested_entries: true
   javascript_transpiler: swc
-  # Tactical: running on webpack during the Pro RSC migration. The project will
-  # flip back to rspack once react_on_rails_rsc ships a native rspack RSC plugin
-  # (tracked at shakacode/react_on_rails_rsc#29). The rspack 2.0.0-beta.7 webpack
-  # compatibility layer doesn't cover the APIs the upstream webpack RSC plugin
-  # requires (contextModuleFactory.resolveDependencies, ModuleDependency), so the
-  # upstream RSCWebpackPlugin can't run on rspack yet.
+  # TODO: flip back to rspack once shakacode/react_on_rails_rsc#29 ships a
+  # native rspack RSC plugin. On webpack for now because rspack
+  # 2.0.0-beta.7's webpack-compat layer doesn't cover the APIs the upstream
+  # RSCWebpackPlugin needs (contextModuleFactory.resolveDependencies,
+  # ModuleDependency).
   assets_bundler: webpack
 
   # Additional paths webpack should lookup modules
