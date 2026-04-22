@@ -12,17 +12,9 @@ ReactOnRailsPro.configure do |config|
 
   config.renderer_url = ENV.fetch("RENDERER_URL", "http://localhost:3800")
 
-  # Must match the password in renderer/node-renderer.js.
-  #
-  # Dev/test: blank or unset falls back to the dev default, so .env.example's
-  # literal `RENDERER_PASSWORD=` still works. `.presence` matches the JS
-  # side's `||` fallback (which treats "" as falsy).
-  #
-  # Production: raise loudly if blank, unset, or still the dev default. The
-  # Pro renderer's JS side guards against unset in production but accepts
-  # the literal dev-default value. If someone set the CP secret to the
-  # well-known dev password, both sides would "match" but renderer auth
-  # would be effectively disabled. This closes that gap.
+  # Must match the password in renderer/node-renderer.js. The JS side
+  # guards against unset in production but accepts the literal dev
+  # default; the prod branch here closes that gap.
   config.renderer_password =
     if Rails.env.local?
       ENV["RENDERER_PASSWORD"].presence || "local-dev-renderer-password"
