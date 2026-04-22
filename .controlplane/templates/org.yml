@@ -4,14 +4,25 @@
 # other sensitive information that is shared across multiple apps
 # in the same organization.
 
-# This is how you apply this once (not during CI)
-# cpl apply-template secrets  -a qa-react-webpack-rails-tutorial --org shakacode-open-source-examples-staging
+# The qa-* dictionary is bootstrapped via this template; prod and
+# staging dictionaries are created manually with real values.
+
+# Initial bootstrap (once, manually, not in CI):
+#   cpflow apply-template secrets -a qa-react-webpack-rails-tutorial --org shakacode-open-source-examples-staging
+#
+# Populate real values with `cpln apply -f <file>` or `cpln secret edit`.
+# Do NOT re-apply this template after real values are set: it will
+# overwrite them with the placeholders below.
 
 kind: secret
 name: {{APP_SECRETS}}
 type: dictionary
 data:
-  SOME_ENV: "123456"
+  # Both sides of the Rails/Node renderer handshake must match.
+  # Generate with `openssl rand -hex 32`.
+  RENDERER_PASSWORD: "replace-with-openssl-rand-hex-32"
+  # JWT from https://pro.reactonrails.com/; same token across envs.
+  REACT_ON_RAILS_PRO_LICENSE: "replace-with-pro-license-jwt"
 
 ---
 

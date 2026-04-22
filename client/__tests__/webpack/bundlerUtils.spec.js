@@ -1,7 +1,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable global-require */
 /**
- * Unit tests for bundlerUtils.js in Rspack-only mode.
+ * Unit tests for bundlerUtils.js. The utility returns the active bundler
+ * module based on shakapacker.yml's `assets_bundler` setting; it supports
+ * both webpack and rspack.
  */
 
 jest.mock('@rspack/core', () => ({
@@ -10,12 +12,18 @@ jest.mock('@rspack/core', () => ({
   optimize: { LimitChunkCountPlugin: class MockRspackLimitChunkCount {} },
 }));
 
+jest.mock('webpack', () => ({
+  ProvidePlugin: class MockWebpackProvidePlugin {},
+  DefinePlugin: class MockWebpackDefinePlugin {},
+  optimize: { LimitChunkCountPlugin: class MockWebpackLimitChunkCount {} },
+}));
+
 describe('bundlerUtils', () => {
   let mockConfig;
 
   beforeEach(() => {
     jest.resetModules();
-    mockConfig = { assets_bundler: 'rspack' };
+    mockConfig = { assets_bundler: 'webpack' };
   });
 
   afterEach(() => {
@@ -35,32 +43,30 @@ describe('bundlerUtils', () => {
       expect(bundler.CssExtractRspackPlugin.name).toBe('MockCssExtractRspackPlugin');
     });
 
-    it('throws when assets_bundler is webpack', () => {
+    it('returns webpack when assets_bundler is webpack', () => {
       mockConfig.assets_bundler = 'webpack';
       jest.doMock('shakapacker', () => ({ config: mockConfig }));
       const utils = require('../../../config/webpack/bundlerUtils');
 
-      expect(() => utils.getBundler()).toThrow('configured for Rspack only');
+      const bundler = utils.getBundler();
+
+      expect(bundler).toBeDefined();
+      expect(bundler.DefinePlugin).toBeDefined();
+      expect(bundler.DefinePlugin.name).toBe('MockWebpackDefinePlugin');
     });
 
-    it('throws when assets_bundler is undefined', () => {
+    it('returns webpack when assets_bundler is undefined', () => {
       mockConfig.assets_bundler = undefined;
       jest.doMock('shakapacker', () => ({ config: mockConfig }));
       const utils = require('../../../config/webpack/bundlerUtils');
 
-      expect(() => utils.getBundler()).toThrow('configured for Rspack only');
-    });
+      const bundler = utils.getBundler();
 
-    it('throws when assets_bundler is invalid', () => {
-      mockConfig.assets_bundler = 'invalid-bundler';
-      jest.doMock('shakapacker', () => ({ config: mockConfig }));
-      const utils = require('../../../config/webpack/bundlerUtils');
-
-      expect(() => utils.getBundler()).toThrow('configured for Rspack only');
+      expect(bundler.DefinePlugin).toBeDefined();
     });
 
     it('returns cached bundler on subsequent calls', () => {
-      mockConfig.assets_bundler = 'rspack';
+      mockConfig.assets_bundler = 'webpack';
       jest.doMock('shakapacker', () => ({ config: mockConfig }));
       const utils = require('../../../config/webpack/bundlerUtils');
 
@@ -106,7 +112,7 @@ describe('bundlerUtils', () => {
       jest.doMock('shakapacker', () => ({ config: mockConfig }));
       const utils = require('../../../config/webpack/bundlerUtils');
 
-      expect(() => utils.getCssExtractPlugin()).toThrow('configured for Rspack only');
+      expect(() => utils.getCssExtractPlugin()).toThrow('only available when assets_bundler is rspack');
     });
   });
 });

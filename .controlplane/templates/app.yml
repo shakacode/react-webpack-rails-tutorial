@@ -24,6 +24,25 @@ spec:
       # set to a secure random value using: openssl rand -hex 64
       # Production apps should configure this manually after app creation via a secret.
       value: 'placeholder_secret_key_base_for_test_apps_only'
+    # Pro Node renderer settings. The renderer process runs in the same
+    # container as Rails (see .controlplane/Dockerfile CMD).
+    - name: RENDERER_PORT
+      value: '3800'
+    - name: RENDERER_LOG_LEVEL
+      value: info
+    - name: RENDERER_WORKERS_COUNT
+      value: '2'
+    - name: RENDERER_URL
+      value: http://localhost:3800
+    # RENDERER_PASSWORD and REACT_ON_RAILS_PRO_LICENSE must be created in the
+    # Control Plane Secret named by {{APP_SECRETS}} before deploy. cpflow
+    # resolves {{APP_SECRETS}} to `{APP_PREFIX}-secrets` — which means review
+    # apps all share one `qa-react-webpack-rails-tutorial-secrets` (thanks to
+    # match_if_app_name_starts_with: true on the qa template).
+    - name: RENDERER_PASSWORD
+      value: cpln://secret/{{APP_SECRETS}}.RENDERER_PASSWORD
+    - name: REACT_ON_RAILS_PRO_LICENSE
+      value: cpln://secret/{{APP_SECRETS}}.REACT_ON_RAILS_PRO_LICENSE
   # Part of standard configuration
   staticPlacement:
     locationLinks:

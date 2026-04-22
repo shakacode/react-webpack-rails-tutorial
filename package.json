@@ -30,7 +30,8 @@
     "test:client": "yarn jest",
     "build:test": "rm -rf public/packs-test && RAILS_ENV=test NODE_ENV=test bin/shakapacker",
     "build:dev": "rm -rf public/packs && RAILS_ENV=development NODE_ENV=development bin/shakapacker",
-    "build:clean": "rm -rf public/packs || true"
+    "build:clean": "rm -rf public/packs || true",
+    "node-renderer": "node renderer/node-renderer.js"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
@@ -77,10 +78,12 @@
     "postcss-loader": "7.3.3",
     "postcss-preset-env": "^8.5.0",
     "prop-types": "^15.8.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "~19.0.4",
+    "react-dom": "~19.0.4",
     "react-intl": "^6.4.4",
     "react-on-rails-pro": "16.6.0",
+    "react-on-rails-pro-node-renderer": "16.6.0",
+    "react-on-rails-rsc": "19.0.4",
     "react-redux": "^8.1.0",
     "react-router": "^6.13.0",
     "react-router-dom": "^6.13.0",

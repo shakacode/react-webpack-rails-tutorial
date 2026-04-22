@@ -80,7 +80,8 @@ RUN SECRET_KEY_BASE=precompile_placeholder yarn res:build && \
 # For Kubernetes and ControlPlane, this is the command on the workload.
 ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
-# Default args to pass to the entry point that can be overridden
-# For Kubernetes and ControlPlane, these are the "workload args"
-# Use Thruster HTTP/2 proxy for optimized performance
-CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
+# Run the Pro Node renderer and Rails in a single container (Option 1 from
+# docs/oss/building-features/node-renderer/container-deployment.md).
+# `wait -n` exits on first child failure → container exits → Control Plane
+# restarts the whole unit. Keeps the existing Thruster HTTP/2 proxy for Rails.
+CMD ["bash", "-c", "node renderer/node-renderer.js & RENDERER_PID=$! ; bundle exec thrust bin/rails server & RAILS_PID=$! ; wait -n ; exit 1"]
