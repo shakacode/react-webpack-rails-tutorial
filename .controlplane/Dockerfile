@@ -83,8 +83,5 @@ ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 # Run the Pro Node renderer and Rails in a single container (Option 1 from
 # docs/oss/building-features/node-renderer/container-deployment.md).
 # `wait -n` exits on first child failure → container exits → Control Plane
-# restarts the whole unit. The trap forwards SIGTERM/SIGINT to both children
-# so rolling deploys can drain: Puma and the renderer's cluster manager both
-# handle SIGTERM, but bash as PID 1 doesn't forward the signal by default.
-# Keeps the existing Thruster HTTP/2 proxy for Rails.
-CMD ["bash", "-c", "node renderer/node-renderer.js & RENDERER_PID=$! ; bundle exec thrust bin/rails server & RAILS_PID=$! ; trap 'kill -TERM $RENDERER_PID $RAILS_PID' TERM INT ; wait -n ; exit 1"]
+# restarts the whole unit. Keeps the existing Thruster HTTP/2 proxy for Rails.
+CMD ["bash", "-c", "node renderer/node-renderer.js & RENDERER_PID=$! ; bundle exec thrust bin/rails server & RAILS_PID=$! ; wait -n ; exit 1"]
