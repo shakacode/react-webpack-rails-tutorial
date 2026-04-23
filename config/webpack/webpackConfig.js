@@ -3,6 +3,7 @@
 
 const clientWebpackConfig = require('./clientWebpackConfig');
 const { default: serverWebpackConfig } = require('./serverWebpackConfig');
+const rscWebpackConfig = require('./rscWebpackConfig');
 
 const webpackConfig = (envSpecific) => {
   const clientConfig = clientWebpackConfig();
@@ -22,6 +23,10 @@ const webpackConfig = (envSpecific) => {
     // eslint-disable-next-line no-console
     console.log('[React on Rails] Creating only the server bundle.');
     result = serverConfig;
+  } else if (process.env.RSC_BUNDLE_ONLY) {
+    // eslint-disable-next-line no-console
+    console.log('[React on Rails] Creating only the RSC bundle.');
+    result = rscWebpackConfig();
   } else {
     // default is the standard client and server build
     // eslint-disable-next-line no-console
