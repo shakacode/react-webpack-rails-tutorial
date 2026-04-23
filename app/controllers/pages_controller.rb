@@ -38,6 +38,8 @@ class PagesController < ApplicationController
 
   def rescript; end
 
+  def server_components; end
+
   private
 
   def set_comments
