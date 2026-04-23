@@ -12,4 +12,6 @@ rails: bundle exec thrust bin/rails server -p 3000
 wp-client: RAILS_ENV=development NODE_ENV=development bin/shakapacker-dev-server
 # Server webpack watcher for SSR bundle
 wp-server: SERVER_BUNDLE_ONLY=yes bin/shakapacker --watch
+# RSC webpack watcher for React Server Components bundle
+wp-rsc: RSC_BUNDLE_ONLY=yes bin/shakapacker --watch
 node-renderer: NODE_ENV=development node renderer/node-renderer.js
