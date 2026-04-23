@@ -3,9 +3,9 @@
 // None of these imports are shipped to the client bundle.
 
 import React, { Suspense } from 'react';
-import ServerInfo from './components/ServerInfo';
-import CommentsFeed from './components/CommentsFeed';
-import TogglePanel from './components/TogglePanel';
+import ServerInfo from '../components/ServerInfo';
+import CommentsFeed from '../components/CommentsFeed';
+import TogglePanel from '../components/TogglePanel';
 
 const ServerComponentsPage = () => {
   return (
