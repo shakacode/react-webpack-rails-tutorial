@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseComponent from 'libs/components/BaseComponent';
