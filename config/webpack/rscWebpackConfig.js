@@ -8,16 +8,29 @@ const configureRsc = () => {
   };
   rscConfig.entry = rscEntry;
 
-  // Runs before babel-loader (webpack loaders execute right-to-left) to
-  // detect 'use client' directives in raw source before transpilation.
+  // Runs before babel/swc (webpack loaders execute right-to-left) to detect
+  // 'use client' directives in raw source before transpilation. Shakapacker
+  // generates rule.use as an array for Babel and as a function for SWC, so
+  // handle both forms.
   const { rules } = rscConfig.module;
   rules.forEach((rule) => {
-    if (Array.isArray(rule.use)) {
-      const babelLoader = extractLoader(rule, 'babel-loader');
-      if (babelLoader) {
-        rule.use.push({
-          loader: 'react-on-rails-rsc/WebpackLoader',
-        });
+    if (typeof rule.use === 'function') {
+      const originalUse = rule.use;
+      rule.use = function rscLoaderWrapper(data) {
+        const result = originalUse.call(this, data);
+        const resultArray = Array.isArray(result) ? result : result ? [result] : [];
+        const resolvedRule = { use: resultArray };
+        const jsLoader =
+          extractLoader(resolvedRule, 'babel-loader') || extractLoader(resolvedRule, 'swc-loader');
+        if (jsLoader) {
+          return [...resultArray, { loader: 'react-on-rails-rsc/WebpackLoader' }];
+        }
+        return result;
+      };
+    } else if (Array.isArray(rule.use)) {
+      const jsLoader = extractLoader(rule, 'babel-loader') || extractLoader(rule, 'swc-loader');
+      if (jsLoader) {
+        rule.use = [...rule.use, { loader: 'react-on-rails-rsc/WebpackLoader' }];
       }
     }
   });
