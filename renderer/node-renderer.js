@@ -47,6 +47,11 @@ const config = {
   // Flight-protocol yielding — with it stubbed, the RSC stream silently
   // emits zero chunks and hangs until the Fastify idle timeout fires.
   stubTimers: false,
+  // Surface console output from async server-component code. Without this,
+  // `console.error` calls from within async Server Components (e.g.
+  // CommentsFeed's catch block) are silently dropped by the VM, making
+  // runtime failures in RSC components invisible.
+  replayServerAsyncOperationLogs: true,
 };
 
 reactOnRailsProNodeRenderer(config);
