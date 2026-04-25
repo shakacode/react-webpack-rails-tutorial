@@ -2,6 +2,7 @@
 
 class PagesController < ApplicationController
   include ReactOnRails::Controller
+  include ReactOnRailsPro::Stream
   before_action :set_comments
 
   def index
@@ -38,7 +39,11 @@ class PagesController < ApplicationController
 
   def rescript; end
 
-  def server_components; end
+  def server_components
+    @server_components_comments = Comment.order(id: :desc).limit(10)
+                                         .as_json(only: %i[id author text created_at])
+    stream_view_containing_react_components(template: "/pages/server_components")
+  end
 
   private
 

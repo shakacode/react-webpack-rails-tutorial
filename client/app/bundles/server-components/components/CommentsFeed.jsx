@@ -1,65 +1,22 @@
-// Server Component - fetches comments directly from the Rails API on the server.
-// Uses marked for markdown rendering. Both fetch and marked stay server-side.
-
 import React from 'react';
 import { Marked } from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import sanitizeHtml from 'sanitize-html';
-import _ from 'lodash';
 import TogglePanel from './TogglePanel';
 
 const marked = new Marked();
 marked.use(gfmHeadingId());
 
-function resolveRailsBaseUrl() {
-  if (process.env.RAILS_INTERNAL_URL) {
-    return process.env.RAILS_INTERNAL_URL;
-  }
-
-  // Local defaults are okay in development/test, but production should be explicit.
-  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-    return 'http://localhost:3000';
-  }
-
-  throw new Error('RAILS_INTERNAL_URL must be set outside development/test');
-}
-
-async function CommentsFeed() {
-  // Simulate network latency only when explicitly enabled for demos.
-  if (process.env.RSC_SUSPENSE_DEMO_DELAY === 'true') {
+// Default-on small delay so the surrounding <Suspense> fallback is visible
+// in the demo. Set RSC_SUSPENSE_DEMO_DELAY=false to disable (CI / tests).
+async function CommentsFeed({ comments = [] }) {
+  if (process.env.RSC_SUSPENSE_DEMO_DELAY !== 'false') {
     await new Promise((resolve) => {
       setTimeout(resolve, 800);
     });
   }
 
-  let recentComments = [];
-  try {
-    // Fetch comments directly from the Rails API — no client-side fetch needed
-    const baseUrl = resolveRailsBaseUrl();
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const response = await fetch(`${baseUrl}/comments.json`, { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText}`);
-    }
-    const data = await response.json();
-    const comments = data.comments;
-
-    // Use lodash to process (stays on server)
-    const sortedComments = _.orderBy(comments, ['created_at'], ['desc']);
-    recentComments = _.take(sortedComments, 10);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('CommentsFeed failed to load comments', error);
-    return (
-      <div className="bg-rose-50 border border-rose-200 rounded-lg p-6 text-center">
-        <p className="text-rose-700">Could not load comments right now. Please try again later.</p>
-      </div>
-    );
-  }
-
-  if (recentComments.length === 0) {
+  if (comments.length === 0) {
     return (
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
         <p className="text-amber-700">
@@ -75,10 +32,8 @@ async function CommentsFeed() {
 
   return (
     <div className="space-y-3">
-      {recentComments.map((comment) => {
-        // Render markdown on the server using marked + sanitize-html.
-        // sanitize-html strips any dangerous HTML before rendering.
-        // These libraries (combined ~200KB) never reach the client.
+      {comments.map((comment) => {
+        // marked + sanitize-html (~200KB combined) stay server-side.
         const rawHtml = marked.parse(comment.text || '');
         const safeHtml = sanitizeHtml(rawHtml, {
           allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
@@ -119,7 +74,7 @@ async function CommentsFeed() {
         );
       })}
       <p className="text-xs text-slate-400 text-center pt-2">
-        {recentComments.length} comment{recentComments.length !== 1 ? 's' : ''} rendered on the server using{' '}
+        {comments.length} comment{comments.length !== 1 ? 's' : ''} rendered on the server using{' '}
         <code>marked</code> + <code>sanitize-html</code> (never sent to browser)
       </p>
     </div>

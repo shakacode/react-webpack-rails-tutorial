@@ -5,7 +5,7 @@ import React from 'react';
 import os from 'os';
 import _ from 'lodash';
 
-async function ServerInfo() {
+function ServerInfo() {
   const serverInfo = {
     platform: os.platform(),
     arch: os.arch(),

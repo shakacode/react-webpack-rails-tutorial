@@ -7,7 +7,7 @@ import ServerInfo from '../components/ServerInfo';
 import CommentsFeed from '../components/CommentsFeed';
 import TogglePanel from '../components/TogglePanel';
 
-const ServerComponentsPage = () => {
+const ServerComponentsPage = ({ comments = [] }) => {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       <header className="mb-10">
@@ -81,7 +81,7 @@ const ServerComponentsPage = () => {
               </div>
             }
           >
-            <CommentsFeed />
+            <CommentsFeed comments={comments} />
           </Suspense>
         </section>
 
