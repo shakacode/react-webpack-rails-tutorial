@@ -72,7 +72,7 @@ const ServerComponentsPage = ({ comments = [] }) => {
             state plumbing. Click <strong>Simulate Error</strong> to make the server component
             throw; the failure surfaces as <code>ServerComponentFetchError</code> and is
             caught by <code>&lt;ErrorBoundary&gt;</code>, which renders a Retry button that
-            re-fetches with corrected props.
+            calls <code>refetchComponent</code> with corrected props.
           </p>
           <LiveActivityRefresher />
         </section>
