@@ -41,7 +41,7 @@ class PagesController < ApplicationController
 
   def server_components
     @server_components_comments = Comment.order(id: :desc).limit(10)
-                                         .as_json(only: %i[id author text created_at])
+                                         .as_json(only: %i[id author text created_at updated_at])
     stream_view_containing_react_components(template: "/pages/server_components")
   end
 

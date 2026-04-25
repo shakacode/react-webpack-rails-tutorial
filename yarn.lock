@@ -8745,6 +8745,13 @@ react-dom@~19.0.4:
   dependencies:
     scheduler "^0.25.0"
 
+react-error-boundary@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.npmjs.org/react-error-boundary/-/react-error-boundary-4.1.2.tgz#bc750ad962edb8b135d6ae922c046051eb58f289"
+  integrity sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
 react-intl@^6.4.4:
   version "6.8.9"
   resolved "https://registry.npmjs.org/react-intl/-/react-intl-6.8.9.tgz"

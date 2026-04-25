@@ -80,6 +80,7 @@
     "prop-types": "^15.8.1",
     "react": "~19.0.4",
     "react-dom": "~19.0.4",
+    "react-error-boundary": "^4.1.2",
     "react-intl": "^6.4.4",
     "react-on-rails-pro": "16.6.0",
     "react-on-rails-pro-node-renderer": "16.6.0",

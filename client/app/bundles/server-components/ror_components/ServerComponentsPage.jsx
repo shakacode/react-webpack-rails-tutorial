@@ -6,6 +6,7 @@ import React, { Suspense } from 'react';
 import ServerInfo from '../components/ServerInfo';
 import CommentsFeed from '../components/CommentsFeed';
 import TogglePanel from '../components/TogglePanel';
+import LiveActivityRefresher from '../components/LiveActivityRefresher';
 
 const ServerComponentsPage = ({ comments = [] }) => {
   return (
@@ -57,6 +58,25 @@ const ServerComponentsPage = ({ comments = [] }) => {
           </TogglePanel>
         </section>
 
+        {/* Client-fetched server component via RSCRoute + ErrorBoundary */}
+        <section>
+          <h2 className="text-xl font-semibold text-slate-700 mb-4 flex items-center gap-2">
+            Live Server Activity
+            <span className="text-xs font-normal bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+              RSCRoute + ErrorBoundary
+            </span>
+          </h2>
+          <p className="text-slate-500 text-sm mb-4">
+            Click <strong>Refresh</strong> to fetch a new RSC payload — the server re-renders
+            this section and streams the result back, no client-side JSON parsing or loading
+            state plumbing. Click <strong>Simulate Error</strong> to make the server component
+            throw; the failure surfaces as <code>ServerComponentFetchError</code> and is
+            caught by <code>&lt;ErrorBoundary&gt;</code>, which renders a Retry button that
+            re-fetches with corrected props.
+          </p>
+          <LiveActivityRefresher />
+        </section>
+
         {/* Async data fetching with Suspense streaming */}
         <section>
           <h2 className="text-xl font-semibold text-slate-700 mb-4 flex items-center gap-2">
@@ -66,8 +86,9 @@ const ServerComponentsPage = ({ comments = [] }) => {
             </span>
           </h2>
           <p className="text-slate-500 text-sm mb-4">
-            Comments are fetched directly on the server using the Rails API.
-            The page shell renders immediately while this section streams in progressively.
+            Comments come from the Rails controller as props — the canonical React on Rails Pro
+            pattern. The page shell renders immediately while this section streams in
+            progressively as Suspense boundaries resolve.
           </p>
           <Suspense
             fallback={
