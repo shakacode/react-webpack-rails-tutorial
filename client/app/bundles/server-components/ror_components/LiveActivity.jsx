@@ -6,10 +6,13 @@ async function LiveActivity({ simulateError = false }) {
     throw new Error('Simulated server-side render failure (demo)');
   }
 
-  // Small delay so the refresh-in-flight state is visible.
-  await new Promise((resolve) => {
-    setTimeout(resolve, 300);
-  });
+  // Opt-in delay so the refresh-in-flight state is visible in the demo.
+  // Matches the gate in CommentsFeed; off by default in production.
+  if (process.env.RSC_SUSPENSE_DEMO_DELAY === 'true') {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 300);
+    });
+  }
 
   const stats = {
     serverTime: new Date().toISOString(),
