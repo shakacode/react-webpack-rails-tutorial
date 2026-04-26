@@ -7,10 +7,10 @@ import TogglePanel from './TogglePanel';
 const marked = new Marked();
 marked.use(gfmHeadingId());
 
-// Default-on small delay so the surrounding <Suspense> fallback is visible
-// in the demo. Set RSC_SUSPENSE_DEMO_DELAY=false to disable (CI / tests).
+// Opt-in delay so the surrounding <Suspense> fallback is visible in the demo.
+// Set RSC_SUSPENSE_DEMO_DELAY=true to enable; defaults off in production.
 async function CommentsFeed({ comments = [] }) {
-  if (process.env.RSC_SUSPENSE_DEMO_DELAY !== 'false') {
+  if (process.env.RSC_SUSPENSE_DEMO_DELAY === 'true') {
     await new Promise((resolve) => {
       setTimeout(resolve, 800);
     });

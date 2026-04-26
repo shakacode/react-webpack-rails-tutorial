@@ -3,7 +3,7 @@
 class PagesController < ApplicationController
   include ReactOnRails::Controller
   include ReactOnRailsPro::Stream
-  before_action :set_comments
+  before_action :set_comments, only: %i[index no_router]
 
   def index
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as

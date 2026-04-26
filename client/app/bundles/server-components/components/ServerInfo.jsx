@@ -14,7 +14,6 @@ function ServerInfo() {
     totalMemory: (os.totalmem() / (1024 * 1024 * 1024)).toFixed(1),
     freeMemory: (os.freemem() / (1024 * 1024 * 1024)).toFixed(1),
     cpus: os.cpus().length,
-    hostname: os.hostname(),
   };
 
   // Using lodash on the server — this 70KB+ library stays server-side
@@ -29,7 +28,6 @@ function ServerInfo() {
     totalMemory: 'Total RAM (GB)',
     freeMemory: 'Free RAM (GB)',
     cpus: 'CPU Cores',
-    hostname: 'Hostname',
   };
 
   return (

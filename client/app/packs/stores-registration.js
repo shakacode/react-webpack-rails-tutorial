@@ -1,3 +1,4 @@
+// 'use client' keeps this pack and its store imports out of the RSC bundle.
 'use client';
 
 import ReactOnRails from 'react-on-rails-pro';
