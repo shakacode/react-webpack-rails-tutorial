@@ -2,6 +2,8 @@
 // It can use Node.js APIs and server-only dependencies directly.
 // None of these imports are shipped to the client bundle.
 
+/* eslint-disable react/prop-types -- React 19 no longer validates propTypes at runtime; using ES default destructuring instead */
+
 import React, { Suspense } from 'react';
 import ServerInfo from '../components/ServerInfo';
 import CommentsFeed from '../components/CommentsFeed';

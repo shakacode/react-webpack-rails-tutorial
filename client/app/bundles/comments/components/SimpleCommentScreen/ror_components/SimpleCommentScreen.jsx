@@ -1,6 +1,6 @@
+/* eslint-disable max-classes-per-file */
 'use client';
 
-// eslint-disable-next-line max-classes-per-file
 import React from 'react';
 import request from 'axios';
 import Immutable from 'immutable';

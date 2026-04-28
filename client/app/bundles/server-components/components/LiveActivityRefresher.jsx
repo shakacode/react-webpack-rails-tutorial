@@ -70,6 +70,9 @@ const LiveActivityRefresher = () => {
         <span className="text-xs text-slate-500 ml-2">Refresh count: {refreshKey}</span>
       </div>
       <ErrorBoundary
+        // react-error-boundary's fallbackRender is a render-prop API by design;
+        // the closure captures buildRetry which depends on parent state.
+        // eslint-disable-next-line react/no-unstable-nested-components
         fallbackRender={({ error, resetErrorBoundary }) => (
           <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
             <p className="text-rose-700 font-semibold mb-1">Server component fetch failed</p>

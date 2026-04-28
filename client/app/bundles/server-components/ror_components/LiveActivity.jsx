@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types -- React 19 no longer validates propTypes at runtime; using ES default destructuring instead */
+
 import React from 'react';
 import os from 'os';
 
