@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 const TogglePanel = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,11 +29,6 @@ const TogglePanel = ({ title, children }) => {
       )}
     </div>
   );
-};
-
-TogglePanel.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
 };
 
 export default TogglePanel;
