@@ -35,7 +35,7 @@ describe "Server Components" do
     it "streams a valid RSC payload for ServerComponentsPage with populated comments" do
       now = 1.minute.ago.iso8601
       comments = [
-        { id: 1, author: "Alice", text: "Hello **markdown**", created_at: now, updated_at: now },
+        { id: 1, author: "Alice", text: "Hello **markdown**", created_at: now, updated_at: now }
       ]
       get "/rsc_payload/ServerComponentsPage", params: { props: { comments: comments }.to_json }
       expect_valid_rsc_payload
