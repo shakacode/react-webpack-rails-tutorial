@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  rsc_payload_route
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # Serve websocket cable requests in-process
   # mount ActionCable.server => '/cable'
 
   root "pages#index"
+  get "server-components", to: "pages#server_components"
 
   get "simple", to: "pages#simple"
   get "rescript", to: "pages#rescript"

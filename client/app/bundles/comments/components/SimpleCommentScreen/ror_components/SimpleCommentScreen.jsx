@@ -1,3 +1,5 @@
+'use client';
+
 // eslint-disable-next-line max-classes-per-file
 import React from 'react';
 import request from 'axios';

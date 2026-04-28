@@ -41,6 +41,17 @@ const config = {
   // deps rely on during SSR. Without URL, react-router-dom's NavLink throws
   // `ReferenceError: URL is not defined` via encodeLocation.
   additionalContext: { URL, AbortController },
+  // RSC requires a real setTimeout. The renderer's default stubTimers:true
+  // replaces setTimeout with a no-op to prevent legacy SSR from leaking
+  // timers, but React's RSC server renderer uses setTimeout internally for
+  // Flight-protocol yielding — with it stubbed, the RSC stream silently
+  // emits zero chunks and hangs until the Fastify idle timeout fires.
+  stubTimers: false,
+  // Surface console output from async server-component code. Without this,
+  // `console.error` calls from within async Server Components (e.g.
+  // CommentsFeed's catch block) are silently dropped by the VM, making
+  // runtime failures in RSC components invisible.
+  replayServerAsyncOperationLogs: true,
 };
 
 reactOnRailsProNodeRenderer(config);

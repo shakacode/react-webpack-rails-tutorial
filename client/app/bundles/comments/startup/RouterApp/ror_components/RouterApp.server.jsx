@@ -1,3 +1,5 @@
+'use client';
+
 // Compare to ./RouterApp.client.jsx
 import { Provider } from 'react-redux';
 import React from 'react';

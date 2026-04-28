@@ -16,4 +16,8 @@ ReactOnRailsPro.configure do |config|
   # so a blank env var (.env.example ships with `RENDERER_PASSWORD=`)
   # falls back to the dev default, matching the JS side's `||`.
   config.renderer_password = ENV["RENDERER_PASSWORD"].presence || "local-dev-renderer-password"
+
+  config.enable_rsc_support = true
+  config.rsc_bundle_js_file = "rsc-bundle.js"
+  config.rsc_payload_generation_url_path = "rsc_payload/"
 end

@@ -5,3 +5,4 @@ export const RESCRIPT_PATH = '/rescript';
 export const SIMPLE_REACT_PATH = '/simple';
 export const STIMULUS_PATH = '/stimulus';
 export const RAILS_PATH = '/comments';
+export const SERVER_COMPONENTS_PATH = '/server-components';

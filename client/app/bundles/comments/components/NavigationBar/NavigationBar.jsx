@@ -104,6 +104,14 @@ function NavigationBar(props) {
             </li>
             <li>
               <a
+                className={navItemClassName(pathname === paths.SERVER_COMPONENTS_PATH)}
+                href={paths.SERVER_COMPONENTS_PATH}
+              >
+                RSC Demo
+              </a>
+            </li>
+            <li>
+              <a
                 className={navItemClassName(false)}
                 href="https://github.com/shakacode/react-webpack-rails-tutorial"
               >

@@ -34,6 +34,10 @@ spec:
       value: '2'
     - name: RENDERER_URL
       value: http://localhost:3800
+    # Enable the artificial Suspense demo delay so the streaming fallback is
+    # visible on the review-app. Off by default in production deployments.
+    - name: RSC_SUSPENSE_DEMO_DELAY
+      value: 'true'
     # RENDERER_PASSWORD and REACT_ON_RAILS_PRO_LICENSE must be created in the
     # Control Plane Secret named by {{APP_SECRETS}} before deploy. cpflow
     # resolves {{APP_SECRETS}} to `{APP_PREFIX}-secrets` — which means review
