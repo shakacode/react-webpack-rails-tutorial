@@ -2,7 +2,8 @@
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/webpackConfig.js
 
 const clientWebpackConfig = require('./clientWebpackConfig');
-const serverWebpackConfig = require('./serverWebpackConfig');
+const { default: serverWebpackConfig } = require('./serverWebpackConfig');
+const rscWebpackConfig = require('./rscWebpackConfig');
 
 const webpackConfig = (envSpecific) => {
   const clientConfig = clientWebpackConfig();
@@ -22,11 +23,14 @@ const webpackConfig = (envSpecific) => {
     // eslint-disable-next-line no-console
     console.log('[React on Rails] Creating only the server bundle.');
     result = serverConfig;
-  } else {
-    // default is the standard client and server build
+  } else if (process.env.RSC_BUNDLE_ONLY) {
     // eslint-disable-next-line no-console
-    console.log('[React on Rails] Creating both client and server bundles.');
-    result = [clientConfig, serverConfig];
+    console.log('[React on Rails] Creating only the RSC bundle.');
+    result = rscWebpackConfig();
+  } else {
+    // eslint-disable-next-line no-console
+    console.log('[React on Rails] Creating client, server, and RSC bundles.');
+    result = [clientConfig, serverConfig, rscWebpackConfig()];
   }
 
   // To debug, uncomment next line and inspect "result"

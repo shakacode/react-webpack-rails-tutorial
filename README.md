@@ -1,8 +1,8 @@
    [![Code Climate](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial/badges/gpa.svg)](https://codeclimate.com/github/shakacode/react-webpack-rails-tutorial) [![Coverage Status](https://coveralls.io/repos/shakacode/react-webpack-rails-tutorial/badge.svg?branch=master&service=github)](https://coveralls.io/github/shakacode/react-webpack-rails-tutorial?branch=master)
 
-# React, Redux, Tailwind CSS, ES2024, Rspack, Ruby on Rails Demo
+# React, Redux, Tailwind CSS, React Server Components, ES2024, Rspack, Ruby on Rails Demo
 
-* Server-Side Rendering of React via the [react_on_rails gem](https://github.com/shakacode/react_on_rails)
+* Server-Side Rendering and React Server Components via [React on Rails Pro](https://www.shakacode.com/react-on-rails-pro/) with the Node Renderer
 * Live at [www.reactrails.com](http://www.reactrails.com/)
 
 ## Control Plane Deployment Example
@@ -82,12 +82,11 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 + [Rspack](#rspack-with-shakapacker)
   + [Configuration Files](#configuration-files)
   + [Additional Resources](#additional-resources)
++ [React Server Components (RSC)](#react-server-components-rsc)
 + [Thruster HTTP/2 Proxy](#thruster-http2-proxy)
 + [Sass, CSS Modules, and Tailwind CSS integration](#sass-css-modules-and-tailwind-css-integration)
   + [Fonts with SASS](#fonts-with-sass)
 + [Process Management during Development](#process-management-during-development)
-+ [Rendering with Express Server](#rendering-with-express-server)
-  + [Setup](#setup)
 + [Contributors](#contributors)
   + [About ShakaCode](#about-shakacode)
   + [RubyMine and WebStorm](#rubymine-and-webstorm)
@@ -95,7 +94,10 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 ## Demoed Functionality
 
-- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) for easy React + Rspack integration with Rails.
+- Example of using [React on Rails Pro](https://www.shakacode.com/react-on-rails-pro/) with the Node Renderer for server-side rendering and React Server Components.
+- Example of [React Server Components](#react-server-components-rsc) with streaming, Suspense fallbacks, error boundaries, and client-driven re-fetching — see the `/server-components` page.
+- Example of `'use client'` directives splitting a tree between server-rendered and client-hydrated components (the "donut pattern").
+- Example of using the [react_on_rails gem](https://github.com/shakacode/react_on_rails) (via React on Rails Pro) for React + Rspack integration with Rails.
 - Example of React with [CSS Modules](http://glenmaddern.com/articles/css-modules) inside Rails using modern Shakapacker/Rspack builds.
 - Example of enabling hot reloading of both JS and CSS (modules) from your Rails app in development mode. Change your code. Save. Browser updates without a refresh!
 - Example of React/Redux with Rails Action Cable.
@@ -110,18 +112,17 @@ You can see this tutorial live here: [http://reactrails.com/](http://reactrails.
 
 See package.json and Gemfile for versions
 
-1. [react_on_rails gem](https://github.com/shakacode/react_on_rails/)
-1. [React](http://facebook.github.io/react/)
+1. [React on Rails Pro](https://www.shakacode.com/react-on-rails-pro/) with the Node Renderer for SSR and React Server Components
+1. [React 19](http://facebook.github.io/react/) with React Server Components support
 1. [Redux](https://github.com/reactjs/redux)
 1. [react-router](https://github.com/reactjs/react-router)
 1. [react-router-redux](https://github.com/reactjs/react-router-redux)
 1. [Rspack with hot-reload](https://rspack.dev/guide/features/dev-server) (for local dev)
-1. [Babel transpiler](https://github.com/babel/babel)
+1. [SWC transpiler](https://swc.rs/) for fast JavaScript/TypeScript compilation
 1. [Ruby on Rails 8](http://rubyonrails.org/) for backend app and comparison with plain HTML
 1. [Thruster](https://github.com/basecamp/thruster) - Zero-config HTTP/2 proxy for optimized asset delivery
 1. [Heroku deployment guide](https://devcenter.heroku.com/articles/getting-started-with-rails8)
 1. [Deployment to the ControlPlane](.controlplane/readme.md)
-1. [Turbolinks 5](https://github.com/turbolinks/turbolinks)
 1. [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
 
 ## Basic Demo Setup
@@ -183,10 +184,12 @@ assets_bundler: rspack
 
 ### Version Targets
 
-- `react_on_rails` gem: `16.4.0`
-- `react-on-rails` npm package: `16.4.0`
-- `shakapacker` gem/npm package: `9.7.0`
-- `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7` (latest published v2 prerelease at the time of this update)
+- `react_on_rails_pro` gem: `16.6.0`
+- `react-on-rails-pro` npm package: `16.6.0`
+- `react-on-rails-pro-node-renderer` npm package: `16.6.0`
+- `shakapacker` gem/npm package: `10.0.0`
+- `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7`
+- `react`: `~19.0.4` (minimum for React Server Components)
 
 ### Why Rspack
 
@@ -194,18 +197,69 @@ assets_bundler: rspack
 - Better incremental rebuild performance for local development
 - One bundler path for browser bundles and SSR bundles
 
+> **Currently on webpack, temporarily.** The repo is built on webpack instead of rspack while [shakacode/react_on_rails_rsc#29](https://github.com/shakacode/react_on_rails_rsc/pull/29) ships rspack support for the RSC plugin. Tracked as a `TODO` in `config/shakapacker.yml`; flips back once that lands.
+
 ### Configuration Files
 
 All bundler configuration is in `config/webpack/`:
-- `webpackConfig.js` - Main Shakapacker entry point
-- `commonWebpackConfig.js` - Shared configuration
-- `clientWebpackConfig.js` - Client bundle settings
-- `serverWebpackConfig.js` - Server-side rendering bundle
-- `development.js`, `production.js`, `test.js` - Environment-specific settings
+- `webpackConfig.js` — Composer; produces all bundles (client + SSR + RSC)
+- `commonWebpackConfig.js` — Shared base configuration
+- `clientWebpackConfig.js` — Client bundle (browser, with HMR + RSC client-references)
+- `serverWebpackConfig.js` — SSR bundle (runs in the Pro Node Renderer)
+- `rscWebpackConfig.js` — React Server Components bundle (runs in the Pro Node Renderer with the `react-server` resolve condition)
+- `bundlerUtils.js` — Bundler detection helper (webpack vs rspack)
+- `development.js`, `production.js`, `test.js` — Environment-specific tweaks
 
 ### Additional Resources
 - [Shakapacker Documentation](https://github.com/shakacode/shakapacker)
 - [Rspack Documentation](https://rspack.dev/)
+
+## React Server Components (RSC)
+
+This project demonstrates React Server Components running on top of the React on Rails Pro Node Renderer. With the dev stack running, visit [`/server-components`](http://localhost:3000/server-components) to see the demo.
+
+### What the demo shows
+
+| Section | What it demonstrates |
+|---------|----------------------|
+| Server Environment | A server-only component reads Node's `os` module and `lodash`; neither library reaches the browser. |
+| Interactive Client Component | A `'use client'` component nested inside a server-component tree, hydrated normally — the "donut pattern". |
+| Live Server Activity | Client-driven server-component re-fetching via `useRSC().refetchComponent` + `RSCRoute`, with `react-error-boundary` catching simulated errors and a Retry button. |
+| Streamed Comments | An async server component receives comments as props from the controller and streams in via `<Suspense>` after the page shell. |
+
+### How the build works
+
+The app produces three bundles, all sharing the `client/app/packs/server-bundle.js` entry:
+
+- **Client bundle** — Browser JavaScript with HMR; emits `react-client-manifest.json` for client-component resolution.
+- **SSR bundle** — Traditional server-side rendering; runs in the Pro Node Renderer (port 3800).
+- **RSC bundle** — RSC payload generation; runs in the Pro Node Renderer with the `react-server` resolve condition and an extra loader that classifies `'use client'` modules as client references.
+
+The three bundles are gated by env vars:
+
+| Env var | Result |
+|---------|--------|
+| (default for `bin/shakapacker-dev-server`) | Client bundle only |
+| `SERVER_BUNDLE_ONLY=yes` | SSR bundle only |
+| `RSC_BUNDLE_ONLY=yes` | RSC bundle only |
+| (none, default for `bin/shakapacker`) | All three |
+
+`Procfile.dev` runs three watchers (`wp-client`, `wp-server`, `wp-rsc`), each gated by its own env var, alongside the Rails server and the Pro Node Renderer.
+
+### Setup notes
+
+In addition to the [Basic Demo Setup](#basic-demo-setup) prerequisites:
+
+- A `REACT_ON_RAILS_PRO_LICENSE` environment variable. Development and test environments don't require one (the Pro engine logs an info-level notice instead). Production deploys must set it to a JWT from [pro.reactonrails.com](https://www.shakacode.com/react-on-rails-pro/).
+- `RENDERER_PASSWORD` (shared between Rails and the Node Renderer for SSR auth). The dev/test default is provided in `.env.example`; production must override.
+- Optional: `RSC_SUSPENSE_DEMO_DELAY=true` adds a small artificial server delay so Suspense fallbacks are visible during the demo. Off by default; enabled on the QA review-app.
+
+### Further reading
+
+- [How React Server Components work](https://www.reactonrails.com/docs/pro/react-server-components/how-react-server-components-work) — RoR Pro's RSC overview
+- [Preparing your app for RSC](https://www.reactonrails.com/docs/migrating/rsc-preparing-app) — `'use client'` directive rules
+- [Component patterns](https://www.reactonrails.com/docs/migrating/rsc-component-patterns) — async server components and Suspense
+- [Data fetching](https://www.reactonrails.com/docs/migrating/rsc-data-fetching) — controller-props pattern (used by `CommentsFeed`)
 
 ## Thruster HTTP/2 Proxy
 
@@ -270,12 +324,18 @@ export default class CommentBox extends React.Component {
 ### Fonts with SASS
 The tutorial makes use of a custom font OpenSans-Light. We're doing this to show how to add assets for the CSS processing. The font files are located under [client/app/assets/fonts](client/app/assets/fonts) and are loaded by both the Rails asset pipeline and the Rspack HMR server.
 
-## Process management during development
+## Process Management during Development
 ```bash
 bundle exec foreman start -f <Procfile>
 ```
 
-1. [`Procfile.dev`](Procfile.dev): Starts the Rspack Dev Server and Rails with Hot Reloading.
+1. [`Procfile.dev`](Procfile.dev): Starts the full development stack with Hot Reloading. Six processes:
+   - `rescript` — ReScript watch mode
+   - `rails` — Rails server via Thruster on port 3000
+   - `wp-client` — Shakapacker dev server with HMR (client bundle)
+   - `wp-server` — Shakapacker watcher for the SSR bundle
+   - `wp-rsc` — Shakapacker watcher for the React Server Components bundle
+   - `node-renderer` — React on Rails Pro Node Renderer on port 3800
 1. [`Procfile.dev-static`](Procfile.dev-static): Starts the Rails server and generates static assets that are used for tests.
 
 ## Contributors
