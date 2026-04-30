@@ -129,6 +129,8 @@ jobs:
       - name: Validate review app deployment source
         if: steps.config.outputs.ready == 'true'
         id: source
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
@@ -147,7 +149,12 @@ jobs:
             exit 0
           fi
 
-          echo "Review app deploys from fork pull requests are not allowed because this workflow uses repository secrets." >&2
+          message="Review app deploys from fork pull requests are not allowed because this workflow uses repository secrets."
+          if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
+            echo "Failed to post fork rejection comment to PR #${PR_NUMBER}" >&2
+          fi
+
+          echo "${message}" >&2
           exit 1
 
       - name: Checkout PR commit

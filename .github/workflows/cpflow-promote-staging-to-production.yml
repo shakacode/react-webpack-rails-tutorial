@@ -275,6 +275,7 @@ jobs:
         run: |
           # Best-effort rollback: try every workload, aggregate failures, exit non-zero at the end
           # if any failed. A single cpln hiccup shouldn't leave other workloads mid-promotion.
+          # `set -e` is intentionally omitted so one failed workload update does not skip the rest.
           set -uo pipefail
 
           rollback_failures=0
