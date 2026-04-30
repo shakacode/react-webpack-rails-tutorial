@@ -93,7 +93,7 @@ jobs:
 
   deploy:
     needs: [validate-branch, build]
-    if: needs.validate-branch.outputs.is_deployable == 'true'
+    if: needs.validate-branch.outputs.is_deployable == 'true' && needs.build.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

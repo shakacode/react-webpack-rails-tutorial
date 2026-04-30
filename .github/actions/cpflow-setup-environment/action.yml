@@ -40,7 +40,7 @@ runs:
         sudo npm install -g @controlplane/cli@${{ inputs.cpln_cli_version }}
         cpln --version
 
-        gem install cpflow -v ${{ inputs.cpflow_version }}
+        gem install cpflow -v ${{ inputs.cpflow_version }} --no-document
         cpflow --version
 
     - name: Setup Control Plane profile and registry login
@@ -62,6 +62,14 @@ runs:
           echo "Error: Control Plane organization not provided" >&2
           exit 1
         fi
+
+        # Make the token available to later workflow steps without putting it on argv.
+        token_delimiter="CPLN_TOKEN_$(openssl rand -hex 8)"
+        {
+          echo "CPLN_TOKEN<<${token_delimiter}"
+          printf '%s\n' "$CPLN_TOKEN"
+          echo "${token_delimiter}"
+        } >> "$GITHUB_ENV"
 
         create_output=""
         if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
