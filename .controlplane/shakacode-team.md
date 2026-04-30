@@ -14,7 +14,7 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
   - [Staging App](https://staging.reactrails.com/)
 
 ### Production Environment
-- **Manual**: Run the [promote-staging-to-production workflow](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/promote-staging-to-production.yml) on GitHub
+- **Manual**: Run the [cpflow-promote-staging-to-production workflow](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/cpflow-promote-staging-to-production.yml) on GitHub
 - **URLs**:
   - [Control Plane Console - Production](https://console.cpln.io/console/org/shakacode-open-source-examples-production/gvc/react-webpack-rails-tutorial-production/workload/rails/-info)
   - [Production App](https://reactrails.com/)

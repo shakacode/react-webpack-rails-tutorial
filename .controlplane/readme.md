@@ -6,7 +6,7 @@ _If you need a free demo account for Control Plane (no CC required), you can con
 
 ---
 
-Check [how the `cpflow` gem (this project) is used in the Github actions](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/deploy-to-control-plane/action.yml).
+Check [how the `cpflow` gem is used in the generated GitHub Actions flow](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/cpflow-build-docker-image/action.yml).
 Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
 
 ---
@@ -385,6 +385,6 @@ The system uses Control Plane's infrastructure to manage these deployments, with
 ### Workflow for Developing Github Actions for Review Apps
 
 1. Create a PR with changes to the Github Actions workflow
-2. Make edits to file such as `.github/actions/deploy-to-control-plane/action.yml`
+2. Make edits to files such as `.github/actions/cpflow-build-docker-image/action.yml` or `.github/workflows/cpflow-deploy-review-app.yml`
 3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
 4. Check the Github Actions tab in the PR to see the status of the workflow

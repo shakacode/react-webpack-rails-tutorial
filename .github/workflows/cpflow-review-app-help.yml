@@ -1,0 +1,41 @@
+name: Show Review App Commands on PR Open
+
+on:
+  # pull_request_target is intentional: it has write permission to comment on PRs from
+  # forks, where `pull_request` would be read-only. This is safe because no PR code is
+  # checked out — the job only calls `actions/github-script` with a hardcoded message.
+  # Do not switch this to `pull_request` or add a checkout step without re-evaluating.
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  show-help:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post quick reference
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              "# Control Plane review app commands",
+              "",
+              "`/deploy-review-app`",
+              "Create the review app or redeploy the PR branch to it.",
+              "",
+              "`/delete-review-app`",
+              "Delete the review app and its temporary resources.",
+              "",
+              "`/help`",
+              "Show the required GitHub variables, secrets, and workflow behavior."
+            ].join("\n");
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

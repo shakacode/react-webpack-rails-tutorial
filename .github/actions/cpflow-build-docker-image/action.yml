@@ -1,0 +1,106 @@
+name: Build Docker Image
+description: Builds and pushes the app image for a Control Plane workload
+
+inputs:
+  app_name:
+    description: Name of the application
+    required: true
+  org:
+    description: Control Plane organization name
+    required: true
+  commit:
+    description: Commit SHA to tag the image with
+    required: true
+  pr_number:
+    description: Pull request number for status messaging
+    required: false
+  docker_build_extra_args:
+    description: Optional newline-delimited extra docker build tokens. Use key=value forms like --build-arg=FOO=bar.
+    required: false
+  docker_build_ssh_key:
+    description: Optional private SSH key used for Docker builds that fetch private dependencies with RUN --mount=type=ssh
+    required: false
+  docker_build_ssh_known_hosts:
+    description: Optional SSH known_hosts entries used with docker_build_ssh_key. Defaults to pinned GitHub.com host keys.
+    required: false
+
+runs:
+  using: composite
+  steps:
+    # Keep SSH key handling in a dedicated step so DOCKER_BUILD_SSH_KEY is never present
+    # in the main build step's environment. ACTIONS_STEP_DEBUG=true dumps env before any
+    # command runs, so keeping the key out of env there avoids even admin-triggered exposure.
+    - name: Prepare SSH agent for Docker build
+      if: ${{ inputs.docker_build_ssh_key != '' }}
+      shell: bash
+      env:
+        # Pass the key via env so the file write is a single printf call rather than a
+        # heredoc with a fixed terminator (a heredoc would silently truncate the key if
+        # any line of the key value happened to match the terminator). Scope is still
+        # this step only — the build step below does not receive DOCKER_BUILD_SSH_KEY.
+        DOCKER_BUILD_SSH_KEY: ${{ inputs.docker_build_ssh_key }}
+        DOCKER_BUILD_SSH_KNOWN_HOSTS: ${{ inputs.docker_build_ssh_known_hosts }}
+      run: |
+        set -euo pipefail
+
+        umask 077
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+
+        if [[ -n "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" ]]; then
+          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+        else
+          printf '%s\n' \
+            'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
+            'github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=' \
+            'github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=' \
+            > ~/.ssh/known_hosts
+        fi
+        chmod 600 ~/.ssh/known_hosts
+
+        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" > ~/.ssh/cpflow_build_key
+        chmod 600 ~/.ssh/cpflow_build_key
+
+    - name: Build Docker image
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        COMMIT_SHA: ${{ inputs.commit }}
+        CONTROL_PLANE_ORG: ${{ inputs.org }}
+        DOCKER_BUILD_EXTRA_ARGS: ${{ inputs.docker_build_extra_args }}
+        PR_NUMBER: ${{ inputs.pr_number }}
+      run: |
+        set -euo pipefail
+
+        PR_INFO=""
+        docker_build_args=()
+
+        if [[ -n "${PR_NUMBER}" ]]; then
+          PR_INFO=" for PR #${PR_NUMBER}"
+        fi
+
+        if [[ -n "${DOCKER_BUILD_EXTRA_ARGS}" ]]; then
+          while IFS= read -r arg; do
+            arg="${arg%$'\r'}"
+            [[ -n "${arg}" ]] || continue
+
+            if [[ "${arg}" =~ [[:space:]] ]]; then
+              echo "docker_build_extra_args entries must be single docker-build tokens. " \
+                   "Use key=value forms like --build-arg=FOO=bar." >&2
+              exit 1
+            fi
+
+            docker_build_args+=("${arg}")
+          done <<< "${DOCKER_BUILD_EXTRA_ARGS}"
+        fi
+
+        if [[ -f "${HOME}/.ssh/cpflow_build_key" ]]; then
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null; rm -f "${HOME}/.ssh/cpflow_build_key"' EXIT
+          ssh-add "${HOME}/.ssh/cpflow_build_key"
+          docker_build_args+=("--ssh=default")
+        fi
+
+        echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT_SHA})..."
+        cpflow build-image -a "${APP_NAME}" --commit="${COMMIT_SHA}" --org="${CONTROL_PLANE_ORG}" "${docker_build_args[@]}"
+        echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT_SHA})"
