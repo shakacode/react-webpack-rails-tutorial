@@ -4,7 +4,7 @@ run-name: "Deploy Review App - PR #${{ github.event.pull_request.number || githu
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [synchronize, reopened]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -35,7 +35,7 @@ env:
 
 jobs:
   deploy:
-    # Skip synchronize/opened events from fork PRs at the job level — they cannot access
+    # Skip pull_request events from fork PRs at the job level — they cannot access
     # repository secrets anyway, so running any steps just burns billable minutes. Users
     # can still manually deploy a fork PR via `/deploy-review-app` (gated below by
     # author_association) or workflow_dispatch.
