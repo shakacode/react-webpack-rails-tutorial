@@ -364,14 +364,28 @@ openssl rand -hex 64
 
 _Note, some of the URL references are internal for the ShakaCode team._
 
- Review Apps (deployment of apps based on a PR) are done via Github Actions.
+Review Apps (deployment of apps based on a PR) are done via the generated
+`cpflow-*` GitHub Actions flow.
 
-The review apps work by creating isolated deployments for each branch through this automated process. When a branch is pushed, the action:
+The review apps work by creating isolated deployments for pull requests through
+this automated process. When an approved collaborator comments exactly
+`/deploy-review-app` on a PR, the action:
 
 1. Sets up the necessary environment and tools
-2. Creates a unique deployment for that branch if it doesn't exist
-3. Builds a Docker image tagged with the branch's commit SHA
+2. Creates a unique review app if it doesn't exist
+3. Builds a Docker image tagged with the PR commit SHA
 4. Deploys this image to Control Plane with its own isolated environment
+
+After the review app exists, new pushes to the PR redeploy it automatically.
+Use `/delete-review-app` to delete it manually; closing the PR deletes it
+automatically. Pushes to the staging branch deploy staging, and production
+promotion is manual from the `cpflow-promote-staging-to-production` workflow.
+
+The repository variables and secrets must match the app names in
+`.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should
+include the `-pr` suffix for this app, such as
+`qa-react-webpack-rails-tutorial-pr`, so generated review apps are named
+`qa-react-webpack-rails-tutorial-pr-1234`.
 
 This allows teams to:
 - Preview changes in a production-like environment
@@ -379,12 +393,14 @@ This allows teams to:
 - Share working versions with stakeholders
 - Validate changes before merging to main branches
 
-The system uses Control Plane's infrastructure to manage these deployments, with each branch getting its own resources as defined in the controlplane.yml configuration.
+The system uses Control Plane's infrastructure to manage these deployments, with
+each review app getting its own resources as defined in the controlplane.yml
+configuration.
 
 
-### Workflow for Developing Github Actions for Review Apps
+### Workflow for Developing GitHub Actions for Review Apps
 
-1. Create a PR with changes to the Github Actions workflow
+1. Create a PR with changes to the GitHub Actions workflow
 2. Make edits to files such as `.github/actions/cpflow-build-docker-image/action.yml` or `.github/workflows/cpflow-deploy-review-app.yml`
 3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
-4. Check the Github Actions tab in the PR to see the status of the workflow
+4. Check the GitHub Actions tab in the PR to see the status of the workflow
