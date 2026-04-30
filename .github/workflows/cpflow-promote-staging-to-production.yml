@@ -203,14 +203,13 @@ jobs:
 
       - name: Copy image from staging
         env:
-          # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
           CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
         shell: bash
         run: |
           set -euo pipefail
-          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}"
+          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" -t "${CPLN_UPSTREAM_TOKEN}" --org "${CPLN_ORG_PRODUCTION}"
 
       - name: Deploy image to production
         env:
