@@ -380,6 +380,8 @@ After the review app exists, new pushes to the PR redeploy it automatically.
 Use `/delete-review-app` to delete it manually; closing the PR deletes it
 automatically. Pushes to the staging branch deploy staging, and production
 promotion is manual from the `cpflow-promote-staging-to-production` workflow.
+The production promotion workflow checks that production has all environment
+variable names present in staging; it does not compare secret values.
 
 The repository variables and secrets must match the app names in
 `.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should

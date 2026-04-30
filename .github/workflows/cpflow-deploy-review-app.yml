@@ -72,7 +72,7 @@ jobs:
                 echo "Control Plane review app automation is not configured yet."
                 echo
                 echo "Missing required GitHub configuration:"
-                printf -- '- `%s`\n' "${missing[@]}"
+                printf -- '- %s\n' "${missing[@]}"
                 echo
                 echo "Pushes to this pull request will skip review app deploys until the repository is configured."
               } >> "$GITHUB_STEP_SUMMARY"
@@ -119,9 +119,11 @@ jobs:
             same_repo="true"
           fi
 
-          echo "PR_NUMBER=$pr_number" >> "$GITHUB_ENV"
-          echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$pr_number" >> "$GITHUB_ENV"
-          echo "PR_SHA=$pr_sha" >> "$GITHUB_ENV"
+          {
+            echo "PR_NUMBER=$pr_number"
+            echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$pr_number"
+            echo "PR_SHA=$pr_sha"
+          } >> "$GITHUB_ENV"
           echo "same_repo=${same_repo}" >> "$GITHUB_OUTPUT"
 
       - name: Validate review app deployment source
@@ -182,9 +184,26 @@ jobs:
         run: |
           set -euo pipefail
 
-          if cpflow exists -a "${APP_NAME}" --org "${CPLN_ORG}"; then
+          exists_output=""
+          if exists_output="$(cpflow exists -a "${APP_NAME}" --org "${CPLN_ORG}" 2>&1)"; then
+            if [[ -n "${exists_output}" ]]; then
+              printf '%s\n' "${exists_output}"
+            fi
+
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
+            case "${exists_output}" in
+              *"Double check your org"*|*"Unknown API token format"*|*"ERROR"*|*"Error:"*|*"Traceback"*|*"Net::"*)
+                echo "Failed to determine whether review app exists: ${APP_NAME}" >&2
+                printf '%s\n' "${exists_output}" >&2
+                exit 1
+                ;;
+            esac
+
+            if [[ -n "${exists_output}" ]]; then
+              printf '%s\n' "${exists_output}"
+            fi
+
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
