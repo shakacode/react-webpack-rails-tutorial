@@ -63,6 +63,12 @@ runs:
           exit 1
         fi
 
+        {
+          echo "CPLN_TOKEN<<__CPLN_TOKEN__"
+          echo "$CPLN_TOKEN"
+          echo "__CPLN_TOKEN__"
+        } >> "$GITHUB_ENV"
+
         create_output=""
         if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
           if ! echo "$create_output" | grep -qi "already exists"; then
