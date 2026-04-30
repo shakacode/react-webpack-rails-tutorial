@@ -406,3 +406,27 @@ configuration.
 2. Make edits to files such as `.github/actions/cpflow-build-docker-image/action.yml` or `.github/workflows/cpflow-deploy-review-app.yml`
 3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
 4. Check the GitHub Actions tab in the PR to see the status of the workflow
+
+### Keeping Generated cpflow Workflows Updated
+
+Treat `.github/actions/cpflow-*` and `.github/workflows/cpflow-*` as generated
+workflow files with project-specific settings layered on top. When `cpflow`
+releases generator fixes or the upstream `control-plane-flow` repo changes the
+GitHub Actions flow, update a project by regenerating the flow from the desired
+`cpflow` version or branch, reviewing the diff, and keeping any local app names,
+repository variables, secrets, and docs aligned with `.controlplane/controlplane.yml`.
+
+For this app, validate a regenerated flow with:
+
+```bash
+bundle exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions
+bundle exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
+actionlint .github/workflows/cpflow-*.yml
+bundle exec rubocop
+```
+
+Then open a normal PR and let GitHub Actions prove the generated review-app,
+staging, lint, JS, and RSpec workflows before merging. If a project needs to
+track generator changes automatically, use a scheduled maintenance PR or
+Renovate-style workflow that bumps the `cpflow` version, regenerates these files,
+and runs the same validation commands.

@@ -52,6 +52,15 @@ Optional repository settings:
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
 
+### Keeping cpflow Automation Current
+
+When the upstream `control-plane-flow` repo changes the generated GitHub Actions
+flow, regenerate the `cpflow-*` actions/workflows in this repo from the target
+`cpflow` version or branch, review the diff, and keep the repository variables
+above aligned with `.controlplane/controlplane.yml`. Validate with
+`cpflow github-flow-readiness`, `actionlint .github/workflows/cpflow-*.yml`, and
+the normal CI checks before merging.
+
 See [readme.md](readme.md) for more details.
 
 ## Links
