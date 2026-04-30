@@ -1,0 +1,382 @@
+name: Deploy Review App to Control Plane
+
+run-name: "Deploy Review App - PR #${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}"
+
+on:
+  pull_request:
+    types: [synchronize, reopened]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to deploy
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  deployments: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: cpflow-review-app-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  cancel-in-progress: true
+
+env:
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
+  CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  PRIMARY_WORKLOAD: ${{ vars.PRIMARY_WORKLOAD }}
+
+jobs:
+  deploy:
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       github.event.comment.body == '/deploy-review-app' &&
+       contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Initial checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets and variables
+        id: config
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          missing=()
+
+          [[ -n "${{ secrets.CPLN_TOKEN_STAGING }}" ]] || missing+=("secret:CPLN_TOKEN_STAGING")
+          [[ -n "${{ vars.CPLN_ORG_STAGING }}" ]] || missing+=("variable:CPLN_ORG_STAGING")
+          [[ -n "${{ vars.REVIEW_APP_PREFIX }}" ]] || missing+=("variable:REVIEW_APP_PREFIX")
+
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              {
+                echo "Control Plane review app automation is not configured yet."
+                echo
+                echo "Missing required GitHub configuration:"
+                printf -- '- `%s`\n' "${missing[@]}"
+                echo
+                echo "Pushes to this pull request will skip review app deploys until the repository is configured."
+              } >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+
+            printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
+            exit 1
+          fi
+
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve PR ref and commit
+        if: steps.config.outputs.ready == 'true'
+        id: resolve-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          case "${{ github.event_name }}" in
+            workflow_dispatch)
+              pr_number="${{ github.event.inputs.pr_number }}"
+              ;;
+            issue_comment)
+              pr_number="${{ github.event.issue.number }}"
+              ;;
+            pull_request)
+              pr_number="${{ github.event.pull_request.number }}"
+              ;;
+            *)
+              echo "Unsupported event type: ${{ github.event_name }}" >&2
+              exit 1
+              ;;
+          esac
+
+          pr_data="$(gh pr view "$pr_number" --json headRefOid,headRepository,headRepositoryOwner)"
+          pr_sha="$(echo "$pr_data" | jq -r '.headRefOid')"
+          pr_repository="$(echo "$pr_data" | jq -r '[.headRepositoryOwner.login, .headRepository.name] | join("/")')"
+          same_repo="false"
+
+          if [[ "$pr_repository" == "$GITHUB_REPOSITORY" ]]; then
+            same_repo="true"
+          fi
+
+          echo "PR_NUMBER=$pr_number" >> "$GITHUB_ENV"
+          echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$pr_number" >> "$GITHUB_ENV"
+          echo "PR_SHA=$pr_sha" >> "$GITHUB_ENV"
+          echo "same_repo=${same_repo}" >> "$GITHUB_OUTPUT"
+
+      - name: Validate review app deployment source
+        if: steps.config.outputs.ready == 'true'
+        id: source
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ steps.resolve-pr.outputs.same_repo }}" == "true" ]]; then
+            echo "allowed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "allowed=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "Review app deploys are skipped for fork pull requests."
+              echo "This workflow builds Docker images with repository secrets, so review app deploys only run for branches in the base repository."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          echo "Review app deploys from fork pull requests are not allowed because this workflow uses repository secrets." >&2
+          exit 1
+
+      - name: Checkout PR commit
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PR_SHA }}
+
+      - name: Setup environment
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+
+      - name: Detect release phase support
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
+        id: release-phase
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if cpflow config -a "${APP_NAME}" | grep -q "release_script:"; then
+            echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
+          else
+            echo "flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check if review app exists
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
+        id: check-app
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if cpflow exists -a "${APP_NAME}" --org "${CPLN_ORG}"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip auto deploy until a review app is created
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && steps.check-app.outputs.exists != 'true' && github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          {
+            echo "Review app ${APP_NAME} does not exist yet."
+            echo "Create it with a PR comment that is exactly /deploy-review-app."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup review app if it does not exist yet
+        id: setup-review-app
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && steps.check-app.outputs.exists != 'true' && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow setup-app -a "${APP_NAME}" --org "${CPLN_ORG}"
+
+      - name: Create initial PR comment
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        id: create-comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const result = await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_NUMBER),
+              body: "🚀 Starting Control Plane review app deployment..."
+            });
+            core.setOutput("comment-id", result.data.id);
+
+      - name: Set deployment links
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            core.exportVariable("WORKFLOW_URL", workflowUrl);
+            core.exportVariable(
+              "CONSOLE_URL",
+              `https://console.cpln.io/console/org/${process.env.CPLN_ORG}/gvc/${process.env.APP_NAME}/-info`
+            );
+
+      - name: Initialize GitHub deployment
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        id: init-deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: process.env.PR_SHA,
+              environment: `review/${process.env.APP_NAME}`,
+              auto_merge: false,
+              required_contexts: [],
+              description: `Control Plane review app for PR #${process.env.PR_NUMBER}`
+            });
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: "in_progress",
+              description: "Deployment started"
+            });
+
+            return deployment.data.id;
+
+      - name: Update PR comment with build status
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
+
+            const body = [
+              `🏗️ Building Docker image for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}`,
+              "",
+              `[View build logs](${process.env.WORKFLOW_URL})`,
+              "",
+              `[Open Control Plane console](${process.env.CONSOLE_URL})`
+            ].join("\n");
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body
+            });
+
+      - name: Build Docker image
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        uses: ./.github/actions/cpflow-build-docker-image
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          commit: ${{ env.PR_SHA }}
+          pr_number: ${{ env.PR_NUMBER }}
+          docker_build_extra_args: ${{ vars.DOCKER_BUILD_EXTRA_ARGS }}
+          docker_build_ssh_key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+          docker_build_ssh_known_hosts: ${{ vars.DOCKER_BUILD_SSH_KNOWN_HOSTS }}
+
+      - name: Update PR comment with deploy status
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
+
+            const body = [
+              "🚀 Deploying review app to Control Plane...",
+              "",
+              `[View deploy logs](${process.env.WORKFLOW_URL})`,
+              "",
+              `[Open Control Plane console](${process.env.CONSOLE_URL})`
+            ].join("\n");
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body
+            });
+
+      - name: Deploy to Control Plane
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow deploy-image -a "${APP_NAME}" ${{ steps.release-phase.outputs.flag }} --org "${CPLN_ORG}" --verbose
+
+      - name: Retrieve app URL
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        id: workload
+        shell: bash
+        run: |
+          set -euo pipefail
+          workload_name="${PRIMARY_WORKLOAD:-rails}"
+          workload_url="$(cpln workload get "${workload_name}" --gvc "${APP_NAME}" --org "${CPLN_ORG}" -o json | jq -r '.status.endpoint // empty')"
+          echo "workload_url=${workload_url}" >> "$GITHUB_OUTPUT"
+
+      - name: Finalize deployment status
+        if: always() && steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            const deploymentId = "${{ steps.init-deployment.outputs.result }}";
+            const appUrl = "${{ steps.workload.outputs.workload_url }}";
+            const success = "${{ job.status }}" === "success";
+
+            if (deploymentId) {
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: Number(deploymentId),
+                state: success ? "success" : "failure",
+                environment: `review/${process.env.APP_NAME}`,
+                environment_url: success && appUrl ? appUrl : undefined,
+                log_url: process.env.WORKFLOW_URL,
+                description: success ? "Review app ready" : "Review app deployment failed"
+              });
+            }
+
+            const successBody = [
+              "## Review app ready",
+              "",
+              appUrl ? `[Open review app](${appUrl})` : "Review app deployed, but no endpoint URL was detected.",
+              "",
+              `[Open Control Plane console](${process.env.CONSOLE_URL})`,
+              `[View workflow logs](${process.env.WORKFLOW_URL})`
+            ].join("\n");
+
+            const failureBody = [
+              `❌ Review app deployment failed for PR #${process.env.PR_NUMBER}`,
+              "",
+              `[Open Control Plane console](${process.env.CONSOLE_URL})`,
+              `[View workflow logs](${process.env.WORKFLOW_URL})`
+            ].join("\n");
+
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping PR comment update because no comment id was created.");
+              return;
+            }
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: success ? successBody : failureBody
+            });

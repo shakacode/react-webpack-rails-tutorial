@@ -1,0 +1,92 @@
+name: Build Docker Image
+description: Builds and pushes the app image for a Control Plane workload
+
+inputs:
+  app_name:
+    description: Name of the application
+    required: true
+  org:
+    description: Control Plane organization name
+    required: true
+  commit:
+    description: Commit SHA to tag the image with
+    required: true
+  pr_number:
+    description: Pull request number for status messaging
+    required: false
+  docker_build_extra_args:
+    description: Optional newline-delimited extra docker build tokens. Use key=value forms like --build-arg=FOO=bar.
+    required: false
+  docker_build_ssh_key:
+    description: Optional private SSH key used for Docker builds that fetch private dependencies with RUN --mount=type=ssh
+    required: false
+  docker_build_ssh_known_hosts:
+    description: Optional SSH known_hosts entries used with docker_build_ssh_key. Defaults to pinned GitHub.com host keys.
+    required: false
+
+outputs:
+  image_tag:
+    description: Fully qualified image tag
+    value: ${{ steps.build.outputs.image_tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build Docker image
+      id: build
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        PR_INFO=""
+        docker_build_args=()
+
+        if [[ -n "${{ inputs.pr_number }}" ]]; then
+          PR_INFO=" for PR #${{ inputs.pr_number }}"
+        fi
+
+        if [[ -n "${{ inputs.docker_build_extra_args }}" ]]; then
+          while IFS= read -r arg; do
+            arg="${arg%$'\r'}"
+            [[ -n "${arg}" ]] || continue
+
+            if [[ "${arg}" =~ [[:space:]] ]]; then
+              echo "docker_build_extra_args entries must be single docker-build tokens. " \
+                   "Use key=value forms like --build-arg=FOO=bar." >&2
+              exit 1
+            fi
+
+            docker_build_args+=("${arg}")
+          done <<< "${{ inputs.docker_build_extra_args }}"
+        fi
+
+        if [[ -n "${{ inputs.docker_build_ssh_key }}" ]]; then
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          if [[ -n "${{ inputs.docker_build_ssh_known_hosts }}" ]]; then
+            cat <<'EOF' > ~/.ssh/known_hosts
+${{ inputs.docker_build_ssh_known_hosts }}
+EOF
+          else
+            cat <<'EOF' > ~/.ssh/known_hosts
+github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+EOF
+          fi
+
+          chmod 600 ~/.ssh/known_hosts
+
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null' EXIT
+          ssh-add - <<< "${{ inputs.docker_build_ssh_key }}"
+          docker_build_args+=("--ssh=default")
+        fi
+
+        echo "🏗️ Building Docker image${PR_INFO} (commit ${{ inputs.commit }})..."
+        cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}" "${docker_build_args[@]}"
+
+        image_tag="${{ inputs.org }}/${{ inputs.app_name }}:${{ inputs.commit }}"
+        echo "image_tag=${image_tag}" >> "$GITHUB_OUTPUT"
+        echo "✅ Docker image build successful${PR_INFO} (commit ${{ inputs.commit }})"

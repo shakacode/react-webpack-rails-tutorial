@@ -21,7 +21,7 @@ echo " -- Waiting for services"
 wait_for_service $(echo $DATABASE_URL | sed -e 's|^.*@||' -e 's|/.*$||')
 wait_for_service $(echo $REDIS_URL | sed -e 's|redis://||' -e 's|/.*$||')
 
-echo " -- Finishing entrypoint.sh, executing '$@'"
+echo " -- Finishing entrypoint.sh, executing '$*'@'"
 
 # Run the main command
 exec "$@"

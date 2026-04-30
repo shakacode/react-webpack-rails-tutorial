@@ -1,0 +1,70 @@
+name: Setup Control Plane Environment
+description: Sets up Ruby, installs the Control Plane CLI and cpflow gem, and configures a default profile
+
+inputs:
+  token:
+    description: Control Plane token
+    required: true
+  org:
+    description: Control Plane organization
+    required: true
+  ruby_version:
+    description: Ruby version used for cpflow
+    required: false
+    default: "3.4.6"
+  cpln_cli_version:
+    description: "@controlplane/cli version"
+    required: false
+    default: "3.3.1"
+  cpflow_version:
+    description: cpflow gem version
+    required: false
+    default: "4.2.0"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby_version }}
+
+    - name: Install Control Plane CLI and cpflow gem
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        sudo npm install -g @controlplane/cli@${{ inputs.cpln_cli_version }}
+        cpln --version
+
+        gem install cpflow -v ${{ inputs.cpflow_version }}
+        cpflow --version
+
+    - name: Setup Control Plane profile and registry login
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        TOKEN="${{ inputs.token }}"
+        ORG="${{ inputs.org }}"
+
+        if [[ -z "$TOKEN" ]]; then
+          echo "Error: Control Plane token not provided" >&2
+          exit 1
+        fi
+
+        if [[ -z "$ORG" ]]; then
+          echo "Error: Control Plane organization not provided" >&2
+          exit 1
+        fi
+
+        create_output=""
+        if ! create_output="$(cpln profile create default --token "$TOKEN" --org "$ORG" 2>&1)"; then
+          if ! echo "$create_output" | grep -qi "already exists"; then
+            echo "$create_output" >&2
+            exit 1
+          fi
+        fi
+
+        cpln profile update default --org "$ORG" --token "$TOKEN"
+        cpln image docker-login --org "$ORG"
