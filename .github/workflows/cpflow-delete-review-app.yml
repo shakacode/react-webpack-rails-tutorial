@@ -1,6 +1,8 @@
 name: Delete Review App
 
 on:
+  # Use pull_request_target for close cleanup so fork PR review apps can be deleted with
+  # base-repo secrets. This workflow checks out the base repository, not untrusted PR code.
   pull_request_target:
     types: [closed]
   issue_comment:

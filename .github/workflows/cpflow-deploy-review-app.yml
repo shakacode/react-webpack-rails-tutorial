@@ -191,6 +191,8 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Keep this in sync with delete-app.sh. `cpflow exists` does not yet expose
+          # distinct structured signals for not-found vs. auth/API failures.
           exists_output=""
           if exists_output="$(cpflow exists -a "${APP_NAME}" --org "${CPLN_ORG}" 2>&1)"; then
             if [[ -n "${exists_output}" ]]; then

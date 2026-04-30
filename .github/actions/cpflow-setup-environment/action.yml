@@ -63,7 +63,8 @@ runs:
           exit 1
         fi
 
-        # Make the token available to later workflow steps without putting it on argv.
+        # Later workflow steps call cpflow/cpln, so persist the token without putting it on argv.
+        # This intentionally gives subsequent trusted steps in the same job a CPLN_TOKEN env var.
         token_delimiter="CPLN_TOKEN_$(openssl rand -hex 8)"
         {
           echo "CPLN_TOKEN<<${token_delimiter}"
