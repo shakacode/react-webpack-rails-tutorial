@@ -17,13 +17,13 @@ inputs:
   cpln_cli_version:
     description: >-
       @controlplane/cli version. Empty string falls back to the action's pinned default
-      so callers can pass `${{ vars.CPLN_CLI_VERSION }}` unconditionally.
+      so callers can pass the repository variable value unconditionally.
     required: false
     default: ""
   cpflow_version:
     description: >-
       cpflow gem version. Empty string falls back to the action's pinned default
-      so callers can pass `${{ vars.CPFLOW_VERSION }}` unconditionally.
+      so callers can pass the repository variable value unconditionally.
     required: false
     default: ""
 
