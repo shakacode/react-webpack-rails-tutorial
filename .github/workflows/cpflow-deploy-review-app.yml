@@ -137,6 +137,9 @@ jobs:
             if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
               echo "Failed to post fork rejection comment to PR #${PR_NUMBER}" >&2
             fi
+            echo "allowed=false" >> "$GITHUB_OUTPUT"
+            echo "${message}" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
 
           echo "${message}" >&2
