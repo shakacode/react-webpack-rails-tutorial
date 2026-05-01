@@ -83,8 +83,8 @@ runs:
           exit 1
         fi
 
-        # Persist the token for later cpflow/cpln steps via env. Use a randomized
-        # delimiter so a multiline token cannot terminate the heredoc early.
+        # Persist the token because later cpflow/cpln steps read CPLN_TOKEN directly.
+        # Use a randomized delimiter so a multiline token cannot terminate the heredoc early.
         delim="CPLN_TOKEN_$(openssl rand -hex 8)"
         {
           echo "CPLN_TOKEN<<${delim}"

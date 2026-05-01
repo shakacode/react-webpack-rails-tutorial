@@ -4,7 +4,7 @@ run-name: "Deploy Review App - PR #${{ github.event.pull_request.number || githu
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [synchronize, reopened]
   issue_comment:
     # Slash-command workflow changes run from the default branch until merged.
     # Test PR-branch edits with:

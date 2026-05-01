@@ -9,7 +9,7 @@ on:
         type: string
 
 permissions:
-  contents: write  # Required for `gh release create` in the "Create GitHub release" step.
+  contents: read
 
 env:
   # Override these by editing this file or by setting the matching repository variable.
@@ -383,25 +383,6 @@ jobs:
             fi
           done
 
-      - name: Create GitHub release
-        if: success() && steps.health-check.outputs.healthy == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
-          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          release_date="$(date '+%Y-%m-%d')"
-          timestamp="$(date '+%H%M%S')"
-          release_tag="production-${release_date}-${timestamp}-${GITHUB_RUN_ID}"
-
-          gh release create "${release_tag}" \
-            --title "Production Release ${release_date} ${timestamp}" \
-            --notes "Promoted ${STAGING_APP_NAME} to ${PRODUCTION_APP_NAME} on ${release_date} at ${timestamp}."
-
       - name: Promotion summary
         if: always()
         env:
@@ -422,3 +403,31 @@ jobs:
             echo "Previous image (first container of selected/first workload): \`${PREVIOUS_IMAGE}\`"
             echo "Previous version: ${PREVIOUS_VERSION}"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  create-release:
+    needs: promote-to-production
+    if: needs.promote-to-production.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub release
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          release_date="$(date '+%Y-%m-%d')"
+          timestamp="$(date '+%H%M%S')"
+          release_tag="production-${release_date}-${timestamp}-${GITHUB_RUN_ID}"
+
+          gh release create "${release_tag}" \
+            --title "Production Release ${release_date} ${timestamp}" \
+            --notes "Promoted ${STAGING_APP_NAME} to ${PRODUCTION_APP_NAME} on ${release_date} at ${timestamp}."
