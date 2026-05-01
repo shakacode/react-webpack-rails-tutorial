@@ -73,22 +73,27 @@ jobs:
         id: resolve-pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+          COMMENT_PR_NUMBER: ${{ github.event.issue.number }}
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
         shell: bash
         run: |
           set -euo pipefail
 
-          case "${{ github.event_name }}" in
+          case "${EVENT_NAME}" in
             workflow_dispatch)
-              pr_number="${{ github.event.inputs.pr_number }}"
+              pr_number="${DISPATCH_PR_NUMBER}"
               ;;
             issue_comment)
-              pr_number="${{ github.event.issue.number }}"
+              pr_number="${COMMENT_PR_NUMBER}"
               ;;
             pull_request)
-              pr_number="${{ github.event.pull_request.number }}"
+              pr_number="${PULL_REQUEST_NUMBER}"
               ;;
             *)
-              echo "Unsupported event type: ${{ github.event_name }}" >&2
+              echo "Unsupported event type: ${EVENT_NAME}" >&2
               exit 1
               ;;
           esac
@@ -104,7 +109,7 @@ jobs:
 
           {
             echo "PR_NUMBER=$pr_number"
-            echo "APP_NAME=${{ vars.REVIEW_APP_PREFIX }}-$pr_number"
+            echo "APP_NAME=${REVIEW_APP_PREFIX}-$pr_number"
             echo "PR_SHA=$pr_sha"
           } >> "$GITHUB_ENV"
           echo "same_repo=${same_repo}" >> "$GITHUB_OUTPUT"
@@ -114,16 +119,18 @@ jobs:
         id: source
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          SAME_REPO: ${{ steps.resolve-pr.outputs.same_repo }}
         shell: bash
         run: |
           set -euo pipefail
 
-          if [[ "${{ steps.resolve-pr.outputs.same_repo }}" == "true" ]]; then
+          if [[ "${SAME_REPO}" == "true" ]]; then
             echo "allowed=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
             echo "allowed=false" >> "$GITHUB_OUTPUT"
             {
               echo "Review app deploys are skipped for fork pull requests."
@@ -133,7 +140,7 @@ jobs:
           fi
 
           message="Review app deploys from fork pull requests are not allowed because this workflow uses repository secrets."
-          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+          if [[ "${EVENT_NAME}" == "issue_comment" ]]; then
             if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
               echo "Failed to post fork rejection comment to PR #${PR_NUMBER}" >&2
             fi
