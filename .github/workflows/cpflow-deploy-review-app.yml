@@ -157,6 +157,18 @@ jobs:
           echo "Review app deploys from fork pull requests are not allowed for workflow_dispatch because this workflow uses repository secrets." >&2
           exit 1
 
+      - name: Comment on fork PR deploy rejection
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'false' && github.event_name == 'issue_comment'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_NUMBER),
+              body: `Review app deploys from fork pull requests require a branch in ${process.env.GITHUB_REPOSITORY}.\n\nThis workflow builds Docker images with repository secrets, so comment-triggered deploys only run for branches in the base repository.`
+            });
+
       - name: Checkout PR commit
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
         uses: actions/checkout@v4
