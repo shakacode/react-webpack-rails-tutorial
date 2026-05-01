@@ -381,7 +381,8 @@ Use `/delete-review-app` to delete it manually; closing the PR deletes it
 automatically. Pushes to the staging branch deploy staging, and production
 promotion is manual from the `cpflow-promote-staging-to-production` workflow.
 The production promotion workflow checks that production has all environment
-variable names present in staging; it does not compare secret values.
+variable names present in staging; it does not compare secret values, workload
+environment variables, or Control Plane secret references.
 
 The repository variables and secrets must match the app names in
 `.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should
@@ -426,7 +427,17 @@ bundle exec rubocop
 ```
 
 Then open a normal PR and let GitHub Actions prove the generated review-app,
-staging, lint, JS, and RSpec workflows before merging. If a project needs to
-track generator changes automatically, use a scheduled maintenance PR or
-Renovate-style workflow that bumps the `cpflow` version, regenerates these files,
-and runs the same validation commands.
+staging, lint, JS, and RSpec workflows before merging. For review-app workflow
+changes, test both the local workflow syntax and a real deployment. GitHub runs
+`issue_comment` workflows from the default branch, so a `/deploy-review-app`
+comment on the PR does not fully exercise slash-command changes that are only on
+the PR branch. Before merge, run the PR branch workflow explicitly:
+
+```bash
+gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
+```
+
+After the workflow reports a review-app URL, verify the URL returns HTTP 200.
+If a project needs to track generator changes automatically, use a scheduled
+maintenance PR or Renovate-style workflow that bumps the `cpflow` version,
+regenerates these files, and runs the same validation commands.

@@ -51,6 +51,8 @@ jobs:
     timeout-minutes: 45
 
     steps:
+      # `pull_request` events run in the base repository context, so this initial
+      # checkout fetches trusted workflow code before the fork-origin guard below.
       - name: Initial checkout
         uses: actions/checkout@v4
 
@@ -107,6 +109,8 @@ jobs:
             same_repo="true"
           fi
 
+          # Re-derive these from the resolved PR number because workflow-level env
+          # values are empty for issue_comment events.
           {
             echo "PR_NUMBER=$pr_number"
             echo "APP_NAME=${REVIEW_APP_PREFIX}-$pr_number"

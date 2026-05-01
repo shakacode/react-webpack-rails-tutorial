@@ -9,15 +9,15 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: write  # Required for `gh release create` after a successful promotion.
 
 env:
   # Override these by editing this file or by setting the matching repository variable.
   # Worst-case wall time per attempt is HEALTH_CHECK_INTERVAL plus the curl --max-time below
   # (10s), so the defaults give a ~10 minute window (24 × (15 + 10) = 600s) — enough for
   # most Rails cold boots (asset precompile + db:migrate + workload readiness).
-  HEALTH_CHECK_RETRIES: 24
-  HEALTH_CHECK_INTERVAL: 15
+  HEALTH_CHECK_RETRIES: ${{ vars.HEALTH_CHECK_RETRIES || 24 }}
+  HEALTH_CHECK_INTERVAL: ${{ vars.HEALTH_CHECK_INTERVAL || 15 }}
   # Space-separated list of HTTP statuses considered healthy. The default accepts 301/302
   # because `curl` is invoked without `-L`, so a root `/` that redirects to a login page
   # (common for Rails apps that auth-gate `/`) would otherwise be reported as unhealthy
@@ -26,8 +26,8 @@ env:
   # (e.g. "200" for a plain /health, or "200 401 403" for apps that auth-gate / without
   # redirecting).
   HEALTH_CHECK_ACCEPTED_STATUSES: ${{ vars.HEALTH_CHECK_ACCEPTED_STATUSES || '200 301 302' }}
-  ROLLBACK_READINESS_RETRIES: 24
-  ROLLBACK_READINESS_INTERVAL: 15
+  ROLLBACK_READINESS_RETRIES: ${{ vars.ROLLBACK_READINESS_RETRIES || 24 }}
+  ROLLBACK_READINESS_INTERVAL: ${{ vars.ROLLBACK_READINESS_INTERVAL || 15 }}
   PRIMARY_WORKLOAD: ${{ vars.PRIMARY_WORKLOAD }}
 
 concurrency:
@@ -128,17 +128,25 @@ jobs:
           staging_vars="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln gvc get "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
           production_vars="$(CPLN_TOKEN="${CPLN_TOKEN_PRODUCTION}" cpln gvc get "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
 
+          # This compares GVC-level env var names only. Workload-level env entries
+          # and secret references are outside this pre-flight check's scope.
           if [[ -z "${staging_vars}" ]]; then
             echo "Staging GVC exposes no environment variables; skipping parity check."
             exit 0
           fi
 
           missing_vars="$(comm -23 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+          extra_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
 
           if [[ -n "${missing_vars}" ]]; then
             echo "::error::Production is missing environment variables that exist in staging"
             echo "${missing_vars}"
             exit 1
+          fi
+
+          if [[ -n "${extra_vars}" ]]; then
+            echo "::warning::Production has GVC environment variables that do not exist in staging; verify they are intentional:"
+            echo "${extra_vars}"
           fi
 
       - name: Capture current production image
@@ -258,6 +266,8 @@ jobs:
             rollback_args=()
 
             while IFS=$'\t' read -r index image; do
+              # cpln parses --set as key=value; current image URI formats do not
+              # contain "=", but re-check this if digest-pinned refs ever add one.
               rollback_args+=(--set "spec.containers[${index}].image=${image}")
             done < <(echo "${previous_images}" | jq -r 'to_entries[] | "\(.key)\t\(.value)"')
 
