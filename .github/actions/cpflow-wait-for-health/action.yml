@@ -61,7 +61,10 @@ runs:
         for attempt in $(seq 1 "${CPFLOW_MAX_RETRIES}"); do
           echo "Health check attempt ${attempt}/${CPFLOW_MAX_RETRIES}"
 
-          endpoint="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json | jq -r '.status.endpoint // empty')"
+          if ! endpoint="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json | jq -r '.status.endpoint // empty')"; then
+            echo "Unable to fetch workload endpoint; will retry if attempts remain."
+            endpoint=""
+          fi
           if [[ -n "${endpoint}" ]]; then
             http_status="$(curl -s -o /dev/null -w '%{http_code}' --max-time "${CPFLOW_CURL_MAX_TIME}" "${endpoint}" 2>/dev/null || echo 000)"
             echo "Endpoint: ${endpoint}, HTTP status: ${http_status}"

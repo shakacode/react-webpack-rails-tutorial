@@ -71,5 +71,6 @@ runs:
           exit 0
         fi
 
-        printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
+        echo "Missing required GitHub configuration:" >&2
+        printf -- '- %s\n' "${missing[@]}" >&2
         exit 1
