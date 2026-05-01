@@ -171,13 +171,6 @@ jobs:
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
 
-      - name: Detect release phase support
-        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
-        id: release-phase
-        uses: ./.github/actions/cpflow-detect-release-phase
-        with:
-          app_name: ${{ env.APP_NAME }}
-
       - name: Check if review app exists
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
         id: check-app
@@ -212,6 +205,13 @@ jobs:
         run: |
           set -euo pipefail
           cpflow setup-app -a "${APP_NAME}" --org "${CPLN_ORG}"
+
+      - name: Detect release phase support
+        if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
+        id: release-phase
+        uses: ./.github/actions/cpflow-detect-release-phase
+        with:
+          app_name: ${{ env.APP_NAME }}
 
       - name: Create initial PR comment
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')

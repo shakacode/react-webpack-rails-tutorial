@@ -6,6 +6,7 @@
 - Creates the review app if it does not exist
 - Builds the PR commit image
 - Deploys the image and comments with the review URL
+- The command must be the only text in the comment
 
 `/delete-review-app`
 - Deletes the review app when the PR is done
