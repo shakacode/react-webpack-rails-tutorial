@@ -44,6 +44,7 @@
 
 - Review apps are opt-in and created with `/deploy-review-app`
 - New commits redeploy existing review apps automatically
+- Slash command workflows run from the default branch until merged. Test PR-branch edits with `gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>`.
 - Pushes to the staging branch deploy staging automatically
 - Promotion to production is manual via the Actions tab
 - A nightly workflow removes stale review apps

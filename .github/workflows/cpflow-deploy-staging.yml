@@ -29,7 +29,7 @@ concurrency:
 jobs:
   validate-branch:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     outputs:
       is_deployable: ${{ steps.check-branch.outputs.is_deployable }}
     steps:

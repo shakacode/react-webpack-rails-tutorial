@@ -126,6 +126,7 @@ jobs:
         id: source
         env:
           EVENT_NAME: ${{ github.event_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SAME_REPO: ${{ steps.resolve-pr.outputs.same_repo }}
         shell: bash
         run: |
@@ -147,10 +148,14 @@ jobs:
 
           if [[ "${EVENT_NAME}" == "issue_comment" ]]; then
             echo "allowed=false" >> "$GITHUB_OUTPUT"
+            message="Review app deploys from fork pull requests require a branch in ${GITHUB_REPOSITORY}. This workflow builds Docker images with repository secrets, so comment-triggered deploys only run for branches in the base repository."
             {
               echo "Review app deploys from fork pull requests require a branch in ${GITHUB_REPOSITORY}."
               echo "This workflow builds Docker images with repository secrets, so comment-triggered deploys only run for branches in the base repository."
             } >> "$GITHUB_STEP_SUMMARY"
+            if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
+              echo "::warning::Could not post fork-PR deployment rejection comment."
+            fi
             exit 0
           fi
 

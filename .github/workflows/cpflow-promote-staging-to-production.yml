@@ -26,6 +26,8 @@ env:
   # (e.g. "200" for a plain /health, or "200 401 403" for apps that auth-gate / without
   # redirecting).
   HEALTH_CHECK_ACCEPTED_STATUSES: ${{ vars.HEALTH_CHECK_ACCEPTED_STATUSES || '200 301 302' }}
+  # Rollback readiness checks run per workload in sequence, so worst-case wait is
+  # workload count times ROLLBACK_READINESS_RETRIES times ROLLBACK_READINESS_INTERVAL.
   ROLLBACK_READINESS_RETRIES: ${{ vars.ROLLBACK_READINESS_RETRIES || 24 }}
   ROLLBACK_READINESS_INTERVAL: ${{ vars.ROLLBACK_READINESS_INTERVAL || 15 }}
   PRIMARY_WORKLOAD: ${{ vars.PRIMARY_WORKLOAD }}
@@ -287,7 +289,10 @@ jobs:
         run: |
           # Best-effort rollback: try every workload, aggregate failures, exit non-zero at the end
           # if any failed. A single cpln hiccup shouldn't leave other workloads mid-promotion.
+          # Intentionally omit -e so one workload failure does not skip the rest.
           set -uo pipefail
+
+          echo "::warning::Rollback restores workload images only. Database migrations and release_script side effects are not reversed; verify database state manually before re-promoting."
 
           rollback_failures=0
           if ! rollback_entries="$(echo "${ROLLBACK_STATE}" | jq -r 'to_entries[] | "\(.key)\t\(.value.containers | @json)"')"; then
