@@ -380,6 +380,9 @@ After the review app exists, new pushes to the PR redeploy it automatically.
 Use `/delete-review-app` to delete it manually; closing the PR deletes it
 automatically. Pushes to the staging branch deploy staging, and production
 promotion is manual from the `cpflow-promote-staging-to-production` workflow.
+If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository
+variable and the `branches:` filter in `.github/workflows/cpflow-deploy-staging.yml`;
+GitHub does not allow repository variables in trigger branch filters.
 The production promotion workflow checks that production has all environment
 variable names present in staging; it does not compare secret values, workload
 environment variables, or Control Plane secret references.

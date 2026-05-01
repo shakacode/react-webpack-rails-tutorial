@@ -40,8 +40,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate-confirmation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate promotion confirmation
+        env:
+          CONFIRM_PROMOTION: ${{ github.event.inputs.confirm_promotion }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${CONFIRM_PROMOTION}" != "promote" ]]; then
+            echo "::error::Promotion confirmation must be exactly 'promote'."
+            exit 1
+          fi
+
   promote-to-production:
-    if: github.event.inputs.confirm_promotion == 'promote'
+    needs: validate-confirmation
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -175,7 +191,9 @@ jobs:
             [[ -n "${workload_name}" ]] || continue
 
             workload_json="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
-            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
+          # current_image/current_version are summary fields for the first container
+          # of the selected workload; rollback_state below captures all containers.
+          workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
             workload_containers="$(echo "${workload_json}" | jq -c '.spec.containers | map({name, image})')"
             workload_version="$(echo "${workload_json}" | jq -r '.version')"
 
@@ -215,15 +233,14 @@ jobs:
 
       - name: Copy image from staging
         env:
-          # cpflow 4.2.x requires the upstream token flag; keep the secret sourced
-          # from env so it is still masked by GitHub logs.
+          # cpflow reads this env var directly, avoiding token exposure in argv.
           CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
         shell: bash
         run: |
           set -euo pipefail
-          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" -t "${CPLN_UPSTREAM_TOKEN}" --org "${CPLN_ORG_PRODUCTION}"
+          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}"
 
       - name: Deploy image to production
         env:
@@ -390,6 +407,6 @@ jobs:
               echo "❌ Status: deployment failed"
             fi
             echo
-            echo "Previous image: \`${PREVIOUS_IMAGE}\`"
+            echo "Previous image (first container of selected/first workload): \`${PREVIOUS_IMAGE}\`"
             echo "Previous version: ${PREVIOUS_VERSION}"
           } >> "$GITHUB_STEP_SUMMARY"

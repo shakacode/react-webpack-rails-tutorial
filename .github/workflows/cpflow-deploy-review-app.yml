@@ -6,6 +6,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   issue_comment:
+    # Slash-command workflow changes run from the default branch until merged.
+    # Test PR-branch edits with:
+    # gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
     types: [created]
   workflow_dispatch:
     inputs:
@@ -282,6 +285,8 @@ jobs:
               ref: process.env.PR_SHA,
               environment: `review/${process.env.APP_NAME}`,
               auto_merge: false,
+              // Review apps intentionally deploy on demand regardless of CI status;
+              // they are ephemeral feedback environments, not branch-protection gates.
               required_contexts: [],
               description: `Control Plane review app for PR #${process.env.PR_NUMBER}`
             });
