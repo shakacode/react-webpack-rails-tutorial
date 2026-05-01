@@ -1,0 +1,92 @@
+name: Wait for Control Plane workload health
+description: >-
+  Polls the workload's status endpoint with curl and exits success when the
+  HTTP response status is in the accepted list. Fails non-zero (and reports
+  `healthy=false`) once retries are exhausted.
+
+inputs:
+  workload_name:
+    description: Workload to query (e.g. `rails`).
+    required: true
+  app_name:
+    description: GVC / Control Plane app name the workload belongs to.
+    required: true
+  org:
+    description: Control Plane organization.
+    required: true
+  max_retries:
+    description: Number of attempts before giving up.
+    required: false
+    default: "24"
+  interval_seconds:
+    description: Seconds to sleep between attempts.
+    required: false
+    default: "15"
+  accepted_statuses:
+    description: >-
+      Space-separated list of HTTP status codes considered healthy. The default
+      `200 301 302` accepts redirects because curl is invoked without `-L`, so a
+      root path that auth-redirects looks like a redirect, not a failure.
+    required: false
+    default: "200 301 302"
+  curl_max_time:
+    description: Per-request curl timeout, seconds.
+    required: false
+    default: "10"
+
+outputs:
+  healthy:
+    description: '"true" once a healthy response was observed; "false" otherwise.'
+    value: ${{ steps.poll.outputs.healthy }}
+
+runs:
+  using: composite
+  steps:
+    - name: Poll workload endpoint
+      id: poll
+      shell: bash
+      env:
+        CPFLOW_WORKLOAD_NAME: ${{ inputs.workload_name }}
+        CPFLOW_APP_NAME: ${{ inputs.app_name }}
+        CPFLOW_ORG: ${{ inputs.org }}
+        CPFLOW_MAX_RETRIES: ${{ inputs.max_retries }}
+        CPFLOW_INTERVAL_SECONDS: ${{ inputs.interval_seconds }}
+        CPFLOW_ACCEPTED_STATUSES: ${{ inputs.accepted_statuses }}
+        CPFLOW_CURL_MAX_TIME: ${{ inputs.curl_max_time }}
+      run: |
+        set -euo pipefail
+
+        read -r -a accepted_statuses <<< "${CPFLOW_ACCEPTED_STATUSES}"
+
+        for attempt in $(seq 1 "${CPFLOW_MAX_RETRIES}"); do
+          echo "Health check attempt ${attempt}/${CPFLOW_MAX_RETRIES}"
+
+          if ! workload_json="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json 2>&1)"; then
+            echo "::error::Workload '${CPFLOW_WORKLOAD_NAME}' not found in GVC '${CPFLOW_APP_NAME}'. Set PRIMARY_WORKLOAD to the correct workload name." >&2
+            printf '%s\n' "${workload_json}" >&2
+            echo "healthy=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          endpoint="$(echo "${workload_json}" | jq -r '.status.endpoint // empty')"
+          if [[ -n "${endpoint}" ]]; then
+            http_status="$(curl -s -o /dev/null -w '%{http_code}' --max-time "${CPFLOW_CURL_MAX_TIME}" "${endpoint}" 2>/dev/null || echo 000)"
+            echo "Endpoint: ${endpoint}, HTTP status: ${http_status}"
+
+            for accepted in "${accepted_statuses[@]}"; do
+              if [[ "${http_status}" == "${accepted}" ]]; then
+                echo "healthy=true" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            done
+          else
+            echo "Workload '${CPFLOW_WORKLOAD_NAME}' has no endpoint yet; waiting for one to be assigned."
+          fi
+
+          if [[ "${attempt}" -lt "${CPFLOW_MAX_RETRIES}" ]]; then
+            sleep "${CPFLOW_INTERVAL_SECONDS}"
+          fi
+        done
+
+        echo "healthy=false" >> "$GITHUB_OUTPUT"
+        exit 1

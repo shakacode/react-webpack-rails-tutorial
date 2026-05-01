@@ -1,0 +1,104 @@
+name: Setup Control Plane Environment
+description: Sets up Ruby, installs the Control Plane CLI and cpflow gem, and configures a default profile
+
+inputs:
+  token:
+    description: Control Plane token
+    required: true
+  org:
+    description: Control Plane organization
+    required: true
+  ruby_version:
+    description: >-
+      Ruby version used for cpflow. When empty (the default), ruby/setup-ruby auto-detects
+      from .ruby-version, .tool-versions, or the Gemfile.
+    required: false
+    default: ""
+  cpln_cli_version:
+    description: >-
+      @controlplane/cli version. Empty string falls back to the action's pinned default
+      so callers can pass the repository variable value unconditionally.
+    required: false
+    default: ""
+  cpflow_version:
+    description: >-
+      cpflow gem version. Empty string falls back to the action's pinned default
+      so callers can pass the repository variable value unconditionally.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby_version }}
+
+    - name: Install Control Plane CLI and cpflow gem
+      shell: bash
+      env:
+        CPLN_CLI_VERSION: ${{ inputs.cpln_cli_version }}
+        CPFLOW_VERSION: ${{ inputs.cpflow_version }}
+      run: |
+        set -euo pipefail
+
+        # Bump these defaults when a new release lands that you want to roll out by default.
+        # Override per-repo by setting `CPLN_CLI_VERSION` / `CPFLOW_VERSION` repo variables;
+        # an empty input falls back to the action's pinned default below.
+        default_cpln_cli_version="3.3.1"
+        default_cpflow_version="4.2.0"
+
+        CPLN_CLI_VERSION="${CPLN_CLI_VERSION:-${default_cpln_cli_version}}"
+        CPFLOW_VERSION="${CPFLOW_VERSION:-${default_cpflow_version}}"
+
+        npm_global_prefix="${HOME}/.npm-global"
+        mkdir -p "${npm_global_prefix}"
+        echo "${npm_global_prefix}/bin" >> "$GITHUB_PATH"
+        export PATH="${npm_global_prefix}/bin:${PATH}"
+
+        npm install --global --prefix "${npm_global_prefix}" "@controlplane/cli@${CPLN_CLI_VERSION}"
+        cpln --version
+
+        gem install cpflow -v "${CPFLOW_VERSION}" --no-document
+        cpflow --version
+
+    - name: Setup Control Plane profile and registry login
+      shell: bash
+      env:
+        # Pass the token via CPLN_TOKEN so cpln picks it up from the environment
+        # rather than `--token`, which would leak it into /proc/<pid>/cmdline and ps output.
+        CPLN_TOKEN: ${{ inputs.token }}
+        ORG: ${{ inputs.org }}
+      run: |
+        set -euo pipefail
+
+        if [[ -z "$CPLN_TOKEN" ]]; then
+          echo "Error: Control Plane token not provided" >&2
+          exit 1
+        fi
+
+        if [[ -z "$ORG" ]]; then
+          echo "Error: Control Plane organization not provided" >&2
+          exit 1
+        fi
+
+        # Persist the token because later cpflow/cpln steps read CPLN_TOKEN directly.
+        # Use a randomized delimiter so a multiline token cannot terminate the heredoc early.
+        delim="CPLN_TOKEN_$(openssl rand -hex 8)"
+        {
+          echo "CPLN_TOKEN<<${delim}"
+          echo "${CPLN_TOKEN}"
+          echo "${delim}"
+        } >> "$GITHUB_ENV"
+
+        create_output=""
+        if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
+          if ! echo "$create_output" | grep -qi "already exists"; then
+            echo "$create_output" >&2
+            exit 1
+          fi
+        fi
+
+        cpln profile update default --org "$ORG"
+        cpln image docker-login --org "$ORG"

@@ -1,0 +1,129 @@
+name: Deploy Staging to Control Plane
+
+run-name: Deploy Control Plane staging app
+
+on:
+  push:
+    # GitHub does not allow repository vars in branch filters. Default to the common
+    # deploy branches unless `cpflow generate-github-actions --staging-branch BRANCH`
+    # was used. If STAGING_APP_BRANCH is later changed in repository variables, keep
+    # this list in sync so pushes to that branch actually trigger the workflow.
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: ${{ vars.STAGING_APP_NAME }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
+  STAGING_APP_BRANCH: ${{ vars.STAGING_APP_BRANCH || 'master' }}
+
+concurrency:
+  group: cpflow-deploy-staging-${{ github.ref_name }}
+  # Match the review-app and delete workflows: a cancelled `cpflow deploy-image` mid-rollout
+  # can leave the staging GVC in a partially-deployed state (some workloads on the new image,
+  # others on the old). Let an in-flight deploy finish before the next push starts a new run.
+  cancel-in-progress: false
+
+jobs:
+  validate-branch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      is_deployable: ${{ steps.check-branch.outputs.is_deployable }}
+    steps:
+      - name: Check whether this branch should deploy staging
+        id: check-branch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_REF_NAME}" == "${STAGING_APP_BRANCH}" ]]; then
+            echo "is_deployable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Branch '${GITHUB_REF_NAME}' does not match STAGING_APP_BRANCH='${STAGING_APP_BRANCH}'"
+            echo "is_deployable=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout repository
+        if: steps.check-branch.outputs.is_deployable == 'true'
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets and variables
+        if: steps.check-branch.outputs.is_deployable == 'true'
+        uses: ./.github/actions/cpflow-validate-config
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            variable:CPLN_ORG_STAGING
+            variable:STAGING_APP_NAME
+
+  build:
+    needs: validate-branch
+    if: needs.validate-branch.outputs.is_deployable == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
+
+      - name: Build Docker image
+        uses: ./.github/actions/cpflow-build-docker-image
+        with:
+          app_name: ${{ env.APP_NAME }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          commit: ${{ github.sha }}
+          docker_build_extra_args: ${{ vars.DOCKER_BUILD_EXTRA_ARGS }}
+          docker_build_ssh_key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+          docker_build_ssh_known_hosts: ${{ vars.DOCKER_BUILD_SSH_KNOWN_HOSTS }}
+
+  deploy:
+    needs: [validate-branch, build]
+    if: needs.validate-branch.outputs.is_deployable == 'true' && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
+
+      - name: Detect release phase support
+        id: release-phase
+        uses: ./.github/actions/cpflow-detect-release-phase
+        with:
+          app_name: ${{ env.APP_NAME }}
+
+      - name: Deploy staging image
+        env:
+          RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy_args=(-a "${APP_NAME}")
+          if [[ -n "${RELEASE_PHASE_FLAG}" ]]; then
+            deploy_args+=("${RELEASE_PHASE_FLAG}")
+          fi
+          deploy_args+=(--org "${CPLN_ORG}" --verbose)
+
+          cpflow deploy-image "${deploy_args[@]}"

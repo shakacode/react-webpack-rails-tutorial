@@ -1,0 +1,56 @@
+name: Detect release phase support
+description: >-
+  Inspects .controlplane/controlplane.yml for an app and emits `flag=--run-release-phase`
+  when a `release_script:` is configured. Outputs an empty `flag` otherwise.
+
+inputs:
+  app_name:
+    description: cpflow app name to inspect
+    required: true
+
+outputs:
+  flag:
+    description: Either `--run-release-phase` or empty
+    value: ${{ steps.detect.outputs.flag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Detect release phase support
+      id: detect
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+      run: |
+        set -euo pipefail
+
+        release_script="$(ruby - "${APP_NAME}" <<'RUBY'
+        require "yaml"
+
+        app_name = ARGV.fetch(0)
+        data = YAML.load_file(".controlplane/controlplane.yml", aliases: true)
+        apps = data["apps"] || {}
+        app_config = apps[app_name]
+
+        unless app_config
+          app_config = apps.find do |name, config|
+            config.is_a?(Hash) &&
+              config["match_if_app_name_starts_with"] &&
+              app_name.start_with?(name)
+          end&.last
+        end
+
+        unless app_config.is_a?(Hash)
+          warn "Error: app '#{app_name}' is not defined under `apps:` in `.controlplane/controlplane.yml`."
+          exit 1
+        end
+
+        puts app_config["release_script"].to_s
+        RUBY
+        )"
+
+        if [[ -n "${release_script}" ]]; then
+          echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
+        else
+          echo "flag=" >> "$GITHUB_OUTPUT"
+        fi

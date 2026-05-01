@@ -1,0 +1,55 @@
+name: Cleanup Stale Review Apps
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  # Single global group: only one cleanup sweep at a time. Independent of review-app
+  # deploy/delete groups (different keys), so cleanup will not block per-PR work.
+  group: cpflow-cleanup-stale-review-apps
+  # A cancelled `cpflow cleanup-stale-apps` can leave half-deleted review apps; let
+  # the in-flight run finish before the next scheduled tick begins.
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets and variables
+        uses: ./.github/actions/cpflow-validate-config
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            variable:CPLN_ORG_STAGING
+            variable:REVIEW_APP_PREFIX
+
+      - name: Setup environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
+
+      - name: Remove stale review apps
+        env:
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow cleanup-stale-apps -a "${REVIEW_APP_PREFIX}" --org "${CPLN_ORG_STAGING}" --yes
+          echo "Stale review apps under prefix '${REVIEW_APP_PREFIX}' have been cleaned up." >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,24 @@
+name: Delete Control Plane App
+description: Deletes a Control Plane app and all associated resources
+
+inputs:
+  app_name:
+    description: Name of the application to delete
+    required: true
+  cpln_org:
+    description: Control Plane organization name
+    required: true
+  review_app_prefix:
+    description: Prefix used for review app names
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Delete application
+      shell: bash
+      run: ${{ github.action_path }}/delete-app.sh
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        CPLN_ORG: ${{ inputs.cpln_org }}
+        REVIEW_APP_PREFIX: ${{ inputs.review_app_prefix }}
