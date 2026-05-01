@@ -1,6 +1,6 @@
 name: Detect release phase support
 description: >-
-  Inspects the cpflow config for an app and emits `flag=--run-release-phase`
+  Inspects .controlplane/controlplane.yml for an app and emits `flag=--run-release-phase`
   when a `release_script:` is configured. Outputs an empty `flag` otherwise.
 
 inputs:
@@ -24,15 +24,32 @@ runs:
       run: |
         set -euo pipefail
 
-        config_output=""
-        if ! config_output="$(cpflow config -a "${APP_NAME}" 2>&1)"; then
-          echo "Failed to read cpflow config for app '${APP_NAME}'" >&2
-          printf '%s\n' "${config_output}" >&2
-          exit 1
-        fi
+        release_script="$(ruby - "${APP_NAME}" <<'RUBY'
+        require "yaml"
 
-        # Anchor to start-of-line so commented-out release_script: entries don't enable --run-release-phase.
-        if grep -qE '^[[:space:]]*release_script:' <<< "${config_output}"; then
+        app_name = ARGV.fetch(0)
+        data = YAML.load_file(".controlplane/controlplane.yml", aliases: true)
+        apps = data["apps"] || {}
+        app_config = apps[app_name]
+
+        unless app_config
+          app_config = apps.find do |name, config|
+            config.is_a?(Hash) &&
+              config["match_if_app_name_starts_with"] &&
+              app_name.start_with?(name)
+          end&.last
+        end
+
+        unless app_config.is_a?(Hash)
+          warn "Error: app '#{app_name}' is not defined under `apps:` in `.controlplane/controlplane.yml`."
+          exit 1
+        end
+
+        puts app_config["release_script"].to_s
+        RUBY
+        )"
+
+        if [[ -n "${release_script}" ]]; then
           echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
         else
           echo "flag=" >> "$GITHUB_OUTPUT"

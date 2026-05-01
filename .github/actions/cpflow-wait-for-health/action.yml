@@ -61,10 +61,14 @@ runs:
         for attempt in $(seq 1 "${CPFLOW_MAX_RETRIES}"); do
           echo "Health check attempt ${attempt}/${CPFLOW_MAX_RETRIES}"
 
-          if ! endpoint="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json | jq -r '.status.endpoint // empty')"; then
-            echo "Unable to fetch workload endpoint; will retry if attempts remain."
-            endpoint=""
+          if ! workload_json="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json 2>&1)"; then
+            echo "::error::Workload '${CPFLOW_WORKLOAD_NAME}' not found in GVC '${CPFLOW_APP_NAME}'. Set PRIMARY_WORKLOAD to the correct workload name." >&2
+            printf '%s\n' "${workload_json}" >&2
+            echo "healthy=false" >> "$GITHUB_OUTPUT"
+            exit 1
           fi
+
+          endpoint="$(echo "${workload_json}" | jq -r '.status.endpoint // empty')"
           if [[ -n "${endpoint}" ]]; then
             http_status="$(curl -s -o /dev/null -w '%{http_code}' --max-time "${CPFLOW_CURL_MAX_TIME}" "${endpoint}" 2>/dev/null || echo 000)"
             echo "Endpoint: ${endpoint}, HTTP status: ${http_status}"
@@ -75,6 +79,8 @@ runs:
                 exit 0
               fi
             done
+          else
+            echo "Workload '${CPFLOW_WORKLOAD_NAME}' has no endpoint yet; waiting for one to be assigned."
           fi
 
           if [[ "${attempt}" -lt "${CPFLOW_MAX_RETRIES}" ]]; then

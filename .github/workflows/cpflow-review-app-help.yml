@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   show-help:
+    if: ${{ !endsWith(github.actor, '[bot]') && vars.REVIEW_APP_PREFIX != '' && vars.CPLN_ORG_STAGING != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -25,10 +26,10 @@ jobs:
               "# Control Plane review app commands",
               "",
               "`/deploy-review-app`",
-              "Create the review app or redeploy the PR branch to it.",
+              "Create the review app or redeploy the PR branch to it. The comment must contain exactly this command.",
               "",
               "`/delete-review-app`",
-              "Delete the review app and its temporary resources.",
+              "Delete the review app and its temporary resources. The comment must contain exactly this command.",
               "",
               "`/help`",
               "Show the required GitHub variables, secrets, and workflow behavior."

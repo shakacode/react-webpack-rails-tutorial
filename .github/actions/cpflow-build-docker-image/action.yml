@@ -74,6 +74,15 @@ runs:
 
         PR_INFO=""
         docker_build_args=()
+        ssh_agent_started=false
+
+        cleanup_build_ssh() {
+          if [[ "${ssh_agent_started}" == "true" ]]; then
+            ssh-agent -k >/dev/null || true
+          fi
+          rm -f "${HOME}/.ssh/cpflow_build_key"
+        }
+        trap cleanup_build_ssh EXIT
 
         if [[ -n "${PR_NUMBER}" ]]; then
           PR_INFO=" for PR #${PR_NUMBER}"
@@ -96,7 +105,7 @@ runs:
 
         if [[ -f "${HOME}/.ssh/cpflow_build_key" ]]; then
           eval "$(ssh-agent -s)"
-          trap 'ssh-agent -k >/dev/null; rm -f "${HOME}/.ssh/cpflow_build_key"' EXIT
+          ssh_agent_started=true
           ssh-add "${HOME}/.ssh/cpflow_build_key"
           docker_build_args+=("--ssh=default")
         fi
@@ -105,10 +114,9 @@ runs:
         cpflow build-image -a "${APP_NAME}" --commit="${COMMIT_SHA}" --org="${CONTROL_PLANE_ORG}" "${docker_build_args[@]}"
         echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT_SHA})"
 
-    - name: Cleanup Docker build SSH key
+    - name: Remove SSH key
       if: ${{ always() }}
       shell: bash
       run: |
-        # Defence in depth: the build step also traps EXIT, but this still runs
-        # if a future refactor exits before that trap is installed.
+        # Defence in depth for cancellations or future refactors around the build trap.
         rm -f "${HOME}/.ssh/cpflow_build_key"

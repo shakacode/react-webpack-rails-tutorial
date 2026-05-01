@@ -9,7 +9,7 @@ on:
         type: string
 
 permissions:
-  contents: write  # Required for `gh release create` after a successful promotion.
+  contents: write  # Required for `gh release create` in the "Create GitHub release" step.
 
 env:
   # Override these by editing this file or by setting the matching repository variable.
@@ -51,6 +51,8 @@ jobs:
 
       - name: Validate required secrets and variables
         uses: ./.github/actions/cpflow-validate-config
+        # Pass secrets via env so the composite action checks indirect shell
+        # variables instead of interpolating secret values into a run script.
         env:
           CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
           CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
@@ -125,28 +127,31 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Override the job-level production token per command so each org lookup
+          # uses the matching Control Plane token.
           staging_vars="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln gvc get "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
           production_vars="$(CPLN_TOKEN="${CPLN_TOKEN_PRODUCTION}" cpln gvc get "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
 
-          # This compares GVC-level env var names only. Workload-level env entries
-          # and secret references are outside this pre-flight check's scope.
           if [[ -z "${staging_vars}" ]]; then
             echo "Staging GVC exposes no environment variables; skipping parity check."
             exit 0
           fi
 
+          # Treat staging as the promotion source of truth: fail when a variable
+          # present in staging is missing in production. Production-only variables
+          # are allowed, but surface them so teams can spot drift.
           missing_vars="$(comm -23 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
-          extra_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+          production_only_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+
+          if [[ -n "${production_only_vars}" ]]; then
+            echo "::warning::Production has environment variables that are not present in staging:"
+            echo "${production_only_vars}"
+          fi
 
           if [[ -n "${missing_vars}" ]]; then
             echo "::error::Production is missing environment variables that exist in staging"
             echo "${missing_vars}"
             exit 1
-          fi
-
-          if [[ -n "${extra_vars}" ]]; then
-            echo "::warning::Production has GVC environment variables that do not exist in staging; verify they are intentional:"
-            echo "${extra_vars}"
           fi
 
       - name: Capture current production image
@@ -171,7 +176,7 @@ jobs:
 
             workload_json="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
             workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
-            workload_images="$(echo "${workload_json}" | jq -c '.spec.containers | map(.image)')"
+            workload_containers="$(echo "${workload_json}" | jq -c '.spec.containers | map({name, image})')"
             workload_version="$(echo "${workload_json}" | jq -r '.version')"
 
             if [[ -z "${first_image}" ]]; then
@@ -189,8 +194,8 @@ jobs:
                 --arg workload "${workload_name}" \
                 --arg image "${workload_image}" \
                 --arg version "${workload_version}" \
-                --argjson images "${workload_images}" \
-                '. + {($workload): {image: $image, version: $version, images: $images}}' \
+                --argjson containers "${workload_containers}" \
+                '. + {($workload): {image: $image, version: $version, containers: $containers}}' \
                 <<< "${rollback_state}"
             )"
           done < <(tr ',' '\n' <<< "${WORKLOAD_NAMES}")
@@ -210,14 +215,15 @@ jobs:
 
       - name: Copy image from staging
         env:
-          # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
+          # cpflow 4.2.x requires the upstream token flag; keep the secret sourced
+          # from env so it is still masked by GitHub logs.
           CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
         shell: bash
         run: |
           set -euo pipefail
-          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}"
+          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" -t "${CPLN_UPSTREAM_TOKEN}" --org "${CPLN_ORG_PRODUCTION}"
 
       - name: Deploy image to production
         env:
@@ -257,19 +263,47 @@ jobs:
         run: |
           # Best-effort rollback: try every workload, aggregate failures, exit non-zero at the end
           # if any failed. A single cpln hiccup shouldn't leave other workloads mid-promotion.
-          # `set -e` is intentionally omitted so one failed workload update does not skip the rest.
           set -uo pipefail
 
           rollback_failures=0
+          if ! rollback_entries="$(echo "${ROLLBACK_STATE}" | jq -r 'to_entries[] | "\(.key)\t\(.value.containers | @json)"')"; then
+            echo "::error::Could not parse rollback state; manual recovery may be required." >&2
+            exit 1
+          fi
 
-          while IFS=$'\t' read -r workload_name previous_images; do
+          while IFS=$'\t' read -r workload_name previous_containers; do
             rollback_args=()
+            if ! current_names="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -c '.spec.containers | map(.name)')"; then
+              echo "::warning::Could not retrieve current containers for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+            if ! previous_names="$(echo "${previous_containers}" | jq -c 'map(.name)')"; then
+              echo "::warning::Could not parse captured containers for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+
+            if [[ "$(echo "${current_names}" | jq -c 'sort')" != "$(echo "${previous_names}" | jq -c 'sort')" ]]; then
+              echo "::error::Container set changed for workload '${workload_name}'; refusing rollback." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+
+            if ! rollback_container_entries="$(
+              jq -r \
+                --argjson current_names "${current_names}" \
+                '.[] as $container | ($current_names | index($container.name)) as $index | "\($index)\t\($container.image)"' \
+                <<< "${previous_containers}"
+            )"; then
+              echo "::warning::Could not build rollback image list for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
 
             while IFS=$'\t' read -r index image; do
-              # cpln parses --set as key=value; current image URI formats do not
-              # contain "=", but re-check this if digest-pinned refs ever add one.
               rollback_args+=(--set "spec.containers[${index}].image=${image}")
-            done < <(echo "${previous_images}" | jq -r 'to_entries[] | "\(.key)\t\(.value)"')
+            done <<< "${rollback_container_entries}"
 
             if ! cpln workload update "${workload_name}" \
               --gvc "${PRODUCTION_APP_NAME}" \
@@ -278,7 +312,7 @@ jobs:
               echo "::warning::Rollback failed for workload '${workload_name}'; continuing with remaining workloads." >&2
               rollback_failures=$((rollback_failures + 1))
             fi
-          done < <(echo "${ROLLBACK_STATE}" | jq -r 'to_entries[] | "\(.key)\t\(.value.images | @json)"')
+          done <<< "${rollback_entries}"
 
           if [[ "${rollback_failures}" -gt 0 ]]; then
             echo "::error::${rollback_failures} workload(s) failed to roll back; inspect the logs above." >&2

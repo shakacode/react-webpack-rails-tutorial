@@ -46,8 +46,8 @@ jobs:
 
       - name: Remove stale review apps
         env:
-          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
           REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
         shell: bash
         run: |
           set -euo pipefail

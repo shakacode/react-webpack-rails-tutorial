@@ -14,17 +14,42 @@ if [[ "$APP_NAME" != "${expected_prefix}"* ]]; then
   exit 1
 fi
 
+# Guard against a misconfigured REVIEW_APP_PREFIX that would otherwise match
+# a well-known shared environment.
+if echo "$APP_NAME" | grep -iqE '(^|-)(production|staging)(-|$)'; then
+  echo "❌ ERROR: refusing to delete an app whose name contains 'production' or 'staging'" >&2
+  echo "App name: $APP_NAME" >&2
+  exit 1
+fi
+
 echo "🔍 Checking if application exists: $APP_NAME"
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if bash "${script_dir}/check-app-exists.sh"; then
-  :
-else
-  exists_status=$?
-  if [[ "$exists_status" -ne 1 ]]; then
+exists_output=""
+set +e
+exists_output="$(cpflow exists -a "$APP_NAME" --org "$CPLN_ORG" 2>&1)"
+exists_status=$?
+set -e
+
+case "$exists_status" in
+  0)
+    ;;
+  2)
+    if [[ -n "$exists_output" ]]; then
+      printf '%s\n' "$exists_output"
+    fi
+    echo "⚠️ Application does not exist: $APP_NAME"
+    exit 0
+    ;;
+  *)
+    echo "❌ ERROR: failed to determine whether application exists: $APP_NAME" >&2
+    if [[ -n "$exists_output" ]]; then
+      printf '%s\n' "$exists_output" >&2
+    fi
     exit "$exists_status"
-  fi
-  echo "⚠️ Application does not exist: $APP_NAME"
-  exit 0
+    ;;
+esac
+
+if [[ -n "$exists_output" ]]; then
+  printf '%s\n' "$exists_output"
 fi
 
 echo "🗑️ Deleting application: $APP_NAME"

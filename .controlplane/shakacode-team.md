@@ -53,6 +53,8 @@ Optional repository settings:
 - `CPLN_CLI_VERSION`: pin a specific `@controlplane/cli` version; defaults to the generated action pin.
 - `CPFLOW_VERSION`: pin a specific cpflow gem version; defaults to the generated action pin.
 - `HEALTH_CHECK_ACCEPTED_STATUSES`: production promotion health statuses; defaults to `200 301 302`.
+- `HEALTH_CHECK_RETRIES` / `HEALTH_CHECK_INTERVAL`: production health polling controls; defaults to `24` retries and `15` seconds.
+- `ROLLBACK_READINESS_RETRIES` / `ROLLBACK_READINESS_INTERVAL`: post-rollback health polling controls; defaults to `24` retries and `15` seconds.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.

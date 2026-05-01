@@ -6,11 +6,12 @@
 - Creates the review app if it does not exist
 - Builds the PR commit image
 - Deploys the image and comments with the review URL
-- The command must be the only text in the comment
+- The comment must contain exactly `/deploy-review-app` and no other text
 
 `/delete-review-app`
 - Deletes the review app when the PR is done
 - This also runs automatically when the PR closes
+- The comment must contain exactly `/delete-review-app` and no other text
 
 ## Repository secrets
 
@@ -34,6 +35,8 @@
 | `DOCKER_BUILD_EXTRA_ARGS` | optional | Newline-delimited extra docker build tokens (e.g. `--build-arg=FOO=bar`). |
 | `DOCKER_BUILD_SSH_KNOWN_HOSTS` | optional | SSH known_hosts entries when SSH build hosts are not GitHub.com. |
 | `HEALTH_CHECK_ACCEPTED_STATUSES` | optional | Space-separated HTTP statuses considered healthy on promote (default `200 301 302`). |
+| `HEALTH_CHECK_RETRIES` / `HEALTH_CHECK_INTERVAL` | optional | Production health polling controls; defaults to `24` retries and `15` seconds. |
+| `ROLLBACK_READINESS_RETRIES` / `ROLLBACK_READINESS_INTERVAL` | optional | Post-rollback health polling controls; defaults to `24` retries and `15` seconds. |
 | `CPLN_CLI_VERSION` | optional | Pin a specific `@controlplane/cli` version; falls back to the action default when unset. |
 | `CPFLOW_VERSION` | optional | Pin a specific cpflow gem version; falls back to the generated default when unset. |
 

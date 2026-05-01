@@ -39,7 +39,8 @@ runs:
         missing=()
         while IFS= read -r entry; do
           entry="${entry%$'\r'}"
-          entry="$(printf '%s' "${entry}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          entry="${entry#"${entry%%[![:space:]]*}"}"
+          entry="${entry%"${entry##*[![:space:]]}"}"
           [[ -z "${entry}" ]] && continue
 
           type="${entry%%:*}"
@@ -70,6 +71,5 @@ runs:
           exit 0
         fi
 
-        echo "Missing required GitHub configuration:" >&2
-        printf -- '- %s\n' "${missing[@]}" >&2
+        printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
         exit 1

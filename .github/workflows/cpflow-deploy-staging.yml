@@ -39,17 +39,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -n "${STAGING_APP_BRANCH}" ]]; then
-            if [[ "${GITHUB_REF_NAME}" == "${STAGING_APP_BRANCH}" ]]; then
-              echo "is_deployable=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "Branch '${GITHUB_REF_NAME}' does not match STAGING_APP_BRANCH='${STAGING_APP_BRANCH}'"
-              echo "is_deployable=false" >> "$GITHUB_OUTPUT"
-            fi
-          elif [[ "${GITHUB_REF_NAME}" == "main" || "${GITHUB_REF_NAME}" == "master" ]]; then
+          if [[ "${GITHUB_REF_NAME}" == "${STAGING_APP_BRANCH}" ]]; then
             echo "is_deployable=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Branch '${GITHUB_REF_NAME}' is not main/master and no STAGING_APP_BRANCH is configured"
+            echo "Branch '${GITHUB_REF_NAME}' does not match STAGING_APP_BRANCH='${STAGING_APP_BRANCH}'"
             echo "is_deployable=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -99,7 +92,7 @@ jobs:
 
   deploy:
     needs: [validate-branch, build]
-    if: needs.validate-branch.outputs.is_deployable == 'true' && needs.build.result == 'success'
+    if: needs.validate-branch.outputs.is_deployable == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

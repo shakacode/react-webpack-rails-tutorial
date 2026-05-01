@@ -17,13 +17,13 @@ inputs:
   cpln_cli_version:
     description: >-
       @controlplane/cli version. Empty string falls back to the action's pinned default
-      so callers can pass a repository-variable-backed input unconditionally.
+      so callers can pass `${{ vars.CPLN_CLI_VERSION }}` unconditionally.
     required: false
     default: ""
   cpflow_version:
     description: >-
       cpflow gem version. Empty string falls back to the action's pinned default
-      so callers can pass a repository-variable-backed input unconditionally.
+      so callers can pass `${{ vars.CPFLOW_VERSION }}` unconditionally.
     required: false
     default: ""
 
@@ -52,7 +52,12 @@ runs:
         CPLN_CLI_VERSION="${CPLN_CLI_VERSION:-${default_cpln_cli_version}}"
         CPFLOW_VERSION="${CPFLOW_VERSION:-${default_cpflow_version}}"
 
-        sudo npm install -g "@controlplane/cli@${CPLN_CLI_VERSION}"
+        npm_global_prefix="${HOME}/.npm-global"
+        mkdir -p "${npm_global_prefix}"
+        echo "${npm_global_prefix}/bin" >> "$GITHUB_PATH"
+        export PATH="${npm_global_prefix}/bin:${PATH}"
+
+        npm install --global --prefix "${npm_global_prefix}" "@controlplane/cli@${CPLN_CLI_VERSION}"
         cpln --version
 
         gem install cpflow -v "${CPFLOW_VERSION}" --no-document
@@ -77,15 +82,6 @@ runs:
           echo "Error: Control Plane organization not provided" >&2
           exit 1
         fi
-
-        # Later workflow steps call cpflow/cpln, so persist the token without putting it on argv.
-        # This intentionally gives subsequent trusted steps in the same job a CPLN_TOKEN env var.
-        token_delimiter="CPLN_TOKEN_$(openssl rand -hex 8)"
-        {
-          echo "CPLN_TOKEN<<${token_delimiter}"
-          printf '%s\n' "$CPLN_TOKEN"
-          echo "${token_delimiter}"
-        } >> "$GITHUB_ENV"
 
         create_output=""
         if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
