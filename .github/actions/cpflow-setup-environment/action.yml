@@ -83,6 +83,15 @@ runs:
           exit 1
         fi
 
+        # Persist the token for later cpflow/cpln steps via env. Use a randomized
+        # delimiter so a multiline token cannot terminate the heredoc early.
+        delim="CPLN_TOKEN_$(openssl rand -hex 8)"
+        {
+          echo "CPLN_TOKEN<<${delim}"
+          echo "${CPLN_TOKEN}"
+          echo "${delim}"
+        } >> "$GITHUB_ENV"
+
         create_output=""
         if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
           if ! echo "$create_output" | grep -qi "already exists"; then
