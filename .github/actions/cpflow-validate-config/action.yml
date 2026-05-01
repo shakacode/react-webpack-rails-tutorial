@@ -4,8 +4,8 @@ description: >-
   proceeds. Pass each value via `env:` with the same NAME as the secret or variable,
   then list the required entries in `required` as `type:NAME` pairs (type is `secret`
   or `variable`). When `pull_request_friendly: true` and the current event is a
-  `pull_request`, missing config writes a step summary and exits 0 with `ready=false`
-  instead of failing the job.
+  pull request event, missing config writes a step summary and exits 0 with
+  `ready=false` instead of failing the job.
 
 inputs:
   required:
@@ -14,7 +14,7 @@ inputs:
       caller MUST export the matching values via `env:` using the same NAME.
     required: true
   pull_request_friendly:
-    description: When "true" and event is pull_request, write summary and exit 0 with ready=false.
+    description: When "true" and event is pull_request/pull_request_target, write summary and exit 0 with ready=false.
     required: false
     default: "false"
 
@@ -58,7 +58,7 @@ runs:
           exit 0
         fi
 
-        if [[ "${CPFLOW_PR_FRIENDLY}" == "true" && "${CPFLOW_EVENT_NAME}" == "pull_request" ]]; then
+        if [[ "${CPFLOW_PR_FRIENDLY}" == "true" && ( "${CPFLOW_EVENT_NAME}" == "pull_request" || "${CPFLOW_EVENT_NAME}" == "pull_request_target" ) ]]; then
           echo "ready=false" >> "$GITHUB_OUTPUT"
           {
             echo "Control Plane review app automation is not configured yet."

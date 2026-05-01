@@ -14,8 +14,9 @@ if [[ "$APP_NAME" != "${expected_prefix}"* ]]; then
   exit 1
 fi
 
-# Guard against a misconfigured REVIEW_APP_PREFIX that would otherwise match
-# a well-known shared environment.
+# Guard against a misconfigured REVIEW_APP_PREFIX that would otherwise match a
+# well-known shared environment. This intentionally rejects review-app prefixes
+# containing these word segments; failing closed is safer for deletion.
 if echo "$APP_NAME" | grep -iqE '(^|-)(production|staging)(-|$)'; then
   echo "❌ ERROR: refusing to delete an app whose name contains 'production' or 'staging'" >&2
   echo "App name: $APP_NAME" >&2

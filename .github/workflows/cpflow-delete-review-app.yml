@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  deployments: write
   issues: write
   pull-requests: write
 
@@ -46,7 +47,8 @@ jobs:
       # comments. This checkout is safe because it does not set `ref:`; GitHub checks
       # out the base branch's trusted workflow code, not the fork head. Do not add
       # `ref: ${{ github.event.pull_request.head.sha }}` here without re-evaluating
-      # the trust boundary.
+      # the trust boundary. All local composite actions below are therefore loaded from
+      # trusted base-branch code; keep them that way when changing this workflow.
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -61,6 +63,7 @@ jobs:
             secret:CPLN_TOKEN_STAGING
             variable:CPLN_ORG_STAGING
             variable:REVIEW_APP_PREFIX
+          pull_request_friendly: "true"
 
       - name: Setup environment
         uses: ./.github/actions/cpflow-setup-environment
@@ -100,6 +103,33 @@ jobs:
           app_name: ${{ env.APP_NAME }}
           cpln_org: ${{ vars.CPLN_ORG_STAGING }}
           review_app_prefix: ${{ vars.REVIEW_APP_PREFIX }}
+
+      - name: Mark GitHub deployment inactive
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const environment = `review/${process.env.APP_NAME}`;
+            const deployments = await github.paginate(github.rest.repos.listDeployments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment,
+              per_page: 100
+            });
+
+            if (deployments.length === 0) {
+              core.info(`No GitHub deployments found for ${environment}.`);
+              return;
+            }
+
+            for (const deployment of deployments) {
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                state: "inactive",
+                description: `Review app ${process.env.APP_NAME} was deleted`
+              });
+            }
 
       - name: Finalize delete status
         if: always()

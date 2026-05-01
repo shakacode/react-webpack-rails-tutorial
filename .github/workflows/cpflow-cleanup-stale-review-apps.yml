@@ -52,3 +52,4 @@ jobs:
         run: |
           set -euo pipefail
           cpflow cleanup-stale-apps -a "${REVIEW_APP_PREFIX}" --org "${CPLN_ORG_STAGING}" --yes
+          echo "Stale review apps under prefix '${REVIEW_APP_PREFIX}' have been cleaned up." >> "$GITHUB_STEP_SUMMARY"

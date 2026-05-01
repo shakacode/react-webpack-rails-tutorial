@@ -148,6 +148,13 @@ jobs:
           staging_vars="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln gvc get "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
           production_vars="$(CPLN_TOKEN="${CPLN_TOKEN_PRODUCTION}" cpln gvc get "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
 
+          {
+            echo "### Environment parity scope"
+            echo "This check compares GVC-level environment variable names only."
+            echo "Workload-level env vars and cpln:// secret references are not compared."
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
           if [[ -z "${staging_vars}" ]]; then
             echo "Staging GVC exposes no environment variables; skipping parity check."
             exit 0
@@ -191,9 +198,9 @@ jobs:
             [[ -n "${workload_name}" ]] || continue
 
             workload_json="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
-          # current_image/current_version are summary fields for the first container
-          # of the selected workload; rollback_state below captures all containers.
-          workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
+            # current_image/current_version are summary fields for the first container
+            # of the selected workload; rollback_state below captures all containers.
+            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
             workload_containers="$(echo "${workload_json}" | jq -c '.spec.containers | map({name, image})')"
             workload_version="$(echo "${workload_json}" | jq -r '.version')"
 
