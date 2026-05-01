@@ -104,3 +104,9 @@ runs:
         echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT_SHA})..."
         cpflow build-image -a "${APP_NAME}" --commit="${COMMIT_SHA}" --org="${CONTROL_PLANE_ORG}" "${docker_build_args[@]}"
         echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT_SHA})"
+
+    - name: Cleanup Docker build SSH key
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        rm -f "${HOME}/.ssh/cpflow_build_key"
