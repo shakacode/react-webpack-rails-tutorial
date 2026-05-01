@@ -22,6 +22,8 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 
 ### Production Environment
 - **Manual**: Run the [cpflow-promote-staging-to-production workflow](https://github.com/shakacode/react-webpack-rails-tutorial/actions/workflows/cpflow-promote-staging-to-production.yml) on GitHub
+- Rollback restores workload images only; database migrations and other
+  `--run-release-phase` side effects are not reversed automatically.
 - **URLs**:
   - [Control Plane Console - Production](https://console.cpln.io/console/org/shakacode-open-source-examples-production/gvc/react-webpack-rails-tutorial-production/workload/rails/-info)
   - [Production App](https://reactrails.com/)

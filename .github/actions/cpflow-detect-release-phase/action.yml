@@ -24,8 +24,15 @@ runs:
       run: |
         set -euo pipefail
 
+        config_output=""
+        if ! config_output="$(cpflow config -a "${APP_NAME}" 2>&1)"; then
+          echo "Failed to read cpflow config for app '${APP_NAME}'" >&2
+          printf '%s\n' "${config_output}" >&2
+          exit 1
+        fi
+
         # Anchor to start-of-line so commented-out release_script: entries don't enable --run-release-phase.
-        if cpflow config -a "${APP_NAME}" | grep -qE '^[[:space:]]*release_script:'; then
+        if grep -qE '^[[:space:]]*release_script:' <<< "${config_output}"; then
           echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
         else
           echo "flag=" >> "$GITHUB_OUTPUT"

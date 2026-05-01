@@ -109,4 +109,6 @@ runs:
       if: ${{ always() }}
       shell: bash
       run: |
+        # Defence in depth: the build step also traps EXIT, but this still runs
+        # if a future refactor exits before that trap is installed.
         rm -f "${HOME}/.ssh/cpflow_build_key"

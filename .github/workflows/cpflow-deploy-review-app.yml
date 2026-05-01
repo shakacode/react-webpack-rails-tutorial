@@ -4,7 +4,7 @@ run-name: "Deploy Review App - PR #${{ github.event.pull_request.number || githu
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [synchronize, reopened]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -35,7 +35,7 @@ env:
 
 jobs:
   deploy:
-    # Skip synchronize/opened events from fork PRs at the job level — they cannot access
+    # Skip synchronize/reopened events from fork PRs at the job level — they cannot access
     # repository secrets anyway, so running any steps just burns billable minutes. Users
     # can still manually deploy a fork PR via `/deploy-review-app` (gated below by
     # author_association) or workflow_dispatch.
@@ -185,26 +185,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Keep this in sync with delete-app.sh. `cpflow exists` does not yet expose
-          # distinct structured signals for not-found vs. auth/API failures.
-          exists_output=""
-          if exists_output="$(cpflow exists -a "${APP_NAME}" --org "${CPLN_ORG}" 2>&1)"; then
-            if [[ -n "${exists_output}" ]]; then
-              printf '%s\n' "${exists_output}"
-            fi
-
+          if bash .github/actions/cpflow-delete-control-plane-app/check-app-exists.sh; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
-            case "${exists_output}" in
-              *"Double check your org"*|*"Unknown API token format"*|*"ERROR"*|*"Error:"*|*"Traceback"*|*"Net::"*)
-                echo "Failed to determine whether review app exists: ${APP_NAME}" >&2
-                printf '%s\n' "${exists_output}" >&2
-                exit 1
-                ;;
-            esac
-
-            if [[ -n "${exists_output}" ]]; then
-              printf '%s\n' "${exists_output}"
+            exists_status=$?
+            if [[ "$exists_status" -ne 1 ]]; then
+              exit "$exists_status"
             fi
 
             echo "exists=false" >> "$GITHUB_OUTPUT"
