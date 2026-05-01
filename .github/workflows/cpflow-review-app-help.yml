@@ -15,6 +15,7 @@ permissions:
 jobs:
   show-help:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Post quick reference
         uses: actions/github-script@v7

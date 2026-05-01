@@ -15,14 +15,17 @@ inputs:
     required: false
     default: ""
   cpln_cli_version:
-    # Bump this default when a new @controlplane/cli release lands that you want to roll out.
-    description: "@controlplane/cli version"
+    description: >-
+      @controlplane/cli version. Empty string falls back to the action's pinned default
+      so callers can pass `${{ vars.CPLN_CLI_VERSION }}` unconditionally.
     required: false
-    default: "3.3.1"
+    default: ""
   cpflow_version:
-    description: cpflow gem version
+    description: >-
+      cpflow gem version. Empty string falls back to the action's pinned default
+      so callers can pass `${{ vars.CPFLOW_VERSION }}` unconditionally.
     required: false
-    default: "4.2.0"
+    default: ""
 
 runs:
   using: composite
@@ -34,13 +37,25 @@ runs:
 
     - name: Install Control Plane CLI and cpflow gem
       shell: bash
+      env:
+        CPLN_CLI_VERSION: ${{ inputs.cpln_cli_version }}
+        CPFLOW_VERSION: ${{ inputs.cpflow_version }}
       run: |
         set -euo pipefail
 
-        sudo npm install -g @controlplane/cli@${{ inputs.cpln_cli_version }}
+        # Bump these defaults when a new release lands that you want to roll out by default.
+        # Override per-repo by setting `CPLN_CLI_VERSION` / `CPFLOW_VERSION` repo variables;
+        # an empty input falls back to the action's pinned default below.
+        default_cpln_cli_version="3.3.1"
+        default_cpflow_version="4.2.0"
+
+        CPLN_CLI_VERSION="${CPLN_CLI_VERSION:-${default_cpln_cli_version}}"
+        CPFLOW_VERSION="${CPFLOW_VERSION:-${default_cpflow_version}}"
+
+        sudo npm install -g "@controlplane/cli@${CPLN_CLI_VERSION}"
         cpln --version
 
-        gem install cpflow -v ${{ inputs.cpflow_version }} --no-document
+        gem install cpflow -v "${CPFLOW_VERSION}" --no-document
         cpflow --version
 
     - name: Setup Control Plane profile and registry login

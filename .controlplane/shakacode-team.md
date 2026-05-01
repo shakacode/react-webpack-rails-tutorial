@@ -48,6 +48,9 @@ Optional repository settings:
 - `DOCKER_BUILD_SSH_KEY`: secret for private SSH dependencies during Docker builds.
 - `DOCKER_BUILD_EXTRA_ARGS`: newline-delimited Docker build tokens, such as `--build-arg=FOO=bar`.
 - `DOCKER_BUILD_SSH_KNOWN_HOSTS`: custom `known_hosts` entries when SSH build hosts are not GitHub.com.
+- `CPLN_CLI_VERSION`: pin a specific `@controlplane/cli` version; defaults to the generated action pin.
+- `CPFLOW_VERSION`: pin a specific cpflow gem version; defaults to the generated action pin.
+- `HEALTH_CHECK_ACCEPTED_STATUSES`: production promotion health statuses; defaults to `200 301 302`.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
@@ -56,8 +59,8 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 
 When the upstream `control-plane-flow` repo changes the generated GitHub Actions
 flow, regenerate the `cpflow-*` actions/workflows in this repo from the target
-`cpflow` version or branch, review the diff, and keep the repository variables
-above aligned with `.controlplane/controlplane.yml`. Validate with
+`cpflow` version or branch using `--staging-branch master`, review the diff, and
+keep the repository variables above aligned with `.controlplane/controlplane.yml`. Validate with
 `cpflow github-flow-readiness`, `actionlint .github/workflows/cpflow-*.yml`, and
 the normal CI checks before merging.
 

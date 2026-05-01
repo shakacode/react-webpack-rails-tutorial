@@ -31,41 +31,49 @@ env:
   PRIMARY_WORKLOAD: ${{ vars.PRIMARY_WORKLOAD }}
 
 concurrency:
+  # Single global group: only one production promotion may run at a time across the
+  # whole repo. Independent of staging deploys and review-app workflows (different
+  # GVCs / different concurrency keys), so those can still run in parallel.
   group: cpflow-promote-staging-to-production
+  # Don't cancel an in-flight promotion: a half-finished `cpflow deploy-image` plus a
+  # rollback can leave production in a worse state than letting the first run finish.
   cancel-in-progress: false
 
 jobs:
   promote-to-production:
     if: github.event.inputs.confirm_promotion == 'promote'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Validate required secrets and variables
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          missing=()
-          [[ -n "${{ secrets.CPLN_TOKEN_STAGING }}" ]] || missing+=("secret:CPLN_TOKEN_STAGING")
-          [[ -n "${{ secrets.CPLN_TOKEN_PRODUCTION }}" ]] || missing+=("secret:CPLN_TOKEN_PRODUCTION")
-          [[ -n "${{ vars.CPLN_ORG_STAGING }}" ]] || missing+=("variable:CPLN_ORG_STAGING")
-          [[ -n "${{ vars.CPLN_ORG_PRODUCTION }}" ]] || missing+=("variable:CPLN_ORG_PRODUCTION")
-          [[ -n "${{ vars.STAGING_APP_NAME }}" ]] || missing+=("variable:STAGING_APP_NAME")
-          [[ -n "${{ vars.PRODUCTION_APP_NAME }}" ]] || missing+=("variable:PRODUCTION_APP_NAME")
-
-          if [[ ${#missing[@]} -gt 0 ]]; then
-            printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
-            exit 1
-          fi
+        uses: ./.github/actions/cpflow-validate-config
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            secret:CPLN_TOKEN_PRODUCTION
+            variable:CPLN_ORG_STAGING
+            variable:CPLN_ORG_PRODUCTION
+            variable:STAGING_APP_NAME
+            variable:PRODUCTION_APP_NAME
 
       - name: Setup production environment
         uses: ./.github/actions/cpflow-setup-environment
         with:
           token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           org: ${{ vars.CPLN_ORG_PRODUCTION }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
       # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).
@@ -101,18 +109,9 @@ jobs:
 
       - name: Detect release phase support
         id: release-phase
-        env:
-          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Anchor the match so commented-out release_script: lines don't accidentally enable --run-release-phase.
-          if cpflow config -a "${PRODUCTION_APP_NAME}" | grep -qE '^[[:space:]]*release_script:'; then
-            echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
-          else
-            echo "flag=" >> "$GITHUB_OUTPUT"
-          fi
+        uses: ./.github/actions/cpflow-detect-release-phase
+        with:
+          app_name: ${{ vars.PRODUCTION_APP_NAME }}
 
       - name: Verify production environment variables
         env:
@@ -231,39 +230,14 @@ jobs:
 
       - name: Wait for deployment health
         id: health-check
-        env:
-          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
-          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          workload_name="${PRIMARY_WORKLOAD:-rails}"
-          read -r -a accepted_statuses <<< "${HEALTH_CHECK_ACCEPTED_STATUSES}"
-
-          for attempt in $(seq 1 "${HEALTH_CHECK_RETRIES}"); do
-            echo "Health check attempt ${attempt}/${HEALTH_CHECK_RETRIES}"
-
-            endpoint="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.status.endpoint // empty')"
-            if [[ -n "${endpoint}" ]]; then
-              http_status="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "${endpoint}" 2>/dev/null || echo 000)"
-              echo "Endpoint: ${endpoint}, HTTP status: ${http_status}"
-
-              for accepted in "${accepted_statuses[@]}"; do
-                if [[ "${http_status}" == "${accepted}" ]]; then
-                  echo "healthy=true" >> "$GITHUB_OUTPUT"
-                  exit 0
-                fi
-              done
-            fi
-
-            if [[ "${attempt}" -lt "${HEALTH_CHECK_RETRIES}" ]]; then
-              sleep "${HEALTH_CHECK_INTERVAL}"
-            fi
-          done
-
-          echo "healthy=false" >> "$GITHUB_OUTPUT"
-          exit 1
+        uses: ./.github/actions/cpflow-wait-for-health
+        with:
+          workload_name: ${{ env.PRIMARY_WORKLOAD || 'rails' }}
+          app_name: ${{ vars.PRODUCTION_APP_NAME }}
+          org: ${{ vars.CPLN_ORG_PRODUCTION }}
+          max_retries: ${{ env.HEALTH_CHECK_RETRIES }}
+          interval_seconds: ${{ env.HEALTH_CHECK_INTERVAL }}
+          accepted_statuses: ${{ env.HEALTH_CHECK_ACCEPTED_STATUSES }}
 
       - name: Roll back on failure
         if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'

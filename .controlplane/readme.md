@@ -419,7 +419,7 @@ repository variables, secrets, and docs aligned with `.controlplane/controlplane
 For this app, validate a regenerated flow with:
 
 ```bash
-bundle exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions
+bundle exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
 bundle exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
 actionlint .github/workflows/cpflow-*.yml
 bundle exec rubocop

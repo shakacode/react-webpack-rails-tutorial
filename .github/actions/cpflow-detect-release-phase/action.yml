@@ -1,0 +1,32 @@
+name: Detect release phase support
+description: >-
+  Inspects the cpflow config for an app and emits `flag=--run-release-phase`
+  when a `release_script:` is configured. Outputs an empty `flag` otherwise.
+
+inputs:
+  app_name:
+    description: cpflow app name to inspect
+    required: true
+
+outputs:
+  flag:
+    description: Either `--run-release-phase` or empty
+    value: ${{ steps.detect.outputs.flag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Detect release phase support
+      id: detect
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+      run: |
+        set -euo pipefail
+
+        # Anchor to start-of-line so commented-out release_script: entries don't enable --run-release-phase.
+        if cpflow config -a "${APP_NAME}" | grep -qE '^[[:space:]]*release_script:'; then
+          echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
+        else
+          echo "flag=" >> "$GITHUB_OUTPUT"
+        fi

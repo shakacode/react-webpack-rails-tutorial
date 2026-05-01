@@ -1,0 +1,75 @@
+name: Validate cpflow GitHub configuration
+description: >-
+  Validates that required secrets and repository variables are set before a workflow
+  proceeds. Pass each value via `env:` with the same NAME as the secret or variable,
+  then list the required entries in `required` as `type:NAME` pairs (type is `secret`
+  or `variable`). When `pull_request_friendly: true` and the current event is a
+  `pull_request`, missing config writes a step summary and exits 0 with `ready=false`
+  instead of failing the job.
+
+inputs:
+  required:
+    description: |
+      Newline-separated `type:NAME` pairs. Type is `secret` or `variable`. The
+      caller MUST export the matching values via `env:` using the same NAME.
+    required: true
+  pull_request_friendly:
+    description: When "true" and event is pull_request, write summary and exit 0 with ready=false.
+    required: false
+    default: "false"
+
+outputs:
+  ready:
+    description: '"true" when all values are set, "false" when missing in PR-friendly mode.'
+    value: ${{ steps.check.outputs.ready }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check required secrets and variables
+      id: check
+      shell: bash
+      env:
+        CPFLOW_REQUIRED: ${{ inputs.required }}
+        CPFLOW_PR_FRIENDLY: ${{ inputs.pull_request_friendly }}
+        CPFLOW_EVENT_NAME: ${{ github.event_name }}
+      run: |
+        set -euo pipefail
+
+        missing=()
+        while IFS= read -r entry; do
+          entry="${entry%$'\r'}"
+          entry="${entry## }"
+          entry="${entry%% }"
+          [[ -z "${entry}" ]] && continue
+
+          type="${entry%%:*}"
+          name="${entry#*:}"
+
+          # Indirect bash lookup: reads the env var named by ${name} (e.g. CPLN_TOKEN_STAGING)
+          # so the value never has to round-trip through workflow logs.
+          if [[ -z "${!name:-}" ]]; then
+            missing+=("${type}:${name}")
+          fi
+        done <<< "${CPFLOW_REQUIRED}"
+
+        if [[ ${#missing[@]} -eq 0 ]]; then
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        if [[ "${CPFLOW_PR_FRIENDLY}" == "true" && "${CPFLOW_EVENT_NAME}" == "pull_request" ]]; then
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+          {
+            echo "Control Plane review app automation is not configured yet."
+            echo
+            echo "Missing required GitHub configuration:"
+            printf -- '- `%s`\n' "${missing[@]}"
+            echo
+            echo "Pushes to this pull request will skip review app deploys until the repository is configured."
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+
+        printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
+        exit 1

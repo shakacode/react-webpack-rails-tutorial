@@ -48,6 +48,7 @@ jobs:
        github.event.comment.body == '/deploy-review-app' &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Initial checkout
@@ -55,35 +56,17 @@ jobs:
 
       - name: Validate required secrets and variables
         id: config
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          missing=()
-
-          [[ -n "${{ secrets.CPLN_TOKEN_STAGING }}" ]] || missing+=("secret:CPLN_TOKEN_STAGING")
-          [[ -n "${{ vars.CPLN_ORG_STAGING }}" ]] || missing+=("variable:CPLN_ORG_STAGING")
-          [[ -n "${{ vars.REVIEW_APP_PREFIX }}" ]] || missing+=("variable:REVIEW_APP_PREFIX")
-
-          if [[ ${#missing[@]} -gt 0 ]]; then
-            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              echo "ready=false" >> "$GITHUB_OUTPUT"
-              {
-                echo "Control Plane review app automation is not configured yet."
-                echo
-                echo "Missing required GitHub configuration:"
-                printf -- '- %s\n' "${missing[@]}"
-                echo
-                echo "Pushes to this pull request will skip review app deploys until the repository is configured."
-              } >> "$GITHUB_STEP_SUMMARY"
-              exit 0
-            fi
-
-            printf 'Missing required GitHub configuration:\n- %s\n' "${missing[@]}" >&2
-            exit 1
-          fi
-
-          echo "ready=true" >> "$GITHUB_OUTPUT"
+        uses: ./.github/actions/cpflow-validate-config
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            variable:CPLN_ORG_STAGING
+            variable:REVIEW_APP_PREFIX
+          pull_request_friendly: "true"
 
       - name: Resolve PR ref and commit
         if: steps.config.outputs.ready == 'true'
@@ -150,8 +133,10 @@ jobs:
           fi
 
           message="Review app deploys from fork pull requests are not allowed because this workflow uses repository secrets."
-          if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
-            echo "Failed to post fork rejection comment to PR #${PR_NUMBER}" >&2
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            if ! gh pr comment "${PR_NUMBER}" --body "${message}"; then
+              echo "Failed to post fork rejection comment to PR #${PR_NUMBER}" >&2
+            fi
           fi
 
           echo "${message}" >&2
@@ -169,20 +154,15 @@ jobs:
         with:
           token: ${{ secrets.CPLN_TOKEN_STAGING }}
           org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
 
       - name: Detect release phase support
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
         id: release-phase
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Anchor to start-of-line so commented-out release_script: entries don't enable --run-release-phase.
-          if cpflow config -a "${APP_NAME}" | grep -qE '^[[:space:]]*release_script:'; then
-            echo "flag=--run-release-phase" >> "$GITHUB_OUTPUT"
-          else
-            echo "flag=" >> "$GITHUB_OUTPUT"
-          fi
+        uses: ./.github/actions/cpflow-detect-release-phase
+        with:
+          app_name: ${{ env.APP_NAME }}
 
       - name: Check if review app exists
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
