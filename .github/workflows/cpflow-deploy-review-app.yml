@@ -74,6 +74,8 @@ jobs:
           set -euo pipefail
           gem install cpflow -v "5.0.0.rc.0" --no-document
           ruby -S cpflow generate-github-actions --staging-branch master
+          # shellcheck disable=SC2016
+          ruby -0pi -e 'gsub!("so callers can pass `${{ vars.CPLN_CLI_VERSION }}` unconditionally.", "so callers can pass the repository variable value unconditionally."); gsub!("so callers can pass `${{ vars.CPFLOW_VERSION }}` unconditionally.", "so callers can pass the repository variable value unconditionally.")' .github/actions/cpflow-setup-environment/action.yml
 
       - name: Validate required secrets and variables
         id: config
