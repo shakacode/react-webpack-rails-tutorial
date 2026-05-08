@@ -61,6 +61,12 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
 
+      - name: Set up Ruby for cpflow bootstrap
+        if: ${{ hashFiles('.github/actions/cpflow-validate-config/action.yml') == '' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+
       - name: Bootstrap generated cpflow actions
         if: ${{ hashFiles('.github/actions/cpflow-validate-config/action.yml') == '' }}
         shell: bash
