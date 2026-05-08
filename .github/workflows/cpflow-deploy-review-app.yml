@@ -61,6 +61,14 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
 
+      - name: Bootstrap generated cpflow actions
+        if: ${{ hashFiles('.github/actions/cpflow-validate-config/action.yml') == '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gem install cpflow -v "5.0.0.rc.0" --no-document
+          ruby -S cpflow generate-github-actions --staging-branch master
+
       - name: Validate required secrets and variables
         id: config
         uses: ./.github/actions/cpflow-validate-config
