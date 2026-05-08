@@ -109,6 +109,8 @@ jobs:
       - name: Delete review app
         if: steps.config.outputs.ready == 'true'
         uses: ./.github/actions/cpflow-delete-control-plane-app
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           cpln_org: ${{ vars.CPLN_ORG_STAGING }}

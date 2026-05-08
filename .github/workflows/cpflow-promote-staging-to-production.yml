@@ -162,6 +162,7 @@ jobs:
       - name: Capture current production image
         id: capture-current
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
           WORKLOAD_NAMES: ${{ steps.workloads.outputs.names }}
@@ -271,6 +272,7 @@ jobs:
 
       - name: Copy image from staging
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
           CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
@@ -283,6 +285,7 @@ jobs:
 
       - name: Deploy image to production
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
           RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
@@ -301,6 +304,8 @@ jobs:
       - name: Wait for deployment health
         id: health-check
         uses: ./.github/actions/cpflow-wait-for-health
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
         with:
           workload_name: ${{ env.PRIMARY_WORKLOAD || 'rails' }}
           app_name: ${{ vars.PRODUCTION_APP_NAME }}
@@ -312,6 +317,7 @@ jobs:
       - name: Roll back on failure
         if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
@@ -378,6 +384,7 @@ jobs:
       - name: Wait for rollback readiness
         if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}

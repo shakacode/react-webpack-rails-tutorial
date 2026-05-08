@@ -216,6 +216,8 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
         id: check-app
         working-directory: app
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail
@@ -261,6 +263,8 @@ jobs:
         id: setup-review-app
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && steps.check-app.outputs.exists != 'true' && github.event_name != 'pull_request'
         working-directory: app
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail
@@ -347,6 +351,8 @@ jobs:
       - name: Build Docker image
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: ./.github/actions/cpflow-build-docker-image
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
@@ -387,6 +393,7 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         working-directory: app
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
         shell: bash
         run: |
@@ -404,6 +411,8 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         id: workload
         working-directory: app
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail

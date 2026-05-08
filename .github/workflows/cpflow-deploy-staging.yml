@@ -91,6 +91,8 @@ jobs:
 
       - name: Build Docker image
         uses: ./.github/actions/cpflow-build-docker-image
+        env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
@@ -126,6 +128,7 @@ jobs:
 
       - name: Deploy staging image
         env:
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
         shell: bash
         run: |
