@@ -1,9 +1,6 @@
 name: Delete Review App
 
 on:
-  # SECURITY: pull_request_target is intentional for PR-close cleanup from forks.
-  # This workflow must keep checking out trusted base-branch code only; do not
-  # change checkout to a PR head ref without re-evaluating secret exposure.
   pull_request_target:
     types: [closed]
   issue_comment:
@@ -54,6 +51,11 @@ jobs:
       # trusted base-branch code; keep them that way when changing this workflow.
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Delete only invokes `cpln`/`cpflow`; no git push happens, so drop the
+          # GITHUB_TOKEN credential helper to keep the token out of .git/config under
+          # `pull_request_target`, which has access to repository secrets.
+          persist-credentials: false
 
       - name: Validate required secrets and variables
         id: config
@@ -136,7 +138,9 @@ jobs:
                 repo: context.repo.repo,
                 deployment_id: deployment.id,
                 state: "inactive",
-                description: `Review app ${process.env.APP_NAME} was deleted`
+                environment,
+                log_url: process.env.WORKFLOW_URL,
+                description: "Review app deleted"
               });
             }
 

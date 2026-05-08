@@ -9,13 +9,15 @@ on:
     types: [opened]
 
 permissions:
-  contents: read
   issues: write
   pull-requests: write
 
 jobs:
   show-help:
-    if: ${{ !endsWith(github.actor, '[bot]') && vars.REVIEW_APP_PREFIX != '' && vars.CPLN_ORG_STAGING != '' }}
+    # Skip on PRs in repos that have not configured the cpflow review app flow yet,
+    # so this workflow does not noisily comment on every contributor PR. Once the
+    # repository sets `vars.REVIEW_APP_PREFIX`, the help message starts appearing.
+    if: vars.REVIEW_APP_PREFIX != ''
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -27,10 +29,10 @@ jobs:
               "# Control Plane review app commands",
               "",
               "`/deploy-review-app`",
-              "Create the review app or redeploy the PR branch to it. The comment must contain exactly this command.",
+              "Create the review app or redeploy the PR branch to it.",
               "",
               "`/delete-review-app`",
-              "Delete the review app and its temporary resources. The comment must contain exactly this command.",
+              "Delete the review app and its temporary resources.",
               "",
               "`/help`",
               "Show the required GitHub variables, secrets, and workflow behavior."

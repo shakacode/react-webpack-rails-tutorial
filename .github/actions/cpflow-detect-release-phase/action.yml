@@ -7,6 +7,10 @@ inputs:
   app_name:
     description: cpflow app name to inspect
     required: true
+  working_directory:
+    description: Directory containing .controlplane/controlplane.yml
+    required: false
+    default: "."
 
 outputs:
   flag:
@@ -21,14 +25,16 @@ runs:
       shell: bash
       env:
         APP_NAME: ${{ inputs.app_name }}
+        WORKING_DIRECTORY: ${{ inputs.working_directory }}
       run: |
         set -euo pipefail
+        cd "${WORKING_DIRECTORY}"
 
         release_script="$(ruby - "${APP_NAME}" <<'RUBY'
         require "yaml"
 
         app_name = ARGV.fetch(0)
-        data = YAML.load_file(".controlplane/controlplane.yml", aliases: true)
+        data = YAML.safe_load(File.read(".controlplane/controlplane.yml"), aliases: true)
         apps = data["apps"] || {}
         app_config = apps[app_name]
 

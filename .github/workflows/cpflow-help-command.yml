@@ -29,6 +29,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Help only reads `.github/cpflow-help.md`; no git push happens, so drop the
+          # GITHUB_TOKEN credential helper to keep the token out of .git/config.
+          persist-credentials: false
 
       - name: Post help message
         uses: actions/github-script@v7

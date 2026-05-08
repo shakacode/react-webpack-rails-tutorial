@@ -6,12 +6,12 @@
 - Creates the review app if it does not exist
 - Builds the PR commit image
 - Deploys the image and comments with the review URL
-- The comment must contain exactly `/deploy-review-app` and no other text
+- Comment body must be exactly `/deploy-review-app` — no surrounding text, trailing whitespace, or trailing newline. The trigger uses an exact-equality match, so a comment like `please /deploy-review-app now` or `/deploy-review-app ` (with a trailing space) silently no-ops.
 
 `/delete-review-app`
 - Deletes the review app when the PR is done
 - This also runs automatically when the PR closes
-- The comment must contain exactly `/delete-review-app` and no other text
+- Same exact-match rule as `/deploy-review-app`: the comment body must be exactly `/delete-review-app`.
 
 ## Repository secrets
 

@@ -29,6 +29,13 @@ inputs:
 
 runs:
   using: composite
+  # Third-party actions are pinned to floating major tags (`@v4`, `@v1`, `@v7`) rather than
+  # immutable SHAs. SHA pinning is GitHub's stronger security recommendation, but for
+  # generated templates that ship into many downstream repositories floating tags are
+  # easier for users to keep current and Dependabot/Renovate already cover the SHA-pinning
+  # workflow for repositories that opt in. Repositories with stricter supply-chain
+  # requirements should replace each `uses: actions/...@vN` with the corresponding
+  # immutable commit SHA.
   steps:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -47,7 +54,7 @@ runs:
         # Override per-repo by setting `CPLN_CLI_VERSION` / `CPFLOW_VERSION` repo variables;
         # an empty input falls back to the action's pinned default below.
         default_cpln_cli_version="3.3.1"
-        default_cpflow_version="4.2.0"
+        default_cpflow_version="5.0.0.rc.0"
 
         CPLN_CLI_VERSION="${CPLN_CLI_VERSION:-${default_cpln_cli_version}}"
         CPFLOW_VERSION="${CPFLOW_VERSION:-${default_cpflow_version}}"
@@ -83,22 +90,9 @@ runs:
           exit 1
         fi
 
-        # Persist the token because later cpflow/cpln steps read CPLN_TOKEN directly.
-        # Use a randomized delimiter so a multiline token cannot terminate the heredoc early.
-        delim="CPLN_TOKEN_$(openssl rand -hex 8)"
-        {
-          echo "CPLN_TOKEN<<${delim}"
-          echo "${CPLN_TOKEN}"
-          echo "${delim}"
-        } >> "$GITHUB_ENV"
-
-        create_output=""
-        if ! create_output="$(cpln profile create default --org "$ORG" 2>&1)"; then
-          if ! echo "$create_output" | grep -qi "already exists"; then
-            echo "$create_output" >&2
-            exit 1
-          fi
-        fi
-
+        # `cpln profile update` lists `create` as an alias (cpln profile --help) and is
+        # idempotent: it creates the profile if missing and updates it otherwise. Calling
+        # update directly avoids parsing the CLI's "already exists" English error text,
+        # which would silently swallow a real failure if the wording ever changed.
         cpln profile update default --org "$ORG"
         cpln image docker-login --org "$ORG"

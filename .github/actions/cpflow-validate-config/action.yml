@@ -39,12 +39,22 @@ runs:
         missing=()
         while IFS= read -r entry; do
           entry="${entry%$'\r'}"
-          entry="${entry#"${entry%%[![:space:]]*}"}"
-          entry="${entry%"${entry##*[![:space:]]}"}"
+          entry="${entry## }"
+          entry="${entry%% }"
           [[ -z "${entry}" ]] && continue
 
           type="${entry%%:*}"
           name="${entry#*:}"
+
+          # Reject names that are not plain SHELL_VAR identifiers before doing the
+          # indirect lookup below. Without this guard, ${!name} would expand whatever
+          # bash nameref/transformation a hand-edited generated workflow snuck in
+          # (e.g. `BASH_FUNC_foo%%`). Callers today are the generated templates, but
+          # the generated file lives in the user's repo and can be hand-edited.
+          if [[ ! "${name}" =~ ^[A-Z_][A-Z0-9_]*$ ]]; then
+            echo "Invalid config entry name: ${name}" >&2
+            exit 1
+          fi
 
           # Indirect bash lookup: reads the env var named by ${name} (e.g. CPLN_TOKEN_STAGING)
           # so the value never has to round-trip through workflow logs.

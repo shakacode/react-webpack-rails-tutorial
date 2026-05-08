@@ -21,8 +21,12 @@ inputs:
     description: Optional private SSH key used for Docker builds that fetch private dependencies with RUN --mount=type=ssh
     required: false
   docker_build_ssh_known_hosts:
-    description: Optional SSH known_hosts entries used with docker_build_ssh_key. Defaults to pinned GitHub.com host keys; override if GitHub rotates keys or your build uses another SSH host.
+    description: Optional SSH known_hosts entries used with docker_build_ssh_key. Defaults to pinned GitHub.com host keys.
     required: false
+  working_directory:
+    description: Directory containing the app .controlplane config and Docker build context
+    required: false
+    default: "."
 
 runs:
   using: composite
@@ -48,10 +52,8 @@ runs:
         chmod 700 ~/.ssh
 
         if [[ -n "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" ]]; then
-          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" | tr -d '\r' > ~/.ssh/known_hosts
         else
-          # GitHub.com host keys verified against GitHub's published keys on 2026-05-01.
-          # Override docker_build_ssh_known_hosts if GitHub rotates keys again.
           printf '%s\n' \
             'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
             'github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=' \
@@ -60,7 +62,7 @@ runs:
         fi
         chmod 600 ~/.ssh/known_hosts
 
-        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" > ~/.ssh/cpflow_build_key
+        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" | tr -d '\r' > ~/.ssh/cpflow_build_key
         chmod 600 ~/.ssh/cpflow_build_key
 
     - name: Build Docker image
@@ -71,20 +73,29 @@ runs:
         CONTROL_PLANE_ORG: ${{ inputs.org }}
         DOCKER_BUILD_EXTRA_ARGS: ${{ inputs.docker_build_extra_args }}
         PR_NUMBER: ${{ inputs.pr_number }}
+        WORKING_DIRECTORY: ${{ inputs.working_directory }}
       run: |
         set -euo pipefail
 
         PR_INFO=""
         docker_build_args=()
         ssh_agent_started=false
+        build_ssh_prepped=false
 
         cleanup_build_ssh() {
           if [[ "${ssh_agent_started}" == "true" ]]; then
             ssh-agent -k >/dev/null || true
           fi
           rm -f "${HOME}/.ssh/cpflow_build_key"
+          # Only remove known_hosts if this action's prep step wrote it. On self-hosted
+          # or reused runners we must not touch a user-managed file we did not create,
+          # so the flag is set inside the same prep-detection branch below.
+          if [[ "${build_ssh_prepped}" == "true" ]]; then
+            rm -f "${HOME}/.ssh/known_hosts"
+          fi
         }
         trap cleanup_build_ssh EXIT
+        cd "${WORKING_DIRECTORY}"
 
         if [[ -n "${PR_NUMBER}" ]]; then
           PR_INFO=" for PR #${PR_NUMBER}"
@@ -106,6 +117,9 @@ runs:
         fi
 
         if [[ -f "${HOME}/.ssh/cpflow_build_key" ]]; then
+          # Mark prep-step ownership so cleanup_build_ssh only removes known_hosts
+          # when this action wrote it (see trap above).
+          build_ssh_prepped=true
           eval "$(ssh-agent -s)"
           ssh_agent_started=true
           ssh-add "${HOME}/.ssh/cpflow_build_key"
@@ -115,10 +129,3 @@ runs:
         echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT_SHA})..."
         cpflow build-image -a "${APP_NAME}" --commit="${COMMIT_SHA}" --org="${CONTROL_PLANE_ORG}" "${docker_build_args[@]}"
         echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT_SHA})"
-
-    - name: Remove SSH key
-      if: ${{ always() }}
-      shell: bash
-      run: |
-        # Defence in depth for cancellations or future refactors around the build trap.
-        rm -f "${HOME}/.ssh/cpflow_build_key"

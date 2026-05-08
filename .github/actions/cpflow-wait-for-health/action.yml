@@ -61,12 +61,15 @@ runs:
         for attempt in $(seq 1 "${CPFLOW_MAX_RETRIES}"); do
           echo "Health check attempt ${attempt}/${CPFLOW_MAX_RETRIES}"
 
-          if ! workload_json="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json 2>&1)"; then
+          workload_stderr="$(mktemp)"
+          if ! workload_json="$(cpln workload get "${CPFLOW_WORKLOAD_NAME}" --gvc "${CPFLOW_APP_NAME}" --org "${CPFLOW_ORG}" -o json 2>"${workload_stderr}")"; then
             echo "::error::Workload '${CPFLOW_WORKLOAD_NAME}' not found in GVC '${CPFLOW_APP_NAME}'. Set PRIMARY_WORKLOAD to the correct workload name." >&2
-            printf '%s\n' "${workload_json}" >&2
+            cat "${workload_stderr}" >&2
+            rm -f "${workload_stderr}"
             echo "healthy=false" >> "$GITHUB_OUTPUT"
             exit 1
           fi
+          rm -f "${workload_stderr}"
 
           endpoint="$(echo "${workload_json}" | jq -r '.status.endpoint // empty')"
           if [[ -n "${endpoint}" ]]; then
