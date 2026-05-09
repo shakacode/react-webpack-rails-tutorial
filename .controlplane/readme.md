@@ -6,7 +6,7 @@ _If you need a free demo account for Control Plane (no CC required), you can con
 
 ---
 
-Check [how the `cpflow` gem (this project) is used in the Github actions](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/deploy-to-control-plane/action.yml).
+Check [how the `cpflow` gem is used in the generated GitHub Actions flow](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/cpflow-build-docker-image/action.yml).
 Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
 
 ---
@@ -364,14 +364,34 @@ openssl rand -hex 64
 
 _Note, some of the URL references are internal for the ShakaCode team._
 
- Review Apps (deployment of apps based on a PR) are done via Github Actions.
+Review Apps (deployment of apps based on a PR) are done via the generated
+`cpflow-*` GitHub Actions flow.
 
-The review apps work by creating isolated deployments for each branch through this automated process. When a branch is pushed, the action:
+The review apps work by creating isolated deployments for pull requests through
+this automated process. When an approved collaborator comments exactly
+`/deploy-review-app` on a PR, the action:
 
 1. Sets up the necessary environment and tools
-2. Creates a unique deployment for that branch if it doesn't exist
-3. Builds a Docker image tagged with the branch's commit SHA
+2. Creates a unique review app if it doesn't exist
+3. Builds a Docker image tagged with the PR commit SHA
 4. Deploys this image to Control Plane with its own isolated environment
+
+After the review app exists, new pushes to the PR redeploy it automatically.
+Use `/delete-review-app` to delete it manually; closing the PR deletes it
+automatically. Pushes to the staging branch deploy staging, and production
+promotion is manual from the `cpflow-promote-staging-to-production` workflow.
+If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository
+variable and the `branches:` filter in `.github/workflows/cpflow-deploy-staging.yml`;
+GitHub does not allow repository variables in trigger branch filters.
+The production promotion workflow checks that production has all environment
+variable names present in staging; it does not compare secret values, workload
+environment variables, or Control Plane secret references.
+
+The repository variables and secrets must match the app names in
+`.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should
+include the `-pr` suffix for this app, such as
+`qa-react-webpack-rails-tutorial-pr`, so generated review apps are named
+`qa-react-webpack-rails-tutorial-pr-1234`.
 
 This allows teams to:
 - Preview changes in a production-like environment
@@ -379,12 +399,48 @@ This allows teams to:
 - Share working versions with stakeholders
 - Validate changes before merging to main branches
 
-The system uses Control Plane's infrastructure to manage these deployments, with each branch getting its own resources as defined in the controlplane.yml configuration.
+The system uses Control Plane's infrastructure to manage these deployments, with
+each review app getting its own resources as defined in the controlplane.yml
+configuration.
 
 
-### Workflow for Developing Github Actions for Review Apps
+### Workflow for Developing GitHub Actions for Review Apps
 
-1. Create a PR with changes to the Github Actions workflow
-2. Make edits to file such as `.github/actions/deploy-to-control-plane/action.yml`
+1. Create a PR with changes to the GitHub Actions workflow
+2. Make edits to files such as `.github/actions/cpflow-build-docker-image/action.yml` or `.github/workflows/cpflow-deploy-review-app.yml`
 3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
-4. Check the Github Actions tab in the PR to see the status of the workflow
+4. Check the GitHub Actions tab in the PR to see the status of the workflow
+
+### Keeping Generated cpflow Workflows Updated
+
+Treat `.github/actions/cpflow-*` and `.github/workflows/cpflow-*` as generated
+workflow files with project-specific settings layered on top. When `cpflow`
+releases generator fixes or the upstream `control-plane-flow` repo changes the
+GitHub Actions flow, update a project by regenerating the flow from the desired
+`cpflow` version or branch, reviewing the diff, and keeping any local app names,
+repository variables, secrets, and docs aligned with `.controlplane/controlplane.yml`.
+
+For this app, validate a regenerated flow with:
+
+```bash
+bundle exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
+bundle exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
+actionlint .github/workflows/cpflow-*.yml
+bundle exec rubocop
+```
+
+Then open a normal PR and let GitHub Actions prove the generated review-app,
+staging, lint, JS, and RSpec workflows before merging. For review-app workflow
+changes, test both the local workflow syntax and a real deployment. GitHub runs
+`issue_comment` workflows from the default branch, so a `/deploy-review-app`
+comment on the PR does not fully exercise slash-command changes that are only on
+the PR branch. Before merge, run the PR branch workflow explicitly:
+
+```bash
+gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
+```
+
+After the workflow reports a review-app URL, verify the URL returns HTTP 200.
+If a project needs to track generator changes automatically, use a scheduled
+maintenance PR or Renovate-style workflow that bumps the `cpflow` version,
+regenerates these files, and runs the same validation commands.
