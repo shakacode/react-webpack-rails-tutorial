@@ -48,7 +48,6 @@ jobs:
 
       - name: Remove stale review apps
         env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
           CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
         shell: bash

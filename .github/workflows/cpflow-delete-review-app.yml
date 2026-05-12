@@ -14,7 +14,6 @@ on:
 
 permissions:
   contents: read
-  deployments: write
   issues: write
   pull-requests: write
 
@@ -34,7 +33,7 @@ jobs:
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
-       github.event.comment.body == '/delete-review-app' &&
+       contains(fromJson('["+review-app-delete","+review-app-delete\n","+review-app-delete\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_target' && github.event.action == 'closed') ||
       github.event_name == 'workflow_dispatch'
@@ -109,42 +108,10 @@ jobs:
       - name: Delete review app
         if: steps.config.outputs.ready == 'true'
         uses: ./.github/actions/cpflow-delete-control-plane-app
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           cpln_org: ${{ vars.CPLN_ORG_STAGING }}
           review_app_prefix: ${{ vars.REVIEW_APP_PREFIX }}
-
-      - name: Mark GitHub deployment inactive
-        if: steps.config.outputs.ready == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const environment = `review/${process.env.APP_NAME}`;
-            const deployments = await github.paginate(github.rest.repos.listDeployments, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              environment,
-              per_page: 100
-            });
-
-            if (deployments.length === 0) {
-              core.info(`No GitHub deployments found for ${environment}.`);
-              return;
-            }
-
-            for (const deployment of deployments) {
-              await github.rest.repos.createDeploymentStatus({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                deployment_id: deployment.id,
-                state: "inactive",
-                environment,
-                log_url: process.env.WORKFLOW_URL,
-                description: "Review app deleted"
-              });
-            }
 
       - name: Finalize delete status
         if: always() && steps.config.outputs.ready == 'true'

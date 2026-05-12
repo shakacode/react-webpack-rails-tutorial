@@ -37,7 +37,7 @@ jobs:
   deploy:
     # Skip synchronize/opened events from fork PRs at the job level — they cannot access
     # repository secrets anyway, so running any steps just burns billable minutes. Users
-    # can still manually deploy a fork PR via `/deploy-review-app` (gated below by
+    # can still manually deploy a fork PR via `+review-app-deploy` (gated below by
     # author_association) or workflow_dispatch.
     if: |
       (github.event_name == 'pull_request' &&
@@ -45,7 +45,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
-       github.event.comment.body == '/deploy-review-app' &&
+       contains(fromJson('["+review-app-deploy","+review-app-deploy\n","+review-app-deploy\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -60,26 +60,6 @@ jobs:
           # staging secrets are passed to them.
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
-
-      - name: Set up Ruby for cpflow bootstrap
-        if: ${{ hashFiles('.github/actions/cpflow-validate-config/action.yml') == '' }}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.4"
-
-      - name: Bootstrap generated cpflow actions
-        if: ${{ hashFiles('.github/actions/cpflow-validate-config/action.yml') == '' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          gem install cpflow -v "5.0.0.rc.0" --no-document
-          ruby -S cpflow generate-github-actions --staging-branch master
-          # shellcheck disable=SC2016
-          ruby -0pi -e '$_.gsub!(/so callers can pass `\$\{\{ vars\.CPLN_CLI_VERSION \}\}` unconditionally\./, "so callers can pass the repository variable value unconditionally."); $_.gsub!(/so callers can pass `\$\{\{ vars\.CPFLOW_VERSION \}\}` unconditionally\./, "so callers can pass the repository variable value unconditionally.")' .github/actions/cpflow-setup-environment/action.yml
-          if grep -n '\$''{{ vars\.\(CPLN_CLI_VERSION\|CPFLOW_VERSION\) }}' .github/actions/cpflow-setup-environment/action.yml; then
-            echo "::error::Bootstrapped cpflow setup action still contains GitHub metadata expressions in input descriptions."
-            exit 1
-          fi
 
       - name: Validate required secrets and variables
         id: config
@@ -220,8 +200,6 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
         id: check-app
         working-directory: app
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail
@@ -260,15 +238,13 @@ jobs:
         run: |
           {
             echo "Review app ${APP_NAME} does not exist yet."
-            echo "Create it with a PR comment that is exactly /deploy-review-app."
+            echo "Create it with +review-app-deploy as the PR comment body."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Setup review app if it does not exist yet
         id: setup-review-app
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && steps.check-app.outputs.exists != 'true' && github.event_name != 'pull_request'
         working-directory: app
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail
@@ -355,8 +331,6 @@ jobs:
       - name: Build Docker image
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: ./.github/actions/cpflow-build-docker-image
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         with:
           app_name: ${{ env.APP_NAME }}
           org: ${{ vars.CPLN_ORG_STAGING }}
@@ -397,7 +371,6 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         working-directory: app
         env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
         shell: bash
         run: |
@@ -415,8 +388,6 @@ jobs:
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         id: workload
         working-directory: app
-        env:
-          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
         shell: bash
         run: |
           set -euo pipefail

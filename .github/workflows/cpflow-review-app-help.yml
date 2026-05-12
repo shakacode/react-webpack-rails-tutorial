@@ -26,16 +26,15 @@ jobs:
         with:
           script: |
             const body = [
-              "# Control Plane review app commands",
+              "# Review app commands",
               "",
-              "`/deploy-review-app`",
-              "Create the review app or redeploy the PR branch to it.",
+              "Repo owners, members, and collaborators can use these commands:",
               "",
-              "`/delete-review-app`",
-              "Delete the review app and its temporary resources.",
+              "- `+review-app-deploy` - create or redeploy this PR's review app.",
+              "- `+review-app-delete` - delete this PR's review app and temporary resources.",
+              "- `+review-app-help` - show setup details and workflow behavior.",
               "",
-              "`/help`",
-              "Show the required GitHub variables, secrets, and workflow behavior."
+              "For setup details, repo owners, members, and collaborators can comment `+review-app-help`."
             ].join("\n");
 
             await github.rest.issues.createComment({
