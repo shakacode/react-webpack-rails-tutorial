@@ -17,10 +17,15 @@ permissions:
 
 jobs:
   help:
+    # Comment-triggered runs are gated on author_association so only repo
+    # owners/members/collaborators can invoke them. workflow_dispatch is
+    # intentionally not gated here: GitHub already restricts manual dispatches
+    # to users with `actions: write` (write access to the repo), which is a
+    # stricter bar than COLLABORATOR.
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
-       github.event.comment.body == '/help' &&
+       contains(fromJson('["+review-app-help","+review-app-help\n","+review-app-help\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

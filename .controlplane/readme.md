@@ -369,7 +369,7 @@ Review Apps (deployment of apps based on a PR) are done via the generated
 
 The review apps work by creating isolated deployments for pull requests through
 this automated process. When an approved collaborator comments exactly
-`/deploy-review-app` on a PR, the action:
+`+review-app-deploy` on a PR, the action:
 
 1. Sets up the necessary environment and tools
 2. Creates a unique review app if it doesn't exist
@@ -377,9 +377,10 @@ this automated process. When an approved collaborator comments exactly
 4. Deploys this image to Control Plane with its own isolated environment
 
 After the review app exists, new pushes to the PR redeploy it automatically.
-Use `/delete-review-app` to delete it manually; closing the PR deletes it
-automatically. Pushes to the staging branch deploy staging, and production
-promotion is manual from the `cpflow-promote-staging-to-production` workflow.
+Use `+review-app-delete` to delete it manually; closing the PR deletes it
+automatically. Use `+review-app-help` for the review-app command reference.
+Pushes to the staging branch deploy staging, and production promotion is manual
+from the `cpflow-promote-staging-to-production` workflow.
 If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository
 variable and the `branches:` filter in `.github/workflows/cpflow-deploy-staging.yml`;
 GitHub does not allow repository variables in trigger branch filters.
@@ -432,9 +433,9 @@ bundle exec rubocop
 Then open a normal PR and let GitHub Actions prove the generated review-app,
 staging, lint, JS, and RSpec workflows before merging. For review-app workflow
 changes, test both the local workflow syntax and a real deployment. GitHub runs
-`issue_comment` workflows from the default branch, so a `/deploy-review-app`
-comment on the PR does not fully exercise slash-command changes that are only on
-the PR branch. Before merge, run the PR branch workflow explicitly:
+`issue_comment` workflows from the default branch, so a `+review-app-deploy`
+comment on the PR does not fully exercise command changes that are only on the
+PR branch. Before merge, run the PR branch workflow explicitly:
 
 ```bash
 gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>

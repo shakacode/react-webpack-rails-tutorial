@@ -5,14 +5,14 @@
 Deployments are handled by Control Plane configuration in this repo and GitHub Actions.
 
 ### Review Apps
-- Add a comment `/deploy-review-app` to any PR to deploy a review app
+- Add a comment `+review-app-deploy` to any PR to deploy a review app
 - The generated app name is `${REVIEW_APP_PREFIX}-${PR_NUMBER}`. Keep
   `REVIEW_APP_PREFIX` set to `qa-react-webpack-rails-tutorial-pr` so review
   apps use names like `qa-react-webpack-rails-tutorial-pr-1234`, matching the
   prefix-backed config in `.controlplane/controlplane.yml`.
 - New pushes to a PR redeploy only after the review app already exists.
-- Add `/delete-review-app` to delete a review app manually; closing the PR also
-  deletes it automatically.
+- Add `+review-app-delete` to delete a review app manually; closing the PR also
+  deletes it automatically. Use `+review-app-help` for the command reference.
 
 ### Staging Environment
 - **Automatic**: Any merge to the `master` branch automatically deploys to staging
