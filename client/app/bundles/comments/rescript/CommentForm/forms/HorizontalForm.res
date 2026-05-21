@@ -8,7 +8,7 @@ let make = (~author, ~handleAuthorChange, ~text, ~handleTextChange, ~handleSubmi
     <div className="flex flex-col gap-0 items-center lg:gap-4 lg:flex-row">
       <label htmlFor="comment_author" className="w-full lg:w-2/12 lg:text-end shrink-0">
         {"Name"->React.string}
-        {"DEMO OF cpflow PR deploys"->React.string}
+        {"XXXXXXXX"->React.string}
       </label>
       <input
         type_="text"
