@@ -119,11 +119,9 @@ jobs:
             same_repo="true"
           fi
 
-          {
-            echo "PR_NUMBER=$pr_number"
-            echo "APP_NAME=${REVIEW_APP_PREFIX}-$pr_number"
-            echo "PR_SHA=$pr_sha"
-          } >> "$GITHUB_ENV"
+          echo "PR_NUMBER=$pr_number" >> "$GITHUB_ENV"
+          echo "APP_NAME=${REVIEW_APP_PREFIX}-$pr_number" >> "$GITHUB_ENV"
+          echo "PR_SHA=$pr_sha" >> "$GITHUB_ENV"
           echo "same_repo=${same_repo}" >> "$GITHUB_OUTPUT"
 
       - name: Validate review app deployment source
@@ -305,9 +303,11 @@ jobs:
       - name: Update PR comment with build status
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: actions/github-script@v7
+        env:
+          COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
         with:
           script: |
-            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            const commentId = Number(process.env.COMMENT_ID);
             if (!Number.isFinite(commentId) || commentId <= 0) {
               core.warning("Skipping PR comment update because no comment id was created.");
               return;
@@ -344,9 +344,11 @@ jobs:
       - name: Update PR comment with deploy status
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: actions/github-script@v7
+        env:
+          COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
         with:
           script: |
-            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
+            const commentId = Number(process.env.COMMENT_ID);
             if (!Number.isFinite(commentId) || commentId <= 0) {
               core.warning("Skipping PR comment update because no comment id was created.");
               return;
@@ -398,12 +400,17 @@ jobs:
       - name: Finalize deployment status
         if: always() && steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         uses: actions/github-script@v7
+        env:
+          COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
+          DEPLOYMENT_ID: ${{ steps.init-deployment.outputs.result }}
+          APP_URL: ${{ steps.workload.outputs.workload_url }}
+          JOB_STATUS: ${{ job.status }}
         with:
           script: |
-            const commentId = Number("${{ steps.create-comment.outputs.comment-id }}");
-            const deploymentId = "${{ steps.init-deployment.outputs.result }}";
-            const appUrl = "${{ steps.workload.outputs.workload_url }}";
-            const success = "${{ job.status }}" === "success";
+            const commentId = Number(process.env.COMMENT_ID);
+            const deploymentId = process.env.DEPLOYMENT_ID;
+            const appUrl = process.env.APP_URL;
+            const success = process.env.JOB_STATUS === "success";
 
             if (deploymentId) {
               await github.rest.repos.createDeploymentStatus({

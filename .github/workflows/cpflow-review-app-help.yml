@@ -28,13 +28,11 @@ jobs:
             const body = [
               "# Review app commands",
               "",
-              "Repo owners, members, and collaborators can use these commands:",
-              "",
               "- `+review-app-deploy` - create or redeploy this PR's review app.",
               "- `+review-app-delete` - delete this PR's review app and temporary resources.",
               "- `+review-app-help` - show setup details and workflow behavior.",
               "",
-              "For setup details, repo owners, members, and collaborators can comment `+review-app-help`."
+              "For setup details, comment `+review-app-help`."
             ].join("\n");
 
             await github.rest.issues.createComment({
