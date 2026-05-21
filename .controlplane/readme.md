@@ -424,10 +424,10 @@ repository variables, secrets, and docs aligned with `.controlplane/controlplane
 For this app, validate a regenerated flow with:
 
 ```bash
-bundle exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
-bundle exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
+bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
+bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
 actionlint .github/workflows/cpflow-*.yml
-bundle exec rubocop
+bin/conductor-exec bundle exec rubocop
 ```
 
 Then open a normal PR and let GitHub Actions prove the generated review-app,
@@ -445,3 +445,7 @@ After the workflow reports a review-app URL, verify the URL returns HTTP 200.
 If a project needs to track generator changes automatically, use a scheduled
 maintenance PR or Renovate-style workflow that bumps the `cpflow` version,
 regenerates these files, and runs the same validation commands.
+
+For a fuller checklist, including the gotcha that review-app deploys load local
+composite actions from `master` before using Control Plane secrets, see
+[Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md).

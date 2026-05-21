@@ -66,9 +66,14 @@ flow, regenerate the `cpflow-*` actions/workflows in this repo from the target
 `cpflow` version or branch using `--staging-branch master`, review the diff, and
 keep the repository variables above aligned with `.controlplane/controlplane.yml`. Validate with
 `cpflow github-flow-readiness`, `actionlint .github/workflows/cpflow-*.yml`, and
-the normal CI checks before merging.
+the normal CI checks before merging. For review-app workflow changes, remember
+that the deploy workflow checks out trusted local actions from `master` before
+passing Control Plane secrets; PR-branch composite action changes are not fully
+tested until they land on `master` and a real review-app deploy is rerun.
 
-See [readme.md](readme.md) for more details.
+See [readme.md](readme.md) and
+[Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md)
+for more details.
 
 ## Links
 
