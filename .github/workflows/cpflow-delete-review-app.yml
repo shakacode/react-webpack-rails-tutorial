@@ -1,0 +1,152 @@
+name: Delete Review App
+
+on:
+  pull_request_target:
+    types: [closed]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number targeted for deletion
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: cpflow-delete-review-app-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  # Deletions must not cancel each other mid-flight — a cancelled `cpln` delete can leave
+  # partial state behind. Let the in-progress deletion finish before the next run starts.
+  cancel-in-progress: false
+
+env:
+  APP_NAME: ${{ vars.REVIEW_APP_PREFIX }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  CPLN_ORG: ${{ vars.CPLN_ORG_STAGING }}
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+
+jobs:
+  delete-review-app:
+    if: |
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(fromJson('["+review-app-delete","+review-app-delete\n","+review-app-delete\r\n"]'), github.event.comment.body) &&
+       contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_target' && github.event.action == 'closed') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # pull_request_target is intentional: PR-close events from forks need access
+      # to staging secrets so this workflow can delete review apps and update PR
+      # comments. This checkout is safe because it does not set `ref:`; GitHub checks
+      # out the base branch's trusted workflow code, not the fork head. Do not add
+      # `ref: ${{ github.event.pull_request.head.sha }}` here without re-evaluating
+      # the trust boundary. All local composite actions below are therefore loaded from
+      # trusted base-branch code; keep them that way when changing this workflow.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Delete only invokes `cpln`/`cpflow`; no git push happens, so drop the
+          # GITHUB_TOKEN credential helper to keep the token out of .git/config under
+          # `pull_request_target`, which has access to repository secrets.
+          persist-credentials: false
+
+      - name: Validate required secrets and variables
+        id: config
+        uses: ./.github/actions/cpflow-validate-config
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          REVIEW_APP_PREFIX: ${{ vars.REVIEW_APP_PREFIX }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            variable:CPLN_ORG_STAGING
+            variable:REVIEW_APP_PREFIX
+          pull_request_friendly: "true"
+
+      - name: Setup environment
+        if: steps.config.outputs.ready == 'true'
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ vars.CPLN_ORG_STAGING }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
+
+      - name: Set workflow links
+        if: steps.config.outputs.ready == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            core.exportVariable("WORKFLOW_URL", workflowUrl);
+            core.exportVariable(
+              "CONSOLE_URL",
+              `https://console.cpln.io/console/org/${process.env.CPLN_ORG}/-info`
+            );
+
+      - name: Create initial PR comment
+        if: steps.config.outputs.ready == 'true'
+        id: create-comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(process.env.PR_NUMBER),
+              body: "🗑️ Deleting Control Plane review app..."
+            });
+            core.setOutput("comment-id", comment.data.id);
+
+      - name: Delete review app
+        if: steps.config.outputs.ready == 'true'
+        uses: ./.github/actions/cpflow-delete-control-plane-app
+        with:
+          app_name: ${{ env.APP_NAME }}
+          cpln_org: ${{ vars.CPLN_ORG_STAGING }}
+          review_app_prefix: ${{ vars.REVIEW_APP_PREFIX }}
+
+      # Finalizer still runs after delete failures, but only after config validation
+      # created the initial PR comment and workflow link env vars it updates.
+      - name: Finalize delete status
+        if: always() && steps.config.outputs.ready == 'true'
+        uses: actions/github-script@v7
+        env:
+          COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
+          JOB_STATUS: ${{ job.status }}
+        with:
+          script: |
+            const commentId = Number(process.env.COMMENT_ID);
+            const success = process.env.JOB_STATUS === "success";
+            const body = success
+              ? [
+                  `✅ Review app for PR #${process.env.PR_NUMBER} is deleted`,
+                  "",
+                  `[Open organization console](${process.env.CONSOLE_URL})`,
+                  `[View workflow logs](${process.env.WORKFLOW_URL})`
+                ].join("\n")
+              : [
+                  `❌ Failed to delete review app for PR #${process.env.PR_NUMBER}`,
+                  "",
+                  `[Open organization console](${process.env.CONSOLE_URL})`,
+                  `[View workflow logs](${process.env.WORKFLOW_URL})`
+                ].join("\n");
+
+            if (!Number.isFinite(commentId) || commentId <= 0) {
+              core.warning("Skipping delete status comment update because no comment id was created.");
+              return;
+            }
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body
+            });

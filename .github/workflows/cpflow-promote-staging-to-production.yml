@@ -1,0 +1,490 @@
+name: Promote Staging to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_promotion:
+        description: Type "promote" to confirm promotion of staging to production
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  # Override these by editing this file or by setting the matching repository variable.
+  # Worst-case wall time per attempt is HEALTH_CHECK_INTERVAL plus the curl --max-time below
+  # (10s), so the defaults give a ~10 minute window (24 × (15 + 10) = 600s) — enough for
+  # most Rails cold boots (asset precompile + db:migrate + workload readiness).
+  HEALTH_CHECK_RETRIES: 24
+  HEALTH_CHECK_INTERVAL: 15
+  # Space-separated list of HTTP statuses considered healthy. The default accepts 301/302
+  # because `curl` is invoked without `-L`, so a root `/` that redirects to a login page
+  # (common for Rails apps that auth-gate `/`) would otherwise be reported as unhealthy
+  # despite the workload itself being up.
+  #
+  # Strongly recommended: expose a dedicated `/health` endpoint that returns `200` and set
+  # HEALTH_CHECK_ACCEPTED_STATUSES to `"200"` in repository variables. The 301/302 default
+  # trades correctness for ergonomics — a maintenance-mode redirect or an auth-gate redirect
+  # to a login page can pass this check even when the underlying app is broken. Override
+  # via the HEALTH_CHECK_ACCEPTED_STATUSES repo variable to tighten this for apps that
+  # expose a dedicated health endpoint (e.g. "200" for a plain /health, or "200 401 403"
+  # for apps that auth-gate / without redirecting).
+  HEALTH_CHECK_ACCEPTED_STATUSES: ${{ vars.HEALTH_CHECK_ACCEPTED_STATUSES || '200 301 302' }}
+  ROLLBACK_READINESS_RETRIES: 24
+  ROLLBACK_READINESS_INTERVAL: 15
+  PRIMARY_WORKLOAD: ${{ vars.PRIMARY_WORKLOAD }}
+
+concurrency:
+  # Single global group: only one production promotion may run at a time across the
+  # whole repo. Independent of staging deploys and review-app workflows (different
+  # GVCs / different concurrency keys), so those can still run in parallel.
+  group: cpflow-promote-staging-to-production
+  # Don't cancel an in-flight promotion: a half-finished `cpflow deploy-image` plus a
+  # rollback can leave production in a worse state than letting the first run finish.
+  cancel-in-progress: false
+
+jobs:
+  promote-to-production:
+    if: github.event.inputs.confirm_promotion == 'promote'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Validate required secrets and variables
+        uses: ./.github/actions/cpflow-validate-config
+        # Pass secrets via env so the composite action checks indirect shell
+        # variables instead of interpolating secret values into a run script.
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+        with:
+          required: |
+            secret:CPLN_TOKEN_STAGING
+            secret:CPLN_TOKEN_PRODUCTION
+            variable:CPLN_ORG_STAGING
+            variable:CPLN_ORG_PRODUCTION
+            variable:STAGING_APP_NAME
+            variable:PRODUCTION_APP_NAME
+
+      - name: Setup production environment
+        uses: ./.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          org: ${{ vars.CPLN_ORG_PRODUCTION }}
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          cpflow_version: ${{ vars.CPFLOW_VERSION }}
+
+      # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
+      # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).
+      - name: Resolve production app workloads
+        id: workloads
+        env:
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          workloads="$(ruby - "${PRODUCTION_APP_NAME}" <<'RUBY'
+          require "yaml"
+
+          app = ARGV.fetch(0)
+          data = YAML.safe_load(File.read(".controlplane/controlplane.yml"), aliases: true)
+          apps = data["apps"] || {}
+          app_config = apps[app]
+
+          unless app_config
+            warn "Error: app '#{app}' is not defined under `apps:` in `.controlplane/controlplane.yml`."
+            warn "       Fix the PRODUCTION_APP_NAME repository variable or add the app to controlplane.yml."
+            exit 1
+          end
+
+          workloads = Array(app_config["app_workloads"])
+          workloads = ["rails"] if workloads.empty?
+          puts workloads.join(",")
+          RUBY
+          )"
+
+          echo "names=${workloads}" >> "$GITHUB_OUTPUT"
+
+      - name: Detect release phase support
+        id: release-phase
+        uses: ./.github/actions/cpflow-detect-release-phase
+        with:
+          app_name: ${{ vars.PRODUCTION_APP_NAME }}
+
+      - name: Verify production environment variables
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          staging_vars="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln gvc get "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
+          production_vars="$(CPLN_TOKEN="${CPLN_TOKEN_PRODUCTION}" cpln gvc get "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
+
+          if [[ -z "${staging_vars}" ]]; then
+            echo "Staging GVC exposes no environment variables; skipping parity check."
+            exit 0
+          fi
+
+          # Treat staging as the promotion source of truth: fail when a variable
+          # present in staging is missing in production. Production-only variables
+          # are allowed, but surface them so teams can spot drift.
+          missing_vars="$(comm -23 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+          production_only_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+
+          if [[ -n "${production_only_vars}" ]]; then
+            echo "::warning::Production has environment variables that are not present in staging:"
+            echo "${production_only_vars}"
+          fi
+
+          if [[ -n "${missing_vars}" ]]; then
+            echo "::error::Production is missing environment variables that exist in staging"
+            echo "${missing_vars}"
+            exit 1
+          fi
+
+      - name: Capture current production image
+        id: capture-current
+        env:
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          WORKLOAD_NAMES: ${{ steps.workloads.outputs.names }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          selected_workload="${PRIMARY_WORKLOAD:-}"
+          selected_image=""
+          selected_version=""
+          first_image=""
+          first_version=""
+          rollback_state='{}'
+
+          while IFS= read -r workload_name; do
+            [[ -n "${workload_name}" ]] || continue
+
+            workload_json="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
+            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
+            workload_containers="$(echo "${workload_json}" | jq -c '.spec.containers | map({name, image})')"
+            workload_version="$(echo "${workload_json}" | jq -r '.version')"
+
+            if [[ -z "${first_image}" ]]; then
+              first_image="${workload_image}"
+              first_version="${workload_version}"
+            fi
+
+            if [[ -n "${selected_workload}" && "${workload_name}" == "${selected_workload}" ]]; then
+              selected_image="${workload_image}"
+              selected_version="${workload_version}"
+            fi
+
+            rollback_state="$(
+              jq -c \
+                --arg workload "${workload_name}" \
+                --arg image "${workload_image}" \
+                --arg version "${workload_version}" \
+                --argjson containers "${workload_containers}" \
+                '. + {($workload): {image: $image, version: $version, containers: $containers}}' \
+                <<< "${rollback_state}"
+            )"
+          done < <(tr ',' '\n' <<< "${WORKLOAD_NAMES}")
+
+          current_image="${selected_image:-${first_image}}"
+          current_version="${selected_version:-${first_version}}"
+
+          echo "current_image=${current_image}" >> "$GITHUB_OUTPUT"
+          echo "current_version=${current_version}" >> "$GITHUB_OUTPUT"
+          # Randomize the heredoc delimiter so a stray "EOF" line inside rollback_state can't terminate it early.
+          delim="EOF_$(openssl rand -hex 8)"
+          {
+            echo "rollback_state<<${delim}"
+            echo "${rollback_state}"
+            echo "${delim}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Capture deployed staging image
+        id: staging-image
+        env:
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
+          WORKLOAD_NAMES: ${{ steps.workloads.outputs.names }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          selected_workload="${PRIMARY_WORKLOAD:-}"
+          selected_image=""
+          first_image=""
+
+          while IFS= read -r workload_name; do
+            [[ -n "${workload_name}" ]] || continue
+
+            workload_json="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln workload get "${workload_name}" --gvc "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json)"
+            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image // empty')"
+
+            if [[ -z "${workload_image}" ]]; then
+              echo "::error::Could not find an image on staging workload '${workload_name}'." >&2
+              exit 1
+            fi
+
+            if [[ -z "${first_image}" ]]; then
+              first_image="${workload_image}"
+            fi
+
+            if [[ -n "${selected_workload}" && "${workload_name}" == "${selected_workload}" ]]; then
+              selected_image="${workload_image}"
+            fi
+          done < <(tr ',' '\n' <<< "${WORKLOAD_NAMES}")
+
+          staging_image_ref="${selected_image:-${first_image}}"
+          if [[ -z "${staging_image_ref}" ]]; then
+            echo "::error::Could not determine the deployed staging image." >&2
+            exit 1
+          fi
+
+          if [[ "${staging_image_ref}" == /org/*/image/* ]]; then
+            staging_image="${staging_image_ref##*/image/}"
+          elif [[ "${staging_image_ref}" == *.registry.cpln.io/* ]]; then
+            staging_image="${staging_image_ref#*.registry.cpln.io/}"
+          else
+            staging_image="${staging_image_ref}"
+          fi
+
+          echo "image=${staging_image}" >> "$GITHUB_OUTPUT"
+
+      - name: Copy image from staging
+        env:
+          # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
+          CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          STAGING_IMAGE: ${{ steps.staging-image.outputs.image }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"
+
+      - name: Deploy image to production
+        env:
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+          RELEASE_PHASE_FLAG: ${{ steps.release-phase.outputs.flag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy_args=(-a "${PRODUCTION_APP_NAME}")
+          if [[ -n "${RELEASE_PHASE_FLAG}" ]]; then
+            deploy_args+=("${RELEASE_PHASE_FLAG}")
+          fi
+          deploy_args+=(--org "${CPLN_ORG_PRODUCTION}" --verbose)
+
+          cpflow deploy-image "${deploy_args[@]}"
+
+      - name: Wait for deployment health
+        id: health-check
+        uses: ./.github/actions/cpflow-wait-for-health
+        with:
+          workload_name: ${{ env.PRIMARY_WORKLOAD || 'rails' }}
+          app_name: ${{ vars.PRODUCTION_APP_NAME }}
+          org: ${{ vars.CPLN_ORG_PRODUCTION }}
+          max_retries: ${{ env.HEALTH_CHECK_RETRIES }}
+          interval_seconds: ${{ env.HEALTH_CHECK_INTERVAL }}
+          accepted_statuses: ${{ env.HEALTH_CHECK_ACCEPTED_STATUSES }}
+
+      - name: Roll back on failure
+        if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
+        env:
+          ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+        shell: bash
+        run: |
+          # Best-effort rollback: try every workload, aggregate failures, exit non-zero at the end
+          # if any failed. A single cpln hiccup shouldn't leave other workloads mid-promotion.
+          set -uo pipefail
+
+          rollback_failures=0
+          if ! rollback_entries="$(echo "${ROLLBACK_STATE}" | jq -r 'to_entries[] | "\(.key)\t\(.value.containers | @json)"')"; then
+            echo "::error::Could not parse rollback state; manual recovery may be required." >&2
+            exit 1
+          fi
+
+          while IFS=$'\t' read -r workload_name previous_containers; do
+            rollback_args=()
+            if ! current_names="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -c '.spec.containers | map(.name)')"; then
+              echo "::warning::Could not retrieve current containers for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+            if ! previous_names="$(echo "${previous_containers}" | jq -c 'map(.name)')"; then
+              echo "::warning::Could not parse captured containers for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+
+            if [[ "$(echo "${current_names}" | jq -c 'sort')" != "$(echo "${previous_names}" | jq -c 'sort')" ]]; then
+              echo "::error::Container set changed for workload '${workload_name}'; refusing rollback." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+
+            if ! rollback_container_entries="$(
+              jq -r \
+                --argjson current_names "${current_names}" \
+                '.[] as $container | ($current_names | index($container.name)) as $index | "\($index)\t\($container.image)"' \
+                <<< "${previous_containers}"
+            )"; then
+              echo "::warning::Could not build rollback image list for workload '${workload_name}'; skipping rollback for this workload." >&2
+              rollback_failures=$((rollback_failures + 1))
+              continue
+            fi
+
+            while IFS=$'\t' read -r index image; do
+              rollback_args+=(--set "spec.containers[${index}].image=${image}")
+            done <<< "${rollback_container_entries}"
+
+            if ! cpln workload update "${workload_name}" \
+              --gvc "${PRODUCTION_APP_NAME}" \
+              --org "${CPLN_ORG_PRODUCTION}" \
+              "${rollback_args[@]}"; then
+              echo "::warning::Rollback failed for workload '${workload_name}'; continuing with remaining workloads." >&2
+              rollback_failures=$((rollback_failures + 1))
+            fi
+          done <<< "${rollback_entries}"
+
+          if [[ "${rollback_failures}" -gt 0 ]]; then
+            echo "::error::${rollback_failures} workload(s) failed to roll back; inspect the logs above." >&2
+            exit 1
+          fi
+
+      - name: Wait for rollback readiness
+        if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
+        env:
+          ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t workloads < <(echo "${ROLLBACK_STATE}" | jq -r 'keys[]')
+
+          # Poll workloads in parallel so the worst-case wall time during a
+          # production incident is `retries × interval` rather than scaling
+          # linearly with the number of workloads. Each per-workload retry
+          # loop runs in a backgrounded subshell that writes its final state
+          # to a status file; the parent waits for all of them before
+          # aggregating warnings, keeping output ordered and deterministic.
+          status_dir="$(mktemp -d)"
+          trap 'rm -rf "${status_dir}"' EXIT
+
+          pids=()
+          for workload_name in "${workloads[@]}"; do
+            [[ -n "${workload_name}" ]] || continue
+
+            echo "Polling rollback readiness for workload '${workload_name}'..."
+            (
+              set -euo pipefail
+              ready=false
+              for attempt in $(seq 1 "${ROLLBACK_READINESS_RETRIES}"); do
+                deployment_ready="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.status.ready // false')"
+                if [[ "${deployment_ready}" == "true" ]]; then
+                  ready=true
+                  break
+                fi
+
+                if [[ "${attempt}" -lt "${ROLLBACK_READINESS_RETRIES}" ]]; then
+                  sleep "${ROLLBACK_READINESS_INTERVAL}"
+                fi
+              done
+
+              if [[ "${ready}" == "true" ]]; then
+                printf 'ready\n' > "${status_dir}/${workload_name}"
+              else
+                printf 'not_ready\n' > "${status_dir}/${workload_name}"
+              fi
+            ) &
+            pids+=("$!")
+          done
+
+          # `|| true` so a single workload that fails to poll (e.g. transient
+          # cpln API error) doesn't abort the parent before the others finish.
+          # Missing or non-`ready` status files are surfaced in the aggregation
+          # loop below, so the failure is still visible to operators.
+          for pid in "${pids[@]}"; do
+            wait "${pid}" || true
+          done
+
+          for workload_name in "${workloads[@]}"; do
+            [[ -n "${workload_name}" ]] || continue
+            status_file="${status_dir}/${workload_name}"
+            if [[ ! -f "${status_file}" ]] || [[ "$(<"${status_file}")" != "ready" ]]; then
+              echo "::warning::Workload '${workload_name}' did not report ready after rollback."
+            fi
+          done
+
+      - name: Promotion summary
+        if: always()
+        env:
+          HEALTHY: ${{ steps.health-check.outputs.healthy }}
+          PREVIOUS_IMAGE: ${{ steps.capture-current.outputs.current_image }}
+          PREVIOUS_VERSION: ${{ steps.capture-current.outputs.current_version }}
+        shell: bash
+        run: |
+          {
+            echo "## Promotion Summary"
+            echo
+            if [[ "${HEALTHY}" == "true" ]]; then
+              echo "✅ Status: deployment successful"
+            else
+              echo "❌ Status: deployment failed"
+            fi
+            echo
+            echo "Previous image: \`${PREVIOUS_IMAGE}\`"
+            echo "Previous version: ${PREVIOUS_VERSION}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  create-github-release:
+    needs: promote-to-production
+    if: needs.promote-to-production.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub release
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          STAGING_APP_NAME: ${{ vars.STAGING_APP_NAME }}
+          PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          release_date="$(date '+%Y-%m-%d')"
+          timestamp="$(date '+%H%M%S')"
+          release_tag="production-${release_date}-${timestamp}-${GITHUB_RUN_ID}"
+
+          gh release create "${release_tag}" \
+            --title "Production Release ${release_date} ${timestamp}" \
+            --notes "Promoted ${STAGING_APP_NAME} to ${PRODUCTION_APP_NAME} on ${release_date} at ${timestamp}."
