@@ -426,7 +426,7 @@ For this app, validate a regenerated flow with:
 ```bash
 bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
 bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
-actionlint .github/workflows/cpflow-*.yml
+actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml
 bin/conductor-exec bundle exec rubocop
 ```
 
@@ -435,11 +435,16 @@ staging, lint, JS, and RSpec workflows before merging. For review-app workflow
 changes, test both the local workflow syntax and a real deployment. GitHub runs
 `issue_comment` workflows from the default branch, so a `+review-app-deploy`
 comment on the PR does not fully exercise command changes that are only on the
-PR branch. Before merge, run the PR branch workflow explicitly:
+PR branch. For top-level workflow edits, run the PR branch workflow explicitly:
 
 ```bash
 gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
 ```
+
+This loads the workflow file from `<branch>`, but trusted local composite
+actions still come from the default branch before secrets are used. Treat it as
+a partial smoke test, then verify a real deploy after the workflow changes land
+on `master`.
 
 After the workflow reports a review-app URL, verify the URL returns HTTP 200.
 If a project needs to track generator changes automatically, use a scheduled

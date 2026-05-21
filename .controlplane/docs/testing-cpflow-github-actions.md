@@ -20,22 +20,28 @@ from `master` until the fix is merged there.
 
 ## Local Checks
 
-After regenerating the flow, run these checks from the repository root. When
-testing an unreleased upstream `control-plane-flow` checkout, invoke that
-checkout's `bin/cpflow` directly:
+After regenerating the flow, run these checks from the repository root. If
+`cpflow` is installed as a gem, use `cpflow` directly:
+
+```sh
+bin/conductor-exec cpflow generate-github-actions --staging-branch master
+bin/test-cpflow-github-flow
+```
+
+When testing an unreleased upstream `control-plane-flow` checkout, replace
+`cpflow` with that checkout's `bin/cpflow`:
 
 ```sh
 bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
-bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
-bin/conductor-exec ruby -e 'require "yaml"; Dir[".github/actions/**/action.yml", ".github/workflows/*.yml"].sort.each { |path| YAML.load_file(path, aliases: true); puts "parsed #{path}" }'
-bin/conductor-exec ruby -e 'require "yaml"; bad=[]; Dir[".github/actions/**/action.yml"].sort.each { |path| doc=YAML.load_file(path, aliases: true); doc.fetch("inputs", {}).each { |name, spec| bad << "#{path}:#{name}" if spec["description"].to_s.include?("${{") } }; }; abort bad.join("\n") unless bad.empty?; puts "no action metadata descriptions contain GitHub expressions"'
-actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml
+bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/bin/cpflow
 ```
 
 Why the explicit description check exists: GitHub parses expression-like snippets
 inside composite action metadata, including `description:` fields. Literal
 examples such as `${{ vars.SOME_VALUE }}` can fail action loading before any
-shell step starts.
+shell step starts. The wrapper runs `cpflow github-flow-readiness`, parses the
+generated YAML, checks action input descriptions for literal GitHub expressions,
+and runs `actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml`.
 
 ## PR Checks
 
@@ -77,8 +83,10 @@ Use the generated app name from the workflow log:
 APP_NAME: ${REVIEW_APP_PREFIX}-${PR_NUMBER}
 ```
 
-For this repo, verify the actual `REVIEW_APP_PREFIX` repository variable before
-assuming the final app name.
+This is a template from the workflow output, not a literal command to evaluate
+unless those environment variables are already set. For this repo, verify the
+actual `REVIEW_APP_PREFIX` repository variable before assuming the final app
+name.
 
 ## Troubleshooting Signals
 
@@ -120,8 +128,8 @@ Create the first review app by commenting exactly:
 
 - Add a no-secret GitHub Actions smoke workflow that loads generated local
   composite actions from the PR branch and fails fast on action metadata parsing.
-- Add a small repo script, for example `bin/test-cpflow-github-flow`, that wraps
-  the local YAML, metadata-description, readiness, and `actionlint` checks.
+- Extend `bin/test-cpflow-github-flow` as more local cpflow GitHub Actions
+  checks become worth standardizing.
 - Add an early token sanity step after `Setup environment` so invalid
   `CPLN_TOKEN_STAGING` and `CPLN_TOKEN_PRODUCTION` values fail with a named
   "validate Control Plane token" step instead of surfacing later during
