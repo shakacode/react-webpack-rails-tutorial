@@ -49,7 +49,7 @@ jobs:
       # the trust boundary. All local composite actions below are therefore loaded from
       # trusted base-branch code; keep them that way when changing this workflow.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Delete only invokes `cpln`/`cpflow`; no git push happens, so drop the
           # GITHUB_TOKEN credential helper to keep the token out of .git/config under
@@ -81,7 +81,7 @@ jobs:
 
       - name: Set workflow links
         if: steps.config.outputs.ready == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
@@ -94,7 +94,7 @@ jobs:
       - name: Create initial PR comment
         if: steps.config.outputs.ready == 'true'
         id: create-comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const comment = await github.rest.issues.createComment({
@@ -117,7 +117,7 @@ jobs:
       # created the initial PR comment and workflow link env vars it updates.
       - name: Finalize delete status
         if: always() && steps.config.outputs.ready == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
           JOB_STATUS: ${{ job.status }}
