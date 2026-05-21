@@ -96,6 +96,12 @@ runs:
           exit 1
         fi
 
+        # Keep the service-account token available to later cpflow/cpln steps.
+        # The profile stores org/default metadata, but cpflow direct API calls
+        # read CPLN_TOKEN before falling back to `cpln profile token`.
+        echo "::add-mask::${CPLN_TOKEN}"
+        printf 'CPLN_TOKEN=%s\n' "${CPLN_TOKEN}" >> "${GITHUB_ENV}"
+
         # `cpln profile update` lists `create` as an alias (cpln profile --help) and is
         # idempotent: it creates the profile if missing and updates it otherwise. Calling
         # update directly avoids parsing the CLI's "already exists" English error text,
