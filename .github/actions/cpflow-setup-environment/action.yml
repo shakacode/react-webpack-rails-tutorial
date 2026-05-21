@@ -14,16 +14,22 @@ inputs:
       from .ruby-version, .tool-versions, or the Gemfile.
     required: false
     default: ""
+  # GitHub parses double-brace expression snippets inside action metadata (including
+  # `description:`) while loading the composite action, and the `vars` context is not
+  # available in that phase. Keep these descriptions in plain prose - reference repo
+  # variables by NAME only, never with literal GitHub Actions expression syntax.
   cpln_cli_version:
     description: >-
-      @controlplane/cli version. Empty string falls back to the action's pinned default
-      so callers can pass `${{ vars.CPLN_CLI_VERSION }}` unconditionally.
+      @controlplane/cli version. Empty string falls back to the action's pinned default,
+      so callers can wire this input to the CPLN_CLI_VERSION repository variable
+      unconditionally.
     required: false
     default: ""
   cpflow_version:
     description: >-
-      cpflow gem version. Empty string falls back to the action's pinned default
-      so callers can pass `${{ vars.CPFLOW_VERSION }}` unconditionally.
+      cpflow gem version. Empty string falls back to the action's pinned default,
+      so callers can wire this input to the CPFLOW_VERSION repository variable
+      unconditionally.
     required: false
     default: ""
 

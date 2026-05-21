@@ -52,7 +52,7 @@ runs:
         chmod 700 ~/.ssh
 
         if [[ -n "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" ]]; then
-          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" | tr -d '\r' > ~/.ssh/known_hosts
+          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
         else
           printf '%s\n' \
             'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
@@ -62,7 +62,7 @@ runs:
         fi
         chmod 600 ~/.ssh/known_hosts
 
-        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" | tr -d '\r' > ~/.ssh/cpflow_build_key
+        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" > ~/.ssh/cpflow_build_key
         chmod 600 ~/.ssh/cpflow_build_key
 
     - name: Build Docker image
