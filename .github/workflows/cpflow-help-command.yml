@@ -17,63 +17,10 @@ permissions:
 
 jobs:
   help:
-    # Comment-triggered runs are gated on author_association so only repo
-    # owners/members/collaborators can invoke them. workflow_dispatch is
-    # intentionally not gated here: GitHub already restricts manual dispatches
-    # to users with `actions: write` (write access to the repo), which is a
-    # stricter bar than COLLABORATOR.
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
        contains(fromJson('["+review-app-help","+review-app-help\n","+review-app-help\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: React to help command
-        if: github.event_name == 'issue_comment'
-        continue-on-error: true
-        uses: actions/github-script@v8
-        with:
-          script: |
-            try {
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: context.payload.comment.id,
-                content: "eyes"
-              });
-            } catch (error) {
-              if (error.status === 422) {
-                core.info("Help command reaction already exists.");
-              } else {
-                throw error;
-              }
-            }
-
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          # Help only reads `.github/cpflow-help.md`; no git push happens, so drop the
-          # GITHUB_TOKEN credential helper to keep the token out of .git/config.
-          persist-credentials: false
-
-      - name: Post help message
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const fs = require("fs");
-            const helpText = fs.readFileSync(".github/cpflow-help.md", "utf8");
-
-            const prNumber = context.eventName === "workflow_dispatch"
-              ? Number(context.payload.inputs.pr_number)
-              : context.issue.number;
-
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: helpText
-            });
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml@jg-codex/reusable-github-actions
