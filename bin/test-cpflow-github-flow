@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+cpflow_cmd=(cpflow)
+if [[ $# -gt 0 ]]; then
+  cpflow_cmd=("$@")
+fi
+
+echo "==> cpflow github-flow-readiness"
+bin/conductor-exec "${cpflow_cmd[@]}" github-flow-readiness
+
+echo "==> parse generated GitHub Actions YAML"
+bin/conductor-exec ruby <<'RUBY'
+require "yaml"
+
+Dir[".github/actions/**/action.yml", ".github/workflows/*.yml"].sort.each do |path|
+  YAML.load_file(path, aliases: true)
+  puts "parsed #{path}"
+end
+RUBY
+
+echo "==> check composite action input descriptions"
+bin/conductor-exec ruby <<'RUBY'
+require "yaml"
+
+bad = []
+Dir[".github/actions/**/action.yml"].sort.each do |path|
+  doc = YAML.load_file(path, aliases: true)
+  doc.fetch("inputs", {}).each do |name, spec|
+    bad << "#{path}:#{name}" if spec["description"].to_s.include?("${{")
+  end
+end
+
+abort bad.join("\n") unless bad.empty?
+puts "no action metadata descriptions contain GitHub expressions"
+RUBY
+
+echo "==> actionlint"
+actionlint -ignore "SC2129" .github/workflows/cpflow-*.yml
