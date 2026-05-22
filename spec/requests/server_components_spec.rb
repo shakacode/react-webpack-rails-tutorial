@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "react_on_rails/length_prefixed_parser"
 
 describe "Server Components" do
   it "GET /server-components returns the demo page shell" do
@@ -12,11 +11,48 @@ describe "Server Components" do
 
   describe "RSC payload endpoint" do
     def parsed_chunks
+      body = response.body.b
       chunks = []
-      parser = ReactOnRails::LengthPrefixedParser.new
-      parser.feed(response.body.b) { |chunk| chunks << chunk }
-      parser.flush
+
+      until body.empty?
+        body = discard_blank_frame_lines(body)
+        break if body.empty?
+
+        chunk, body = parse_length_prefixed_chunk(body)
+        chunks << chunk
+      end
+
       chunks
+    end
+
+    def discard_blank_frame_lines(body)
+      body = body.byteslice(1..) || "".b while body.start_with?("\n")
+      body
+    end
+
+    def parse_length_prefixed_chunk(body)
+      header_end = body.index("\n")
+      raise "Malformed length-prefixed RSC payload: missing header newline" unless header_end
+
+      metadata_json, content_length_hex = body.byteslice(0, header_end).split("\t", 2)
+      raise "Malformed length-prefixed RSC payload: missing tab separator" unless content_length_hex
+
+      content_start = header_end + 1
+      content_length = Integer(content_length_hex, 16)
+      content = body.byteslice(content_start, content_length)
+      raise "Malformed length-prefixed RSC payload: truncated content" unless content&.bytesize == content_length
+
+      [
+        parse_payload_metadata(metadata_json, content),
+        body.byteslice(content_start + content_length, body.bytesize) || "".b
+      ]
+    end
+
+    def parse_payload_metadata(metadata_json, content)
+      metadata = JSON.parse(metadata_json.force_encoding(Encoding::UTF_8))
+      content.force_encoding(Encoding::UTF_8)
+      metadata["html"] = metadata.delete("payloadType") == "object" ? JSON.parse(content) : content
+      metadata
     end
 
     def expect_valid_rsc_payload
