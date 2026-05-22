@@ -16,8 +16,8 @@ permissions:
 
 jobs:
   deploy-staging:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@jg-codex/reusable-github-actions
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@8e9c0c5e9991ac8651ae2721830bf5231f34de5c
     with:
-      control_plane_flow_ref: jg-codex/reusable-github-actions
+      control_plane_flow_ref: 8e9c0c5e9991ac8651ae2721830bf5231f34de5c
       staging_app_branch_default: ""
     secrets: inherit

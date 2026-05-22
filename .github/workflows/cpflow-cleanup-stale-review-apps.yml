@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   cleanup:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@jg-codex/reusable-github-actions
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@8e9c0c5e9991ac8651ae2721830bf5231f34de5c
     with:
-      control_plane_flow_ref: jg-codex/reusable-github-actions
+      control_plane_flow_ref: 8e9c0c5e9991ac8651ae2721830bf5231f34de5c
     secrets: inherit
