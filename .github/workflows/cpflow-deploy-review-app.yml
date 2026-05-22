@@ -51,8 +51,29 @@ jobs:
     timeout-minutes: 45
 
     steps:
+      - name: React to deploy command
+        if: github.event_name == 'issue_comment'
+        continue-on-error: true
+        uses: actions/github-script@v8
+        with:
+          script: |
+            try {
+              await github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: context.payload.comment.id,
+                content: "rocket"
+              });
+            } catch (error) {
+              if (error.status === 422) {
+                core.info("Deploy command reaction already exists.");
+              } else {
+                throw error;
+              }
+            }
+
       - name: Checkout trusted workflow sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Keep generated composite actions on the trusted base branch. The PR
           # application code is checked out separately under ./app after source
@@ -164,7 +185,7 @@ jobs:
 
       - name: Checkout PR commit
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.PR_SHA }}
           path: app
@@ -251,20 +272,26 @@ jobs:
       - name: Create initial PR comment
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         id: create-comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
+            const body = [
+              "## 🚀 Starting deployment process...",
+              "",
+              `_Preparing review app deployment for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}_`
+            ].join("\n");
+
             const result = await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: Number(process.env.PR_NUMBER),
-              body: "🚀 Starting Control Plane review app deployment..."
+              body
             });
             core.setOutput("comment-id", result.data.id);
 
       - name: Set deployment links
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
@@ -277,7 +304,7 @@ jobs:
       - name: Initialize GitHub deployment
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
         id: init-deployment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const deployment = await github.rest.repos.createDeployment({
@@ -302,7 +329,7 @@ jobs:
 
       - name: Update PR comment with build status
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
         with:
@@ -316,9 +343,8 @@ jobs:
             const body = [
               `🏗️ Building Docker image for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}`,
               "",
-              `[View build logs](${process.env.WORKFLOW_URL})`,
-              "",
-              `[Open Control Plane console](${process.env.CONSOLE_URL})`
+              `📝 [View Build Logs](${process.env.WORKFLOW_URL})`,
+              `🎮 [Control Plane Console](${process.env.CONSOLE_URL})`
             ].join("\n");
 
             await github.rest.issues.updateComment({
@@ -343,9 +369,10 @@ jobs:
 
       - name: Update PR comment with deploy status
         if: steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
+          DEPLOYING_ICON_URL: ${{ vars.REVIEW_APP_DEPLOYING_ICON_URL }}
         with:
           script: |
             const commentId = Number(process.env.COMMENT_ID);
@@ -354,12 +381,37 @@ jobs:
               return;
             }
 
+            // Pinned to the commit that introduced this SVG for immutability.
+            // To update the icon: update the SVG, replace this SHA, and regenerate user workflows.
+            const DEFAULT_DEPLOYING_ICON_URL = "https://raw.githubusercontent.com/shakacode/control-plane-flow/7632313232b751aaa0bc55a122bf0615ff490345/docs/assets/cpflow-deploying.svg";
+            const configuredDeployingIconUrl = (process.env.DEPLOYING_ICON_URL || "").trim();
+            const isNone = configuredDeployingIconUrl.toLowerCase() === "none";
+            let deployingIconUrl = DEFAULT_DEPLOYING_ICON_URL;
+
+            if (configuredDeployingIconUrl && !isNone) {
+              try {
+                const parsedUrl = new URL(configuredDeployingIconUrl);
+                if (parsedUrl.protocol === "https:") {
+                  deployingIconUrl = parsedUrl.href;
+                } else {
+                  core.warning("Ignoring REVIEW_APP_DEPLOYING_ICON_URL because it must use https://.");
+                }
+              } catch {
+                core.warning("Ignoring REVIEW_APP_DEPLOYING_ICON_URL because it is not a valid URL.");
+              }
+            }
+
+            const deployingIcon = isNone
+              ? "⏳"
+              : `<img src="${deployingIconUrl}" alt="Deploying" width="20" height="20" />`;
+
             const body = [
-              "🚀 Deploying review app to Control Plane...",
+              "## 🚀 Deploying to Control Plane...",
               "",
-              `[View deploy logs](${process.env.WORKFLOW_URL})`,
+              `${deployingIcon} **Waiting for deployment to be ready...**`,
               "",
-              `[Open Control Plane console](${process.env.CONSOLE_URL})`
+              `📝 [View Deploy Logs](${process.env.WORKFLOW_URL})`,
+              `🎮 [Control Plane Console](${process.env.CONSOLE_URL})`
             ].join("\n");
 
             await github.rest.issues.updateComment({
@@ -399,7 +451,7 @@ jobs:
 
       - name: Finalize deployment status
         if: always() && steps.config.outputs.ready == 'true' && steps.source.outputs.allowed == 'true' && (steps.check-app.outputs.exists == 'true' || steps.setup-review-app.outcome == 'success')
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           COMMENT_ID: ${{ steps.create-comment.outputs.comment-id }}
           DEPLOYMENT_ID: ${{ steps.init-deployment.outputs.result }}
@@ -426,19 +478,23 @@ jobs:
             }
 
             const successBody = [
-              "## Review app ready",
+              "## 🎉 Deploy Complete!",
               "",
-              appUrl ? `[Open review app](${appUrl})` : "Review app deployed, but no endpoint URL was detected.",
+              appUrl ? `### [Open Review App](${appUrl})` : "Review app deployed, but no endpoint URL was detected.",
               "",
-              `[Open Control Plane console](${process.env.CONSOLE_URL})`,
-              `[View workflow logs](${process.env.WORKFLOW_URL})`
+              `_Deployment successful for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}_`,
+              "",
+              `🎮 [Control Plane Console](${process.env.CONSOLE_URL})`,
+              `📋 [View Completed Action Build and Deploy Logs](${process.env.WORKFLOW_URL})`
             ].join("\n");
 
             const failureBody = [
-              `❌ Review app deployment failed for PR #${process.env.PR_NUMBER}`,
+              "## ❌ Review App Deployment Failed",
               "",
-              `[Open Control Plane console](${process.env.CONSOLE_URL})`,
-              `[View workflow logs](${process.env.WORKFLOW_URL})`
+              `_Deployment failed for PR #${process.env.PR_NUMBER}, commit ${process.env.PR_SHA}_`,
+              "",
+              `🎮 [Control Plane Console](${process.env.CONSOLE_URL})`,
+              `📋 [View Failed Action Build and Deploy Logs](${process.env.WORKFLOW_URL})`
             ].join("\n");
 
             if (!Number.isFinite(commentId) || commentId <= 0) {

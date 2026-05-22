@@ -22,17 +22,24 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Post quick reference
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const body = [
-              "# Review app commands",
+              "# 🚀 Quick Review App Commands",
               "",
-              "- `+review-app-deploy` - create or redeploy this PR's review app.",
-              "- `+review-app-delete` - delete this PR's review app and temporary resources.",
-              "- `+review-app-help` - show setup details and workflow behavior.",
+              "Welcome! Here are the commands you can use in this PR:",
               "",
-              "For setup details, comment `+review-app-help`."
+              "### `+review-app-deploy`",
+              "Deploy your PR branch for testing.",
+              "",
+              "### `+review-app-delete`",
+              "Remove the review app when done.",
+              "",
+              "### `+review-app-help`",
+              "Show detailed instructions, environment setup, and configuration options.",
+              "",
+              "_Comment `+review-app-help` for full setup details._"
             ].join("\n");
 
             await github.rest.issues.createComment({
