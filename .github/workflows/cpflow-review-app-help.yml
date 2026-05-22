@@ -3,8 +3,8 @@ name: Show Review App Commands on PR Open
 on:
   # pull_request_target is intentional: it has write permission to comment on PRs from
   # forks, where `pull_request` would be read-only. This is safe because no PR code is
-  # checked out — the job only calls `actions/github-script` with a hardcoded message.
-  # Do not switch this to `pull_request` or add a checkout step without re-evaluating.
+  # checked out — the job only calls the upstream reusable workflow with a hardcoded
+  # message.
   pull_request_target:
     types: [opened]
 
@@ -14,30 +14,5 @@ permissions:
 
 jobs:
   show-help:
-    # Skip on PRs in repos that have not configured the cpflow review app flow yet,
-    # so this workflow does not noisily comment on every contributor PR. Once the
-    # repository sets `vars.REVIEW_APP_PREFIX`, the help message starts appearing.
     if: vars.REVIEW_APP_PREFIX != ''
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Post quick reference
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const body = [
-              "# Review app commands",
-              "",
-              "- `+review-app-deploy` - create or redeploy this PR's review app.",
-              "- `+review-app-delete` - delete this PR's review app and temporary resources.",
-              "- `+review-app-help` - show setup details and workflow behavior.",
-              "",
-              "For setup details, comment `+review-app-help`."
-            ].join("\n");
-
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body
-            });
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@8e9c0c5e9991ac8651ae2721830bf5231f34de5c
