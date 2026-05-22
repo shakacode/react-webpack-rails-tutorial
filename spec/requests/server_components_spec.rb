@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "react_on_rails/length_prefixed_parser"
 
 describe "Server Components" do
   it "GET /server-components returns the demo page shell" do
@@ -11,12 +12,11 @@ describe "Server Components" do
 
   describe "RSC payload endpoint" do
     def parsed_chunks
-      response.body.each_line.filter_map do |line|
-        stripped = line.strip
-        next if stripped.empty?
-
-        JSON.parse(stripped)
-      end
+      chunks = []
+      parser = ReactOnRails::LengthPrefixedParser.new
+      parser.feed(response.body.b) { |chunk| chunks << chunk }
+      parser.flush
+      chunks
     end
 
     def expect_valid_rsc_payload
