@@ -14,7 +14,7 @@ permissions:
 jobs:
   promote-to-production:
     if: github.event.inputs.confirm_promotion == 'promote'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@8e9c0c5e9991ac8651ae2721830bf5231f34de5c
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@6f44c84049d4fa09aaa8c0a72cc436cd52e66fb0
     with:
-      control_plane_flow_ref: 8e9c0c5e9991ac8651ae2721830bf5231f34de5c
+      control_plane_flow_ref: 6f44c84049d4fa09aaa8c0a72cc436cd52e66fb0
     secrets: inherit
