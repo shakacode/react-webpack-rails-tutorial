@@ -437,6 +437,16 @@ setup action installs that RubyGems version instead. For normal release pins,
 either leave it unset while using the matching `v<version>` workflow tag, or set
 it to the same gem version without the leading `v`.
 
+To test unreleased upstream workflow changes before merging `control-plane-flow`,
+pin a downstream PR to the upstream PR's full commit SHA in both `uses:` and
+`control_plane_flow_ref`, leave `CPFLOW_VERSION` unset, and trigger a real review
+app deploy. That tests the upstream reusable workflow, shared composite actions,
+and source-built `cpflow` gem from the same immutable commit. After the upstream
+change is released, regenerate or repin back to the matching release tag.
+Use `bin/pin-cpflow-github-ref <ref>` to update the generated wrapper refs
+together. The helper accepts release tags and full commit SHAs by default;
+`--allow-moving-ref` is only for short-lived local experiments.
+
 For this app, validate a regenerated flow with:
 
 ```bash

@@ -38,5 +38,52 @@ abort bad.join("\n") unless bad.empty?
 puts "no action metadata descriptions contain GitHub expressions"
 RUBY
 
+echo "==> check cpflow reusable workflow refs"
+bin/conductor-exec ruby <<'RUBY'
+require "yaml"
+
+CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
+
+refs = Hash.new { |hash, key| hash[key] = [] }
+
+Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
+  doc = YAML.load_file(path, aliases: true)
+  doc.fetch("jobs", {}).each do |job_name, job|
+    next unless job.is_a?(Hash)
+
+    with = job["with"].is_a?(Hash) ? job["with"] : {}
+    input_ref = with["control_plane_flow_ref"]
+    uses_match = job["uses"].to_s.match(CONTROL_PLANE_FLOW_WORKFLOW)
+
+    unless uses_match
+      abort "#{path}:#{job_name} has control_plane_flow_ref but no control-plane-flow reusable workflow" if input_ref
+
+      next
+    end
+
+    uses_ref = uses_match[1]
+    refs[uses_ref] << "#{path}:#{job_name}"
+
+    if input_ref
+      refs[input_ref] << "#{path}:#{job_name}"
+      abort "#{path}:#{job_name} mismatched cpflow refs: #{uses_ref}, #{input_ref}" if uses_ref != input_ref
+    elsif job.key?("secrets")
+      abort "#{path}:#{job_name} inherits secrets but is missing control_plane_flow_ref for #{uses_ref}"
+    end
+  end
+end
+
+if refs.empty?
+  puts "no upstream cpflow reusable workflow refs found"
+elsif refs.length > 1
+  refs.each do |ref, paths|
+    puts "#{ref}: #{paths.uniq.sort.join(', ')}"
+  end
+  abort "cpflow workflow wrappers use multiple upstream refs: #{refs.keys.sort.join(', ')}"
+else
+  puts "cpflow refs: #{refs.keys.sort.join(', ')}"
+end
+RUBY
+
 echo "==> actionlint"
 actionlint -ignore "SC2129" .github/workflows/cpflow-*.yml
