@@ -421,6 +421,22 @@ GitHub Actions flow, update a project by regenerating the flow from the desired
 `cpflow` version or branch, reviewing the diff, and keeping any local app names,
 repository variables, secrets, and docs aligned with `.controlplane/controlplane.yml`.
 
+The generated workflows are intentionally thin wrappers around reusable
+workflows in `shakacode/control-plane-flow`. GitHub loads reusable workflows from
+a repository ref, not from the Ruby gem, so each wrapper has a `uses: ...@<ref>`
+line plus a matching `control_plane_flow_ref: <ref>`. For stable releases,
+generate these files from a released `cpflow` gem; the default ref is the
+matching upstream release tag, `v<gem version>`. Avoid `main` or feature-branch
+refs in production. Use an immutable commit SHA only when testing unreleased
+upstream changes, then move back to the release tag after the upstream release
+is published.
+
+`CPFLOW_VERSION` is a runtime gem-install override. When it is unset, the setup
+action builds `cpflow` from the checked-out upstream ref. When it is set, the
+setup action installs that RubyGems version instead. For normal release pins,
+either leave it unset while using the matching `v<version>` workflow tag, or set
+it to the same gem version without the leading `v`.
+
 For this app, validate a regenerated flow with:
 
 ```bash

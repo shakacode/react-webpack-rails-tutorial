@@ -51,7 +51,9 @@ Optional repository settings:
 - `DOCKER_BUILD_EXTRA_ARGS`: newline-delimited Docker build tokens, such as `--build-arg=FOO=bar`.
 - `DOCKER_BUILD_SSH_KNOWN_HOSTS`: custom `known_hosts` entries when SSH build hosts are not GitHub.com.
 - `CPLN_CLI_VERSION`: pin a specific `@controlplane/cli` version; defaults to the generated action pin.
-- `CPFLOW_VERSION`: pin a specific cpflow gem version; defaults to the generated action pin.
+- `CPFLOW_VERSION`: optional runtime gem-install override. When unset, workflows build
+  `cpflow` from the checked-out upstream workflow ref. When set, use the RubyGems
+  version number without a leading `v`.
 - `HEALTH_CHECK_ACCEPTED_STATUSES`: production promotion health statuses; defaults to `200 301 302`.
 - `HEALTH_CHECK_RETRIES` / `HEALTH_CHECK_INTERVAL`: production health polling controls; defaults to `24` retries and `15` seconds.
 - `ROLLBACK_READINESS_RETRIES` / `ROLLBACK_READINESS_INTERVAL`: post-rollback health polling controls; defaults to `24` retries and `15` seconds.
@@ -70,6 +72,14 @@ the normal CI checks before merging. For review-app workflow changes, remember
 that the deploy workflow checks out trusted local actions from `master` before
 passing Control Plane secrets; PR-branch composite action changes are not fully
 tested until they land on `master` and a real review-app deploy is rerun.
+
+Generated workflow wrappers point to upstream reusable workflows with
+`uses: shakacode/control-plane-flow/...@<ref>` and pass the same
+`control_plane_flow_ref`. For stable releases, `<ref>` should be the
+`v<cpflow gem version>` tag produced by the released gem. Do not use `main` or a
+feature branch for production automation. A commit SHA is acceptable for
+unreleased testing, but regenerate or repin to the release tag once the upstream
+release exists.
 
 See [readme.md](readme.md) and
 [Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md)
