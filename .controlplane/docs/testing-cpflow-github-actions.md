@@ -18,6 +18,48 @@ Control Plane secrets to local composite actions. A PR branch can contain fixed
 `.github/actions/*` files, but the deploy job still loads those local actions
 from `master` until the fix is merged there.
 
+## How Upstream Code Is Pinned
+
+Generated `cpflow-*` workflows are thin wrappers around reusable workflows in
+`shakacode/control-plane-flow`. GitHub reusable workflows cannot be loaded from
+a Ruby gem; GitHub resolves them from a repository ref. Each wrapper therefore
+has two upstream pins that must stay in sync:
+
+```yaml
+uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@<ref>
+with:
+  control_plane_flow_ref: <ref>
+```
+
+`uses: ...@<ref>` chooses the reusable workflow file. `control_plane_flow_ref`
+chooses the same upstream checkout for shared composite actions and, when
+`CPFLOW_VERSION` is unset, the source used to build and install the `cpflow` gem
+inside the workflow.
+
+The stable release path is still gem-driven:
+
+1. Install or update to a released `cpflow` gem.
+2. Run `cpflow generate-github-actions --staging-branch master`.
+3. The generated wrappers use `v<cpflow gem version>` as the upstream ref.
+
+That tag should point to the same source that produced the RubyGems release, so
+the workflow code is locked to a release tag rather than a moving branch. Do not
+pin production workflows to `main` or a feature branch. For unreleased testing,
+pin to an immutable commit SHA, not a branch name, then regenerate or repin to
+the release tag after the upstream release is published.
+
+`CPFLOW_VERSION` is separate from the GitHub workflow ref. If the repository
+variable is set, the setup action runs `gem install cpflow -v <version>`. If it
+is unset, the setup action builds `cpflow` from the checked-out upstream ref.
+For normal releases, either leave `CPFLOW_VERSION` unset while using the matching
+`v<version>` upstream tag, or set `CPFLOW_VERSION` to the same released gem
+version without the leading `v`.
+
+This repo is currently pinned to an upstream commit SHA because the reusable
+workflow change was tested before a new `cpflow` gem release existed. That is
+safer than pinning a branch, but it should be treated as a temporary test pin
+until the next upstream release tag is available.
+
 ## Local Checks
 
 After regenerating the flow, run these checks from the repository root. If
