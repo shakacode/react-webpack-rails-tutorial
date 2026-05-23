@@ -60,6 +60,73 @@ workflow change was tested before a new `cpflow` gem release existed. That is
 safer than pinning a branch, but it should be treated as a temporary test pin
 until the next upstream release tag is available.
 
+What is tied to the upstream repo:
+
+- The downstream workflow wrapper hardcodes `shakacode/control-plane-flow` in
+  `uses:`.
+- The reusable workflow file comes from the ref after `@`.
+- The reusable workflow checks out `control-plane-flow` at
+  `control_plane_flow_ref` to load shared composite actions.
+- When `CPFLOW_VERSION` is empty, the setup action builds and installs the
+  `cpflow` gem from that checked-out repository ref.
+
+What is tied to RubyGems:
+
+- A released `cpflow` gem is the normal source used to generate downstream
+  workflow wrappers.
+- The `CPFLOW_VERSION` repository variable is a runtime override that runs
+  `gem install cpflow -v <version>` inside workflows.
+
+For stable downstream automation, prefer the release path: generate from a
+released gem and pin wrappers to the matching upstream release tag. For
+pre-release validation, pin to a full commit SHA from the upstream PR, never a
+moving branch.
+
+## Testing An Unmerged Upstream PR Downstream
+
+You can test an upstream `control-plane-flow` PR in this downstream app before
+merging upstream, without publishing a gem. Use an immutable commit SHA from the
+upstream PR branch:
+
+1. Push the upstream PR branch and copy its head commit SHA.
+2. In a downstream test branch, pin every generated wrapper ref:
+
+   ```sh
+   bin/pin-cpflow-github-ref <upstream-pr-sha>
+   ```
+
+   The helper accepts release tags and full 40-character commit SHAs by default.
+   It rejects branch names such as `main` or `feature/foo`; use
+   `--allow-moving-ref` only for short-lived local experiments that will not be
+   committed. The resulting diff should replace both pins in each reusable
+   workflow call:
+
+   ```yaml
+   uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@<upstream-pr-sha>
+   with:
+     control_plane_flow_ref: <upstream-pr-sha>
+   ```
+
+3. Keep `CPFLOW_VERSION` unset unless you intentionally want to test a released
+   RubyGems version instead of building `cpflow` from the upstream PR SHA.
+4. Run `bin/test-cpflow-github-flow`.
+5. Open a downstream PR and trigger a real review app with a comment whose body
+   is exactly:
+
+   ```text
+   +review-app-deploy
+   ```
+
+6. Verify the deploy logs show the expected upstream commit SHA, the setup step
+   prints the expected `cpflow` version/source, and the review app URL returns
+   HTTP 200.
+7. After the upstream PR merges and releases, regenerate or repin downstream to
+   the release tag instead of leaving the temporary commit SHA forever.
+
+This tests the real reusable workflow and shared composite actions from the
+upstream PR. It avoids merging upstream blind while also avoiding a mutable
+branch ref in downstream automation.
+
 ## Local Checks
 
 After regenerating the flow, run these checks from the repository root. If
@@ -83,7 +150,10 @@ inside composite action metadata, including `description:` fields. Literal
 examples such as `${{ vars.SOME_VALUE }}` can fail action loading before any
 shell step starts. The wrapper runs `cpflow github-flow-readiness`, parses the
 generated YAML, checks action input descriptions for literal GitHub expressions,
-and runs `actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml`.
+checks that every generated wrapper keeps `uses:` and `control_plane_flow_ref`
+on the same upstream ref across all `cpflow-*` wrappers, checks that any
+secret-inheriting reusable workflow passes `control_plane_flow_ref`, and runs
+`actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml`.
 
 ## PR Checks
 
@@ -168,6 +238,12 @@ Create the first review app by commenting exactly:
 
 ## Ways To Make This Easier
 
+- Extend `bin/pin-cpflow-github-ref` so it can also run
+  `bin/test-cpflow-github-flow`, open a downstream PR, and print or post the
+  exact `+review-app-deploy` command needed to start the canary deploy.
+- Add CI coverage that runs `bin/test-cpflow-github-flow` on generated workflow
+  changes, so ref mismatches and action metadata parsing issues are caught
+  before review.
 - Add a no-secret GitHub Actions smoke workflow that loads generated local
   composite actions from the PR branch and fails fast on action metadata parsing.
 - Extend `bin/test-cpflow-github-flow` as more local cpflow GitHub Actions
