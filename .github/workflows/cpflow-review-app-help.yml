@@ -15,4 +15,4 @@ permissions:
 jobs:
   show-help:
     if: vars.REVIEW_APP_PREFIX != ''
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@6f44c84049d4fa09aaa8c0a72cc436cd52e66fb0
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
