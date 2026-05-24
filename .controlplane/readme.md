@@ -19,6 +19,104 @@ In a real app, you would likely use persistent, external resources, such as AWS 
 
 You can see the definition of Postgres and Redis in the `.controlplane/templates` directory.
 
+## GitHub Review App Setup
+
+For normal generated review apps in this repo, GitHub needs only one repository
+secret:
+
+| Secret | Notes |
+| --- | --- |
+| `CPLN_TOKEN_STAGING` | Control Plane service-account token for `shakacode-open-source-examples-staging`. |
+
+No GitHub repository variables are required for the standard review-app path.
+The generated workflow infers the review app prefix
+`qa-react-webpack-rails-tutorial` and staging org
+`shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`
+because that file defines exactly one app with
+`match_if_app_name_starts_with: true`.
+
+Optional review-app variables:
+
+| Variable | Notes |
+| --- | --- |
+| `CPLN_ORG_STAGING` | Override the inferred staging org. |
+| `REVIEW_APP_PREFIX` | Override or disambiguate the inferred review app prefix. |
+| `PRIMARY_WORKLOAD` | Public workload name used to discover the review URL; defaults to `rails`. |
+
+For staging auto-deploys, also configure:
+
+| Secret or variable | Value |
+| --- | --- |
+| `CPLN_TOKEN_STAGING` | Same staging Control Plane token used by review apps. |
+| `CPLN_ORG_STAGING` | `shakacode-open-source-examples-staging` |
+| `STAGING_APP_NAME` | `react-webpack-rails-tutorial-staging` |
+
+For production promotion, configure a protected GitHub Environment named
+`production`:
+
+| Secret or variable | Value |
+| --- | --- |
+| `CPLN_TOKEN_PRODUCTION` | Environment secret on `production`, not a repository or organization secret. |
+| `CPLN_ORG_PRODUCTION` | Environment variable on `production`: `shakacode-open-source-examples-production` |
+| `PRODUCTION_APP_NAME` | Environment variable on `production`: `react-webpack-rails-tutorial-production` |
+
+Protect the `production` environment with required reviewers, enable prevent
+self-review, and consider disabling administrator bypass. Only release managers
+or similarly trusted maintainers should be able to approve the promotion job.
+The promotion workflow uses that environment before it can access
+`CPLN_TOKEN_PRODUCTION`, so the production token is not exposed to ordinary
+review-app or staging runs.
+
+Advanced optional variables:
+
+| Name | Notes |
+| --- | --- |
+| `REVIEW_APP_DEPLOYING_ICON_URL` | Cosmetic custom animated icon for review-app comments. Ignore this for the standard setup. |
+| `CPLN_CLI_VERSION` | Pin only when Control Plane CLI compatibility requires it. |
+| `CPFLOW_VERSION` | Runtime gem override. Leave unset when workflow wrappers are pinned to a GitHub commit SHA for upstream PR testing. |
+
+## Control Plane Setup
+
+The GitHub secret is only the automation credential. The Control Plane org also
+needs the app resources and runtime secrets that the workloads read at boot.
+
+For review-app testing, the standard setup is:
+
+| Control Plane item | Where | Notes |
+| --- | --- | --- |
+| Staging/review org | `shakacode-open-source-examples-staging` | The `CPLN_TOKEN_STAGING` service account must be able to create and update GVCs, workloads, images, identities, policies, and secrets in this org. |
+| Review app prefix | `qa-react-webpack-rails-tutorial` | Review apps are named `qa-react-webpack-rails-tutorial-<PR number>`. This is inferred from `.controlplane/controlplane.yml`. |
+| Review app secret dictionary | `qa-react-webpack-rails-tutorial-secrets` | Shared by generated review apps because the QA app entry uses `match_if_app_name_starts_with: true`. |
+
+For staging deploys later, also use:
+
+| Control Plane item | Where | Notes |
+| --- | --- | --- |
+| Staging app | `react-webpack-rails-tutorial-staging` | The `CPLN_TOKEN_STAGING` token deploys this app from `master`. |
+| Staging app secret dictionary | `react-webpack-rails-tutorial-staging-secrets` | Same required keys as the review app secret dictionary. |
+
+For production promotion later, use a separate production org and token:
+
+| Control Plane item | Where | Notes |
+| --- | --- | --- |
+| Production org | `shakacode-open-source-examples-production` | Do not give the staging token access to this org. |
+| Production app | `react-webpack-rails-tutorial-production` | Promotion copies the staging image into this app. |
+| Production app secret dictionary | `react-webpack-rails-tutorial-production-secrets` | Create before the first promotion. Use production-only values. |
+| Production service-account token | GitHub Environment secret `CPLN_TOKEN_PRODUCTION` | Keep this token in the protected `production` GitHub Environment only. |
+
+The app secret dictionaries must include:
+
+- `SECRET_KEY_BASE`
+- `RENDERER_PASSWORD`
+- `REACT_ON_RAILS_PRO_LICENSE`
+
+Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
+`RENDERER_PASSWORD` with `openssl rand -hex 32`. The review/staging template
+currently contains a test placeholder for `SECRET_KEY_BASE`; replace it with a
+secret-backed value before promoting production. The demo Postgres and Redis
+workloads are useful for review apps and staging demos. For real production,
+prefer managed services and update `DATABASE_URL` and `REDIS_URL` accordingly.
+
 ## Prerequisites
 
 1. Ensure your [Control Plane](https://shakacode.controlplane.com) account is set up.
@@ -388,11 +486,11 @@ The production promotion workflow checks that production has all environment
 variable names present in staging; it does not compare secret values, workload
 environment variables, or Control Plane secret references.
 
-The repository variables and secrets must match the app names in
-`.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should
-include the `-pr` suffix for this app, such as
-`qa-react-webpack-rails-tutorial-pr`, so generated review apps are named
-`qa-react-webpack-rails-tutorial-pr-1234`.
+The GitHub settings and Control Plane resources must match the app names in
+`.controlplane/controlplane.yml`. For the standard review-app path, leave
+`REVIEW_APP_PREFIX` unset and let the workflow infer
+`qa-react-webpack-rails-tutorial`; generated review apps are named
+`qa-react-webpack-rails-tutorial-<PR number>`.
 
 This allows teams to:
 - Preview changes in a production-like environment

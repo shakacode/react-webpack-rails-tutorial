@@ -26,7 +26,7 @@ jobs:
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_target' && github.event.action == 'closed') ||
       github.event_name == 'workflow_dispatch'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@db013e139af4ee8741f791c14ff825f13c0a1021
     with:
-      control_plane_flow_ref: 3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
+      control_plane_flow_ref: db013e139af4ee8741f791c14ff825f13c0a1021
     secrets: inherit
