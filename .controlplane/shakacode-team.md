@@ -6,10 +6,10 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 
 ### Review Apps
 - Add a comment `+review-app-deploy` to any PR to deploy a review app
-- The generated app name is `${REVIEW_APP_PREFIX}-${PR_NUMBER}`. Keep
-  `REVIEW_APP_PREFIX` set to `qa-react-webpack-rails-tutorial-pr` so review
-  apps use names like `qa-react-webpack-rails-tutorial-pr-1234`, matching the
-  prefix-backed config in `.controlplane/controlplane.yml`.
+- Leave `REVIEW_APP_PREFIX` unset for the standard path. The workflow infers
+  `qa-react-webpack-rails-tutorial` from `.controlplane/controlplane.yml`, so
+  generated review apps use names like
+  `qa-react-webpack-rails-tutorial-1234`.
 - New pushes to a PR redeploy only after the review app already exists.
 - Add `+review-app-delete` to delete a review app manually; closing the PR also
   deletes it automatically. Use `+review-app-help` for the command reference.
@@ -30,20 +30,30 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 
 ### GitHub Repository Settings
 
-Required repository secrets:
+Required repository secret for review apps and staging:
 
 - `CPLN_TOKEN_STAGING`
-- `CPLN_TOKEN_PRODUCTION`
 
-Required repository variables:
+Required repository variables for staging deploys:
 
 - `CPLN_ORG_STAGING=shakacode-open-source-examples-staging`
-- `CPLN_ORG_PRODUCTION=shakacode-open-source-examples-production`
 - `STAGING_APP_NAME=react-webpack-rails-tutorial-staging`
-- `PRODUCTION_APP_NAME=react-webpack-rails-tutorial-production`
-- `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial-pr`
 - `STAGING_APP_BRANCH=master`
 - `PRIMARY_WORKLOAD=rails`
+
+Review apps infer `CPLN_ORG_STAGING`, `REVIEW_APP_PREFIX`, and
+`PRIMARY_WORKLOAD` from `.controlplane/controlplane.yml` and workflow defaults,
+so those values do not need to be set just to test review apps.
+
+Production promotion uses a protected GitHub Environment named `production`:
+
+- Environment secret `CPLN_TOKEN_PRODUCTION`
+- Environment variable `CPLN_ORG_PRODUCTION=shakacode-open-source-examples-production`
+- Environment variable `PRODUCTION_APP_NAME=react-webpack-rails-tutorial-production`
+
+Protect the `production` environment with required reviewers, enable prevent
+self-review, and consider disabling administrator bypass. Do not store
+`CPLN_TOKEN_PRODUCTION` as a repository or organization secret.
 
 Optional repository settings:
 
@@ -66,7 +76,7 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 When the upstream `control-plane-flow` repo changes the generated GitHub Actions
 flow, regenerate the `cpflow-*` actions/workflows in this repo from the target
 `cpflow` version or branch using `--staging-branch master`, review the diff, and
-keep the repository variables above aligned with `.controlplane/controlplane.yml`. Validate with
+keep the GitHub settings above aligned with `.controlplane/controlplane.yml`. Validate with
 `cpflow github-flow-readiness`, `actionlint .github/workflows/cpflow-*.yml`, and
 the normal CI checks before merging. For review-app workflow changes, remember
 that the deploy workflow checks out trusted local actions from `master` before
