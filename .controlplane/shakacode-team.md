@@ -43,7 +43,9 @@ Required repository variables for staging deploys:
 
 Review apps infer `CPLN_ORG_STAGING`, `REVIEW_APP_PREFIX`, and
 `PRIMARY_WORKLOAD` from `.controlplane/controlplane.yml` and workflow defaults,
-so those values do not need to be set just to test review apps.
+so those values do not need to be set just to test review apps. Set them only
+when testing a fork or clone against a different Control Plane org, review-app
+prefix, or public workload.
 
 Production promotion uses a protected GitHub Environment named `production`:
 

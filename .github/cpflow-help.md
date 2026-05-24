@@ -43,6 +43,13 @@ GitHub setting. The review app prefix and staging org are inferred from
 `.controlplane/controlplane.yml` when it defines exactly one app with
 `match_if_app_name_starts_with: true`.
 
+Those inferred values come from `.controlplane/controlplane.yml`: `cpln_org`
+selects the Control Plane org and the app key with
+`match_if_app_name_starts_with: true` becomes the review-app prefix. The
+optional review-app variables below are override hooks for forks and clones that
+want to test against their own Control Plane org, use a different prefix, or
+expose a different public workload. Leave them unset for the standard setup.
+
 For production promotion, create a GitHub Environment named `production`, add
 required reviewers, enable prevent self-review, and store
 `CPLN_TOKEN_PRODUCTION` as an environment secret there. The generated promotion
@@ -56,10 +63,10 @@ workflow uses that environment before it can access production secrets.
 | `CPLN_ORG_PRODUCTION` | yes (for promote) | Control Plane org on controlplane.com for production. Prefer a `production` environment variable. |
 | `STAGING_APP_NAME` | yes | App name in `controlplane.yml` used as the staging deploy target. |
 | `PRODUCTION_APP_NAME` | yes (for promote) | App name in `controlplane.yml` used as the production deploy target. Prefer a `production` environment variable. |
-| `REVIEW_APP_PREFIX` | optional | Override or disambiguate the review app prefix inferred from `controlplane.yml`. |
+| `REVIEW_APP_PREFIX` | optional | Override the review-app app key inferred from the `match_if_app_name_starts_with: true` entry in `controlplane.yml`. |
 | `REVIEW_APP_DEPLOYING_ICON_URL` | optional, advanced | Cosmetic custom image URL for the animated deploying icon in review-app PR comments. Set to `none` to use the text fallback icon. |
 | `STAGING_APP_BRANCH` | optional | Custom staging branch. Custom branches must also appear in `cpflow-deploy-staging.yml`'s push filter. |
-| `PRIMARY_WORKLOAD` | optional | Workload polled for health and rollback (defaults to `rails`). |
+| `PRIMARY_WORKLOAD` | optional | Override the public workload used for the review URL, health checks, and rollback (defaults to `rails`). |
 | `DOCKER_BUILD_EXTRA_ARGS` | optional | Newline-delimited extra docker build tokens (e.g. `--build-arg=FOO=bar`). |
 | `DOCKER_BUILD_SSH_KNOWN_HOSTS` | optional | SSH known_hosts entries when SSH build hosts are not GitHub.com. |
 | `HEALTH_CHECK_ACCEPTED_STATUSES` | optional | Space-separated HTTP statuses considered healthy on promote (default `200 301 302`). |

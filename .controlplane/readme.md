@@ -35,13 +35,21 @@ The generated workflow infers the review app prefix
 because that file defines exactly one app with
 `match_if_app_name_starts_with: true`.
 
-Optional review-app variables:
+These inferred values come from `.controlplane/controlplane.yml`: the review-app
+prefix is the app key with `match_if_app_name_starts_with: true`, and the
+staging org is the `cpln_org` value on that app or its shared alias. The
+variables below are escape hatches for forks and clones, so someone can test
+this repo against their own Control Plane org, choose a different review-app
+prefix, or expose a different public workload without editing the generated
+workflow. Leave them unset for the standard setup.
+
+Optional review-app override variables:
 
 | Variable | Notes |
 | --- | --- |
-| `CPLN_ORG_STAGING` | Override the inferred staging org. |
-| `REVIEW_APP_PREFIX` | Override or disambiguate the inferred review app prefix. |
-| `PRIMARY_WORKLOAD` | Public workload name used to discover the review URL; defaults to `rails`. |
+| `CPLN_ORG_STAGING` | Override the staging org inferred from `cpln_org` in `.controlplane/controlplane.yml`. |
+| `REVIEW_APP_PREFIX` | Override the review-app app key inferred from the `match_if_app_name_starts_with: true` entry. |
+| `PRIMARY_WORKLOAD` | Override the public workload used to discover the review URL; leave unset for `rails`. |
 
 For staging auto-deploys, also configure:
 
