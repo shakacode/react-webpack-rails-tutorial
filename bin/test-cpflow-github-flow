@@ -43,6 +43,7 @@ bin/conductor-exec ruby <<'RUBY'
 require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
+PROMOTE_WORKFLOW = "/.github/workflows/cpflow-promote-staging-to-production.yml@"
 
 refs = Hash.new { |hash, key| hash[key] = [] }
 
@@ -67,6 +68,17 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
 
     uses_ref = uses_match[1]
     refs[uses_ref] << "#{path}:#{job_name}"
+
+    if job["uses"].to_s.include?(PROMOTE_WORKFLOW)
+      if with["production_environment"].to_s.strip.empty?
+        abort "#{path}:#{job_name} must set production_environment so GitHub can expose production environment secrets after approval"
+      end
+
+      secrets = job["secrets"].is_a?(Hash) ? job["secrets"] : {}
+      if secrets.key?("CPLN_TOKEN_PRODUCTION")
+        abort "#{path}:#{job_name} must not pass CPLN_TOKEN_PRODUCTION as a caller secret; store it on the protected production environment"
+      end
+    end
 
     if input_ref
       refs[input_ref] << "#{path}:#{job_name}"

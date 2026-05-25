@@ -22,8 +22,9 @@ jobs:
     with:
       control_plane_flow_ref: b0c5759050c5c79a05826cd7a5d3ae711cd22a40
       # Keep CPLN_TOKEN_PRODUCTION as a secret on this protected GitHub
-      # Environment. Required reviewers approve the job before GitHub exposes
-      # environment secrets to the upstream reusable workflow.
+      # Environment. The caller passes the environment name, the upstream
+      # reusable workflow runs its production job in that environment, and
+      # GitHub exposes environment secrets only after required reviewers approve.
       production_environment: production
     # Only pass the staging token explicitly. CPLN_TOKEN_PRODUCTION must live on
     # the protected production Environment, where GitHub exposes it only after

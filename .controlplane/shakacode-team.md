@@ -54,7 +54,11 @@ Production promotion uses a protected GitHub Environment named `production`:
 
 Protect the `production` environment with required reviewers, enable prevent
 self-review, and consider disabling administrator bypass. Do not store
-`CPLN_TOKEN_PRODUCTION` as a repository or organization secret.
+`CPLN_TOKEN_PRODUCTION` as a repository or organization secret. The caller
+passes `production_environment: production`; the upstream reusable workflow runs
+its production job in that environment, and GitHub injects the production token
+only after approval.
+
 Generated caller workflows pass only the named secrets each upstream workflow
 needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
 only by the protected `production` Environment after approval.
