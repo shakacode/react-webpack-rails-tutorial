@@ -12,6 +12,6 @@ jobs:
   cleanup:
     # Cleanup targets the current inferred review-app prefix. If you changed
     # naming conventions, manually delete review apps under the old prefix.
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@54a6b8a066ac0a59c49e95a866e21b5633e2b1f9
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@v5.0.1
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}

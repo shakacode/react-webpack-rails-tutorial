@@ -66,10 +66,9 @@ only by the protected `production` Environment after approval.
 Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
-Current workflow wrappers are pinned to merged upstream `control-plane-flow`
-commit `54a6b8a066ac0a59c49e95a866e21b5633e2b1f9` for downstream testing. After
-5.0.1 ships, repin the wrappers to `v5.0.1`; do not treat the temporary SHA as
-the steady-state master configuration.
+Current workflow wrappers are pinned to the upstream `control-plane-flow`
+release tag `v5.0.1`. Keep release tags as the steady-state configuration; use
+a full commit SHA only for short-lived upstream PR testing.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.

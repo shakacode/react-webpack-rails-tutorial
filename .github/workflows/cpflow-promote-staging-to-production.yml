@@ -16,7 +16,7 @@ permissions:
 jobs:
   promote-to-production:
     if: github.event.inputs.confirm_promotion == 'promote'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@54a6b8a066ac0a59c49e95a866e21b5633e2b1f9
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.0.1
     with:
       # Keep CPLN_TOKEN_PRODUCTION as a secret on this protected GitHub
       # Environment. The caller passes the environment name, the upstream
