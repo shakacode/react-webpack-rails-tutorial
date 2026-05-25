@@ -39,6 +39,16 @@ Optional overrides exist for forks, clones, and unusual apps:
 ## Staging And Production
 
 Staging deploys use the same `CPLN_TOKEN_STAGING` secret plus `STAGING_APP_NAME`.
+Before the first staging deploy, bootstrap the persistent staging app once:
+
+```sh
+cpflow setup-app -a "$STAGING_APP_NAME" --org "$CPLN_ORG_STAGING" --skip-post-creation-hook
+```
+
+`setup-app` creates the app identity, app secret dictionary, app secret policy,
+policy binding, and template resources. For later template updates on an
+existing persistent app, use `cpflow apply-template` and make sure the app
+identity has `reveal` permission on the app secret policy.
 
 Production promotion is part of the generated flow, but keep it protected:
 
@@ -52,6 +62,9 @@ Configure the `production` GitHub Environment with required reviewers and
 prevent self-review. The generated promotion wrapper passes only the staging
 token from repository secrets; GitHub injects `CPLN_TOKEN_PRODUCTION` only after
 the environment approval gate passes.
+
+Before the first promotion, bootstrap the production app the same way in the
+production org, using production-only secrets and values.
 
 ## Version Locking
 
