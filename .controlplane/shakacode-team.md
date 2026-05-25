@@ -63,24 +63,12 @@ Generated caller workflows pass only the named secrets each upstream workflow
 needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
 only by the protected `production` Environment after approval.
 
-Optional repository settings:
-
-- `PRIMARY_WORKLOAD`: public workload used for review URLs and promote health checks; defaults to `rails`.
-- `DOCKER_BUILD_SSH_KEY`: secret for private SSH dependencies during Docker builds.
-- `DOCKER_BUILD_EXTRA_ARGS`: newline-delimited Docker build tokens, such as `--build-arg=FOO=bar`.
-- `DOCKER_BUILD_SSH_KNOWN_HOSTS`: custom `known_hosts` entries when SSH build hosts are not GitHub.com.
-- `CPLN_CLI_VERSION`: pin a specific `@controlplane/cli` version; defaults to the generated action pin.
-- `CPFLOW_VERSION`: optional runtime gem-install override. When unset, workflows build
-  `cpflow` from the checked-out upstream workflow ref. When set, use the RubyGems
-  version number without a leading `v`.
-- `HEALTH_CHECK_ACCEPTED_STATUSES`: production promotion health statuses; defaults to `200 301 302`.
-- `HEALTH_CHECK_RETRIES` / `HEALTH_CHECK_INTERVAL`: production health polling controls; defaults to `24` retries and `15` seconds.
-- `ROLLBACK_READINESS_RETRIES` / `ROLLBACK_READINESS_INTERVAL`: post-rollback health polling controls; defaults to `24` retries and `15` seconds.
+Advanced optional settings are documented upstream in the
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
 Current workflow wrappers are pinned to upstream `control-plane-flow` PR #318 at
-`19ca93eadcba81e7438f26ab55a0f2ca7ace82b0` for downstream testing. After that
-upstream work is released, regenerate or repin the wrappers to the release tag
-instead of keeping this PR commit SHA long term.
+`19ca93eadcba81e7438f26ab55a0f2ca7ace82b0` for downstream testing. After 5.0.1
+ships, repin the wrappers to `v5.0.1`.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
@@ -88,22 +76,10 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 ### Keeping cpflow Automation Current
 
 When the upstream `control-plane-flow` repo changes the generated GitHub Actions
-flow, regenerate the `cpflow-*` actions/workflows in this repo from the target
-`cpflow` version or branch using `--staging-branch master`, review the diff, and
-keep the GitHub settings above aligned with `.controlplane/controlplane.yml`. Validate with
-`cpflow github-flow-readiness`, `actionlint .github/workflows/cpflow-*.yml`, and
-the normal CI checks before merging. For review-app workflow changes, remember
-that the deploy workflow checks out trusted local actions from `master` before
-passing Control Plane secrets; PR-branch composite action changes are not fully
-tested until they land on `master` and a real review-app deploy is rerun.
-
-Generated workflow wrappers point to upstream reusable workflows with
-`uses: shakacode/control-plane-flow/...@<ref>` and pass the same
-`control_plane_flow_ref`. For stable releases, `<ref>` should be the
-`v<cpflow gem version>` tag produced by the released gem. Do not use `main` or a
-feature branch for production automation. A commit SHA is acceptable for
-unreleased testing, but regenerate or repin to the release tag once the upstream
-release exists.
+flow, regenerate from the target `cpflow` version with `--staging-branch master`,
+review the diff, and validate with `bin/test-cpflow-github-flow` plus the normal
+CI checks. Stable automation should use release tags such as `v5.0.1`, not
+`main` or a feature branch.
 
 See [readme.md](readme.md) and
 [Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md)
