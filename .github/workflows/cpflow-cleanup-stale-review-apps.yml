@@ -10,7 +10,8 @@ permissions:
 
 jobs:
   cleanup:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
-    with:
-      control_plane_flow_ref: 3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
-    secrets: inherit
+    # Cleanup targets the current inferred review-app prefix. If you changed
+    # naming conventions, manually delete review apps under the old prefix.
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@v5.0.1
+    secrets:
+      CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}

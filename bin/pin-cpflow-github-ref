@@ -8,6 +8,9 @@ USAGE = <<~USAGE
 
   Use a release tag for normal operation, e.g. v5.0.0.
   Use a full 40-character commit SHA for temporary unreleased upstream testing.
+  This only updates generated reusable-workflow `uses:` refs. The called
+  workflows load their own matching shared actions from that same workflow
+  commit automatically. Regenerate from the cpflow gem when templates changed.
   Use --allow-moving-ref only for short-lived local branch/ref experiments.
 USAGE
 
@@ -32,7 +35,7 @@ end
 ref = positional.first
 allow_moving_ref = options.include?("--allow-moving-ref")
 
-unless ref.match?(/\A[0-9A-Za-z._\/-]+\z/)
+unless ref.match?(%r{\A[0-9A-Za-z._/-]+\z})
   warn "Ref contains unsupported characters: #{ref.inspect}"
   exit 1
 end
@@ -44,7 +47,7 @@ unless ref.match?(FULL_COMMIT_SHA) || ref.match?(RELEASE_TAG) || allow_moving_re
 end
 
 root = Pathname.new(__dir__).join("..").expand_path
-workflow_paths = Dir[root.join(".github/workflows/cpflow-*.yml")].sort
+workflow_paths = Dir[root.join(".github/workflows/cpflow-*.yml")]
 
 if workflow_paths.empty?
   warn "No cpflow workflow wrappers found."
@@ -55,8 +58,7 @@ changed = []
 workflow_paths.each do |path|
   text = File.read(path)
   updated = text
-    .gsub(%r{(uses:\s+shakacode/control-plane-flow/\.github/workflows/[^@\s]+@)[^\s]+}, "\\1#{ref}")
-    .gsub(/(\bcontrol_plane_flow_ref:\s*)\S+/, "\\1#{ref}")
+            .gsub(%r{(uses:\s+shakacode/control-plane-flow/\.github/workflows/[^@\s]+@)[^\s]+}, "\\1#{ref}")
 
   next if updated == text
 

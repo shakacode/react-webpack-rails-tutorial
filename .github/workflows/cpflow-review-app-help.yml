@@ -14,5 +14,8 @@ permissions:
 
 jobs:
   show-help:
-    if: vars.REVIEW_APP_PREFIX != ''
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
+    # This is intentionally unconditional: committing this wrapper opts the repo in
+    # to PR-open help. Remove it, or uncomment and adapt this guard, if forks or
+    # clones should stay quiet until Control Plane is configured:
+    #   if: vars.REVIEW_APP_PREFIX != '' || vars.CPLN_ORG_STAGING != ''
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@v5.0.1

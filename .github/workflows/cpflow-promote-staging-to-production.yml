@@ -9,12 +9,22 @@ on:
         type: string
 
 permissions:
+  # The upstream reusable workflow's create-github-release job needs
+  # contents: write, and callers must grant the union of callee permissions.
   contents: write
 
 jobs:
   promote-to-production:
     if: github.event.inputs.confirm_promotion == 'promote'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.0.1
     with:
-      control_plane_flow_ref: 3e0e7e1f0a35c15648cc9254b573b058d77ca8c4
-    secrets: inherit
+      # Keep CPLN_TOKEN_PRODUCTION as a secret on this protected GitHub
+      # Environment. The caller passes the environment name, the upstream
+      # reusable workflow runs its production job in that environment, and
+      # GitHub exposes environment secrets only after required reviewers approve.
+      production_environment: production
+    # Only pass the staging token explicitly. CPLN_TOKEN_PRODUCTION must live on
+    # the protected production Environment, where GitHub exposes it only after
+    # the required reviewers approve this job.
+    secrets:
+      CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}

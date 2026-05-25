@@ -19,6 +19,92 @@ In a real app, you would likely use persistent, external resources, such as AWS 
 
 You can see the definition of Postgres and Redis in the `.controlplane/templates` directory.
 
+## GitHub and Control Plane Setup
+
+This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
+generic behavior documented upstream in the
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md);
+this section only lists the values that are specific to this app.
+
+### Review Apps and Staging
+
+For review apps, GitHub needs one repository secret:
+
+| Name | Value |
+| --- | --- |
+| `CPLN_TOKEN_STAGING` | Service-account token for `shakacode-open-source-examples-staging`. |
+
+No review-app repository variables are required for the standard path. The
+workflow infers `qa-react-webpack-rails-tutorial` and
+`shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`,
+because that file has one app with `match_if_app_name_starts_with: true`.
+`PRIMARY_WORKLOAD` also stays unset because the public workload is `rails`.
+
+For staging auto-deploys, also set these repository variables:
+
+| Name | Value |
+| --- | --- |
+| `CPLN_ORG_STAGING` | `shakacode-open-source-examples-staging` |
+| `STAGING_APP_NAME` | `react-webpack-rails-tutorial-staging` |
+| `STAGING_APP_BRANCH` | `master` |
+
+The matching Control Plane resources are:
+
+| Resource | Name |
+| --- | --- |
+| Review app prefix | `qa-react-webpack-rails-tutorial` |
+| Review app secret dictionary | `qa-react-webpack-rails-tutorial-secrets` |
+| Staging app | `react-webpack-rails-tutorial-staging` |
+| Staging app secret dictionary | `react-webpack-rails-tutorial-staging-secrets` |
+
+### Production Promotion
+
+Production promotion is part of the default demo flow, but the production token
+must be gated by a protected GitHub Environment named `production`:
+
+| Name | Where | Value |
+| --- | --- | --- |
+| `CPLN_TOKEN_PRODUCTION` | `production` Environment secret | Production Control Plane service-account token. |
+| `CPLN_ORG_PRODUCTION` | `production` Environment variable | `shakacode-open-source-examples-production` |
+| `PRODUCTION_APP_NAME` | `production` Environment variable | `react-webpack-rails-tutorial-production` |
+
+Protect the `production` environment with required reviewers, prevent
+self-review, and consider disabling administrator bypass. Do not store
+`CPLN_TOKEN_PRODUCTION` as a repository or organization secret. The generated
+promotion wrapper does not use `secrets: inherit`; GitHub exposes the production
+token only after the environment approval gate passes.
+
+The matching Control Plane resources are:
+
+| Resource | Name |
+| --- | --- |
+| Production app | `react-webpack-rails-tutorial-production` |
+| Production app secret dictionary | `react-webpack-rails-tutorial-production-secrets` |
+
+All review, staging, and production secret dictionaries need these app runtime
+secrets:
+
+- `SECRET_KEY_BASE`
+- `RENDERER_PASSWORD`
+- `REACT_ON_RAILS_PRO_LICENSE`
+
+Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
+`RENDERER_PASSWORD` with `openssl rand -hex 32`. For real production, prefer
+managed Postgres and Redis services and update `DATABASE_URL` and `REDIS_URL`
+accordingly.
+
+### Advanced Overrides
+
+Most repos should leave these unset. They exist so forks and clones can test
+against their own Control Plane org, prefix, workload, or toolchain:
+
+- `CPLN_ORG_STAGING`
+- `REVIEW_APP_PREFIX`
+- `PRIMARY_WORKLOAD`
+- `REVIEW_APP_DEPLOYING_ICON_URL`
+- `CPLN_CLI_VERSION`
+- `CPFLOW_VERSION`
+
 ## Prerequisites
 
 1. Ensure your [Control Plane](https://shakacode.controlplane.com) account is set up.
@@ -388,11 +474,19 @@ The production promotion workflow checks that production has all environment
 variable names present in staging; it does not compare secret values, workload
 environment variables, or Control Plane secret references.
 
-The repository variables and secrets must match the app names in
-`.controlplane/controlplane.yml`. In particular, `REVIEW_APP_PREFIX` should
-include the `-pr` suffix for this app, such as
-`qa-react-webpack-rails-tutorial-pr`, so generated review apps are named
-`qa-react-webpack-rails-tutorial-pr-1234`.
+The GitHub settings and Control Plane resources must match the app names in
+`.controlplane/controlplane.yml`. For the standard review-app path, leave
+`REVIEW_APP_PREFIX` unset and let the workflow infer
+`qa-react-webpack-rails-tutorial`; generated review apps are named
+`qa-react-webpack-rails-tutorial-<PR number>`.
+If you have older review apps from the previous
+`qa-react-webpack-rails-tutorial-pr-<PR number>` naming, delete them manually
+after this flow lands; cleanup targets the current prefix convention. To
+inventory old apps, run:
+
+```sh
+cpln gvc query --org shakacode-open-source-examples-staging -o yaml --prop name~qa-react-webpack-rails-tutorial-pr-
+```
 
 This allows teams to:
 - Preview changes in a production-like environment
@@ -405,63 +499,27 @@ each review app getting its own resources as defined in the controlplane.yml
 configuration.
 
 
-### Workflow for Developing GitHub Actions for Review Apps
+### Updating Generated cpflow Workflows
 
-1. Create a PR with changes to the GitHub Actions workflow
-2. Make edits to files such as `.github/actions/cpflow-build-docker-image/action.yml` or `.github/workflows/cpflow-deploy-review-app.yml`
-3. Run a script like `ga .github && gc -m fixes && gp` to commit and push changes (ga = git add, gc = git commit, gp = git push)
-4. Check the GitHub Actions tab in the PR to see the status of the workflow
+Keep the reusable-workflow mechanics in the upstream
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
+For this repo, the update loop is:
 
-### Keeping Generated cpflow Workflows Updated
-
-Treat `.github/actions/cpflow-*` and `.github/workflows/cpflow-*` as generated
-workflow files with project-specific settings layered on top. When `cpflow`
-releases generator fixes or the upstream `control-plane-flow` repo changes the
-GitHub Actions flow, update a project by regenerating the flow from the desired
-`cpflow` version or branch, reviewing the diff, and keeping any local app names,
-repository variables, secrets, and docs aligned with `.controlplane/controlplane.yml`.
-
-The generated workflows are intentionally thin wrappers around reusable
-workflows in `shakacode/control-plane-flow`. GitHub loads reusable workflows from
-a repository ref, not from the Ruby gem, so each wrapper has a `uses: ...@<ref>`
-line plus a matching `control_plane_flow_ref: <ref>`. For stable releases,
-generate these files from a released `cpflow` gem; the default ref is the
-matching upstream release tag, `v<gem version>`. Avoid `main` or feature-branch
-refs in production. Use an immutable commit SHA only when testing unreleased
-upstream changes, then move back to the release tag after the upstream release
-is published.
-
-`CPFLOW_VERSION` is a runtime gem-install override. When it is unset, the setup
-action builds `cpflow` from the checked-out upstream ref. When it is set, the
-setup action installs that RubyGems version instead. For normal release pins,
-either leave it unset while using the matching `v<version>` workflow tag, or set
-it to the same gem version without the leading `v`.
-
-To test unreleased upstream workflow changes before merging `control-plane-flow`,
-pin a downstream PR to the upstream PR's full commit SHA in both `uses:` and
-`control_plane_flow_ref`, leave `CPFLOW_VERSION` unset, and trigger a real review
-app deploy. That tests the upstream reusable workflow, shared composite actions,
-and source-built `cpflow` gem from the same immutable commit. After the upstream
-change is released, regenerate or repin back to the matching release tag.
-Use `bin/pin-cpflow-github-ref <ref>` to update the generated wrapper refs
-together. The helper accepts release tags and full commit SHAs by default;
-`--allow-moving-ref` is only for short-lived local experiments.
-
-For this app, validate a regenerated flow with:
+1. Generate from the desired `cpflow` release with `--staging-branch master`.
+2. Keep generated refs on a release tag such as `v5.0.1`. Use a full upstream
+   commit SHA only for short-lived downstream testing of an unreleased upstream
+   PR, and leave `CPFLOW_VERSION` unset in that case.
+3. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
+4. Validate locally:
 
 ```bash
 bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
-bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow github-flow-readiness
-actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml
-bin/conductor-exec bundle exec rubocop
+bin/conductor-exec bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/bin/cpflow
 ```
 
-Then open a normal PR and let GitHub Actions prove the generated review-app,
-staging, lint, JS, and RSpec workflows before merging. For review-app workflow
-changes, test both the local workflow syntax and a real deployment. GitHub runs
-`issue_comment` workflows from the default branch, so a `+review-app-deploy`
-comment on the PR does not fully exercise command changes that are only on the
-PR branch. For top-level workflow edits, run the PR branch workflow explicitly:
+Then open a normal PR, wait for GitHub Actions, and test a real review-app
+deploy. Comment-triggered workflows run from `master`; for PR-branch workflow
+edits, dispatch the workflow explicitly:
 
 ```bash
 gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
@@ -470,13 +528,5 @@ gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-num
 This loads the workflow file from `<branch>`, but trusted local composite
 actions still come from the default branch before secrets are used. Treat it as
 a partial smoke test, then verify a real deploy after the workflow changes land
-on `master`.
-
-After the workflow reports a review-app URL, verify the URL returns HTTP 200.
-If a project needs to track generator changes automatically, use a scheduled
-maintenance PR or Renovate-style workflow that bumps the `cpflow` version,
-regenerates these files, and runs the same validation commands.
-
-For a fuller checklist, including the gotcha that review-app deploys load local
-composite actions from `master` before using Control Plane secrets, see
-[Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md).
+on `master`. See the short
+[testing checklist](docs/testing-cpflow-github-actions.md) for the canary steps.
