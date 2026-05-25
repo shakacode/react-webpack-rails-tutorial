@@ -10,8 +10,10 @@ permissions:
 
 jobs:
   cleanup:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@b0c5759050c5c79a05826cd7a5d3ae711cd22a40
+    # Cleanup targets qa-react-webpack-rails-tutorial-<PR>. Manually delete any
+    # legacy qa-react-webpack-rails-tutorial-pr-<PR> apps during migration.
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@1d82a6dc510745c3fe9b40b01ea348875a4f1923
     with:
-      control_plane_flow_ref: b0c5759050c5c79a05826cd7a5d3ae711cd22a40
+      control_plane_flow_ref: 1d82a6dc510745c3fe9b40b01ea348875a4f1923
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}

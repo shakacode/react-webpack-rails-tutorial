@@ -14,6 +14,6 @@ permissions:
 
 jobs:
   show-help:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@b0c5759050c5c79a05826cd7a5d3ae711cd22a40
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@1d82a6dc510745c3fe9b40b01ea348875a4f1923
     with:
-      control_plane_flow_ref: b0c5759050c5c79a05826cd7a5d3ae711cd22a40
+      control_plane_flow_ref: 1d82a6dc510745c3fe9b40b01ea348875a4f1923
