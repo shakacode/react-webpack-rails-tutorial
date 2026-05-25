@@ -68,7 +68,8 @@ Advanced optional settings are documented upstream in the
 
 Current workflow wrappers are pinned to upstream `control-plane-flow` PR #318 at
 `19ca93eadcba81e7438f26ab55a0f2ca7ace82b0` for downstream testing. After 5.0.1
-ships, repin the wrappers to `v5.0.1`.
+ships, repin the wrappers to `v5.0.1`; do not treat the temporary SHA as the
+steady-state master configuration.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
