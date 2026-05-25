@@ -504,7 +504,10 @@ The GitHub settings and Control Plane resources must match the app names in
 `REVIEW_APP_PREFIX` unset and let the workflow infer
 `qa-react-webpack-rails-tutorial`; generated review apps are named
 `qa-react-webpack-rails-tutorial-<PR number>`.
-If you have older review apps from the previous `qa-react-webpack-rails-tutorial-pr-<PR number>` naming, delete them manually after this flow lands; cleanup targets the current prefix convention. To inventory old apps, run:
+If you have older review apps from the previous
+`qa-react-webpack-rails-tutorial-pr-<PR number>` naming, delete them manually
+after this flow lands; cleanup targets the current prefix convention. To
+inventory old apps, run:
 
 ```sh
 cpln gvc query --org shakacode-open-source-examples-staging -o yaml --prop name~qa-react-webpack-rails-tutorial-pr-

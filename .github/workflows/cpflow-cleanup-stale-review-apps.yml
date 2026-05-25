@@ -12,8 +12,8 @@ jobs:
   cleanup:
     # Cleanup targets qa-react-webpack-rails-tutorial-<PR>. Manually delete any
     # legacy qa-react-webpack-rails-tutorial-pr-<PR> apps during migration.
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@1d82a6dc510745c3fe9b40b01ea348875a4f1923
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml@f3f410ebe622fd60af09b8bdf6eca4617685c64a
     with:
-      control_plane_flow_ref: 1d82a6dc510745c3fe9b40b01ea348875a4f1923
+      control_plane_flow_ref: f3f410ebe622fd60af09b8bdf6eca4617685c64a
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
