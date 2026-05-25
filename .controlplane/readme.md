@@ -57,6 +57,21 @@ The matching Control Plane resources are:
 | Staging app | `react-webpack-rails-tutorial-staging` |
 | Staging app secret dictionary | `react-webpack-rails-tutorial-staging-secrets` |
 
+Bootstrap the persistent staging app once before the first merge-to-master
+deploy:
+
+```sh
+cpflow setup-app -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging --skip-post-creation-hook
+```
+
+`setup-app` reads `setup_app_templates` from `.controlplane/controlplane.yml`
+and creates the app identity, app secret dictionary, app secret policy, policy
+binding, and template resources. Use `--skip-post-creation-hook` so first-time
+bootstrap does not try to run database setup before a Docker image exists. For
+later template updates on an existing persistent app, use
+`cpflow apply-template` and make sure the app identity still has `reveal`
+permission on the app secret policy.
+
 ### Production Promotion
 
 Production promotion is part of the default demo flow, but the production token
@@ -80,6 +95,9 @@ The matching Control Plane resources are:
 | --- | --- |
 | Production app | `react-webpack-rails-tutorial-production` |
 | Production app secret dictionary | `react-webpack-rails-tutorial-production-secrets` |
+
+Bootstrap production the same way before the first promotion, using the
+production org and production-only secret values.
 
 All review, staging, and production secret dictionaries need these app runtime
 secrets:

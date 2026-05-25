@@ -63,6 +63,18 @@ Generated caller workflows pass only the named secrets each upstream workflow
 needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
 only by the protected `production` Environment after approval.
 
+Persistent staging and production apps must be bootstrapped once before the
+first deploy or promotion:
+
+```sh
+cpflow setup-app -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging --skip-post-creation-hook
+cpflow setup-app -a react-webpack-rails-tutorial-production --org shakacode-open-source-examples-production --skip-post-creation-hook
+```
+
+Use `setup-app` for first-time bootstrap because it creates the app secret
+policy and identity binding. Use `cpflow apply-template` for later template
+updates to existing persistent apps.
+
 Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
