@@ -19,6 +19,9 @@ permissions:
 
 jobs:
   delete-review-app:
+    # pull_request_target is intentional: fork PR-close events need access to
+    # staging secrets to delete review apps and update PR comments. The upstream
+    # reusable workflow checks out trusted base-branch action code, not fork code.
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
@@ -26,8 +29,8 @@ jobs:
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_target' && github.event.action == 'closed') ||
       github.event_name == 'workflow_dispatch'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@19ca93eadcba81e7438f26ab55a0f2ca7ace82b0
-    with:
-      control_plane_flow_ref: 19ca93eadcba81e7438f26ab55a0f2ca7ace82b0
+    # This `if:` mirrors the upstream job guard to avoid a billable workflow_call
+    # when the event does not match. Keep both conditions in sync.
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@c0ca750c4838dacf6a1d81d52cb151301516cb77
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}

@@ -25,8 +25,9 @@ guide:
 4. For comment-triggered review-app commands, test a real `+review-app-deploy`
    after the trusted default-branch wrapper points at the code under test.
 5. When testing unreleased upstream `control-plane-flow` changes downstream, pin
-   both the reusable workflow `uses:` ref and `control_plane_flow_ref` to the
-   same upstream commit SHA.
+   the generated reusable workflow `uses:` refs to the same upstream commit SHA.
+   Newer upstream workflows load their matching shared actions automatically; do
+   not add a duplicate ref input to downstream wrappers.
 
 Avoid testing production automation against moving branch refs such as `main` or
 a feature branch. Use release tags for normal operation and full commit SHAs for

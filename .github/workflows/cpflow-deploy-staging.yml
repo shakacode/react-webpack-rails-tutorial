@@ -8,7 +8,7 @@ on:
     # deploy branches unless `cpflow generate-github-actions --staging-branch BRANCH`
     # was used. If STAGING_APP_BRANCH is later changed in repository variables, keep
     # this list in sync so pushes to that branch actually trigger the workflow.
-    branches: ["main", "master"]
+    branches: ["master"]
   workflow_dispatch:
 
 permissions:
@@ -16,10 +16,9 @@ permissions:
 
 jobs:
   deploy-staging:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@19ca93eadcba81e7438f26ab55a0f2ca7ace82b0
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@c0ca750c4838dacf6a1d81d52cb151301516cb77
     with:
-      control_plane_flow_ref: 19ca93eadcba81e7438f26ab55a0f2ca7ace82b0
-      staging_app_branch_default: ""
+      staging_app_branch_default: "master"
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
       DOCKER_BUILD_SSH_KEY: ${{ secrets.DOCKER_BUILD_SSH_KEY }}

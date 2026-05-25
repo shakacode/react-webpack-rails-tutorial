@@ -36,8 +36,8 @@ and tag ship, repin wrappers to the release tag, such as `v5.0.1`.
 
 1. Open or reuse a same-repository PR.
 2. Comment exactly `+review-app-deploy`.
-3. Confirm the deploy job checks out the expected upstream
-   `control_plane_flow_ref`.
+3. Confirm the deploy job checks out the expected upstream Control Plane Flow
+   source selected by the generated wrapper's `uses:` ref.
 4. Confirm `Setup environment`, `Check if review app exists`,
    `Build Docker image`, and `Deploy to Control Plane` all pass.
 5. Open the review-app URL from the PR comment and verify it returns HTTP 200.

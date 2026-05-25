@@ -10,10 +10,10 @@ if [[ $# -gt 0 ]]; then
 fi
 
 echo "==> cpflow github-flow-readiness"
-bin/conductor-exec "${cpflow_cmd[@]}" github-flow-readiness
+"${cpflow_cmd[@]}" github-flow-readiness
 
 echo "==> parse generated GitHub Actions YAML"
-bin/conductor-exec ruby <<'RUBY'
+ruby <<'RUBY'
 require "yaml"
 
 Dir[".github/actions/**/action.yml", ".github/workflows/*.yml"].sort.each do |path|
@@ -23,7 +23,7 @@ end
 RUBY
 
 echo "==> check composite action input descriptions"
-bin/conductor-exec ruby <<'RUBY'
+ruby <<'RUBY'
 require "yaml"
 
 bad = []
@@ -39,7 +39,7 @@ puts "no action metadata descriptions contain GitHub expressions"
 RUBY
 
 echo "==> check cpflow reusable workflow refs"
-bin/conductor-exec ruby <<'RUBY'
+ruby <<'RUBY'
 require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
@@ -60,9 +60,11 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
       abort "#{path}:#{job_name} uses secrets: inherit; pass only the named secrets the upstream workflow needs"
     end
 
-    unless uses_match
-      abort "#{path}:#{job_name} has control_plane_flow_ref but no control-plane-flow reusable workflow" if input_ref
+    if input_ref
+      abort "#{path}:#{job_name} passes obsolete control_plane_flow_ref. Remove it; the upstream reusable workflow checks out its own source from GitHub's job.workflow_* context."
+    end
 
+    unless uses_match
       next
     end
 
@@ -80,12 +82,6 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
       end
     end
 
-    if input_ref
-      refs[input_ref] << "#{path}:#{job_name}"
-      abort "#{path}:#{job_name} mismatched cpflow refs: #{uses_ref}, #{input_ref}" if uses_ref != input_ref
-    elsif job.key?("secrets")
-      abort "#{path}:#{job_name} passes secrets but is missing control_plane_flow_ref for #{uses_ref}"
-    end
   end
 end
 
@@ -102,4 +98,7 @@ end
 RUBY
 
 echo "==> actionlint"
-actionlint -ignore "SC2129" .github/workflows/cpflow-*.yml
+actionlint \
+  -ignore "SC2129" \
+  -ignore 'property "workflow_(ref|sha|repository|file_path)" is not defined in object type' \
+  .github/workflows/cpflow-*.yml
