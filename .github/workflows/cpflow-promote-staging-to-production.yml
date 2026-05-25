@@ -18,9 +18,9 @@ jobs:
     if: github.event.inputs.confirm_promotion == 'promote'
     # Keep the @ref in `uses:` and `control_plane_flow_ref` below in sync: the
     # first selects the reusable workflow, the second selects its shared actions.
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@a83a38fa3e60538cd54d193791302d0dc52df695
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@1fd7de511099278dc9dccd4c28b146d809cf36bc
     with:
-      control_plane_flow_ref: a83a38fa3e60538cd54d193791302d0dc52df695
+      control_plane_flow_ref: 1fd7de511099278dc9dccd4c28b146d809cf36bc
       # Keep CPLN_TOKEN_PRODUCTION as a secret on this protected GitHub
       # Environment. The caller passes the environment name, the upstream
       # reusable workflow runs its production job in that environment, and
