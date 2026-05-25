@@ -43,7 +43,7 @@ bin/conductor-exec ruby <<'RUBY'
 require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
-PROMOTE_WORKFLOW = "/.github/workflows/cpflow-promote-staging-to-production.yml@"
+PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@[^\s]+\z}
 
 refs = Hash.new { |hash, key| hash[key] = [] }
 
@@ -69,7 +69,7 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
     uses_ref = uses_match[1]
     refs[uses_ref] << "#{path}:#{job_name}"
 
-    if job["uses"].to_s.include?(PROMOTE_WORKFLOW)
+    if job["uses"].to_s.match?(PROMOTE_WORKFLOW)
       if with["production_environment"].to_s.strip.empty?
         abort "#{path}:#{job_name} must set production_environment so GitHub can expose production environment secrets after approval"
       end
