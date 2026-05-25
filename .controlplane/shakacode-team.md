@@ -67,7 +67,7 @@ Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
 Current workflow wrappers are pinned to merged upstream `control-plane-flow`
-commit `c0ca750c4838dacf6a1d81d52cb151301516cb77` for downstream testing. After
+commit `54a6b8a066ac0a59c49e95a866e21b5633e2b1f9` for downstream testing. After
 5.0.1 ships, repin the wrappers to `v5.0.1`; do not treat the temporary SHA as
 the steady-state master configuration.
 
