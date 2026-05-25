@@ -151,8 +151,8 @@ examples such as `${{ vars.SOME_VALUE }}` can fail action loading before any
 shell step starts. The wrapper runs `cpflow github-flow-readiness`, parses the
 generated YAML, checks action input descriptions for literal GitHub expressions,
 checks that every generated wrapper keeps `uses:` and `control_plane_flow_ref`
-on the same upstream ref across all `cpflow-*` wrappers, checks that any
-secret-inheriting reusable workflow passes `control_plane_flow_ref`, and runs
+on the same upstream ref across all `cpflow-*` wrappers, rejects broad `secrets: inherit` in generated cpflow wrappers, checks that
+any secret-passing reusable workflow passes `control_plane_flow_ref`, and runs
 `actionlint -ignore 'SC2129' .github/workflows/cpflow-*.yml`.
 
 ## PR Checks

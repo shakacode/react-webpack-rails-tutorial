@@ -74,6 +74,9 @@ or similarly trusted maintainers should be able to approve the promotion job.
 The promotion workflow uses that environment before it can access
 `CPLN_TOKEN_PRODUCTION`, so the production token is not exposed to ordinary
 review-app or staging runs.
+Generated caller workflows pass only the named secrets each upstream workflow
+needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
+only by the protected `production` Environment after approval.
 
 Advanced optional variables:
 
@@ -499,6 +502,7 @@ The GitHub settings and Control Plane resources must match the app names in
 `REVIEW_APP_PREFIX` unset and let the workflow infer
 `qa-react-webpack-rails-tutorial`; generated review apps are named
 `qa-react-webpack-rails-tutorial-<PR number>`.
+If you have older review apps from the previous `qa-react-webpack-rails-tutorial-pr-<PR number>` naming, delete them manually after this flow lands; cleanup targets the current prefix convention.
 
 This allows teams to:
 - Preview changes in a production-like environment

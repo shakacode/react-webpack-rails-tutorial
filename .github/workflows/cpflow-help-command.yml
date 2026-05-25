@@ -23,4 +23,6 @@ jobs:
        contains(fromJson('["+review-app-help","+review-app-help\n","+review-app-help\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       github.event_name == 'workflow_dispatch'
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml@cfe494bf32925d49508380e03856d97bd71f6689
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml@7d9b80dcb55b243d0cc78b0a85bcb3d568ce8e02
+    with:
+      control_plane_flow_ref: 7d9b80dcb55b243d0cc78b0a85bcb3d568ce8e02

@@ -55,6 +55,10 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
     input_ref = with["control_plane_flow_ref"]
     uses_match = job["uses"].to_s.match(CONTROL_PLANE_FLOW_WORKFLOW)
 
+    if job["secrets"] == "inherit"
+      abort "#{path}:#{job_name} uses secrets: inherit; pass only the named secrets the upstream workflow needs"
+    end
+
     unless uses_match
       abort "#{path}:#{job_name} has control_plane_flow_ref but no control-plane-flow reusable workflow" if input_ref
 
@@ -68,7 +72,7 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
       refs[input_ref] << "#{path}:#{job_name}"
       abort "#{path}:#{job_name} mismatched cpflow refs: #{uses_ref}, #{input_ref}" if uses_ref != input_ref
     elsif job.key?("secrets")
-      abort "#{path}:#{job_name} inherits secrets but is missing control_plane_flow_ref for #{uses_ref}"
+      abort "#{path}:#{job_name} passes secrets but is missing control_plane_flow_ref for #{uses_ref}"
     end
   end
 end

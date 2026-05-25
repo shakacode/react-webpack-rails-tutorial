@@ -39,7 +39,6 @@ Required repository variables for staging deploys:
 - `CPLN_ORG_STAGING=shakacode-open-source-examples-staging`
 - `STAGING_APP_NAME=react-webpack-rails-tutorial-staging`
 - `STAGING_APP_BRANCH=master`
-- `PRIMARY_WORKLOAD=rails`
 
 Review apps infer `CPLN_ORG_STAGING`, `REVIEW_APP_PREFIX`, and
 `PRIMARY_WORKLOAD` from `.controlplane/controlplane.yml` and workflow defaults,
@@ -56,9 +55,13 @@ Production promotion uses a protected GitHub Environment named `production`:
 Protect the `production` environment with required reviewers, enable prevent
 self-review, and consider disabling administrator bypass. Do not store
 `CPLN_TOKEN_PRODUCTION` as a repository or organization secret.
+Generated caller workflows pass only the named secrets each upstream workflow
+needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
+only by the protected `production` Environment after approval.
 
 Optional repository settings:
 
+- `PRIMARY_WORKLOAD`: public workload used for review URLs and promote health checks; defaults to `rails`.
 - `DOCKER_BUILD_SSH_KEY`: secret for private SSH dependencies during Docker builds.
 - `DOCKER_BUILD_EXTRA_ARGS`: newline-delimited Docker build tokens, such as `--build-arg=FOO=bar`.
 - `DOCKER_BUILD_SSH_KNOWN_HOSTS`: custom `known_hosts` entries when SSH build hosts are not GitHub.com.
