@@ -78,7 +78,7 @@ Optional repository settings:
 - `ROLLBACK_READINESS_RETRIES` / `ROLLBACK_READINESS_INTERVAL`: post-rollback health polling controls; defaults to `24` retries and `15` seconds.
 
 Current workflow wrappers are pinned to upstream `control-plane-flow` PR #318 at
-`19501451b7e08a48a917fb04a439171881558f82` for downstream testing. After that
+`19ca93eadcba81e7438f26ab55a0f2ca7ace82b0` for downstream testing. After that
 upstream work is released, regenerate or repin the wrappers to the release tag
 instead of keeping this PR commit SHA long term.
 
