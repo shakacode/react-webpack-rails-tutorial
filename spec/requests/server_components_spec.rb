@@ -38,7 +38,7 @@ describe "Server Components" do
       raise "Malformed length-prefixed RSC payload: missing tab separator" unless content_length_hex
 
       content_start = header_end + 1
-      content_length = Integer(content_length_hex, 16)
+      content_length = parse_content_length(content_length_hex)
       content = body.byteslice(content_start, content_length)
       raise "Malformed length-prefixed RSC payload: truncated content" unless content&.bytesize == content_length
 
@@ -46,6 +46,12 @@ describe "Server Components" do
         parse_payload_metadata(metadata_json, content),
         body.byteslice(content_start + content_length, body.bytesize) || "".b
       ]
+    end
+
+    def parse_content_length(content_length_hex)
+      Integer(content_length_hex, 16)
+    rescue ArgumentError
+      raise "Malformed length-prefixed RSC payload: invalid hex length '#{content_length_hex}'"
     end
 
     def parse_payload_metadata(metadata_json, content)
@@ -61,6 +67,13 @@ describe "Server Components" do
       chunks = parsed_chunks
       expect(chunks).not_to be_empty
       expect(chunks.any? { |chunk| chunk.key?("html") }).to be(true)
+    end
+
+    it "raises a malformed payload error for invalid hex content lengths" do
+      payload = { payloadType: "string" }.to_json
+
+      expect { parse_length_prefixed_chunk("#{payload}\tzz\ncontent".b) }
+        .to raise_error(RuntimeError, "Malformed length-prefixed RSC payload: invalid hex length 'zz'")
     end
 
     it "streams a valid RSC payload for ServerComponentsPage" do
