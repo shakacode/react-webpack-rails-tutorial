@@ -524,7 +524,7 @@ Keep the reusable-workflow mechanics in the upstream
 For this repo, the update loop is:
 
 1. Generate from the desired `cpflow` release with `--staging-branch master`.
-2. Keep generated refs on a release tag such as `v5.0.1`. Use a full upstream
+2. Keep generated refs on a release tag such as `v5.0.4`. Use a full upstream
    commit SHA only for short-lived downstream testing of an unreleased upstream
    PR, and leave `CPFLOW_VERSION` unset in that case.
 3. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.

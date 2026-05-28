@@ -30,7 +30,7 @@ bin/conductor-exec bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/
 ```
 
 Leave `CPFLOW_VERSION` unset while testing a commit SHA. After the upstream gem
-and tag ship, repin wrappers to the release tag, such as `v5.0.1`.
+and tag ship, repin wrappers to the release tag, such as `v5.0.4`.
 
 ## Review App Canary
 
