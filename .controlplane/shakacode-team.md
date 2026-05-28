@@ -79,7 +79,7 @@ Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
 Current workflow wrappers are pinned to the upstream `control-plane-flow`
-release tag `v5.0.1`. Keep release tags as the steady-state configuration; use
+release tag `v5.0.2`. Keep release tags as the steady-state configuration; use
 a full commit SHA only for short-lived upstream PR testing.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
@@ -90,7 +90,7 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 When the upstream `control-plane-flow` repo changes the generated GitHub Actions
 flow, regenerate from the target `cpflow` version with `--staging-branch master`,
 review the diff, and validate with `bin/test-cpflow-github-flow` plus the normal
-CI checks. Stable automation should use release tags such as `v5.0.1`, not
+CI checks. Stable automation should use release tags such as `v5.0.2`, not
 `main` or a feature branch.
 
 See [readme.md](readme.md) and
