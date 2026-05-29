@@ -5197,7 +5197,7 @@ fastify-plugin@^5.0.0:
   resolved "https://registry.npmjs.org/fastify-plugin/-/fastify-plugin-5.1.0.tgz#7083e039d6418415f9a669f8c25e72fc5bf2d3e7"
   integrity sha512-FAIDA8eovSt5qcDgcBvDuX/v0Cjz0ohGhENZ/wpc3y+oZCY2afZ9Baqql3g/lC+OHRnciQol4ww7tuthOb9idw==
 
-fastify@^5.8.3:
+fastify@^5.8.5:
   version "5.8.5"
   resolved "https://registry.npmjs.org/fastify/-/fastify-5.8.5.tgz#c452224295e0ca550bcd0efc3f7d3e90e9c11955"
   integrity sha512-Yqptv59pQzPgQUSIm87hMqHJmdkb1+GPxdE6vW6FRyVE9G86mt7rOghitiU4JHRaTyDUk9pfeKmDeu70lAwM4Q==
@@ -7908,13 +7908,6 @@ pify@^4.0.1:
   resolved "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pino-abstract-transport@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/pino-abstract-transport/-/pino-abstract-transport-2.0.0.tgz#de241578406ac7b8a33ce0d77ae6e8a0b3b68a60"
-  integrity sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==
-  dependencies:
-    split2 "^4.0.0"
-
 pino-abstract-transport@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/pino-abstract-transport/-/pino-abstract-transport-3.0.0.tgz#b21e5f33a297e8c4c915c62b3ce5dd4a87a52c23"
@@ -7926,23 +7919,6 @@ pino-std-serializers@^7.0.0:
   version "7.1.0"
   resolved "https://registry.npmjs.org/pino-std-serializers/-/pino-std-serializers-7.1.0.tgz#a7b0cd65225f29e92540e7853bd73b07479893fc"
   integrity sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==
-
-pino@^9.0.0:
-  version "9.14.0"
-  resolved "https://registry.npmjs.org/pino/-/pino-9.14.0.tgz#673d9711c2d1e64d18670c1ec05ef7ba14562556"
-  integrity sha512-8OEwKp5juEvb/MjpIc4hjqfgCNysrS94RIOMXYvpYCdm/jglrKEiAYmiumbmGhCvs+IcInsphYDFwqrjr7398w==
-  dependencies:
-    "@pinojs/redact" "^0.4.0"
-    atomic-sleep "^1.0.0"
-    on-exit-leak-free "^2.1.0"
-    pino-abstract-transport "^2.0.0"
-    pino-std-serializers "^7.0.0"
-    process-warning "^5.0.0"
-    quick-format-unescaped "^4.0.3"
-    real-require "^0.2.0"
-    safe-stable-stringify "^2.3.1"
-    sonic-boom "^4.0.1"
-    thread-stream "^3.0.0"
 
 "pino@^9.14.0 || ^10.1.0":
   version "10.3.1"
@@ -8783,25 +8759,25 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails-pro-node-renderer@16.6.0:
-  version "16.6.0"
-  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-16.6.0.tgz#c13ca0f156566531d7c6e005759459b0f19472a8"
-  integrity sha512-fBZ0lKRaEe8LyVTdUsXx364zQfL6hGJuE+2qQsKo+bXm0aTVq2RtO49gzq0m7Y4xuhBTVmnPQUP0O1v1cGRzLg==
+react-on-rails-pro-node-renderer@16.7.0-rc.3:
+  version "16.7.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-16.7.0-rc.3.tgz#2a2e20ab2815f8a03214ce5d42ac498420c08d3f"
+  integrity sha512-k8fyz2BZBW6YlVAt4BP7WQ+J8czAq0p27NDAlcasBNk9C1fttP2UjLY7n9WpkCJPW6Uc4B74dNwzmfcUDYG1FQ==
   dependencies:
     "@fastify/formbody" "^7.4.0 || ^8.0.2"
     "@fastify/multipart" "^8.3.1 || ^9.0.3"
-    fastify "^5.8.3"
+    fastify "^5.8.5"
     fs-extra "^11.2.0"
     jsonwebtoken "^9.0.3"
     lockfile "^1.0.4"
-    pino "^9.0.0"
+    pino "^9.14.0 || ^10.1.0"
 
-react-on-rails-pro@16.6.0:
-  version "16.6.0"
-  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-16.6.0.tgz#19a5ea99d7b397dd56f14cff1f31955211b4d0a2"
-  integrity sha512-Uc8o3gdHyIETvY5J9wVUyONKOhnkw9kGJDREMHQb/IuXoB5/Vo51UK487Rcep2Z+Dzz/bEvNoF+GuZohORZ7Zw==
+react-on-rails-pro@16.7.0-rc.3:
+  version "16.7.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-16.7.0-rc.3.tgz#d30ec0d27ab25a5d1c4b817b654192a3a7486cee"
+  integrity sha512-oJO7/26c+UQwd2/YbPkXqQgsGhXc1HE1iOwhCJijs4iKvQkOFb8Mm6r1BLrb3Kt/28n9PChZq0+XfbMDPvCuLg==
   dependencies:
-    react-on-rails "16.6.0"
+    react-on-rails "16.7.0-rc.3"
 
 react-on-rails-rsc@19.0.4:
   version "19.0.4"
@@ -8812,10 +8788,10 @@ react-on-rails-rsc@19.0.4:
     neo-async "^2.6.1"
     webpack-sources "^3.2.0"
 
-react-on-rails@16.6.0:
-  version "16.6.0"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.6.0.tgz#da7f117fec14f420f7f6ffe6bdb34b7fc2e01b3a"
-  integrity sha512-LqLi7A0n0Tv5c3yMYlwS9s6rE82gvXNMj3sscmK2LOgIJ+mLQlOX65n0Jq5ZJ4Nsl9SRgxEOOQmcrfvDeB9F1g==
+react-on-rails@16.7.0-rc.3:
+  version "16.7.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-16.7.0-rc.3.tgz#07ffd98bb54c11b471616f2091165983e9c4d967"
+  integrity sha512-je/0D0w0rHKW5eVwqajqci4F3IGe3O7jfzJcQ7Lv/WrHUqy+QcTkwYxsnrVfsk+8SkMlkFGVCmuUjcuVWJncLg==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -9510,10 +9486,10 @@ setprototypeof@1.2.0, setprototypeof@~1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@10.0.0:
-  version "10.0.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.0.0.tgz#870f823531c7362836975ab9bb16732234a580a0"
-  integrity sha512-bLKU/xGxIpC/oXvTBRLnpH6bjVK/wyYeWiwE35zd3xxbcg6WfbbQxls0L/AmO8p560RR2PgfR3QtHb7klBmu0A==
+shakapacker@10.1.0:
+  version "10.1.0"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.1.0.tgz#081b4e30900bbe92d6030b42f96e74f4da1b1c40"
+  integrity sha512-FMo4nXpM21rZyNNhXt5jn/rm40olFF1udWC0BPE9QO9QVY6utJAEv1bkKhM/mXY/k3/nDT8ur8B3ZcEs+HoLFg==
   dependencies:
     js-yaml "^4.1.0"
     pack-config-diff "^0.1.0"
@@ -10118,13 +10094,6 @@ thenify-all@^1.0.0:
   integrity sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   dependencies:
     any-promise "^1.0.0"
-
-thread-stream@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/thread-stream/-/thread-stream-3.1.0.tgz#4b2ef252a7c215064507d4ef70c05a5e2d34c4f1"
-  integrity sha512-OqyPZ9u96VohAyMfJykzmivOrY2wfMSf3C5TtFJVgN+Hm6aj+voFhlK+kZEIv2FBh1X6Xp3DlnCOfEQ3B2J86A==
-  dependencies:
-    real-require "^0.2.0"
 
 thread-stream@^4.0.0:
   version "4.0.0"
