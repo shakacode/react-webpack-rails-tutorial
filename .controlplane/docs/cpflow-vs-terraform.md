@@ -54,15 +54,19 @@ models actually diverge.
 
 ```hcl
 # variables.tf
-variable "app_name"   { type = string }                 # cpflow injects {{APP_NAME}} per review app;
-                                                          # in TF this is a -var or a workspace name.
+variable "app_name" {                                    # cpflow injects {{APP_NAME}} per review app;
+  type = string                                          # in TF this is a -var or a workspace name.
+}
 variable "location" {
   type    = string
   default = "aws-us-east-2"
 }
-variable "image_link" { type = string }                 # cpflow's {{APP_IMAGE_LINK}} is set at *deploy*
-                                                          # time by `deploy-image`. In TF the image is a
-                                                          # plain argument, so every deploy is a full apply.
+# cpflow's {{APP_IMAGE_LINK}} is set at *deploy* time by `deploy-image`. In TF the image
+# is a plain argument, so each image bump is its own `terraform apply` (plan + state lock)
+# rather than a one-shot `deploy-image` call.
+variable "image_link" {
+  type = string
+}
 
 # gvc.tf  —  was templates/app.yml (kind: gvc + kind: identity)
 resource "cpln_gvc" "app" {
@@ -71,6 +75,8 @@ resource "cpln_gvc" "app" {
 
   # was spec.env: (a list of {name,value}); in TF it is a flat map.
   env = {
+    # Placeholder credentials mirror templates/app.yml; in production set DATABASE_URL via a
+    # sensitive var or a cpln://secret ref (like RENDERER_PASSWORD below) — never embed a real password.
     DATABASE_URL             = "postgres://the_user:the_password@postgres.${var.app_name}.cpln.local:5432/${var.app_name}"
     REDIS_URL                = "redis://redis.${var.app_name}.cpln.local:6379"
     RAILS_ENV                = "production"
@@ -145,6 +151,7 @@ What the comments are really showing: the three things cpflow gives you for free
 injection, and the implicit "provision ≠ deploy" separation) all become *your*
 problem in Terraform. The image being a plain argument is the big one: in
 cpflow, `deploy-image` bumps the running tag without touching infra; in
-Terraform, a new image is a `terraform apply` that diffs the whole workload. And
-none of `controlplane.yml` (release script, upstream promotion, review-app
-prefix matching) has any representation above at all.
+Terraform, a new image means a `terraform apply` — only that one argument changes,
+but the full plan / state-lock cycle still runs. And none of `controlplane.yml`
+(release script, upstream promotion, review-app prefix matching) has any
+representation above at all.
