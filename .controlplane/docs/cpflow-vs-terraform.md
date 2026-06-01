@@ -56,7 +56,10 @@ models actually diverge.
 # variables.tf
 variable "app_name"   { type = string }                 # cpflow injects {{APP_NAME}} per review app;
                                                           # in TF this is a -var or a workspace name.
-variable "location"   { type = string  default = "aws-us-east-2" }
+variable "location" {
+  type    = string
+  default = "aws-us-east-2"
+}
 variable "image_link" { type = string }                 # cpflow's {{APP_IMAGE_LINK}} is set at *deploy*
                                                           # time by `deploy-image`. In TF the image is a
                                                           # plain argument, so every deploy is a full apply.
@@ -73,6 +76,9 @@ resource "cpln_gvc" "app" {
     RAILS_ENV                = "production"
     NODE_ENV                 = "production"
     RAILS_SERVE_STATIC_FILES = "true"
+    # Placeholder is fine for test apps (matches templates/app.yml); in production set
+    # SECRET_KEY_BASE via a sensitive var or a cpln://secret ref (see the two lines
+    # below) — never commit a literal secret to an env map.
     SECRET_KEY_BASE          = "placeholder_secret_key_base_for_test_apps_only"
     RENDERER_PORT            = "3800"
     RENDERER_LOG_LEVEL       = "info"
@@ -107,7 +113,7 @@ resource "cpln_workload" "rails" {
 
     ports {
       protocol = "http"                                  # keep http — Thruster does HTTP/2 on the TLS frontend
-      number   = "3000"
+      number   = 3000                                     # an integer, not a string (matches templates/rails.yml)
     }
   }
 
@@ -120,8 +126,8 @@ resource "cpln_workload" "rails" {
 
   firewall_spec {
     external {
-      inbound_allow_cidr  = ["0.0.0.0/0"]
-      outbound_allow_cidr = ["0.0.0.0/0"]
+      inbound_allow_cidr  = ["0.0.0.0/0"]                # mirrors templates/rails.yml; tighten for production
+      outbound_allow_cidr = ["0.0.0.0/0"]                # likewise — scope outbound to known egress in real apps
     }
   }
 }
@@ -130,7 +136,9 @@ resource "cpln_workload" "rails" {
 `templates/postgres.yml`, `templates/redis.yml`, and `templates/daily-task.yml`
 follow the same pattern (`cpln_workload` + `cpln_secret` + `cpln_policy` +
 `cpln_volumeset`). The mechanical translation is straightforward — the field
-names line up almost 1:1.
+names line up almost 1:1; see the
+[`cpln` provider docs](https://registry.terraform.io/providers/controlplane-com/cpln/latest/docs)
+for the exact attribute names of each resource.
 
 What the comments are really showing: the three things cpflow gives you for free
 (`{{APP_NAME}}` per-PR interpolation, deploy-time `{{APP_IMAGE_LINK}}`
