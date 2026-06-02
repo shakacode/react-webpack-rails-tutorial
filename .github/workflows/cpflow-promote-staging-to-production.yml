@@ -348,10 +348,27 @@ jobs:
         run: |
           set -euo pipefail
 
-          CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image get "${STAGING_IMAGE}" --org "${CPLN_ORG_STAGING}" -o json >/dev/null
+          if ! [[ "${COPY_IMAGE_RETRIES}" =~ ^[0-9]+$ ]]; then
+            echo "::error::COPY_IMAGE_RETRIES must be a non-negative integer."
+            exit 1
+          fi
+
+          if ! [[ "${COPY_IMAGE_RETRY_INTERVAL}" =~ ^[0-9]+$ ]]; then
+            echo "::error::COPY_IMAGE_RETRY_INTERVAL must be a non-negative integer."
+            exit 1
+          fi
+
+          copy_image_retries=$((10#${COPY_IMAGE_RETRIES}))
+          copy_image_attempts=$((copy_image_retries + 1))
+          copy_image_retry_interval=$((10#${COPY_IMAGE_RETRY_INTERVAL}))
+
+          if ! CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image get "${STAGING_IMAGE}" --org "${CPLN_ORG_STAGING}" -o json >/dev/null; then
+            echo "::error::Staging image '${STAGING_IMAGE}' was not found in org '${CPLN_ORG_STAGING}'; aborting promotion."
+            exit 1
+          fi
 
           copy_status=1
-          for attempt in $(seq 1 "${COPY_IMAGE_RETRIES}"); do
+          for attempt in $(seq 1 "${copy_image_attempts}"); do
             if cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"; then
               copy_status=0
               break
@@ -359,14 +376,16 @@ jobs:
               copy_status=$?
             fi
 
-            if [[ "${attempt}" -lt "${COPY_IMAGE_RETRIES}" ]]; then
-              echo "::warning::Image copy attempt ${attempt}/${COPY_IMAGE_RETRIES} failed with exit ${copy_status}; retrying in ${COPY_IMAGE_RETRY_INTERVAL}s."
-              sleep "${COPY_IMAGE_RETRY_INTERVAL}"
+            if [[ "${attempt}" -lt "${copy_image_attempts}" ]]; then
+              echo "::warning::Image copy attempt ${attempt}/${copy_image_attempts} failed with exit ${copy_status}; retrying in ${copy_image_retry_interval}s."
+              sleep "${copy_image_retry_interval}"
+            else
+              echo "::warning::Image copy attempt ${attempt}/${copy_image_attempts} failed with exit ${copy_status}; no attempts remain."
             fi
           done
 
           if [[ "${copy_status}" -ne 0 ]]; then
-            echo "::error::Could not copy staging image '${STAGING_IMAGE}' from '${CPLN_ORG_STAGING}' to '${CPLN_ORG_PRODUCTION}' after ${COPY_IMAGE_RETRIES} attempt(s)."
+            echo "::error::Could not copy staging image '${STAGING_IMAGE}' from '${CPLN_ORG_STAGING}' to '${CPLN_ORG_PRODUCTION}' after ${copy_image_attempts} attempt(s)."
             exit "${copy_status}"
           fi
 
