@@ -387,19 +387,19 @@ jobs:
           }
           trap cleanup_upstream_profile EXIT
 
-          cpln profile create "${upstream_profile}" --token "${CPLN_TOKEN_STAGING}" >/dev/null
+          cleanup_upstream_profile
+          CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln profile create "${upstream_profile}" >/dev/null
           CPLN_PROFILE="${upstream_profile}" cpln image docker-login --org "${CPLN_ORG_STAGING}" >/dev/null
-          CPLN_PROFILE="${upstream_profile}" docker manifest inspect "${source_image_ref}" >/dev/null
 
           copy_status=1
           for attempt in $(seq 1 "${copy_image_attempts}"); do
-            if cpln image copy "${STAGING_IMAGE}" \
+            if CPLN_PROFILE="${upstream_profile}" docker manifest inspect "${source_image_ref}" >/dev/null &&
+              cpln image copy "${STAGING_IMAGE}" \
               --profile "${upstream_profile}" \
               --org "${CPLN_ORG_STAGING}" \
               --to-profile default \
               --to-org "${CPLN_ORG_PRODUCTION}" \
-              --to-name "${production_image}" \
-              --cleanup; then
+              --to-name "${production_image}"; then
               copy_status=0
               break
             else
@@ -585,7 +585,7 @@ jobs:
           HEALTHY: ${{ steps.health-check.outputs.healthy }}
           PREVIOUS_IMAGE: ${{ steps.capture-current.outputs.current_image }}
           PREVIOUS_VERSION: ${{ steps.capture-current.outputs.current_version }}
-          DEPLOYED_IMAGE: ${{ steps.copy-image.outputs.image }}
+          COPIED_IMAGE: ${{ steps.copy-image.outputs.image }}
         shell: bash
         run: |
           {
@@ -593,13 +593,15 @@ jobs:
             echo
             if [[ "${HEALTHY}" == "true" ]]; then
               echo "✅ Status: deployment successful"
+              deployed_image="${COPIED_IMAGE}"
             else
               echo "❌ Status: deployment failed"
+              deployed_image="${PREVIOUS_IMAGE}"
             fi
             echo
             echo "Previous image: \`${PREVIOUS_IMAGE}\`"
             echo "Previous version: ${PREVIOUS_VERSION}"
-            echo "Deployed image: \`${DEPLOYED_IMAGE}\`"
+            echo "Deployed image: \`${deployed_image}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
   create-github-release:
