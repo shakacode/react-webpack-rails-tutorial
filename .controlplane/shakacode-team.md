@@ -61,7 +61,8 @@ only after approval.
 
 If promotion fails with
 `CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
-the token is missing from the environment scope. Configure it with:
+the token is missing from the environment scope. A repository or organization
+secret with the same name is not enough for this workflow. Configure it with:
 
 ```sh
 gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
