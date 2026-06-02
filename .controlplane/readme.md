@@ -89,6 +89,19 @@ self-review, and consider disabling administrator bypass. Do not store
 promotion wrapper does not use `secrets: inherit`; GitHub exposes the production
 token only after the environment approval gate passes.
 
+If promotion fails with
+`CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
+the token is missing from the environment scope. A repository or organization
+secret with the same name is not enough for this workflow. Create or verify the
+environment secret with:
+You need permission to manage repository environments and secrets to run these
+commands.
+
+```sh
+gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+```
+
 The matching Control Plane resources are:
 
 | Resource | Name |
