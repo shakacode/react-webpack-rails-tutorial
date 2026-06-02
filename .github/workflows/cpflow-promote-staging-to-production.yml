@@ -31,6 +31,8 @@ env:
   # expose a dedicated health endpoint (e.g. "200" for a plain /health, or "200 401 403"
   # for apps that auth-gate / without redirecting).
   HEALTH_CHECK_ACCEPTED_STATUSES: ${{ vars.HEALTH_CHECK_ACCEPTED_STATUSES || '200 301 302' }}
+  COPY_IMAGE_RETRIES: ${{ vars.COPY_IMAGE_RETRIES || '3' }}
+  COPY_IMAGE_RETRY_INTERVAL: ${{ vars.COPY_IMAGE_RETRY_INTERVAL || '20' }}
   ROLLBACK_READINESS_RETRIES: ${{ vars.ROLLBACK_READINESS_RETRIES || '24' }}
   ROLLBACK_READINESS_INTERVAL: ${{ vars.ROLLBACK_READINESS_INTERVAL || '15' }}
 
@@ -336,14 +338,56 @@ jobs:
       - name: Copy image from staging
         env:
           # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
+          CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
           CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
+          CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
           STAGING_IMAGE: ${{ steps.staging-image.outputs.image }}
         shell: bash
         run: |
           set -euo pipefail
-          cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"
+
+          if ! [[ "${COPY_IMAGE_RETRIES}" =~ ^[0-9]+$ ]]; then
+            echo "::error::COPY_IMAGE_RETRIES must be a non-negative integer."
+            exit 1
+          fi
+
+          if ! [[ "${COPY_IMAGE_RETRY_INTERVAL}" =~ ^[0-9]+$ ]]; then
+            echo "::error::COPY_IMAGE_RETRY_INTERVAL must be a non-negative integer."
+            exit 1
+          fi
+
+          copy_image_retries=$((10#${COPY_IMAGE_RETRIES}))
+          copy_image_attempts=$((copy_image_retries + 1))
+          copy_image_retry_interval=$((10#${COPY_IMAGE_RETRY_INTERVAL}))
+
+          if ! CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image get "${STAGING_IMAGE}" --org "${CPLN_ORG_STAGING}" -o json >/dev/null; then
+            echo "::error::Staging image '${STAGING_IMAGE}' was not found in org '${CPLN_ORG_STAGING}'; aborting promotion."
+            exit 1
+          fi
+
+          copy_status=1
+          for attempt in $(seq 1 "${copy_image_attempts}"); do
+            if cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"; then
+              copy_status=0
+              break
+            else
+              copy_status=$?
+            fi
+
+            if [[ "${attempt}" -lt "${copy_image_attempts}" ]]; then
+              echo "::warning::Image copy attempt ${attempt}/${copy_image_attempts} failed with exit ${copy_status}; retrying in ${copy_image_retry_interval}s."
+              sleep "${copy_image_retry_interval}"
+            else
+              echo "::warning::Image copy attempt ${attempt}/${copy_image_attempts} failed with exit ${copy_status}; no attempts remain."
+            fi
+          done
+
+          if [[ "${copy_status}" -ne 0 ]]; then
+            echo "::error::Could not copy staging image '${STAGING_IMAGE}' from '${CPLN_ORG_STAGING}' to '${CPLN_ORG_PRODUCTION}' after ${copy_image_attempts} attempt(s)."
+            exit "${copy_status}"
+          fi
 
       - name: Deploy image to production
         env:
@@ -411,19 +455,14 @@ jobs:
               continue
             fi
 
-            if ! rollback_container_entries="$(
-              jq -r \
-                --argjson current_names "${current_names}" \
-                '.[] as $container | ($current_names | index($container.name)) as $index | "\($index)\t\($container.image)"' \
-                <<< "${previous_containers}"
-            )"; then
+            if ! rollback_container_entries="$(jq -r '.[] | "\(.name)\t\(.image)"' <<< "${previous_containers}")"; then
               echo "::warning::Could not build rollback image list for workload '${workload_name}'; skipping rollback for this workload." >&2
               rollback_failures=$((rollback_failures + 1))
               continue
             fi
 
-            while IFS=$'\t' read -r index image; do
-              rollback_args+=(--set "spec.containers[${index}].image=${image}")
+            while IFS=$'\t' read -r container_name image; do
+              rollback_args+=(--set "spec.containers.${container_name}.image=${image}")
             done <<< "${rollback_container_entries}"
 
             if ! cpln workload update "${workload_name}" \
