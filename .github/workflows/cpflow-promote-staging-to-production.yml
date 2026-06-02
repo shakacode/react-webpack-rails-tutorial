@@ -336,10 +336,10 @@ jobs:
           echo "image=${staging_image}" >> "$GITHUB_OUTPUT"
 
       - name: Copy image from staging
+        id: copy-image
         env:
           # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
           CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
-          CPLN_UPSTREAM_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_STAGING: ${{ vars.CPLN_ORG_STAGING }}
           CPLN_ORG_PRODUCTION: ${{ vars.CPLN_ORG_PRODUCTION }}
@@ -367,9 +367,39 @@ jobs:
             exit 1
           fi
 
+          staging_commit="${STAGING_IMAGE##*_}"
+          if [[ "${staging_commit}" == "${STAGING_IMAGE}" || -z "${staging_commit}" ]]; then
+            echo "::error::Staging image '${STAGING_IMAGE}' does not include the expected '_<commit>' suffix."
+            exit 1
+          fi
+
+          latest_number="$(
+            cpln image query --org "${CPLN_ORG_PRODUCTION}" --prop "name~${PRODUCTION_APP_NAME}:" -o json |
+              jq -r --arg prefix "${PRODUCTION_APP_NAME}:" \
+                '[.items[].name | select(startswith($prefix)) | (try capture("^[^:]+:(?<number>[0-9]+)") catch empty) | .number | tonumber] | max // 0'
+          )"
+          production_image="${PRODUCTION_APP_NAME}:$((latest_number + 1))_${staging_commit}"
+          source_image_ref="${CPLN_ORG_STAGING}.registry.cpln.io/${STAGING_IMAGE}"
+
+          upstream_profile="upstream-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          cleanup_upstream_profile() {
+            cpln profile delete "${upstream_profile}" >/dev/null 2>&1 || true
+          }
+          trap cleanup_upstream_profile EXIT
+
+          cleanup_upstream_profile
+          CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln profile create "${upstream_profile}" >/dev/null
+          CPLN_PROFILE="${upstream_profile}" cpln image docker-login --org "${CPLN_ORG_STAGING}" >/dev/null
+
           copy_status=1
           for attempt in $(seq 1 "${copy_image_attempts}"); do
-            if cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"; then
+            if CPLN_PROFILE="${upstream_profile}" docker manifest inspect "${source_image_ref}" >/dev/null &&
+              cpln image copy "${STAGING_IMAGE}" \
+              --profile "${upstream_profile}" \
+              --org "${CPLN_ORG_STAGING}" \
+              --to-profile default \
+              --to-org "${CPLN_ORG_PRODUCTION}" \
+              --to-name "${production_image}"; then
               copy_status=0
               break
             else
@@ -388,6 +418,8 @@ jobs:
             echo "::error::Could not copy staging image '${STAGING_IMAGE}' from '${CPLN_ORG_STAGING}' to '${CPLN_ORG_PRODUCTION}' after ${copy_image_attempts} attempt(s)."
             exit "${copy_status}"
           fi
+
+          echo "image=${production_image}" >> "$GITHUB_OUTPUT"
 
       - name: Deploy image to production
         env:
@@ -553,7 +585,7 @@ jobs:
           HEALTHY: ${{ steps.health-check.outputs.healthy }}
           PREVIOUS_IMAGE: ${{ steps.capture-current.outputs.current_image }}
           PREVIOUS_VERSION: ${{ steps.capture-current.outputs.current_version }}
-          DEPLOYED_IMAGE: ${{ steps.staging-image.outputs.image }}
+          COPIED_IMAGE: ${{ steps.copy-image.outputs.image }}
         shell: bash
         run: |
           {
@@ -561,13 +593,15 @@ jobs:
             echo
             if [[ "${HEALTHY}" == "true" ]]; then
               echo "✅ Status: deployment successful"
+              deployed_image="${COPIED_IMAGE}"
             else
               echo "❌ Status: deployment failed"
+              deployed_image="${PREVIOUS_IMAGE}"
             fi
             echo
             echo "Previous image: \`${PREVIOUS_IMAGE}\`"
             echo "Previous version: ${PREVIOUS_VERSION}"
-            echo "Deployed image: \`${DEPLOYED_IMAGE}\`"
+            echo "Deployed image: \`${deployed_image}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
   create-github-release:
