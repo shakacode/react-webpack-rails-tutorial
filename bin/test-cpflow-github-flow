@@ -72,18 +72,32 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
     refs[uses_ref] << "#{path}:#{job_name}"
 
     if job["uses"].to_s.match?(PROMOTE_WORKFLOW)
-      if with["production_environment"].to_s.strip.empty?
-        abort "#{path}:#{job_name} must set production_environment so GitHub can expose production environment secrets after approval"
-      end
-
-      secrets = job["secrets"].is_a?(Hash) ? job["secrets"] : {}
-      if secrets.key?("CPLN_TOKEN_PRODUCTION")
-        abort "#{path}:#{job_name} must not pass CPLN_TOKEN_PRODUCTION as a caller secret; store it on the protected production environment"
-      end
+      abort "#{path}:#{job_name} must not call the cross-repo production reusable workflow; use a normal caller-repo job with environment: production"
     end
 
   end
 end
+
+promote_path = ".github/workflows/cpflow-promote-staging-to-production.yml"
+promote_doc = YAML.load_file(promote_path, aliases: true)
+promote_job = promote_doc.fetch("jobs", {}).fetch("promote-to-production")
+
+if promote_job.key?("uses")
+  abort "#{promote_path}:promote-to-production must run as a normal caller-repo job, not a reusable workflow, so GitHub can expose production environment secrets"
+end
+
+unless promote_job["environment"].to_s == "production"
+  abort "#{promote_path}:promote-to-production must declare environment: production"
+end
+
+checkout_step = Array(promote_job["steps"]).find { |step| step["name"] == "Checkout control-plane-flow actions" }
+checkout_ref = checkout_step&.fetch("with", {})&.fetch("ref", nil)
+
+if checkout_ref.to_s.strip.empty?
+  abort "#{promote_path}:promote-to-production must pin the Checkout control-plane-flow actions step"
+end
+
+refs[checkout_ref] << "#{promote_path}:promote-to-production"
 
 if refs.empty?
   puts "no upstream cpflow reusable workflow refs found"

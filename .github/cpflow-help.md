@@ -66,21 +66,29 @@ Production promotion is part of the generated flow, but keep it protected:
 | `PRODUCTION_APP_NAME` | Prefer `production` Environment variable | Production app name from `controlplane.yml`. |
 
 Configure the `production` GitHub Environment with required reviewers and
-prevent self-review. The generated promotion wrapper passes only the staging
-token from repository secrets; GitHub injects `CPLN_TOKEN_PRODUCTION` only after
-the environment approval gate passes.
+prevent self-review. Production promotion intentionally runs as a normal
+caller-repo workflow job with `environment: production`, then checks out the
+pinned `control-plane-flow` release for shared actions. Do not move production
+promotion behind a cross-repo reusable workflow: GitHub does not expose this
+repo's environment secrets to that called workflow.
+
+Keep `CPLN_TOKEN_PRODUCTION` absent from repository and organization secrets. A
+normal environment-gated job cannot tell which secret scope supplied a nonempty
+value, so a broader secret with the same name can mask a missing environment
+secret.
 
 If promotion fails with
 `CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
-the token is missing from the environment scope. A repository or organization
-secret with the same name is not enough for this workflow. Create or verify the
-environment secret with:
+the token is missing from the environment scope or the workflow job is no longer
+declaring `environment: production`. Create or verify the environment secret
+and confirm there is no same-named repository or organization secret:
 You need permission to manage repository environments and secrets to run these
 commands.
 
 ```sh
 gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
 gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial
 ```
 
 Before the first promotion, bootstrap the production app the same way in the
@@ -88,13 +96,11 @@ production org, using production-only secrets and values.
 
 ## Version Locking
 
-Generated wrappers pin Control Plane Flow once with the reusable workflow
-`uses:` ref, for example `@v5.0.4`. For stable releases,
-this ref should be a release tag. The upstream reusable workflow automatically
-loads its matching shared actions from GitHub's workflow context, so downstream
-wrappers should not pass a duplicate Control Plane Flow ref input. If your
-generated wrappers still include a `with:` block whose only purpose is to repeat
-the same ref, regenerate them with a newer `cpflow`.
+Generated wrappers pin Control Plane Flow with a release tag, for example
+`v5.0.4`. Reusable review-app, staging, cleanup, and helper workflows pin the
+tag in their `uses:` ref. Production promotion pins the same tag in the
+`Checkout control-plane-flow actions` step so the caller-owned job can keep
+`environment: production` and receive production environment secrets directly.
 
 Leave `CPFLOW_VERSION` unset so the workflow builds cpflow from the same
 checked-out upstream source. If you set `CPFLOW_VERSION`, it must match the

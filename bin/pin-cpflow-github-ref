@@ -8,9 +8,9 @@ USAGE = <<~USAGE
 
   Use a release tag for normal operation, e.g. v5.0.0.
   Use a full 40-character commit SHA for temporary unreleased upstream testing.
-  This only updates generated reusable-workflow `uses:` refs. The called
-  workflows load their own matching shared actions from that same workflow
-  commit automatically. Regenerate from the cpflow gem when templates changed.
+  This updates generated reusable-workflow `uses:` refs plus the production
+  workflow's pinned control-plane-flow checkout and setup validation ref.
+  Regenerate from the cpflow gem when templates changed.
   Use --allow-moving-ref only for short-lived local branch/ref experiments.
 USAGE
 
@@ -59,6 +59,8 @@ workflow_paths.each do |path|
   text = File.read(path)
   updated = text
             .gsub(%r{(uses:\s+shakacode/control-plane-flow/\.github/workflows/[^@\s]+@)[^\s]+}, "\\1#{ref}")
+            .gsub(%r{(repository:\s+shakacode/control-plane-flow\n\s+ref:\s+)[^\s]+}, "\\1#{ref}")
+            .gsub(%r{(control_plane_flow_ref:\s+shakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@)[^\s]+}, "\\1#{ref}")
 
   next if updated == text
 
