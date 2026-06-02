@@ -4,8 +4,10 @@
 # other sensitive information that is shared across multiple apps
 # in the same organization.
 
-# The qa-* dictionary is bootstrapped via this template; prod and
-# staging dictionaries are created manually with real values.
+# The qa-* dictionary is bootstrapped via this template for review apps.
+# Review apps run pull request code, so values in this dictionary must be
+# disposable or otherwise acceptable for review-app exposure. Prod and staging
+# dictionaries are created manually with separate real values.
 
 # Initial bootstrap (once, manually, not in CI):
 #   cpflow apply-template secrets -a qa-react-webpack-rails-tutorial --org shakacode-open-source-examples-staging
@@ -21,7 +23,8 @@ data:
   # Both sides of the Rails/Node renderer handshake must match.
   # Generate with `openssl rand -hex 32`.
   RENDERER_PASSWORD: "replace-with-openssl-rand-hex-32"
-  # JWT from https://pro.reactonrails.com/; same token across envs.
+  # JWT from https://pro.reactonrails.com/. Use a review-safe token for public
+  # review apps if the production token must not be exposed to pull request code.
   REACT_ON_RAILS_PRO_LICENSE: "replace-with-pro-license-jwt"
 
 ---

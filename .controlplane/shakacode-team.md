@@ -13,6 +13,14 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 - New pushes to a PR redeploy only after the review app already exists.
 - Add `+review-app-delete` to delete a review app manually; closing the PR also
   deletes it automatically. Use `+review-app-help` for the command reference.
+- Public fork PRs can receive help comments, but deploys are limited to branches
+  in this repository because Docker builds use repository secrets. If a forked
+  change needs a review app, first move the reviewed change to a trusted branch
+  in this repository.
+- Review apps run pull request code. Keep `CPLN_TOKEN_STAGING`,
+  `qa-react-webpack-rails-tutorial-secrets`, database credentials, renderer
+  credentials, and license values limited to review/staging use. Never mount
+  production secrets into review apps.
 
 ### Staging Environment
 - **Automatic**: Any merge to the `master` branch automatically deploys to staging
@@ -33,6 +41,9 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 Required repository secret for review apps and staging:
 
 - `CPLN_TOKEN_STAGING`
+
+Use a staging/review service-account token that cannot access the production
+Control Plane org or production secret dictionaries.
 
 Required repository variables for staging deploys:
 

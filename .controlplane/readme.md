@@ -34,6 +34,12 @@ For review apps, GitHub needs one repository secret:
 | --- | --- |
 | `CPLN_TOKEN_STAGING` | Service-account token for `shakacode-open-source-examples-staging`. |
 
+Use a staging/review token that cannot access production Control Plane
+resources. In public repositories, generated review-app deploys skip fork PR
+heads because Docker builds use repository secrets; if a forked change needs a
+review app, first move the reviewed change to a trusted branch in this
+repository.
+
 No review-app repository variables are required for the standard path. The
 workflow infers `qa-react-webpack-rails-tutorial` and
 `shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`,
@@ -129,6 +135,13 @@ Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
 `RENDERER_PASSWORD` with `openssl rand -hex 32`. For real production, prefer
 managed Postgres and Redis services and update `DATABASE_URL` and `REDIS_URL`
 accordingly.
+
+Review apps run pull request code, so anything mounted through
+`cpln://secret/...` can be read by that code after it starts. Keep the
+`qa-react-webpack-rails-tutorial-secrets` dictionary limited to review-safe
+values: disposable databases, review-only renderer credentials, and a Pro
+license value that is acceptable for review-app exposure. Do not reuse
+production or long-lived staging secret dictionaries for review apps.
 
 ### Advanced Overrides
 
@@ -502,6 +515,10 @@ this automated process. When an approved collaborator comments exactly
 After the review app exists, new pushes to the PR redeploy it automatically.
 Use `+review-app-delete` to delete it manually; closing the PR deletes it
 automatically. Use `+review-app-help` for the review-app command reference.
+Fork PR heads are skipped for deploys because the workflow builds Docker images
+with repository secrets. A trusted comment on a fork PR still should not deploy
+the fork head; move the reviewed change to a branch in this repository when a
+review app is needed.
 Pushes to the staging branch deploy staging, and production promotion is manual
 from the `cpflow-promote-staging-to-production` workflow.
 If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository

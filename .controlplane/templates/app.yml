@@ -42,7 +42,8 @@ spec:
     # Control Plane Secret named by {{APP_SECRETS}} before deploy. cpflow
     # resolves {{APP_SECRETS}} to `{APP_PREFIX}-secrets` — which means review
     # apps all share one `qa-react-webpack-rails-tutorial-secrets` (thanks to
-    # match_if_app_name_starts_with: true on the qa template).
+    # match_if_app_name_starts_with: true on the qa template). Review apps run
+    # pull request code, so every mounted secret must be review-safe.
     - name: RENDERER_PASSWORD
       value: cpln://secret/{{APP_SECRETS}}.RENDERER_PASSWORD
     - name: REACT_ON_RAILS_PRO_LICENSE
