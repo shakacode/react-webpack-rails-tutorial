@@ -59,6 +59,15 @@ passes `production_environment: production`; the upstream reusable workflow runs
 its production job in that environment, and GitHub injects the production token
 only after approval.
 
+If promotion fails with
+`CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
+the token is missing from the environment scope. Configure it with:
+
+```sh
+gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+```
+
 Generated caller workflows pass only the named secrets each upstream workflow
 needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
 only by the protected `production` Environment after approval.

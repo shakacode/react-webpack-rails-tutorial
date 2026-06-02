@@ -70,6 +70,17 @@ prevent self-review. The generated promotion wrapper passes only the staging
 token from repository secrets; GitHub injects `CPLN_TOKEN_PRODUCTION` only after
 the environment approval gate passes.
 
+If promotion fails with
+`CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
+the token is missing from the environment scope. A repository or organization
+secret with the same name is not enough for this workflow. Create or verify the
+environment secret with:
+
+```sh
+gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+```
+
 Before the first promotion, bootstrap the production app the same way in the
 production org, using production-only secrets and values.
 
