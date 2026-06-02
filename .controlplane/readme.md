@@ -94,6 +94,8 @@ If promotion fails with
 the token is missing from the environment scope. A repository or organization
 secret with the same name is not enough for this workflow. Create or verify the
 environment secret with:
+You need permission to manage repository environments and secrets to run these
+commands.
 
 ```sh
 gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
