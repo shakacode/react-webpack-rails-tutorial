@@ -54,26 +54,31 @@ Production promotion uses a protected GitHub Environment named `production`:
 
 Protect the `production` environment with required reviewers, enable prevent
 self-review, and consider disabling administrator bypass. Do not store
-`CPLN_TOKEN_PRODUCTION` as a repository or organization secret. The caller
-passes `production_environment: production`; the upstream reusable workflow runs
-its production job in that environment, and GitHub injects the production token
-only after approval.
+`CPLN_TOKEN_PRODUCTION` as a repository or organization secret. The production
+promotion workflow is intentionally a normal caller-repo job with
+`environment: production`; it checks out the pinned `control-plane-flow` release
+for shared actions after GitHub makes the environment secret available.
+Keep `CPLN_TOKEN_PRODUCTION` absent from repository and organization secrets so
+a broader secret cannot mask a missing environment secret.
 
 If promotion fails with
 `CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
-the token is missing from the environment scope. A repository or organization
-secret with the same name is not enough for this workflow. Create or verify the
-environment secret with:
+the token is missing from the environment scope or the workflow job is no longer
+declaring `environment: production`. Create or verify the environment secret
+and confirm there is no same-named repository or organization secret:
 You need permission to manage repository environments and secrets to run these
 commands.
 
 ```sh
 gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
 gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial
+gh secret list --org shakacode | grep '^CPLN_TOKEN_PRODUCTION[[:space:]]' || true
 ```
 
-Generated caller workflows pass only the named secrets each upstream workflow
-needs. They do not use `secrets: inherit`; `CPLN_TOKEN_PRODUCTION` is supplied
+Generated reusable-workflow callers pass only the named secrets each upstream
+workflow needs. They do not use `secrets: inherit`. Production promotion is the
+exception: it stays as a caller-owned job so `CPLN_TOKEN_PRODUCTION` is supplied
 only by the protected `production` Environment after approval.
 
 Persistent staging and production apps must be bootstrapped once before the

@@ -8,15 +8,25 @@ USAGE = <<~USAGE
 
   Use a release tag for normal operation, e.g. v5.0.0.
   Use a full 40-character commit SHA for temporary unreleased upstream testing.
-  This only updates generated reusable-workflow `uses:` refs. The called
-  workflows load their own matching shared actions from that same workflow
-  commit automatically. Regenerate from the cpflow gem when templates changed.
+  This updates generated reusable-workflow `uses:` refs plus the production
+  workflow's pinned control-plane-flow checkout and setup validation ref.
+  Regenerate from the cpflow gem when templates changed.
   Use --allow-moving-ref only for short-lived local branch/ref experiments.
 USAGE
 
 ALLOWED_OPTIONS = ["--allow-moving-ref"].freeze
 FULL_COMMIT_SHA = /\A[0-9a-f]{40}\z/i
 RELEASE_TAG = /\Av\d+\.\d+\.\d+(?:[-.][0-9A-Za-z][0-9A-Za-z.-]*)?\z/
+PRODUCTION_WORKFLOW_REF = "shakacode/control-plane-flow/.github/workflows/" \
+                          "cpflow-promote-staging-to-production.yml"
+CPFLOW_CHECKOUT_REF_PATTERN = %r{
+  (^\s*-\s+name:\s+Checkout\ control-plane-flow\ actions\s*\n
+    (?:(?!^\s*-\s+name:).)*?
+    ^\s+repository:\s+shakacode/control-plane-flow\s*\n
+    (?:(?!^\s*-\s+name:).)*?
+    ^\s+ref:\s+)
+  [^\s]+
+}mx
 
 options, positional = ARGV.partition { |arg| arg.start_with?("--") }
 unknown_options = options - ALLOWED_OPTIONS
@@ -57,8 +67,12 @@ end
 changed = []
 workflow_paths.each do |path|
   text = File.read(path)
+  production_setup_ref_pattern =
+    /(control_plane_flow_ref:\s+#{Regexp.escape(PRODUCTION_WORKFLOW_REF)}@)[^\s]+/
   updated = text
             .gsub(%r{(uses:\s+shakacode/control-plane-flow/\.github/workflows/[^@\s]+@)[^\s]+}, "\\1#{ref}")
+            .gsub(production_setup_ref_pattern, "\\1#{ref}")
+            .gsub(CPFLOW_CHECKOUT_REF_PATTERN, "\\1#{ref}")
 
   next if updated == text
 
