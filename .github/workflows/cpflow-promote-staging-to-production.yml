@@ -355,9 +355,10 @@ jobs:
             if cpflow copy-image-from-upstream -a "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" --image "${STAGING_IMAGE}"; then
               copy_status=0
               break
+            else
+              copy_status=$?
             fi
 
-            copy_status=$?
             if [[ "${attempt}" -lt "${COPY_IMAGE_RETRIES}" ]]; then
               echo "::warning::Image copy attempt ${attempt}/${COPY_IMAGE_RETRIES} failed with exit ${copy_status}; retrying in ${COPY_IMAGE_RETRY_INTERVAL}s."
               sleep "${COPY_IMAGE_RETRY_INTERVAL}"
