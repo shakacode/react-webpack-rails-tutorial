@@ -381,21 +381,20 @@ jobs:
           production_image="${PRODUCTION_APP_NAME}:$((latest_number + 1))_${staging_commit}"
           source_image_ref="${CPLN_ORG_STAGING}.registry.cpln.io/${STAGING_IMAGE}"
 
-          upstream_profile="upstream-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          cleanup_upstream_profile() {
-            cpln profile delete "${upstream_profile}" >/dev/null 2>&1 || true
+          docker_config_dir="$(mktemp -d)"
+          cleanup_copy_credentials() {
+            rm -rf "${docker_config_dir}"
           }
-          trap cleanup_upstream_profile EXIT
+          trap cleanup_copy_credentials EXIT
 
-          cleanup_upstream_profile
-          CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln profile create "${upstream_profile}" >/dev/null
-          CPLN_PROFILE="${upstream_profile}" cpln image docker-login --org "${CPLN_ORG_STAGING}" >/dev/null
+          export DOCKER_CONFIG="${docker_config_dir}"
 
           copy_status=1
           for attempt in $(seq 1 "${copy_image_attempts}"); do
-            if CPLN_PROFILE="${upstream_profile}" docker manifest inspect "${source_image_ref}" >/dev/null &&
+            if CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image docker-login --org "${CPLN_ORG_STAGING}" >/dev/null &&
+              docker manifest inspect "${source_image_ref}" >/dev/null &&
+              CPLN_TOKEN="${CPLN_TOKEN_STAGING}" \
               cpln image copy "${STAGING_IMAGE}" \
-              --profile "${upstream_profile}" \
               --org "${CPLN_ORG_STAGING}" \
               --to-profile default \
               --to-org "${CPLN_ORG_PRODUCTION}" \
