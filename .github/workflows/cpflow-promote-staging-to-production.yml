@@ -245,6 +245,8 @@ jobs:
           selected_version=""
           rollback_state='{}'
 
+          # Validate all workloads have images, then promote the primary workload's
+          # image as the canonical image for this GVC.
           while IFS= read -r workload_name; do
             [[ -n "${workload_name}" ]] || continue
 
@@ -372,7 +374,7 @@ jobs:
           accepted_statuses: ${{ env.HEALTH_CHECK_ACCEPTED_STATUSES }}
 
       - name: Roll back on failure
-        if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
+        if: failure() && steps.capture-current.outcome == 'success'
         env:
           ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
@@ -439,7 +441,7 @@ jobs:
           fi
 
       - name: Wait for rollback readiness
-        if: failure() && steps.capture-current.outputs.rollback_state != '' && steps.capture-current.outputs.rollback_state != '{}'
+        if: failure() && steps.capture-current.outcome == 'success'
         env:
           ROLLBACK_STATE: ${{ steps.capture-current.outputs.rollback_state }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
@@ -462,6 +464,7 @@ jobs:
           pids=()
           for workload_name in "${workloads[@]}"; do
             [[ -n "${workload_name}" ]] || continue
+            status_name="${workload_name//\//_}"
 
             echo "Polling rollback readiness for workload '${workload_name}'..."
             (
@@ -480,9 +483,9 @@ jobs:
               done
 
               if [[ "${ready}" == "true" ]]; then
-                printf 'ready\n' > "${status_dir}/${workload_name}"
+                printf 'ready\n' > "${status_dir}/${status_name}"
               else
-                printf 'not_ready\n' > "${status_dir}/${workload_name}"
+                printf 'not_ready\n' > "${status_dir}/${status_name}"
               fi
             ) &
             pids+=("$!")
@@ -498,7 +501,8 @@ jobs:
 
           for workload_name in "${workloads[@]}"; do
             [[ -n "${workload_name}" ]] || continue
-            status_file="${status_dir}/${workload_name}"
+            status_name="${workload_name//\//_}"
+            status_file="${status_dir}/${status_name}"
             if [[ ! -f "${status_file}" ]] || [[ "$(<"${status_file}")" != "ready" ]]; then
               echo "::warning::Workload '${workload_name}' did not report ready after rollback."
             fi
@@ -510,6 +514,7 @@ jobs:
           HEALTHY: ${{ steps.health-check.outputs.healthy }}
           PREVIOUS_IMAGE: ${{ steps.capture-current.outputs.current_image }}
           PREVIOUS_VERSION: ${{ steps.capture-current.outputs.current_version }}
+          DEPLOYED_IMAGE: ${{ steps.staging-image.outputs.image }}
         shell: bash
         run: |
           {
@@ -523,6 +528,7 @@ jobs:
             echo
             echo "Previous image: \`${PREVIOUS_IMAGE}\`"
             echo "Previous version: ${PREVIOUS_VERSION}"
+            echo "Deployed image: \`${DEPLOYED_IMAGE}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
   create-github-release:

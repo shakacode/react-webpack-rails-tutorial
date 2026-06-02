@@ -43,7 +43,7 @@ ruby <<'RUBY'
 require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
-PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@[^\s]+\z}
+PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@([^\s]+)\z}
 EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"
 EXPECTED_CPFLOW_CHECKOUT_REPOSITORY = "shakacode/control-plane-flow"
 
@@ -82,7 +82,11 @@ end
 
 promote_path = ".github/workflows/cpflow-promote-staging-to-production.yml"
 promote_doc = YAML.load_file(promote_path, aliases: true)
-promote_job = promote_doc.fetch("jobs", {}).fetch("promote-to-production")
+promote_job = promote_doc.fetch("jobs", {})["promote-to-production"]
+
+unless promote_job
+  abort "#{promote_path}:promote-to-production job is missing"
+end
 
 if promote_job.key?("uses")
   abort "#{promote_path}:promote-to-production must run as a normal caller-repo job, not a reusable workflow, so GitHub can expose production environment secrets"
@@ -115,6 +119,21 @@ if checkout_ref.to_s.strip.empty?
 end
 
 refs[checkout_ref] << "#{promote_path}:promote-to-production"
+
+setup_step = Array(promote_job["steps"]).find { |step| step["name"] == "Setup production environment" }
+
+unless setup_step
+  abort "#{promote_path}:promote-to-production must include a Setup production environment step"
+end
+
+setup_ref = setup_step.fetch("with", {})["control_plane_flow_ref"]
+setup_match = setup_ref.to_s.match(PROMOTE_WORKFLOW)
+
+unless setup_match
+  abort "#{promote_path}:promote-to-production must pass a pinned production control_plane_flow_ref to setup"
+end
+
+refs[setup_match[1]] << "#{promote_path}:promote-to-production setup"
 
 if refs.empty?
   puts "no upstream cpflow reusable workflow refs found"
