@@ -44,6 +44,8 @@ require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
 PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@[^\s]+\z}
+EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"
+EXPECTED_CPFLOW_CHECKOUT_REPOSITORY = "shakacode/control-plane-flow"
 
 refs = Hash.new { |hash, key| hash[key] = [] }
 
@@ -91,7 +93,22 @@ unless promote_job["environment"].to_s == "production"
 end
 
 checkout_step = Array(promote_job["steps"]).find { |step| step["name"] == "Checkout control-plane-flow actions" }
-checkout_ref = checkout_step&.fetch("with", {})&.fetch("ref", nil)
+
+unless checkout_step
+  abort "#{promote_path}:promote-to-production must include a Checkout control-plane-flow actions step"
+end
+
+unless checkout_step["uses"] == EXPECTED_CPFLOW_CHECKOUT_ACTION
+  abort "#{promote_path}:promote-to-production must use #{EXPECTED_CPFLOW_CHECKOUT_ACTION} for the Checkout control-plane-flow actions step"
+end
+
+checkout_with = checkout_step.fetch("with", {})
+checkout_repository = checkout_with["repository"]
+checkout_ref = checkout_with["ref"]
+
+unless checkout_repository == EXPECTED_CPFLOW_CHECKOUT_REPOSITORY
+  abort "#{promote_path}:promote-to-production must check out #{EXPECTED_CPFLOW_CHECKOUT_REPOSITORY}"
+end
 
 if checkout_ref.to_s.strip.empty?
   abort "#{promote_path}:promote-to-production must pin the Checkout control-plane-flow actions step"

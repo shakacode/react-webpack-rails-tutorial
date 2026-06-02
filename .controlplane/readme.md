@@ -105,6 +105,7 @@ commands.
 gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
 gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
 gh secret list --repo shakacode/react-webpack-rails-tutorial
+gh secret list --org shakacode | grep '^CPLN_TOKEN_PRODUCTION[[:space:]]' || true
 ```
 
 The matching Control Plane resources are:

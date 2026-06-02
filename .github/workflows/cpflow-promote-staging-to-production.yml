@@ -16,8 +16,8 @@ env:
   # Worst-case wall time per attempt is HEALTH_CHECK_INTERVAL plus the curl --max-time below
   # (10s), so the defaults give a ~10 minute window (24 × (15 + 10) = 600s) — enough for
   # most Rails cold boots (asset precompile + db:migrate + workload readiness).
-  HEALTH_CHECK_RETRIES: 24
-  HEALTH_CHECK_INTERVAL: 15
+  HEALTH_CHECK_RETRIES: ${{ vars.HEALTH_CHECK_RETRIES || '24' }}
+  HEALTH_CHECK_INTERVAL: ${{ vars.HEALTH_CHECK_INTERVAL || '15' }}
   # Space-separated list of HTTP statuses considered healthy. The default accepts 301/302
   # because `curl` is invoked without `-L`, so a root `/` that redirects to a login page
   # (common for Rails apps that auth-gate `/`) would otherwise be reported as unhealthy
@@ -31,8 +31,8 @@ env:
   # expose a dedicated health endpoint (e.g. "200" for a plain /health, or "200 401 403"
   # for apps that auth-gate / without redirecting).
   HEALTH_CHECK_ACCEPTED_STATUSES: ${{ vars.HEALTH_CHECK_ACCEPTED_STATUSES || '200 301 302' }}
-  ROLLBACK_READINESS_RETRIES: 24
-  ROLLBACK_READINESS_INTERVAL: 15
+  ROLLBACK_READINESS_RETRIES: ${{ vars.ROLLBACK_READINESS_RETRIES || '24' }}
+  ROLLBACK_READINESS_INTERVAL: ${{ vars.ROLLBACK_READINESS_INTERVAL || '15' }}
 
 concurrency:
   # Single global group: only one production promotion may run at a time across the
@@ -129,6 +129,7 @@ jobs:
           working_directory: .cpflow
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
+          # The setup action validates CPFLOW_VERSION against this full workflow ref.
           control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.0.4
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
@@ -142,11 +143,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          ruby - "${PRODUCTION_APP_NAME}" "${PRIMARY_WORKLOAD}" >> "$GITHUB_OUTPUT" <<'RUBY'
+          ruby - "${PRODUCTION_APP_NAME}" "${PRIMARY_WORKLOAD}" "${GITHUB_OUTPUT}" <<'RUBY'
           require "yaml"
 
           app = ARGV.fetch(0)
           requested_primary = ARGV.fetch(1, "").to_s.strip
+          output_path = ARGV.fetch(2)
           data = YAML.safe_load(File.read(".controlplane/controlplane.yml"), aliases: true)
           apps = data["apps"] || {}
           app_config = apps[app]
@@ -167,19 +169,21 @@ jobs:
               elsif workloads.include?("rails")
                 "rails"
               else
-                warn "::error::PRIMARY_WORKLOAD is not configured and app '#{app}' has multiple workloads: #{workloads.join(', ')}."
+                puts "::error::PRIMARY_WORKLOAD is not configured and app '#{app}' has multiple workloads: #{workloads.join(', ')}."
                 warn "       Set the PRIMARY_WORKLOAD repository variable to one of these workloads."
                 exit 1
               end
             elsif workloads.include?(requested_primary)
               requested_primary
             else
-              warn "::error::PRIMARY_WORKLOAD '#{requested_primary}' is not one of: #{workloads.join(', ')}."
+              puts "::error::PRIMARY_WORKLOAD '#{requested_primary}' is not one of: #{workloads.join(', ')}."
               exit 1
             end
 
-          puts "names=#{workloads.join(',')}"
-          puts "primary=#{primary}"
+          File.open(output_path, "a") do |output|
+            output.puts "names=#{workloads.join(',')}"
+            output.puts "primary=#{primary}"
+          end
           RUBY
 
       - name: Detect release phase support
@@ -245,7 +249,7 @@ jobs:
             [[ -n "${workload_name}" ]] || continue
 
             workload_json="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
-            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image')"
+            workload_image="$(echo "${workload_json}" | jq -r '.spec.containers[0].image // empty')"
             workload_containers="$(echo "${workload_json}" | jq -c '.spec.containers | map({name, image})')"
             workload_version="$(echo "${workload_json}" | jq -r '.version')"
 
@@ -377,6 +381,7 @@ jobs:
         run: |
           # Best-effort rollback: try every workload, aggregate failures, exit non-zero at the end
           # if any failed. A single cpln hiccup shouldn't leave other workloads mid-promotion.
+          # Keep -e disabled here so rollback can aggregate failures across workloads.
           set -uo pipefail
 
           rollback_failures=0
