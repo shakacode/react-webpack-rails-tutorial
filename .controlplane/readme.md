@@ -195,6 +195,10 @@ These YAML files are the same as used by the `cpln apply` command.
 3. `Dockerfile`: defines the Docker image used to run the app on Control Plane.
 4. `entrypoint.sh`: defines the entrypoint script used to run the app on Control Plane.
 
+Wondering whether to manage these YAML templates with Terraform instead? See
+[docs/cpflow-vs-terraform.md](docs/cpflow-vs-terraform.md) for the trade-offs
+and a concrete HCL comparison.
+
 ## Setup and run
 
 Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`.
