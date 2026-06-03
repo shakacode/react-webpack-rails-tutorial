@@ -18,4 +18,4 @@ jobs:
     # to PR-open help. Remove it, or uncomment and adapt this guard, if forks or
     # clones should stay quiet until Control Plane is configured:
     #   if: vars.REVIEW_APP_PREFIX != '' || vars.CPLN_ORG_STAGING != ''
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@2d8225572edd6f54c83ba9c51bd2983546989e93
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml@d8877ca0c9c1d88947f322903e4a4344641029ba

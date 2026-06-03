@@ -118,11 +118,11 @@ Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
 Current workflow wrappers are temporarily pinned to upstream
-`control-plane-flow` commit `2d8225572edd6f54c83ba9c51bd2983546989e93` to test
-promotion hardening before it ships in a release tag. Keep release tags as the
-steady-state configuration once the upstream PR is released; use a full commit
-SHA only for short-lived upstream PR testing and leave `CPFLOW_VERSION` unset in
-that case.
+`control-plane-flow` commit `d8877ca0c9c1d88947f322903e4a4344641029ba` to use
+merged-but-unreleased promotion hardening and the release-runner timeout fix
+before they ship in a release tag. Keep release tags as the steady-state
+configuration once the upstream changes are released; use a full commit SHA only
+for short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.

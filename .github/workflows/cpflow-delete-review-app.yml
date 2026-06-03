@@ -31,6 +31,6 @@ jobs:
       github.event_name == 'workflow_dispatch'
     # This `if:` mirrors the upstream job guard to avoid a billable workflow_call
     # when the event does not match. Keep both conditions in sync.
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@2d8225572edd6f54c83ba9c51bd2983546989e93
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-delete-review-app.yml@d8877ca0c9c1d88947f322903e4a4344641029ba
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
