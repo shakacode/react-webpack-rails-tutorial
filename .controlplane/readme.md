@@ -577,9 +577,10 @@ For this repo, the update loop is:
 1. Generate from the desired `cpflow` release with `--staging-branch master`.
 2. Keep generated refs on a release tag once the upstream hardening changes ship.
    This branch temporarily pins refs to
-   `2d8225572edd6f54c83ba9c51bd2983546989e93` to test upstream promotion
-   hardening before the next release tag. Leave `CPFLOW_VERSION` unset while
-   testing a commit SHA.
+   `d8877ca0c9c1d88947f322903e4a4344641029ba` to use merged-but-unreleased
+   upstream promotion hardening and the release-runner timeout fix before the
+   next release tag.
+   Leave `CPFLOW_VERSION` unset while testing a commit SHA.
 3. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
 4. Validate locally:
 
