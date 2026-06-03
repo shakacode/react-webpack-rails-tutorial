@@ -102,14 +102,27 @@ cpflow setup-app -a react-webpack-rails-tutorial-production --org shakacode-open
 
 Use `setup-app` for first-time bootstrap because it creates the app secret
 policy and identity binding. Use `cpflow apply-template` for later template
-updates to existing persistent apps.
+updates to existing persistent apps. Production promotion compares both GVC env
+names and app workload container env names against staging before copying the
+image, so keep production `rails` and `daily-task` env references in sync with
+the templates:
+
+```sh
+cpflow apply-template app postgres redis daily-task rails \
+  -a react-webpack-rails-tutorial-production \
+  --org shakacode-open-source-examples-production \
+  --yes --add-app-identity
+```
 
 Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
-Current workflow wrappers are pinned to the upstream `control-plane-flow`
-release tag `v5.0.4`. Keep release tags as the steady-state configuration; use
-a full commit SHA only for short-lived upstream PR testing.
+Current workflow wrappers are temporarily pinned to upstream
+`control-plane-flow` commit `9ef104c246670d6c1ea4132dfd22be68ef930a70` to test
+promotion hardening before it ships in a release tag. Keep release tags as the
+steady-state configuration once the upstream PR is released; use a full commit
+SHA only for short-lived upstream PR testing and leave `CPFLOW_VERSION` unset in
+that case.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
@@ -119,8 +132,8 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 When the upstream `control-plane-flow` repo changes the generated GitHub Actions
 flow, regenerate from the target `cpflow` version with `--staging-branch master`,
 review the diff, and validate with `bin/test-cpflow-github-flow` plus the normal
-CI checks. Stable automation should use release tags such as `v5.0.4`, not
-`main` or a feature branch.
+CI checks. Stable automation should use a release tag that includes the upstream
+hardening changes, not `main` or a feature branch.
 
 See [readme.md](readme.md) and
 [Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md)

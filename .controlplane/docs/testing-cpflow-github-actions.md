@@ -29,8 +29,10 @@ bin/pin-cpflow-github-ref <40-character-control-plane-flow-commit-sha>
 bin/conductor-exec bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/bin/cpflow
 ```
 
-Leave `CPFLOW_VERSION` unset while testing a commit SHA. After the upstream gem
-and tag ship, repin wrappers to the release tag, such as `v5.0.4`.
+Leave `CPFLOW_VERSION` unset while testing a commit SHA. After the upstream PR
+ships in a release tag, repin wrappers to that tag. Use `v5.1.0` only for
+changes already included in that tag; keep this promotion-hardening canary on an
+immutable commit SHA until the upstream hardening PR is released.
 
 ## Review App Canary
 

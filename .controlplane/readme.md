@@ -122,7 +122,16 @@ The matching Control Plane resources are:
 | Production app secret dictionary | `react-webpack-rails-tutorial-production-secrets` |
 
 Bootstrap production the same way before the first promotion, using the
-production org and production-only secret values.
+production org and production-only secret values. After bootstrap or any
+template change, re-apply the persistent production templates so the `rails`
+and `daily-task` workloads keep the same secret-backed env names as staging:
+
+```sh
+cpflow apply-template app postgres redis daily-task rails \
+  -a react-webpack-rails-tutorial-production \
+  --org shakacode-open-source-examples-production \
+  --yes --add-app-identity
+```
 
 All review, staging, and production secret dictionaries need these app runtime
 secrets:
@@ -529,8 +538,10 @@ If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository
 variable and the `branches:` filter in `.github/workflows/cpflow-deploy-staging.yml`;
 GitHub does not allow repository variables in trigger branch filters.
 The production promotion workflow checks that production has all environment
-variable names present in staging; it does not compare secret values, workload
-environment variables, or Control Plane secret references.
+variable names present in staging at both the GVC level and each configured app
+workload's container level. It does not compare secret values. The health check
+waits for Control Plane to report both `status.ready` and `status.readyLatest`
+before probing the public endpoint.
 
 The GitHub settings and Control Plane resources must match the app names in
 `.controlplane/controlplane.yml`. For the standard review-app path, leave
@@ -564,9 +575,11 @@ Keep the reusable-workflow mechanics in the upstream
 For this repo, the update loop is:
 
 1. Generate from the desired `cpflow` release with `--staging-branch master`.
-2. Keep generated refs on a release tag such as `v5.0.4`. Use a full upstream
-   commit SHA only for short-lived downstream testing of an unreleased upstream
-   PR, and leave `CPFLOW_VERSION` unset in that case.
+2. Keep generated refs on a release tag once the upstream hardening changes ship.
+   This branch temporarily pins refs to
+   `9ef104c246670d6c1ea4132dfd22be68ef930a70` to test upstream promotion
+   hardening before the next release tag. Leave `CPFLOW_VERSION` unset while
+   testing a commit SHA.
 3. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
 4. Validate locally:
 

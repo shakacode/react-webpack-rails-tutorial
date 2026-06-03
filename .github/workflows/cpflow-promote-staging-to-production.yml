@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: shakacode/control-plane-flow
-          ref: v5.0.4
+          ref: 9ef104c246670d6c1ea4132dfd22be68ef930a70
           path: .cpflow
           persist-credentials: false
 
@@ -140,7 +140,7 @@ jobs:
             if ! [[ "${value}" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
               local display_value
               display_value="$(printf '%q' "${value}")"
-              echo "::error::${label} (${display_value}) must be a valid Control Plane org name; use lowercase alphanumeric characters and hyphens only, with no leading or trailing hyphen."
+              echo "::error::${label} (${display_value}) must be a valid Control Plane org name; use lowercase alphanumeric characters and hyphens only, with no leading or trailing hyphen." >&2
               exit 1
             fi
           }
@@ -179,7 +179,7 @@ jobs:
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
           # The setup action validates CPFLOW_VERSION against this full workflow ref.
-          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.0.4
+          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@9ef104c246670d6c1ea4132dfd22be68ef930a70
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
       # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).
@@ -249,34 +249,89 @@ jobs:
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
           CPLN_ORG_STAGING: ${{ steps.cpln-orgs.outputs.staging }}
           CPLN_ORG_PRODUCTION: ${{ steps.cpln-orgs.outputs.production }}
+          WORKLOAD_NAMES: ${{ steps.workloads.outputs.names }}
         shell: bash
         run: |
           set -euo pipefail
 
-          staging_vars="$(CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln gvc get "${STAGING_APP_NAME}" --org "${CPLN_ORG_STAGING}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
-          production_vars="$(CPLN_TOKEN="${CPLN_TOKEN_PRODUCTION}" cpln gvc get "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.spec.env // [] | .[].name' | sort)"
+          list_gvc_env_names() {
+            local token="$1"
+            local org="$2"
+            local app="$3"
 
-          if [[ -z "${staging_vars}" ]]; then
-            echo "Staging GVC exposes no environment variables; skipping parity check."
-            exit 0
-          fi
+            CPLN_TOKEN="${token}" cpln gvc get "${app}" --org "${org}" -o json |
+              jq -r '.spec.env // [] | .[] | .name // empty' |
+              sort -u
+          }
 
-          # Treat staging as the promotion source of truth: fail when a variable
-          # present in staging is missing in production. Production-only variables
-          # are allowed, but surface them so teams can spot drift.
-          missing_vars="$(comm -23 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
-          production_only_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+          list_workload_env_names() {
+            local token="$1"
+            local org="$2"
+            local app="$3"
+            local workload="$4"
 
-          if [[ -n "${production_only_vars}" ]]; then
-            echo "::warning::Production has environment variables that are not present in staging:"
-            echo "${production_only_vars}"
-          fi
+            CPLN_TOKEN="${token}" cpln workload get "${workload}" --gvc "${app}" --org "${org}" -o json |
+              jq -r '.spec.containers // [] | .[] | (.env // [])[]? | .name // empty' |
+              sort -u
+          }
 
-          if [[ -n "${missing_vars}" ]]; then
-            echo "::error::Production is missing environment variables that exist in staging"
-            echo "${missing_vars}"
-            exit 1
-          fi
+          check_required_vars() {
+            local staging_scope="$1"
+            local production_scope="$2"
+            local missing_message="$3"
+            local staging_vars="$4"
+            local production_vars="$5"
+            local missing_vars
+            local production_only_vars
+
+            if [[ -z "${staging_vars}" ]]; then
+              echo "Staging ${staging_scope} exposes no environment variables; skipping parity check."
+              return
+            fi
+
+            # Treat staging as the promotion source of truth: fail when a variable
+            # present in staging is missing in production. Production-only variables
+            # are allowed, but surface them so teams can spot drift.
+            missing_vars="$(comm -23 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+            production_only_vars="$(comm -13 <(printf '%s\n' "${staging_vars}") <(printf '%s\n' "${production_vars}"))"
+
+            if [[ -n "${production_only_vars}" ]]; then
+              echo "::warning::Production ${production_scope} has environment variables that are not present in staging:"
+              echo "${production_only_vars}"
+            fi
+
+            if [[ -n "${missing_vars}" ]]; then
+              echo "::error::${missing_message}"
+              echo "${missing_vars}"
+              env_check_failed=1
+            fi
+          }
+
+          env_check_failed=0
+
+          staging_vars="$(list_gvc_env_names "${CPLN_TOKEN_STAGING}" "${CPLN_ORG_STAGING}" "${STAGING_APP_NAME}")"
+          production_vars="$(list_gvc_env_names "${CPLN_TOKEN_PRODUCTION}" "${CPLN_ORG_PRODUCTION}" "${PRODUCTION_APP_NAME}")"
+          check_required_vars \
+            "GVC '${STAGING_APP_NAME}'" \
+            "GVC '${PRODUCTION_APP_NAME}'" \
+            "Production GVC '${PRODUCTION_APP_NAME}' is missing environment variables that exist in staging" \
+            "${staging_vars}" \
+            "${production_vars}"
+
+          while IFS= read -r workload_name; do
+            [[ -n "${workload_name}" ]] || continue
+
+            staging_workload_vars="$(list_workload_env_names "${CPLN_TOKEN_STAGING}" "${CPLN_ORG_STAGING}" "${STAGING_APP_NAME}" "${workload_name}")"
+            production_workload_vars="$(list_workload_env_names "${CPLN_TOKEN_PRODUCTION}" "${CPLN_ORG_PRODUCTION}" "${PRODUCTION_APP_NAME}" "${workload_name}")"
+            check_required_vars \
+              "workload '${workload_name}'" \
+              "workload '${workload_name}'" \
+              "Production workload '${workload_name}' is missing environment variables that exist in staging" \
+              "${staging_workload_vars}" \
+              "${production_workload_vars}"
+          done < <(tr ',' '\n' <<< "${WORKLOAD_NAMES}")
+
+          exit "${env_check_failed}"
 
       - name: Capture current production image
         id: capture-current
@@ -382,10 +437,12 @@ jobs:
 
           echo "image=${staging_image}" >> "$GITHUB_OUTPUT"
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5
+
       - name: Copy image from staging
         id: copy-image
         env:
-          # Pass the upstream token via env rather than `-t` so it doesn't appear in /proc/<pid>/cmdline.
           CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
           CPLN_TOKEN_PRODUCTION: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           PRODUCTION_APP_NAME: ${{ vars.PRODUCTION_APP_NAME }}
@@ -410,27 +467,53 @@ jobs:
           copy_image_attempts=$((copy_image_retries + 1))
           copy_image_retry_interval=$((10#${COPY_IMAGE_RETRY_INTERVAL}))
 
-          if ! CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image get "${STAGING_IMAGE}" --org "${CPLN_ORG_STAGING}" -o json >/dev/null; then
+          if [[ "${STAGING_IMAGE}" == *@* ]]; then
+            staging_image="${STAGING_IMAGE}"
+          else
+            staging_image="${STAGING_IMAGE%%@*}"
+          fi
+          if [[ -z "${staging_image}" ]]; then
+            echo "::error::Staging image '${STAGING_IMAGE}' did not contain a usable image reference."
+            exit 1
+          fi
+
+          if ! CPLN_TOKEN="${CPLN_TOKEN_STAGING}" cpln image get "${staging_image}" --org "${CPLN_ORG_STAGING}" -o json >/dev/null; then
             echo "::error::Staging image '${STAGING_IMAGE}' was not found in org '${CPLN_ORG_STAGING}'; aborting promotion."
             exit 1
           fi
 
-          staging_commit="${STAGING_IMAGE##*_}"
-          if [[ "${staging_commit}" == "${STAGING_IMAGE}" || -z "${staging_commit}" ]]; then
-            echo "::error::Staging image '${STAGING_IMAGE}' does not include the expected '_<commit>' suffix."
-            exit 1
+          staging_tag=""
+          if [[ "${staging_image}" == *@* ]]; then
+            staging_tag="${staging_image##*@}"
+          elif [[ "${staging_image}" == *:* ]]; then
+            staging_tag="${staging_image##*:}"
+          fi
+          staging_commit=""
+          if [[ "${staging_tag}" == *_* ]]; then
+            staging_commit="${staging_tag##*_}"
           fi
 
+          # The workflow-level concurrency group serializes this sequence so two
+          # production promotions cannot derive and publish the same next tag.
           latest_number="$(
-            cpln image query --org "${CPLN_ORG_PRODUCTION}" --prop "name~${PRODUCTION_APP_NAME}:" -o json |
+            cpln image query --org "${CPLN_ORG_PRODUCTION}" --prop "name~${PRODUCTION_APP_NAME}:" --max 0 -o json |
               jq -r --arg prefix "${PRODUCTION_APP_NAME}:" \
                 '[.items[].name | select(startswith($prefix)) | (try capture("^[^:]+:(?<number>[0-9]+)") catch empty) | .number | tonumber] | max // 0'
           )"
-          production_image="${PRODUCTION_APP_NAME}:$((latest_number + 1))_${staging_commit}"
+          if ! [[ "${latest_number}" =~ ^[0-9]+$ ]]; then
+            echo "::error::Could not determine the next production image number for app '${PRODUCTION_APP_NAME}' in org '${CPLN_ORG_PRODUCTION}'."
+            exit 1
+          fi
+
+          production_image="${PRODUCTION_APP_NAME}:$((latest_number + 1))"
+          if [[ -n "${staging_commit}" ]]; then
+            production_image="${production_image}_${staging_commit}"
+          fi
+
           staging_registry="${CPLN_ORG_STAGING}.registry.cpln.io"
           production_registry="${CPLN_ORG_PRODUCTION}.registry.cpln.io"
-          source_image_ref="${CPLN_ORG_STAGING}.registry.cpln.io/${STAGING_IMAGE}"
-          production_image_ref="${CPLN_ORG_PRODUCTION}.registry.cpln.io/${production_image}"
+          source_image_ref="${staging_registry}/${STAGING_IMAGE}"
+          production_image_ref="${production_registry}/${production_image}"
 
           docker_config_dir="$(mktemp -d)"
           cleanup_copy_credentials() {
@@ -440,16 +523,27 @@ jobs:
 
           export DOCKER_CONFIG="${docker_config_dir}"
 
+          if ! printf '%s' "${CPLN_TOKEN_STAGING}" |
+            docker login "${staging_registry}" -u '<token>' --password-stdin >/dev/null; then
+            echo "::error::Failed to authenticate to staging registry '${staging_registry}'."
+            exit 1
+          fi
+
+          if ! printf '%s' "${CPLN_TOKEN_PRODUCTION}" |
+            docker login "${production_registry}" -u '<token>' --password-stdin >/dev/null; then
+            echo "::error::Failed to authenticate to production registry '${production_registry}'."
+            exit 1
+          fi
+
+          if docker buildx imagetools inspect "${production_image_ref}" >/dev/null 2>&1; then
+            echo "::error::Production image '${production_image}' already exists in org '${CPLN_ORG_PRODUCTION}'; aborting to avoid overwriting it."
+            exit 1
+          fi
+
           copy_status=1
           for attempt in $(seq 1 "${copy_image_attempts}"); do
-            if printf '%s' "${CPLN_TOKEN_STAGING}" |
-              docker login "${staging_registry}" -u '<token>' --password-stdin >/dev/null &&
-              printf '%s' "${CPLN_TOKEN_PRODUCTION}" |
-              docker login "${production_registry}" -u '<token>' --password-stdin >/dev/null &&
-              docker manifest inspect "${source_image_ref}" >/dev/null &&
-              docker pull "${source_image_ref}" &&
-              docker tag "${source_image_ref}" "${production_image_ref}" &&
-              docker push "${production_image_ref}"; then
+            if docker buildx imagetools inspect "${source_image_ref}" >/dev/null &&
+              docker buildx imagetools create --prefer-index=false --tag "${production_image_ref}" "${source_image_ref}"; then
               copy_status=0
               break
             else
@@ -484,6 +578,9 @@ jobs:
           if [[ -n "${RELEASE_PHASE_FLAG}" ]]; then
             deploy_args+=("${RELEASE_PHASE_FLAG}")
           fi
+          # `cpflow deploy-image` deploys the latest image for the app. The
+          # workflow-level concurrency group keeps production promotion copy and
+          # deploy steps coupled across workflow runs.
           deploy_args+=(--org "${CPLN_ORG_PRODUCTION}" --verbose)
 
           cpflow deploy-image "${deploy_args[@]}"
@@ -592,8 +689,10 @@ jobs:
               set -euo pipefail
               ready=false
               for attempt in $(seq 1 "${ROLLBACK_READINESS_RETRIES}"); do
-                deployment_ready="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json | jq -r '.status.ready // false')"
-                if [[ "${deployment_ready}" == "true" ]]; then
+                workload_status="$(cpln workload get "${workload_name}" --gvc "${PRODUCTION_APP_NAME}" --org "${CPLN_ORG_PRODUCTION}" -o json)"
+                deployment_ready="$(echo "${workload_status}" | jq -r '.status.ready // false')"
+                latest_ready="$(echo "${workload_status}" | jq -r '.status.readyLatest // false')"
+                if [[ "${deployment_ready}" == "true" && "${latest_ready}" == "true" ]]; then
                   ready=true
                   break
                 fi

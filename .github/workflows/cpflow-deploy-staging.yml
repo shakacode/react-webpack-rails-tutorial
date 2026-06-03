@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   deploy-staging:
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@v5.0.4
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml@9ef104c246670d6c1ea4132dfd22be68ef930a70
     with:
       staging_app_branch_default: "master"
     secrets:
