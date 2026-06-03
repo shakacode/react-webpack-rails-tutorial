@@ -118,7 +118,7 @@ Advanced optional settings are documented upstream in the
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
 
 Current workflow wrappers are temporarily pinned to upstream
-`control-plane-flow` commit `9ef104c246670d6c1ea4132dfd22be68ef930a70` to test
+`control-plane-flow` commit `01dd1d231ce3d8849bcb7ed36b9fd9d184eb3350` to test
 promotion hardening before it ships in a release tag. Keep release tags as the
 steady-state configuration once the upstream PR is released; use a full commit
 SHA only for short-lived upstream PR testing and leave `CPFLOW_VERSION` unset in

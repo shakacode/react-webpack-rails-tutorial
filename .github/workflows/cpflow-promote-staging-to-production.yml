@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: shakacode/control-plane-flow
-          ref: 9ef104c246670d6c1ea4132dfd22be68ef930a70
+          ref: 01dd1d231ce3d8849bcb7ed36b9fd9d184eb3350
           path: .cpflow
           persist-credentials: false
 
@@ -179,7 +179,7 @@ jobs:
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
           # The setup action validates CPFLOW_VERSION against this full workflow ref.
-          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@9ef104c246670d6c1ea4132dfd22be68ef930a70
+          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@01dd1d231ce3d8849bcb7ed36b9fd9d184eb3350
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
       # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).
@@ -307,6 +307,9 @@ jobs:
             fi
           }
 
+          # check_required_vars intentionally mutates env_check_failed in this
+          # shell; keep calls outside subshells so failures aggregate before the
+          # final exit.
           env_check_failed=0
 
           staging_vars="$(list_gvc_env_names "${CPLN_TOKEN_STAGING}" "${CPLN_ORG_STAGING}" "${STAGING_APP_NAME}")"
@@ -467,13 +470,9 @@ jobs:
           copy_image_attempts=$((copy_image_retries + 1))
           copy_image_retry_interval=$((10#${COPY_IMAGE_RETRY_INTERVAL}))
 
-          if [[ "${STAGING_IMAGE}" == *@* ]]; then
-            staging_image="${STAGING_IMAGE}"
-          else
-            staging_image="${STAGING_IMAGE%%@*}"
-          fi
+          staging_image="${STAGING_IMAGE}"
           if [[ -z "${staging_image}" ]]; then
-            echo "::error::Staging image '${STAGING_IMAGE}' did not contain a usable image reference."
+            echo "::error::STAGING_IMAGE is not set or is empty."
             exit 1
           fi
 
