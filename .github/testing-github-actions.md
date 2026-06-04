@@ -1,85 +1,35 @@
-# Developing and Testing Github Actions
+# Developing and Testing GitHub Actions
 
-Testing Github Actions on an existing repository is tricky.
-                                                                               
-The main issue boils down to the fact that Github Actions uses the workflow files in the branch where the event originates. This is fine for push events, but it becomes a problem when you want to test workflows that are triggered by comments on a pull request.
+GitHub Actions workflow testing depends on the event type:
 
-Here's a summary of the behavior:
-  
-Behavior of push and pull_request Events
-	1.	Push on a Branch:
-	•	When you push changes to a branch (e.g., feature-branch), GitHub Actions uses the workflow files in that same branch.
-	•	This is why changes to workflows work seamlessly when testing with push events.
-	2.	Pull Request Events:
-	•	For pull_request events (e.g., a PR from feature-branch into master), GitHub Actions will always use the workflow files from the target branch (e.g., master), not the source branch (e.g., feature-branch).
-	•	This is a security feature to prevent someone from introducing malicious code in a PR that modifies the workflow files themselves.
+- `push` runs workflow files from the pushed branch.
+- `pull_request` runs workflow files from the base branch for sensitive cases.
+- `issue_comment` runs workflow files from the default branch.
+- `workflow_dispatch --ref <branch>` runs the workflow file from that ref.
 
-Impact on Comment-Triggered Workflows
+This matters for review-app automation because comment-triggered commands such
+as `+review-app-deploy` use default-branch workflow code. A PR that changes
+workflow files or action wiring is not fully proven by commenting on that same
+PR until the trusted default-branch code has those changes.
 
-When you want to trigger workflows via comments (issue_comment) in a pull request:
-	•	The workflow code used will always come from the master branch (or the default branch), regardless of the branch where the PR originates.
-	•	This means the PR’s changes to the workflow won’t be used, and the action invoked by the comment will also use code from master.
+For cpflow review-app, staging, and promotion workflows, use the cpflow-specific
+guide:
 
-Workarounds to Test Comment-Triggered Workflows
+[Testing cpflow GitHub Actions Changes](../.controlplane/docs/testing-cpflow-github-actions.md)
 
-If you want to test workflows in a way that uses the changes in the pull request, here are your options:
+## Practical Pattern
 
-1. Use Push Events for Testing
-	•	Test your changes on a branch with push triggers.
-	•	Use workflow_dispatch to simulate the events you need (like invoking actions via comments).
+1. Validate generated files locally with `bin/test-cpflow-github-flow`.
+2. Open a PR and let regular CI prove GitHub can parse the workflow YAML.
+3. For top-level workflow-file experiments, run `workflow_dispatch --ref`.
+4. For comment-triggered review-app commands, test a real `+review-app-deploy`
+   after the trusted default-branch wrapper points at the code under test.
+5. When testing unreleased upstream `control-plane-flow` changes downstream, pin
+   the generated reusable workflow `uses:` refs to the same upstream commit SHA.
+   Newer upstream workflows load their matching shared actions automatically; do
+   not add a duplicate ref input to downstream wrappers.
 
-This allows you to confirm that your changes to the workflow file or actions behave as expected before merging into master.
-
-2. Merge the Workflow to master Temporarily
-
-If you absolutely need the workflow to run as part of a pull_request event:
-	1.	Merge your workflow changes into master temporarily.
-	2.	Open a PR to test your comment-triggered workflows.
-	3.	Revert the changes in master if necessary.
-
-This ensures the workflow changes are active in master while still testing with the pull_request context.
-
-3. Add Logic to Detect the Source Branch
-
-Use github.event.pull_request.head.ref to add custom logic in your workflow that behaves differently based on the source branch.
-	•	Example:
-
-jobs:
-  test-pr:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.ref == 'feature-branch' }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Debug
-        run: echo "Testing workflow changes in feature-branch"
-
-However, this still requires the workflow itself to exist in master.
-
-4. Use a Fork or a Temporary Repo
-
-Create a temporary repository or a fork to test workflows in isolation:
-	•	Push your workflow changes to master in the test repository.
-	•	Open a PR in the fork to test how workflows behave with issue_comment events and PR contexts.
-
-Once confirmed, you can replicate the changes in your main repository.
-
-6. Alternative Approach: Split Workflows
-
-If your workflow includes comment-based triggers (issue_comment), consider splitting your workflows:
-	•	A base workflow in master that handles triggering.
-	•	A test-specific workflow for validating changes on a branch.
-
-For example:
-	1.	The base workflow triggers when a comment like /run-tests is added.
-	2.	The test-specific workflow runs in response to the base workflow but uses the branch’s code.
-
-Summary
-	•	For push events: The branch-specific workflow is used, so testing changes is easy.
-	•	For pull_request and issue_comment events: GitHub always uses workflows from the master branch, and there’s no direct way to bypass this.
-
-To test comment-triggered workflows:
-	1.	Use push or workflow_dispatch to validate changes.
-	2.	Merge workflow changes temporarily into master to test with pull_request events.
-	3.	Use tools like act for local simulation.
+Avoid testing production automation against moving branch refs such as `main` or
+a feature branch. Use release tags for normal operation and full commit SHAs for
+temporary pre-release validation. `bin/pin-cpflow-github-ref` enforces that
+default and requires `--allow-moving-ref` for one-off local branch experiments.

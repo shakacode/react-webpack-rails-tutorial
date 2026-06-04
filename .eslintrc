@@ -37,6 +37,11 @@ rules:
   # currently deprecated https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/no-onchange.md
   jsx-a11y/no-onchange: 0
 
+  # React 19 removed runtime propTypes validation; the rule is still in
+  # plugin:react/recommended (jsx-eslint/eslint-plugin-react#3753 tracks
+  # removing it) but no longer relevant in this codebase.
+  react/prop-types: 0
+
 settings:
   import/core-modules:
     - react-redux

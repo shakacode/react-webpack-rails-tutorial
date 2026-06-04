@@ -1,5 +1,5 @@
 import request from 'axios';
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 
 const API_URL = 'comments.json';
 

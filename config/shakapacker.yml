@@ -9,7 +9,12 @@ default: &default
   webpack_compile_output: true
   nested_entries: true
   javascript_transpiler: swc
-  assets_bundler: rspack
+  # TODO: flip back to rspack once shakacode/react_on_rails_rsc#29 ships a
+  # native rspack RSC plugin. On webpack for now because rspack
+  # 2.0.0-beta.7's webpack-compat layer doesn't cover the APIs the upstream
+  # RSCWebpackPlugin needs (contextModuleFactory.resolveDependencies,
+  # ModuleDependency).
+  assets_bundler: webpack
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']

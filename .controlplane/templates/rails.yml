@@ -15,8 +15,11 @@ spec:
       # Inherit other ENV values from GVC
       inheritEnv: true
       image: {{APP_IMAGE_LINK}}
-      # 512 corresponds to a standard 1x dyno type
-      memory: 512Mi
+      # 1Gi (up from 512Mi) gives the single container enough headroom for
+      # Rails + the Pro Node renderer. Below the marketplace demo's 2Gi
+      # because this tutorial's Rails surface is smaller; capacityAI below
+      # adjusts upward if actual usage warrants it.
+      memory: 1Gi
       ports:
         - number: 3000
           protocol: http
@@ -27,7 +30,9 @@ spec:
     autoscaling:
       # Max of 1 effectively disables autoscaling, so a like a Heroku dyno count of 1
       maxScale: 1
-    capacityAI: false
+    # CapacityAI adjusts CPU/memory within the single replica based on observed
+    # usage, so the 1Gi/300m baseline can grow if Rails + renderer need more.
+    capacityAI: true
   firewallConfig:
     external:
       # Default to allow public access to Rails server

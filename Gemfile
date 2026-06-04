@@ -5,8 +5,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.4.6"
 
+gem "cpflow", "5.1.1", require: false
 gem "react_on_rails", "17.0.0.rc.1"
-gem "shakapacker", "10.0.0.rc.0"
+gem "react_on_rails_pro", "17.0.0.rc.1"
+gem "shakapacker", "10.1.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 8.1.2"

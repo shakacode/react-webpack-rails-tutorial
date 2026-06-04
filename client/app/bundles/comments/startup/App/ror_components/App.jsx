@@ -1,6 +1,8 @@
+'use client';
+
 import { Provider } from 'react-redux';
 import React from 'react';
-import ReactOnRails from 'react-on-rails';
+import ReactOnRails from 'react-on-rails-pro';
 
 import NonRouterCommentsContainer from '../../../containers/NonRouterCommentsContainer.jsx';
 import 'intl/locale-data/jsonp/en';

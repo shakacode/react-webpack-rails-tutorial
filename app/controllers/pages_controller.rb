@@ -2,7 +2,8 @@
 
 class PagesController < ApplicationController
   include ReactOnRails::Controller
-  before_action :set_comments
+  include ReactOnRailsPro::Stream
+  before_action :set_comments, only: %i[index no_router]
 
   def index
     # NOTE: The below notes apply if you want to set the value of the props in the controller, as
@@ -37,6 +38,12 @@ class PagesController < ApplicationController
   def simple; end
 
   def rescript; end
+
+  def server_components
+    @server_components_comments = Comment.order(id: :desc).limit(10)
+                                         .as_json(only: %i[id author text created_at updated_at])
+    stream_view_containing_react_components(template: "/pages/server_components")
+  end
 
   private
 

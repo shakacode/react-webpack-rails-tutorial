@@ -6,7 +6,7 @@ _If you need a free demo account for Control Plane (no CC required), you can con
 
 ---
 
-See the reusable `cpflow-*` GitHub Actions files in this repo's [`.github`](https://github.com/shakacode/react-webpack-rails-tutorial/tree/master/.github) directory for review apps, staging deploys, and production promotion.
+Check [how the `cpflow` gem is used in the generated GitHub Actions flow](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/cpflow-build-docker-image/action.yml).
 Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
 
 ---
@@ -18,6 +18,151 @@ To maximize simplicity, this example creates Postgres and Redis as workloads in 
 In a real app, you would likely use persistent, external resources, such as AWS RDS and AWS ElastiCache.
 
 You can see the definition of Postgres and Redis in the `.controlplane/templates` directory.
+
+## GitHub and Control Plane Setup
+
+This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
+generic behavior documented upstream in the
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md);
+this section only lists the values that are specific to this app.
+
+### Review Apps and Staging
+
+For review apps, GitHub needs one repository secret:
+
+| Name | Value |
+| --- | --- |
+| `CPLN_TOKEN_STAGING` | Service-account token for `shakacode-open-source-examples-staging`. |
+
+Use a staging/review token that cannot access production Control Plane
+resources. In public repositories, generated review-app deploys skip fork PR
+heads because Docker builds use repository secrets; if a forked change needs a
+review app, first move the reviewed change to a trusted branch in this
+repository.
+
+No review-app repository variables are required for the standard path. The
+workflow infers `qa-react-webpack-rails-tutorial` and
+`shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`,
+because that file has one app with `match_if_app_name_starts_with: true`.
+`PRIMARY_WORKLOAD` also stays unset because the public workload is `rails`.
+
+For staging auto-deploys, also set these repository variables:
+
+| Name | Value |
+| --- | --- |
+| `CPLN_ORG_STAGING` | `shakacode-open-source-examples-staging` |
+| `STAGING_APP_NAME` | `react-webpack-rails-tutorial-staging` |
+| `STAGING_APP_BRANCH` | `master` |
+
+The matching Control Plane resources are:
+
+| Resource | Name |
+| --- | --- |
+| Review app prefix | `qa-react-webpack-rails-tutorial` |
+| Review app secret dictionary | `qa-react-webpack-rails-tutorial-secrets` |
+| Staging app | `react-webpack-rails-tutorial-staging` |
+| Staging app secret dictionary | `react-webpack-rails-tutorial-staging-secrets` |
+
+Bootstrap the persistent staging app once before the first merge-to-master
+deploy:
+
+```sh
+cpflow setup-app -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging --skip-post-creation-hook
+```
+
+`setup-app` reads `setup_app_templates` from `.controlplane/controlplane.yml`
+and creates the app identity, app secret dictionary, app secret policy, policy
+binding, and template resources. Use `--skip-post-creation-hook` so first-time
+bootstrap does not try to run database setup before a Docker image exists. For
+later template updates on an existing persistent app, use
+`cpflow apply-template` and make sure the app identity still has `reveal`
+permission on the app secret policy.
+
+### Production Promotion
+
+Production promotion is part of the default demo flow, but the production token
+must be gated by a protected GitHub Environment named `production`:
+
+| Name | Where | Value |
+| --- | --- | --- |
+| `CPLN_TOKEN_PRODUCTION` | `production` Environment secret | Production Control Plane service-account token. |
+| `CPLN_ORG_PRODUCTION` | `production` Environment variable | `shakacode-open-source-examples-production` |
+| `PRODUCTION_APP_NAME` | `production` Environment variable | `react-webpack-rails-tutorial-production` |
+
+Protect the `production` environment with required reviewers, prevent
+self-review, and consider disabling administrator bypass. Do not store
+`CPLN_TOKEN_PRODUCTION` as a repository or organization secret. The production
+promotion workflow intentionally runs as a normal caller-repo job with
+`environment: production`, then checks out the pinned `control-plane-flow`
+release for shared actions. GitHub exposes the production token only after the
+environment approval gate passes.
+Keep `CPLN_TOKEN_PRODUCTION` absent from repository and organization secrets so
+a broader secret cannot mask a missing environment secret.
+
+If promotion fails with
+`CPLN_TOKEN_PRODUCTION is not set. Add it as a secret on the 'production' GitHub Environment.`,
+the token is missing from the environment scope or the workflow job is no longer
+declaring `environment: production`. Create or verify the environment secret
+and confirm there is no same-named repository or organization secret:
+You need permission to manage repository environments and secrets to run these
+commands.
+
+```sh
+gh secret set CPLN_TOKEN_PRODUCTION --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial --env production
+gh secret list --repo shakacode/react-webpack-rails-tutorial
+gh secret list --org shakacode | grep '^CPLN_TOKEN_PRODUCTION[[:space:]]' || true
+```
+
+The matching Control Plane resources are:
+
+| Resource | Name |
+| --- | --- |
+| Production app | `react-webpack-rails-tutorial-production` |
+| Production app secret dictionary | `react-webpack-rails-tutorial-production-secrets` |
+
+Bootstrap production the same way before the first promotion, using the
+production org and production-only secret values. After bootstrap or any
+template change, re-apply the persistent production templates so the `rails`
+and `daily-task` workloads keep the same secret-backed env names as staging:
+
+```sh
+cpflow apply-template app postgres redis daily-task rails \
+  -a react-webpack-rails-tutorial-production \
+  --org shakacode-open-source-examples-production \
+  --yes --add-app-identity
+```
+
+All review, staging, and production secret dictionaries need these app runtime
+secrets:
+
+- `SECRET_KEY_BASE`
+- `RENDERER_PASSWORD`
+- `REACT_ON_RAILS_PRO_LICENSE`
+
+Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
+`RENDERER_PASSWORD` with `openssl rand -hex 32`. For real production, prefer
+managed Postgres and Redis services and update `DATABASE_URL` and `REDIS_URL`
+accordingly.
+
+Review apps run pull request code, so anything mounted through
+`cpln://secret/...` can be read by that code after it starts. Keep the
+`qa-react-webpack-rails-tutorial-secrets` dictionary limited to review-safe
+values: disposable databases, review-only renderer credentials, and a Pro
+license value that is acceptable for review-app exposure. Do not reuse
+production or long-lived staging secret dictionaries for review apps.
+
+### Advanced Overrides
+
+Most repos should leave these unset. They exist so forks and clones can test
+against their own Control Plane org, prefix, workload, or toolchain:
+
+- `CPLN_ORG_STAGING`
+- `REVIEW_APP_PREFIX`
+- `PRIMARY_WORKLOAD`
+- `REVIEW_APP_DEPLOYING_ICON_URL`
+- `CPLN_CLI_VERSION`
+- `CPFLOW_VERSION`
 
 ## Prerequisites
 
@@ -59,6 +204,10 @@ These YAML files are the same as used by the `cpln apply` command.
 3. `Dockerfile`: defines the Docker image used to run the app on Control Plane.
 4. `entrypoint.sh`: defines the entrypoint script used to run the app on Control Plane.
 
+Wondering whether to manage these YAML templates with Terraform instead? See
+[docs/cpflow-vs-terraform.md](docs/cpflow-vs-terraform.md) for the trade-offs
+and a concrete HCL comparison.
+
 ## Setup and run
 
 Check if the Control Plane organization and location are correct in `.controlplane/controlplane.yml`.
@@ -69,111 +218,54 @@ You should be able to see this information in the Control Plane UI.
 and not `cpln` which is the Control Plane CLI.
 
 ```sh
-# Use the staging app defined in .controlplane/controlplane.yml
-export APP_NAME=react-webpack-rails-tutorial-staging
+# Use environment variable to prevent repetition
+export APP_NAME=react-webpack-rails-tutorial
 
 # Provision all infrastructure on Control Plane.
-cpflow setup-app -a "$APP_NAME"
+# app react-webpack-rails-tutorial will be created per definition in .controlplane/controlplane.yml
+cpflow setup-app -a $APP_NAME
 
-# Build and push the Docker image to the Control Plane registry.
-cpflow build-image -a "$APP_NAME"
+# Build and push docker image to Control Plane repository
+# Note, may take many minutes. Be patient.
+# Check for error messages, such as forgetting to run `cpln image docker-login --org <your-org>`
+cpflow build-image -a $APP_NAME
 
-# Run the configured release phase before cutting staging over to the new image.
-cpflow deploy-image -a "$APP_NAME" --run-release-phase
+# Promote image to app after running `cpflow build-image command`
+# Note, the UX of images may not show the image for up to 5 minutes.
+# However, it's ready.
+cpflow deploy-image -a $APP_NAME
 
-# See how the app is starting up
-cpflow logs -a "$APP_NAME"
+# See how app is starting up
+cpflow logs -a $APP_NAME
 
 # Open app in browser (once it has started up)
-cpflow open -a "$APP_NAME"
+cpflow open -a $APP_NAME
 ```
 
 ### Promoting code updates
 
-After committing code, you will update your staging deployment with the following commands:
+After committing code, you will update your deployment of `react-webpack-rails-tutorial` with the following commands:
 
 ```sh
-# Assuming APP_NAME is still react-webpack-rails-tutorial-staging
-cpflow build-image -a "$APP_NAME"
+# Assuming you have already set APP_NAME env variable to react-webpack-rails-tutorial
+# Build and push new image with sequential image tagging, e.g. 'react-webpack-rails-tutorial:1', then 'react-webpack-rails-tutorial:2', etc.
+cpflow build-image -a $APP_NAME
 
 # Run database migrations (or other release tasks) with latest image,
 # while app is still running on previous image.
 # This is analogous to the release phase.
-cpflow run -a "$APP_NAME" --image latest -- rails db:migrate
+cpflow run -a $APP_NAME --image latest -- rails db:migrate
 
 # Pomote latest image to app after migrations run
-cpflow deploy-image -a "$APP_NAME" --run-release-phase
+cpflow deploy-image -a $APP_NAME
 ```
 
 If you needed to push a new image with a specific commit SHA, you can run the following command:
 
 ```sh
-# Build and push with sequential image tagging and commit SHA
-cpflow build-image -a "$APP_NAME" --commit ABCD
+# Build and push with sequential image tagging and commit SHA, e.g. 'react-webpack-rails-tutorial:123_ABCD'
+cpflow build-image -a $APP_NAME --commit ABCD
 ```
-
-## GitHub Actions Flow
-
-This repo now uses the shared `cpflow-*` GitHub Actions scaffolding:
-
-- `.github/workflows/cpflow-review-app-help.yml`
-- `.github/workflows/cpflow-help-command.yml`
-- `.github/workflows/cpflow-deploy-review-app.yml`
-- `.github/workflows/cpflow-delete-review-app.yml`
-- `.github/workflows/cpflow-deploy-staging.yml`
-- `.github/workflows/cpflow-promote-staging-to-production.yml`
-- `.github/workflows/cpflow-cleanup-stale-review-apps.yml`
-
-The legacy workflows in this branch keep their help text inline instead of using
-the newer generated `.github/cpflow-help.md` file. The local setup action
-installs `cpflow` 5.1.1 by default.
-
-Behavior:
-
-- comment `+review-app-deploy` on a PR to create or update a review app
-- later pushes to that PR auto-redeploy the existing review app
-- pushes to `master` auto-deploy staging unless `STAGING_APP_BRANCH` overrides it
-- production promotion happens manually from the Actions tab
-- stale review apps are cleaned up nightly
-
-This repo keeps its historical `qa-react-webpack-rails-tutorial` prefix for review apps, so:
-
-- `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`
-- PR 123 deploys to `qa-react-webpack-rails-tutorial-123`
-
-Required GitHub repository secrets:
-
-- `CPLN_TOKEN_STAGING`
-- `CPLN_TOKEN_PRODUCTION`
-
-Required GitHub repository variables:
-
-- `CPLN_ORG_STAGING`
-- `CPLN_ORG_PRODUCTION`
-- `STAGING_APP_NAME=react-webpack-rails-tutorial-staging`
-- `PRODUCTION_APP_NAME=react-webpack-rails-tutorial-production`
-- `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`
-
-Optional variables:
-
-- `STAGING_APP_BRANCH=master`
-- `PRIMARY_WORKLOAD=rails`
-- `DOCKER_BUILD_EXTRA_ARGS`
-
-Operational notes:
-
-- `+review-app-deploy`, `+review-app-delete`, and `+review-app-help` only run for trusted commenters (`OWNER`, `MEMBER`, `COLLABORATOR`)
-- fork PRs still receive help comments, but review app deploys are skipped because the workflow builds Docker images with repository secrets
-- PR pushes do not auto-create review apps; the first deploy remains opt-in
-
-Secret grant notes for `cpflow` 5.1.1:
-
-- this repo keeps the app secret dictionary and policy placeholders,
-  `{{APP_SECRETS}}` and `{{APP_SECRETS_POLICY}}`
-- `shared_secret_grants` is only for a separate shared org-level dictionary
-  referenced from templates with `{{SHARED_SECRET_<NAME>}}`
-- do not add `shared_secret_grants` here unless the app/workload templates start
-  referencing such a shared dictionary
 
 ## HTTP/2 and Thruster Configuration
 
@@ -419,12 +511,94 @@ openssl rand -hex 64
 
 ## CI Automation, Review Apps and Staging
 
-Review apps, staging deploys, and production promotion are all driven by the
-`cpflow-*` workflows in `.github/workflows/`.
+_Note, some of the URL references are internal for the ShakaCode team._
 
-### Workflow for Developing GitHub Actions for Review Apps
+Review Apps (deployment of apps based on a PR) are done via the generated
+`cpflow-*` GitHub Actions flow.
 
-1. Create a PR with changes to the GitHub Actions workflow.
-2. Make edits to files such as `.github/workflows/cpflow-deploy-review-app.yml` or `.github/actions/cpflow-build-docker-image/action.yml`.
-3. Commit and push the `.github` changes.
-4. Check the GitHub Actions tab in the PR to see the status of the workflow.
+The review apps work by creating isolated deployments for pull requests through
+this automated process. When an approved collaborator comments exactly
+`+review-app-deploy` on a PR, the action:
+
+1. Sets up the necessary environment and tools
+2. Creates a unique review app if it doesn't exist
+3. Builds a Docker image tagged with the PR commit SHA
+4. Deploys this image to Control Plane with its own isolated environment
+
+After the review app exists, new pushes to the PR redeploy it automatically.
+Use `+review-app-delete` to delete it manually; closing the PR deletes it
+automatically. Use `+review-app-help` for the review-app command reference.
+Fork PR heads are skipped for deploys because the workflow builds Docker images
+with repository secrets. A trusted comment on a fork PR still should not deploy
+the fork head; move the reviewed change to a branch in this repository when a
+review app is needed.
+Pushes to the staging branch deploy staging, and production promotion is manual
+from the `cpflow-promote-staging-to-production` workflow.
+If staging moves off `master`, update both the `STAGING_APP_BRANCH` repository
+variable and the `branches:` filter in `.github/workflows/cpflow-deploy-staging.yml`;
+GitHub does not allow repository variables in trigger branch filters.
+The production promotion workflow checks that production has all environment
+variable names present in staging at both the GVC level and each configured app
+workload's container level. It does not compare secret values. The health check
+waits for Control Plane to report both `status.ready` and `status.readyLatest`
+before probing the public endpoint.
+
+The GitHub settings and Control Plane resources must match the app names in
+`.controlplane/controlplane.yml`. For the standard review-app path, leave
+`REVIEW_APP_PREFIX` unset and let the workflow infer
+`qa-react-webpack-rails-tutorial`; generated review apps are named
+`qa-react-webpack-rails-tutorial-<PR number>`.
+If you have older review apps from the previous
+`qa-react-webpack-rails-tutorial-pr-<PR number>` naming, delete them manually
+after this flow lands; cleanup targets the current prefix convention. To
+inventory old apps, run:
+
+```sh
+cpln gvc query --org shakacode-open-source-examples-staging -o yaml --prop name~qa-react-webpack-rails-tutorial-pr-
+```
+
+This allows teams to:
+- Preview changes in a production-like environment
+- Test features independently
+- Share working versions with stakeholders
+- Validate changes before merging to main branches
+
+The system uses Control Plane's infrastructure to manage these deployments, with
+each review app getting its own resources as defined in the controlplane.yml
+configuration.
+
+
+### Updating Generated cpflow Workflows
+
+Keep the reusable-workflow mechanics in the upstream
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
+For this repo, the update loop is:
+
+1. Update the bundled `cpflow` gem to the desired release.
+2. Refresh generated wrappers from that release with `--staging-branch master`.
+3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
+   This branch pins refs to `v5.1.1`, which includes upstream promotion
+   hardening and the release-runner timeout fix. Use a full commit SHA only for
+   short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
+4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
+5. Validate locally:
+
+```bash
+bin/conductor-exec bundle update cpflow
+bin/conductor-exec bundle exec cpflow update-github-actions --staging-branch master
+bin/conductor-exec bin/test-cpflow-github-flow bundle exec cpflow
+```
+
+Then open a normal PR, wait for GitHub Actions, and test a real review-app
+deploy. Comment-triggered workflows run from `master`; for PR-branch workflow
+edits, dispatch the workflow explicitly:
+
+```bash
+gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
+```
+
+This loads the workflow file from `<branch>`, but trusted local composite
+actions still come from the default branch before secrets are used. Treat it as
+a partial smoke test, then verify a real deploy after the workflow changes land
+on `master`. See the short
+[testing checklist](docs/testing-cpflow-github-actions.md) for the canary steps.

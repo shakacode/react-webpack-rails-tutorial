@@ -11,6 +11,7 @@ on:
         type: number
 
 permissions:
+  contents: read
   issues: write
   pull-requests: write
 
@@ -22,70 +23,4 @@ jobs:
        contains(fromJson('["+review-app-help","+review-app-help\n","+review-app-help\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Post help message
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const helpText = [
-              "# Control Plane GitHub Flow",
-              "",
-              "## PR commands",
-              "",
-              "`+review-app-deploy`",
-              "- Creates the review app if it does not exist",
-              "- Builds the PR commit image",
-              "- Deploys the image and comments with the review URL",
-              "",
-              "`+review-app-delete`",
-              "- Deletes the review app when the PR is done",
-              "- This also runs automatically when the PR closes",
-              "",
-              "`+review-app-help`",
-              "- Shows this help message",
-              "",
-              "## Repository secrets",
-              "",
-              "- `CPLN_TOKEN_STAGING`",
-              "- `CPLN_TOKEN_PRODUCTION`",
-              "- `DOCKER_BUILD_SSH_KEY` (optional, when Docker builds fetch private dependencies over SSH)",
-              "",
-              "## Repository variables",
-              "",
-              "- `CPLN_ORG_STAGING`",
-              "- `CPLN_ORG_PRODUCTION`",
-              "- `STAGING_APP_NAME`",
-              "- `PRODUCTION_APP_NAME`",
-              "- `REVIEW_APP_PREFIX`",
-              "- `STAGING_APP_BRANCH` (optional, defaults to `main` or `master`)",
-              "- `PRIMARY_WORKLOAD` (optional, defaults to `rails`)",
-              "- `DOCKER_BUILD_EXTRA_ARGS` (optional Docker build flags)",
-              "- `DOCKER_BUILD_SSH_KNOWN_HOSTS` (optional when SSH build hosts are not GitHub.com)",
-              "",
-              "## App secrets and shared grants",
-              "",
-              "- This repo keeps the app secret dictionary/policy pattern generated from `{{APP_SECRETS}}` and `{{APP_SECRETS_POLICY}}`",
-              "- `shared_secret_grants` is only for a separate shared org-level dictionary referenced from templates with `{{SHARED_SECRET_<NAME>}}`",
-              "- Do not add `shared_secret_grants` unless app templates actually reference that shared dictionary",
-              "",
-              "## Workflow behavior",
-              "",
-              "- Review apps are opt-in and created with `+review-app-deploy`",
-              "- New commits redeploy existing review apps automatically",
-              "- Pushes to the staging branch deploy staging automatically",
-              "- Promotion to production is manual via the Actions tab",
-              "- A nightly workflow removes stale review apps"
-            ].join("\n");
-
-            const prNumber = context.eventName === "workflow_dispatch"
-              ? Number(context.payload.inputs.pr_number)
-              : context.issue.number;
-
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: helpText
-            });
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml@v5.1.1

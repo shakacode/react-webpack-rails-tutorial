@@ -33,6 +33,9 @@ jobs:
       DRIVER: selenium_chrome
       CHROME_BIN: /usr/bin/google-chrome
       USE_COVERALLS: true
+      # Must match config.renderer_password in config/initializers/react_on_rails_pro.rb.
+      # Setting explicitly avoids silent drift if the two-sided defaults ever diverge.
+      RENDERER_PASSWORD: local-dev-renderer-password
 
     steps:
       - name: Install Chrome
@@ -81,6 +84,25 @@ jobs:
 
       - name: Build shakapacker chunks
         run: NODE_ENV=development bundle exec bin/shakapacker
+
+      - name: Start Node renderer for SSR
+        run: |
+          node renderer/node-renderer.js &
+          RENDERER_PID=$!
+          echo "Waiting for Node renderer (PID $RENDERER_PID) on port 3800..."
+          for i in $(seq 1 30); do
+            if ! kill -0 $RENDERER_PID 2>/dev/null; then
+              echo "Node renderer process exited unexpectedly (see output above)."
+              exit 1
+            fi
+            if nc -z localhost 3800 2>/dev/null; then
+              echo "Node renderer is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Node renderer failed to start within 30 seconds (see output above)."
+          exit 1
 
       - name: Run rspec with xvfb
         uses: coactions/setup-xvfb@v1

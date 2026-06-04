@@ -27,9 +27,7 @@ describe('CommentList', () => {
   );
 
   it('renders a list of Comments in normal order', () => {
-    render(
-      <CommentList $$comments={comments} cssTransitionGroupClassNames={cssTransitionGroupClassNames} />,
-    );
+    render(<CommentList $$comments={comments} cssTransitionGroupClassNames={cssTransitionGroupClassNames} />);
 
     // Verify both authors are rendered in order
     expect(screen.getByText('Frank')).toBeInTheDocument();

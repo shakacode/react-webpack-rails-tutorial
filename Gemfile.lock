@@ -78,6 +78,25 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
+    async (2.39.0)
+      console (~> 1.29)
+      fiber-annotation
+      io-event (~> 1.11)
+      metrics (~> 0.12)
+      traces (~> 0.18)
+    async-http (0.95.1)
+      async (>= 2.10.2)
+      async-pool (~> 0.11)
+      io-endpoint (~> 0.14)
+      io-stream (~> 0.6)
+      metrics (~> 0.12)
+      protocol-http (~> 0.62)
+      protocol-http1 (~> 0.39)
+      protocol-http2 (~> 0.26)
+      protocol-url (~> 0.2)
+      traces (~> 0.10)
+    async-pool (0.11.2)
+      async (>= 2.0)
     autoprefixer-rails (10.4.16.0)
       execjs (~> 2)
     awesome_print (1.9.2)
@@ -115,11 +134,20 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.3.6)
     connection_pool (3.0.2)
+    console (1.36.0)
+      fiber-annotation
+      fiber-local (~> 1.1)
+      json
     coveralls_reborn (0.25.0)
       simplecov (>= 0.18.1, < 0.22.0)
       term-ansicolor (~> 1.6)
       thor (>= 0.20.3, < 2.0)
       tins (~> 1.16)
+    cpflow (5.1.1)
+      dotenv (~> 3.1)
+      jwt (~> 3.1)
+      psych (~> 5.2)
+      thor (~> 1.3)
     crass (1.0.6)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
@@ -134,6 +162,7 @@ GEM
     debug_inspector (1.2.0)
     diff-lcs (1.5.1)
     docile (1.4.0)
+    dotenv (3.2.0)
     drb (2.2.3)
     erb (6.0.4)
     erubi (1.13.1)
@@ -144,8 +173,13 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
+    ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
+    fiber-annotation (0.2.0)
+    fiber-local (1.1.0)
+      fiber-storage
+    fiber-storage (1.0.1)
     foreman (0.88.1)
     generator_spec (0.10.0)
       activesupport (>= 3.0.0)
@@ -156,6 +190,9 @@ GEM
       concurrent-ruby (~> 1.0)
     interception (0.5)
     io-console (0.8.2)
+    io-endpoint (0.17.2)
+    io-event (1.16.1)
+    io-stream (0.13.0)
     irb (1.18.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
@@ -164,7 +201,9 @@ GEM
     jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.19.7)
+    json (2.19.8)
+    jwt (3.2.0)
+      base64
     language_server-protocol (3.17.0.5)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -182,6 +221,7 @@ GEM
     marcel (1.2.1)
     matrix (0.4.2)
     method_source (1.1.0)
+    metrics (0.15.0)
     mini_mime (1.1.5)
     minitest (6.0.6)
       drb (~> 2.0)
@@ -199,6 +239,8 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.3-aarch64-linux-gnu)
+      racc (~> 1.4)
     nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-linux-gnu)
@@ -215,6 +257,14 @@ GEM
     prism (1.9.0)
     protocol (2.0.0)
       ruby_parser (~> 3.0)
+    protocol-hpack (1.5.1)
+    protocol-http (0.62.2)
+    protocol-http1 (0.39.0)
+      protocol-http (~> 0.62)
+    protocol-http2 (0.26.0)
+      protocol-hpack (~> 1.4)
+      protocol-http (~> 0.62)
+    protocol-url (0.4.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -303,6 +353,15 @@ GEM
       rails (>= 5.2)
       rainbow (~> 3.0)
       shakapacker (>= 6.0)
+    react_on_rails_pro (17.0.0.rc.1)
+      addressable
+      async (>= 2.29)
+      async-http (~> 0.95)
+      execjs (~> 2.9)
+      io-endpoint (~> 0.17.0)
+      jwt (>= 2.5, < 4)
+      rainbow
+      react_on_rails (= 17.0.0.rc.1)
     redcarpet (3.6.0)
     redis (5.3.0)
       redis-client (>= 0.22.0)
@@ -387,7 +446,7 @@ GEM
       websocket (~> 1.0)
     semantic_range (3.1.1)
     sexp_processor (4.17.1)
-    shakapacker (10.0.0.rc.0)
+    shakapacker (10.1.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -418,6 +477,7 @@ GEM
       mize
       tins (~> 1.0)
     thor (1.5.0)
+    thruster (0.1.16-aarch64-linux)
     thruster (0.1.16-arm64-darwin)
     thruster (0.1.16-x86_64-linux)
     tilt (2.4.0)
@@ -425,6 +485,7 @@ GEM
     tins (1.33.0)
       bigdecimal
       sync
+    traces (0.18.2)
     tsort (0.2.0)
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
@@ -444,7 +505,7 @@ GEM
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
     websocket (1.2.10)
-    websocket-driver (0.8.0)
+    websocket-driver (0.8.1)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -454,6 +515,7 @@ GEM
     zeitwerk (2.8.2)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin
   arm64-darwin-22
   x86_64-linux
@@ -467,6 +529,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   coveralls_reborn (~> 0.25.0)
+  cpflow (= 5.1.1)
   database_cleaner
   debug (>= 1.0.0)
   factory_bot_rails
@@ -487,6 +550,7 @@ DEPENDENCIES
   rails_best_practices
   rainbow
   react_on_rails (= 17.0.0.rc.1)
+  react_on_rails_pro (= 17.0.0.rc.1)
   redcarpet
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
@@ -498,7 +562,7 @@ DEPENDENCIES
   scss_lint
   sdoc
   selenium-webdriver (~> 4)
-  shakapacker (= 10.0.0.rc.0)
+  shakapacker (= 10.1.0)
   spring
   spring-commands-rspec
   stimulus-rails (~> 1.3)
