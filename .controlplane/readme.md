@@ -23,7 +23,7 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
 generic behavior documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md);
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md);
 this section only lists the values that are specific to this app.
 
 ### Review Apps and Staging
@@ -571,22 +571,22 @@ configuration.
 ### Updating Generated cpflow Workflows
 
 Keep the reusable-workflow mechanics in the upstream
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
 For this repo, the update loop is:
 
-1. Generate from the desired `cpflow` release with `--staging-branch master`.
-2. Keep generated refs on a release tag once the upstream hardening changes ship.
-   This branch temporarily pins refs to
-   `d8877ca0c9c1d88947f322903e4a4344641029ba` to use merged-but-unreleased
-   upstream promotion hardening and the release-runner timeout fix before the
-   next release tag.
-   Leave `CPFLOW_VERSION` unset while testing a commit SHA.
-3. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
-4. Validate locally:
+1. Update the bundled `cpflow` gem to the desired release.
+2. Refresh generated wrappers from that release with `--staging-branch master`.
+3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
+   This branch pins refs to `v5.1.1`, which includes upstream promotion
+   hardening and the release-runner timeout fix. Use a full commit SHA only for
+   short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
+4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
+5. Validate locally:
 
 ```bash
-bin/conductor-exec ruby /path/to/control-plane-flow/bin/cpflow generate-github-actions --staging-branch master
-bin/conductor-exec bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/bin/cpflow
+bin/conductor-exec bundle update cpflow
+bin/conductor-exec bundle exec cpflow update-github-actions --staging-branch master
+bin/conductor-exec bin/test-cpflow-github-flow bundle exec cpflow
 ```
 
 Then open a normal PR, wait for GitHub Actions, and test a real review-app
