@@ -115,14 +115,12 @@ cpflow apply-template app postgres redis daily-task rails \
 ```
 
 Advanced optional settings are documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/main/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
 
-Current workflow wrappers are temporarily pinned to upstream
-`control-plane-flow` commit `d8877ca0c9c1d88947f322903e4a4344641029ba` to use
-merged-but-unreleased promotion hardening and the release-runner timeout fix
-before they ship in a release tag. Keep release tags as the steady-state
-configuration once the upstream changes are released; use a full commit SHA only
-for short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
+Current workflow wrappers pin `control-plane-flow` release tag `v5.1.1`, which
+includes promotion hardening and the release-runner timeout fix. Keep release
+tags as the steady-state configuration; use a full commit SHA only for
+short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
 
 If staging moves off `master`, update both `STAGING_APP_BRANCH` and the branch
 filter in `.github/workflows/cpflow-deploy-staging.yml`.
