@@ -19,13 +19,13 @@ jobs:
             const body = [
               "# Control Plane review app commands",
               "",
-              "`/deploy-review-app`",
+              "`+review-app-deploy`",
               "Create the review app or redeploy the PR branch to it.",
               "",
-              "`/delete-review-app`",
+              "`+review-app-delete`",
               "Delete the review app and its temporary resources.",
               "",
-              "`/help`",
+              "`+review-app-help`",
               "Show the required GitHub variables, secrets, and workflow behavior."
             ].join("\n");
 

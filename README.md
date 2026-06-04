@@ -183,9 +183,9 @@ assets_bundler: rspack
 
 ### Version Targets
 
-- `react_on_rails` gem: `16.4.0`
-- `react-on-rails` npm package: `16.4.0`
-- `shakapacker` gem/npm package: `9.7.0`
+- `react_on_rails` gem: `17.0.0.rc.1`
+- `react-on-rails` npm package: `17.0.0-rc.1`
+- `shakapacker` gem/npm package: `10.0.0-rc.0`
 - `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7` (latest published v2 prerelease at the time of this update)
 
 ### Why Rspack

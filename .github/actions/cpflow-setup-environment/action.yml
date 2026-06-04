@@ -19,7 +19,7 @@ inputs:
   cpflow_version:
     description: cpflow gem version
     required: false
-    default: "4.2.0"
+    default: "5.1.1"
 
 runs:
   using: composite

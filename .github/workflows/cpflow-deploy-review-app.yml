@@ -38,7 +38,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
-       github.event.comment.body == '/deploy-review-app' &&
+       contains(fromJson('["+review-app-deploy","+review-app-deploy\n","+review-app-deploy\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-latest
 
@@ -186,7 +186,7 @@ jobs:
         run: |
           {
             echo "Review app ${APP_NAME} does not exist yet."
-            echo "Create it with a PR comment that is exactly /deploy-review-app."
+            echo "Create it with +review-app-deploy as the PR comment body."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Setup review app if it does not exist yet

@@ -124,9 +124,13 @@ This repo now uses the shared `cpflow-*` GitHub Actions scaffolding:
 - `.github/workflows/cpflow-promote-staging-to-production.yml`
 - `.github/workflows/cpflow-cleanup-stale-review-apps.yml`
 
+The legacy workflows in this branch keep their help text inline instead of using
+the newer generated `.github/cpflow-help.md` file. The local setup action
+installs `cpflow` 5.1.1 by default.
+
 Behavior:
 
-- comment `/deploy-review-app` on a PR to create or update a review app
+- comment `+review-app-deploy` on a PR to create or update a review app
 - later pushes to that PR auto-redeploy the existing review app
 - pushes to `master` auto-deploy staging unless `STAGING_APP_BRANCH` overrides it
 - production promotion happens manually from the Actions tab
@@ -158,9 +162,18 @@ Optional variables:
 
 Operational notes:
 
-- `/deploy-review-app` and `/delete-review-app` only run for trusted commenters (`OWNER`, `MEMBER`, `COLLABORATOR`)
+- `+review-app-deploy`, `+review-app-delete`, and `+review-app-help` only run for trusted commenters (`OWNER`, `MEMBER`, `COLLABORATOR`)
 - fork PRs still receive help comments, but review app deploys are skipped because the workflow builds Docker images with repository secrets
 - PR pushes do not auto-create review apps; the first deploy remains opt-in
+
+Secret grant notes for `cpflow` 5.1.1:
+
+- this repo keeps the app secret dictionary and policy placeholders,
+  `{{APP_SECRETS}}` and `{{APP_SECRETS_POLICY}}`
+- `shared_secret_grants` is only for a separate shared org-level dictionary
+  referenced from templates with `{{SHARED_SECRET_<NAME>}}`
+- do not add `shared_secret_grants` here unless the app/workload templates start
+  referencing such a shared dictionary
 
 ## HTTP/2 and Thruster Configuration
 

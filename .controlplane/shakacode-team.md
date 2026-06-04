@@ -5,7 +5,7 @@
 Deployments are handled by Control Plane configuration in this repo and GitHub Actions.
 
 ### Review Apps
-- Add a comment `/deploy-review-app` to any PR to deploy a review app
+- Add a comment `+review-app-deploy` to any PR to deploy a review app
 
 ### Staging Environment
 - **Automatic**: Any merge to the `master` branch automatically deploys to staging
