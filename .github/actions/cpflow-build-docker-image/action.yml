@@ -35,17 +35,25 @@ runs:
     - name: Build Docker image
       id: build
       shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        COMMIT: ${{ inputs.commit }}
+        DOCKER_BUILD_EXTRA_ARGS: ${{ inputs.docker_build_extra_args }}
+        DOCKER_BUILD_SSH_KEY: ${{ inputs.docker_build_ssh_key }}
+        DOCKER_BUILD_SSH_KNOWN_HOSTS: ${{ inputs.docker_build_ssh_known_hosts }}
+        ORG: ${{ inputs.org }}
+        PR_NUMBER: ${{ inputs.pr_number }}
       run: |
         set -euo pipefail
 
         PR_INFO=""
         docker_build_args=()
 
-        if [[ -n "${{ inputs.pr_number }}" ]]; then
-          PR_INFO=" for PR #${{ inputs.pr_number }}"
+        if [[ -n "$PR_NUMBER" ]]; then
+          PR_INFO=" for PR #${PR_NUMBER}"
         fi
 
-        if [[ -n "${{ inputs.docker_build_extra_args }}" ]]; then
+        if [[ -n "$DOCKER_BUILD_EXTRA_ARGS" ]]; then
           while IFS= read -r arg; do
             arg="${arg%$'\r'}"
             [[ -n "${arg}" ]] || continue
@@ -57,17 +65,15 @@ runs:
             fi
 
             docker_build_args+=("${arg}")
-          done <<< "${{ inputs.docker_build_extra_args }}"
+          done <<< "$DOCKER_BUILD_EXTRA_ARGS"
         fi
 
-        if [[ -n "${{ inputs.docker_build_ssh_key }}" ]]; then
+        if [[ -n "$DOCKER_BUILD_SSH_KEY" ]]; then
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          if [[ -n "${{ inputs.docker_build_ssh_known_hosts }}" ]]; then
-            cat <<'EOF' > ~/.ssh/known_hosts
-        ${{ inputs.docker_build_ssh_known_hosts }}
-        EOF
+          if [[ -n "$DOCKER_BUILD_SSH_KNOWN_HOSTS" ]]; then
+            printf '%s\n' "$DOCKER_BUILD_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           else
             cat <<'EOF' > ~/.ssh/known_hosts
         github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
@@ -80,13 +86,14 @@ runs:
 
           eval "$(ssh-agent -s)"
           trap 'ssh-agent -k >/dev/null' EXIT
-          ssh-add - <<< "${{ inputs.docker_build_ssh_key }}"
+          ssh-add - <<< "$DOCKER_BUILD_SSH_KEY"
+          unset DOCKER_BUILD_SSH_KEY
           docker_build_args+=("--ssh=default")
         fi
 
-        echo "🏗️ Building Docker image${PR_INFO} (commit ${{ inputs.commit }})..."
-        cpflow build-image -a "${{ inputs.app_name }}" --commit="${{ inputs.commit }}" --org="${{ inputs.org }}" "${docker_build_args[@]}"
+        echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT})..."
+        cpflow build-image -a "$APP_NAME" --commit="$COMMIT" --org="$ORG" "${docker_build_args[@]}"
 
-        image_tag="${{ inputs.org }}/${{ inputs.app_name }}:${{ inputs.commit }}"
+        image_tag="${ORG}/${APP_NAME}:${COMMIT}"
         echo "image_tag=${image_tag}" >> "$GITHUB_OUTPUT"
-        echo "✅ Docker image build successful${PR_INFO} (commit ${{ inputs.commit }})"
+        echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT})"

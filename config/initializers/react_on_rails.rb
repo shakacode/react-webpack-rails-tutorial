@@ -9,9 +9,11 @@ ReactOnRails.configure do |config|
   # Build commands
   # Direct shakapacker invocations need generated ReScript and locale files first.
   config.build_test_command =
-    "yarn res:build && RAILS_ENV=test bin/rails react_on_rails:locale && RAILS_ENV=test bin/shakapacker"
+    "yarn res:build && RAILS_ENV=test bin/rails react_on_rails:locale && " \
+    "RAILS_ENV=test bin/rails react_on_rails:generate_packs && RAILS_ENV=test bin/shakapacker"
   config.build_production_command =
     "yarn res:build && RAILS_ENV=production NODE_ENV=production bin/rails react_on_rails:locale && " \
+    "RAILS_ENV=production NODE_ENV=production bin/rails react_on_rails:generate_packs && " \
     "RAILS_ENV=production NODE_ENV=production bin/shakapacker"
 
   # This is the file used for server rendering of React when using `(prerender: true)`
