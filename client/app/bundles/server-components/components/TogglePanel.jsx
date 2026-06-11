@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const TogglePanel = ({ title, children }) => {
+function TogglePanel({ title, children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,13 +22,9 @@ const TogglePanel = ({ title, children }) => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {isOpen && (
-        <div className="px-4 py-3 bg-white">
-          {children}
-        </div>
-      )}
+      {isOpen && <div className="px-4 py-3 bg-white">{children}</div>}
     </div>
   );
-};
+}
 
 export default TogglePanel;

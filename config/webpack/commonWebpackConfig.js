@@ -2,12 +2,14 @@
 // https://github.com/shakacode/react_on_rails_tutorial_with_ssr_and_hmr_fast_refresh/blob/master/config/webpack/commonWebpackConfig.js
 
 // Common configuration applying to client and server configuration
+const path = require('path');
 const { generateWebpackConfig, merge } = require('shakapacker');
 
 const commonOptions = {
   resolve: {
     // Add .res.js extension for ReScript-compiled modules (modern ReScript convention)
     extensions: ['.css', '.ts', '.tsx', '.res.js'],
+    modules: [path.resolve(__dirname, '../../client/app'), 'node_modules'],
     // Shim for third-party packages (notably rescript-react-on-rails) that import
     // 'react-on-rails' directly and can't be source-rewritten to react-on-rails-pro.
     // Without this, Pro and core coexist in the bundle and trigger the runtime error
@@ -113,4 +115,3 @@ const commonWebpackConfig = () => {
 };
 
 module.exports = commonWebpackConfig;
-

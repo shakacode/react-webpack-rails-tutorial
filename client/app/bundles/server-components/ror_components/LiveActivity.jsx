@@ -24,21 +24,15 @@ async function LiveActivity({ simulateError = false }) {
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-5">
       <div className="grid grid-cols-3 gap-4 text-sm">
         <div>
-          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">
-            Server Time
-          </div>
+          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">Server Time</div>
           <div className="font-mono text-indigo-900">{stats.serverTime}</div>
         </div>
         <div>
-          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">
-            Free RAM
-          </div>
+          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">Free RAM</div>
           <div className="font-mono text-indigo-900">{stats.freeMemoryMB} MB</div>
         </div>
         <div>
-          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">
-            Uptime (hrs)
-          </div>
+          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">Uptime (hrs)</div>
           <div className="font-mono text-indigo-900">{stats.uptimeHours}</div>
         </div>
       </div>

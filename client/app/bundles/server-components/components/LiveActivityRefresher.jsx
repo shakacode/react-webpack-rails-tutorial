@@ -8,22 +8,22 @@ import { useRSC } from 'react-on-rails-pro/RSCProvider';
 // Same shape and dimensions as the rendered LiveActivity card. Local Suspense
 // fallback prevents the RSCRoute suspension from bubbling to an outer
 // boundary, which would collapse the whole page during in-flight fetches.
-const ActivityCardSkeleton = () => (
-  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-5">
-    <div className="grid grid-cols-3 gap-4 text-sm">
-      {['Server Time', 'Free RAM', 'Uptime (hrs)'].map((label) => (
-        <div key={label}>
-          <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">
-            {label}
+function ActivityCardSkeleton() {
+  return (
+    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-5">
+      <div className="grid grid-cols-3 gap-4 text-sm">
+        {['Server Time', 'Free RAM', 'Uptime (hrs)'].map((label) => (
+          <div key={label}>
+            <div className="text-xs text-indigo-600 font-medium uppercase tracking-wide mb-1">{label}</div>
+            <div className="font-mono text-indigo-300 animate-pulse">—</div>
           </div>
-          <div className="font-mono text-indigo-300 animate-pulse">—</div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
-const LiveActivityRefresher = () => {
+function LiveActivityRefresher() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [simulateError, setSimulateError] = useState(false);
   const { refetchComponent } = useRSC();
@@ -94,6 +94,6 @@ const LiveActivityRefresher = () => {
       </ErrorBoundary>
     </div>
   );
-};
+}
 
 export default LiveActivityRefresher;

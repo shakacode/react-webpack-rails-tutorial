@@ -1,8 +1,10 @@
-# Org level secrets are used to store sensitive information that is
-# shared across multiple apps in the same organization. This is
-# useful for storing things like API keys, database credentials, and
-# other sensitive information that is shared across multiple apps
-# in the same organization.
+# App secret dictionaries store sensitive information for apps in the
+# organization. This template keeps the cpflow app-secret placeholders
+# {{APP_SECRETS}} and {{APP_SECRETS_POLICY}}.
+#
+# cpflow 5.1.1 shared_secret_grants are only for a separate shared
+# org-level dictionary referenced from app/workload templates with
+# {{SHARED_SECRET_<NAME>}}.
 
 # The qa-* dictionary is bootstrapped via this template for review apps.
 # Review apps run pull request code, so values in this dictionary must be
@@ -29,7 +31,7 @@ data:
 
 ---
 
-# Policy is needed to allow identities to access secrets
+# App secret policy grants app identities reveal access to this dictionary.
 kind: policy
 name: {{APP_SECRETS_POLICY}}
 targetKind: secret

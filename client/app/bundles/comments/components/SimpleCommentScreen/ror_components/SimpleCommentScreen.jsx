@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+
 'use client';
 
 import React from 'react';

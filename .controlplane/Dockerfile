@@ -72,7 +72,8 @@ RUN SECRET_KEY_BASE=precompile_placeholder bin/rails react_on_rails:locale
 # and /app/client/app are the client assets that are bundled, so not needed once built
 # Helps to have smaller images b/c of smaller Docker Layer Caches and smaller final images
 # SECRET_KEY_BASE is required for asset precompilation but is not persisted in the image
-RUN SECRET_KEY_BASE=precompile_placeholder yarn res:build && \
+RUN SECRET_KEY_BASE=precompile_placeholder bundle exec rake react_on_rails:generate_packs && \
+    SECRET_KEY_BASE=precompile_placeholder yarn res:build && \
     SECRET_KEY_BASE=precompile_placeholder bin/rails assets:precompile && \
     rm -rf /app/lib/bs /app/client/app
 
