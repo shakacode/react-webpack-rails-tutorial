@@ -89,6 +89,7 @@
     "react-router": "^6.13.0",
     "react-router-dom": "^6.13.0",
     "react-router-redux": "^4.0.8",
+    "react-server-dom-webpack": "~19.2.7",
     "react-transition-group": "4.4.5",
     "redux": "^4.2.1",
     "redux-thunk": "^2.2.0",
