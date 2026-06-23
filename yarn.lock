@@ -8714,12 +8714,12 @@ react-deep-force-update@^1.0.0:
   resolved "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.1.2.tgz"
   integrity sha512-WUSQJ4P/wWcusaH+zZmbECOk7H5N2pOIl0vzheeornkIMhu+qrNdGFm0bDZLCb0hSF0jf/kH1SgkNGfBdTc4wA==
 
-react-dom@~19.0.4:
-  version "19.0.5"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.0.5.tgz#7666ca4385dd1f1d2ac2445423077b2f232aa3c0"
-  integrity sha512-yqJj7o8tlj5FiLpycpClCCTp1f1FXvMgCkFej41N1iTmVDiTeDIay6Y69sn8w9JXSCzZyCLP3fotgEhZagDZWw==
+react-dom@~19.2.7:
+  version "19.2.7"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.7.tgz#0450dc9ae9ddbff76ef196401cd8b8c7fb466ccc"
+  integrity sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==
   dependencies:
-    scheduler "^0.25.0"
+    scheduler "^0.27.0"
 
 react-error-boundary@^4.1.2:
   version "4.1.2"
@@ -8759,10 +8759,10 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails-pro-node-renderer@17.0.0-rc.3:
-  version "17.0.0-rc.3"
-  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.0.0-rc.3.tgz#e816f76eea918f59eb40dade10ad462d7c61b905"
-  integrity sha512-Red3GaNEF33XhjtfCSkYAM4+GEoiCEjP0Yt1eknH5LmWqVnO1NMqWoFhtBfxaVr/K++qTVYY5yV28iNh6gTqzg==
+react-on-rails-pro-node-renderer@17.0.0-rc.6:
+  version "17.0.0-rc.6"
+  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.0.0-rc.6.tgz#1fef0e21a7a13eb9d4525e05b6989a0ed79fb9c2"
+  integrity sha512-nX9Nmgb3hiUMPItC5xfV/W/FGnYLLzefr5qJOURPxrkHgEa6dw1ndnH2mRPyh0zFkOaCB2FBIy8lkWfXvRpfiA==
   dependencies:
     "@fastify/formbody" "^7.4.0 || ^8.0.2"
     "@fastify/multipart" "^8.3.1 || ^9.0.3"
@@ -8772,26 +8772,27 @@ react-on-rails-pro-node-renderer@17.0.0-rc.3:
     lockfile "^1.0.4"
     pino "^9.14.0 || ^10.1.0"
 
-react-on-rails-pro@17.0.0-rc.3:
-  version "17.0.0-rc.3"
-  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-17.0.0-rc.3.tgz#a9a7546ad1c4ee7ef0d5150f04d7f58d6e7d1476"
-  integrity sha512-DzBHKrDX+bHY2ojnNjH5cNxFXmwIncaL3SQL1SCVibU+G2I32IV8gKB3cUTZgNhMY3p1Onsgjt/cVt0x6+Cqhw==
+react-on-rails-pro@17.0.0-rc.6:
+  version "17.0.0-rc.6"
+  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-17.0.0-rc.6.tgz#41dc95ed0e3513822a2f0c9b4b25b34c607106be"
+  integrity sha512-Uc4IUmNYAJIk4iy4RatLN0qVM7MAi8zgXVvd7vZMEnVkGGhHqvj1A82ft97yJqgfqF9mm3eSPPyU3gyXrH5CsQ==
   dependencies:
-    react-on-rails "17.0.0-rc.3"
+    react-on-rails "17.0.0-rc.6"
 
-react-on-rails-rsc@19.0.5-rc.7:
-  version "19.0.5-rc.7"
-  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.0.5-rc.7.tgz#cbca0fcec9eb4b82b2faa9cf3c6fbfedd4ecf9b6"
-  integrity sha512-cyQwZm7YW9FS0PEgwael5P9S5HsNeHwhnMm10ScgepZTv38dOeidf+gWf9x+z6w0wrgJ92aExZ8uLjCgpImxcQ==
+react-on-rails-rsc@19.2.0-rc.3:
+  version "19.2.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.0-rc.3.tgz#9b0d24a78c12a5e3d45d711d1c8612d4387cac08"
+  integrity sha512-lthw7rRbPdUOeZQMVR2rH1FdA3sp7wiZfMljmld1c/2epYtA7SYLLhg7jTn9FcVEIjWLZiyzC7GkNrNnLB4IOQ==
   dependencies:
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
+    react-server-dom-webpack "~19.2.7"
     webpack-sources "^3.2.0"
 
-react-on-rails@17.0.0-rc.3:
-  version "17.0.0-rc.3"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-17.0.0-rc.3.tgz#626024849887bd52f828683555f26521f5f1af2b"
-  integrity sha512-VpLWgVt4mE6ETo1mGj5yLCL/sEK+SPYIut7nVqx10HY0F/P1IQodEWm18IYQ5ZBBxdAngvSsOArjypVUcFLP0w==
+react-on-rails@17.0.0-rc.6:
+  version "17.0.0-rc.6"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-17.0.0-rc.6.tgz#4372994d13e7dcff4acaf06efad7b413da4bc42d"
+  integrity sha512-/u2hzYvuUN+1HnH0gEdbfQvkWkgLMSN2kl/2x9CCOInIHffBvilgXzBgJrP5NlvjWpguUWSxO6PrYpgV0BzLMA==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -8838,6 +8839,15 @@ react-router@6.30.1, react-router@^6.13.0:
   dependencies:
     "@remix-run/router" "1.23.0"
 
+react-server-dom-webpack@~19.2.7:
+  version "19.2.7"
+  resolved "https://registry.npmjs.org/react-server-dom-webpack/-/react-server-dom-webpack-19.2.7.tgz#ec4ca821297a039df2c6119a5fe14e49c9423573"
+  integrity sha512-bYfuvqPJnHB4CHo2Ze7fQyJAO77TUu1W/aKFt81ICXbLiOTg5jHaO/NPDlpvGWUALoEGaGb7Oi1uXAaO+Bw6jw==
+  dependencies:
+    acorn-loose "^8.3.0"
+    neo-async "^2.6.1"
+    webpack-sources "^3.2.0"
+
 react-transform-hmr@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/react-transform-hmr/-/react-transform-hmr-1.0.4.tgz"
@@ -8856,10 +8866,10 @@ react-transition-group@4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@~19.0.4:
-  version "19.0.5"
-  resolved "https://registry.npmjs.org/react/-/react-19.0.5.tgz#b9406da29c7085e446e4c2372dcfe4f7c4801aec"
-  integrity sha512-yIoQWl4moQfHFKNGmyJavhOki09GwCRcMFuXv3y3KMXoQrGnDi0ZHGe4H9EtQE+jrMWU4hgxaILMS4rxTkJdGw==
+react@~19.2.7:
+  version "19.2.7"
+  resolved "https://registry.npmjs.org/react/-/react-19.2.7.tgz#1f47a1bfc06f8ec885752c6f4af14369a9f8260b"
+  integrity sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -9290,10 +9300,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.25.0:
-  version "0.25.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.25.0.tgz#336cd9768e8cceebf52d3c80e3dcf5de23e7e015"
-  integrity sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==
+scheduler@^0.27.0:
+  version "0.27.0"
+  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz#0c4ef82d67d1e5c1e359e8fc76d3a87f045fe5bd"
+  integrity sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==
 
 schema-utils@^3.0.0, schema-utils@^3.3.0:
   version "3.3.0"
