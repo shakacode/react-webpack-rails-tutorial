@@ -7,7 +7,7 @@ ruby "3.4.6"
 
 gem "cpflow", "5.1.1", require: false
 gem "react_on_rails_pro", "17.0.0.rc.6"
-gem "shakapacker", "10.1.0"
+gem "shakapacker", "10.2.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 8.1.2"
