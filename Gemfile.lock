@@ -290,7 +290,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
-    rack-proxy (0.8.2)
+    rack-proxy (0.8.3)
       rack
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -446,7 +446,7 @@ GEM
       websocket (~> 1.0)
     semantic_range (3.1.1)
     sexp_processor (4.17.1)
-    shakapacker (10.1.0)
+    shakapacker (10.2.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -561,7 +561,7 @@ DEPENDENCIES
   scss_lint
   sdoc
   selenium-webdriver (~> 4)
-  shakapacker (= 10.1.0)
+  shakapacker (= 10.2.0)
   spring
   spring-commands-rspec
   stimulus-rails (~> 1.3)

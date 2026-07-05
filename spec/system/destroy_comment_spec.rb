@@ -12,6 +12,7 @@ describe "Destroy a comment", :existing_comment do
 
       click_link "New Comment"
       submit_form(name: comment.author, text: comment.text)
+      expect(page).to have_css("#notice", text: "Comment was successfully created.")
       click_link "Back"
 
       accept_confirm do
