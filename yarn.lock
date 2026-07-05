@@ -8779,10 +8779,10 @@ react-on-rails-pro@17.0.0-rc.6:
   dependencies:
     react-on-rails "17.0.0-rc.6"
 
-react-on-rails-rsc@19.2.0-rc.4:
-  version "19.2.0-rc.4"
-  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.0-rc.4.tgz#97ea2bf3c5e760fe900ba2a2330fac0e3149fe81"
-  integrity sha512-Jm9822vmAvXPbQ3gyx8B5RwbGcmxEXZ1eMEoVxd3rsnnxuZ7B35dr11Ygy2FBPPq4v5sJa/PFWGir/m8Cg1b9Q==
+react-on-rails-rsc@19.2.0:
+  version "19.2.0"
+  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.0.tgz#3b539142048047193d524265fabdc81356bd482f"
+  integrity sha512-4PlfNFWGHl029al/yi10G3fcREbTwzqQ45uqYs6i9Baqds2OROyWp1xdorfX4Ok46IVJjje14SeaJVyN8pGDGg==
   dependencies:
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
