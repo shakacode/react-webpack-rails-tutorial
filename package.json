@@ -84,7 +84,7 @@
     "react-intl": "^6.4.4",
     "react-on-rails-pro": "17.0.0-rc.6",
     "react-on-rails-pro-node-renderer": "17.0.0-rc.6",
-    "react-on-rails-rsc": "19.2.0-rc.4",
+    "react-on-rails-rsc": "19.2.0",
     "react-redux": "^8.1.0",
     "react-router": "^6.13.0",
     "react-router-dom": "^6.13.0",

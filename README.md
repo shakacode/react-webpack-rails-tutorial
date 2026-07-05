@@ -184,13 +184,13 @@ assets_bundler: rspack
 
 ### Version Targets
 
-- `react_on_rails_pro` gem: `17.0.0.rc.3`
-- `react-on-rails-pro` npm package: `17.0.0-rc.3`
-- `react-on-rails-pro-node-renderer` npm package: `17.0.0-rc.3`
-- `react-on-rails-rsc` npm package: `19.0.5-rc.7`
+- `react_on_rails_pro` gem: `17.0.0.rc.6`
+- `react-on-rails-pro` npm package: `17.0.0-rc.6`
+- `react-on-rails-pro-node-renderer` npm package: `17.0.0-rc.6`
+- `react-on-rails-rsc` npm package: `19.2.0`
 - `shakapacker` gem/npm package: `10.1.0`
 - `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7`
-- `react`: `~19.0.4` (minimum for React Server Components)
+- `react`: `~19.2.7` (minimum for React Server Components)
 
 ### Why Rspack
 
