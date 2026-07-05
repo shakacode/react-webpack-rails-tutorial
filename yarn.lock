@@ -2156,6 +2156,18 @@
   dependencies:
     "@rspack/binding" "2.0.4"
 
+"@rspack/dev-middleware@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/@rspack/dev-middleware/-/dev-middleware-2.0.3.tgz#48d2a4638721f5095bbe2f8cadd2494639701e96"
+  integrity sha512-GxnGj9jy76G3eCPyZei81fwKLAMLZaPEEqFz1/QDYquhwi/qYZX5fekFJ1XVpuwxGEK9KSX3hxZylfwrs4cmLA==
+
+"@rspack/dev-server@^2.0.4":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@rspack/dev-server/-/dev-server-2.1.0.tgz#733386d7e6f53138d8cc210cd8e750e61d5ee991"
+  integrity sha512-WkCi6bWThVX5Ziv04srPaRoCoUY5FJolO4gqzE7xPO0XbXShsGnwn0vGD0DFfnYFcw9VSsxlmeCDV799lNYclA==
+  dependencies:
+    "@rspack/dev-middleware" "^2.0.3"
+
 "@rspack/lite-tapable@^1.0.1":
   version "1.0.1"
   resolved "https://registry.npmjs.org/@rspack/lite-tapable/-/lite-tapable-1.0.1.tgz#d4540a5d28bd6177164bc0ba0bee4bdec0458591"
