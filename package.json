@@ -55,7 +55,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.3.2",
     "compression-webpack-plugin": "10.0.0",
-    "css-loader": "^7.1.4",
+    "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "es5-shim": "^4.6.7",
     "estraverse": "^5.3.0",
