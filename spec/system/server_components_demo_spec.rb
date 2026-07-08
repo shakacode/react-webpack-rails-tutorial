@@ -32,7 +32,7 @@ describe "Server Components demo" do
       expect(page).to have_content("Refresh count: 1")
     end
 
-    it "shows the ErrorBoundary fallback when Simulate Error is clicked, then recovers on Retry" do
+    it "shows the error recovery fallback when Simulate Error is clicked, then recovers on Retry" do
       click_button "Simulate Error"
       expect(page).to have_content("Server component fetch failed")
 

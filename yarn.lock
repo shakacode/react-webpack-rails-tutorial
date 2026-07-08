@@ -8767,10 +8767,10 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails-pro-node-renderer@17.0.0-rc.6:
-  version "17.0.0-rc.6"
-  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.0.0-rc.6.tgz#1fef0e21a7a13eb9d4525e05b6989a0ed79fb9c2"
-  integrity sha512-nX9Nmgb3hiUMPItC5xfV/W/FGnYLLzefr5qJOURPxrkHgEa6dw1ndnH2mRPyh0zFkOaCB2FBIy8lkWfXvRpfiA==
+react-on-rails-pro-node-renderer@17.0.0-rc.7:
+  version "17.0.0-rc.7"
+  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.0.0-rc.7.tgz#dc5da170b71ae91cb6e53305f90645ee5c2d95c9"
+  integrity sha512-qyB0wd1AU7KsPMJJyc3U3l4rgq8ZVR8FOAqNQ4riZ2adqeNfz5k5Gx1NKwKMWd51ri7fGqyZDFC8295bAIQEZw==
   dependencies:
     "@fastify/formbody" "^7.4.0 || ^8.0.2"
     "@fastify/multipart" "^8.3.1 || ^9.0.3"
@@ -8780,27 +8780,27 @@ react-on-rails-pro-node-renderer@17.0.0-rc.6:
     lockfile "^1.0.4"
     pino "^9.14.0 || ^10.1.0"
 
-react-on-rails-pro@17.0.0-rc.6:
-  version "17.0.0-rc.6"
-  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-17.0.0-rc.6.tgz#41dc95ed0e3513822a2f0c9b4b25b34c607106be"
-  integrity sha512-Uc4IUmNYAJIk4iy4RatLN0qVM7MAi8zgXVvd7vZMEnVkGGhHqvj1A82ft97yJqgfqF9mm3eSPPyU3gyXrH5CsQ==
+react-on-rails-pro@17.0.0-rc.7:
+  version "17.0.0-rc.7"
+  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-17.0.0-rc.7.tgz#d7f79b9c19e66061452bf2eecc64532da385339a"
+  integrity sha512-tfHNFjlX0Vnb/t4GxUc3X3mw742hHcrR3VapYfz3kAlDPNnpMi03PzPVPxwAO5FeQloHvAKq9/rjUemdsRDSQQ==
   dependencies:
-    react-on-rails "17.0.0-rc.6"
+    react-on-rails "17.0.0-rc.7"
 
-react-on-rails-rsc@19.2.0:
-  version "19.2.0"
-  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.0.tgz#3b539142048047193d524265fabdc81356bd482f"
-  integrity sha512-4PlfNFWGHl029al/yi10G3fcREbTwzqQ45uqYs6i9Baqds2OROyWp1xdorfX4Ok46IVJjje14SeaJVyN8pGDGg==
+react-on-rails-rsc@19.2.1-rc.0:
+  version "19.2.1-rc.0"
+  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.1-rc.0.tgz#cf50da6586b8c978d3ff0699178e892e8cbde006"
+  integrity sha512-lWUQloOMYS2/Jio7M9pKaY84+gNJ1ZD2pMTj37HDZtf6GsJjb0CJfJlizvxbquUdMQawX+1h59c63syFZ7AWmQ==
   dependencies:
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
     react-server-dom-webpack "~19.2.7"
     webpack-sources "^3.2.0"
 
-react-on-rails@17.0.0-rc.6:
-  version "17.0.0-rc.6"
-  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-17.0.0-rc.6.tgz#4372994d13e7dcff4acaf06efad7b413da4bc42d"
-  integrity sha512-/u2hzYvuUN+1HnH0gEdbfQvkWkgLMSN2kl/2x9CCOInIHffBvilgXzBgJrP5NlvjWpguUWSxO6PrYpgV0BzLMA==
+react-on-rails@17.0.0-rc.7:
+  version "17.0.0-rc.7"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-17.0.0-rc.7.tgz#02c73fc20e68a7471aae391c9e5c7ed5ca3adaff"
+  integrity sha512-JWeDJeFUc8TEWtz4MWLMHpCIPBw3stKBx//EY8aPDZDwL1UxX3tnDDt/4JlIOzvGonz4ncGxEbEKcnBheyafDw==
 
 react-proxy@^1.1.7:
   version "1.1.8"
