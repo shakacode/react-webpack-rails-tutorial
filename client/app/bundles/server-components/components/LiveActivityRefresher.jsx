@@ -4,6 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import RSCRoute from 'react-on-rails-pro/RSCRoute';
 import { useRSC } from 'react-on-rails-pro/RSCProvider';
+import { ServerComponentFetchError } from 'react-on-rails-pro/ServerComponentFetchError';
 
 // Same shape and dimensions as the rendered LiveActivity card. Local Suspense
 // fallback prevents the RSCRoute suspension from bubbling to an outer
@@ -23,32 +24,85 @@ function ActivityCardSkeleton() {
   );
 }
 
+function ActivityErrorFallback({ error, onRetry }) {
+  return (
+    <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+      <p className="text-rose-700 font-semibold mb-1">Server component fetch failed</p>
+      <p className="text-rose-600 text-sm font-mono mb-3">{error.message}</p>
+      <button
+        type="button"
+        onClick={onRetry}
+        className="px-3 py-1.5 text-sm bg-rose-600 text-white rounded hover:bg-rose-700"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
+function toServerComponentFetchError(error, componentProps) {
+  if (error instanceof ServerComponentFetchError) {
+    return error;
+  }
+
+  const originalError = error instanceof Error ? error : new Error(String(error));
+  return new ServerComponentFetchError(originalError.message, 'LiveActivity', componentProps, originalError);
+}
+
+function ThrowActivityError({ error }) {
+  throw error;
+}
+
 function LiveActivityRefresher() {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [simulateError, setSimulateError] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
   const { refetchComponent } = useRSC();
 
+  const refetchLiveActivity = (componentProps) =>
+    refetchComponent('LiveActivity', componentProps, true).then((payload) => {
+      if (payload instanceof Error) {
+        throw payload;
+      }
+    });
+
   const handleRefresh = () => {
-    setSimulateError(false);
+    setFetchError(null);
     setRefreshKey((k) => k + 1);
   };
 
   const handleSimulateError = () => {
-    setSimulateError(true);
-    setRefreshKey((k) => k + 1);
+    const nextKey = refreshKey + 1;
+    const errorProps = { simulateError: true, refreshKey: nextKey };
+
+    setFetchError(null);
+    setRefreshKey(nextKey);
+    refetchLiveActivity(errorProps).catch((error) => {
+      setFetchError(toServerComponentFetchError(error, errorProps));
+    });
   };
 
   // refetchComponent primes the cache with corrected props before resetting
   // the boundary, so the post-reset render hits cache instead of re-fetching.
-  const buildRetry = (resetErrorBoundary) => () => {
+  const handleRetry = () => {
     const newKey = refreshKey + 1;
-    setSimulateError(false);
+    const correctedProps = { simulateError: false, refreshKey: newKey };
+
+    setFetchError(null);
     setRefreshKey(newKey);
-    refetchComponent('LiveActivity', { simulateError: false, refreshKey: newKey })
+    refetchLiveActivity(correctedProps)
       // eslint-disable-next-line no-console
-      .catch((err) => console.error('Retry refetch failed:', err))
-      .finally(() => resetErrorBoundary());
+      .catch((err) => {
+        console.error('Retry refetch failed:', err);
+        setFetchError(toServerComponentFetchError(err, correctedProps));
+      });
   };
+
+  const buildBoundaryRetry = (resetErrorBoundary) => () => {
+    handleRetry();
+    resetErrorBoundary();
+  };
+
+  const componentProps = { simulateError: false, refreshKey };
 
   return (
     <div className="space-y-3">
@@ -71,26 +125,20 @@ function LiveActivityRefresher() {
       </div>
       <ErrorBoundary
         // react-error-boundary's fallbackRender is a render-prop API by design;
-        // the closure captures buildRetry which depends on parent state.
+        // the closure captures retry state from this component.
         // eslint-disable-next-line react/no-unstable-nested-components
         fallbackRender={({ error, resetErrorBoundary }) => (
-          <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
-            <p className="text-rose-700 font-semibold mb-1">Server component fetch failed</p>
-            <p className="text-rose-600 text-sm font-mono mb-3">{error.message}</p>
-            <button
-              type="button"
-              onClick={buildRetry(resetErrorBoundary)}
-              className="px-3 py-1.5 text-sm bg-rose-600 text-white rounded hover:bg-rose-700"
-            >
-              Retry
-            </button>
-          </div>
+          <ActivityErrorFallback error={error} onRetry={buildBoundaryRetry(resetErrorBoundary)} />
         )}
         resetKeys={[refreshKey]}
       >
-        <Suspense fallback={<ActivityCardSkeleton />}>
-          <RSCRoute componentName="LiveActivity" componentProps={{ simulateError, refreshKey }} />
-        </Suspense>
+        {fetchError ? (
+          <ThrowActivityError error={fetchError} />
+        ) : (
+          <Suspense fallback={<ActivityCardSkeleton />}>
+            <RSCRoute componentName="LiveActivity" componentProps={componentProps} />
+          </Suspense>
+        )}
       </ErrorBoundary>
     </div>
   );
