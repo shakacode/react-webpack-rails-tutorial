@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { Suspense, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import RSCRoute from 'react-on-rails-pro/RSCRoute';
 import { useRSC } from 'react-on-rails-pro/RSCProvider';
@@ -54,9 +54,16 @@ function ThrowActivityError({ error }) {
 }
 
 function LiveActivityRefresher() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshCount, setRefreshCount] = useState(0);
+  const [routeRefreshKey, setRouteRefreshKey] = useState(0);
   const [fetchError, setFetchError] = useState(null);
+  const latestRequestIdRef = useRef(0);
   const { refetchComponent } = useRSC();
+
+  const nextRequestId = () => {
+    latestRequestIdRef.current += 1;
+    return latestRequestIdRef.current;
+  };
 
   const refetchLiveActivity = (componentProps) =>
     refetchComponent('LiveActivity', componentProps, true).then((payload) => {
@@ -66,43 +73,52 @@ function LiveActivityRefresher() {
     });
 
   const handleRefresh = () => {
+    const nextKey = refreshCount + 1;
+
+    nextRequestId();
     setFetchError(null);
-    setRefreshKey((k) => k + 1);
+    setRefreshCount(nextKey);
+    setRouteRefreshKey(nextKey);
   };
 
   const handleSimulateError = () => {
-    const nextKey = refreshKey + 1;
+    const requestId = nextRequestId();
+    const nextKey = refreshCount + 1;
     const errorProps = { simulateError: true, refreshKey: nextKey };
 
     setFetchError(null);
-    setRefreshKey(nextKey);
+    setRefreshCount(nextKey);
     refetchLiveActivity(errorProps).catch((error) => {
-      setFetchError(toServerComponentFetchError(error, errorProps));
+      if (latestRequestIdRef.current === requestId) {
+        setFetchError(toServerComponentFetchError(error, errorProps));
+      }
     });
   };
 
-  // refetchComponent primes the cache with corrected props before resetting
-  // the boundary, so the post-reset render hits cache instead of re-fetching.
-  const handleRetry = () => {
-    const newKey = refreshKey + 1;
+  const buildBoundaryRetry = (resetErrorBoundary) => () => {
+    const requestId = nextRequestId();
+    const newKey = refreshCount + 1;
     const correctedProps = { simulateError: false, refreshKey: newKey };
 
     setFetchError(null);
-    setRefreshKey(newKey);
+    setRefreshCount(newKey);
     refetchLiveActivity(correctedProps)
-      // eslint-disable-next-line no-console
+      .then(() => {
+        if (latestRequestIdRef.current === requestId) {
+          setRouteRefreshKey(newKey);
+          resetErrorBoundary();
+        }
+      })
       .catch((err) => {
-        console.error('Retry refetch failed:', err);
-        setFetchError(toServerComponentFetchError(err, correctedProps));
+        if (latestRequestIdRef.current === requestId) {
+          // eslint-disable-next-line no-console
+          console.error('Retry refetch failed:', err);
+          setFetchError(toServerComponentFetchError(err, correctedProps));
+        }
       });
   };
 
-  const buildBoundaryRetry = (resetErrorBoundary) => () => {
-    handleRetry();
-    resetErrorBoundary();
-  };
-
-  const componentProps = { simulateError: false, refreshKey };
+  const componentProps = { simulateError: false, refreshKey: routeRefreshKey };
 
   return (
     <div className="space-y-3">
@@ -121,7 +137,7 @@ function LiveActivityRefresher() {
         >
           Simulate Error
         </button>
-        <span className="text-xs text-slate-500 ml-2">Refresh count: {refreshKey}</span>
+        <span className="text-xs text-slate-500 ml-2">Refresh count: {refreshCount}</span>
       </div>
       <ErrorBoundary
         // react-error-boundary's fallbackRender is a render-prop API by design;
@@ -130,7 +146,7 @@ function LiveActivityRefresher() {
         fallbackRender={({ error, resetErrorBoundary }) => (
           <ActivityErrorFallback error={error} onRetry={buildBoundaryRetry(resetErrorBoundary)} />
         )}
-        resetKeys={[refreshKey]}
+        resetKeys={[routeRefreshKey]}
       >
         {fetchError ? (
           <ThrowActivityError error={fetchError} />
