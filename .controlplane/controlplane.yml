@@ -78,22 +78,9 @@ apps:
     <<: *common
   # QA Apps are like Heroku review apps, but they use `prefix` so you can run a command like
   # this to create a QA app for the tutorial app.
-  # `cpflow setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-1234`
+  # `cpflow setup-app -a qa-react-webpack-rails-tutorial-1234`
   qa-react-webpack-rails-tutorial:
     <<: *common
-    # Order matters!
-    setup_app_templates:
-      # GVC template contains the identity
-      - app
-
-      # Resources
-      - postgres
-      - redis
-
-      # Workloads, like Dynos types on Heroku
-      - daily-task
-      - node-renderer
-      - rails
     # match_if_app_name_starts_with is used to identify these "qa" apps.
     match_if_app_name_starts_with: true
     image_retention_days: 5

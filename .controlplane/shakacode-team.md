@@ -9,6 +9,7 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 - `node-renderer` runs the React on Rails Pro boot seed before `yarn node-renderer` so the new renderer cache is warm before Rails rolls.
 - Rails reaches the renderer through `RENDERER_URL=http://node-renderer.<app>.cpln.local:3800`.
 - Keep `ROLLING_DEPLOY_TOKEN` populated in the app secret dictionary; Rails and the renderer use it for rolling-deploy bundle pulls.
+- For existing staging/production apps, populate `ROLLING_DEPLOY_TOKEN`, apply templates with `node-renderer`, validate staging, then promote production. Do not combine the production template cutover with missing secrets.
 
 ### Review Apps
 - Add a comment `+review-app-deploy` to any PR to deploy a review app
@@ -63,6 +64,10 @@ so those values do not need to be set just to test review apps. Set them only
 when testing a fork or clone against a different Control Plane org, review-app
 prefix, or public workload.
 
+App secret dictionaries for review, staging, and production must include
+`SECRET_KEY_BASE`, `RENDERER_PASSWORD`, `ROLLING_DEPLOY_TOKEN`, and
+`REACT_ON_RAILS_PRO_LICENSE`.
+
 Production promotion uses a protected GitHub Environment named `production`:
 
 - Environment secret `CPLN_TOKEN_PRODUCTION`
@@ -110,11 +115,11 @@ Use `setup-app` for first-time bootstrap because it creates the app secret
 policy and identity binding. Use `cpflow apply-template` for later template
 updates to existing persistent apps. Production promotion compares both GVC env
 names and app workload container env names against staging before copying the
-image, so keep production `rails` and `daily-task` env references in sync with
-the templates:
+image, so keep production `rails`, `node-renderer`, and `daily-task` env
+references in sync with the templates:
 
 ```sh
-cpflow apply-template app postgres redis daily-task rails \
+cpflow apply-template app postgres redis daily-task node-renderer rails \
   -a react-webpack-rails-tutorial-production \
   --org shakacode-open-source-examples-production \
   --yes --add-app-identity

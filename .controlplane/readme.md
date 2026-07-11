@@ -124,10 +124,11 @@ The matching Control Plane resources are:
 Bootstrap production the same way before the first promotion, using the
 production org and production-only secret values. After bootstrap or any
 template change, re-apply the persistent production templates so the `rails`
-and `daily-task` workloads keep the same secret-backed env names as staging:
+`node-renderer`, and `daily-task` workloads keep the same secret-backed env
+names as staging:
 
 ```sh
-cpflow apply-template app postgres redis daily-task rails \
+cpflow apply-template app postgres redis daily-task node-renderer rails \
   -a react-webpack-rails-tutorial-production \
   --org shakacode-open-source-examples-production \
   --yes --add-app-identity
@@ -138,12 +139,13 @@ secrets:
 
 - `SECRET_KEY_BASE`
 - `RENDERER_PASSWORD`
+- `ROLLING_DEPLOY_TOKEN`
 - `REACT_ON_RAILS_PRO_LICENSE`
 
 Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
-`RENDERER_PASSWORD` with `openssl rand -hex 32`. For real production, prefer
-managed Postgres and Redis services and update `DATABASE_URL` and `REDIS_URL`
-accordingly.
+`RENDERER_PASSWORD` and `ROLLING_DEPLOY_TOKEN` with `openssl rand -hex 32`.
+For real production, prefer managed Postgres and Redis services and update
+`DATABASE_URL` and `REDIS_URL` accordingly.
 
 Review apps run pull request code, so anything mounted through
 `cpln://secret/...` can be read by that code after it starts. Keep the
@@ -586,6 +588,26 @@ The renderer workload uses the same application image as Rails, runs
 `RENDERER_PASSWORD`. `ROLLING_DEPLOY_PREVIOUS_URLS` points at the app's
 Control Plane rolling-deploy endpoint so the boot seed can pull the draining
 bundle before Rails rolls.
+
+### Coordinating existing staging and production apps
+
+For existing persistent apps, roll the topology change separately from the new
+React on Rails RC when possible:
+
+1. Populate `ROLLING_DEPLOY_TOKEN` in the staging and production app secret
+   dictionaries. Use the same value for Rails and the renderer within each app.
+2. Re-apply templates to staging first:
+   `cpflow apply-template app postgres redis daily-task node-renderer rails -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging --yes --add-app-identity`.
+3. Deploy staging with `cpflow deploy-image -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging`.
+   cpflow 5.2.0 honors `deploy_order`, so `node-renderer` deploys and waits
+   before `rails`.
+4. After staging is healthy, re-apply the same template list to production.
+5. Promote production with the generated workflow. Production promotion also
+   honors `deploy_order`, so the renderer rolls before Rails.
+
+Do not apply the production template change until the production app secret
+dictionary has `ROLLING_DEPLOY_TOKEN`; the app template references that secret
+for both Rails and the renderer.
 
 React on Rails docs reference:
 <https://reactonrails.com/docs/pro/rolling-deploy-adapters/#deploy-the-renderer-before-rails>

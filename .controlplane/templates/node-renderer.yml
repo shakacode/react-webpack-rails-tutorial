@@ -8,19 +8,22 @@ spec:
   type: standard
   containers:
     - name: node-renderer
-      cpu: 300m
-      memory: 1Gi
+      cpu: 50m
+      memory: 512Mi
       env:
         - name: LOG_LEVEL
           value: info
         - name: NODE_OPTIONS
-          value: --max-old-space-size=512
+          value: --max-old-space-size=256
       inheritEnv: true
       image: {{APP_IMAGE_LINK}}
       args:
         - bash
         - -lc
         - |
+          # The rake task warns and continues on bundle fetch misses so rollout
+          # does not wedge; unexpected task failures still stop the shell.
+          set -e
           bundle exec rake react_on_rails_pro:pre_seed_renderer_cache
           exec yarn node-renderer
       ports:
