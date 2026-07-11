@@ -7,11 +7,11 @@ is absent means that capability is n/a in this repository.
 
 | Script | Purpose | This repo runs |
 | --- | --- | --- |
-| `setup` | Install dependencies | n/a |
-| `validate` | Pre-push gate | `bin/conductor-exec bundle exec rubocop` |
-| `test` | Run tests | `bin/conductor-exec bundle exec rspec` |
-| `lint` | Lint / format | n/a |
-| `build` | Build / type-check | n/a |
+| `setup` | Install dependencies | `bin/conductor-exec bin/setup --skip-server` |
+| `validate` | Pre-push gate | `bin/conductor-exec bin/rubocop` |
+| `test` | Run tests | `bin/conductor-exec bin/ci` |
+| `lint` | Lint / format | `bin/conductor-exec yarn lint:eslint` |
+| `build` | Build / type-check | generate React on Rails packs, build ReScript, then `bin/conductor-exec yarn build:test` |
 | `docs` | Docs checks | n/a |
 | `ci-detect` | CI change detector | n/a |
 
