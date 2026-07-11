@@ -4,6 +4,9 @@ set -euo pipefail
 cd "$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 
 renderer_port="${RENDERER_PORT:-3800}"
+if [[ -n "${RENDERER_PORT:-}" && -z "${RENDERER_URL:-}" ]]; then
+  export RENDERER_URL="http://localhost:$renderer_port"
+fi
 renderer_started=false
 renderer_pid=''
 
