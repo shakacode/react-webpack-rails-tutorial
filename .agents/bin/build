@@ -3,6 +3,4 @@
 set -euo pipefail
 cd "$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 
-RAILS_ENV=test bin/conductor-exec bin/rails react_on_rails:generate_packs
-bin/conductor-exec yarn res:build
 exec bin/conductor-exec yarn build:test "$@"
