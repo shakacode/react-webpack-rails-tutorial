@@ -29,6 +29,7 @@ function parseIntegerEnv(name, defaultValue, { min, max = Number.MAX_SAFE_INTEGE
 
 const config = {
   serverBundleCachePath: path.resolve(__dirname, '.node-renderer-bundles'),
+  host: process.env.RENDERER_HOST || 'localhost',
   logLevel: process.env.RENDERER_LOG_LEVEL || 'info',
   password: rendererPassword,
   port: parseIntegerEnv('RENDERER_PORT', 3800, { min: 1, max: 65535 }),

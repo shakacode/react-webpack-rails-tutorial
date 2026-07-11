@@ -24,8 +24,8 @@ spec:
       # set to a secure random value using: openssl rand -hex 64
       # Production apps should configure this manually after app creation via a secret.
       value: 'placeholder_secret_key_base_for_test_apps_only'
-    # Pro Node renderer settings. The renderer process runs in the same
-    # container as Rails (see .controlplane/Dockerfile CMD).
+    # Pro Node renderer settings. Control Plane runs the renderer in the
+    # separate node-renderer workload and Rails reaches it over same-GVC DNS.
     - name: RENDERER_PORT
       value: '3800'
     - name: RENDERER_LOG_LEVEL
@@ -33,7 +33,13 @@ spec:
     - name: RENDERER_WORKERS_COUNT
       value: '2'
     - name: RENDERER_URL
-      value: http://localhost:3800
+      # Internal same-GVC endpoint for the separate React on Rails Pro Node Renderer workload.
+      value: http://node-renderer.{{APP_NAME}}.cpln.local:3800
+    - name: RENDERER_HOST
+      value: 0.0.0.0
+    - name: ROLLING_DEPLOY_PREVIOUS_URLS
+      # The renderer boot seed pulls the still-live bundle manifest before Rails rolls.
+      value: https://{{APP_NAME}}.cpln.app/react_on_rails_pro/rolling_deploy
     # Enable the artificial Suspense demo delay so the streaming fallback is
     # visible on the review-app. Off by default in production deployments.
     - name: RSC_SUSPENSE_DEMO_DELAY
@@ -46,6 +52,8 @@ spec:
     # pull request code, so every mounted secret must be review-safe.
     - name: RENDERER_PASSWORD
       value: cpln://secret/{{APP_SECRETS}}.RENDERER_PASSWORD
+    - name: ROLLING_DEPLOY_TOKEN
+      value: cpln://secret/{{APP_SECRETS}}.ROLLING_DEPLOY_TOKEN
     - name: REACT_ON_RAILS_PRO_LICENSE
       value: cpln://secret/{{APP_SECRETS}}.REACT_ON_RAILS_PRO_LICENSE
   # Part of standard configuration

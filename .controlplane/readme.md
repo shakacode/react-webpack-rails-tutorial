@@ -23,7 +23,7 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
 generic behavior documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md);
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md);
 this section only lists the values that are specific to this app.
 
 ### Review Apps and Staging
@@ -567,17 +567,40 @@ The system uses Control Plane's infrastructure to manage these deployments, with
 each review app getting its own resources as defined in the controlplane.yml
 configuration.
 
+### Separate React on Rails renderer workload
+
+Control Plane runs the React on Rails Pro Node Renderer as its own
+`node-renderer` workload. `.controlplane/controlplane.yml` includes
+`node-renderer` in `app_workloads` and sets `deploy_order` so
+`cpflow deploy-image` and `cpflow promote-app-from-upstream` deploy the
+renderer first, wait for it to become healthy, and then deploy `rails` plus
+`daily-task`.
+
+The renderer workload uses the same application image as Rails, runs
+`react_on_rails_pro:pre_seed_renderer_cache` at container boot, and then starts
+`yarn node-renderer`. Rails gets `RENDERER_URL` from
+`.controlplane/templates/app.yml` and reaches the renderer at
+`http://node-renderer.<app>.cpln.local:3800`.
+
+`ROLLING_DEPLOY_TOKEN` lives in the app secret dictionary alongside
+`RENDERER_PASSWORD`. `ROLLING_DEPLOY_PREVIOUS_URLS` points at the app's
+Control Plane rolling-deploy endpoint so the boot seed can pull the draining
+bundle before Rails rolls.
+
+React on Rails docs reference:
+<https://reactonrails.com/docs/pro/rolling-deploy-adapters/#deploy-the-renderer-before-rails>
+
 
 ### Updating Generated cpflow Workflows
 
 Keep the reusable-workflow mechanics in the upstream
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 For this repo, the update loop is:
 
 1. Update the bundled `cpflow` gem to the desired release.
 2. Refresh generated wrappers from that release with `--staging-branch master`.
 3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
-   This branch pins refs to `v5.1.1`, which includes upstream promotion
+   This branch pins refs to `v5.2.0`, which includes upstream promotion
    hardening and the release-runner timeout fix. Use a full commit SHA only for
    short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
 4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.

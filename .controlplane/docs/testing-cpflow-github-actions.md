@@ -1,7 +1,7 @@
 # Testing cpflow GitHub Actions Changes
 
 Generic reusable-workflow behavior belongs upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 Use this repo note only as the canary checklist for
 `react-webpack-rails-tutorial`.
 
@@ -30,7 +30,7 @@ bin/conductor-exec bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/
 ```
 
 Leave `CPFLOW_VERSION` unset while testing a commit SHA. After the upstream PR
-ships in a release tag, repin wrappers to that tag. Use `v5.1.1` for the
+ships in a release tag, repin wrappers to that tag. Use `v5.2.0` for the
 promotion-hardening and release-runner timeout fixes; use immutable commit SHAs
 only for future unreleased upstream PR tests.
 

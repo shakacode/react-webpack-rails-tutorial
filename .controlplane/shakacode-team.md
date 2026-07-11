@@ -4,6 +4,12 @@
 
 Deployments are handled by Control Plane configuration in this repo and GitHub Actions.
 
+### Renderer Workload
+- `node-renderer` is an app workload and deploys before `rails` through `deploy_order`.
+- `node-renderer` runs the React on Rails Pro boot seed before `yarn node-renderer` so the new renderer cache is warm before Rails rolls.
+- Rails reaches the renderer through `RENDERER_URL=http://node-renderer.<app>.cpln.local:3800`.
+- Keep `ROLLING_DEPLOY_TOKEN` populated in the app secret dictionary; Rails and the renderer use it for rolling-deploy bundle pulls.
+
 ### Review Apps
 - Add a comment `+review-app-deploy` to any PR to deploy a review app
 - Leave `REVIEW_APP_PREFIX` unset for the standard path. The workflow infers
@@ -19,8 +25,8 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
   in this repository.
 - Review apps run pull request code. Keep `CPLN_TOKEN_STAGING`,
   `qa-react-webpack-rails-tutorial-secrets`, database credentials, renderer
-  credentials, and license values limited to review/staging use. Never mount
-  production secrets into review apps.
+  credentials, rolling-deploy tokens, and license values limited to
+  review/staging use. Never mount production secrets into review apps.
 
 ### Staging Environment
 - **Automatic**: Any merge to the `master` branch automatically deploys to staging
@@ -115,9 +121,9 @@ cpflow apply-template app postgres redis daily-task rails \
 ```
 
 Advanced optional settings are documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 
-Current workflow wrappers pin `control-plane-flow` release tag `v5.1.1`, which
+Current workflow wrappers pin `control-plane-flow` release tag `v5.2.0`, which
 includes promotion hardening and the release-runner timeout fix. Keep release
 tags as the steady-state configuration; use a full commit SHA only for
 short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.

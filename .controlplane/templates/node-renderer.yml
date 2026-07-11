@@ -1,0 +1,55 @@
+# Separate React on Rails Pro Node Renderer workload.
+#
+# Keep the renderer on the same image as Rails so bundle hashes, gem versions,
+# and npm package versions stay aligned during rolling deploys.
+kind: workload
+name: node-renderer
+spec:
+  type: standard
+  containers:
+    - name: node-renderer
+      cpu: 300m
+      memory: 1Gi
+      env:
+        - name: LOG_LEVEL
+          value: info
+        - name: NODE_OPTIONS
+          value: --max-old-space-size=512
+      inheritEnv: true
+      image: {{APP_IMAGE_LINK}}
+      args:
+        - bash
+        - -lc
+        - |
+          bundle exec rake react_on_rails_pro:pre_seed_renderer_cache
+          exec yarn node-renderer
+      ports:
+        - number: 3800
+          protocol: http2
+      startupProbe:
+        tcpSocket:
+          port: 3800
+        failureThreshold: 30
+        periodSeconds: 2
+      readinessProbe:
+        tcpSocket:
+          port: 3800
+        failureThreshold: 3
+        periodSeconds: 5
+      livenessProbe:
+        tcpSocket:
+          port: 3800
+        failureThreshold: 3
+        periodSeconds: 10
+  defaultOptions:
+    autoscaling:
+      maxScale: 1
+    capacityAI: true
+  firewallConfig:
+    external:
+      inboundAllowCIDR: []
+      outboundAllowCIDR:
+        - 0.0.0.0/0
+    internal:
+      inboundAllowType: same-gvc
+  identityLink: {{APP_IDENTITY_LINK}}
