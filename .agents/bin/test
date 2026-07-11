@@ -3,6 +3,7 @@
 set -euo pipefail
 cd "$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 
+renderer_port="${RENDERER_PORT:-3800}"
 renderer_started=false
 renderer_pid=''
 
@@ -19,27 +20,29 @@ cleanup_renderer() {
 
 trap cleanup_renderer EXIT
 
-if nc -z localhost 3800 2>/dev/null; then
-  echo "Reusing existing Node renderer on port 3800."
+bin/conductor-exec bin/setup --skip-server
+
+if nc -z localhost "$renderer_port" 2>/dev/null; then
+  echo "Reusing existing Node renderer on port $renderer_port."
 else
   bin/conductor-exec node renderer/node-renderer.js &
   renderer_pid=$!
   renderer_started=true
 
-  echo "Waiting for Node renderer (PID $renderer_pid) on port 3800..."
+  echo "Waiting for Node renderer (PID $renderer_pid) on port $renderer_port..."
   for _ in $(seq 1 30); do
     if ! kill -0 "$renderer_pid" 2>/dev/null; then
       echo "Node renderer exited unexpectedly (see output above)." >&2
       exit 1
     fi
-    if nc -z localhost 3800 2>/dev/null; then
+    if nc -z localhost "$renderer_port" 2>/dev/null; then
       break
     fi
     sleep 1
   done
 
-  if ! nc -z localhost 3800 2>/dev/null; then
-    echo "Node renderer failed to start within 30 seconds (see output above)." >&2
+  if ! nc -z localhost "$renderer_port" 2>/dev/null; then
+    echo "Node renderer failed to start on port $renderer_port within 30 seconds (see output above)." >&2
     exit 1
   fi
 fi
