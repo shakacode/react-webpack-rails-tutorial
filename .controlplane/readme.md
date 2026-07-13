@@ -285,9 +285,13 @@ Thruster is a small, fast HTTP/2 proxy designed for Ruby web applications. It pr
 
 To enable Thruster with HTTP/2 on Control Plane, two configuration changes are required:
 
-#### 1. Dockerfile CMD (`.controlplane/Dockerfile`)
+#### 1. Container Startup Command
 
-The Dockerfile must use Thruster to start the Rails server:
+The Dockerfile `CMD` is the local and single-container fallback. Control Plane
+workload templates can override it with explicit `args:`; this app does that for
+both `rails` and `node-renderer`.
+
+The fallback command still uses Thruster to start the Rails server:
 
 ```dockerfile
 # Use Thruster HTTP/2 proxy for optimized performance
@@ -296,9 +300,9 @@ CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
 
 **Note:** Do NOT use `--early-hints` flag as Thruster handles this automatically.
 
-#### 2. Workload Port Protocol (`.controlplane/templates/rails.yml`)
+#### 2. Workload Port Protocol (`.controlplane/templates/rails.yml` and `node-renderer.yml`)
 
-The workload port should remain as HTTP/1.1:
+The Rails workload port should remain as HTTP/1.1:
 
 ```yaml
 ports:
@@ -312,6 +316,11 @@ ports:
 - Setting `protocol: http2` causes a protocol mismatch and 502 errors
 - Thruster automatically provides HTTP/2 to end users through its TLS termination
 
+The separate `node-renderer` workload is different: React on Rails Pro's Node
+Renderer listens with cleartext HTTP/2 (h2c), so its workload port intentionally
+uses `protocol: http2`. Keep its probes as `tcpSocket` because HTTP/1.1-only
+health probes cannot speak to that listener.
+
 ### Important: Dockerfile vs Procfile
 
 **On Heroku:** The `Procfile` defines how dynos start:
@@ -319,9 +328,13 @@ ports:
 web: bundle exec thrust bin/rails server
 ```
 
-**On Control Plane/Kubernetes:** The `Dockerfile CMD` defines how containers start. The Procfile is ignored.
+**On Control Plane/Kubernetes:** workload `args:` define how `rails` and
+`node-renderer` start. The Dockerfile `CMD` is the fallback for local or
+single-container runs. The Procfile is ignored.
 
-This is a common source of confusion when migrating from Heroku. Always ensure your Dockerfile CMD matches your intended startup command.
+This is a common source of confusion when migrating from Heroku. For deployed
+workloads, update the matching template in `.controlplane/templates/`; keep the
+Dockerfile fallback aligned for local and single-container use.
 
 ### Verifying HTTP/2 is Enabled
 

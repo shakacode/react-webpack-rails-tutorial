@@ -31,6 +31,7 @@ spec:
     - name: RENDERER_LOG_LEVEL
       value: info
     - name: RENDERER_WORKERS_COUNT
+      # One worker keeps the separate tutorial renderer at minimum baseline cost.
       value: '1'
     - name: RENDERER_URL
       # Internal same-GVC endpoint for the separate React on Rails Pro Node Renderer workload.

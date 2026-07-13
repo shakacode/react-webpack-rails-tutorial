@@ -88,11 +88,14 @@ resource "cpln_gvc" "app" {
     SECRET_KEY_BASE          = "placeholder_secret_key_base_for_test_apps_only"
     RENDERER_PORT            = "3800"
     RENDERER_LOG_LEVEL       = "info"
-    RENDERER_WORKERS_COUNT   = "2"
-    RENDERER_URL             = "http://localhost:3800"
+    RENDERER_WORKERS_COUNT   = "1"
+    RENDERER_URL             = "http://node-renderer.${var.app_name}.cpln.local:3800"
+    RENDERER_HOST            = "0.0.0.0"
+    ROLLING_DEPLOY_PREVIOUS_URLS = "https://${var.app_name}.cpln.app/react_on_rails_pro/rolling_deploy"
     RSC_SUSPENSE_DEMO_DELAY  = "true"
     # cpln:// secret references are just strings, so they port over verbatim:
     RENDERER_PASSWORD          = "cpln://secret/${var.app_name}-secrets.RENDERER_PASSWORD"
+    ROLLING_DEPLOY_TOKEN       = "cpln://secret/${var.app_name}-secrets.ROLLING_DEPLOY_TOKEN"
     REACT_ON_RAILS_PRO_LICENSE = "cpln://secret/${var.app_name}-secrets.REACT_ON_RAILS_PRO_LICENSE"
   }
 }
