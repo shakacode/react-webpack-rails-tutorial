@@ -2,7 +2,7 @@
 # organization. This template keeps the cpflow app-secret placeholders
 # {{APP_SECRETS}} and {{APP_SECRETS_POLICY}}.
 #
-# cpflow 5.1.1 shared_secret_grants are only for a separate shared
+# cpflow 5.2.0 shared_secret_grants are only for a separate shared
 # org-level dictionary referenced from app/workload templates with
 # {{SHARED_SECRET_<NAME>}}.
 
@@ -25,6 +25,9 @@ data:
   # Both sides of the Rails/Node renderer handshake must match.
   # Generate with `openssl rand -hex 32`.
   RENDERER_PASSWORD: "replace-with-openssl-rand-hex-32"
+  # Shared bearer token for React on Rails Pro rolling-deploy bundle pulls.
+  # Generate with `openssl rand -hex 32`.
+  ROLLING_DEPLOY_TOKEN: "replace-with-openssl-rand-hex-32"
   # JWT from https://pro.reactonrails.com/. Use a review-safe token for public
   # review apps if the production token must not be exposed to pull request code.
   REACT_ON_RAILS_PRO_LICENSE: "replace-with-pro-license-jwt"

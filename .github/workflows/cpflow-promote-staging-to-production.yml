@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: shakacode/control-plane-flow
-          ref: v5.1.1
+          ref: v5.2.0
           path: .cpflow
           persist-credentials: false
 
@@ -179,7 +179,7 @@ jobs:
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
           # The setup action validates CPFLOW_VERSION against this full workflow ref.
-          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.1.1
+          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.2.0
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
       # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).

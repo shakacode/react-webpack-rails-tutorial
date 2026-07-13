@@ -23,7 +23,7 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
 generic behavior documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md);
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md);
 this section only lists the values that are specific to this app.
 
 ### Review Apps and Staging
@@ -124,10 +124,11 @@ The matching Control Plane resources are:
 Bootstrap production the same way before the first promotion, using the
 production org and production-only secret values. After bootstrap or any
 template change, re-apply the persistent production templates so the `rails`
-and `daily-task` workloads keep the same secret-backed env names as staging:
+`node-renderer`, and `daily-task` workloads keep the same secret-backed env
+names as staging:
 
 ```sh
-cpflow apply-template app postgres redis daily-task rails \
+cpflow apply-template app postgres redis daily-task node-renderer rails \
   -a react-webpack-rails-tutorial-production \
   --org shakacode-open-source-examples-production \
   --yes --add-app-identity
@@ -138,12 +139,13 @@ secrets:
 
 - `SECRET_KEY_BASE`
 - `RENDERER_PASSWORD`
+- `ROLLING_DEPLOY_TOKEN`
 - `REACT_ON_RAILS_PRO_LICENSE`
 
 Generate `SECRET_KEY_BASE` with `openssl rand -hex 64` and
-`RENDERER_PASSWORD` with `openssl rand -hex 32`. For real production, prefer
-managed Postgres and Redis services and update `DATABASE_URL` and `REDIS_URL`
-accordingly.
+`RENDERER_PASSWORD` and `ROLLING_DEPLOY_TOKEN` with `openssl rand -hex 32`.
+For real production, prefer managed Postgres and Redis services and update
+`DATABASE_URL` and `REDIS_URL` accordingly.
 
 Review apps run pull request code, so anything mounted through
 `cpln://secret/...` can be read by that code after it starts. Keep the
@@ -283,9 +285,13 @@ Thruster is a small, fast HTTP/2 proxy designed for Ruby web applications. It pr
 
 To enable Thruster with HTTP/2 on Control Plane, two configuration changes are required:
 
-#### 1. Dockerfile CMD (`.controlplane/Dockerfile`)
+#### 1. Container Startup Command
 
-The Dockerfile must use Thruster to start the Rails server:
+The Dockerfile `CMD` is the local and single-container fallback. Control Plane
+workload templates can override it with explicit `args:`; this app does that for
+both `rails` and `node-renderer`.
+
+The fallback command still uses Thruster to start the Rails server:
 
 ```dockerfile
 # Use Thruster HTTP/2 proxy for optimized performance
@@ -294,9 +300,9 @@ CMD ["bundle", "exec", "thrust", "bin/rails", "server"]
 
 **Note:** Do NOT use `--early-hints` flag as Thruster handles this automatically.
 
-#### 2. Workload Port Protocol (`.controlplane/templates/rails.yml`)
+#### 2. Workload Port Protocol (`.controlplane/templates/rails.yml` and `node-renderer.yml`)
 
-The workload port should remain as HTTP/1.1:
+The Rails workload port should remain as HTTP/1.1:
 
 ```yaml
 ports:
@@ -310,6 +316,11 @@ ports:
 - Setting `protocol: http2` causes a protocol mismatch and 502 errors
 - Thruster automatically provides HTTP/2 to end users through its TLS termination
 
+The separate `node-renderer` workload is different: React on Rails Pro's Node
+Renderer listens with cleartext HTTP/2 (h2c), so its workload port intentionally
+uses `protocol: http2`. Keep its probes as `tcpSocket` because HTTP/1.1-only
+health probes cannot speak to that listener.
+
 ### Important: Dockerfile vs Procfile
 
 **On Heroku:** The `Procfile` defines how dynos start:
@@ -317,9 +328,13 @@ ports:
 web: bundle exec thrust bin/rails server
 ```
 
-**On Control Plane/Kubernetes:** The `Dockerfile CMD` defines how containers start. The Procfile is ignored.
+**On Control Plane/Kubernetes:** workload `args:` define how `rails` and
+`node-renderer` start. The Dockerfile `CMD` is the fallback for local or
+single-container runs. The Procfile is ignored.
 
-This is a common source of confusion when migrating from Heroku. Always ensure your Dockerfile CMD matches your intended startup command.
+This is a common source of confusion when migrating from Heroku. For deployed
+workloads, update the matching template in `.controlplane/templates/`; keep the
+Dockerfile fallback aligned for local and single-container use.
 
 ### Verifying HTTP/2 is Enabled
 
@@ -567,17 +582,60 @@ The system uses Control Plane's infrastructure to manage these deployments, with
 each review app getting its own resources as defined in the controlplane.yml
 configuration.
 
+### Separate React on Rails renderer workload
+
+Control Plane runs the React on Rails Pro Node Renderer as its own
+`node-renderer` workload. `.controlplane/controlplane.yml` includes
+`node-renderer` in `app_workloads` and sets `deploy_order` so
+`cpflow deploy-image` and `cpflow promote-app-from-upstream` deploy the
+renderer first, wait for it to become healthy, and then deploy `rails` plus
+`daily-task`.
+
+The renderer workload uses the same application image as Rails, runs
+`react_on_rails_pro:pre_seed_renderer_cache` at container boot, and then starts
+`yarn node-renderer`. Rails gets `RENDERER_URL` from
+`.controlplane/templates/app.yml` and reaches the renderer at
+`http://node-renderer.<app>.cpln.local:3800`.
+
+`ROLLING_DEPLOY_TOKEN` lives in the app secret dictionary alongside
+`RENDERER_PASSWORD`. `ROLLING_DEPLOY_PREVIOUS_URLS` points at the app's
+Control Plane rolling-deploy endpoint so the boot seed can pull the draining
+bundle before Rails rolls.
+
+### Coordinating existing staging and production apps
+
+For existing persistent apps, roll the topology change separately from the new
+React on Rails RC when possible:
+
+1. Populate `ROLLING_DEPLOY_TOKEN` in the staging and production app secret
+   dictionaries. Use the same value for Rails and the renderer within each app.
+2. Re-apply templates to staging first:
+   `cpflow apply-template app postgres redis daily-task node-renderer rails -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging --yes --add-app-identity`.
+3. Deploy staging with `cpflow deploy-image -a react-webpack-rails-tutorial-staging --org shakacode-open-source-examples-staging`.
+   cpflow 5.2.0 honors `deploy_order`, so `node-renderer` deploys and waits
+   before `rails`.
+4. After staging is healthy, re-apply the same template list to production.
+5. Promote production with the generated workflow. Production promotion also
+   honors `deploy_order`, so the renderer rolls before Rails.
+
+Do not apply the production template change until the production app secret
+dictionary has `ROLLING_DEPLOY_TOKEN`; the app template references that secret
+for both Rails and the renderer.
+
+React on Rails docs reference:
+<https://reactonrails.com/docs/pro/rolling-deploy-adapters/#deploy-the-renderer-before-rails>
+
 
 ### Updating Generated cpflow Workflows
 
 Keep the reusable-workflow mechanics in the upstream
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.1.1/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 For this repo, the update loop is:
 
 1. Update the bundled `cpflow` gem to the desired release.
 2. Refresh generated wrappers from that release with `--staging-branch master`.
 3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
-   This branch pins refs to `v5.1.1`, which includes upstream promotion
+   This branch pins refs to `v5.2.0`, which includes upstream promotion
    hardening and the release-runner timeout fix. Use a full commit SHA only for
    short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
 4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.

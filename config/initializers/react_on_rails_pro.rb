@@ -12,6 +12,12 @@ ReactOnRailsPro.configure do |config|
 
   config.renderer_url = ENV.fetch("RENDERER_URL", "http://localhost:3800")
 
+  if ENV["ROLLING_DEPLOY_TOKEN"].present?
+    config.rolling_deploy_adapter = ReactOnRailsPro::RollingDeployAdapters::Http
+    config.rolling_deploy_token = ENV.fetch("ROLLING_DEPLOY_TOKEN")
+    config.rolling_deploy_previous_urls = ENV["ROLLING_DEPLOY_PREVIOUS_URLS"].presence
+  end
+
   # Must match the password in renderer/node-renderer.js. Use .presence
   # so a blank env var (.env.example ships with `RENDERER_PASSWORD=`)
   # falls back to the dev default, matching the JS side's `||`.

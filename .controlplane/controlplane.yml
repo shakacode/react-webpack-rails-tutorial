@@ -20,11 +20,35 @@ aliases:
     default_location: aws-us-east-2
     # Configure the workload name used as a template for one-off scripts, like a Heroku one-off dyno.
     one_off_workload: rails
+
+    # Templates used when bootstrapping review, staging, or production apps.
+    # Keep node-renderer before rails so first-time setup matches deploy_order.
+    setup_app_templates:
+      # GVC template contains the identity and shared environment.
+      - app
+
+      # Resources
+      - postgres
+      - redis
+
+      # Workloads, like Dyno types on Heroku
+      - daily-task
+      - node-renderer
+      - rails
+
     # Like the entries in the Heroku Procfile that get deployed when the application code changes
     # and the application image updates.
     app_workloads:
+      - node-renderer
       - rails
       - daily-task
+
+    # Deploy the separate React on Rails renderer first, wait for it to become
+    # ready, then deploy Rails and cron workloads that share the same image.
+    deploy_order:
+      - [node-renderer]
+      - [rails, daily-task]
+
     # Additional workloads that are not affected by deploy-image and promote-app-from-upstream
     # These workloads apply to the ps commands
     additional_workloads:
@@ -54,21 +78,9 @@ apps:
     <<: *common
   # QA Apps are like Heroku review apps, but they use `prefix` so you can run a command like
   # this to create a QA app for the tutorial app.
-  # `cpflow setup gvc postgres redis rails -a qa-react-webpack-rails-tutorial-1234`
+  # `cpflow setup-app -a qa-react-webpack-rails-tutorial-1234`
   qa-react-webpack-rails-tutorial:
     <<: *common
-    # Order matters!
-    setup_app_templates:
-      # GVC template contains the identity
-      - app
-
-      # Resources
-      - postgres
-      - redis
-
-      # Workloads, like Dynos types on Heroku
-      - daily-task
-      - rails
     # match_if_app_name_starts_with is used to identify these "qa" apps.
     match_if_app_name_starts_with: true
     image_retention_days: 5

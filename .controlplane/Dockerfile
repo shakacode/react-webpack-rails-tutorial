@@ -81,8 +81,9 @@ RUN SECRET_KEY_BASE=precompile_placeholder bundle exec rake react_on_rails:gener
 # For Kubernetes and ControlPlane, this is the command on the workload.
 ENTRYPOINT ["./.controlplane/entrypoint.sh"]
 
-# Run the Pro Node renderer and Rails in a single container (Option 1 from
-# docs/oss/building-features/node-renderer/container-deployment.md).
+# Default local/single-container command. Control Plane workload templates
+# override this with Rails-only and renderer-only commands so deploy_order can
+# roll the renderer before Rails.
 # `wait -n` exits on first child failure → container exits → Control Plane
-# restarts the whole unit. Keeps the existing Thruster HTTP/2 proxy for Rails.
+# restarts the whole unit when a workload intentionally uses this default.
 CMD ["bash", "-c", "node renderer/node-renderer.js & RENDERER_PID=$! ; bundle exec thrust bin/rails server & RAILS_PID=$! ; wait -n ; exit 1"]
