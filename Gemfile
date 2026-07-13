@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.4.6"
 
-gem "cpflow", "5.1.1", require: false
+gem "cpflow", "5.2.0", require: false
 gem "react_on_rails_pro", "17.0.0.rc.9"
 gem "shakapacker", "10.2.0"
 

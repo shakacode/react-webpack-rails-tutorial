@@ -33,6 +33,9 @@ spec:
     - name: RENDERER_WORKERS_COUNT
       # One worker keeps the separate tutorial renderer at minimum baseline cost.
       value: '1'
+    - name: RENDERER_SERVER_BUNDLE_CACHE_PATH
+      # Shared by the boot-seed rake task and the Node renderer process.
+      value: /app/renderer/.node-renderer-bundles
     - name: RENDERER_URL
       # Internal same-GVC endpoint for the separate React on Rails Pro Node Renderer workload.
       value: http://node-renderer.{{APP_NAME}}.cpln.local:3800

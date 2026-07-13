@@ -89,6 +89,7 @@ resource "cpln_gvc" "app" {
     RENDERER_PORT            = "3800"
     RENDERER_LOG_LEVEL       = "info"
     RENDERER_WORKERS_COUNT   = "1"
+    RENDERER_SERVER_BUNDLE_CACHE_PATH = "/app/renderer/.node-renderer-bundles"
     RENDERER_URL             = "http://node-renderer.${var.app_name}.cpln.local:3800"
     RENDERER_HOST            = "0.0.0.0"
     ROLLING_DEPLOY_PREVIOUS_URLS = "https://${var.app_name}.cpln.app/react_on_rails_pro/rolling_deploy"
