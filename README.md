@@ -189,7 +189,7 @@ assets_bundler: rspack
 - `react-on-rails-pro-node-renderer` npm package: `17.0.0-rc.9`
 - `react-on-rails-rsc` npm package: `19.2.1-rc.1`
 - `shakapacker` gem/npm package: `10.2.0`
-- `@rspack/core` and `@rspack/cli`: `2.0.0-beta.7`
+- `@rspack/core` and `@rspack/cli`: `2.0.4`
 - `react`: `~19.2.7` (minimum for React Server Components)
 
 ### Why Rspack
