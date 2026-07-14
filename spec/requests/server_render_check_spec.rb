@@ -11,6 +11,13 @@ describe "Server Rendering" do
       .to include("Comments")
   end
 
+  it "server renders RouterApp NavLinks that require the URL VM global" do
+    get root_path
+    html_nodes = Nokogiri::HTML(response.body)
+
+    expect(html_nodes.at_css("#RouterApp-react-component-0 a[href='/react-router']").text).to eq("Route")
+  end
+
   it "generates no server rendered HTML if server rendering not enabled" do
     get simple_path
     html_nodes = Nokogiri::HTML(response.body)
