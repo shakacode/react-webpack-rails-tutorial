@@ -1,4 +1,5 @@
 const path = require('path');
+const { URL } = require('node:url');
 const { reactOnRailsProNodeRenderer } = require('react-on-rails-pro-node-renderer');
 
 const isProduction = process.env.NODE_ENV === 'production';
