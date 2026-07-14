@@ -13,7 +13,7 @@ describe "Server Rendering" do
 
   it "server renders RouterApp NavLinks that require the URL VM global" do
     get root_path
-    html_nodes = Nokogiri::HTML(response.body)
+    html_nodes = response.parsed_body
 
     expect(html_nodes.at_css("#RouterApp-react-component-0 a[href='/react-router']").text).to eq("Route")
   end
