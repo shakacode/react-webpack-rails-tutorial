@@ -18,7 +18,9 @@ require "yaml"
 
 template = File.read(".controlplane/templates/node-renderer.yml")
 rendered = template.gsub(/\{\{[A-Z_]+\}\}/, "template-placeholder")
-container = YAML.safe_load(rendered).fetch("spec").fetch("containers").fetch(0)
+workload = YAML.safe_load(rendered)
+spec = workload.fetch("spec")
+container = spec.fetch("containers").fetch(0)
 
 expected_args = [
   "bash",
@@ -32,6 +34,10 @@ expected_args = [
   SHELL
 ]
 expected_ports = [{ "number" => 3800, "protocol" => "http2" }]
+expected_env = [
+  { "name" => "LOG_LEVEL", "value" => "info" },
+  { "name" => "NODE_OPTIONS", "value" => "--max-old-space-size=256" },
+]
 expected_readiness_probe = {
   "tcpSocket" => { "port" => 3800 },
   "failureThreshold" => 3,
@@ -43,18 +49,52 @@ expected_liveness_probe = {
   "periodSeconds" => 10,
   "initialDelaySeconds" => 120,
 }
+expected_default_options = {
+  "autoscaling" => { "maxScale" => 1 },
+  "capacityAI" => true,
+}
+expected_firewall_config = {
+  "external" => {
+    "inboundAllowCIDR" => [],
+    "outboundAllowCIDR" => ["0.0.0.0/0"],
+  },
+  "internal" => { "inboundAllowType" => "same-gvc" },
+}
 
 failures = []
+failures << "workload keys changed" unless workload.keys.sort == %w[kind name spec]
+failures << "workload identity changed" unless workload.values_at("kind", "name") == %w[workload node-renderer]
+failures << "spec keys changed" unless spec.keys.sort == %w[containers defaultOptions firewallConfig identityLink type]
+failures << "workload type changed" unless spec.fetch("type") == "standard"
+failures << "container keys changed" unless container.keys.sort ==
+                                                 %w[args cpu env image inheritEnv livenessProbe memory name ports readinessProbe]
 failures << "unsupported startupProbe is present" if container.key?("startupProbe")
 failures << "command changed" if container.key?("command")
+failures << "renderer name changed" unless container.fetch("name") == "node-renderer"
+failures << "renderer CPU changed" unless container.fetch("cpu") == "100m"
+failures << "renderer memory changed" unless container.fetch("memory") == "512Mi"
+failures << "renderer environment changed" unless container.fetch("env") == expected_env
+failures << "environment inheritance changed" unless container.fetch("inheritEnv") == true
 failures << "args changed" unless container.fetch("args") == expected_args
 failures << "image changed" unless container.fetch("image") == "template-placeholder"
 failures << "ports changed" unless container.fetch("ports") == expected_ports
 failures << "readinessProbe changed" unless container.fetch("readinessProbe") == expected_readiness_probe
 failures << "livenessProbe grace or thresholds changed" unless container.fetch("livenessProbe") == expected_liveness_probe
+failures << "default autoscaling or capacityAI changed" unless spec.fetch("defaultOptions") == expected_default_options
+failures << "firewall configuration changed" unless spec.fetch("firewallConfig") == expected_firewall_config
+failures << "identity link changed" unless spec.fetch("identityLink") == "template-placeholder"
+
+cpu_match = /\A(?<millicores>\d+)m\z/.match(container.fetch("cpu").to_s)
+memory_match = /\A(?<mebibytes>\d+)Mi\z/.match(container.fetch("memory").to_s)
+if cpu_match && memory_match && cpu_match[:millicores].to_i.positive?
+  resource_ratio = memory_match[:mebibytes].to_f / cpu_match[:millicores].to_i
+  failures << format("provider resource ratio must be strictly below 8 (got %.2f)", resource_ratio) unless resource_ratio < 8
+else
+  failures << "renderer resources must use positive millicore CPU and MiB memory units"
+end
 
 abort failures.join("\n") unless failures.empty?
-puts "node renderer template preserves supported probe grace and stable runtime settings"
+puts "node renderer template preserves provider resource ratio, supported probe grace, and stable runtime settings"
 RUBY
 
 echo "==> parse generated GitHub Actions YAML"
