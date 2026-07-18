@@ -10,7 +10,7 @@ spec:
     - name: node-renderer
       # Minimum starting point for the tutorial renderer. Keep one worker and
       # let capacityAI raise resources if real SSR load needs more.
-      cpu: 50m
+      cpu: 100m
       memory: 512Mi
       env:
         - name: LOG_LEVEL
