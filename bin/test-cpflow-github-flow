@@ -12,6 +12,51 @@ fi
 echo "==> cpflow github-flow-readiness"
 "${cpflow_cmd[@]}" github-flow-readiness
 
+echo "==> check node renderer probe template"
+ruby <<'RUBY'
+require "yaml"
+
+template = File.read(".controlplane/templates/node-renderer.yml")
+rendered = template.gsub(/\{\{[A-Z_]+\}\}/, "template-placeholder")
+container = YAML.safe_load(rendered).fetch("spec").fetch("containers").fetch(0)
+
+expected_args = [
+  "bash",
+  "-lc",
+  <<~'SHELL',
+    # The rake task warns and continues on bundle fetch misses so rollout
+    # does not wedge; unexpected task failures still stop the shell.
+    set -e
+    bundle exec rake react_on_rails_pro:pre_seed_renderer_cache
+    exec yarn node-renderer
+  SHELL
+]
+expected_ports = [{ "number" => 3800, "protocol" => "http2" }]
+expected_readiness_probe = {
+  "tcpSocket" => { "port" => 3800 },
+  "failureThreshold" => 3,
+  "periodSeconds" => 5,
+}
+expected_liveness_probe = {
+  "tcpSocket" => { "port" => 3800 },
+  "failureThreshold" => 3,
+  "periodSeconds" => 10,
+  "initialDelaySeconds" => 120,
+}
+
+failures = []
+failures << "unsupported startupProbe is present" if container.key?("startupProbe")
+failures << "command changed" if container.key?("command")
+failures << "args changed" unless container.fetch("args") == expected_args
+failures << "image changed" unless container.fetch("image") == "template-placeholder"
+failures << "ports changed" unless container.fetch("ports") == expected_ports
+failures << "readinessProbe changed" unless container.fetch("readinessProbe") == expected_readiness_probe
+failures << "livenessProbe grace or thresholds changed" unless container.fetch("livenessProbe") == expected_liveness_probe
+
+abort failures.join("\n") unless failures.empty?
+puts "node renderer template preserves supported probe grace and stable runtime settings"
+RUBY
+
 echo "==> parse generated GitHub Actions YAML"
 ruby <<'RUBY'
 require "yaml"

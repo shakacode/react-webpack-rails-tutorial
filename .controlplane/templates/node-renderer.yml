@@ -33,13 +33,6 @@ spec:
           # The React on Rails Pro Node Renderer speaks cleartext HTTP/2 (h2c).
           # Rails/Thruster stays `http`; this renderer port intentionally differs.
           protocol: http2
-      startupProbe:
-        tcpSocket:
-          port: 3800
-        # Give the boot seed enough room for Rails boot plus previous-bundle
-        # fetches; readiness still waits for the renderer port before Rails rolls.
-        failureThreshold: 60
-        periodSeconds: 2
       readinessProbe:
         tcpSocket:
           port: 3800
@@ -48,6 +41,7 @@ spec:
       livenessProbe:
         tcpSocket:
           port: 3800
+        initialDelaySeconds: 120
         failureThreshold: 3
         periodSeconds: 10
   defaultOptions:
