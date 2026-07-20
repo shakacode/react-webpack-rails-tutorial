@@ -7,7 +7,7 @@ ruby "3.4.6"
 
 gem "cpflow", "5.2.0", require: false
 gem "react_on_rails_pro", "17.0.0"
-gem "shakapacker", "10.2.0"
+gem "shakapacker", "10.3.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 8.1.2"
@@ -32,7 +32,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem "redis", "~> 5.0"
+gem "redis", "~> 5.4"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -71,10 +71,10 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", "1.69", require: false
-  gem "rubocop-performance", "1.23.1", require: false
-  gem "rubocop-rails", "2.29.1", require: false
-  gem "rubocop-rspec", "3.4.0", require: false
+  gem "rubocop", "1.88.2", require: false
+  gem "rubocop-performance", "1.26.1", require: false
+  gem "rubocop-rails", "2.36.0", require: false
+  gem "rubocop-rspec", "3.10.2", require: false
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "scss_lint", require: false
 
@@ -97,12 +97,12 @@ end
 group :test do
   gem "capybara"
   gem "capybara-screenshot"
-  gem "coveralls_reborn", "~> 0.25.0", require: false
+  gem "coveralls_reborn", "~> 1.0.0", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
   gem "rails_best_practices"
-  gem "rspec-rails", "~> 6.0.0"
+  gem "rspec-rails", "~> 8.0.4"
   gem "selenium-webdriver", "~> 4"
 end
 
