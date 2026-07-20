@@ -51,7 +51,7 @@ jobs:
         run: "export DISPLAY=:99"
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Use Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
