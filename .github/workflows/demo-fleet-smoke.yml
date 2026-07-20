@@ -1,0 +1,35 @@
+name: Demo fleet smoke
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    uses: shakacode/react_on_rails/.github/workflows/demo-fleet-smoke.yml@613c6c2a251a782328b26d68e7f23daa9b677497
+    with:
+      ruby-version: "3.4.6"
+      node-version: "22"
+      install-command: >-
+        bundle config set path vendor/bundle && bundle install --jobs 4 --retry 3 && yarn install --frozen-lockfile &&
+        docker run --name tutorial-fleet-postgres -e POSTGRES_DB=rails_test -e POSTGRES_USER=rails -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:11-alpine@sha256:ea50b9fd617b66c9135816a4536cf6e0697d4eea7014a7194479c95f6edd5ef9 &&
+        for attempt in {1..30}; do docker inspect --format '{{.State.Running}}' tutorial-fleet-postgres | grep -qx true || exit 1; docker exec tutorial-fleet-postgres pg_isready -U rails -d rails_test && break; sleep 1; done;
+        docker exec tutorial-fleet-postgres pg_isready -U rails -d rails_test
+      test-command: >-
+        RAILS_ENV=test NODE_ENV=test bundle exec rake react_on_rails:locale &&
+        RAILS_ENV=test NODE_ENV=test bundle exec rails react_on_rails:generate_packs &&
+        RAILS_ENV=test NODE_ENV=test bundle exec rake ci:js
+      build-command: yarn build:dev
+      smoke-command: >-
+        RENDERER_SERVER_BUNDLE_CACHE_PATH=renderer/.node-renderer-bundles MODE=symlink RAILS_ENV=development bundle exec rake react_on_rails_pro:pre_seed_renderer_cache || exit 1;
+        RENDERER_SERVER_BUNDLE_CACHE_PATH=renderer/.node-renderer-bundles node renderer/node-renderer.js & renderer_pid=$!;
+        trap 'test -n "${rails_pid:-}" && kill "$rails_pid" 2>/dev/null || true; kill "$renderer_pid" 2>/dev/null || true; docker rm -f tutorial-fleet-postgres >/dev/null 2>&1 || true' EXIT;
+        for attempt in {1..30}; do nc -z localhost 3800 && break; sleep 1; done; nc -z localhost 3800 || exit 1;
+        DATABASE_URL=postgres://rails:password@127.0.0.1:5432/rails_test RAILS_ENV=development bundle exec rails db:prepare || exit 1;
+        DATABASE_URL=postgres://rails:password@127.0.0.1:5432/rails_test RAILS_ENV=development NODE_ENV=development bundle exec rails server -b 127.0.0.1 -p 3000 & rails_pid=$!;
+        for attempt in {1..30}; do kill -0 "$rails_pid" 2>/dev/null || exit 1; curl --fail --silent --show-error http://127.0.0.1:3000/ && exit 0; sleep 1; done; exit 1

@@ -1,0 +1,54 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      react-on-rails-family:
+        patterns:
+          - react_on_rails
+          - react_on_rails_pro
+      all-dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      react-on-rails-family:
+        patterns:
+          - react-on-rails-pro
+          - react-on-rails-pro-node-renderer
+          - react-on-rails-rsc
+          - rescript-react-on-rails
+      all-dependencies:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "@babel/cli"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/core"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/plugin-transform-runtime"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/preset-env"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/runtime"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/eslint-parser"
+        versions:
+          - ">= 8.0.0"
+      - dependency-name: "@babel/preset-react"
+        versions:
+          - ">= 8.0.0"
