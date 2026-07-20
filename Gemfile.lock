@@ -134,7 +134,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.3.7)
     connection_pool (3.0.2)
-    console (1.36.0)
+    console (1.37.0)
       fiber-annotation
       fiber-local (~> 1.1)
       json
@@ -191,8 +191,9 @@ GEM
     interception (0.5)
     io-console (0.8.2)
     io-endpoint (0.17.2)
-    io-event (1.19.1)
-    io-stream (0.13.1)
+    io-event (1.19.2)
+    io-stream (0.13.2)
+      openssl (>= 3.3)
     irb (1.18.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
@@ -245,6 +246,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
+    openssl (4.0.2)
     package_json (0.2.0)
     parallel (1.27.0)
     parser (3.3.9.0)
@@ -258,10 +260,10 @@ GEM
     protocol (2.0.0)
       ruby_parser (~> 3.0)
     protocol-hpack (1.5.1)
-    protocol-http (0.62.2)
+    protocol-http (0.63.0)
     protocol-http1 (0.39.0)
       protocol-http (~> 0.62)
-    protocol-http2 (0.26.0)
+    protocol-http2 (0.26.1)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.62)
     protocol-url (0.4.0)
@@ -346,21 +348,21 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    react_on_rails (17.0.0.rc.12)
+    react_on_rails (17.0.0)
       addressable
       connection_pool
       execjs (~> 2.5)
       rails (>= 5.2)
       rainbow (~> 3.0)
       shakapacker (>= 6.0)
-    react_on_rails_pro (17.0.0.rc.12)
+    react_on_rails_pro (17.0.0)
       async (>= 2.29)
       async-http (~> 0.95)
       execjs (~> 2.9)
       io-endpoint (~> 0.17.0)
       jwt (>= 2.5, < 4)
       nokogiri (>= 1.12, < 2)
-      react_on_rails (= 17.0.0.rc.12)
+      react_on_rails (= 17.0.0)
     redcarpet (3.6.0)
     redis (5.3.0)
       redis-client (>= 0.22.0)
@@ -548,7 +550,7 @@ DEPENDENCIES
   rails-html-sanitizer
   rails_best_practices
   rainbow
-  react_on_rails_pro (= 17.0.0.rc.12)
+  react_on_rails_pro (= 17.0.0)
   redcarpet
   redis (~> 5.0)
   rspec-rails (~> 6.0.0)
