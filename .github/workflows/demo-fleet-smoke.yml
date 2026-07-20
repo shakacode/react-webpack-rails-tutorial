@@ -11,7 +11,7 @@ on:
 
 jobs:
   smoke:
-    uses: shakacode/react_on_rails/.github/workflows/demo-fleet-smoke.yml@613c6c2a251a782328b26d68e7f23daa9b677497
+    uses: shakacode/react_on_rails/.github/workflows/demo-fleet-smoke.yml@c4f798063f9b1047c3a19022174a6cd8866955d4
     with:
       ruby-version: "3.4.6"
       node-version: "22"
