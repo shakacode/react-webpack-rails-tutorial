@@ -83,5 +83,10 @@ apps:
     <<: *common
     # match_if_app_name_starts_with is used to identify these "qa" apps.
     match_if_app_name_starts_with: true
+    # These review-app one-off defaults request app-sized resources and set a
+    # 15-minute server-side active deadline.
+    runner_job_default_cpu: "300m"
+    runner_job_default_memory: "1Gi"
+    runner_job_timeout: 900
     image_retention_days: 5
     stale_app_image_deployed_days: 5 # If the app is older than 5 days, the nightly automations will clean stale apps.
