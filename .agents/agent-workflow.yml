@@ -1,5 +1,7 @@
 ---
 base_branch: master
+merge_submission:
+  mode: direct
 follow_up_prefix: 'Follow-up:'
 review_gate: n/a
 approval_exempt: n/a
