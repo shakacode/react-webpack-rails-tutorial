@@ -1,0 +1,12 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+archive = ""
+run_mode = "nonconcurrent"
+setup = "./conductor-setup.sh"
+
+[scripts.run.run]
+available_in = "local"
+command = "bin/conductor-exec bin/dev"
+default = true
+icon = "play"
