@@ -2,6 +2,8 @@
 base_branch: master
 merge_submission:
   mode: direct
+trusted_actions:
+  - shakacode/control-plane-flow
 follow_up_prefix: 'Follow-up:'
 review_gate: n/a
 approval_exempt: n/a
