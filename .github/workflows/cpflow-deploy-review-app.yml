@@ -13,15 +13,24 @@ on:
         description: Pull request number to deploy
         required: true
         type: number
+      reconcile_intent_run_id:
+        description: Authenticated internal handoff; manual values are rejected
+        required: false
+        type: string
 
 permissions:
+  actions: write
   contents: read
   deployments: write
   issues: write
   pull-requests: write
 
 jobs:
+  # The reusable job exposes `image_built`; downstream jobs can read
+  # `needs.deploy.outputs.image_built`. A value of `false` means this check did not validate the Docker image.
   deploy:
+    # author_association is a cheap caller-side cost filter. The reusable workflow
+    # still checks the commenter's current repository permission before privileged work.
     if: |
       (github.event_name == 'pull_request' &&
        github.event.pull_request.head.repo.full_name == github.repository) ||
@@ -30,7 +39,7 @@ jobs:
        github.event.issue.pull_request &&
        contains(fromJson('["+review-app-deploy","+review-app-deploy\n","+review-app-deploy\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@v5.2.0
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@v5.3.0
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
       DOCKER_BUILD_SSH_KEY: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
