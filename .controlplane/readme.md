@@ -23,7 +23,7 @@ You can see the definition of Postgres and Redis in the `.controlplane/templates
 
 This repo uses the generated `cpflow-*` GitHub Actions wrappers. Keep the
 generic behavior documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md);
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.3.0/docs/ci-automation.md);
 this section only lists the values that are specific to this app.
 
 ### Review Apps and Staging
@@ -629,13 +629,13 @@ React on Rails docs reference:
 ### Updating Generated cpflow Workflows
 
 Keep the reusable-workflow mechanics in the upstream
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.3.0/docs/ci-automation.md).
 For this repo, the update loop is:
 
 1. Update the bundled `cpflow` gem to the desired release.
 2. Refresh generated wrappers from that release with `--staging-branch master`.
 3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
-   This branch pins refs to `v5.2.0`, which includes upstream promotion
+   This branch pins refs to `v5.3.0`, which includes upstream promotion
    hardening and the release-runner timeout fix. Use a full commit SHA only for
    short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
 4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.

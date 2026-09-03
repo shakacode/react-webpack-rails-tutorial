@@ -126,9 +126,9 @@ cpflow apply-template app postgres redis daily-task node-renderer rails \
 ```
 
 Advanced optional settings are documented upstream in the
-[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
+[`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.3.0/docs/ci-automation.md).
 
-Current workflow wrappers pin `control-plane-flow` release tag `v5.2.0`, which
+Current workflow wrappers pin `control-plane-flow` release tag `v5.3.0`, which
 includes promotion hardening and the release-runner timeout fix. Keep release
 tags as the steady-state configuration; use a full commit SHA only for
 short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
