@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "yaml"
+
+# These callers advance as a pair independently of the other generated workflows.
+# Compare their behavior with the installed release's authoritative templates.
+# This reads files only: it neither loads cpflow application code nor contacts APIs.
+module CpflowReviewAppContract
+  VERSION = "5.3.0"
+  SHA = "b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6"
+  CALLERS = { "deploy" => "deploy", "delete" => "delete-review-app" }.freeze
+
+  def self.check(root)
+    template_root = File.join(Gem::Specification.find_by_name("cpflow", VERSION).full_gem_path,
+                              "lib/github_flow_templates")
+    errors = dependency_errors(root)
+    CALLERS.each do |operation, job_name|
+      path = ".github/workflows/cpflow-#{operation}-review-app.yml"
+      source = File.read(File.join(root, path))
+      template = File.read(File.join(template_root, path)).sub("__CPFLOW_GITHUB_ACTIONS_REF__", SHA)
+      errors.concat(caller_errors(path, source, template, job_name))
+    end
+    errors
+  rescue Psych::Exception, KeyError, TypeError, NoMethodError, Errno::ENOENT, Gem::LoadError => error
+    # Never echo configuration values or parser excerpts in validation output.
+    ["Missing or malformed review-app contract input (#{error.class})"]
+  end
+
+  def self.dependency_errors(root)
+    errors = []
+    gemfile = File.read(File.join(root, "Gemfile"))
+    lockfile = File.read(File.join(root, "Gemfile.lock"))
+    gem_pin = /^gem ["']cpflow["'], ["']#{Regexp.escape(VERSION)}["'], require: false$/
+    errors << "Gemfile must pin local cpflow to #{VERSION}" unless gemfile.match?(gem_pin)
+    unless lockfile.scan(/^    cpflow \(([^)]+)\)$/).flatten == [VERSION] &&
+           lockfile.scan(/^  cpflow \(= ([^)]+)\)$/).flatten == [VERSION]
+      errors << "Gemfile.lock must resolve and require cpflow #{VERSION}"
+    end
+    errors
+  end
+
+  def self.caller_errors(path, source, template, job_name)
+    actual = YAML.safe_load(source)
+    expected = YAML.safe_load(template)
+    errors = []
+    errors << "#{path}: top-level contract keys changed" unless actual.keys.sort_by(&:to_s) ==
+                                                               expected.keys.sort_by(&:to_s)
+    %w[name run-name permissions].each do |key|
+      errors << "#{path}: #{key} differs from release" unless actual[key] == expected[key]
+    end
+
+    triggers = actual["on"] || actual[true]
+    expected_triggers = expected["on"] || expected[true]
+    unless triggers.dig("workflow_dispatch", "inputs") == expected_triggers.dig("workflow_dispatch", "inputs")
+      errors << "#{path}: dispatch inputs differ from release"
+    end
+    unless triggers.reject { |key, _| key == "workflow_dispatch" } ==
+           expected_triggers.reject { |key, _| key == "workflow_dispatch" }
+      errors << "#{path}: event admission differs from release"
+    end
+
+    jobs = actual.fetch("jobs")
+    expected_job = expected.fetch("jobs").fetch(job_name)
+    job = jobs[job_name] || {}
+    unless jobs.keys == [job_name] && job.keys.sort == expected_job.keys.sort
+      errors << "#{path}: job contract differs from release"
+    end
+    errors << "#{path}: job guard differs from release" unless job["if"] == expected_job["if"]
+    errors << "#{path}: expected released workflow ref" unless job["uses"] == expected_job["uses"]
+    errors << "#{path}: credential mapping differs from release" unless job["secrets"] == expected_job["secrets"]
+    pin_line = /^    uses: #{Regexp.escape(expected_job.fetch("uses"))} # v#{Regexp.escape(VERSION)}$/
+    errors << "#{path}: expected SHA pin with release comment" unless source.match?(pin_line)
+    errors
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  abort "Usage: ruby bin/check-cpflow-review-app-contract [repository-root]" if ARGV.length > 1
+  errors = CpflowReviewAppContract.check(ARGV.fetch(0, File.expand_path("..", __dir__)))
+  abort errors.join("\n") unless errors.empty?
+  puts "review-app release contract: v#{CpflowReviewAppContract::VERSION}"
+end

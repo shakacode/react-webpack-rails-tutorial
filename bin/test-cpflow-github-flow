@@ -4,13 +4,26 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+offline=false
+if [[ "${1:-}" == "--offline" ]]; then
+  offline=true
+  shift
+fi
+
 cpflow_cmd=(cpflow)
 if [[ $# -gt 0 ]]; then
   cpflow_cmd=("$@")
 fi
 
-echo "==> cpflow github-flow-readiness"
-"${cpflow_cmd[@]}" github-flow-readiness
+if [[ "$offline" == true ]]; then
+  echo "==> SKIP registry readiness (--offline)"
+else
+  echo "==> cpflow github-flow-readiness"
+  "${cpflow_cmd[@]}" github-flow-readiness
+fi
+
+echo "==> check released review-app caller contract"
+ruby bin/check-cpflow-review-app-contract
 
 echo "==> check node renderer probe template"
 ruby <<'RUBY'
@@ -132,13 +145,12 @@ PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-p
 EXPECTED_PROMOTE_WORKFLOW_REF_FORMAT = "shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@vX.Y.Z"
 EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"
 EXPECTED_CPFLOW_CHECKOUT_REPOSITORY = "shakacode/control-plane-flow"
-REVIEW_APP_CANARY_PATH = ".github/workflows/cpflow-deploy-review-app.yml"
-REVIEW_APP_CANARY_JOB = "deploy"
-REVIEW_APP_CANARY_WORKFLOW = "shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml"
-FULL_COMMIT_SHA = /\A[0-9a-f]{40}\z/i
+REVIEW_APP_RELEASE_JOBS = {
+  ".github/workflows/cpflow-deploy-review-app.yml" => "deploy",
+  ".github/workflows/cpflow-delete-review-app.yml" => "delete-review-app",
+}.freeze
 
 stable_refs = Hash.new { |hash, key| hash[key] = [] }
-review_app_canary_entries = []
 
 Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
   doc = YAML.load_file(path, aliases: true)
@@ -163,16 +175,9 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
 
     uses_ref = uses_match[1]
     entry = "#{path}:#{job_name}"
-    if path == REVIEW_APP_CANARY_PATH && job_name == REVIEW_APP_CANARY_JOB
-      canary_workflow = job["uses"].to_s.delete_suffix("@#{uses_ref}")
-      unless canary_workflow == REVIEW_APP_CANARY_WORKFLOW
-        abort "#{entry} must call #{REVIEW_APP_CANARY_WORKFLOW}, got #{canary_workflow.inspect}"
-      end
-
-      review_app_canary_entries << { ref: uses_ref, entry: entry }
-    else
-      stable_refs[uses_ref] << entry
-    end
+    # The released pair is checked independently above; other wrappers retain
+    # their existing stable cohort until a separately scoped migration.
+    stable_refs[uses_ref] << entry unless REVIEW_APP_RELEASE_JOBS[path] == job_name
 
     if job["uses"].to_s.match?(PROMOTE_WORKFLOW)
       abort "#{path}:#{job_name} must not call the cross-repo production reusable workflow; use a normal caller-repo job with environment: production"
@@ -237,33 +242,16 @@ end
 
 stable_refs[setup_match[1]] << "#{promote_path}:promote-to-production setup"
 
-unless review_app_canary_entries.length == 1
-  abort "expected exactly one review-app canary entry at #{REVIEW_APP_CANARY_PATH}:#{REVIEW_APP_CANARY_JOB}, " \
-        "found #{review_app_canary_entries.length}"
-end
-
 if stable_refs.empty?
-  abort "no stable upstream cpflow refs found outside the review-app canary"
+  abort "no stable upstream cpflow refs found outside the released review-app pair"
 elsif stable_refs.length > 1
   stable_refs.each do |ref, paths|
     puts "#{ref}: #{paths.uniq.sort.join(', ')}"
   end
-  abort "non-canary cpflow workflow wrappers use multiple upstream refs: #{stable_refs.keys.sort.join(', ')}"
+  abort "non-review-app cpflow workflow wrappers use multiple upstream refs: #{stable_refs.keys.sort.join(', ')}"
 end
 
-stable_ref = stable_refs.keys.fetch(0)
-review_app_canary = review_app_canary_entries.fetch(0)
-review_app_ref = review_app_canary.fetch(:ref)
-
-if review_app_ref == stable_ref
-  puts "cpflow refs: #{stable_ref}"
-elsif review_app_ref.match?(FULL_COMMIT_SHA)
-  puts "cpflow stable ref: #{stable_ref}"
-  puts "review-app canary ref: #{review_app_ref} (#{review_app_canary.fetch(:entry)})"
-else
-  abort "review-app canary may diverge from #{stable_ref} only with a full 40-character commit SHA, " \
-        "got #{review_app_ref.inspect}"
-end
+puts "cpflow stable refs outside released review-app pair: #{stable_refs.keys.fetch(0)}"
 RUBY
 
 echo "==> actionlint"
