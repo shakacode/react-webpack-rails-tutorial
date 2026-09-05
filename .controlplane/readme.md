@@ -630,33 +630,47 @@ React on Rails docs reference:
 
 Keep the reusable-workflow mechanics in the upstream
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
-For this repo, the update loop is:
+This repo deliberately keeps two release cohorts:
 
-1. Update the bundled `cpflow` gem to the desired release.
-2. Refresh generated wrappers from that release with `--staging-branch master`.
-3. Keep generated refs on the same release tag as the bundled `cpflow` gem.
-   This branch pins refs to `v5.2.0`, which includes upstream promotion
-   hardening and the release-runner timeout fix. Use a full commit SHA only for
-   short-lived upstream testing and leave `CPFLOW_VERSION` unset in that case.
-4. Keep app names and GitHub settings aligned with `.controlplane/controlplane.yml`.
-5. Validate locally:
+- The review-app deploy/delete callers pin cpflow `v5.3.0` at
+  `b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6`. The bundled `cpflow` gem and
+  lockfile use `5.3.0`.
+- Staging, cleanup, help, and promotion retain `v5.2.0` at
+  `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Their migration is separate
+  scope, not an automatic consequence of updating the local gem.
+
+Full commit SHAs are the normal release contract, not just a testing option.
+Leave `CPFLOW_VERSION` unset: SHA-pinned workflows build the CLI from their
+pinned source, and the runtime version override requires a release-tag ref.
+Promotion must keep its action refs, `.cpflow` checkout, and setup provenance
+on the same `v5.2.0` SHA. Its setup-only `GIT_DIR` binding supplies that
+checkout's metadata when packaging the downloaded action source.
+
+Do not run blanket `cpflow update-github-actions` regeneration or
+`bin/pin-cpflow-github-ref` for this split. They can overwrite the separate
+cohorts and caller customizations. For a future review-app upgrade, update both
+callers, the local gem and lockfile, validator release constants, and fixture
+tests together in a reviewed PR. Preserve the renderer assertions and review
+changes to other cohorts separately. Keep the staging branch `master` and
+the settings in `.controlplane/controlplane.yml` intact.
+
+After installing the pinned dependencies, run these local checks:
 
 ```bash
-bin/conductor-exec bundle update cpflow
-bin/conductor-exec bundle exec cpflow update-github-actions --staging-branch master
-bin/conductor-exec bin/test-cpflow-github-flow bundle exec cpflow
+bin/conductor-exec bundle check
+bin/conductor-exec ruby bin/check-cpflow-review-app-contract
+bin/conductor-exec bundle exec rspec spec/cpflow_review_app_contract_spec.rb
+bin/conductor-exec bin/test-cpflow-github-flow --offline
 ```
 
-Then open a normal PR, wait for GitHub Actions, and test a real review-app
-deploy. Comment-triggered workflows run from `master`; for PR-branch workflow
-edits, dispatch the workflow explicitly:
+These checks do not deploy or prove deployment readiness. The full helper needs
+`actionlint`; ordinary contract specs need only Ruby and the bundle. See the
+[testing checklist and split-migration exception](docs/testing-cpflow-github-actions.md#released-review-app-pair).
 
-```bash
-gh workflow run cpflow-deploy-review-app.yml --ref <branch> -f pr_number=<pr-number>
-```
-
-This loads the workflow file from `<branch>`, but trusted local composite
-actions still come from the default branch before secrets are used. Treat it as
-a partial smoke test, then verify a real deploy after the workflow changes land
-on `master`. See the short
-[testing checklist](docs/testing-cpflow-github-actions.md) for the canary steps.
+Deployment needs separate, explicit authorization. Do not treat publication or
+a green local check as permission to dispatch a workflow or retry a deployment.
+A push can itself deploy an existing app or honor an accepted deployment
+intent. Follow the checklist's publication guard before pushing under a
+no-deployment constraint. Comment-triggered runs and cross-operation handoffs
+use default-branch wrappers, so a branch-only smoke test does not prove the
+complete deploy/delete flow.

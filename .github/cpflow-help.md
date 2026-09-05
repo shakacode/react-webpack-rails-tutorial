@@ -129,42 +129,40 @@ production org, using production-only secrets and values.
 
 ## Version Locking
 
-Generated wrappers pin Control Plane Flow with a release tag, for example
-`v5.2.0`. Reusable review-app, staging, cleanup, and
-helper workflows pin the tag in their `uses:` ref. Production promotion pins
-the same tag in the `Checkout control-plane-flow actions` step so the
-caller-owned job can keep `environment: production` and receive production
-environment secrets directly.
+This repo uses immutable release SHAs and deliberately separates two cohorts:
 
-Leave `CPFLOW_VERSION` unset so the workflow builds cpflow from the same
-checked-out upstream source. If you set `CPFLOW_VERSION`, it must match the
-release tag your wrappers are pinned to: a `CPFLOW_VERSION=5.2.x` runtime
-override goes with a wrapper pinned to `uses: ...@v5.2.x` (substitute the
-release you pinned above).
+- Review-app deploy/delete callers: `v5.3.0` at
+  `b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6`, with the local `cpflow` gem
+  and lockfile on `5.3.0`. Upgrade the two callers together.
+- Staging, cleanup, help, and promotion: `v5.2.0` at
+  `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Keep this cohort unchanged
+  unless its migration is separately reviewed.
 
-After updating the `cpflow` gem in this repo, update the generated wrappers in
-the same PR:
+Leave `CPFLOW_VERSION` unset. Each SHA-pinned workflow builds cpflow from its
+own pinned upstream source; a runtime version override requires a release-tag
+ref and is incompatible with these SHAs. Promotion keeps its action refs,
+`.cpflow` source checkout, and setup provenance on the same `v5.2.0` SHA.
+The setup-only `GIT_DIR` binding provides matching checkout metadata for
+packaging the action archive. Preserve the caller-owned
+`environment: production` job.
 
-```sh
-cpflow update-github-actions
-bin/test-cpflow-github-flow
-```
+Do not run blanket `cpflow update-github-actions` regeneration or
+`bin/pin-cpflow-github-ref` over this split. A review-app upgrade must update
+both callers, the local dependency and lockfile, validator release constants,
+and fixture tests together. See the
+[split-migration exception and local checks](../.controlplane/docs/testing-cpflow-github-actions.md#released-review-app-pair).
 
-If `cpflow` is bundled by the app, use:
-
-```sh
-bundle exec cpflow update-github-actions
-bin/test-cpflow-github-flow bundle exec cpflow
-```
-
-Do not leave downstream apps pinned to a moving branch such as `main`. For a
-short-lived test of an unreleased upstream PR, pin to a full 40-character commit
-SHA and leave `CPFLOW_VERSION` unset:
+After installing the pinned dependencies, validate locally without deploying:
 
 ```sh
-bin/pin-cpflow-github-ref <40-character-control-plane-flow-commit-sha>
-bin/test-cpflow-github-flow ruby /path/to/control-plane-flow/bin/cpflow
+bin/conductor-exec ruby bin/check-cpflow-review-app-contract
+bin/conductor-exec bundle exec rspec spec/cpflow_review_app_contract_spec.rb
+bin/conductor-exec bin/test-cpflow-github-flow --offline
 ```
+
+Deployment, manual dispatch, and deployment retries need explicit authorization.
+A push can also deploy; follow the testing checklist's publication guard under
+any no-deployment constraint. Local validation does not authorize a canary.
 
 ## Advanced Variables
 
