@@ -17,8 +17,9 @@ runs:
   steps:
     - name: Delete application
       shell: bash
-      run: ${{ github.action_path }}/delete-app.sh
+      run: '"$ACTION_PATH/delete-app.sh"'
       env:
+        ACTION_PATH: ${{ github.action_path }}
         APP_NAME: ${{ inputs.app_name }}
         CPLN_ORG: ${{ inputs.cpln_org }}
         REVIEW_APP_PREFIX: ${{ inputs.review_app_prefix }}
