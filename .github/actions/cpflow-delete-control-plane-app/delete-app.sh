@@ -28,14 +28,15 @@ case "$exists_status" in
     if [[ -n "$exists_output" ]]; then
       printf '%s\n' "$exists_output"
     fi
-
     echo "⚠️ Application does not exist: $APP_NAME"
     exit 0
     ;;
   *)
     echo "❌ ERROR: failed to determine whether application exists: $APP_NAME" >&2
-    printf '%s\n' "$exists_output" >&2
-    exit 1
+    if [[ -n "$exists_output" ]]; then
+      printf '%s\n' "$exists_output" >&2
+    fi
+    exit "$exists_status"
     ;;
 esac
 

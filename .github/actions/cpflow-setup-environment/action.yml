@@ -1,5 +1,5 @@
 name: Setup Control Plane Environment
-description: Sets up Ruby, installs the Control Plane CLI and cpflow gem, and configures a default profile
+description: Sets up Ruby, installs the Control Plane CLI and cpflow, and configures a default profile
 
 inputs:
   token:
@@ -9,46 +9,251 @@ inputs:
     description: Control Plane organization
     required: true
   ruby_version:
-    description: Ruby version used for cpflow
+    description: >-
+      Ruby version used for cpflow. When empty (the default), ruby/setup-ruby
+      auto-detects from .ruby-version, .tool-versions, mise.toml, or a Gemfile
+      ruby directive, then falls back to the action's pinned default.
     required: false
-    default: "3.4.6"
+    default: ""
+  working_directory:
+    description: Directory where ruby/setup-ruby should detect Ruby version files.
+    required: false
+    default: "."
+  cpflow_source_directory:
+    description: Directory containing the checked-out control-plane-flow source.
+    required: false
+    default: ".cpflow"
+  # GitHub parses double-brace expression snippets inside action metadata (including
+  # `description:`) while loading the composite action, and the `vars` context is not
+  # available in that phase. Keep these descriptions in plain prose - reference repo
+  # variables by NAME only, never with literal GitHub Actions expression syntax.
   cpln_cli_version:
-    description: "@controlplane/cli version"
+    description: >-
+      @controlplane/cli version. Empty string falls back to the action's pinned default,
+      so callers can wire this input to the CPLN_CLI_VERSION repository variable
+      unconditionally.
     required: false
-    default: "3.3.1"
+    default: ""
   cpflow_version:
-    description: cpflow gem version
+    description: >-
+      cpflow gem version to install from RubyGems. Empty string installs cpflow from
+      the checked-out control-plane-flow repository, so callers can test a GitHub ref
+      without publishing a release.
     required: false
-    default: "5.1.1"
+    default: ""
+  control_plane_flow_ref:
+    description: >-
+      Full GitHub workflow ref for the control-plane-flow reusable workflow, for
+      example shakacode/control-plane-flow/.github/workflows/deploy.yml@refs/tags/v5.0.1.
+      When cpflow_version is set, this must point at the matching release tag.
+    required: false
+    default: ""
 
 runs:
   using: composite
+  # Dependabot proposes action updates, but each reviewed dependency remains
+  # pinned to the release commit recorded beside its exact version comment.
   steps:
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ inputs.ruby_version }}
-
-    - name: Install Control Plane CLI and cpflow gem
+    - name: Resolve Ruby setup version
+      id: ruby-version
       shell: bash
+      env:
+        INPUT_RUBY_VERSION: ${{ inputs.ruby_version }}
+        INPUT_WORKING_DIRECTORY: ${{ inputs.working_directory }}
       run: |
         set -euo pipefail
 
-        sudo npm install -g @controlplane/cli@${{ inputs.cpln_cli_version }}
+        ruby_version="${INPUT_RUBY_VERSION}"
+        working_directory="${INPUT_WORKING_DIRECTORY:-.}"
+        # Bump when the project's minimum-supported Ruby advances.
+        default_ruby_version="3.2"
+
+        if [[ -z "${ruby_version}" ]]; then
+          if [[ -f "${working_directory}/.ruby-version" ]] ||
+             { [[ -f "${working_directory}/.tool-versions" ]] && grep -Eq "^[[:space:]]*ruby[[:space:]]+" "${working_directory}/.tool-versions"; } ||
+             { [[ -f "${working_directory}/mise.toml" ]] && grep -Eq "^[[:space:]]*ruby[[:space:]]*=" "${working_directory}/mise.toml"; } ||
+             { [[ -f "${working_directory}/.mise.toml" ]] && grep -Eq "^[[:space:]]*ruby[[:space:]]*=" "${working_directory}/.mise.toml"; }; then
+            : # keep empty; ruby/setup-ruby will auto-detect
+          elif [[ -f "${working_directory}/Gemfile" ]] && grep -Eq "^[[:space:]]*ruby[[:space:]]*(\(|file:|['\"])" "${working_directory}/Gemfile"; then
+            : # keep empty; ruby/setup-ruby will read Gemfile
+          else
+            ruby_version="${default_ruby_version}"
+          fi
+        fi
+
+        echo "ruby_version=${ruby_version}" >> "$GITHUB_OUTPUT"
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
+      with:
+        ruby-version: ${{ steps.ruby-version.outputs.ruby_version }}
+        working-directory: ${{ inputs.working_directory }}
+
+    - name: Install Control Plane CLI and cpflow gem
+      shell: bash
+      env:
+        CONTROL_PLANE_FLOW_REF: ${{ inputs.control_plane_flow_ref }}
+        CPLN_CLI_VERSION: ${{ inputs.cpln_cli_version }}
+        CPFLOW_VERSION: ${{ inputs.cpflow_version }}
+        CPFLOW_SOURCE_DIR: ${{ inputs.cpflow_source_directory }}
+      run: |
+        set -euo pipefail
+
+        # Bump this default when a new Control Plane CLI release should roll out by default.
+        # Override per-repo by setting the `CPLN_CLI_VERSION` repo variable.
+        default_cpln_cli_version="3.11.0"
+
+        CPLN_CLI_VERSION="${CPLN_CLI_VERSION:-${default_cpln_cli_version}}"
+
+        normalize_version() {
+          local version="${1#v}"
+          version="${version//-/.}"
+
+          if [[ "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9A-Za-z]+)*$ ]]; then
+            echo "${version}"
+          fi
+          # Empty output means an unrecognized format; callers check for that.
+        }
+
+        extract_ref_name() {
+          local ref="${1##*@}"
+          ref="${ref#refs/tags/}"
+          echo "${ref}"
+        }
+
+        normalize_release_ref() {
+          local ref
+          ref="$(extract_ref_name "$1")"
+
+          # Intentional: non-v refs return success with empty stdout; callers
+          # treat empty output as "not a release tag".
+          [[ "${ref}" == v* ]] || return 0
+          normalize_version "${ref}"
+        }
+
+        verify_release_ref_matches_checkout() {
+          local ref
+          local remote_url="https://github.com/shakacode/control-plane-flow.git"
+          local tag_refs
+          local tag_commit=""
+          local checkout_commit
+
+          ref="$(extract_ref_name "$1")"
+          [[ "${ref}" == v* ]] || return 1
+
+          git_ls_remote_tag() {
+            if command -v timeout >/dev/null 2>&1; then
+              timeout 20 git ls-remote --tags "${remote_url}" "refs/tags/${ref}" "refs/tags/${ref}^{}"
+            else
+              git ls-remote --tags "${remote_url}" "refs/tags/${ref}" "refs/tags/${ref}^{}"
+            fi
+          }
+
+          if ! tag_refs="$(git_ls_remote_tag 2>&1)"; then
+            echo "::error::Could not verify the control-plane-flow workflow ref against ${remote_url}. Runners that set CPFLOW_VERSION need outbound HTTPS access to GitHub for this tag check. Leave CPFLOW_VERSION unset when testing a commit SHA or branch. Details: ${tag_refs}"
+            exit 1
+          fi
+
+          if [[ -z "${tag_refs}" ]]; then
+            echo "::error::CPFLOW_VERSION can only be used with an existing control-plane-flow release tag. No remote tag found for workflow ref ${CONTROL_PLANE_FLOW_REF}."
+            exit 1
+          fi
+
+          while read -r sha tag_ref; do
+            if [[ "${tag_ref}" == "refs/tags/${ref}^{}" ]]; then
+              tag_commit="${sha}"
+              break
+            fi
+
+            if [[ "${tag_ref}" == "refs/tags/${ref}" ]]; then
+              tag_commit="${sha}"
+            fi
+          done <<< "${tag_refs}"
+
+          if [[ -z "${tag_commit}" ]]; then
+            echo "::error::Could not resolve the commit for release tag ${ref}."
+            exit 1
+          fi
+
+          checkout_commit="$(git -C "${CPFLOW_SOURCE_DIR}" rev-parse HEAD)"
+          if [[ "${checkout_commit}" != "${tag_commit}" ]]; then
+            echo "::error::control-plane-flow workflow ref ${CONTROL_PLANE_FLOW_REF} resolved to ${checkout_commit}, but release tag ${ref} points to ${tag_commit}. Use the real release tag ref, not a moving branch, or leave CPFLOW_VERSION unset."
+            exit 1
+          fi
+        }
+
+        is_rubygems_version() {
+          [[ "${1}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9A-Za-z]+)*$ ]]
+        }
+
+        validate_cpflow_version_pin() {
+          [[ -z "${CPFLOW_VERSION}" ]] && return 0
+
+          local actual_version
+          local expected_version
+
+          if ! is_rubygems_version "${CPFLOW_VERSION}"; then
+            echo "::error::CPFLOW_VERSION must be a RubyGems version usable by 'gem install cpflow -v', such as 5.0.0 or 5.0.0.rc.1. Do not include a leading v, and use dot-separated prereleases instead of dash-separated prereleases."
+            exit 1
+          fi
+
+          actual_version="$(normalize_version "${CPFLOW_VERSION}")"
+          expected_version="$(normalize_release_ref "${CONTROL_PLANE_FLOW_REF}")"
+
+          if [[ -z "${expected_version}" ]]; then
+            echo "::error::CPFLOW_VERSION can only be used when the control-plane-flow reusable workflow is pinned to a release tag like v${CPFLOW_VERSION}. Dot and dash prerelease tags are accepted, for example v5.0.0.rc.1 or v5.0.0-rc.1. Current workflow ref: ${CONTROL_PLANE_FLOW_REF:-<empty>}. Leave CPFLOW_VERSION unset when testing a commit SHA or branch so cpflow is built from the same source as the reusable workflow."
+            exit 1
+          fi
+
+          verify_release_ref_matches_checkout "${CONTROL_PLANE_FLOW_REF}"
+
+          if [[ "${actual_version}" != "${expected_version}" ]]; then
+            echo "::error::CPFLOW_VERSION must match the control-plane-flow reusable workflow tag. CPFLOW_VERSION=${CPFLOW_VERSION}, normalized CPFLOW_VERSION=${actual_version}, workflow ref=${CONTROL_PLANE_FLOW_REF}, expected CPFLOW_VERSION=${expected_version}."
+            exit 1
+          fi
+        }
+
+        validate_cpflow_version_pin
+
+        npm_global_prefix="${HOME}/.npm-global"
+        mkdir -p "${npm_global_prefix}"
+        echo "${npm_global_prefix}/bin" >> "$GITHUB_PATH"
+        export PATH="${npm_global_prefix}/bin:${PATH}"
+
+        npm install --global --prefix "${npm_global_prefix}" "@controlplane/cli@${CPLN_CLI_VERSION}"
         cpln --version
 
-        gem install cpflow -v ${{ inputs.cpflow_version }}
+        if [[ -n "${CPFLOW_VERSION}" ]]; then
+          gem install cpflow -v "${CPFLOW_VERSION}" --no-document
+        else
+          cpflow_source_dir="$(cd "${CPFLOW_SOURCE_DIR}" && pwd)"
+          if [[ ! -f "${cpflow_source_dir}/cpflow.gemspec" ]]; then
+            echo "::error::CPFLOW_SOURCE_DIR (${cpflow_source_dir}) does not contain cpflow.gemspec" >&2
+            exit 1
+          fi
+
+          cpflow_gem="$(mktemp -t cpflow-XXXXXX.gem)"
+          trap 'rm -f "${cpflow_gem}"' EXIT
+          (
+            cd "${cpflow_source_dir}"
+            gem build cpflow.gemspec --output "${cpflow_gem}"
+          )
+          gem install "${cpflow_gem}" --no-document
+        fi
+
         cpflow --version
 
     - name: Setup Control Plane profile and registry login
       shell: bash
+      env:
+        # Pass the token via CPLN_TOKEN so cpln picks it up from the environment
+        # rather than `--token`, which would leak it into /proc/<pid>/cmdline and ps output.
+        CPLN_TOKEN: ${{ inputs.token }}
+        ORG: ${{ inputs.org }}
       run: |
         set -euo pipefail
 
-        TOKEN="${{ inputs.token }}"
-        ORG="${{ inputs.org }}"
-
-        if [[ -z "$TOKEN" ]]; then
+        if [[ -z "$CPLN_TOKEN" ]]; then
           echo "Error: Control Plane token not provided" >&2
           exit 1
         fi
@@ -58,13 +263,19 @@ runs:
           exit 1
         fi
 
-        create_output=""
-        if ! create_output="$(cpln profile create default --token "$TOKEN" --org "$ORG" 2>&1)"; then
-          if ! echo "$create_output" | grep -qi "already exists"; then
-            echo "$create_output" >&2
-            exit 1
-          fi
-        fi
-
-        cpln profile update default --org "$ORG" --token "$TOKEN"
+        # `cpln profile update` lists `create` as an alias (cpln profile --help) and is
+        # idempotent: it creates the profile if missing and updates it otherwise. Calling
+        # update directly avoids parsing the CLI's "already exists" English error text,
+        # which would silently swallow a real failure if the wording ever changed.
+        cpln profile update default --org "$ORG"
         cpln image docker-login --org "$ORG"
+
+        # Keep the token available to later cpflow/cpln steps without passing it
+        # on the command line. GitHub masks secret values in logs, and the env file
+        # itself is not echoed.
+        delim="CPLN_TOKEN_DELIM_$(openssl rand -hex 8)"
+        {
+          echo "CPLN_TOKEN<<${delim}"
+          echo "${CPLN_TOKEN}"
+          echo "${delim}"
+        } >> "$GITHUB_ENV"
