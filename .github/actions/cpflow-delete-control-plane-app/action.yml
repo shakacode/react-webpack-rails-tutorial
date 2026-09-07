@@ -11,14 +11,20 @@ inputs:
   review_app_prefix:
     description: Prefix used for review app names
     required: true
+  working_directory:
+    description: Directory containing the downstream project's .controlplane/controlplane.yml
+    required: false
+    default: "."
 
 runs:
   using: composite
   steps:
     - name: Delete application
       shell: bash
-      run: ${{ github.action_path }}/delete-app.sh
+      working-directory: ${{ inputs.working_directory }}
+      run: "${ACTION_PATH}/delete-app.sh"
       env:
+        ACTION_PATH: ${{ github.action_path }}
         APP_NAME: ${{ inputs.app_name }}
         CPLN_ORG: ${{ inputs.cpln_org }}
         REVIEW_APP_PREFIX: ${{ inputs.review_app_prefix }}

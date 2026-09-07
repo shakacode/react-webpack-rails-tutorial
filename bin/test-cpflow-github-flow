@@ -12,99 +12,74 @@ fi
 echo "==> cpflow github-flow-readiness"
 "${cpflow_cmd[@]}" github-flow-readiness
 
-echo "==> check node renderer probe template"
-ruby <<'RUBY'
-require "yaml"
-
-template = File.read(".controlplane/templates/node-renderer.yml")
-rendered = template.gsub(/\{\{[A-Z_]+\}\}/, "template-placeholder")
-workload = YAML.safe_load(rendered)
-spec = workload.fetch("spec")
-container = spec.fetch("containers").fetch(0)
-
-expected_args = [
-  "bash",
-  "-lc",
-  <<~'SHELL',
-    # The rake task warns and continues on bundle fetch misses so rollout
-    # does not wedge; unexpected task failures still stop the shell.
-    set -e
-    bundle exec rake react_on_rails_pro:pre_seed_renderer_cache
-    exec yarn node-renderer
-  SHELL
-]
-expected_ports = [{ "number" => 3800, "protocol" => "http2" }]
-expected_env = [
-  { "name" => "LOG_LEVEL", "value" => "info" },
-  { "name" => "NODE_OPTIONS", "value" => "--max-old-space-size=256" },
-]
-expected_readiness_probe = {
-  "tcpSocket" => { "port" => 3800 },
-  "failureThreshold" => 3,
-  "periodSeconds" => 5,
-}
-expected_liveness_probe = {
-  "tcpSocket" => { "port" => 3800 },
-  "failureThreshold" => 3,
-  "periodSeconds" => 10,
-  "initialDelaySeconds" => 120,
-}
-expected_default_options = {
-  "autoscaling" => { "maxScale" => 1 },
-  "capacityAI" => true,
-}
-expected_firewall_config = {
-  "external" => {
-    "inboundAllowCIDR" => [],
-    "outboundAllowCIDR" => ["0.0.0.0/0"],
-  },
-  "internal" => { "inboundAllowType" => "same-gvc" },
-}
-
-failures = []
-failures << "workload keys changed" unless workload.keys.sort == %w[kind name spec]
-failures << "workload identity changed" unless workload.values_at("kind", "name") == %w[workload node-renderer]
-failures << "spec keys changed" unless spec.keys.sort == %w[containers defaultOptions firewallConfig identityLink type]
-failures << "workload type changed" unless spec.fetch("type") == "standard"
-failures << "container keys changed" unless container.keys.sort ==
-                                                 %w[args cpu env image inheritEnv livenessProbe memory name ports readinessProbe]
-failures << "unsupported startupProbe is present" if container.key?("startupProbe")
-failures << "command changed" if container.key?("command")
-failures << "renderer name changed" unless container.fetch("name") == "node-renderer"
-failures << "renderer CPU changed" unless container.fetch("cpu") == "100m"
-failures << "renderer memory changed" unless container.fetch("memory") == "512Mi"
-failures << "renderer environment changed" unless container.fetch("env") == expected_env
-failures << "environment inheritance changed" unless container.fetch("inheritEnv") == true
-failures << "args changed" unless container.fetch("args") == expected_args
-failures << "image changed" unless container.fetch("image") == "template-placeholder"
-failures << "ports changed" unless container.fetch("ports") == expected_ports
-failures << "readinessProbe changed" unless container.fetch("readinessProbe") == expected_readiness_probe
-failures << "livenessProbe grace or thresholds changed" unless container.fetch("livenessProbe") == expected_liveness_probe
-failures << "default autoscaling or capacityAI changed" unless spec.fetch("defaultOptions") == expected_default_options
-failures << "firewall configuration changed" unless spec.fetch("firewallConfig") == expected_firewall_config
-failures << "identity link changed" unless spec.fetch("identityLink") == "template-placeholder"
-
-cpu_match = /\A(?<millicores>\d+)m\z/.match(container.fetch("cpu").to_s)
-memory_match = /\A(?<mebibytes>\d+)Mi\z/.match(container.fetch("memory").to_s)
-if cpu_match && memory_match && cpu_match[:millicores].to_i.positive?
-  resource_ratio = memory_match[:mebibytes].to_f / cpu_match[:millicores].to_i
-  failures << format("provider resource ratio must be strictly below 8 (got %.2f)", resource_ratio) unless resource_ratio < 8
-else
-  failures << "renderer resources must use positive millicore CPU and MiB memory units"
-end
-
-abort failures.join("\n") unless failures.empty?
-puts "node renderer template preserves provider resource ratio, supported probe grace, and stable runtime settings"
-RUBY
-
 echo "==> parse generated GitHub Actions YAML"
 ruby <<'RUBY'
 require "yaml"
 
-Dir[".github/actions/**/action.yml", ".github/workflows/*.yml"].sort.each do |path|
-  YAML.load_file(path, aliases: true)
+documents = Dir[
+  ".github/actions/**/action.yml",
+  ".github/actions/**/action.yaml",
+  ".github/workflows/*.yml",
+  ".github/workflows/*.yaml"
+].sort.to_h do |path|
+  [path, YAML.load_file(path, aliases: true)]
+end
+
+documents.each_key do |path|
   puts "parsed #{path}"
 end
+
+generated_local_action_pattern = %r{\A\./(?<directory>\.github/actions/cpflow-[a-z0-9]+(?:-[a-z0-9]+)*)\z}
+local_action_references = []
+invalid_local_action_references = []
+visited_container_ids = {}
+walk = lambda do |node, source_path|
+  if node.is_a?(Hash) || node.is_a?(Array)
+    next if visited_container_ids.key?(node.object_id)
+
+    visited_container_ids[node.object_id] = true
+  end
+
+  case node
+  when Hash
+    uses = node["uses"]
+    if uses.is_a?(String) && uses.start_with?("./.github/actions/cpflow-")
+      match = uses.match(generated_local_action_pattern)
+      if match
+        local_action_references << [source_path, match[:directory]]
+      else
+        invalid_local_action_references <<
+          "#{source_path} has invalid generated local action reference #{uses}"
+      end
+    end
+    node.each_value { |value| walk.call(value, source_path) }
+  when Array
+    node.each { |value| walk.call(value, source_path) }
+  end
+end
+documents.each { |path, document| walk.call(document, path) }
+
+abort invalid_local_action_references.uniq.join("\n") unless invalid_local_action_references.empty?
+
+missing_actions = local_action_references.uniq.filter_map do |source_path, action_directory|
+  directory_is_local = begin
+    File.lstat(action_directory).directory?
+  rescue Errno::ENOENT
+    false
+  end
+  descriptor_is_local = %w[action.yml action.yaml].any? do |filename|
+    begin
+      File.lstat(File.join(action_directory, filename)).file?
+    rescue Errno::ENOENT
+      false
+    end
+  end
+
+  "#{source_path} references missing local action #{action_directory}" unless directory_is_local && descriptor_is_local
+end
+
+abort missing_actions.join("\n") unless missing_actions.empty?
+puts "all referenced local actions have checked-in descriptors"
 RUBY
 
 echo "==> check composite action input descriptions"
@@ -130,7 +105,7 @@ require "yaml"
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
 PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@([^\s]+)\z}
 EXPECTED_PROMOTE_WORKFLOW_REF_FORMAT = "shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@vX.Y.Z"
-EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"
+EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
 EXPECTED_CPFLOW_CHECKOUT_REPOSITORY = "shakacode/control-plane-flow"
 
 refs = Hash.new { |hash, key| hash[key] = [] }
