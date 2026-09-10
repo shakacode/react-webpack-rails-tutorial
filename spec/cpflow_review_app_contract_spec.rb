@@ -30,6 +30,31 @@ RSpec.describe "Workflow release and security contracts" do
     expect(output).to include("review-app release contract: v5.3.0")
   end
 
+  it "activates an isolated bundle when plain Ruby has no inherited bundle-exec setup" do
+    Dir.mktmpdir("cpflow-isolated-bundle") do |directory|
+      bundle_path = File.join(directory, "bundle")
+      ruby_gems = File.join(bundle_path, "ruby", RbConfig::CONFIG.fetch("ruby_version"))
+      FileUtils.mkdir_p(File.dirname(ruby_gems))
+      File.symlink(Bundler.bundle_path, ruby_gems)
+      # Reuse installed gems offline, but keep them outside RubyGems' search path.
+      env = {
+        "PATH" => "",
+        "GEM_HOME" => File.join(directory, "empty-gems"),
+        "GEM_PATH" => File.join(directory, "empty-gems"),
+        "BUNDLE_GEMFILE" => File.join(root, "Gemfile"),
+        "BUNDLE_PATH" => bundle_path,
+        "BUNDLE_IGNORE_CONFIG" => "1",
+        "RUBYLIB" => File.join(Gem::Specification.find_by_name("bundler").full_gem_path, "lib")
+      }
+      output, status = Open3.capture2e(env, RbConfig.ruby,
+                                       File.join(root, "bin/check-cpflow-review-app-contract"),
+                                       unsetenv_others: true)
+
+      expect(status.success?).to be(true), output
+      expect(output).to include("review-app release contract: v5.3.0")
+    end
+  end
+
   context "with a copied caller fixture" do
     let(:fixture) { Dir.mktmpdir("cpflow-review-contract") }
 
