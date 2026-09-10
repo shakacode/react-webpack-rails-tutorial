@@ -2,6 +2,17 @@
 base_branch: master
 merge_submission:
   mode: direct
+trusted_actions:
+  - actions/checkout
+  - actions/github-script
+  - actions/setup-node
+  - anthropics/claude-code-action
+  - browser-actions/setup-chrome
+  - coactions/setup-xvfb
+  - docker/setup-buildx-action
+  - ruby/setup-ruby
+  - shakacode/control-plane-flow
+  - shakacode/react_on_rails
 follow_up_prefix: 'Follow-up:'
 review_gate: n/a
 approval_exempt: n/a

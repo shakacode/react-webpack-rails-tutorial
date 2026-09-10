@@ -138,15 +138,19 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 
 ### Keeping cpflow Automation Current
 
-When the upstream `control-plane-flow` repo changes the generated GitHub Actions
-flow, regenerate from the target `cpflow` version with `--staging-branch master`,
-review the diff, and validate with `bin/test-cpflow-github-flow` plus the normal
-CI checks. Stable automation should use a release tag that includes the upstream
-hardening changes, not `main` or a feature branch.
+Keep upstream workflow and action references on reviewed, immutable full commit
+SHAs with readable release comments, not release tags, `main`, or feature
+branches. The review-app deploy/delete pair advances together on released
+**5.3.0**; other generated callers and promotion actions retain their reviewed
+**5.2.0** cohort until a separately scoped migration.
 
-See [readme.md](readme.md) and
-[Testing cpflow GitHub Actions Changes](docs/testing-cpflow-github-actions.md)
-for more details.
+Do not blanket-regenerate the automation or use the all-wrapper pin helper for
+this split migration. Preserve the customized validator and renderer assertions,
+review each cohort's changes separately, and validate with
+`bin/conductor-exec bin/test-cpflow-github-flow --offline` plus the normal CI
+checks. Follow the canonical [split-migration guidance](docs/testing-cpflow-github-actions.md#released-review-app-pair)
+for coordinated caller, dependency, and validator updates; see also
+[readme.md](readme.md).
 
 ## Links
 

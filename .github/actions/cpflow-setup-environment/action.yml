@@ -25,28 +25,31 @@ runs:
   using: composite
   steps:
     - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
       with:
         ruby-version: ${{ inputs.ruby_version }}
 
     - name: Install Control Plane CLI and cpflow gem
       shell: bash
+      env:
+        CPLN_CLI_VERSION: ${{ inputs.cpln_cli_version }}
+        CPFLOW_VERSION: ${{ inputs.cpflow_version }}
       run: |
         set -euo pipefail
 
-        sudo npm install -g @controlplane/cli@${{ inputs.cpln_cli_version }}
+        sudo npm install -g "@controlplane/cli@$CPLN_CLI_VERSION"
         cpln --version
 
-        gem install cpflow -v ${{ inputs.cpflow_version }}
+        gem install cpflow -v "$CPFLOW_VERSION"
         cpflow --version
 
     - name: Setup Control Plane profile and registry login
       shell: bash
+      env:
+        TOKEN: ${{ inputs.token }}
+        ORG: ${{ inputs.org }}
       run: |
         set -euo pipefail
-
-        TOKEN="${{ inputs.token }}"
-        ORG="${{ inputs.org }}"
 
         if [[ -z "$TOKEN" ]]; then
           echo "Error: Control Plane token not provided" >&2

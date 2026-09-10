@@ -4,13 +4,26 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+offline=false
+if [[ "${1:-}" == "--offline" ]]; then
+  offline=true
+  shift
+fi
+
 cpflow_cmd=(cpflow)
 if [[ $# -gt 0 ]]; then
   cpflow_cmd=("$@")
 fi
 
-echo "==> cpflow github-flow-readiness"
-"${cpflow_cmd[@]}" github-flow-readiness
+if [[ "$offline" == true ]]; then
+  echo "==> SKIP registry readiness (--offline)"
+else
+  echo "==> cpflow github-flow-readiness"
+  "${cpflow_cmd[@]}" github-flow-readiness
+fi
+
+echo "==> check released review-app caller contract"
+ruby bin/check-cpflow-review-app-contract
 
 echo "==> check node renderer probe template"
 ruby <<'RUBY'
@@ -129,11 +142,22 @@ require "yaml"
 
 CONTROL_PLANE_FLOW_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/[^@\s]+@([^\s]+)\z}
 PROMOTE_WORKFLOW = %r{\Ashakacode/control-plane-flow/\.github/workflows/cpflow-promote-staging-to-production\.yml@([^\s]+)\z}
-EXPECTED_PROMOTE_WORKFLOW_REF_FORMAT = "shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@vX.Y.Z"
+EXPECTED_STABLE_REF = "1d1ec7f7af181c5c6cf07f512ce336dbdb367246" # v5.2.0
+EXPECTED_PROMOTE_WORKFLOW_REF_FORMAT = "shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@#{EXPECTED_STABLE_REF}"
 EXPECTED_CPFLOW_CHECKOUT_ACTION = "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"
 EXPECTED_CPFLOW_CHECKOUT_REPOSITORY = "shakacode/control-plane-flow"
+EXPECTED_PROMOTE_ACTIONS = %w[
+  cpflow-validate-config
+  cpflow-setup-environment
+  cpflow-detect-release-phase
+  cpflow-wait-for-health
+].freeze
+REVIEW_APP_RELEASE_JOBS = {
+  ".github/workflows/cpflow-deploy-review-app.yml" => "deploy",
+  ".github/workflows/cpflow-delete-review-app.yml" => "delete-review-app",
+}.freeze
 
-refs = Hash.new { |hash, key| hash[key] = [] }
+stable_refs = Hash.new { |hash, key| hash[key] = [] }
 
 Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
   doc = YAML.load_file(path, aliases: true)
@@ -157,7 +181,10 @@ Dir[".github/workflows/cpflow-*.yml"].sort.each do |path|
     end
 
     uses_ref = uses_match[1]
-    refs[uses_ref] << "#{path}:#{job_name}"
+    entry = "#{path}:#{job_name}"
+    # The released pair is checked independently above; other wrappers retain
+    # their existing stable cohort until a separately scoped migration.
+    stable_refs[uses_ref] << entry unless REVIEW_APP_RELEASE_JOBS[path] == job_name
 
     if job["uses"].to_s.match?(PROMOTE_WORKFLOW)
       abort "#{path}:#{job_name} must not call the cross-repo production reusable workflow; use a normal caller-repo job with environment: production"
@@ -204,7 +231,22 @@ if checkout_ref.to_s.strip.empty?
   abort "#{promote_path}:promote-to-production must pin the Checkout control-plane-flow actions step"
 end
 
-refs[checkout_ref] << "#{promote_path}:promote-to-production"
+unless checkout_with["path"] == ".cpflow"
+  abort "#{promote_path}:promote-to-production must preserve the .cpflow source checkout"
+end
+
+stable_refs[checkout_ref] << "#{promote_path}:promote-to-production"
+
+expected_action_refs = EXPECTED_PROMOTE_ACTIONS.map do |name|
+  "#{EXPECTED_CPFLOW_CHECKOUT_REPOSITORY}/.github/actions/#{name}@#{EXPECTED_STABLE_REF}"
+end
+actual_action_refs = Array(promote_job["steps"]).filter_map do |step|
+  ref = step["uses"].to_s
+  ref if ref.include?("/cpflow-")
+end
+unless actual_action_refs == expected_action_refs
+  abort "#{promote_path}:promote-to-production must use the four immutable v5.2.0 actions in order"
+end
 
 setup_step = Array(promote_job["steps"]).find { |step| step["name"] == "Setup production environment" }
 
@@ -215,23 +257,42 @@ end
 setup_ref = setup_step.fetch("with", {})["control_plane_flow_ref"]
 setup_match = setup_ref.to_s.match(PROMOTE_WORKFLOW)
 
+unless setup_step.fetch("with", {})["working_directory"] == ".cpflow"
+  abort "#{promote_path}:promote-to-production must install from the .cpflow source checkout"
+end
+
+expected_git_dir = "${{ github.workspace }}/.cpflow/.git"
+unless setup_step.fetch("env", {})["GIT_DIR"] == expected_git_dir
+  abort "#{promote_path}:promote-to-production setup must use matching checkout metadata for archive packaging"
+end
+
+if promote_doc.fetch("env", {}).key?("GIT_DIR") ||
+   promote_doc.fetch("jobs", {}).values.any? { |job| job.fetch("env", {}).key?("GIT_DIR") } ||
+   promote_doc.fetch("jobs", {}).values.flat_map { |job| Array(job["steps"]) }.any? do |step|
+     !step.equal?(setup_step) && step.fetch("env", {}).key?("GIT_DIR")
+   end
+  abort "#{promote_path}:GIT_DIR must be scoped only to the setup step"
+end
+
 unless setup_match
   abort "#{promote_path}:promote-to-production must pass a pinned production control_plane_flow_ref to setup, " \
         "for example #{EXPECTED_PROMOTE_WORKFLOW_REF_FORMAT}"
 end
 
-refs[setup_match[1]] << "#{promote_path}:promote-to-production setup"
+stable_refs[setup_match[1]] << "#{promote_path}:promote-to-production setup"
 
-if refs.empty?
-  puts "no upstream cpflow reusable workflow refs found"
-elsif refs.length > 1
-  refs.each do |ref, paths|
+if stable_refs.empty?
+  abort "no stable upstream cpflow refs found outside the released review-app pair"
+elsif stable_refs.length > 1
+  stable_refs.each do |ref, paths|
     puts "#{ref}: #{paths.uniq.sort.join(', ')}"
   end
-  abort "cpflow workflow wrappers use multiple upstream refs: #{refs.keys.sort.join(', ')}"
-else
-  puts "cpflow refs: #{refs.keys.sort.join(', ')}"
+  abort "non-review-app cpflow workflow wrappers use multiple upstream refs: #{stable_refs.keys.sort.join(', ')}"
+elsif stable_refs.keys.fetch(0) != EXPECTED_STABLE_REF
+  abort "non-review-app cpflow sources must retain the immutable v5.2.0 release"
 end
+
+puts "cpflow stable refs outside released review-app pair: #{stable_refs.keys.fetch(0)}"
 RUBY
 
 echo "==> actionlint"

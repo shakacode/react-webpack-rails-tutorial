@@ -61,15 +61,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
       - name: Checkout control-plane-flow actions
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: shakacode/control-plane-flow
-          ref: v5.2.0
+          ref: 1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
           path: .cpflow
           persist-credentials: false
 
@@ -90,7 +90,7 @@ jobs:
           fi
 
       - name: Validate required secrets and variables
-        uses: ./.cpflow/.github/actions/cpflow-validate-config
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-validate-config@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
         # Pass secrets via env so the composite action checks indirect shell
         # variables instead of interpolating secret values into a run script.
         env:
@@ -171,7 +171,10 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Setup production environment
-        uses: ./.cpflow/.github/actions/cpflow-setup-environment
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-setup-environment@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
+        env:
+          # The v5.2 gemspec needs matching checkout metadata to package its action archive.
+          GIT_DIR: ${{ github.workspace }}/.cpflow/.git
         with:
           token: ${{ secrets.CPLN_TOKEN_PRODUCTION }}
           org: ${{ steps.cpln-orgs.outputs.production }}
@@ -179,7 +182,7 @@ jobs:
           cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
           cpflow_version: ${{ vars.CPFLOW_VERSION }}
           # The setup action validates CPFLOW_VERSION against this full workflow ref.
-          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@v5.2.0
+          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@1d1ec7f7af181c5c6cf07f512ce336dbdb367246
 
       # Runs after Setup production environment so the pinned Ruby (>= 3.1) is on PATH.
       # YAML.load_file(..., aliases: true) is not supported on Ruby 3.0 (system Ruby on ubuntu-22.04).
@@ -237,7 +240,7 @@ jobs:
 
       - name: Detect release phase support
         id: release-phase
-        uses: ./.cpflow/.github/actions/cpflow-detect-release-phase
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-detect-release-phase@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
         with:
           app_name: ${{ vars.PRODUCTION_APP_NAME }}
 
@@ -441,7 +444,7 @@ jobs:
           echo "image=${staging_image}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
       - name: Copy image from staging
         id: copy-image
@@ -589,7 +592,7 @@ jobs:
 
       - name: Wait for deployment health
         id: health-check
-        uses: ./.cpflow/.github/actions/cpflow-wait-for-health
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-wait-for-health@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
         with:
           workload_name: ${{ steps.workloads.outputs.primary }}
           app_name: ${{ vars.PRODUCTION_APP_NAME }}
