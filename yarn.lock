@@ -218,10 +218,20 @@
   resolved "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.27.1.tgz"
   integrity sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==
 
+"@babel/helper-string-parser@^7.29.7":
+  version "7.29.7"
+  resolved "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz#7f0871d99824d23137d60f86fcf6130fd5a1b51f"
+  integrity sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==
+
 "@babel/helper-validator-identifier@^7.27.1":
   version "7.27.1"
   resolved "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.27.1.tgz"
   integrity sha512-D2hP9eA+Sqx1kBZgzxZh0y1trbuU+JoDkiEwqhQ36nodYqJwyEIhPSdMNd7lOm/4io72luTPWH20Yda0xOuUow==
+
+"@babel/helper-validator-identifier@^7.29.7":
+  version "7.29.7"
+  resolved "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz#bd87084ced0c796ec46bda492de6e83d29e89fc2"
+  integrity sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==
 
 "@babel/helper-validator-option@^7.27.1":
   version "7.27.1"
@@ -251,6 +261,13 @@
   integrity sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==
   dependencies:
     "@babel/types" "^7.28.4"
+
+"@babel/parser@^7.28.5":
+  version "7.29.8"
+  resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.29.8.tgz#9653716a2f10c677b98fbc63d4bfb000c302cf17"
+  integrity sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==
+  dependencies:
+    "@babel/types" "^7.29.8"
 
 "@babel/plugin-bugfix-firefox-class-in-computed-class-key@^7.27.1":
   version "7.27.1"
@@ -1003,6 +1020,14 @@
   dependencies:
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
+
+"@babel/types@^7.29.8":
+  version "7.29.8"
+  resolved "https://registry.npmjs.org/@babel/types/-/types-7.29.8.tgz#1229eef31d85156d70fa3f4cd859376d0eaf6863"
+  integrity sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==
+  dependencies:
+    "@babel/helper-string-parser" "^7.29.7"
+    "@babel/helper-validator-identifier" "^7.29.7"
 
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
@@ -8722,10 +8747,10 @@ react-deep-force-update@^1.0.0:
   resolved "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.1.2.tgz"
   integrity sha512-WUSQJ4P/wWcusaH+zZmbECOk7H5N2pOIl0vzheeornkIMhu+qrNdGFm0bDZLCb0hSF0jf/kH1SgkNGfBdTc4wA==
 
-react-dom@~19.2.7:
-  version "19.2.7"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.7.tgz#0450dc9ae9ddbff76ef196401cd8b8c7fb466ccc"
-  integrity sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==
+react-dom@19.2.8:
+  version "19.2.8"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.8.tgz#3b46b9eeda877cdff2cf13d2770fff4ae36c2ec2"
+  integrity sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==
   dependencies:
     scheduler "^0.27.0"
 
@@ -8767,10 +8792,10 @@ react-is@^18.0.0, react-is@^18.3.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-on-rails-pro-node-renderer@17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.0.0.tgz#5aec3ffb90b70e2465df1b8495a3f6b4bc432789"
-  integrity sha512-82yuZubo1iaoVpnH8adznf0rVLoZvsSWxYbLYdbKhrdwPjt9MxtyJG6//sqd77hSRX3EVnXQONvkiiur8qLQtw==
+react-on-rails-pro-node-renderer@17.1.0-rc.3:
+  version "17.1.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails-pro-node-renderer/-/react-on-rails-pro-node-renderer-17.1.0-rc.3.tgz#2e69d493719d3d25b30d4bb01c3dd307306a41f8"
+  integrity sha512-bOXpelJvPNagAlVZJ0E1grNO+I2MAtcyIzfayEJXO7xe5o6F8ExJTV92aXqIGhwin6c1uC95L3t+oflLIilYxg==
   dependencies:
     "@fastify/formbody" "^7.4.0 || ^8.0.2"
     "@fastify/multipart" "^8.3.1 || ^9.0.3"
@@ -8780,27 +8805,28 @@ react-on-rails-pro-node-renderer@17.0.0:
     lockfile "^1.0.4"
     pino "^9.14.0 || ^10.1.0"
 
-react-on-rails-pro@17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails-pro/-/react-on-rails-pro-17.0.0.tgz#831e4cbe48d7b4d60185fecbae7e7fb6ea1d2a6f"
-  integrity sha512-4eEOnr0K5d5POR9iwaaJGZWrNZUUL1gehhlQDfx83T8Nk3PIb4xVQkOVGkQBko4Wj/fCs9TSUFpMm741+9bNwg==
+react-on-rails-pro@17.1.0-rc.3:
+  version "17.1.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails-pro/-/react-on-rails-pro-17.1.0-rc.3.tgz#17dced42fc04fc3ca08eec87166998eed6288112"
+  integrity sha512-fyHLfN2/i8S1o97yPcm4qQpbGuAqiFT0wAEBqIhyI6JWKZIZU84nDeLlmkmhNtYt0N10VQ7NzXnBZlkVG8HeKg==
   dependencies:
-    react-on-rails "17.0.0"
+    react-on-rails "17.1.0-rc.3"
 
-react-on-rails-rsc@19.2.1:
-  version "19.2.1"
-  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.2.1.tgz#c7fc623119d31224a27f24ff0bc500d99fa8821a"
-  integrity sha512-PQ+Ly+cCA3flJ4EJMczSv0rD6boP0wcXCLmaSfj3HOt+7XxP7DkJyu5IiEGb86vIQjMwaTPs68XN9wlnnx+pUw==
+react-on-rails-rsc@19.3.0-rc.4:
+  version "19.3.0-rc.4"
+  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.3.0-rc.4.tgz#b0bc0ddd910fba3ba8ea98bb3c988c8f47bea5a1"
+  integrity sha512-+oJbP947a1e8Pg8GzhsWJxXmtiEyNJCGlX9oxmOGFonVxS9znet8sPpq8imaSi5ak6heNd4SlY6cX4cbgAbVhw==
   dependencies:
+    "@babel/parser" "^7.28.5"
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
-    react-server-dom-webpack "~19.2.7"
+    react-server-dom-webpack "~19.2.8"
     webpack-sources "^3.2.0"
 
-react-on-rails@17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-17.0.0.tgz#5bc518fb73c6c250fb8cbf1aa4d3bc36b0093c1f"
-  integrity sha512-jVJmaXJaVsCVoZCWMQ3ePACWaGkq3hOlmbeR0LniQKLr8+kDDgL0RbZ/6D1J2tMAsd1CxS+sOu0PCyO0ZfAQ+g==
+react-on-rails@17.1.0-rc.3:
+  version "17.1.0-rc.3"
+  resolved "https://registry.npmjs.org/react-on-rails/-/react-on-rails-17.1.0-rc.3.tgz#93f5b09be1f86f6e27ff3e694b7172bd9e700c3f"
+  integrity sha512-32GEzz6pnKSL0LGWT1TShh3xYd4uo6Zr5SUj9/Z2QxQ9JM5jm/rjFkHG5MOwvwjDaWTkmzDGSOykFokO5kBcKQ==
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -8847,10 +8873,10 @@ react-router@6.30.1, react-router@^6.13.0:
   dependencies:
     "@remix-run/router" "1.23.0"
 
-react-server-dom-webpack@~19.2.7:
-  version "19.2.7"
-  resolved "https://registry.npmjs.org/react-server-dom-webpack/-/react-server-dom-webpack-19.2.7.tgz#ec4ca821297a039df2c6119a5fe14e49c9423573"
-  integrity sha512-bYfuvqPJnHB4CHo2Ze7fQyJAO77TUu1W/aKFt81ICXbLiOTg5jHaO/NPDlpvGWUALoEGaGb7Oi1uXAaO+Bw6jw==
+react-server-dom-webpack@19.2.8, react-server-dom-webpack@~19.2.8:
+  version "19.2.8"
+  resolved "https://registry.npmjs.org/react-server-dom-webpack/-/react-server-dom-webpack-19.2.8.tgz#f25752bedff5173500579e72055281a3ee5b7638"
+  integrity sha512-rFO1VJZ+cH9ZH6hGy9+qmIsmZHZpCMKJZXhWHqT71UnSfg+w+W+gwrwp58MVzMqdFquG8GF1c6C8q0OGphkEdg==
   dependencies:
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
@@ -8874,10 +8900,10 @@ react-transition-group@4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@~19.2.7:
-  version "19.2.7"
-  resolved "https://registry.npmjs.org/react/-/react-19.2.7.tgz#1f47a1bfc06f8ec885752c6f4af14369a9f8260b"
-  integrity sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==
+react@19.2.8:
+  version "19.2.8"
+  resolved "https://registry.npmjs.org/react/-/react-19.2.8.tgz#a80663dbb58d69c6fe3fd291d3cb324e8a7dff2d"
+  integrity sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==
 
 read-cache@^1.0.0:
   version "1.0.0"
