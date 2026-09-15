@@ -593,7 +593,7 @@ renderer first, wait for it to become healthy, and then deploy `rails` plus
 
 The renderer workload uses the same application image as Rails, runs
 `react_on_rails_pro:pre_seed_renderer_cache` at container boot, and then starts
-`yarn node-renderer`. Rails gets `RENDERER_URL` from
+`/usr/local/node/bin/node renderer/node-renderer.js`. Rails gets `RENDERER_URL` from
 `.controlplane/templates/app.yml` and reaches the renderer at
 `http://node-renderer.<app>.cpln.local:3800`.
 
