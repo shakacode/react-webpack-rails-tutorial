@@ -37,13 +37,13 @@ container = spec.fetch("containers").fetch(0)
 
 expected_args = [
   "bash",
-  "-lc",
+  "-c",
   <<~'SHELL',
     # The rake task warns and continues on bundle fetch misses so rollout
     # does not wedge; unexpected task failures still stop the shell.
     set -e
     bundle exec rake react_on_rails_pro:pre_seed_renderer_cache
-    exec /usr/local/node/bin/node renderer/node-renderer.js
+    exec node renderer/node-renderer.js
   SHELL
 ]
 expected_ports = [{ "number" => 3800, "protocol" => "http2" }]
