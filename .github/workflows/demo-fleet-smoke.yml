@@ -18,8 +18,8 @@ jobs:
       install-command: >-
         bundle config set path vendor/bundle && bundle install --jobs 4 --retry 3 && yarn install --frozen-lockfile &&
         docker run --name tutorial-fleet-postgres -e POSTGRES_DB=rails_test -e POSTGRES_USER=rails -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:11-alpine@sha256:ea50b9fd617b66c9135816a4536cf6e0697d4eea7014a7194479c95f6edd5ef9 &&
-        for attempt in {1..30}; do docker inspect --format '{{.State.Running}}' tutorial-fleet-postgres | grep -qx true || exit 1; docker exec tutorial-fleet-postgres pg_isready -U rails -d rails_test && break; sleep 1; done;
-        docker exec tutorial-fleet-postgres pg_isready -U rails -d rails_test
+        for attempt in {1..30}; do docker inspect --format '{{.State.Running}}' tutorial-fleet-postgres | grep -qx true || exit 1; docker exec tutorial-fleet-postgres pg_isready -h 127.0.0.1 -U rails -d rails_test && break; sleep 1; done;
+        docker exec tutorial-fleet-postgres pg_isready -h 127.0.0.1 -U rails -d rails_test
       test-command: >-
         RAILS_ENV=test NODE_ENV=test bundle exec rake react_on_rails:locale &&
         RAILS_ENV=test NODE_ENV=test bundle exec rails react_on_rails:generate_packs &&
