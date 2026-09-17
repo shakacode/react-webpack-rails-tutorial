@@ -90,7 +90,7 @@ jobs:
           fi
 
       - name: Validate required secrets and variables
-        uses: shakacode/control-plane-flow/.github/actions/cpflow-validate-config@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-validate-config@b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6 # v5.3.0
         # Pass secrets via env so the composite action checks indirect shell
         # variables instead of interpolating secret values into a run script.
         env:
