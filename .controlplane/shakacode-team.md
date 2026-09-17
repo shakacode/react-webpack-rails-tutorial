@@ -6,7 +6,7 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 
 ### Renderer Workload
 - `node-renderer` is an app workload and deploys before `rails` through `deploy_order`.
-- `node-renderer` runs the React on Rails Pro boot seed before `yarn node-renderer` so the new renderer cache is warm before Rails rolls.
+- `node-renderer` runs the React on Rails Pro boot seed in a non-login shell before `node renderer/node-renderer.js` so the new renderer cache is warm before Rails rolls.
 - Rails reaches the renderer through `RENDERER_URL=http://node-renderer.<app>.cpln.local:3800`.
 - Keep `ROLLING_DEPLOY_TOKEN` populated in the app secret dictionary; Rails and the renderer use it for rolling-deploy bundle pulls.
 - For existing staging/production apps, populate `ROLLING_DEPLOY_TOKEN`, apply templates with `node-renderer`, validate staging, then promote production. Do not combine the production template cutover with missing secrets.
