@@ -592,7 +592,7 @@ jobs:
 
       - name: Wait for deployment health
         id: health-check
-        uses: shakacode/control-plane-flow/.github/actions/cpflow-wait-for-health@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-wait-for-health@b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6 # v5.3.0
         with:
           workload_name: ${{ steps.workloads.outputs.primary }}
           app_name: ${{ vars.PRODUCTION_APP_NAME }}
