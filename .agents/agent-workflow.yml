@@ -4,8 +4,9 @@ version: 1
 base_branch: master
 commands:
   setup: ".agents/bin/setup"
-  validate: ".agents/bin/validate"
+  validate: ".agents/bin/test"
   test: ".agents/bin/test"
+  validate_local: ".agents/bin/validate"
 review:
   required: none
 merge:
