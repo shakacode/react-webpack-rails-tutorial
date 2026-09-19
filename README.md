@@ -184,10 +184,10 @@ assets_bundler: rspack
 
 ### Version Targets
 
-- `react_on_rails_pro` gem: `17.1.0.rc.5`
-- `react-on-rails-pro` npm package: `17.1.0-rc.5`
-- `react-on-rails-pro-node-renderer` npm package: `17.1.0-rc.5`
-- `react-on-rails-rsc` npm package: `19.3.0-rc.4`
+- `react_on_rails_pro` gem: `17.1.0`
+- `react-on-rails-pro` npm package: `17.1.0`
+- `react-on-rails-pro-node-renderer` npm package: `17.1.0`
+- `react-on-rails-rsc` npm package: `19.3.0`
 - `shakapacker` gem/npm package: `10.2.0`
 - `@rspack/core` and `@rspack/cli`: `2.0.4`
 - `react`, `react-dom`, and `react-server-dom-webpack`: `19.2.8` (exact RC validation pins)
