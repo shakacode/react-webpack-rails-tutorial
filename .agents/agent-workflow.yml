@@ -21,3 +21,14 @@ protection:
   branch_deletion: false
 branches:
   name: "{login}-{host}/{issue}-{description}"
+trusted_actions:
+- actions/checkout
+- actions/github-script
+- actions/setup-node
+- anthropics/claude-code-action
+- browser-actions/setup-chrome
+- coactions/setup-xvfb
+- docker/setup-buildx-action
+- ruby/setup-ruby
+- shakacode/control-plane-flow
+- shakacode/react_on_rails
