@@ -190,7 +190,8 @@ assets_bundler: rspack
 - `react-on-rails-rsc` npm package: `19.3.0`
 - `shakapacker` gem/npm package: `10.2.0`
 - `@rspack/core` and `@rspack/cli`: `2.0.4`
-- `react`, `react-dom`, and `react-server-dom-webpack`: `19.2.8` (exact RC validation pins)
+- `react` and `react-dom`: `19.3.0`
+- `react-server-dom-webpack`: `19.2.8` (pinned by `react-on-rails-rsc` 19.3.0)
 
 ### Why Rspack
 
