@@ -11,8 +11,7 @@ pilot seam command.
 
 | Path | Purpose |
 | --- | --- |
-| `agent-workflow.yml` | Review, merge, and branch policy, read from the trusted default branch. Live GitHub settings still govern checks and approvals. |
-| `bin/` | Executable setup, test, and validation wrappers. Shaka runs the candidate checkout's copies; inspect changes before execution. |
+| `README.md` | Inventory of repository-owned `.agents` commands and configuration. |
 | `trusted-github-actors.yml` | Public allowlist for trusted GitHub comment authors. |
 
 ## Check configuration edits
