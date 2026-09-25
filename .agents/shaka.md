@@ -3,9 +3,11 @@
 
 This repository uses Shaka 0.1.0.pre.1 (pilot stage 0.0.x)
 with contract `version: 1`. The files below hold its configuration.
-Run these commands from a separate, trusted checkout of `shakacode/shaka`.
-This repository does not install the CLI. RubyGems `0.1.0.pre.1` reserves the
-package name; the published gem does not include the pilot seam command.
+Use the `shaka` executable from a separate, trusted checkout of `shakacode/shaka`.
+Run the commands below from this repository's root so `--root .` and the
+default-branch SHA refer to this checkout. This repository does not install the
+CLI; RubyGems `0.1.0.pre.1` reserves the package name and does not include the
+pilot seam command.
 
 | Path | Purpose |
 | --- | --- |
