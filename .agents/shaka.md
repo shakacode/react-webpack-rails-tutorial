@@ -11,7 +11,7 @@ pilot seam command.
 
 | Shaka reference | Purpose |
 | --- | --- |
-| [`README.md`](README.md) | Full inventory of repository-owned `.agents` commands and configuration. |
+| [`README.md`](README.md) | Lists this repository's standard commands and typed policy. |
 | `trusted-github-actors.yml` | Public allowlist for trusted GitHub comment authors. |
 
 The reference links below use the Shaka source snapshot for this fleet migration.
