@@ -3,8 +3,9 @@
 
 This repository uses Shaka 0.1.0.pre.1 (pilot stage 0.0.x)
 with contract `version: 1`. The files below hold its configuration.
-The Shaka CLI is supplied by the maintainer's environment; this repository
-does not install it.
+Run these commands from a separate, trusted checkout of `shakacode/shaka`.
+This repository does not install the CLI. RubyGems `0.1.0.pre.1` reserves the
+package name; the published gem does not include the pilot seam command.
 
 | Path | Purpose |
 | --- | --- |
@@ -20,11 +21,6 @@ Validates the current checkout's YAML and scripts. Without `--ref`, it
 grants no trusted policy authority.
 
 ## Load trusted policy
-
-Use the previous Shaka installation while this migration is still a pull
-request: validate against the old default-branch SHA, which still contains the
-predecessor format. After the migration reaches the default branch, resolve its
-new SHA and use the Shaka 0.1.0.pre.1 command below.
 
 Resolve this repository's default branch to an immutable commit SHA, then:
 
