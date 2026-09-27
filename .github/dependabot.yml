@@ -6,16 +6,49 @@ updates:
       interval: weekly
     # Staging, cleanup, help, and promotion stay on the reviewed v5.2.0 cohort
     # until that migration is reviewed on its own. See Version Locking in
-    # .github/cpflow-help.md.
+    # .github/cpflow-help.md. These rules ignore version updates only, so a
+    # security advisory can still open a pull request.
     ignore:
       - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-detect-release-phase
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-setup-environment
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-validate-config
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
       - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-wait-for-health
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+          - version-update:semver-patch
   - package-ecosystem: bundler
     directory: "/"
     schedule:
