@@ -4,6 +4,18 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # Staging, cleanup, help, and promotion stay on the reviewed v5.2.0 cohort
+    # until that migration is reviewed on its own. See Version Locking in
+    # .github/cpflow-help.md.
+    ignore:
+      - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-cleanup-stale-review-apps.yml
+      - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-staging.yml
+      - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-help-command.yml
+      - dependency-name: shakacode/control-plane-flow/.github/workflows/cpflow-review-app-help.yml
+      - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-detect-release-phase
+      - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-setup-environment
+      - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-validate-config
+      - dependency-name: shakacode/control-plane-flow/.github/actions/cpflow-wait-for-health
   - package-ecosystem: bundler
     directory: "/"
     schedule:
