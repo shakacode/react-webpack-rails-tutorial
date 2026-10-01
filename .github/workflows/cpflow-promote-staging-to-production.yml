@@ -171,7 +171,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Setup production environment
-        uses: shakacode/control-plane-flow/.github/actions/cpflow-setup-environment@1d1ec7f7af181c5c6cf07f512ce336dbdb367246 # v5.2.0
+        uses: shakacode/control-plane-flow/.github/actions/cpflow-setup-environment@b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6 # v5.3.0
         env:
           # The v5.2 gemspec needs matching checkout metadata to package its action archive.
           GIT_DIR: ${{ github.workspace }}/.cpflow/.git
