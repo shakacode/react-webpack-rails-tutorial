@@ -9701,10 +9701,10 @@ setprototypeof@1.2.0, setprototypeof@~1.2.0:
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-shakapacker@10.2.0:
-  version "10.2.0"
-  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.2.0.tgz#8d3b18536ae9a21f087feb294672a67a852e829d"
-  integrity sha512-4jHAL3pCjI1BVf45hFPRVrsMRV54VIVVYrw1MmyX/Ks6rl2ydVt3rxpdzzxH4HFZ4umW6AsuAVSVucZE13taCw==
+shakapacker@10.3.2:
+  version "10.3.2"
+  resolved "https://registry.npmjs.org/shakapacker/-/shakapacker-10.3.2.tgz#cc8047b8fa67e0b141c8c1a428bc7992967ce62a"
+  integrity sha512-W4LV0MFS1c6ayODF/Ra4RM5xS3DljBc9XGLqz04WGSap97U5gJ7FjBTChPmoJ/7VDiTYmL1w+vh+D360e9qK7Q==
   dependencies:
     js-yaml "^4.1.0"
     pack-config-diff "^0.1.0"
