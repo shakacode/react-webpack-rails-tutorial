@@ -1,0 +1,109 @@
+name: Test CPFlow 500 promotion preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [jg-codex/test-cpflow-500-preview]
+    paths: [.github/workflows/cpflow-500-preview-test.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpflow-500-preview-test
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      staging_image: ${{ steps.preview.outputs.staging_image }}
+      production_commit: ${{ steps.preview.outputs.production_commit }}
+    steps:
+      - name: Checkout tutorial
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Checkout PR 500 candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: shakacode/control-plane-flow
+          ref: f99fb40af3de92cb2d434d414fafecdcd4dbdab2
+          path: .cpflow
+          persist-credentials: false
+      - name: Normalize staging org
+        id: org
+        shell: bash
+        env:
+          STAGING_ORG: ${{ vars.CPLN_ORG_STAGING }}
+        run: |
+          set -euo pipefail
+          org="${STAGING_ORG#"${STAGING_ORG%%[![:space:]]*}"}"
+          org="${org%"${org##*[![:space:]]}"}"
+          [[ "$org" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]] || exit 1
+          echo "org=$org" >> "$GITHUB_OUTPUT"
+      - name: Setup staging client from candidate source
+        uses: ./.cpflow/.github/actions/cpflow-setup-environment
+        with:
+          token: ${{ secrets.CPLN_TOKEN_STAGING }}
+          org: ${{ steps.org.outputs.org }}
+          working_directory: .cpflow
+          cpflow_source_directory: .cpflow
+          cpflow_version: ""
+          cpln_cli_version: ${{ vars.CPLN_CLI_VERSION }}
+          control_plane_flow_ref: shakacode/control-plane-flow/.github/workflows/cpflow-promote-staging-to-production.yml@f99fb40af3de92cb2d434d414fafecdcd4dbdab2
+      - name: Preview real staging commits
+        id: preview
+        uses: ./.cpflow/.github/actions/cpflow-preview-promotion
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          CPLN_TOKEN: ${{ secrets.CPLN_TOKEN_STAGING }}
+        with:
+          staging_app_name: ${{ vars.STAGING_APP_NAME }}
+          staging_org: ${{ steps.org.outputs.org }}
+          primary_workload: ${{ vars.PRIMARY_WORKLOAD }}
+      - name: Verify live comparison independently
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          STAGING_IMAGE: ${{ steps.preview.outputs.staging_image }}
+          PRODUCTION_COMMIT: ${{ steps.preview.outputs.production_commit }}
+        run: |
+          set -euo pipefail
+          [[ "$PRODUCTION_COMMIT" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "::error::Test requires a resolvable recorded production release."
+            exit 1
+          }
+          staging_tag="${STAGING_IMAGE%%@*}"
+          staging_commit="${staging_tag##*_}"
+          [[ "$staging_commit" =~ ^[0-9a-f]{40}$ ]] || exit 1
+          comparison="$(gh api "repos/$GH_REPO/compare/$PRODUCTION_COMMIT...$staging_commit?per_page=100&page=1")"
+          jq -e '.ahead_by >= 0 and (.commits | type == "array")' <<< "$comparison" >/dev/null
+          echo "Recorded production: $PRODUCTION_COMMIT"
+          echo "Deployed staging: $staging_commit"
+          jq '{status, ahead_by, behind_by, total_commits}' <<< "$comparison"
+          echo "Compare: https://github.com/$GH_REPO/compare/$PRODUCTION_COMMIT...$staging_commit"
+
+  approval-proof:
+    needs: preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment: cpflow-500-test-approval
+    steps:
+      - name: Confirm approval without deployment
+        shell: bash
+        env:
+          STAGING_IMAGE: ${{ needs.preview.outputs.staging_image }}
+          PRODUCTION_COMMIT: ${{ needs.preview.outputs.production_commit }}
+        run: |
+          set -euo pipefail
+          {
+            echo "## Test approval completed"
+            echo "The preview finished before this protected job could start."
+            echo "Staging image: $STAGING_IMAGE"
+            echo "Recorded production commit: $PRODUCTION_COMMIT"
+            echo "This test has no production credential, image copy, or deployment step."
+          } >> "$GITHUB_STEP_SUMMARY"
