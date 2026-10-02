@@ -10,12 +10,12 @@ gem "react_on_rails_pro", "17.2.0.rc.0"
 gem "shakapacker", "10.2.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 8.1.2"
+gem "rails", "~> 8.1.4"
 
 gem "pg"
 
 gem "bootsnap", require: false
-gem "puma"
+gem "puma", "~> 8.0.2"
 gem "thruster", "~> 0.1"
 
 # Use SCSS for stylesheets
