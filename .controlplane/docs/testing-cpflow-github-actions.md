@@ -49,9 +49,10 @@ those directories identical to the bundled gem's `.github/actions`; the contract
 check fails when they differ. The older cohort still loads its actions from its
 own pinned upstream source.
 
-GitHub checks these actions out at the same revision as the caller workflow
-file, so they carry the caller's trust and not the pull request's application
-code. The repository variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must
+The released 6.0.0 workflow checks this repository out at the triggering
+event's own revision before it runs these actions, and checks the pull
+request's application code out separately under `app/`. The actions therefore
+carry the caller workflow's trust, not the application code's. The repository variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must
 stay set: they take precedence over the prefix and org in the pull request's
 `controlplane.yml`. The deploy caller also maps the optional
 `REVIEW_APP_DOCKER_BUILD_SECRETS` secret, which this repo does not define. A
