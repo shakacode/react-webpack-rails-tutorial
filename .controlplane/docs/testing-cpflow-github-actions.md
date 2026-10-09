@@ -33,15 +33,20 @@ helper separately when validating workflow changes.
 
 ## Released Review-App Pair
 
-The deploy/delete callers and local CLI use cpflow **5.3.0**. Both callers pin
-`b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6` with a readable `v5.3.0`
+The deploy/delete callers and local CLI use cpflow **6.0.0**. Both callers pin
+`68b5d83152c02a70eb98ffdc7fd2072e28265fef` with a readable `v6.0.0`
 comment. Other generated callers intentionally remain on their existing
 **5.2.0** cohort; their migration is separate scope.
 
 The pair is inseparable: both need the generated authenticated redispatch
 input, exact run/job names, and matching permissions. A pin-only upgrade or a
 single divergent canary is rejected. The offline validator reads the installed
-5.3.0 gem's caller templates as its source of truth, without loading cpflow code.
+6.0.0 gem's caller templates as its source of truth, without loading cpflow code.
+
+From 6.0.0 the pair runs the composite actions checked in under
+`.github/actions/cpflow-*` instead of the copies in the upstream checkout. Keep
+those directories identical to the bundled gem's `.github/actions`; the older
+cohort still loads its actions from its own pinned upstream source.
 
 Leave `CPFLOW_VERSION` unset for these SHA-pinned callers: upstream builds the
 CLI from the same pinned source. The variable-based RubyGems override requires
@@ -49,8 +54,8 @@ a release-tag ref and cannot be combined with a commit SHA.
 
 Do not run the all-wrapper pin helper or blindly regenerate over the customized
 validation script for this split migration. A future upgrade must update both
-callers, the local dependency/lockfile, validator release constants, and fixture
-tests together. Preserve the renderer assertions and separately review any
+callers, the local dependency/lockfile, the checked-in local actions, validator
+release constants, and fixture tests together. Preserve the renderer assertions and separately review any
 changes to other caller cohorts.
 
 ## Review App Canary

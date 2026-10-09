@@ -10,7 +10,7 @@ load File.expand_path("../bin/check-cpflow-review-app-contract", __dir__)
 
 RSpec.describe "Workflow release and security contracts" do
   let(:root) { File.expand_path("..", __dir__) }
-  let(:release_sha) { "b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6" }
+  let(:release_sha) { "68b5d83152c02a70eb98ffdc7fd2072e28265fef" }
 
   it "moves deploy and delete together to the released source" do
     %w[deploy delete].each do |operation|
@@ -27,7 +27,7 @@ RSpec.describe "Workflow release and security contracts" do
                                      File.join(root, "bin/check-cpflow-review-app-contract"))
 
     expect(status.success?).to be(true), output
-    expect(output).to include("review-app release contract: v5.3.0")
+    expect(output).to include("review-app release contract: v6.0.0")
   end
 
   it "activates an isolated bundle when plain Ruby has no inherited bundle-exec setup" do
@@ -51,7 +51,7 @@ RSpec.describe "Workflow release and security contracts" do
                                        unsetenv_others: true)
 
       expect(status.success?).to be(true), output
-      expect(output).to include("review-app release contract: v5.3.0")
+      expect(output).to include("review-app release contract: v6.0.0")
     end
   end
 
@@ -77,9 +77,9 @@ RSpec.describe "Workflow release and security contracts" do
     end
 
     [
-      ["a moving ref", "deploy", "b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6", "main", "released workflow ref"],
-      ["a mismatched pair", "delete", "b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6", "a" * 40, "released workflow ref"],
-      ["a stale release comment", "delete", "# v5.3.0", "# v5.2.0", "release comment"],
+      ["a moving ref", "deploy", "68b5d83152c02a70eb98ffdc7fd2072e28265fef", "main", "released workflow ref"],
+      ["a mismatched pair", "delete", "68b5d83152c02a70eb98ffdc7fd2072e28265fef", "a" * 40, "released workflow ref"],
+      ["a stale release comment", "delete", "# v6.0.0", "# v5.2.0", "release comment"],
       ["missing dispatch permission", "deploy", "  actions: write\n", "", "permissions"],
       ["missing deletion permission", "delete", "  deployments: write\n", "", "permissions"],
       ["excessive permissions", "deploy", "  contents: read", "  contents: write", "permissions"],
@@ -102,14 +102,14 @@ RSpec.describe "Workflow release and security contracts" do
 
     it "rejects an out-of-date local CLI dependency" do
       path = File.join(fixture, "Gemfile")
-      File.write(path, File.read(path).sub('gem "cpflow", "5.3.0"', 'gem "cpflow", "5.2.0"'))
+      File.write(path, File.read(path).sub('gem "cpflow", "6.0.0"', 'gem "cpflow", "5.2.0"'))
 
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("Gemfile"))
     end
 
     it "rejects an out-of-date lockfile resolution" do
       path = File.join(fixture, "Gemfile.lock")
-      File.write(path, File.read(path).sub("    cpflow (5.3.0)", "    cpflow (5.2.0)"))
+      File.write(path, File.read(path).sub("    cpflow (6.0.0)", "    cpflow (5.2.0)"))
 
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("Gemfile.lock"))
     end
@@ -224,14 +224,17 @@ RSpec.describe "Workflow release and security contracts" do
         FileUtils.remove_entry_secure(fixture)
       end
 
-      def run_step(step, inputs = {})
+      def run_step(step, inputs = {}, system_path: false)
         bindings = step.fetch("env", {}).transform_values do |expression|
           match = /\A\$\{\{ inputs\.([a-z_]+) \}\}\z/.match(expression)
           raise "Unexpected test input binding" unless match
 
-          inputs.fetch(match[1])
+          inputs.fetch(match[1], "")
         end
-        env = { "PATH" => fixture, "FIXTURE_ROOT" => fixture }.merge(bindings)
+        path = system_path ? "#{fixture}:/usr/bin:/bin" : fixture
+        runner_files = { "GITHUB_PATH" => File.join(fixture, "github_path"),
+                         "GITHUB_ENV" => File.join(fixture, "github_env") }
+        env = { "PATH" => path, "FIXTURE_ROOT" => fixture, "HOME" => fixture }.merge(runner_files, bindings)
         _output, status = Open3.capture2e(env, "/bin/bash", "-c", step.fetch("run"),
                                           chdir: fixture, unsetenv_others: true)
         expect(File).not_to exist(File.join(fixture, "injected"))
@@ -242,55 +245,80 @@ RSpec.describe "Workflow release and security contracts" do
         File.binread(File.join(fixture, "#{command}.args")).split("\0")
       end
 
-      it "passes version inputs as literal single arguments without shell evaluation" do
-        step = setup_steps.fetch(1)
+      it "passes the CLI version input as a literal single argument without shell evaluation" do
+        source = File.join(fixture, "cpflow-source")
+        FileUtils.mkdir_p(source)
+        FileUtils.touch(File.join(source, "cpflow.gemspec"))
 
-        status = run_step(step, "cpln_cli_version" => hostile_input, "cpflow_version" => hostile_input)
+        status = run_step(setup_steps.fetch(2),
+                          { "cpln_cli_version" => hostile_input, "cpflow_source_directory" => source },
+                          system_path: true)
 
         expect(status.success?).to be(true)
-        expect(arguments_for("npm")).to eq(["install", "-g", "@controlplane/cli@#{hostile_input}"])
-        expect(arguments_for("gem")).to eq(["install", "cpflow", "-v", hostile_input])
+        expect(arguments_for("npm")).to eq(
+          ["install", "--global", "--prefix", File.join(fixture, ".npm-global"), "@controlplane/cli@#{hostile_input}"]
+        )
+        expect(arguments_for("gem").first(3)).to eq(%w[build cpflow.gemspec --output])
         expect(arguments_for("cpln")).to eq(["--version"])
         expect(arguments_for("cpflow")).to eq(["--version"])
       end
 
-      it "passes profile inputs literally without shell evaluation" do
-        expect(run_step(setup_steps.fetch(2), "token" => hostile_input, "org" => hostile_input).success?).to be(true)
-        expected_arguments = [
-          "profile", "create", "default", "--token", hostile_input, "--org", hostile_input,
-          "profile", "update", "default", "--org", hostile_input, "--token", hostile_input,
-          "image", "docker-login", "--org", hostile_input
-        ]
-        expect(arguments_for("cpln")).to eq(expected_arguments)
+      it "rejects a malformed cpflow version input before invoking a command" do
+        status = run_step(setup_steps.fetch(2), { "cpflow_version" => hostile_input })
+
+        expect(status.success?).to be(false)
+        expect(Dir[File.join(fixture, "*.args")]).to be_empty
+      end
+
+      it "passes the org input literally and keeps the token off the command line" do
+        status = run_step(setup_steps.fetch(3), { "token" => hostile_input, "org" => hostile_input },
+                          system_path: true)
+
+        expect(status.success?).to be(true)
+        expect(arguments_for("cpln")).to eq(
+          ["profile", "update", "default", "--org", hostile_input, "image", "docker-login", "--org", hostile_input]
+        )
       end
 
       %w[token org].each do |missing_input|
         it "rejects an empty #{missing_input} input before invoking a command" do
           inputs = { "token" => "fixture-value", "org" => "fixture-value", missing_input => "" }
 
-          expect(run_step(setup_steps.fetch(2), inputs).success?).to be(false)
+          expect(run_step(setup_steps.fetch(3), inputs).success?).to be(false)
           expect(Dir[File.join(fixture, "*.args")]).to be_empty
         end
       end
 
-      it "quotes the action path before executing the delete script" do
-        action = YAML.safe_load(File.read(File.join(root,
-                                                    ".github/actions/cpflow-delete-control-plane-app/action.yml")))
-        step = action.fetch("runs").fetch("steps").fetch(0)
-        action_path = File.join(fixture, "action $(printf injected)")
-        FileUtils.mkdir_p(action_path)
-        script = File.join(action_path, "delete-app.sh")
-        File.write(script, "#!/bin/bash\nprintf called > \"$FIXTURE_ROOT/called\"\n")
-        FileUtils.chmod(0o700, script)
+      context "with the delete action" do
+        let(:step) do
+          action = YAML.safe_load(File.read(File.join(root,
+                                                      ".github/actions/cpflow-delete-control-plane-app/action.yml")))
+          action.fetch("runs").fetch("steps").fetch(0)
+        end
 
-        expect(step.fetch("env").fetch("ACTION_PATH")).to eq("${{ github.action_path }}")
-        env = { "PATH" => fixture, "FIXTURE_ROOT" => fixture, "ACTION_PATH" => action_path }
-        _output, status = Open3.capture2e(env, "/bin/bash", "-c", step.fetch("run"),
-                                          chdir: fixture, unsetenv_others: true)
+        def run_delete(action_path)
+          FileUtils.mkdir_p(action_path)
+          script = File.join(action_path, "delete-app.sh")
+          File.write(script, "#!/bin/bash\nprintf called > \"$FIXTURE_ROOT/called\"\n")
+          FileUtils.chmod(0o700, script)
+          env = { "PATH" => fixture, "FIXTURE_ROOT" => fixture, "ACTION_PATH" => action_path }
+          _output, status = Open3.capture2e(env, "/bin/bash", "-c", step.fetch("run"),
+                                            chdir: fixture, unsetenv_others: true)
+          status
+        end
 
-        expect(status.success?).to be(true)
-        expect(File.read(File.join(fixture, "called"))).to eq("called")
-        expect(File).not_to exist(File.join(fixture, "injected"))
+        it "runs the delete script from the action path bound through the environment" do
+          expect(step.fetch("env").fetch("ACTION_PATH")).to eq("${{ github.action_path }}")
+          expect(run_delete(File.join(fixture, "action")).success?).to be(true)
+          expect(File.read(File.join(fixture, "called"))).to eq("called")
+        end
+
+        it "does not evaluate shell syntax in the action path" do
+          run_delete(File.join(fixture, "action $(printf injected)"))
+
+          expect(File).not_to exist(File.join(fixture, "injected"))
+          expect(File).not_to exist(File.join(fixture, "called"))
+        end
       end
     end
   end

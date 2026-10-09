@@ -131,9 +131,10 @@ production org, using production-only secrets and values.
 
 This repo uses immutable release SHAs and deliberately separates two cohorts:
 
-- Review-app deploy/delete callers: `v5.3.0` at
-  `b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6`, with the local `cpflow` gem
-  and lockfile on `5.3.0`. Upgrade the two callers together.
+- Review-app deploy/delete callers: `v6.0.0` at
+  `68b5d83152c02a70eb98ffdc7fd2072e28265fef`, with the local `cpflow` gem
+  and lockfile on `6.0.0`. Upgrade the two callers together with the
+  `.github/actions/cpflow-*` actions, which these workflows run from this repo.
 - Staging, cleanup, help, and promotion: `v5.2.0` at
   `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Keep this cohort unchanged
   unless its migration is separately reviewed.

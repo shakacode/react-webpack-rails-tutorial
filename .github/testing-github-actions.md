@@ -29,7 +29,7 @@ guide:
    workflows load their matching shared actions automatically; do not add a
    duplicate ref input to downstream wrappers.
 
-The review-app deploy/delete pair uses released **5.3.0** together; the other
+The review-app deploy/delete pair uses released **6.0.0** together; the other
 generated callers and promotion actions retain their reviewed **5.2.0** cohort.
 Do not replace these pins with release tags, `main`, or feature branches. Do not
 use the all-wrapper pin helper or blanket regeneration for this split migration:

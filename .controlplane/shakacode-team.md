@@ -141,7 +141,7 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 Keep upstream workflow and action references on reviewed, immutable full commit
 SHAs with readable release comments, not release tags, `main`, or feature
 branches. The review-app deploy/delete pair advances together on released
-**5.3.0**; other generated callers and promotion actions retain their reviewed
+**6.0.0**; other generated callers and promotion actions retain their reviewed
 **5.2.0** cohort until a separately scoped migration.
 
 Do not blanket-regenerate the automation or use the all-wrapper pin helper for

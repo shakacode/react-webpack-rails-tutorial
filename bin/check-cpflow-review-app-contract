@@ -8,8 +8,8 @@ require "yaml"
 # Compare their behavior with the installed release's authoritative templates.
 # This reads files only: it neither loads cpflow application code nor contacts APIs.
 module CpflowReviewAppContract
-  VERSION = "5.3.0"
-  SHA = "b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6"
+  VERSION = "6.0.0"
+  SHA = "68b5d83152c02a70eb98ffdc7fd2072e28265fef"
   CALLERS = { "deploy" => "deploy", "delete" => "delete-review-app" }.freeze
 
   def self.check(root)

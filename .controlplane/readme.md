@@ -633,9 +633,11 @@ Keep the reusable-workflow mechanics in the upstream
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 This repo deliberately keeps two release cohorts:
 
-- The review-app deploy/delete callers pin cpflow `v5.3.0` at
-  `b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6`. The bundled `cpflow` gem and
-  lockfile use `5.3.0`.
+- The review-app deploy/delete callers pin cpflow `v6.0.0` at
+  `68b5d83152c02a70eb98ffdc7fd2072e28265fef`. The bundled `cpflow` gem and
+  lockfile use `6.0.0`. From 6.0.0 these workflows run the composite actions
+  checked in under `.github/actions/cpflow-*`, so those files must match the
+  bundled gem.
 - Staging, cleanup, help, and promotion retain `v5.2.0` at
   `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Their migration is separate
   scope, not an automatic consequence of updating the local gem.

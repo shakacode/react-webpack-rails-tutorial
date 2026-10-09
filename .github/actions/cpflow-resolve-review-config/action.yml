@@ -1,0 +1,137 @@
+name: Resolve Review App Config
+description: Infers review app prefix and Control Plane org from controlplane.yml
+
+inputs:
+  configured_cpln_org_staging:
+    description: Optional override for the staging Control Plane org.
+    required: false
+    default: ""
+  configured_review_app_prefix:
+    description: Optional override for the review app prefix.
+    required: false
+    default: ""
+  pr_number:
+    description: Pull request number used to build the review app name.
+    required: false
+    default: ""
+  working_directory:
+    description: Directory containing .controlplane/controlplane.yml.
+    required: false
+    default: "."
+
+outputs:
+  review_app_prefix:
+    description: Resolved review app prefix.
+    value: ${{ steps.resolve.outputs.review_app_prefix }}
+  cpln_org:
+    description: Resolved Control Plane org.
+    value: ${{ steps.resolve.outputs.cpln_org }}
+  app_name:
+    description: Resolved review app name when pr_number is present; omitted when pr_number is empty.
+    value: ${{ steps.resolve.outputs.app_name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve review app config
+      id: resolve
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        CONFIGURED_CPLN_ORG_STAGING: ${{ inputs.configured_cpln_org_staging }}
+        CONFIGURED_REVIEW_APP_PREFIX: ${{ inputs.configured_review_app_prefix }}
+        PR_NUMBER: ${{ inputs.pr_number }}
+      run: |
+        set -euo pipefail
+
+        ruby <<'RUBY'
+        require "yaml"
+
+        def safe_load_yaml_file(path)
+          contents = File.read(path)
+
+          if YAML.method(:safe_load).parameters.any? { |type, name| type == :key && name == :aliases }
+            YAML.safe_load(contents, aliases: true)
+          else
+            YAML.safe_load(contents, [], [], true)
+          end
+        end
+
+        def validate_github_env_value!(name, value)
+          return if value.match?(/\A[A-Za-z0-9-]+\z/)
+
+          warn "::error::#{name} must contain only letters, numbers, and hyphens so it is a valid Control Plane name and can be safely written to GitHub environment files."
+          exit 1
+        end
+
+        begin
+          config = safe_load_yaml_file(".controlplane/controlplane.yml")
+          unless config.is_a?(Hash)
+            warn "::error::.controlplane/controlplane.yml must be a YAML mapping; got #{config.class}: #{config.inspect}"
+            exit 1
+          end
+
+          apps = config["apps"]
+          unless apps.is_a?(Hash)
+            warn "::error::.controlplane/controlplane.yml must define an apps mapping; got #{apps.class}: #{apps.inspect}"
+            exit 1
+          end
+
+          review_apps = apps.select do |_name, app_config|
+            app_config.is_a?(Hash) && app_config["match_if_app_name_starts_with"] == true
+          end
+
+          prefix = ENV.fetch("CONFIGURED_REVIEW_APP_PREFIX", "").strip
+          if prefix.empty?
+            if review_apps.length == 1
+              prefix = review_apps.keys.first
+            elsif review_apps.empty?
+              warn "::error::Set REVIEW_APP_PREFIX or define exactly one app with match_if_app_name_starts_with: true in .controlplane/controlplane.yml."
+              exit 1
+            else
+              warn "::error::Set REVIEW_APP_PREFIX because .controlplane/controlplane.yml defines multiple review app prefixes: #{review_apps.keys.sort.join(', ')}."
+              exit 1
+            end
+          end
+
+          app_config = apps[prefix]
+          unless app_config.is_a?(Hash) && app_config["match_if_app_name_starts_with"] == true
+            warn "::error::Review app prefix '#{prefix}' must match an app in .controlplane/controlplane.yml with match_if_app_name_starts_with: true."
+            exit 1
+          end
+
+          cpln_org = ENV.fetch("CONFIGURED_CPLN_ORG_STAGING", "").strip
+          cpln_org = app_config["cpln_org"].to_s.strip if cpln_org.empty?
+          if cpln_org.empty?
+            warn "::error::Set CPLN_ORG_STAGING or cpln_org for review app prefix '#{prefix}' in .controlplane/controlplane.yml."
+            exit 1
+          end
+
+          pr_number = ENV.fetch("PR_NUMBER", "").strip
+          unless pr_number.empty? || pr_number.match?(/\A[1-9][0-9]*\z/)
+            warn "::error::PR_NUMBER must be a positive integer; got: #{pr_number.inspect}"
+            exit 1
+          end
+
+          app_name = pr_number.empty? ? "" : "#{prefix}-#{pr_number}"
+
+          validate_github_env_value!("REVIEW_APP_PREFIX", prefix)
+          validate_github_env_value!("CPLN_ORG", cpln_org)
+          validate_github_env_value!("APP_NAME", app_name) unless app_name.empty?
+
+          File.open(ENV.fetch("GITHUB_ENV"), "a") do |file|
+            file.puts "REVIEW_APP_PREFIX=#{prefix}"
+            file.puts "CPLN_ORG=#{cpln_org}"
+            file.puts "APP_NAME=#{app_name}" unless app_name.empty?
+          end
+
+          File.open(ENV.fetch("GITHUB_OUTPUT"), "a") do |file|
+            file.puts "review_app_prefix=#{prefix}"
+            file.puts "cpln_org=#{cpln_org}"
+            file.puts "app_name=#{app_name}" unless app_name.empty?
+          end
+        rescue StandardError => e
+          warn "::error::Could not resolve review app config from .controlplane/controlplane.yml: #{e.class}: #{e.message}"
+          exit 1
+        end
+        RUBY

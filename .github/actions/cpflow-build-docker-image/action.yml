@@ -17,43 +17,190 @@ inputs:
   docker_build_extra_args:
     description: Optional newline-delimited extra docker build tokens. Use key=value forms like --build-arg=FOO=bar.
     required: false
+  docker_build_secrets:
+    description: Optional newline-delimited id=value secrets, passed through BuildKit secret mounts.
+    required: false
   docker_build_ssh_key:
     description: Optional private SSH key used for Docker builds that fetch private dependencies with RUN --mount=type=ssh
     required: false
   docker_build_ssh_known_hosts:
     description: Optional SSH known_hosts entries used with docker_build_ssh_key. Defaults to pinned GitHub.com host keys.
     required: false
-
-outputs:
-  image_tag:
-    description: Fully qualified image tag
-    value: ${{ steps.build.outputs.image_tag }}
+  working_directory:
+    description: Directory containing the app .controlplane config and Docker build context
+    required: false
+    default: "."
 
 runs:
   using: composite
   steps:
+    - name: Prepare Docker build secrets
+      id: build-secrets
+      if: ${{ inputs.docker_build_secrets != '' }}
+      shell: bash
+      env:
+        DOCKER_BUILD_SECRETS: ${{ inputs.docker_build_secrets }}
+      run: |
+        set -euo pipefail
+        umask 077
+        secret_directory="$(mktemp -d "${RUNNER_TEMP}/cpflow-build-secrets.XXXXXX")"
+        secrets_ready=false
+        trap 'if [[ "${secrets_ready}" != "true" ]]; then rm -rf "${secret_directory}"; fi' EXIT
+        while IFS= read -r entry || [[ -n "${entry}" ]]; do
+          entry="${entry%$'\r'}"
+          [[ -n "${entry}" ]] || continue
+          if [[ "${entry}" != *=* ]]; then
+            echo "Docker build secrets must use id=value entries." >&2
+            exit 1
+          fi
+          secret_id="${entry%%=*}"
+          secret_value="${entry#*=}"
+          if [[ ! "${secret_id}" =~ ^[a-zA-Z0-9][a-zA-Z0-9_-]*$ ]] || [[ -z "${secret_value}" ]]; then
+            echo "Docker build secrets require a valid id and a nonempty value." >&2
+            exit 1
+          fi
+          if [[ -e "${secret_directory}/${secret_id}" ]]; then
+            echo "Duplicate Docker build secret id." >&2
+            exit 1
+          fi
+          # GitHub masks the stored id=value entry; register the extracted value too.
+          masked_value="${secret_value//%/%25}"
+          masked_value="${masked_value//$'\r'/%0D}"
+          masked_value="${masked_value//$'\n'/%0A}"
+          printf '::add-mask::%s\n' "${masked_value}"
+          printf '%s' "${secret_value}" > "${secret_directory}/${secret_id}"
+        done <<< "${DOCKER_BUILD_SECRETS}"
+        echo "directory=${secret_directory}" >> "${GITHUB_OUTPUT}"
+        secrets_ready=true
+
+    # Keep SSH key handling in a dedicated step so DOCKER_BUILD_SSH_KEY is never present
+    # in the main build step's environment. ACTIONS_STEP_DEBUG=true dumps env before any
+    # command runs, so keeping the key out of env there avoids even admin-triggered exposure.
+    - name: Prepare SSH agent for Docker build
+      id: prepare-build-ssh
+      if: ${{ inputs.docker_build_ssh_key != '' }}
+      shell: bash
+      env:
+        # Pass the key via env so ssh-add can read it from stdin without persisting it to
+        # disk. Scope is this step only — the build step below receives the agent socket,
+        # not DOCKER_BUILD_SSH_KEY.
+        DOCKER_BUILD_SSH_KEY: ${{ inputs.docker_build_ssh_key }}
+        DOCKER_BUILD_SSH_KNOWN_HOSTS: ${{ inputs.docker_build_ssh_known_hosts }}
+      run: |
+        set -euo pipefail
+
+        umask 077
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+
+        known_hosts_backup="${HOME}/.ssh/cpflow_known_hosts_backup"
+        if [[ -e "${known_hosts_backup}" ]]; then
+          echo "Refusing to replace SSH known_hosts: a prior cpflow backup exists at ${known_hosts_backup}." >&2
+          echo "If no build is currently running on this runner, restore or remove that backup, then retry." >&2
+          exit 1
+        fi
+
+        known_hosts_backup_ready=false
+        known_hosts_replaced=false
+        ssh_agent_started=false
+        restore_known_hosts_on_prep_failure() {
+          status=$?
+          if [[ "${status}" -ne 0 ]]; then
+            if [[ "${ssh_agent_started}" == "true" ]]; then
+              ssh-agent -k >/dev/null || true
+            fi
+            if [[ "${known_hosts_backup_ready}" == "true" ]]; then
+              mv -f -- "${known_hosts_backup}" "${HOME}/.ssh/known_hosts"
+            else
+              rm -f "${known_hosts_backup}"
+              if [[ "${known_hosts_replaced}" == "true" ]]; then
+                rm -f "${HOME}/.ssh/known_hosts"
+              fi
+            fi
+          fi
+          exit "${status}"
+        }
+        trap restore_known_hosts_on_prep_failure EXIT
+
+        if [[ -L "${HOME}/.ssh/known_hosts" ]]; then
+          echo "Refusing to replace symlinked SSH known_hosts." >&2
+          exit 1
+        fi
+        if [[ -e "${HOME}/.ssh/known_hosts" ]]; then
+          if [[ ! -f "${HOME}/.ssh/known_hosts" ]]; then
+            echo "Refusing to replace non-file SSH known_hosts." >&2
+            exit 1
+          fi
+          cp -p -- "${HOME}/.ssh/known_hosts" "${known_hosts_backup}"
+          known_hosts_backup_ready=true
+        fi
+
+        known_hosts_replaced=true
+        if [[ -n "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" ]]; then
+          printf '%s\n' "${DOCKER_BUILD_SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+        else
+          printf '%s\n' \
+            'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
+            'github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=' \
+            'github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=' \
+            > ~/.ssh/known_hosts
+        fi
+        chmod 600 ~/.ssh/known_hosts
+
+        eval "$(ssh-agent -s)"
+        ssh_agent_started=true
+        printf '%s\n' "${DOCKER_BUILD_SSH_KEY}" | ssh-add -
+        {
+          echo "prepared=true"
+          echo "known_hosts_had_original=${known_hosts_backup_ready}"
+          echo "ssh_auth_sock=${SSH_AUTH_SOCK}"
+          echo "ssh_agent_pid=${SSH_AGENT_PID}"
+        } >> "${GITHUB_OUTPUT}"
+
     - name: Build Docker image
-      id: build
       shell: bash
       env:
         APP_NAME: ${{ inputs.app_name }}
-        COMMIT: ${{ inputs.commit }}
+        COMMIT_SHA: ${{ inputs.commit }}
+        CONTROL_PLANE_ORG: ${{ inputs.org }}
+        DOCKER_BUILD_SECRET_DIRECTORY: ${{ steps.build-secrets.outputs.directory }}
         DOCKER_BUILD_EXTRA_ARGS: ${{ inputs.docker_build_extra_args }}
-        DOCKER_BUILD_SSH_KEY: ${{ inputs.docker_build_ssh_key }}
-        DOCKER_BUILD_SSH_KNOWN_HOSTS: ${{ inputs.docker_build_ssh_known_hosts }}
-        ORG: ${{ inputs.org }}
         PR_NUMBER: ${{ inputs.pr_number }}
+        CPFLOW_BUILD_SSH_PREPPED: ${{ steps.prepare-build-ssh.outputs.prepared }}
+        CPFLOW_KNOWN_HOSTS_HAD_ORIGINAL: ${{ steps.prepare-build-ssh.outputs.known_hosts_had_original }}
+        SSH_AUTH_SOCK: ${{ steps.prepare-build-ssh.outputs.ssh_auth_sock }}
+        SSH_AGENT_PID: ${{ steps.prepare-build-ssh.outputs.ssh_agent_pid }}
+        WORKING_DIRECTORY: ${{ inputs.working_directory }}
       run: |
         set -euo pipefail
 
         PR_INFO=""
         docker_build_args=()
+        build_ssh_prepped="${CPFLOW_BUILD_SSH_PREPPED:-false}"
 
-        if [[ -n "$PR_NUMBER" ]]; then
+        cleanup_build_ssh() {
+          if [[ -n "${DOCKER_BUILD_SECRET_DIRECTORY:-}" ]]; then
+            rm -rf -- "${DOCKER_BUILD_SECRET_DIRECTORY}"
+          fi
+          if [[ "${build_ssh_prepped}" == "true" ]]; then
+            ssh-agent -k >/dev/null || true
+            # Restore a pre-existing known_hosts file on reused runners. When there was
+            # no original file, remove only the file created by this action.
+            if [[ -f "${HOME}/.ssh/cpflow_known_hosts_backup" ]]; then
+              mv -f -- "${HOME}/.ssh/cpflow_known_hosts_backup" "${HOME}/.ssh/known_hosts"
+            else
+              rm -f "${HOME}/.ssh/known_hosts"
+            fi
+          fi
+        }
+        trap cleanup_build_ssh EXIT
+        cd "${WORKING_DIRECTORY}"
+
+        if [[ -n "${PR_NUMBER}" ]]; then
           PR_INFO=" for PR #${PR_NUMBER}"
         fi
 
-        if [[ -n "$DOCKER_BUILD_EXTRA_ARGS" ]]; then
+        if [[ -n "${DOCKER_BUILD_EXTRA_ARGS}" ]]; then
           while IFS= read -r arg; do
             arg="${arg%$'\r'}"
             [[ -n "${arg}" ]] || continue
@@ -65,35 +212,51 @@ runs:
             fi
 
             docker_build_args+=("${arg}")
-          done <<< "$DOCKER_BUILD_EXTRA_ARGS"
+          done <<< "${DOCKER_BUILD_EXTRA_ARGS}"
         fi
 
-        if [[ -n "$DOCKER_BUILD_SSH_KEY" ]]; then
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          if [[ -n "$DOCKER_BUILD_SSH_KNOWN_HOSTS" ]]; then
-            printf '%s\n' "$DOCKER_BUILD_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          else
-            cat <<'EOF' > ~/.ssh/known_hosts
-        github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
-        github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
-        github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
-        EOF
-          fi
-
-          chmod 600 ~/.ssh/known_hosts
-
-          eval "$(ssh-agent -s)"
-          trap 'ssh-agent -k >/dev/null' EXIT
-          ssh-add - <<< "$DOCKER_BUILD_SSH_KEY"
-          unset DOCKER_BUILD_SSH_KEY
+        if [[ "${build_ssh_prepped}" == "true" ]]; then
           docker_build_args+=("--ssh=default")
         fi
 
-        echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT})..."
-        cpflow build-image -a "$APP_NAME" --commit="$COMMIT" --org="$ORG" "${docker_build_args[@]}"
+        if [[ -n "${DOCKER_BUILD_SECRET_DIRECTORY:-}" ]]; then
+          for secret_path in "${DOCKER_BUILD_SECRET_DIRECTORY}"/*; do
+            [[ -f "${secret_path}" ]] || continue
+            docker_build_args+=("--secret=id=${secret_path##*/},src=${secret_path}")
+          done
+        fi
 
-        image_tag="${ORG}/${APP_NAME}:${COMMIT}"
-        echo "image_tag=${image_tag}" >> "$GITHUB_OUTPUT"
-        echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT})"
+        echo "🏗️ Building Docker image${PR_INFO} (commit ${COMMIT_SHA})..."
+        cpflow build-image -a "${APP_NAME}" --commit="${COMMIT_SHA}" --org="${CONTROL_PLANE_ORG}" "${docker_build_args[@]}"
+        echo "✅ Docker image build successful${PR_INFO} (commit ${COMMIT_SHA})"
+
+    - name: Clean up SSH build state
+      if: ${{ always() && inputs.docker_build_ssh_key != '' }}
+      shell: bash
+      env:
+        CPFLOW_BUILD_SSH_PREPPED: ${{ steps.prepare-build-ssh.outputs.prepared }}
+        CPFLOW_KNOWN_HOSTS_HAD_ORIGINAL: ${{ steps.prepare-build-ssh.outputs.known_hosts_had_original }}
+        SSH_AUTH_SOCK: ${{ steps.prepare-build-ssh.outputs.ssh_auth_sock }}
+        SSH_AGENT_PID: ${{ steps.prepare-build-ssh.outputs.ssh_agent_pid }}
+      run: |
+        set +e
+
+        if [[ "${CPFLOW_BUILD_SSH_PREPPED:-false}" == "true" ]]; then
+          ssh-agent -k >/dev/null || true
+          if [[ -f "${HOME}/.ssh/cpflow_known_hosts_backup" ]]; then
+            mv -f -- "${HOME}/.ssh/cpflow_known_hosts_backup" "${HOME}/.ssh/known_hosts"
+          elif [[ "${CPFLOW_KNOWN_HOSTS_HAD_ORIGINAL:-}" == "false" ]]; then
+            rm -f "${HOME}/.ssh/known_hosts"
+          fi
+        fi
+
+    - name: Clean up Docker build secrets
+      if: ${{ always() && inputs.docker_build_secrets != '' }}
+      shell: bash
+      env:
+        DOCKER_BUILD_SECRET_DIRECTORY: ${{ steps.build-secrets.outputs.directory }}
+      run: |
+        set -euo pipefail
+        if [[ -n "${DOCKER_BUILD_SECRET_DIRECTORY:-}" ]]; then
+          rm -rf -- "${DOCKER_BUILD_SECRET_DIRECTORY}"
+        fi

@@ -139,7 +139,7 @@ GEM
       term-ansicolor (~> 1.6)
       thor (>= 0.20.3, < 2.0)
       tins (~> 1.16)
-    cpflow (5.3.0)
+    cpflow (6.0.0)
       dotenv (~> 3.1)
       jwt (~> 3.1)
       psych (~> 5.2)
@@ -520,7 +520,7 @@ DEPENDENCIES
   capybara-screenshot
   coffee-rails
   coveralls_reborn (~> 0.25.0)
-  cpflow (= 5.3.0)
+  cpflow (= 6.0.0)
   database_cleaner
   debug (>= 1.0.0)
   factory_bot_rails
