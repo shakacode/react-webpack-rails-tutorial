@@ -29,10 +29,9 @@ heads because Docker builds use repository secrets. If a forked change needs a
 review app, first move the reviewed change to a trusted branch in this
 repository.
 
-No repository variables are required for the standard review-app path when
-`.controlplane/controlplane.yml` has exactly one review app entry with
-`match_if_app_name_starts_with: true`. cpflow infers the review-app prefix and
-staging org from that config.
+This repository sets the `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` repository
+variables. Keep both set: without them cpflow infers the review-app prefix and
+staging org from the pull request's `.controlplane/controlplane.yml`.
 
 Review apps run pull request code. Any value mounted through
 `cpln://secret/...` can be read by that code after the workload starts, so keep

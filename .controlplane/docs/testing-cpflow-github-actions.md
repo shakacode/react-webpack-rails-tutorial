@@ -52,9 +52,9 @@ own pinned upstream source.
 The released 6.0.0 workflow checks this repository out at the triggering
 event's own revision before it runs these actions, and checks the pull
 request's application code out separately under `app/`. The actions therefore
-carry the caller workflow's trust, not the application code's. The repository variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must
-stay set: they take precedence over the prefix and org in the pull request's
-`controlplane.yml`. The deploy caller also maps the optional
+carry the caller workflow's trust, not the application code's. The repository
+variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must stay set: they take
+precedence over the prefix and org in the pull request's `controlplane.yml`. The deploy caller also maps the optional
 `REVIEW_APP_DOCKER_BUILD_SECRETS` secret, which this repo does not define. A
 pull request's Dockerfile can read it during the build, so only ever store
 review-grade values there.
@@ -66,8 +66,8 @@ a release-tag ref and cannot be combined with a commit SHA.
 Do not run the all-wrapper pin helper or blindly regenerate over the customized
 validation script for this split migration. A future upgrade must update both
 callers, the local dependency/lockfile, the checked-in local actions, validator
-release constants, and fixture tests together. Preserve the renderer assertions and separately review any
-changes to other caller cohorts.
+release constants, and fixture tests together. Preserve the renderer assertions
+and separately review any changes to other caller cohorts.
 
 ## Review App Canary
 

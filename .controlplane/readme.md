@@ -40,11 +40,15 @@ heads because Docker builds use repository secrets; if a forked change needs a
 review app, first move the reviewed change to a trusted branch in this
 repository.
 
-No review-app repository variables are required for the standard path. The
-workflow infers `qa-react-webpack-rails-tutorial` and
-`shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`,
-because that file has one app with `match_if_app_name_starts_with: true`.
-`PRIMARY_WORKLOAD` also stays unset because the public workload is `rails`.
+Review apps need two repository variables. Without them the workflow infers
+the prefix and org from the pull request's `.controlplane/controlplane.yml`:
+
+| Name | Value |
+| --- | --- |
+| `REVIEW_APP_PREFIX` | `qa-react-webpack-rails-tutorial` |
+| `CPLN_ORG_STAGING` | `shakacode-open-source-examples-staging` |
+
+`PRIMARY_WORKLOAD` stays unset because the public workload is `rails`.
 
 For staging auto-deploys, also set these repository variables:
 
