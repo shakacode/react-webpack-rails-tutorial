@@ -65,6 +65,7 @@ RSpec.describe "Workflow release and security contracts" do
         FileUtils.cp(File.join(root, path), File.join(fixture, path))
       end
       %w[Gemfile Gemfile.lock].each { |path| FileUtils.cp(File.join(root, path), fixture) }
+      FileUtils.cp_r(File.join(root, ".github/actions"), File.join(fixture, ".github/actions"))
       example.run
     ensure
       FileUtils.remove_entry_secure(fixture)
@@ -112,6 +113,20 @@ RSpec.describe "Workflow release and security contracts" do
       File.write(path, File.read(path).sub("    cpflow (6.0.0)", "    cpflow (5.2.0)"))
 
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("Gemfile.lock"))
+    end
+
+    it "rejects an edited local action" do
+      path = File.join(fixture, ".github/actions/cpflow-setup-environment/action.yml")
+      File.write(path, "#{File.read(path)}# edited\n")
+
+      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("differs from release"))
+    end
+
+    it "rejects a missing or extra local action file" do
+      FileUtils.rm(File.join(fixture, ".github/actions/cpflow-wait-for-health/action.yml"))
+      FileUtils.touch(File.join(fixture, ".github/actions/cpflow-setup-environment/extra.sh"))
+
+      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("action files differ"))
     end
 
     def change_fixture(operation, before, after)

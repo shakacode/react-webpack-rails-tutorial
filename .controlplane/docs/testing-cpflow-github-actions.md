@@ -45,8 +45,18 @@ single divergent canary is rejected. The offline validator reads the installed
 
 From 6.0.0 the pair runs the composite actions checked in under
 `.github/actions/cpflow-*` instead of the copies in the upstream checkout. Keep
-those directories identical to the bundled gem's `.github/actions`; the older
-cohort still loads its actions from its own pinned upstream source.
+those directories identical to the bundled gem's `.github/actions`; the contract
+check fails when they differ. The older cohort still loads its actions from its
+own pinned upstream source.
+
+GitHub checks these actions out at the same revision as the caller workflow
+file, so they carry the caller's trust and not the pull request's application
+code. The repository variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must
+stay set: they take precedence over the prefix and org in the pull request's
+`controlplane.yml`. The deploy caller also maps the optional
+`REVIEW_APP_DOCKER_BUILD_SECRETS` secret, which this repo does not define. A
+pull request's Dockerfile can read it during the build, so only ever store
+review-grade values there.
 
 Leave `CPFLOW_VERSION` unset for these SHA-pinned callers: upstream builds the
 CLI from the same pinned source. The variable-based RubyGems override requires

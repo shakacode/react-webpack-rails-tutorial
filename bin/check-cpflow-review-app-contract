@@ -13,9 +13,9 @@ module CpflowReviewAppContract
   CALLERS = { "deploy" => "deploy", "delete" => "delete-review-app" }.freeze
 
   def self.check(root)
-    template_root = File.join(Gem::Specification.find_by_name("cpflow", VERSION).full_gem_path,
-                              "lib/github_flow_templates")
-    errors = dependency_errors(root)
+    gem_root = Gem::Specification.find_by_name("cpflow", VERSION).full_gem_path
+    template_root = File.join(gem_root, "lib/github_flow_templates")
+    errors = dependency_errors(root) + action_errors(root, gem_root)
     CALLERS.each do |operation, job_name|
       path = ".github/workflows/cpflow-#{operation}-review-app.yml"
       source = File.read(File.join(root, path))
@@ -37,6 +37,23 @@ module CpflowReviewAppContract
     unless lockfile.scan(/^    cpflow \(([^)]+)\)$/).flatten == [VERSION] &&
            lockfile.scan(/^  cpflow \(= ([^)]+)\)$/).flatten == [VERSION]
       errors << "Gemfile.lock must resolve and require cpflow #{VERSION}"
+    end
+    errors
+  end
+
+  # The released callers run these actions from this repository, so they must be the release's own files.
+  def self.action_errors(root, gem_root)
+    list = lambda do |base|
+      Dir.glob(".github/actions/cpflow-*/**/*", base: base).select { |path| File.file?(File.join(base, path)) }.sort
+    end
+    released = list.call(gem_root)
+    errors = []
+    errors << ".github/actions: cpflow action files differ from release" unless list.call(root) == released
+    released.each do |path|
+      local = File.join(root, path)
+      next unless File.file?(local)
+
+      errors << "#{path}: differs from release" unless File.binread(local) == File.binread(File.join(gem_root, path))
     end
     errors
   end
