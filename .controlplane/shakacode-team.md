@@ -13,10 +13,10 @@ Deployments are handled by Control Plane configuration in this repo and GitHub A
 
 ### Review Apps
 - Add a comment `+review-app-deploy` to any PR to deploy a review app
-- Leave `REVIEW_APP_PREFIX` unset for the standard path. The workflow infers
-  `qa-react-webpack-rails-tutorial` from `.controlplane/controlplane.yml`, so
-  generated review apps use names like
-  `qa-react-webpack-rails-tutorial-1234`.
+- Keep the repository variable `REVIEW_APP_PREFIX` set to
+  `qa-react-webpack-rails-tutorial`, so the prefix never comes from a pull
+  request's `.controlplane/controlplane.yml`. Generated review apps use names
+  like `qa-react-webpack-rails-tutorial-1234`.
 - New pushes to a PR redeploy only after the review app already exists.
 - Add `+review-app-delete` to delete a review app manually; closing the PR also
   deletes it automatically. Use `+review-app-help` for the command reference.
@@ -58,11 +58,12 @@ Required repository variables for staging deploys:
 - `STAGING_APP_NAME=react-webpack-rails-tutorial-staging`
 - `STAGING_APP_BRANCH=master`
 
-Review apps infer `CPLN_ORG_STAGING`, `REVIEW_APP_PREFIX`, and
-`PRIMARY_WORKLOAD` from `.controlplane/controlplane.yml` and workflow defaults,
-so those values do not need to be set just to test review apps. Set them only
-when testing a fork or clone against a different Control Plane org, review-app
-prefix, or public workload.
+Review apps also need `REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial` and
+the `CPLN_ORG_STAGING` value above. Both are set in this repository and must
+stay set: without them the workflow infers the prefix and org from the pull
+request's `.controlplane/controlplane.yml`. `PRIMARY_WORKLOAD` can stay unset.
+Change these values only when testing a fork or clone against a different
+Control Plane org, review-app prefix, or public workload.
 
 App secret dictionaries for review, staging, and production must include
 `SECRET_KEY_BASE`, `RENDERER_PASSWORD`, `ROLLING_DEPLOY_TOKEN`, and

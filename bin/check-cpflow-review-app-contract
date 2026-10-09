@@ -54,6 +54,7 @@ module CpflowReviewAppContract
       next unless File.file?(local)
 
       errors << "#{path}: differs from release" unless File.binread(local) == File.binread(File.join(gem_root, path))
+      errors << "#{path}: must be executable" if File.executable?(File.join(gem_root, path)) && !File.executable?(local)
     end
     errors
   end

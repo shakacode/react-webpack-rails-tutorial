@@ -156,11 +156,12 @@ production or long-lived staging secret dictionaries for review apps.
 
 ### Advanced Overrides
 
-Most repos should leave these unset. They exist so forks and clones can test
-against their own Control Plane org, prefix, workload, or toolchain:
+This repository sets `CPLN_ORG_STAGING` and
+`REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`; keep both set so review
+apps never take their org or prefix from a pull request's
+`.controlplane/controlplane.yml`. Leave the rest unset unless a fork or clone
+needs its own workload or toolchain:
 
-- `CPLN_ORG_STAGING`
-- `REVIEW_APP_PREFIX`
 - `PRIMARY_WORKLOAD`
 - `REVIEW_APP_DEPLOYING_ICON_URL`
 - `CPLN_CLI_VERSION`
@@ -559,8 +560,8 @@ waits for Control Plane to report both `status.ready` and `status.readyLatest`
 before probing the public endpoint.
 
 The GitHub settings and Control Plane resources must match the app names in
-`.controlplane/controlplane.yml`. For the standard review-app path, leave
-`REVIEW_APP_PREFIX` unset and let the workflow infer
+`.controlplane/controlplane.yml`. Keep the repository variable
+`REVIEW_APP_PREFIX` set to
 `qa-react-webpack-rails-tutorial`; generated review apps are named
 `qa-react-webpack-rails-tutorial-<PR number>`.
 If you have older review apps from the previous

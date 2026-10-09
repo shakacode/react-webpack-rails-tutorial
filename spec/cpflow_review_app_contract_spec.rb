@@ -122,6 +122,16 @@ RSpec.describe "Workflow release and security contracts" do
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("differs from release"))
     end
 
+    it "rejects a local action script that lost its executable bit" do
+      FileUtils.chmod(0o644, File.join(fixture, ".github/actions/cpflow-delete-control-plane-app/delete-app.sh"))
+
+      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("must be executable"))
+    end
+
+    it "accepts the unchanged local actions" do
+      expect(CpflowReviewAppContract.check(fixture)).to be_empty
+    end
+
     it "rejects a missing or extra local action file" do
       FileUtils.rm(File.join(fixture, ".github/actions/cpflow-wait-for-health/action.yml"))
       FileUtils.touch(File.join(fixture, ".github/actions/cpflow-setup-environment/extra.sh"))
