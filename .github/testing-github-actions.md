@@ -25,9 +25,11 @@ guide:
 4. For comment-triggered review-app commands, test a real `+review-app-deploy`
    after the trusted default-branch wrapper points at the code under test.
 5. Pin upstream `control-plane-flow` workflow and action references to reviewed,
-   immutable full commit SHAs with readable release comments. Newer upstream
-   workflows load their matching shared actions automatically; do not add a
-   duplicate ref input to downstream wrappers.
+   immutable full commit SHAs with readable release comments. The v5.2.0
+   workflows load their matching shared actions from that upstream source; the
+   6.0.0 review-app workflows run the actions checked in under
+   `.github/actions/cpflow-*`. Do not add a duplicate ref input to downstream
+   wrappers.
 
 The review-app deploy/delete pair uses released **6.0.0** together; the other
 generated callers and promotion actions retain their reviewed **5.2.0** cohort.
