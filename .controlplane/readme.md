@@ -40,11 +40,15 @@ heads because Docker builds use repository secrets; if a forked change needs a
 review app, first move the reviewed change to a trusted branch in this
 repository.
 
-No review-app repository variables are required for the standard path. The
-workflow infers `qa-react-webpack-rails-tutorial` and
-`shakacode-open-source-examples-staging` from `.controlplane/controlplane.yml`,
-because that file has one app with `match_if_app_name_starts_with: true`.
-`PRIMARY_WORKLOAD` also stays unset because the public workload is `rails`.
+Review apps need two repository variables. Without them the workflow infers
+the prefix and org from the pull request's `.controlplane/controlplane.yml`:
+
+| Name | Value |
+| --- | --- |
+| `REVIEW_APP_PREFIX` | `qa-react-webpack-rails-tutorial` |
+| `CPLN_ORG_STAGING` | `shakacode-open-source-examples-staging` |
+
+`PRIMARY_WORKLOAD` stays unset because the public workload is `rails`.
 
 For staging auto-deploys, also set these repository variables:
 
@@ -156,11 +160,12 @@ production or long-lived staging secret dictionaries for review apps.
 
 ### Advanced Overrides
 
-Most repos should leave these unset. They exist so forks and clones can test
-against their own Control Plane org, prefix, workload, or toolchain:
+This repository sets `CPLN_ORG_STAGING` and
+`REVIEW_APP_PREFIX=qa-react-webpack-rails-tutorial`; keep both set so review
+apps never take their org or prefix from a pull request's
+`.controlplane/controlplane.yml`. Leave the rest unset unless a fork or clone
+needs its own workload or toolchain:
 
-- `CPLN_ORG_STAGING`
-- `REVIEW_APP_PREFIX`
 - `PRIMARY_WORKLOAD`
 - `REVIEW_APP_DEPLOYING_ICON_URL`
 - `CPLN_CLI_VERSION`
@@ -559,8 +564,8 @@ waits for Control Plane to report both `status.ready` and `status.readyLatest`
 before probing the public endpoint.
 
 The GitHub settings and Control Plane resources must match the app names in
-`.controlplane/controlplane.yml`. For the standard review-app path, leave
-`REVIEW_APP_PREFIX` unset and let the workflow infer
+`.controlplane/controlplane.yml`. Keep the repository variable
+`REVIEW_APP_PREFIX` set to
 `qa-react-webpack-rails-tutorial`; generated review apps are named
 `qa-react-webpack-rails-tutorial-<PR number>`.
 If you have older review apps from the previous
@@ -633,9 +638,11 @@ Keep the reusable-workflow mechanics in the upstream
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 This repo deliberately keeps two release cohorts:
 
-- The review-app deploy/delete callers pin cpflow `v5.3.0` at
-  `b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6`. The bundled `cpflow` gem and
-  lockfile use `5.3.0`.
+- The review-app deploy/delete callers pin cpflow `v6.0.0` at
+  `68b5d83152c02a70eb98ffdc7fd2072e28265fef`. The bundled `cpflow` gem and
+  lockfile use `6.0.0`. From 6.0.0 these workflows run the composite actions
+  checked in under `.github/actions/cpflow-*`, so those files must match the
+  bundled gem.
 - Staging, cleanup, help, and promotion retain `v5.2.0` at
   `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Their migration is separate
   scope, not an automatic consequence of updating the local gem.

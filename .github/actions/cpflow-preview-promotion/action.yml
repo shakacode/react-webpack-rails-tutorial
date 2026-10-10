@@ -1,0 +1,82 @@
+name: Preview Production Promotion
+description: Compare the deployed staging image to the last recorded production release before approval
+inputs:
+  staging_app_name:
+    required: true
+    description: Staging app to read
+  staging_org:
+    required: true
+    description: Normalized staging org
+  primary_workload:
+    required: false
+    default: ""
+    description: Optional primary workload override
+outputs:
+  primary_workload:
+    description: Workload whose staging image was previewed
+    value: ${{ steps.workloads.outputs.primary }}
+  staging_image:
+    description: Captured staging image for approval
+    value: ${{ steps.preview.outputs.staging_image }}
+  production_commit:
+    description: Last recorded production release commit, if available
+    value: ${{ steps.preview.outputs.production_commit }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve primary workload
+      id: workloads
+      env:
+        STAGING_APP_NAME: ${{ inputs.staging_app_name }}
+        PRIMARY_WORKLOAD: ${{ inputs.primary_workload }}
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        ruby - "${STAGING_APP_NAME}" "${PRIMARY_WORKLOAD}" >> "$GITHUB_OUTPUT" <<'RUBY'
+        require "yaml"
+
+        app = ARGV.fetch(0)
+        requested_primary = ARGV.fetch(1, "").to_s.strip
+        data = YAML.safe_load(File.read(".controlplane/controlplane.yml"), aliases: true)
+        apps = data["apps"] || {}
+        app_config = apps[app]
+
+        unless app_config
+          warn "Error: app '#{app}' is not defined under `apps:` in `.controlplane/controlplane.yml`."
+          warn "       Fix the STAGING_APP_NAME repository variable or add the app to controlplane.yml."
+          exit 1
+        end
+
+        workloads = Array(app_config["app_workloads"]).map(&:to_s).reject(&:empty?)
+        workloads = ["rails"] if workloads.empty?
+
+        primary =
+          if requested_primary.empty?
+            if workloads.length == 1
+              workloads.first
+            elsif workloads.include?("rails")
+              "rails"
+            else
+              warn "::error::PRIMARY_WORKLOAD is not configured and app '#{app}' has multiple workloads: #{workloads.join(', ')}."
+              warn "       Set the PRIMARY_WORKLOAD repository variable to one of these workloads."
+              exit 1
+            end
+          elsif workloads.include?(requested_primary)
+            requested_primary
+          else
+            warn "::error::PRIMARY_WORKLOAD '#{requested_primary}' is not one of: #{workloads.join(', ')}."
+            exit 1
+          end
+
+        puts "primary=#{primary}"
+        RUBY
+    - name: Compare recorded production release to staging
+      id: preview
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        STAGING_APP_NAME: ${{ inputs.staging_app_name }}
+        CPLN_ORG_STAGING: ${{ inputs.staging_org }}
+        PRIMARY_WORKLOAD: ${{ steps.workloads.outputs.primary }}
+      shell: bash
+      run: bash "${ACTION_PATH}/preview-promotion.sh"

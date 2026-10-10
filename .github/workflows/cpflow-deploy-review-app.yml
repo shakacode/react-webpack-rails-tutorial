@@ -39,7 +39,8 @@ jobs:
        github.event.issue.pull_request &&
        contains(fromJson('["+review-app-deploy","+review-app-deploy\n","+review-app-deploy\r\n"]'), github.event.comment.body) &&
        contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
-    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@b1e5ff4a04adfccfd8b59996e8abdbb5defb3fd6 # v5.3.0
+    uses: shakacode/control-plane-flow/.github/workflows/cpflow-deploy-review-app.yml@68b5d83152c02a70eb98ffdc7fd2072e28265fef # v6.0.0
     secrets:
       CPLN_TOKEN_STAGING: ${{ secrets.CPLN_TOKEN_STAGING }}
+      REVIEW_APP_DOCKER_BUILD_SECRETS: ${{ secrets.REVIEW_APP_DOCKER_BUILD_SECRETS }}
       DOCKER_BUILD_SSH_KEY: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
