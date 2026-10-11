@@ -6,7 +6,7 @@ _If you need a free demo account for Control Plane (no CC required), you can con
 
 ---
 
-Check [how the `cpflow` gem is used in the generated GitHub Actions flow](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/.github/actions/cpflow-build-docker-image/action.yml).
+Check [how the `cpflow` gem is used in the generated GitHub Actions flow](https://github.com/shakacode/control-plane-flow/blob/v6.0.1/.github/actions/cpflow-build-docker-image/action.yml).
 Here is a brief [video overview](https://www.youtube.com/watch?v=llaQoAV_6Iw).
 
 ---
@@ -638,11 +638,9 @@ Keep the reusable-workflow mechanics in the upstream
 [`control-plane-flow` CI automation guide](https://github.com/shakacode/control-plane-flow/blob/v5.2.0/docs/ci-automation.md).
 This repo deliberately keeps two release cohorts:
 
-- The review-app deploy/delete callers pin cpflow `v6.0.0` at
-  `68b5d83152c02a70eb98ffdc7fd2072e28265fef`. The bundled `cpflow` gem and
-  lockfile use `6.0.0`. From 6.0.0 these workflows run the composite actions
-  checked in under `.github/actions/cpflow-*`, so those files must match the
-  bundled gem.
+- The review-app deploy/delete callers pin cpflow `v6.0.1` at
+  `6aa575780f2d9175755881b79cbb3253adbc9c1f`. The bundled `cpflow` gem and
+  lockfile use `6.0.1`.
 - Staging, cleanup, help, and promotion retain `v5.2.0` at
   `1d1ec7f7af181c5c6cf07f512ce336dbdb367246`. Their migration is separate
   scope, not an automatic consequence of updating the local gem.
