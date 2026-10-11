@@ -70,6 +70,10 @@ RSpec.describe "Workflow release and security contracts" do
       FileUtils.remove_entry_secure(fixture)
     end
 
+    it "accepts the unchanged callers" do
+      expect(CpflowReviewAppContract.check(fixture)).to be_empty
+    end
+
     it "rejects a missing authenticated redispatch input" do
       change_fixture("deploy", "      reconcile_intent_run_id:", "      unrelated_input:")
 
