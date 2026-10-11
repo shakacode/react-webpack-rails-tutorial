@@ -8,14 +8,14 @@ require "yaml"
 # Compare their behavior with the installed release's authoritative templates.
 # This reads files only: it neither loads cpflow application code nor contacts APIs.
 module CpflowReviewAppContract
-  VERSION = "6.0.0"
-  SHA = "68b5d83152c02a70eb98ffdc7fd2072e28265fef"
+  VERSION = "6.0.1"
+  SHA = "6aa575780f2d9175755881b79cbb3253adbc9c1f"
   CALLERS = { "deploy" => "deploy", "delete" => "delete-review-app" }.freeze
 
   def self.check(root)
     gem_root = Gem::Specification.find_by_name("cpflow", VERSION).full_gem_path
     template_root = File.join(gem_root, "lib/github_flow_templates")
-    errors = dependency_errors(root) + action_errors(root, gem_root)
+    errors = dependency_errors(root) + action_copy_errors(root)
     CALLERS.each do |operation, job_name|
       path = ".github/workflows/cpflow-#{operation}-review-app.yml"
       source = File.read(File.join(root, path))
@@ -41,22 +41,11 @@ module CpflowReviewAppContract
     errors
   end
 
-  # The released callers run these actions from this repository, so they must be the release's own files.
-  def self.action_errors(root, gem_root)
-    list = lambda do |base|
-      Dir.glob(".github/actions/cpflow-*/**/*", base: base).select { |path| File.file?(File.join(base, path)) }.sort
+  # The released callers load cpflow's actions from the pinned upstream ref, so a local copy is unused and stale.
+  def self.action_copy_errors(root)
+    Dir.glob(".github/actions/cpflow-*", base: root).sort.map do |path|
+      "#{path}: remove this cpflow action copy; the callers load actions from the pinned release"
     end
-    released = list.call(gem_root)
-    errors = []
-    errors << ".github/actions: cpflow action files differ from release" unless list.call(root) == released
-    released.each do |path|
-      local = File.join(root, path)
-      next unless File.file?(local)
-
-      errors << "#{path}: differs from release" unless File.binread(local) == File.binread(File.join(gem_root, path))
-      errors << "#{path}: must be executable" if File.executable?(File.join(gem_root, path)) && !File.executable?(local)
-    end
-    errors
   end
 
   def self.caller_errors(path, source, template, job_name)

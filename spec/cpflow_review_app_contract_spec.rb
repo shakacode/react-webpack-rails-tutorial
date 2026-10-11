@@ -10,7 +10,7 @@ load File.expand_path("../bin/check-cpflow-review-app-contract", __dir__)
 
 RSpec.describe "Workflow release and security contracts" do
   let(:root) { File.expand_path("..", __dir__) }
-  let(:release_sha) { "68b5d83152c02a70eb98ffdc7fd2072e28265fef" }
+  let(:release_sha) { "6aa575780f2d9175755881b79cbb3253adbc9c1f" }
 
   it "moves deploy and delete together to the released source" do
     %w[deploy delete].each do |operation|
@@ -27,7 +27,7 @@ RSpec.describe "Workflow release and security contracts" do
                                      File.join(root, "bin/check-cpflow-review-app-contract"))
 
     expect(status.success?).to be(true), output
-    expect(output).to include("review-app release contract: v6.0.0")
+    expect(output).to include("review-app release contract: v6.0.1")
   end
 
   it "activates an isolated bundle when plain Ruby has no inherited bundle-exec setup" do
@@ -51,7 +51,7 @@ RSpec.describe "Workflow release and security contracts" do
                                        unsetenv_others: true)
 
       expect(status.success?).to be(true), output
-      expect(output).to include("review-app release contract: v6.0.0")
+      expect(output).to include("review-app release contract: v6.0.1")
     end
   end
 
@@ -65,7 +65,6 @@ RSpec.describe "Workflow release and security contracts" do
         FileUtils.cp(File.join(root, path), File.join(fixture, path))
       end
       %w[Gemfile Gemfile.lock].each { |path| FileUtils.cp(File.join(root, path), fixture) }
-      FileUtils.cp_r(File.join(root, ".github/actions"), File.join(fixture, ".github/actions"))
       example.run
     ensure
       FileUtils.remove_entry_secure(fixture)
@@ -78,9 +77,9 @@ RSpec.describe "Workflow release and security contracts" do
     end
 
     [
-      ["a moving ref", "deploy", "68b5d83152c02a70eb98ffdc7fd2072e28265fef", "main", "released workflow ref"],
-      ["a mismatched pair", "delete", "68b5d83152c02a70eb98ffdc7fd2072e28265fef", "a" * 40, "released workflow ref"],
-      ["a stale release comment", "delete", "# v6.0.0", "# v5.2.0", "release comment"],
+      ["a moving ref", "deploy", "6aa575780f2d9175755881b79cbb3253adbc9c1f", "main", "released workflow ref"],
+      ["a mismatched pair", "delete", "6aa575780f2d9175755881b79cbb3253adbc9c1f", "a" * 40, "released workflow ref"],
+      ["a stale release comment", "delete", "# v6.0.1", "# v5.2.0", "release comment"],
       ["missing dispatch permission", "deploy", "  actions: write\n", "", "permissions"],
       ["missing deletion permission", "delete", "  deployments: write\n", "", "permissions"],
       ["excessive permissions", "deploy", "  contents: read", "  contents: write", "permissions"],
@@ -103,40 +102,27 @@ RSpec.describe "Workflow release and security contracts" do
 
     it "rejects an out-of-date local CLI dependency" do
       path = File.join(fixture, "Gemfile")
-      File.write(path, File.read(path).sub('gem "cpflow", "6.0.0"', 'gem "cpflow", "5.2.0"'))
+      File.write(path, File.read(path).sub('gem "cpflow", "6.0.1"', 'gem "cpflow", "5.2.0"'))
 
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("Gemfile"))
     end
 
     it "rejects an out-of-date lockfile resolution" do
       path = File.join(fixture, "Gemfile.lock")
-      File.write(path, File.read(path).sub("    cpflow (6.0.0)", "    cpflow (5.2.0)"))
+      File.write(path, File.read(path).sub("    cpflow (6.0.1)", "    cpflow (5.2.0)"))
 
       expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("Gemfile.lock"))
     end
 
-    it "rejects an edited local action" do
-      path = File.join(fixture, ".github/actions/cpflow-setup-environment/action.yml")
-      File.write(path, "#{File.read(path)}# edited\n")
-
-      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("differs from release"))
-    end
-
-    it "rejects a local action script that lost its executable bit" do
-      FileUtils.chmod(0o644, File.join(fixture, ".github/actions/cpflow-delete-control-plane-app/delete-app.sh"))
-
-      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("must be executable"))
-    end
-
-    it "accepts the unchanged local actions" do
+    it "accepts callers with no local cpflow action copies" do
       expect(CpflowReviewAppContract.check(fixture)).to be_empty
     end
 
-    it "rejects a missing or extra local action file" do
-      FileUtils.rm(File.join(fixture, ".github/actions/cpflow-wait-for-health/action.yml"))
-      FileUtils.touch(File.join(fixture, ".github/actions/cpflow-setup-environment/extra.sh"))
+    it "rejects a leftover local cpflow action copy" do
+      FileUtils.mkdir_p(File.join(fixture, ".github/actions/cpflow-setup-environment"))
 
-      expect(CpflowReviewAppContract.check(fixture)).to include(a_string_including("action files differ"))
+      expect(CpflowReviewAppContract.check(fixture))
+        .to include(a_string_including(".github/actions/cpflow-setup-environment: remove this cpflow action copy"))
     end
 
     def change_fixture(operation, before, after)
@@ -224,8 +210,13 @@ RSpec.describe "Workflow release and security contracts" do
 
     context "with isolated composite action command stubs" do
       let(:fixture) { Dir.mktmpdir("workflow-shell-inputs") }
+      # The callers load these actions from the pinned release, which the bundled gem ships unchanged.
+      let(:released_actions) do
+        gem_root = Gem::Specification.find_by_name("cpflow", CpflowReviewAppContract::VERSION).full_gem_path
+        File.join(gem_root, ".github/actions")
+      end
       let(:setup_steps) do
-        YAML.safe_load(File.read(File.join(root, ".github/actions/cpflow-setup-environment/action.yml")))
+        YAML.safe_load(File.read(File.join(released_actions, "cpflow-setup-environment/action.yml")))
             .fetch("runs").fetch("steps")
       end
       let(:hostile_input) { 'value with spaces; $(printf injected > "$FIXTURE_ROOT/injected") " end' }
@@ -316,8 +307,8 @@ RSpec.describe "Workflow release and security contracts" do
 
       context "with the delete action" do
         let(:step) do
-          action = YAML.safe_load(File.read(File.join(root,
-                                                      ".github/actions/cpflow-delete-control-plane-app/action.yml")))
+          action = YAML.safe_load(File.read(File.join(released_actions,
+                                                      "cpflow-delete-control-plane-app/action.yml")))
           action.fetch("runs").fetch("steps").fetch(0)
         end
 

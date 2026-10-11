@@ -33,26 +33,25 @@ helper separately when validating workflow changes.
 
 ## Released Review-App Pair
 
-The deploy/delete callers and local CLI use cpflow **6.0.0**. Both callers pin
-`68b5d83152c02a70eb98ffdc7fd2072e28265fef` with a readable `v6.0.0`
+The deploy/delete callers and local CLI use cpflow **6.0.1**. Both callers pin
+`6aa575780f2d9175755881b79cbb3253adbc9c1f` with a readable `v6.0.1`
 comment. Other generated callers intentionally remain on their existing
 **5.2.0** cohort; their migration is separate scope.
 
 The pair is inseparable: both need the generated authenticated redispatch
 input, exact run/job names, and matching permissions. A pin-only upgrade or a
 single divergent canary is rejected. The offline validator reads the installed
-6.0.0 gem's caller templates as its source of truth, without loading cpflow code.
+6.0.1 gem's caller templates as its source of truth, without loading cpflow code.
 
-From 6.0.0 the pair runs the composite actions checked in under
-`.github/actions/cpflow-*` instead of the copies in the upstream checkout. Keep
-those directories identical to the bundled gem's `.github/actions`; the contract
-check fails when they differ. The older cohort still loads its actions from its
-own pinned upstream source.
+The pair loads cpflow's composite actions from the pinned upstream ref. cpflow
+6.0.0 ran copies checked in under `.github/actions/cpflow-*`; 6.0.1 no longer
+reads them, so they were removed and the contract check fails if one reappears.
+The older cohort also loads its actions from its own pinned upstream source.
 
-The released 6.0.0 workflow checks this repository out at the triggering
-event's own revision before it runs these actions, and checks the pull
-request's application code out separately under `app/`. The actions therefore
-carry the caller workflow's trust, not the application code's. The repository
+The released 6.0.1 workflow checks its own pinned source out under `.cpflow/`
+and runs the actions from there, and checks the pull request's application code
+out separately under `app/`. The actions therefore come from the reviewed pin,
+not from the pull request or the application code. The repository
 variables `REVIEW_APP_PREFIX` and `CPLN_ORG_STAGING` must stay set: they take
 precedence over the prefix and org in the pull request's `controlplane.yml`. The deploy caller also maps the optional
 `REVIEW_APP_DOCKER_BUILD_SECRETS` secret, which this repo does not define. A
@@ -65,7 +64,7 @@ a release-tag ref and cannot be combined with a commit SHA.
 
 Do not run the all-wrapper pin helper or blindly regenerate over the customized
 validation script for this split migration. A future upgrade must update both
-callers, the local dependency/lockfile, the checked-in local actions, validator
+callers, the local dependency/lockfile, validator
 release constants, and fixture tests together. Preserve the renderer assertions
 and separately review any changes to other caller cohorts.
 

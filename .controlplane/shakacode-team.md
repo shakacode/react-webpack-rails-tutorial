@@ -142,10 +142,10 @@ filter in `.github/workflows/cpflow-deploy-staging.yml`.
 Keep upstream workflow and action references on reviewed, immutable full commit
 SHAs with readable release comments, not release tags, `main`, or feature
 branches. The review-app deploy/delete pair advances together on released
-**6.0.0**; other generated callers and promotion actions retain their reviewed
-**5.2.0** cohort until a separately scoped migration. From 6.0.0 the pair runs
-the composite actions checked in under `.github/actions/cpflow-*`; keep them
-identical to the bundled gem.
+**6.0.1**; other generated callers and promotion actions retain their reviewed
+**5.2.0** cohort until a separately scoped migration. The pair loads cpflow's
+composite actions from its pinned ref; do not check in `.github/actions/cpflow-*`
+copies.
 
 Do not blanket-regenerate the automation or use the all-wrapper pin helper for
 this split migration. Preserve the customized validator and renderer assertions,
