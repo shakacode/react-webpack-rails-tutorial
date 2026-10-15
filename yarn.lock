@@ -318,21 +318,7 @@
     "@babel/template" "^7.29.7"
     "@babel/types" "^7.29.7"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.28.3", "@babel/parser@^7.28.4":
-  version "7.28.4"
-  resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.28.4.tgz"
-  integrity sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==
-  dependencies:
-    "@babel/types" "^7.28.4"
-
-"@babel/parser@^7.28.5":
-  version "7.29.8"
-  resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.29.8.tgz#9653716a2f10c677b98fbc63d4bfb000c302cf17"
-  integrity sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==
-  dependencies:
-    "@babel/types" "^7.29.8"
-
-"@babel/parser@^7.29.7", "@babel/parser@^7.29.8":
+"@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.28.3", "@babel/parser@^7.28.4", "@babel/parser@^7.28.5", "@babel/parser@^7.29.7", "@babel/parser@^7.29.8":
   version "7.29.9"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.29.9.tgz#e7ee0a24f752c5296c6455855ccb72662e67ea96"
   integrity sha512-CjXrNHTnvqBVqHgdBysY3vk2T8tpJHb5/RMeHJBTyVa9xgugCB0CJTx/3oO8RV2QRQP391RWpB7D6hLjm8V9uA==
@@ -8982,15 +8968,15 @@ react-on-rails-pro@17.2.0:
   dependencies:
     react-on-rails "17.2.0"
 
-react-on-rails-rsc@19.3.0:
-  version "19.3.0"
-  resolved "https://registry.npmjs.org/react-on-rails-rsc/-/react-on-rails-rsc-19.3.0.tgz#69f304f5ab3fc3143779450588664f5fb3808939"
-  integrity sha512-K2QuvKMYu2V+8egZbRp+2YO7imPXk+/CKw13WQdQORg0tfsQgy5fVKaKBcRCPAJHD019UfAR6palEwQ2tNvOvg==
+react-on-rails-rsc@19.3.1:
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/react-on-rails-rsc/-/react-on-rails-rsc-19.3.1.tgz#b614d90ab4871c7b1abb907055bc4de01732544c"
+  integrity sha512-pQlYW6PvaBBY2Q57H5TpQZ04DOQmrZMnVnHakcPIqcMGogLJ0JiC6hVsVxMofFBcwG326UA/VjLCuj16mEXx6A==
   dependencies:
     "@babel/parser" "^7.28.5"
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
-    react-server-dom-webpack "~19.2.8"
+    react-server-dom-webpack "~19.3.0"
     webpack-sources "^3.2.0"
 
 react-on-rails@17.2.0:
@@ -9043,10 +9029,19 @@ react-router@6.30.6, react-router@^6.30.6:
   dependencies:
     "@remix-run/router" "1.23.4"
 
-react-server-dom-webpack@19.2.8, react-server-dom-webpack@~19.2.8:
+react-server-dom-webpack@19.2.8:
   version "19.2.8"
   resolved "https://registry.npmjs.org/react-server-dom-webpack/-/react-server-dom-webpack-19.2.8.tgz#f25752bedff5173500579e72055281a3ee5b7638"
   integrity sha512-rFO1VJZ+cH9ZH6hGy9+qmIsmZHZpCMKJZXhWHqT71UnSfg+w+W+gwrwp58MVzMqdFquG8GF1c6C8q0OGphkEdg==
+  dependencies:
+    acorn-loose "^8.3.0"
+    neo-async "^2.6.1"
+    webpack-sources "^3.2.0"
+
+react-server-dom-webpack@~19.3.0:
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/react-server-dom-webpack/-/react-server-dom-webpack-19.3.1.tgz#c611e30c1d0831192cc4fd9b86f1356d7cca46ea"
+  integrity sha512-I1Smf6Yc+389rFWPwyYjvCQVK1XFWpb2M9gvgYgfpbZ+LPqkZtb0tT9Fwdk0K+wknK2E+ns82lC0DCYLnXCVGA==
   dependencies:
     acorn-loose "^8.3.0"
     neo-async "^2.6.1"
