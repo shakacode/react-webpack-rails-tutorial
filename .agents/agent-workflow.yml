@@ -4,6 +4,12 @@ version: 1
 repo_prefix: RWRT
 review:
   required: none
+  local_review_count: 2
+  local_review_agents:
+  - provider: anthropic
+    model_family: claude
+  - provider: openai
+    model_family: codex
 merge:
   preference: ask
 branches:
