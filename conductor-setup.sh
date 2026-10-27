@@ -40,7 +40,7 @@ run_cmd() {
     fi
 }
 
-# Note: This project requires Ruby 3.4.6.
+# Note: This project requires Ruby 3.4.9.
 # Please ensure you have the correct Ruby version active before running this script.
 
 # Check required tools
