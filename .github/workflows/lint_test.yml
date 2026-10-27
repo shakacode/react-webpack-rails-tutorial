@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [22.x]
-        ruby: [3.4.6]
+        ruby: [3.4.9]
 
     env:
       RAILS_ENV: test

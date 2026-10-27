@@ -129,7 +129,7 @@ See package.json and Gemfile for versions
 
 ### Prerequisites
 - Node `v22.3.0` or above. Be sure that you have Node installed! We suggest using [nvm](https://github.com/creationix/nvm) and running `nvm list` to check the active Node version. See this article [Updating and using nvm](http://forum.shakacode.com/t/updating-and-using-nvm/293).
-- Ruby 3.4.6 or above
+- Ruby 3.4.9 or above
 - Postgres v9.2 or above
 - Redis. Check that you have Redis installed by running `which redis-server`. If missing and on MacOS, install with Homebrew (`brew install redis`)
 - [Yarn](https://yarnpkg.com/).
@@ -184,13 +184,13 @@ assets_bundler: rspack
 
 ### Version Targets
 
-- `react_on_rails_pro` gem: `17.1.0`
-- `react-on-rails-pro` npm package: `17.1.0`
-- `react-on-rails-pro-node-renderer` npm package: `17.1.0`
-- `react-on-rails-rsc` npm package: `19.3.0`
-- `shakapacker` gem/npm package: `10.2.0`
+- `react_on_rails_pro` gem: `17.2.1.rc.0`
+- `react-on-rails-pro` npm package: `17.2.1-rc.0`
+- `react-on-rails-pro-node-renderer` npm package: `17.2.1-rc.0`
+- `react-on-rails-rsc` npm package: `19.3.1`
+- `shakapacker` gem/npm package: `10.3.2`
 - `@rspack/core` and `@rspack/cli`: `2.0.4`
-- `react`, `react-dom`, and `react-server-dom-webpack`: `19.2.8` (exact RC validation pins)
+- `react`, `react-dom`, and `react-server-dom-webpack`: `19.3.1` (exact RC validation pins)
 
 ### Why Rspack
 
