@@ -9,11 +9,11 @@ is absent means that capability is n/a in this repository.
 | --- | --- | --- |
 | `setup` | Install dependencies | `bin/conductor-exec bin/setup --skip-server` |
 | `validate` | Full CI-equivalent validation | `bin/conductor-exec bin/ci` |
-| `test` | Full-suite compatibility entry point during seam adoption | delegates to `.agents/bin/validate` |
+| `test` | Full-suite compatibility entry point during seam adoption | delegates to `validate` |
 | `validate-local` | Fast pre-review validation | `bin/conductor-exec bin/rubocop` |
 | `lint` | Lint / format | `bin/conductor-exec yarn lint:eslint` |
 | `build` | Build / type-check | generate React on Rails packs, build ReScript, then `bin/conductor-exec yarn build:test` |
 | `docs` | Docs checks | n/a |
 | `ci-detect` | CI change detector | n/a |
 
-Non-command policy lives in [`../agent-workflow.yml`](../agent-workflow.yml).
+Non-command policy lives in [`../shaka/config.yml`](../shaka/config.yml).
