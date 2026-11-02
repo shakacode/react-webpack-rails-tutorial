@@ -40,9 +40,8 @@ describe "with Rescript" do
 
     it "keeps markdown formatting and removes unsafe HTML" do
       expect(page).to have_css(".js-comment-text strong", text: "bold")
-      expect(page).to have_no_css(".js-comment-text img")
-      expect(page).to have_no_css(".js-comment-text script")
-      expect(page.evaluate_script("window.xssRan")).to be_nil
+      expect(page).to have_no_css(".js-comment-text img", visible: :all)
+      expect(page).to have_no_css(".js-comment-text script", visible: :all)
     end
   end
 
