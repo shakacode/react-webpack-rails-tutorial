@@ -29,6 +29,23 @@ describe "with Rescript" do
     end
   end
 
+  describe "comment markdown rendering" do
+    before do
+      Comment.create!(
+        author: "Author",
+        text: '**bold** <img src="missing.png" onerror="window.xssRan = true"><script>window.xssRan = true</script>'
+      )
+      visit "/rescript"
+    end
+
+    it "keeps markdown formatting and removes unsafe HTML" do
+      expect(page).to have_css(".js-comment-text strong", text: "bold")
+      expect(page).to have_no_css(".js-comment-text img")
+      expect(page).to have_no_css(".js-comment-text script")
+      expect(page.evaluate_script("window.xssRan")).to be_nil
+    end
+  end
+
   describe "form submission functions" do
     let(:comment) { Comment.new(author: "Author", text: "This is a comment") }
     let(:author_field) { "comment_author" }
