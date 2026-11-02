@@ -1,7 +1,8 @@
 @react.component
 let make = (~comment: Actions.Fetch.t, ~cssTransitionGroupClassNames) => {
   let rawMarkup = Marked.marked(comment.text, {gfm: true})
-  let innerHTML = {"__html": rawMarkup}
+  let sanitizedRawMarkup = SanitizeHtml.sanitize(rawMarkup)
+  let innerHTML = {"__html": sanitizedRawMarkup}
   let nodeRef = React.useRef(Js.Nullable.null)
 
   // The 500 must correspond to the 0.5s in:
