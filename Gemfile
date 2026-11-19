@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.4.9"
 
-gem "cpflow", "6.0.1", require: false
+gem "cpflow", "6.1.0", require: false
 gem "react_on_rails_pro", "17.2.1.rc.3"
 gem "shakapacker", "10.3.2"
 
@@ -15,7 +15,7 @@ gem "rails", "~> 8.1.4"
 gem "pg"
 
 gem "bootsnap", require: false
-gem "puma", "~> 8.0.2"
+gem "puma", "~> 8.1.1"
 gem "thruster", "~> 0.1"
 
 # Use SCSS for stylesheets
@@ -32,7 +32,7 @@ gem "coffee-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
-gem "redis", "~> 5.0"
+gem "redis", "~> 6.0"
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", group: :doc
@@ -71,10 +71,10 @@ group :development, :test do
 
   ################################################################################
   # Linters and Security
-  gem "rubocop", "1.69", require: false
-  gem "rubocop-performance", "1.23.1", require: false
-  gem "rubocop-rails", "2.29.1", require: false
-  gem "rubocop-rspec", "3.4.0", require: false
+  gem "rubocop", "1.92.2", require: false
+  gem "rubocop-performance", "1.27.0", require: false
+  gem "rubocop-rails", "2.38.0", require: false
+  gem "rubocop-rspec", "3.10.2", require: false
   # Critical that require: false be set! https://github.com/brigade/scss-lint/issues/278
   gem "scss_lint", require: false
 
@@ -97,12 +97,12 @@ end
 group :test do
   gem "capybara"
   gem "capybara-screenshot"
-  gem "coveralls_reborn", "~> 0.25.0", require: false
+  gem "coveralls_reborn", "~> 1.0.0", require: false
   gem "database_cleaner"
   gem "generator_spec"
   gem "launchy"
   gem "rails_best_practices"
-  gem "rspec-rails", "~> 6.0.0"
+  gem "rspec-rails", "~> 8.1.0"
   gem "selenium-webdriver", "~> 4"
 end
 
